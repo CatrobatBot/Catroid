@@ -24,6 +24,7 @@ package org.catrobat.catroid.stage;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
@@ -46,6 +47,7 @@ import org.catrobat.catroid.common.CatroidService;
 import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.common.ServiceProvider;
 import org.catrobat.catroid.content.Scene;
+import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.devices.raspberrypi.RaspberryPiService;
 import org.catrobat.catroid.drone.DroneInitializer;
@@ -56,12 +58,15 @@ import org.catrobat.catroid.sensing.GatherCollisionInformationTask;
 import org.catrobat.catroid.ui.BaseActivity;
 import org.catrobat.catroid.ui.SettingsActivity;
 import org.catrobat.catroid.ui.dialogs.CustomAlertDialogBuilder;
+import org.catrobat.catroid.ui.dialogs.NoNetworkDialog;
 import org.catrobat.catroid.utils.FlashUtil;
 import org.catrobat.catroid.utils.ToastUtil;
 import org.catrobat.catroid.utils.TouchUtil;
+import org.catrobat.catroid.utils.Utils;
 import org.catrobat.catroid.utils.VibratorUtil;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -238,6 +243,33 @@ public class PreStageActivity extends BaseActivity implements GatherCollisionInf
 		if ((requiredResources & Brick.COLLISION) > 0) {
 			GatherCollisionInformationTask task = new GatherCollisionInformationTask(this);
 			task.execute();
+		}
+
+		if ((requiredResources & Brick.NETWORK_CONNECTION) > 0) {
+			final Context finalBaseContext = this.getBaseContext();
+			if (!Utils.isNetworkAvailable(finalBaseContext)) {
+				NoNetworkDialog nnd = new NoNetworkDialog(this);
+				nnd.setBrickList(getBricksRequieringResource(Brick.NETWORK_CONNECTION));
+				nnd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+					@Override
+					public void onCancel(DialogInterface dialogInterface) {
+						resourceFailed();
+					}
+				});
+				nnd.setOnDismissListener(new DialogInterface.OnDismissListener() {
+					@Override
+					public void onDismiss(DialogInterface dialogInterface) {
+						if (Utils.isNetworkAvailable(finalBaseContext)) {
+							resourceInitialized();
+						} else {
+							resourceFailed();
+						}
+					}
+				});
+				nnd.show();
+			} else {
+				resourceInitialized();
+			}
 		}
 
 		if (requiredResourceCounter == Brick.NO_RESOURCES) {
@@ -561,6 +593,30 @@ public class PreStageActivity extends BaseActivity implements GatherCollisionInf
 			// TODO: resourceFailed() & startActivityForResult(), if behaviour needed
 		}
 		resourceInitialized();
+	}
+	private static ArrayList<Brick> getBricksRequieringResource(int resource) {
+		ArrayList<Brick> brickList = new ArrayList<Brick>();
+		ArrayList<Sprite> spriteList = (ArrayList<Sprite>) ProjectManager.getInstance().getCurrentProject()
+				.getSpriteListWithClones();
+
+		for (Sprite sprite : spriteList) {
+			brickList.addAll(sprite.getBricksRequiringResource(resource));
+		}
+
+		//unique entries
+		Iterator<Brick> i = brickList.iterator();
+		while (i.hasNext()) {
+			Brick c = i.next();
+			Iterator<Brick> secIt = brickList.iterator();
+			while (secIt.hasNext()) {
+				Brick proofBrick = secIt.next();
+				if (proofBrick.getClass() == c.getClass() && proofBrick != c) {
+					i.remove();
+					break;
+				}
+			}
+		}
+		return brickList;
 	}
 
 	@Override

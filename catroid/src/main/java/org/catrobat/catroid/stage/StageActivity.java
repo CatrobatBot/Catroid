@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
@@ -69,6 +70,9 @@ import org.catrobat.catroid.utils.VibratorUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NavigableMap;
+import java.util.Random;
+import java.util.TreeMap;
 
 public class StageActivity extends AndroidApplication {
 	public static final String TAG = StageActivity.class.getSimpleName();
@@ -76,6 +80,8 @@ public class StageActivity extends AndroidApplication {
 	public static final int STAGE_ACTIVITY_FINISH = 7777;
 
 	public static final int ASK_MESSAGE = 0;
+	public static final int REGISTER_INTENT = 1;
+	private static final int PERFORM_INTENT = 2;
 
 	private StageAudioFocus stageAudioFocus;
 	private PendingIntent pendingIntent;
@@ -87,6 +93,8 @@ public class StageActivity extends AndroidApplication {
 	private static int numberOfSpritesCloned;
 
 	public static Handler messageHandler;
+	public static NavigableMap<Integer, IntentListener> intentListeners = new TreeMap<>();
+	public static Random randomGenerator = new Random();
 
 	AndroidApplicationConfiguration configuration = null;
 
@@ -142,13 +150,25 @@ public class StageActivity extends AndroidApplication {
 	}
 
 	private void setupAskHandler() {
+		final StageActivity currentStage = this;
 		messageHandler = new Handler(Looper.getMainLooper()) {
 			@Override
 			public void handleMessage(Message message) {
 				ArrayList<Object> params = (ArrayList<Object>) message.obj;
 
-				if (message.what == ASK_MESSAGE) {
-					showDialog((String) params.get(1), (AskAction) params.get(0));
+				switch (message.what)
+				{
+					case ASK_MESSAGE:
+						showDialog((String) params.get(1), (AskAction) params.get(0));
+						break;
+					case REGISTER_INTENT:
+						currentStage.queueIntent((IntentListener) params.get(0));
+						break;
+					case PERFORM_INTENT:
+						currentStage.startQueuedIntent((Integer) params.get(0));
+						break;
+					default:
+						Log.e(TAG,"Unhandled message in messagehandler, case "+message.what);
 				}
 			}
 		};
@@ -437,5 +457,51 @@ public class StageActivity extends AndroidApplication {
 
 	public static int getAndIncrementNumberOfClonedSprites() {
 		return ++numberOfSpritesCloned;
+	}
+
+
+
+	public synchronized void queueIntent(IntentListener asker) {
+		int newIdentId;
+		do {
+			newIdentId = StageActivity.randomGenerator.nextInt(100000);
+		} while (intentListeners.containsKey(newIdentId));
+
+		intentListeners.put(newIdentId, asker);
+
+		ArrayList<Object> params = new ArrayList<>();
+		params.add(newIdentId);
+		if (StageActivity.messageHandler == null) {
+			return;
+		}
+		Message message = StageActivity.messageHandler.obtainMessage(StageActivity.PERFORM_INTENT, params);
+		message.sendToTarget();
+	}
+
+	private void startQueuedIntent(int intentKey) {
+		if(!intentListeners.containsKey(intentKey))
+		{
+			return;
+		}
+		Intent i = intentListeners.get(intentKey).getTargetIntent();
+		i.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, this.getClass().getPackage().getName());
+		this.startActivityForResult(i, intentKey);
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		//Register your intent with "queueIntent"
+		if (!intentListeners.containsKey(requestCode)) {
+			Log.e(TAG, "Unknown intent result recieved!");
+		} else {
+			IntentListener asker = intentListeners.get(requestCode);
+			asker.onIntentResult(resultCode, data);
+			intentListeners.remove(requestCode);
+		}
+	}
+
+	public interface IntentListener {
+		Intent getTargetIntent();
+		void onIntentResult(int resultCode, Intent data); //don't do heavy processing here
 	}
 }
