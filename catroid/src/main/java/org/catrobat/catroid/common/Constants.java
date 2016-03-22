@@ -29,23 +29,22 @@ public final class Constants {
 	// Reflection in testcases needed
 	// http://stackoverflow.com/questions/1615163/modifying-final-fields-in-java?answertab=votes#tab-top
 
-	public static final float CURRENT_CATROBAT_LANGUAGE_VERSION = Float.valueOf(0.991f);
+	public static final float CURRENT_CATROBAT_LANGUAGE_VERSION = Float.valueOf(0.98f);
 
 	public static final String PLATFORM_NAME = "Android";
 	public static final int APPLICATION_BUILD_NUMBER = 0; // updated from jenkins nightly/release build
 	public static final String APPLICATION_BUILD_NAME = ""; // updated from jenkins nightly/release build
 	public static final String PROJECTCODE_NAME = "code.xml";
 	public static final String PROJECTPERMISSIONS_NAME = "permissions.txt";
-	public static final String PROJECTPERMISSIONS_NAME_TMP = "tmp_" + PROJECTPERMISSIONS_NAME;
 	public static final String PROJECTCODE_NAME_TMP = "tmp_" + PROJECTCODE_NAME;
 
 	public static final String CATROBAT_EXTENSION = ".catrobat";
-	public static final String IMAGE_STANDARD_EXTENSION = ".png";
+	public static final String IMAGE_STANDARD_EXTENTION = ".png";
 	public static final String SOUND_STANDARD_EXTENSION = ".wav";
 
 	//Extensions:
-	public static final String[] IMAGE_EXTENSIONS = { ".png", ".jpg", ".jpeg", ".png", ".gif" };
-	public static final String[] SOUND_EXTENSIONS = { ".wav", ".mp3", ".mpga", ".wav", ".ogy" };
+	public static final String[] IMAGE_EXTENTIONS = {".png", ".jpg", ".jpeg", ".png", ".gif"};
+	public static final String[] SOUND_EXTENTIONS = {".wav", ".mp3", ".mpga", ".wav", ".ogy"};
 
 	public static final String DEFAULT_ROOT = Environment.getExternalStorageDirectory().getAbsolutePath()
 			+ "/Pocket Code";
@@ -85,10 +84,10 @@ public final class Constants {
 	public static final String RASPI_BROADCAST_PREFIX = "#RASPI#";
 	public static final String RASPI_BROADCAST_INTERRUPT_PREFIX = RASPI_BROADCAST_PREFIX + "interrupt ";
 	public static final String OPENING_BRACE = "(";
+	public static final String CLOSING_BRACE = ")";
 
 	//Web:
-	public static final String MAIN_URL_HTTPS = "https://share.catrob.at";
-	public static final String BASE_URL_HTTPS = MAIN_URL_HTTPS + "/pocketcode/";
+	public static final String BASE_URL_HTTPS = "https://share.catrob.at/pocketcode/";
 	public static final String LIBRARY_LOOKS_URL = "https://share.catrob.at/pocketcode/pocket-library/looks";
 	public static final String LIBRARY_BACKGROUNDS_URL = "https://share.catrob.at/pocketcode/pocket-library/backgrounds";
 	public static final String LIBRARY_SOUNDS_URL = "https://share.catrob.at/pocketcode/pocket-library/sounds";
@@ -99,6 +98,12 @@ public final class Constants {
 
 	public static final String CATROBAT_ABOUT_URL = "http://www.catrobat.org/";
 	public static final String ABOUT_POCKETCODE_LICENSE_URL = "http://developer.catrobat.org/licenses";
+
+	public static final String SCRATCH_SEARCH_BASE_URL = "https://www.googleapis.com/customsearch/";
+	public static final String SCRATCH_SEARCH_URL = SCRATCH_SEARCH_BASE_URL + "v1element";
+	public static final String SCRATCH_CONVERTER_BASE_URL = "https://scratch2.catrob.at/";
+	public static final String SCRATCH_CONVERTER_API_BASE_URL = SCRATCH_CONVERTER_BASE_URL + "api/v1/";
+	public static final String SCRATCH_CONVERTER_API_DEFAULT_PROJECTS_URL = SCRATCH_CONVERTER_API_BASE_URL + "projects.json";
 
 	public static final String CATROBAT_HELP_URL = BASE_URL_HTTPS + "help";
 	public static final String CATROBAT_TOKEN_LOGIN_URL = BASE_URL_HTTPS + "tokenlogin?username=";
@@ -149,6 +154,9 @@ public final class Constants {
 	public static final String PLATFORM_DEFAULT = "Android";
 
 	public static final String WHATSAPP_URI = "whatsapp://";
+
+	// Scratch Converter
+    public static final int SCRATCH_SEARCH_RESULT_CACHE_SIZE = 100;
 
 	// Pocket Paint
 	public static final String EXTRA_PICTURE_PATH_POCKET_PAINT = "org.catrobat.extra.PAINTROID_PICTURE_PATH";
