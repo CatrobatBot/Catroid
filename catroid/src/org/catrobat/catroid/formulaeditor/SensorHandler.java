@@ -67,9 +67,17 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 	private float faceSize = 0f;
 	private float facePositionX = 0f;
 	private float facePositionY = 0f;
+	private float dateYear = 0f;
+	private float dateMonth = 0f;
+	private float dateDay = 0f;
+	private float dateWeekday = 0f;
+	private float timeHour = 0f;
+	private float timeMinute = 0f;
+	private float timeSecond = 0f;
 	private boolean compassAvailable = true;
 	private boolean accelerationAvailable = true;
 	private boolean inclinationAvailable = true;
+	private boolean dateAvailable = true;
 
 	private SensorHandler(Context context) {
 		sensorManager = new SensorManager(
@@ -119,6 +127,10 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 		return this.inclinationAvailable;
 	}
 
+	public boolean dateAvailable() {
+		return this.dateAvailable;
+	}
+
 	public static SensorHandler getInstance(Context context) {
 		if (instance == null) {
 			instance = new SensorHandler(context);
@@ -136,6 +148,13 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 		instance.registerListener(instance);
 
 		instance.sensorManager.registerListener(instance, Sensors.LOUDNESS);
+		instance.sensorManager.registerListener(instance, Sensors.DATE_YEAR);
+		instance.sensorManager.registerListener(instance, Sensors.DATE_MONTH);
+		instance.sensorManager.registerListener(instance, Sensors.DATE_DAY);
+		instance.sensorManager.registerListener(instance, Sensors.DATE_WEEKDAY);
+		instance.sensorManager.registerListener(instance, Sensors.TIME_HOUR);
+		instance.sensorManager.registerListener(instance, Sensors.TIME_MINUTE);
+		instance.sensorManager.registerListener(instance, Sensors.TIME_SECOND);
 		FaceDetectionHandler.registerOnFaceDetectedListener(instance);
 		FaceDetectionHandler.registerOnFaceDetectionStatusListener(instance);
 	}
@@ -337,6 +356,20 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 				}
 			case LOUDNESS:
 				return Double.valueOf(instance.loudness);
+			case DATE_YEAR:
+				return Double.valueOf(instance.dateYear);
+			case DATE_MONTH:
+				return Double.valueOf(instance.dateMonth);
+			case DATE_DAY:
+				return Double.valueOf(instance.dateDay);
+			case DATE_WEEKDAY:
+				return Double.valueOf(instance.dateWeekday);
+			case TIME_HOUR:
+				return Double.valueOf(instance.timeHour);
+			case TIME_MINUTE:
+				return Double.valueOf(instance.timeMinute);
+			case TIME_SECOND:
+				return Double.valueOf(instance.timeSecond);
 
 			case NXT_SENSOR_1:
 			case NXT_SENSOR_2:
@@ -509,6 +542,27 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 				break;
 			case FACE_Y_POSITION:
 				instance.facePositionY = event.values[0];
+				break;
+			case DATE_YEAR:
+				instance.dateYear = event.values[0];
+				break;
+			case DATE_MONTH:
+				instance.dateMonth = event.values[0];
+				break;
+			case DATE_DAY:
+				instance.dateDay = event.values[0];
+				break;
+			case DATE_WEEKDAY:
+				instance.dateWeekday = event.values[0];
+				break;
+			case TIME_HOUR:
+				instance.timeHour = event.values[0];
+				break;
+			case TIME_MINUTE:
+				instance.timeMinute = event.values[0];
+				break;
+			case TIME_SECOND:
+				instance.timeSecond = event.values[0];
 				break;
 			default:
 				Log.v(TAG, "Unhandled sensor: " + event.sensor);

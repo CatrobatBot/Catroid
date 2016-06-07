@@ -125,6 +125,9 @@ public class FormulaEditorCategoryListFragment extends ListFragment implements D
 
 	private static final int[] DEFAULT_SENSOR_ITEMS = { R.string.formula_editor_sensor_loudness };
 
+	private static final int[] DATE_AND_TIME_SENSOR_ITEMS = { R.string.formula_editor_sensor_date_year, R.string.formula_editor_sensor_date_month, R.string.formula_editor_sensor_date_day, R.string.formula_editor_sensor_date_weekday,
+			R.string.formula_editor_sensor_time_hour, R.string.formula_editor_sensor_time_minute, R.string.formula_editor_sensor_time_second };
+
 	private static final int[] ACCELERATION_SENSOR_ITEMS = { R.string.formula_editor_sensor_x_acceleration,
 			R.string.formula_editor_sensor_y_acceleration, R.string.formula_editor_sensor_z_acceleration };
 
@@ -322,6 +325,11 @@ public class FormulaEditorCategoryListFragment extends ListFragment implements D
 				parameterIds = concatAll(parameterIds, createEmptyParametersList(FACE_DETECTION_SENSOR_ITEMS.length));
 			}
 
+			if (SensorHandler.getInstance(context).dateAvailable()) {
+				header.put(itemsIds.length, getString(R.string.formula_editor_device_date_and_time));
+				itemsIds = concatAll(itemsIds, DATE_AND_TIME_SENSOR_ITEMS);
+			}
+			
 			if (SettingsActivity.isMindstormsNXTSharedPreferenceEnabled(context)) {
 				header.put(itemsIds.length, getString(R.string.formula_editor_device_lego));
 				itemsIds = concatAll(itemsIds, NXT_SENSOR_ITEMS);

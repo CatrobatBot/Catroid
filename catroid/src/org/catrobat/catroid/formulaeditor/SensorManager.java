@@ -51,6 +51,13 @@ public class SensorManager implements SensorManagerInterface {
 	@Override
 	public void unregisterListener(SensorCustomEventListener listener) {
 		SensorLoudness.getSensorLoudness().unregisterListener(listener);
+		SensorYear.getSensorYear().unregisterListener(listener);
+		SensorMonth.getSensorMonth().unregisterListener(listener);
+		SensorDay.getSensorDay().unregisterListener(listener);
+		SensorWeekday.getSensorWeekday().unregisterListener(listener);
+		SensorHour.getSensorHour().unregisterListener(listener);
+		SensorMinute.getSensorMinute().unregisterListener(listener);
+		SensorSecond.getSensorSecond().unregisterListener(listener);
 	}
 
 	@Override
@@ -58,6 +65,20 @@ public class SensorManager implements SensorManagerInterface {
 		switch (sensor) {
 			case LOUDNESS:
 				return SensorLoudness.getSensorLoudness().registerListener(listener);
+			case DATE_YEAR:
+				return SensorYear.getSensorYear().registerListener(listener);
+			case DATE_MONTH:
+				return SensorMonth.getSensorMonth().registerListener(listener);
+			case DATE_DAY:
+				return SensorDay.getSensorDay().registerListener(listener);
+			case DATE_WEEKDAY:
+				return SensorWeekday.getSensorWeekday().registerListener(listener);
+			case TIME_HOUR:
+				return SensorHour.getSensorHour().registerListener(listener);
+			case TIME_MINUTE:
+				return SensorMinute.getSensorMinute().registerListener(listener);
+			case TIME_SECOND:
+				return SensorSecond.getSensorSecond().registerListener(listener);
 			default:
 				return false;
 		}
