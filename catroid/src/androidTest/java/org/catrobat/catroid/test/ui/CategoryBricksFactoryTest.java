@@ -62,7 +62,11 @@ public class CategoryBricksFactoryTest extends AndroidTestCase {
 	}
 
 	public void testControlBricks() {
+<<<<<<< HEAD
 		final int expectedBrickCount = 10;
+=======
+		final int expectedBrickCount = 16;
+>>>>>>> 7bcae7f... CAT-1940 StopScripts Brick added
 		checkBrickCountInCategory(R.string.category_control, background, expectedBrickCount);
 		checkBrickCountInCategory(R.string.category_control, sprite, expectedBrickCount);
 	}
