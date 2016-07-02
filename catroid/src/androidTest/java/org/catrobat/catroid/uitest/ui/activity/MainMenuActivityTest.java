@@ -288,7 +288,7 @@ public class MainMenuActivityTest extends BaseActivityInstrumentationTestCase<Ma
 		// https://developer.android.com/reference/android/content/pm/ActivityInfo.html
 		PackageManager packageManager = getActivity().getPackageManager();
 		ActivityInfo activityInfo = packageManager.getActivityInfo(getActivity().getComponentName(),
-				PackageManager.GET_META_DATA);
+				PackageManager.GET_ACTIVITIES);
 
 		// Note that the activity is _indeed_ rotated on your device/emulator!
 		// Robotium can _force_ the activity to be in landscapeMode mode (and so could we, programmatically)
@@ -360,15 +360,13 @@ public class MainMenuActivityTest extends BaseActivityInstrumentationTestCase<Ma
 
 	public void testRateAppMenuExists() {
 		solo.sendKey(Solo.MENU);
-		assertTrue("App rating menu not found in overflow menu!",
-                solo.searchText(solo.getString(R.string.main_menu_rate_app)));
+		assertTrue("App rating menu not found in overflow menu!", solo.searchText(solo.getString(R.string.main_menu_rate_app)));
 		solo.goBack();
 	}
 
 	public void testScratchConverterMenuExists() {
 		solo.sendKey(Solo.MENU);
-        assertTrue("Scratch Converter menu item not found in overflow menu!",
-                solo.searchText(solo.getString(R.string.preference_title_scratch_converter)));
+		assertTrue("Scratch Converter menu item not found in overflow menu!", solo.searchText(solo.getString(R.string.preference_title_scratch_converter)));
 		solo.goBack();
 	}
 
@@ -471,7 +469,8 @@ public class MainMenuActivityTest extends BaseActivityInstrumentationTestCase<Ma
 		startingScript.addBrick(new SetLookBrick());
 		startingScript.addBrick(new SetLookBrick());
 		assertEquals("Number of bricks in background sprite was wrong after adding three new bricks", 10,
-				backgroundSprite.getNumberOfBricks());
+				backgroundSprite
+						.getNumberOfBricks());
 		ProjectManager.getInstance().setCurrentSprite(backgroundSprite);
 		ProjectManager.getInstance().setCurrentScript(startingScript);
 		StorageHandler.getInstance().saveProject(standardProject);
