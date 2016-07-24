@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Catroid: An on-device visual programming system for Android devices
   ~ Copyright (C) 2010-2016 The Catrobat Team
   ~ (<http://developer.catrobat.org/credits>)
@@ -78,7 +79,8 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Catroid">
+        android:theme="@style/Theme.Catroid"
+        android:supportsRtl="true">
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -90,11 +92,6 @@
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-        <activity
-            android:name="com.facebook.FacebookActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".ui.MainMenuActivity"
             android:launchMode="standard"
@@ -172,6 +169,7 @@
             android:windowSoftInputMode="adjustPan" />
          <activity
              android:name=".ui.BaseActivity"
+
              android:screenOrientation="portrait"
              android:windowSoftInputMode="adjustPan" />
         <activity
@@ -210,12 +208,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.ScratchProjectDetailsActivity"
+            android:name=".ui.ScratchProgramDetailsActivity"
             android:noHistory="false"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".bluetooth.ConnectBluetoothDeviceActivity"
-
         <activity
             android:name=".bluetooth.ConnectBluetoothDeviceActivity"
             android:theme="@android:style/Theme.Holo.Dialog" />
@@ -245,5 +240,4 @@
         <service android:name=".utils.StatusBarNotificationManager$NotificationActionService" />
 
     </application>
-
 </manifest>
