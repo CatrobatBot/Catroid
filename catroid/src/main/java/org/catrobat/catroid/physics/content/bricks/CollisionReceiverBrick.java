@@ -147,7 +147,7 @@ public class CollisionReceiverBrick extends ScriptBrick implements BroadcastMess
 		messageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		messageAdapter.add(getDisplayedAnythingString(context));
 		int resources = Brick.NO_RESOURCES;
-		for (Sprite sprite : scene.getSpriteList()) {
+		for (Sprite sprite : ProjectManager.getInstance().getCurrentProject().getSpriteListWithClones()) {
 			if (!spriteName.equals(sprite.getName())) {
 				resources |= sprite.getRequiredResources();
 				if ((resources & Brick.PHYSICS) > 0 && messageAdapter.getPosition(sprite.getName()) < 0) {

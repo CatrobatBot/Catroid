@@ -113,10 +113,9 @@ public final class BroadcastHandler {
 
 	private static void addBroadcastMessageToBroadcastWaitSequenceMap(Look look, BroadcastEvent event,
 			String broadcastMessage) {
-		String sceneName = ProjectManager.getInstance().getSceneToPlay().getName();
 		ArrayList<SequenceAction> actionList = new ArrayList<SequenceAction>();
 		BroadcastWaitSequenceMap.setCurrentBroadcastEvent(event);
-		for (SequenceAction action : BroadcastSequenceMap.get(broadcastMessage, sceneName)) {
+		for (SequenceAction action : BroadcastSequenceMap.get(broadcastMessage)) {
 			SequenceAction broadcastWaitAction = ActionFactory.sequence(action,
 					ActionFactory.createBroadcastNotifyAction(event));
 			Script receiverScript = actionScriptMap.get(action);
@@ -131,7 +130,7 @@ public final class BroadcastHandler {
 			}
 		}
 		if (actionList.size() > 0) {
-			BroadcastWaitSequenceMap.put(sceneName, broadcastMessage, actionList);
+			BroadcastWaitSequenceMap.put(broadcastMessage, actionList);
 		}
 	}
 
@@ -159,7 +158,7 @@ public final class BroadcastHandler {
 	private static boolean handleActionFromBroadcastWait(SequenceAction sequenceActionWithBroadcastNotifyAction) {
 		Action actualAction = sequenceActionWithBroadcastNotifyAction.getActions().get(0);
 
-		for (Sprite sprites : ProjectManager.getInstance().getSceneToPlay().getSpriteList()) {
+		for (Sprite sprites : ProjectManager.getInstance().getCurrentProject().getSpriteListWithClones()) {
 			for (Action actionOfLook : sprites.look.getActions()) {
 				Action actualActionOfLook = null;
 				if (actionOfLook instanceof SequenceAction && ((SequenceAction) actionOfLook).getActions().size > 0) {
@@ -200,7 +199,7 @@ public final class BroadcastHandler {
 		return actionScriptMap;
 	}
 
-	public static HashMap<Script, Sprite> getScriptSpriteMapMap() {
+	public static HashMap<Script, Sprite> getScriptSpriteMap() {
 		return scriptSpriteMap;
 	}
 

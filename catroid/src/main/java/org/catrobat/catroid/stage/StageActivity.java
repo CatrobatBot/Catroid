@@ -91,6 +91,7 @@ public class StageActivity extends AndroidApplication {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG, "onCreate()");
 
+		numberOfSpritesCloned = 0;
 		setupAskHandler();
 
 		if (ProjectManager.getInstance().isCurrentProjectLandscapeMode()) {
@@ -424,5 +425,9 @@ public class StageActivity extends AndroidApplication {
 				}
 			}
 		});
+	}
+
+	public static int getAndIncrementNumberOfClonedSprites() {
+		return ++numberOfSpritesCloned;
 	}
 }
