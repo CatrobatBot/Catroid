@@ -22,6 +22,8 @@
  */
 package org.catrobat.catroid.content;
 
+import android.util.Log;
+
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -36,6 +38,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 
+import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.common.DroneVideoLookData;
 import org.catrobat.catroid.common.LookData;
 
@@ -254,6 +257,11 @@ public class Look extends Image {
 	public void setLookData(LookData lookData) {
 		this.lookData = lookData;
 		imageChanged = true;
+
+		boolean isBackgroundLook = getZIndex() == 0;
+		if (isBackgroundLook) {
+			BackgroundWaitHandler.fireBackgroundChangedEvent(lookData);
+		}
 	}
 
 	public boolean getAllActionsAreFinished() {
