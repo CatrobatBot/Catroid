@@ -713,4 +713,20 @@ public class StageListener implements ApplicationListener {
 	public void removeActor(Look look) {
 		look.remove();
 	}
+
+	public float getVirtualWidth() {
+		return virtualWidth;
+	}
+
+	public float getVirtualWidthHalf() {
+		return virtualWidthHalf;
+	}
+
+	public float getVirtualHeight() {
+		return virtualHeight;
+	}
+
+	public float getVirtualHeightHalf() {
+		return virtualHeightHalf;
+	}
 }
