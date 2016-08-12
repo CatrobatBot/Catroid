@@ -45,7 +45,7 @@ public class CastDevicesAdapter extends ArrayAdapter<MediaRouter.RouteInfo> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 
 		if (convertView == null) {
-			convertView =  LayoutInflater.from(getContext()).inflate(R.layout.fragment_cast_device_list_item, parent, false);
+			convertView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_cast_device_list_item, parent, false);
 		}
 
 		MediaRouter.RouteInfo routeInfo = CastManager.getInstance().getRouteInfos().get(position);

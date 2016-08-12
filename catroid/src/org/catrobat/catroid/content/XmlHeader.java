@@ -203,8 +203,8 @@ public class XmlHeader implements Serializable {
 	public boolean isCastProject() {
 		return isCastProject;
 	}
+
 	public void setTags(List<String> tags) {
 		this.tags = TextUtils.join(",", tags);
-
 	}
 }
