@@ -132,6 +132,7 @@ public class UploadProjectTagsDialog extends DialogFragment implements GetTagsTa
 	public void setProjectName(String projectName) {
 		this.currentProjectName = projectName;
 	}
+
 	public void setProjectDescription(String projectDescription) {
 		this.currentProjectDescription = projectDescription;
 	}
