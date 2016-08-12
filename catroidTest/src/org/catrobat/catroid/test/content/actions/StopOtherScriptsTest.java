@@ -92,7 +92,7 @@ public class StopOtherScriptsTest extends InstrumentationTestCase {
 
 		sprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
 
-		for(int i = 0; i < 100; i++) {
+		for (int i = 0; i < 100; i++) {
 			sprite.look.act(1.0f);
 		}
 

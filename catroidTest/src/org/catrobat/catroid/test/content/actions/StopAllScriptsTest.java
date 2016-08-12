@@ -25,8 +25,6 @@ package org.catrobat.catroid.test.content.actions;
 
 import android.test.InstrumentationTestCase;
 
-import com.badlogic.gdx.scenes.scene2d.Stage;
-
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.common.BrickValues;
 import org.catrobat.catroid.content.Project;
@@ -55,7 +53,6 @@ public class StopAllScriptsTest extends InstrumentationTestCase {
 		super.setUp();
 	}
 
-
 	public void testStopOneScript() {
 		String variableName = "testVariable";
 		project.getDataContainer().addProjectUserVariable(variableName);
@@ -74,7 +71,7 @@ public class StopAllScriptsTest extends InstrumentationTestCase {
 
 		sprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
 
-		for(int i = 0; i < 100; i++) {
+		for (int i = 0; i < 100; i++) {
 			sprite.look.act(10.0f);
 		}
 
@@ -107,7 +104,7 @@ public class StopAllScriptsTest extends InstrumentationTestCase {
 
 		sprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
 
-		for(int i = 0; i < 100; i++) {
+		for (int i = 0; i < 100; i++) {
 			sprite.look.act(10.0f);
 		}
 

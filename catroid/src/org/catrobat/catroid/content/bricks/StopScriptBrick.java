@@ -39,7 +39,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.BrickValues;
-import org.catrobat.catroid.common.SoundInfo;
 import org.catrobat.catroid.content.Sprite;
 
 import java.util.List;
@@ -76,7 +75,7 @@ public class StopScriptBrick extends BrickBaseType {
 			ColorStateList color = textStopScript.getTextColors().withAlpha(alphaValue);
 			textStopScript.setTextColor(textStopScript.getTextColors().withAlpha(alphaValue));
 
-			if(adapterView != null) {
+			if (adapterView != null) {
 				((TextView) adapterView.getChildAt(0)).setTextColor(color);
 			}
 
@@ -105,7 +104,7 @@ public class StopScriptBrick extends BrickBaseType {
 
 		Spinner spinner = (Spinner) view.findViewById(R.id.brick_stop_script_spinner);
 
-		if(!(checkbox.getVisibility() == view.VISIBLE)) {
+		if (!(checkbox.getVisibility() == view.VISIBLE)) {
 			spinner.setClickable(true);
 			spinner.setEnabled(true);
 		} else {
@@ -164,7 +163,7 @@ public class StopScriptBrick extends BrickBaseType {
 		return copyBrick;
 	}
 
-	private ArrayAdapter<String> createArrayAdapter(Context context){
+	private ArrayAdapter<String> createArrayAdapter(Context context) {
 		spinnerValue[BrickValues.STOP_THIS_SCRIPT] = context.getString(R.string.brick_stop_this_script);
 		spinnerValue[BrickValues.STOP_ALL_SCRIPTS] = context.getString(R.string.brick_stop_all_scripts);
 		spinnerValue[BrickValues.STOP_OTHER_SCRIPTS] = context.getString(R.string.brick_stop_other_scripts);
