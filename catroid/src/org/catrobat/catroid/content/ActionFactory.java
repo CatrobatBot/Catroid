@@ -837,9 +837,9 @@ public class ActionFactory extends Actions {
 
 	public Action createStopScriptAction(int spinnerSelectionId, Action currentAction) {
 		switch (spinnerSelectionId) {
-			case BrickValues.STOP_THIS_SCRIPT :
+			case BrickValues.STOP_THIS_SCRIPT:
 				return Actions.action(StopThisScriptAction.class);
-			case BrickValues.STOP_OTHER_SCRIPTS :
+			case BrickValues.STOP_OTHER_SCRIPTS:
 				StopOtherScriptsAction action = Actions.action(StopOtherScriptsAction.class);
 				action.setCurrentAction(currentAction);
 				return action;
