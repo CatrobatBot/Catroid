@@ -33,7 +33,7 @@ public class StopOtherScriptsAction extends TemporalAction {
 	@Override
 	protected void update(float percent) {
 
-		if(this.actor == null || this.actor.getActions() == null) {
+		if (this.actor == null || this.actor.getActions() == null) {
 			return;
 		}
 
@@ -41,11 +41,10 @@ public class StopOtherScriptsAction extends TemporalAction {
 		String currentActionSignature = this.currentAction.toString();
 
 		for (Action action : this.actor.getActions()) {
-			if(!alreadyStopped && action.toString().contains(currentActionSignature)) {
+			if (!alreadyStopped && action.toString().contains(currentActionSignature)) {
 				alreadyStopped = true;
 				continue;
-			}
-			else {
+			} else {
 				action.reset();
 			}
 		}

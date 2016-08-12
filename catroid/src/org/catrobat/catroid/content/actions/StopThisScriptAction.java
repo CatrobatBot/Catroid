@@ -23,8 +23,6 @@
 
 package org.catrobat.catroid.content.actions;
 
-import android.app.Notification;
-
 import com.badlogic.gdx.scenes.scene2d.Action;
 
 public class StopThisScriptAction extends Action {

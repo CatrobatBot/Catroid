@@ -77,8 +77,9 @@ public class StopScriptActionsTest extends InstrumentationTestCase {
 		ProjectManager.getInstance().setCurrentScript(script);
 		sprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
 
-		for (int i=0; i < 100; i++)
+		for (int i = 0; i < 100; i++) {
 			sprite.look.act(1.0f);
+		}
 
 		assertEquals(20.0f, sprite.look.getX());
 	}
@@ -112,7 +113,7 @@ public class StopScriptActionsTest extends InstrumentationTestCase {
 
 		sprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
 
-		for(int i = 0; i < 50; i++) {
+		for (int i = 0; i < 50; i++) {
 			sprite.look.act(10.0f);
 		}
 
@@ -152,7 +153,7 @@ public class StopScriptActionsTest extends InstrumentationTestCase {
 
 		sprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
 
-		for(int i = 0; i < 100; i++) {
+		for (int i = 0; i < 100; i++) {
 			sprite.look.act(1.0f);
 		}
 
