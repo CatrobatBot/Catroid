@@ -104,7 +104,7 @@ public class StopScriptActionsTest extends InstrumentationTestCase {
 		script2.addBrick(foreverBrick);
 		script2.addBrick(new SetVariableBrick(new Formula(50), userVariable));
 		script2.addBrick(endBrick);
-		
+
 		sprite.addScript(script);
 		sprite.addScript(script2);
 		project.addSprite(sprite);
