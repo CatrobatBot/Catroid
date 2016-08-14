@@ -329,7 +329,7 @@ public class FormulaEditorCategoryListFragment extends ListFragment implements D
 				header.put(itemsIds.length, getString(R.string.formula_editor_device_date_and_time));
 				itemsIds = concatAll(itemsIds, DATE_AND_TIME_SENSOR_ITEMS);
 			}
-			
+
 			if (SettingsActivity.isMindstormsNXTSharedPreferenceEnabled(context)) {
 				header.put(itemsIds.length, getString(R.string.formula_editor_device_lego));
 				itemsIds = concatAll(itemsIds, NXT_SENSOR_ITEMS);
