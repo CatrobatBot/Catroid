@@ -296,8 +296,8 @@ public class Look extends Image {
 		int touchIndex = TouchUtil.getLastTouchIndex();
 
 		distanceToTouchPosition = (float)
-		Math.sqrt(Math.pow((TouchUtil.getX(touchIndex) - getXInUserInterfaceDimensionUnit()), 2)
-		+ Math.pow((TouchUtil.getY(touchIndex) - getYInUserInterfaceDimensionUnit()), 2));
+				Math.sqrt(Math.pow((TouchUtil.getX(touchIndex) - getXInUserInterfaceDimensionUnit()), 2)
+						+ Math.pow((TouchUtil.getY(touchIndex) - getYInUserInterfaceDimensionUnit()), 2));
 
 		return distanceToTouchPosition;
 	}
