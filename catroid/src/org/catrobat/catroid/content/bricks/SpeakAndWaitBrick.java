@@ -151,7 +151,7 @@ public class SpeakAndWaitBrick extends FormulaBrick {
 		return null;
 	}
 
-	public int getDurationOfSpokenText (Sprite sprite, Formula text) {
+	public int getDurationOfSpokenText(Sprite sprite, Formula text) {
 		Object interpretedText;
 		String hashText;
 		TextToSpeech.OnUtteranceCompletedListener listener;
