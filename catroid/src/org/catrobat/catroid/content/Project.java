@@ -63,7 +63,6 @@ public class Project implements Serializable {
 	@XStreamAlias("settings")
 	private List<Setting> settings = new ArrayList<>();
 
-
 	private transient PhysicsWorld physicsWorld;
 
 	public Project(Context context, String name, boolean landscapeMode, boolean isCastProject) {
@@ -453,5 +452,4 @@ public class Project implements Serializable {
 	public boolean islandscapeMode() {
 		return xmlHeader.islandscapeMode();
 	}
-
 }
