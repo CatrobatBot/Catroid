@@ -159,7 +159,7 @@ public class SettingsActivity extends PreferenceActivity {
 
 		boolean areChoosersEnabled = getMindstormsNXTSensorChooserEnabled(this);
 
-		final String[] dronePreferences = new String[]{DRONE_CONFIGS, DRONE_ALTITUDE_LIMIT, DRONE_VERTICAL_SPEED, DRONE_ROTATION_SPEED, DRONE_TILT_ANGLE};
+		final String[] dronePreferences = new String[] { DRONE_CONFIGS, DRONE_ALTITUDE_LIMIT, DRONE_VERTICAL_SPEED, DRONE_ROTATION_SPEED, DRONE_TILT_ANGLE };
 		for (String dronePreference : dronePreferences) {
 			ListPreference listPreference = (ListPreference) findPreference(dronePreference);
 
@@ -238,7 +238,7 @@ public class SettingsActivity extends PreferenceActivity {
 
 		boolean areChoosersEnabled = getMindstormsNXTSensorChooserEnabled(this);
 
-		final String[] sensorPreferences = new String[]{NXT_SENSOR_1, NXT_SENSOR_2, NXT_SENSOR_3, NXT_SENSOR_4};
+		final String[] sensorPreferences = new String[] { NXT_SENSOR_1, NXT_SENSOR_2, NXT_SENSOR_3, NXT_SENSOR_4 };
 		for (int i = 0; i < sensorPreferences.length; ++i) {
 			ListPreference listPreference = (ListPreference) findPreference(sensorPreferences[i]);
 			listPreference.setEntryValues(NXTSensor.Sensor.getSensorCodes());
@@ -327,7 +327,7 @@ public class SettingsActivity extends PreferenceActivity {
 	public static NXTSensor.Sensor[] getLegoMindstormsNXTSensorMapping(Context context) {
 
 		final String[] sensorPreferences =
-				new String[]{NXT_SENSOR_1, NXT_SENSOR_2, NXT_SENSOR_3, NXT_SENSOR_4};
+				new String[] { NXT_SENSOR_1, NXT_SENSOR_2, NXT_SENSOR_3, NXT_SENSOR_4 };
 
 		NXTSensor.Sensor[] sensorMapping = new NXTSensor.Sensor[4];
 		for (int i = 0; i < 4; i++) {
@@ -375,7 +375,7 @@ public class SettingsActivity extends PreferenceActivity {
 	public static DroneConfigPreference.Preferences[] getDronePreferenceMapping(Context context) {
 
 		final String[] dronePreferences =
-				new String[]{DRONE_CONFIGS, DRONE_ALTITUDE_LIMIT, DRONE_VERTICAL_SPEED, DRONE_ROTATION_SPEED, DRONE_TILT_ANGLE};
+				new String[] { DRONE_CONFIGS, DRONE_ALTITUDE_LIMIT, DRONE_VERTICAL_SPEED, DRONE_ROTATION_SPEED, DRONE_TILT_ANGLE };
 
 		DroneConfigPreference.Preferences[] preferenceMapping = new DroneConfigPreference.Preferences[5];
 		for (int i = 0; i < 5; i++) {
