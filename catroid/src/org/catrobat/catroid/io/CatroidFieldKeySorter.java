@@ -153,7 +153,7 @@ public class CatroidFieldKeySorter implements FieldKeySorter {
 				fieldKeyOrder[13] = fieldKey;
 			} else if (fieldKey.getFieldName().equals("actionFactory")) {
 				fieldKeyOrder[14] = fieldKey;
-			}  else if (fieldKey.getFieldName().equals("isMobile")) {
+			} else if (fieldKey.getFieldName().equals("isMobile")) {
 				fieldKeyOrder[15] = fieldKey;
 			} else if (fieldKey.getFieldName().equals("$change")) {
 				fieldKeyOrder[16] = fieldKey;
