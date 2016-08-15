@@ -315,7 +315,7 @@ public class MainMenuActivity extends BaseActivity implements OnLoadProjectCompl
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		boolean result = false;
 		if (keyCode == KeyEvent.KEYCODE_BACK && !lockBackButtonForAsync) {
-			result =  true;
+			result = true;
 		}
 		return result;
 	}

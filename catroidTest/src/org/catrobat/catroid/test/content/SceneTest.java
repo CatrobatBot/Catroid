@@ -201,7 +201,7 @@ public class SceneTest extends AndroidTestCase {
 		unpackedScene = ProjectManager.getInstance().getCurrentProject().getSceneByName(unpackedHiddenSceneName1);
 		assertTrue(unpackedHiddenSceneName1 + " was not unpacked correctly", unpackedScene != null && Utils
 				.isStandardScene(unpackedScene
-				.getProject(), unpackedScene.getName(), getContext()));
+						.getProject(), unpackedScene.getName(), getContext()));
 		unpackedSize = folderSize(new File(Utils.buildScenePath(unpackedScene.getProject().getName(),
 				unpackedScene.getName())));
 		assertEquals("Unpacked Folder has not correct size", original, unpackedSize);
@@ -209,7 +209,7 @@ public class SceneTest extends AndroidTestCase {
 		unpackedScene = ProjectManager.getInstance().getCurrentProject().getSceneByName(unpackedHiddenSceneName2);
 		assertTrue(unpackedHiddenSceneName2 + " was not unpacked correctly", unpackedScene != null && Utils
 				.isStandardScene(unpackedScene
-				.getProject(), unpackedScene.getName(), getContext()));
+						.getProject(), unpackedScene.getName(), getContext()));
 		unpackedSize = folderSize(new File(Utils.buildScenePath(unpackedScene.getProject().getName(),
 				unpackedScene.getName())));
 		assertEquals("Unpacked Folder has not correct size", original, unpackedSize);
