@@ -76,7 +76,7 @@ public class SwitchToLookCrashTest extends BaseActivityInstrumentationTestCase<M
 			// pass even if the needed code in copyImageIntoCatroid() was deleted
 			InputStream inputStream = getInstrumentation().getContext().getResources().getAssets().open(nyanCatPng);
 			nyanCatPath = Utils.buildPath(Utils.buildScenePath(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, ProjectManager
-					.getInstance().getCurrentProject().getDefaultScene().getName()),
+							.getInstance().getCurrentProject().getDefaultScene().getName()),
 					Constants.IMAGE_DIRECTORY, nyanCatPng);
 			writeBufferToFile(inputStream, nyanCatPath);
 		} catch (IOException e) {
@@ -129,7 +129,7 @@ public class SwitchToLookCrashTest extends BaseActivityInstrumentationTestCase<M
 			// pass even if the needed code in copyImageIntoCatroid() was deleted
 			InputStream inputStream = getInstrumentation().getContext().getResources().getAssets().open(manImageJpg);
 			manImagePath = Utils.buildPath(Utils.buildScenePath(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, ProjectManager
-					.getInstance().getCurrentProject().getDefaultScene().getName()),
+							.getInstance().getCurrentProject().getDefaultScene().getName()),
 					Constants.IMAGE_DIRECTORY, manImageJpg);
 			writeBufferToFile(inputStream, manImagePath);
 		} catch (IOException e) {
