@@ -257,15 +257,15 @@ public class ActionFactory extends Actions {
 
 	public Action createGoToAction(Sprite sprite, Sprite destinationSprite, int spinnerSelection) {
 		switch (spinnerSelection) {
-			case BrickValues.GO_TO_TOUCH_POSITION :
+			case BrickValues.GO_TO_TOUCH_POSITION:
 				GoToTouchPositionAction touchPositionAction = Actions.action(GoToTouchPositionAction.class);
 				touchPositionAction.setSprite(sprite);
 				return touchPositionAction;
-			case BrickValues.GO_TO_RANDOM_POSITION :
+			case BrickValues.GO_TO_RANDOM_POSITION:
 				GoToRandomPositionAction randomPositionAction = Actions.action(GoToRandomPositionAction.class);
 				randomPositionAction.setSprite(sprite);
 				return randomPositionAction;
-			case BrickValues.GO_TO_OTHER_SPRITE_POSITION :
+			case BrickValues.GO_TO_OTHER_SPRITE_POSITION:
 				GoToOtherSpritePositionAction otherSpritePositionAction = Actions
 						.action(GoToOtherSpritePositionAction.class);
 				otherSpritePositionAction.setSprite(sprite);
