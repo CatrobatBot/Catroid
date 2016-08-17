@@ -33,8 +33,8 @@ import com.thoughtworks.xstream.converters.reflection.FieldKeySorter;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 
 import org.catrobat.catroid.io.CatroidFieldKeySorter;
-import org.catrobat.catroid.io.XStreamMissingSerializableFieldException;
 import org.catrobat.catroid.io.XStreamFieldKeyOrder;
+import org.catrobat.catroid.io.XStreamMissingSerializableFieldException;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -85,7 +85,6 @@ public class CatroidFieldKeySorterTest extends AndroidTestCase {
 		MoreAsserts.assertEquals("Sorted fields differ",
 				new String[] { "a", "x" }, fieldKeySorter.getFieldNames(BaseClass.class));
 	}
-
 
 	public void testSortTagsAlphabeticallyByClassHierarchy() {
 		xstream.toXML(new SubClass());
