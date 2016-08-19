@@ -48,7 +48,7 @@ import java.util.Map;
 
 public class ShowVariableAction extends TemporalAction {
 	public static final String TAG = ShowVariableAction.class.getSimpleName();
-	
+
 	private Formula xPosition;
 	private Formula yPosition;
 	private UserVariable variableToShow;
