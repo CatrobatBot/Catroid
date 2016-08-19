@@ -24,7 +24,6 @@ package org.catrobat.catroid.content;
 
 import android.content.Context;
 import android.os.Build;
-import android.util.Log;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
