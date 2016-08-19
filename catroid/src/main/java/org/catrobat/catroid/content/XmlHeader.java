@@ -49,7 +49,7 @@ public class XmlHeader implements Serializable {
 	private float catrobatLanguageVersion;
 	private boolean landscapeMode;
 	@SuppressWarnings("unused")
-	public String scenesEnabled = Constants.SCENES_ENABLED_TAG;
+	public boolean scenesEnabled = true;
 
 	// fields only used on the catrobat.org website so far
 	private String applicationBuildName = "";
