@@ -268,15 +268,15 @@ public class ProjectAdapter extends ArrayAdapter<ProjectData> implements EditTex
 				.my_projects_activity_description_edit);
 		editDescription.setOnEditTextImeBackListener(this, holder, projectData, editDescription);
 		holder.projectOverview.findViewById(R.id.my_projects_activity_edit_description_button).setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						editDescription.setVisibility(View.VISIBLE);
-						holder.projectOverview.findViewById(R.id.my_projects_activity_description_content).setVisibility(View.GONE);
-						editDescription.requestFocus();
-						InputMethodManager manager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-						manager.showSoftInput(editDescription, InputMethodManager.SHOW_IMPLICIT);
-						editDescription.setSelection(editDescription.getText().length());
-					}
+			@Override
+			public void onClick(View v) {
+				editDescription.setVisibility(View.VISIBLE);
+				holder.projectOverview.findViewById(R.id.my_projects_activity_description_content).setVisibility(View.GONE);
+				editDescription.requestFocus();
+				InputMethodManager manager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+				manager.showSoftInput(editDescription, InputMethodManager.SHOW_IMPLICIT);
+				editDescription.setSelection(editDescription.getText().length());
+			}
 		});
 
 		if (checkedProjects.contains(position)) {
