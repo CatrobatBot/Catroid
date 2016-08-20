@@ -321,7 +321,7 @@ public final class Utils {
 			lines.add(newLine);
 			cursorPos += lastWhitespace;
 		}
-		lines.add(text.substring(cursorPos, text.length()));
+		lines.add(text.substring(cursorPos, text.length()).trim());
 
 		return lines;
 	}
