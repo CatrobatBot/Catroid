@@ -369,9 +369,9 @@ public class CategoryBricksFactory {
 		looksBrickList.add(new HideBrick());
 		looksBrickList.add(new ShowBrick());
 		looksBrickList.add(new SayBubbleBrick(context.getString(R.string.brick_say_bubble_default_value)));
-		looksBrickList.add(new SayForBubbleBrick(context.getString(R.string.brick_say_bubble_default_value), 2.0f));
+		looksBrickList.add(new SayForBubbleBrick(context.getString(R.string.brick_say_bubble_default_value), 1.0f));
 		looksBrickList.add(new ThinkBubbleBrick(context.getString(R.string.brick_think_bubble_default_value)));
-		looksBrickList.add(new ThinkForBubbleBrick(context.getString(R.string.brick_think_bubble_default_value), 2.0f));
+		looksBrickList.add(new ThinkForBubbleBrick(context.getString(R.string.brick_think_bubble_default_value), 1.0f));
 		looksBrickList.add(new SetTransparencyBrick(BrickValues.SET_TRANSPARENCY));
 		looksBrickList.add(new ChangeTransparencyByNBrick(BrickValues.CHANGE_TRANSPARENCY_EFFECT));
 		looksBrickList.add(new SetBrightnessBrick(BrickValues.SET_BRIGHTNESS_TO));

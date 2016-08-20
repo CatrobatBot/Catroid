@@ -109,6 +109,7 @@ import org.catrobat.catroid.content.bricks.RaspiIfLogicBeginBrick;
 import org.catrobat.catroid.content.bricks.RaspiPwmBrick;
 import org.catrobat.catroid.content.bricks.RaspiSendDigitalValueBrick;
 import org.catrobat.catroid.content.bricks.RepeatBrick;
+import org.catrobat.catroid.content.bricks.SayBubbleBrick;
 import org.catrobat.catroid.content.bricks.SayForBubbleBrick;
 import org.catrobat.catroid.content.bricks.SceneStartBrick;
 import org.catrobat.catroid.content.bricks.SceneTransitionBrick;
@@ -457,7 +458,7 @@ public class XStreamToSupportCatrobatLanguageVersion0991AndBefore extends XStrea
 		brickInfo.addBrickFieldToMap("text", BrickField.STRING);
 		brickInfoMap.put("thinkBubbleBrick", brickInfo);
 
-		brickInfo = new BrickInfo(ThinkBubbleBrick.class.getSimpleName());
+		brickInfo = new BrickInfo(SayBubbleBrick.class.getSimpleName());
 		brickInfo.addBrickFieldToMap("text", BrickField.STRING);
 		brickInfoMap.put("sayBubbleBrick", brickInfo);
 
