@@ -48,13 +48,11 @@ public abstract class BaseMessage extends Message {
 		private int typeID;
 
 		private static Map<Integer, Type> map = new HashMap<>();
-
 		static {
 			for (Type legEnum : Type.values()) {
 				map.put(legEnum.typeID, legEnum);
 			}
 		}
-
 		Type(final int typeID) {
 			this.typeID = typeID;
 		}

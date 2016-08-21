@@ -22,6 +22,7 @@
  */
 
 package org.catrobat.catroid.scratchconverter;
+
 import android.app.Activity;
 
 import com.google.android.gms.common.images.WebImage;

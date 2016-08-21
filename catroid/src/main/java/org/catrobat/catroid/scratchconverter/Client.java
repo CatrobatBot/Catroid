@@ -33,7 +33,8 @@ import java.util.Date;
 
 public interface Client {
 
-	enum State { NOT_CONNECTED, CONNECTED, CONNECTED_AUTHENTICATED }
+	enum State {NOT_CONNECTED, CONNECTED, CONNECTED_AUTHENTICATED}
+
 	long INVALID_CLIENT_ID = -1;
 
 	void setConvertCallback(ConvertCallback convertCallback);

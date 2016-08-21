@@ -29,7 +29,6 @@ import com.google.android.gms.common.images.WebImage;
 
 import org.catrobat.catroid.scratchconverter.protocol.JsonKeys.JsonJobDataKeys;
 import org.catrobat.catroid.utils.Utils;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,13 +48,11 @@ public class Job {
 		private int state;
 
 		private static Map<Integer, State> map = new HashMap<>();
-
 		static {
 			for (State legEnum : State.values()) {
 				map.put(legEnum.state, legEnum);
 			}
 		}
-
 		State(final int state) {
 			this.state = state;
 		}

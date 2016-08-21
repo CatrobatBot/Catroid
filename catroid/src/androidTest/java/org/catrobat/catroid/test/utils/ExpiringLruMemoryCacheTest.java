@@ -86,15 +86,15 @@ public final class ExpiringLruMemoryCacheTest extends InstrumentationTestCase {
 
 		// use introspection for accessing private constructor
 		LruCache<String, String> lruTextCache = new LruCache<String, String>(maxNumOfEntries) {
-				@Override
-				protected void entryRemoved(boolean evicted, String key, String oldValue, String newValue) {
-					textCache.removeExpiryTime(key);
-				}
+			@Override
+			protected void entryRemoved(boolean evicted, String key, String oldValue, String newValue) {
+				textCache.removeExpiryTime(key);
+			}
 
-				@Override
-				protected int sizeOf(String key, String value) {
-					return 1;
-				}
+			@Override
+			protected int sizeOf(String key, String value) {
+				return 1;
+			}
 		};
 
 		textCache = (ExpiringLruMemoryObjectCache<String>) textCacheConstructor.newInstance(Long.valueOf(EXPIRE_TIME),
@@ -116,15 +116,15 @@ public final class ExpiringLruMemoryCacheTest extends InstrumentationTestCase {
 
 		// use introspection for accessing private constructor
 		LruCache<String, Bitmap> lruImageCache = new LruCache<String, Bitmap>(maxNumOfEntries) {
-				@Override
-				protected void entryRemoved(boolean evicted, String key, Bitmap oldValue, Bitmap newValue) {
-					imageCache.removeExpiryTime(key);
-				}
+			@Override
+			protected void entryRemoved(boolean evicted, String key, Bitmap oldValue, Bitmap newValue) {
+				imageCache.removeExpiryTime(key);
+			}
 
-				@Override
-				protected int sizeOf(String key, Bitmap bitmap) {
-					return bitmap.getByteCount() / 1024;
-				}
+			@Override
+			protected int sizeOf(String key, Bitmap bitmap) {
+				return bitmap.getByteCount() / 1024;
+			}
 		};
 
 		imageCache = imageCacheConstructor.newInstance(Long.valueOf(EXPIRE_TIME), lruImageCache, testClock);

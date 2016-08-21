@@ -34,13 +34,11 @@ public abstract class Message {
 
 		private int categoryID;
 		private static Map<Integer, CategoryType> map = new HashMap<>();
-
 		static {
 			for (CategoryType legEnum : CategoryType.values()) {
 				map.put(legEnum.categoryID, legEnum);
 			}
 		}
-
 		CategoryType(final int categoryID) {
 			this.categoryID = categoryID;
 		}

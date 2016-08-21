@@ -75,7 +75,7 @@ public class JobHandlerTest extends AndroidTestCase {
 			jobHandler.onJobMessage(new JobReadyMessage(WRONG_JOB_ID));
 			fail("onJobMessage() should throw exception, but returned unexpectedly");
 		} catch (IllegalArgumentException ex) {
-			assertEquals("State of expectedJob changed unexpectedly", Job.State.SCHEDULED,	expectedJob.getState());
+			assertEquals("State of expectedJob changed unexpectedly", Job.State.SCHEDULED, expectedJob.getState());
 			verifyZeroInteractions(convertCallbackMock);
 		} catch (Exception ex) {
 			fail("Unexpected exception thrown!");
