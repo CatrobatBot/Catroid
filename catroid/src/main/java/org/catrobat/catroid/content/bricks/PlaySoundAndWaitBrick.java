@@ -240,7 +240,7 @@ public class PlaySoundAndWaitBrick extends BrickBaseType implements OnItemSelect
 		if (sound != null && sprite.getSoundList().contains(sound) && sound.getAbsolutePath() != null) {
 			duration = (SoundManager.getInstance().getDurationOfSoundFile(sound.getAbsolutePath())) / 1000;
 		}
-		
+
 		return duration;
 	}
 
