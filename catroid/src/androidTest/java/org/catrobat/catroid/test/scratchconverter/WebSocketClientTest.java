@@ -612,6 +612,7 @@ public class WebSocketClientTest extends AndroidTestCase {
 
 		doAnswer(new Answer<DownloadFinishedCallback>() {
 			int counter = 0;
+
 			@Override
 			public DownloadFinishedCallback answer(InvocationOnMock invocation) throws Throwable {
 				assertNotNull("First argument of restoreJobIfRunning() call must not be null",

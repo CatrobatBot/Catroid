@@ -27,7 +27,6 @@ import android.util.Log;
 
 import com.google.android.gms.common.images.WebImage;
 import com.google.common.base.Preconditions;
-
 import com.koushikdutta.async.callback.CompletedCallback;
 import com.koushikdutta.async.http.AsyncHttpClient;
 import com.koushikdutta.async.http.WebSocket;

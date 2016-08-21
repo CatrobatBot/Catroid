@@ -499,7 +499,7 @@ public final class Utils {
 		Field activitiesField = activityThreadClass.getDeclaredField("mActivities");
 		activitiesField.setAccessible(true);
 		HashMap activities = (HashMap) activitiesField.get(activityThread);
-		for (Object activityRecord:activities.values()) {
+		for (Object activityRecord : activities.values()) {
 			Class activityRecordClass = activityRecord.getClass();
 			Field pausedField = activityRecordClass.getDeclaredField("paused");
 			pausedField.setAccessible(true);

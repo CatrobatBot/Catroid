@@ -165,7 +165,7 @@ public class ScratchConverterActivity extends BaseActivity implements SlidingUpP
 
 	public void convertProjects(List<ScratchProgramData> programList) {
 		final int numberOfJobsInProgress = conversionManager.getNumberOfJobsInProgress();
-		if (numberOfJobsInProgress + programList.size()  > Constants.SCRATCH_CONVERTER_MAX_NUMBER_OF_JOBS_PER_CLIENT) {
+		if (numberOfJobsInProgress + programList.size() > Constants.SCRATCH_CONVERTER_MAX_NUMBER_OF_JOBS_PER_CLIENT) {
 			ToastUtil.showError(this, getResources().getQuantityString(
 					R.plurals.error_cannot_convert_more_than_x_programs,
 					Constants.SCRATCH_CONVERTER_MAX_NUMBER_OF_JOBS_PER_CLIENT,

@@ -49,7 +49,6 @@ import org.catrobat.catroid.scratchconverter.protocol.message.job.JobOutputMessa
 import org.catrobat.catroid.scratchconverter.protocol.message.job.JobProgressMessage;
 import org.catrobat.catroid.scratchconverter.protocol.message.job.JobReadyMessage;
 import org.catrobat.catroid.scratchconverter.protocol.message.job.JobRunningMessage;
-
 import org.json.JSONObject;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;

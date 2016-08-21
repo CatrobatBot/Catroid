@@ -276,7 +276,7 @@ public class ScratchConverterActivityTest extends BaseActivityInstrumentationTes
 		final Job job = new Job(10205819, "Program 1", null);
 		job.setState(Job.State.UNSCHEDULED);
 
-		final Job[] expectedJobs = new Job[] {job};
+		final Job[] expectedJobs = new Job[] { job };
 
 		when(clientMock.isAuthenticated()).thenReturn(true);
 		conversionManager.onInfo(Constants.CURRENT_CATROBAT_LANGUAGE_VERSION, expectedJobs);
@@ -459,7 +459,7 @@ public class ScratchConverterActivityTest extends BaseActivityInstrumentationTes
 
 		for (int indexOfCheckedProgram : checkedProgramsIndex) {
 			assertTrue("Program '" + expectedDefaultProgramsList.get(indexOfCheckedProgram).getTitle()
-					+ "' at index: " + indexOfCheckedProgram + " is not checked",
+							+ "' at index: " + indexOfCheckedProgram + " is not checked",
 					expectedSet.contains(indexOfCheckedProgram));
 			expectedSet.remove(indexOfCheckedProgram);
 		}

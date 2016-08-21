@@ -38,13 +38,11 @@ public enum ScratchVisibilityState implements Parcelable {
 	private int visibilityState;
 
 	private static Map<Integer, ScratchVisibilityState> map = new HashMap<>();
-
 	static {
 		for (ScratchVisibilityState legEnum : ScratchVisibilityState.values()) {
 			map.put(legEnum.visibilityState, legEnum);
 		}
 	}
-
 	ScratchVisibilityState(final int visibilityState) {
 		this.visibilityState = visibilityState;
 	}
