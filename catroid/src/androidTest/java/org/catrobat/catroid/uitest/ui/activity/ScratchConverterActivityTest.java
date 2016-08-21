@@ -459,7 +459,7 @@ public class ScratchConverterActivityTest extends BaseActivityInstrumentationTes
 
 		for (int indexOfCheckedProgram : checkedProgramsIndex) {
 			assertTrue("Program '" + expectedDefaultProgramsList.get(indexOfCheckedProgram).getTitle()
-						+ "' at index: " + indexOfCheckedProgram + " is not checked",
+							+ "' at index: " + indexOfCheckedProgram + " is not checked",
 					expectedSet.contains(indexOfCheckedProgram));
 			expectedSet.remove(indexOfCheckedProgram);
 		}
