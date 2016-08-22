@@ -44,7 +44,7 @@ import org.catrobat.catroid.uitest.util.UiTestUtils;
 import java.util.ArrayList;
 
 public class GoToBrickTest extends ActivityInstrumentationTestCase2<ScriptActivity> {
-	
+
 	private Solo solo;
 	private Project project;
 	private GoToBrick goToBrick;
