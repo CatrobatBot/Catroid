@@ -48,7 +48,7 @@ import java.io.File;
 import java.util.List;
 
 public class PlaySoundAndWaitBrickTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
-	
+
 	private File soundFile;
 	private File soundFile2;
 	private String soundName = "testSound1";
