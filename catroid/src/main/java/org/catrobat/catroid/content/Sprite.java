@@ -322,13 +322,12 @@ public class Sprite implements Serializable, Cloneable {
 		cloneSprite.soundList = this.soundList;
 		cloneSprite.nfcTagList = this.nfcTagList;
 
-		Project currentProject = ProjectManager.getInstance().getCurrentProject();
 		Sprite originalSprite = ProjectManager.getInstance().getCurrentSprite();
 		ProjectManager.getInstance().setCurrentSprite(cloneSprite);
 
 		cloneLooks(cloneSprite);
 		cloneUserBricks(cloneSprite);
-		cloneSpriteVariables(currentProject, cloneSprite);
+		cloneSpriteVariables(ProjectManager.getInstance().getCurrentScene(), cloneSprite);
 		cloneScripts(cloneSprite);
 		setUserAndVariableBrickReferences(cloneSprite, userBricks);
 

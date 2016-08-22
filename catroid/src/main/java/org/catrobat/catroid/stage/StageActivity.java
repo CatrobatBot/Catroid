@@ -82,6 +82,8 @@ public class StageActivity extends AndroidApplication {
 	private boolean resizePossible;
 	private boolean askDialogUnanswered = false;
 
+	private static int numberOfSpritesCloned;
+
 	public static Handler messageHandler;
 
 	AndroidApplicationConfiguration configuration = null;

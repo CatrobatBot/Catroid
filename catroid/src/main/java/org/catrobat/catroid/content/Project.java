@@ -207,7 +207,7 @@ public class Project implements Serializable {
 		if (StageActivity.stageListener != null) {
 			return StageActivity.stageListener.getSpritesFromStage();
 		} else { // e.g. for ActionTests there is no Stage, only use sprites from Project
-			return spriteList;
+			return getDefaultScene().getSpriteList();
 		}
 	}
 

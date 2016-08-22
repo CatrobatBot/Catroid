@@ -147,7 +147,7 @@ public class CloneBrick extends BrickBaseType {
 		valueSpinner.setClickable(true);
 		valueSpinner.setEnabled(true);
 
-		final List<Sprite> spriteList = ProjectManager.getInstance().getCurrentProject()
+		final List<Sprite> spriteList = ProjectManager.getInstance().getCurrentScene()
 				.getSpriteList();
 
 		ArrayAdapter<String> valueAdapter = getSpinnerArrayAdapter(context);
@@ -178,7 +178,7 @@ public class CloneBrick extends BrickBaseType {
 		messageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		messageAdapter.add(context.getString(R.string.brick_clone_this));
 
-		final List<Sprite> spriteList = ProjectManager.getInstance().getCurrentProject()
+		final List<Sprite> spriteList = ProjectManager.getInstance().getCurrentScene()
 				.getSpriteList();
 
 		for (Sprite sprite : spriteList) {

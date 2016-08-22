@@ -64,6 +64,7 @@ import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.facedetection.FaceDetectionHandler;
+import org.catrobat.catroid.formulaeditor.DataContainer;
 import org.catrobat.catroid.io.SoundManager;
 import org.catrobat.catroid.physics.PhysicsDebugSettings;
 import org.catrobat.catroid.physics.PhysicsLook;
@@ -199,7 +200,7 @@ public class StageListener implements ApplicationListener {
 		physicsWorld = scene.resetPhysicsWorld();
 
 		clonedSprites = new HashSet<>();
-		sprites = new ArrayList<>(project.getSpriteList());
+		sprites = new ArrayList<>(scene.getSpriteList());
 		for (Sprite sprite : sprites) {
 			sprite.resetSprite();
 			sprite.look.createBrightnessContrastHueShader();
@@ -253,8 +254,8 @@ public class StageListener implements ApplicationListener {
 			return;
 		}
 
-		Project currentProject = ProjectManager.getInstance().getCurrentProject();
-		DataContainer userVariables = currentProject.getDataContainer();
+		Scene currentScene = ProjectManager.getInstance().getSceneToPlay();
+		DataContainer userVariables = currentScene.getDataContainer();
 		userVariables.removeVariableListForSprite(sprite);
 
 		BroadcastHandler.getScriptSpriteMap().remove(sprite);

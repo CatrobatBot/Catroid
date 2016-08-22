@@ -115,7 +115,8 @@ public final class BroadcastHandler {
 			String broadcastMessage) {
 		ArrayList<SequenceAction> actionList = new ArrayList<SequenceAction>();
 		BroadcastWaitSequenceMap.setCurrentBroadcastEvent(event);
-		for (SequenceAction action : BroadcastSequenceMap.get(broadcastMessage)) {
+		String sceneName = ProjectManager.getInstance().getSceneToPlay().getName();
+		for (SequenceAction action : BroadcastSequenceMap.get(broadcastMessage, sceneName)) {
 			SequenceAction broadcastWaitAction = ActionFactory.sequence(action,
 					ActionFactory.createBroadcastNotifyAction(event));
 			Script receiverScript = actionScriptMap.get(action);
@@ -130,7 +131,7 @@ public final class BroadcastHandler {
 			}
 		}
 		if (actionList.size() > 0) {
-			BroadcastWaitSequenceMap.put(broadcastMessage, actionList);
+			BroadcastWaitSequenceMap.put(sceneName, broadcastMessage, actionList);
 		}
 	}
 
