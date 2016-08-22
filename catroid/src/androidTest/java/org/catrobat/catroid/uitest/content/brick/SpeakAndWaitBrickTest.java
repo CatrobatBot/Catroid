@@ -42,7 +42,7 @@ import org.catrobat.catroid.uitest.util.UiTestUtils;
 import java.util.ArrayList;
 
 public class SpeakAndWaitBrickTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
-	
+
 	private Project project;
 	private SpeakAndWaitBrick speakAndWaitBrick;
 	private Sprite sprite;
