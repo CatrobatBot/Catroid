@@ -143,6 +143,7 @@ public class SpriteTest extends AndroidTestCase {
 		assertEquals("Indexes do not match", 0, sprite.getScriptIndex(firstScript));
 		assertEquals("Indexes do not match", 1, sprite.getScriptIndex(secondScript));
 	}
+
 	public void testAddScriptCorrectTotalNumber() {
 		Sprite sprite = new SingleSprite("new SingleSprite");
 		Script firstScript = new StartScript();
