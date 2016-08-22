@@ -512,7 +512,7 @@ public class PreStageActivity extends BaseActivity {
 	}
 
 	public static void textToSpeech(String text, File speechFile, OnUtteranceCompletedListener listener,
-									HashMap<String, String> speakParameter) {
+			HashMap<String, String> speakParameter) {
 		if (text == null) {
 			text = "";
 		}

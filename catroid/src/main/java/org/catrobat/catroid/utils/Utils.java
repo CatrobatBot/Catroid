@@ -768,7 +768,7 @@ public final class Utils {
 		String token = preferences.getString(Constants.TOKEN, Constants.NO_TOKEN);
 
 		boolean tokenValid = !(token.equals(Constants.NO_TOKEN) || token.length() != ServerCalls.TOKEN_LENGTH
-					|| token.equals(ServerCalls.TOKEN_CODE_INVALID));
+				|| token.equals(ServerCalls.TOKEN_CODE_INVALID));
 		return tokenValid;
 	}
 
