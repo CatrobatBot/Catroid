@@ -46,7 +46,6 @@ import android.widget.TextView;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.ProjectData;
 import org.catrobat.catroid.content.XmlHeader;
-import org.catrobat.catroid.io.StorageHandler;
 import org.catrobat.catroid.io.ProjectAndSceneScreenshotLoader;
 import org.catrobat.catroid.io.StorageHandler;
 import org.catrobat.catroid.ui.EditTextImeOverride;

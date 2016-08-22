@@ -26,7 +26,6 @@ import android.text.TextUtils;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
-import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.common.ScreenModes;
 
 import java.io.Serializable;
