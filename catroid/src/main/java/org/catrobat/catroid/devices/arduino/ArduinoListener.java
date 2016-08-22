@@ -44,7 +44,7 @@ public class ArduinoListener implements IFirmata.Listener {
 	private int analogPin4 = 0;
 	private int analogPin5 = 0;
 
-	int[] portValue = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	int[] portValue = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 	@Override
 	public void onAnalogMessageReceived(AnalogMessage message) {
@@ -87,19 +87,19 @@ public class ArduinoListener implements IFirmata.Listener {
 
 		switch (message.getPort()) {
 			case ArduinoImpl.PORT_DIGITAL_0:
-				portValue [2] = (message.getValue() & 0x4) == 0 ? 0 : 1;
-				portValue [3] = (message.getValue() & 0x8) == 0 ? 0 : 1;
-				portValue [4] = (message.getValue() & 0x16) == 0 ? 0 : 1;
-				portValue [5] = (message.getValue() & 0x32) == 0 ? 0 : 1;
-				portValue [6] = (message.getValue() & 0x64) == 0 ? 0 : 1;
+				portValue[2] = (message.getValue() & 0x4) == 0 ? 0 : 1;
+				portValue[3] = (message.getValue() & 0x8) == 0 ? 0 : 1;
+				portValue[4] = (message.getValue() & 0x16) == 0 ? 0 : 1;
+				portValue[5] = (message.getValue() & 0x32) == 0 ? 0 : 1;
+				portValue[6] = (message.getValue() & 0x64) == 0 ? 0 : 1;
 				break;
 			case ArduinoImpl.PORT_DIGITAL_1:
-				portValue [8] = (message.getValue() & 0x1) == 0 ? 0 : 1;
-				portValue [9] = (message.getValue() & 0x2) == 0 ? 0 : 1;
-				portValue [10] = (message.getValue() & 0x4) == 0 ? 0 : 1;
-				portValue [11] = (message.getValue() & 0x8) == 0 ? 0 : 1;
-				portValue [12] = (message.getValue() & 0x16) == 0 ? 0 : 1;
-				portValue [13] = (message.getValue() & 0x32) == 0 ? 0 : 1;
+				portValue[8] = (message.getValue() & 0x1) == 0 ? 0 : 1;
+				portValue[9] = (message.getValue() & 0x2) == 0 ? 0 : 1;
+				portValue[10] = (message.getValue() & 0x4) == 0 ? 0 : 1;
+				portValue[11] = (message.getValue() & 0x8) == 0 ? 0 : 1;
+				portValue[12] = (message.getValue() & 0x16) == 0 ? 0 : 1;
+				portValue[13] = (message.getValue() & 0x32) == 0 ? 0 : 1;
 				break;
 		}
 

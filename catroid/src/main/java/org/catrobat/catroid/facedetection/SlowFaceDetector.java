@@ -30,7 +30,6 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
-import android.media.FaceDetector;
 import android.media.FaceDetector.Face;
 
 import org.catrobat.catroid.camera.CameraManager;
