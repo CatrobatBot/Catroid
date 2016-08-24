@@ -39,6 +39,7 @@ import com.parrot.freeflight.service.DroneControlService;
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.bluetooth.base.BluetoothDevice;
 import org.catrobat.catroid.bluetooth.base.BluetoothDeviceService;
+import org.catrobat.catroid.cast.CastManager;
 import org.catrobat.catroid.common.CatroidService;
 import org.catrobat.catroid.common.ServiceProvider;
 import org.catrobat.catroid.devices.arduino.phiro.Phiro;
@@ -66,7 +67,7 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 	private float[] rotationVector = new float[3];
 	private float[] accelerationXYZ = new float[3];
 	private float signAccelerationZ = 0f;
-	private float[] gravity = new float[]{0f, 0f, 0f};
+	private float[] gravity = new float[] { 0f, 0f, 0f };
 	private boolean useLinearAccelerationFallback = false;
 	private boolean useRotationVectorFallback = false;
 	private float linearAccelerationX = 0f;
@@ -401,7 +402,7 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 			case DATE_DAY:
 				return Double.valueOf(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
 			case DATE_WEEKDAY:
-				return Double.valueOf(Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1);
+				return Double.valueOf(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
 			case TIME_HOUR:
 				return Double.valueOf(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
 			case TIME_MINUTE:
@@ -431,6 +432,14 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 					return Double.valueOf(phiro.getSensorValue(sensor));
 				}
 				break;
+
+			case GAMEPAD_A_PRESSED:
+			case GAMEPAD_B_PRESSED:
+			case GAMEPAD_DOWN_PRESSED:
+			case GAMEPAD_LEFT_PRESSED:
+			case GAMEPAD_RIGHT_PRESSED:
+			case GAMEPAD_UP_PRESSED:
+				return CastManager.getInstance().isButtonPressed(sensor) ? 1.0 : 0.0;
 
 			case LAST_FINGER_INDEX:
 				return Double.valueOf(TouchUtil.getLastTouchIndex());
@@ -497,6 +506,9 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 
 			case NFC_TAG_ID:
 				return (double) NfcHandler.getLastNfcTagId();
+			//CAST
+			//default:
+			//	throw new IllegalArgumentException("Sensor not implemented");
 		}
 		return 0d;
 	}

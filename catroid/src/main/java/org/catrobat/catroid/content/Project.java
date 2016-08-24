@@ -28,6 +28,7 @@ import android.os.Build;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.common.MessageContainer;
@@ -38,7 +39,6 @@ import org.catrobat.catroid.devices.mindstorms.nxt.sensors.NXTSensor;
 import org.catrobat.catroid.formulaeditor.DataContainer;
 import org.catrobat.catroid.formulaeditor.UserList;
 import org.catrobat.catroid.formulaeditor.UserVariable;
-import org.catrobat.catroid.io.XStreamFieldKeyOrder;
 import org.catrobat.catroid.physics.content.ActionPhysicsFactory;
 import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.ui.SettingsActivity;
@@ -51,15 +51,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @XStreamAlias("program")
-// Remove checkstyle disable when https://github.com/checkstyle/checkstyle/issues/1349 is fixed
-// CHECKSTYLE DISABLE IndentationCheck FOR 7 LINES
-@XStreamFieldKeyOrder({
-		"header",
-		"settings",
-		"scenes",
-		"programVariableList",
-		"programListOfLists"
-})
 public class Project implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -75,7 +66,8 @@ public class Project implements Serializable {
 	@XStreamAlias("scenes")
 	private List<Scene> sceneList = new ArrayList<>();
 
-	public Project(Context context, String name, boolean landscapeMode) {
+	public Project(Context context, String name, boolean landscapeMode, boolean isCastProject) {
+
 		xmlHeader.setProgramName(name);
 		xmlHeader.setDescription("");
 
@@ -93,6 +85,10 @@ public class Project implements Serializable {
 		xmlHeader.virtualScreenHeight = ScreenValues.SCREEN_HEIGHT;
 		setDeviceData(context);
 
+		if (isCastProject) {
+			setChromecastFields();
+		}
+
 		MessageContainer.clear();
 
 		//This is used for tests
@@ -103,6 +99,10 @@ public class Project implements Serializable {
 					this));
 		}
 		xmlHeader.scenesEnabled = true;
+	}
+
+	public Project(Context context, String name, boolean landscapeMode) {
+		this(context, name, landscapeMode, false);
 	}
 
 	public Project(Context context, String name) {
@@ -188,6 +188,13 @@ public class Project implements Serializable {
 		return null;
 	}
 
+	public void setChromecastFields() {
+		xmlHeader.virtualScreenHeight = ScreenValues.CAST_SCREEN_HEIGHT;
+		xmlHeader.virtualScreenWidth = ScreenValues.CAST_SCREEN_WIDTH;
+		xmlHeader.setlandscapeMode(true);
+		xmlHeader.setIsCastProject(true);
+	}
+
 	private void ifLandscapeSwitchWidthAndHeight() {
 		if (ScreenValues.SCREEN_WIDTH > ScreenValues.SCREEN_HEIGHT) {
 			int tmp = ScreenValues.SCREEN_HEIGHT;
@@ -249,7 +256,10 @@ public class Project implements Serializable {
 	}
 
 	public int getRequiredResources() {
-		int resources = Brick.NO_RESOURCES;
+		//CAST
+		int resources = ProjectManager.getInstance().getCurrentProject().isCastProject() ? Brick.CAST_REQUIRED : Brick.NO_RESOURCES;
+		//develop!!!
+		//int resources = Brick.NO_RESOURCES;
 		ActionFactory physicsActionFactory = new ActionPhysicsFactory();
 		ActionFactory actionFactory = new ActionFactory();
 
@@ -372,6 +382,11 @@ public class Project implements Serializable {
 				return;
 			}
 		}
+	}
+
+	//CAST
+	public boolean isCastProject() {
+		return xmlHeader.isCastProject();
 	}
 
 	public void refreshSpriteReferences() {
