@@ -369,7 +369,6 @@ public final class ProjectManager implements OnLoadProjectCompleteListener, OnCh
 		initializeNewProject(projectName, context, empty, drone, false, false);
 	}*/
 
-
 	public Project getCurrentProject() {
 		return project;
 	}

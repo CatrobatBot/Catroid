@@ -66,8 +66,6 @@ import org.catrobat.catroid.utils.UtilFile;
 import java.io.File;
 import java.io.IOException;
 
-
-
 public class DefaultProjectCreatorCast extends DefaultProjectCreator {
 	private static final String TAG = DefaultProjectCreatorDefault.class.getSimpleName();
 
@@ -140,7 +138,7 @@ public class DefaultProjectCreatorCast extends DefaultProjectCreator {
 			File soundFile2 = UtilFile.copySoundFromResourceIntoProject(projectName, sceneName, tweet2
 					+ SoundRecorder.RECORDING_EXTENSION, R.raw.default_project_tweet_2, context, true);
 			UtilFile.copyFromResourceIntoProject(projectName, sceneName, ".", StageListener
-					.SCREENSHOT_AUTOMATIC_FILE_NAME,
+							.SCREENSHOT_AUTOMATIC_FILE_NAME,
 					R.drawable.default_project_screenshot, context, false);
 
 			Log.i(TAG, String.format("createAndSaveDefaultCastProject(%s) %s created%n %s created%n %s created%n %s "
