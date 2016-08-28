@@ -70,7 +70,7 @@ public class Job {
 		}
 	}
 
-	public enum DownloadState { NOT_YET_DOWNLOADED, DOWNLOADING, ALREADY_DOWNLOADED }
+	public enum DownloadState {NOT_YET_DOWNLOADED, DOWNLOADING, ALREADY_DOWNLOADED}
 
 	private State state;
 	private long jobID;
