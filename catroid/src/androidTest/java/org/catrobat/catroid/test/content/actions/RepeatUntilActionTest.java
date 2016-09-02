@@ -189,14 +189,14 @@ public class RepeatUntilActionTest extends InstrumentationTestCase {
 		testSprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
 
 		while (!testSprite.look.getAllActionsAreFinished()) {
-		while (!testSprite.look.getAllActionsAreFinished()) {
-			testSprite.look.act(1.0f);
-		}
+			while (!testSprite.look.getAllActionsAreFinished()) {
+				testSprite.look.act(1.0f);
+			}
 
-		int valueOfUserVariable = ((Double) userVariable.getValue()).intValue();
-		int valueOfUserVariable2 = ((Double) userVariable2.getValue()).intValue();
+			int valueOfUserVariable = ((Double) userVariable.getValue()).intValue();
+			int valueOfUserVariable2 = ((Double) userVariable2.getValue()).intValue();
 
-		assertEquals("Wrong value for userVariable", TRUE_VALUE, valueOfUserVariable);
-		assertEquals("Wrong value for userVariable2", TRUE_VALUE, valueOfUserVariable2);
+			assertEquals("Wrong value for userVariable", TRUE_VALUE, valueOfUserVariable);
+			assertEquals("Wrong value for userVariable2", TRUE_VALUE, valueOfUserVariable2);
 	}
 }
