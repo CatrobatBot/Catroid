@@ -64,7 +64,6 @@ public class PocketMusicActivity extends BaseActivity {
 
 		project.addTrack("Track 1", track);
 
-
 		TrackToTrackGridConverter.convertTrackToTrackGrid(track, MusicalBeat.BEAT_4_4, bpm);
 	}
 }
