@@ -30,15 +30,19 @@ import org.catrobat.catroid.R;
 public class NoteView extends View implements View.OnClickListener {
 
 	private boolean toggled;
-	private static int whiteColor;
-	private static int blackColor;
+	private int untoggledColor;
+	private static int toggledColor;
 
 	public NoteView(Context context) {
 		super(context);
-		setBackgroundColor(getToggledColor());
 		setOnClickListener(this);
-		whiteColor = getResources().getColor(R.color.white);
-		blackColor = getResources().getColor(R.color.grey);
+	}
+
+	public NoteView(Context context, int untoggledColor) {
+		this(context);
+		this.setUntoggledColor(untoggledColor);
+		setBackgroundColor(getToggledColor());
+		toggledColor = getResources().getColor(R.color.grey);
 	}
 
 	@Override
@@ -48,10 +52,23 @@ public class NoteView extends View implements View.OnClickListener {
 	}
 
 	private int getToggledColor() {
-		return toggled ? blackColor : whiteColor;
+		if (toggled) {
+			return toggledColor;
+		}
+		else {
+			return getUntoggledColor();
+		}
 	}
 
 	public boolean isToggled() {
 		return toggled;
+	}
+
+	public int getUntoggledColor() {
+		return untoggledColor;
+	}
+
+	public void setUntoggledColor(int untoggledColor) {
+		this.untoggledColor = untoggledColor;
 	}
 }
