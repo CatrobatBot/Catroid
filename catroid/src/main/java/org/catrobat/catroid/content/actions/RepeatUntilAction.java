@@ -66,7 +66,7 @@ public class RepeatUntilAction extends com.badlogic.gdx.scenes.scene2d.actions.R
 	@Override
 	public boolean delegate(float delta) {
 
-		if(!isValidConditionFormula()) {
+		if (!isValidConditionFormula()) {
 			return true;
 		}
 

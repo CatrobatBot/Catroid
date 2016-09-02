@@ -176,7 +176,6 @@ public class RepeatUntilActionTest extends InstrumentationTestCase {
 				new FormulaElement(ElementType.NUMBER, String.valueOf(TRUE_VALUE), null),
 				new FormulaElement(ElementType.USER_VARIABLE, userVariable.getName(), null)));
 
-
 		RepeatUntilBrick repeatBrick = new RepeatUntilBrick(validFormula);
 		LoopEndBrick loopEndBrick = new LoopEndBrick(repeatBrick);
 		repeatBrick.setLoopEndBrick(loopEndBrick);
