@@ -58,6 +58,7 @@ public class WhenConditionBrick extends FormulaBrick implements ScriptBrick {
 	public WhenConditionBrick(WhenConditionScript script) {
 		this.script = script;
 		init();
+		setFormulaWithBrickField(BrickField.IF_CONDITION, getFormulaWithBrickField(BrickField.IF_CONDITION));
 	}
 
 	private void init() {
