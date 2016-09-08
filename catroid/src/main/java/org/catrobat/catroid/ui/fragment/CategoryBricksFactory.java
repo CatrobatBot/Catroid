@@ -254,9 +254,10 @@ public class CategoryBricksFactory {
 			controlBrickList.add(new PhiroIfLogicBeginBrick());
 		}
 
-		controlBrickList.add(new WhenClonedBrick());
 		controlBrickList.add(new CloneBrick());
 		controlBrickList.add(new DeleteThisCloneBrick());
+		controlBrickList.add(new WhenClonedBrick());
+		
 		controlBrickList.add(new StopScriptBrick(BrickValues.STOP_THIS_SCRIPT));
 
 		return controlBrickList;
@@ -376,21 +377,16 @@ public class CategoryBricksFactory {
 	private List<Brick> setupLooksCategoryList(Context context, boolean isBackgroundSprite) {
 		List<Brick> looksBrickList = new ArrayList<>();
 
-		looksBrickList.add(new WhenBackgroundChangesBrick());
-		looksBrickList.add(new SetBackgroundBrick());
-		looksBrickList.add(new SetBackgroundAndWaitBrick());
 		if (!isBackgroundSprite) {
 			looksBrickList.add(new SetLookBrick());
 		}
 		looksBrickList.add(new NextLookBrick());
 		looksBrickList.add(new PreviousLookBrick());
-		looksBrickList.add(new CameraBrick());
-		looksBrickList.add(new AskBrick(context.getString(R.string.brick_ask_default_question)));
-		looksBrickList.add(new ChooseCameraBrick());
 		looksBrickList.add(new SetSizeToBrick(BrickValues.SET_SIZE_TO));
 		looksBrickList.add(new ChangeSizeByNBrick(BrickValues.CHANGE_SIZE_BY));
 		looksBrickList.add(new HideBrick());
 		looksBrickList.add(new ShowBrick());
+		looksBrickList.add(new AskBrick(context.getString(R.string.brick_ask_default_question)));
 		if (!isBackgroundSprite) {
 			looksBrickList.add(new SayBubbleBrick(context.getString(R.string.brick_say_bubble_default_value)));
 			looksBrickList.add(new SayForBubbleBrick(context.getString(R.string.brick_say_bubble_default_value), 1.0f));
@@ -404,6 +400,11 @@ public class CategoryBricksFactory {
 		looksBrickList.add(new SetColorBrick(BrickValues.SET_COLOR_TO));
 		looksBrickList.add(new ChangeColorByNBrick(BrickValues.CHANGE_COLOR_BY));
 		looksBrickList.add(new ClearGraphicEffectBrick());
+		looksBrickList.add(new WhenBackgroundChangesBrick());
+		looksBrickList.add(new SetBackgroundBrick());
+		looksBrickList.add(new SetBackgroundAndWaitBrick());
+		looksBrickList.add(new CameraBrick());
+		looksBrickList.add(new ChooseCameraBrick());
 		looksBrickList.add(new FlashBrick());
 
 		if (SettingsActivity.isPhiroSharedPreferenceEnabled(context)) {
