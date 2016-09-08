@@ -257,7 +257,7 @@ public class CategoryBricksFactory {
 		controlBrickList.add(new CloneBrick());
 		controlBrickList.add(new DeleteThisCloneBrick());
 		controlBrickList.add(new WhenClonedBrick());
-		
+
 		controlBrickList.add(new StopScriptBrick(BrickValues.STOP_THIS_SCRIPT));
 
 		return controlBrickList;
