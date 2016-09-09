@@ -35,7 +35,7 @@ public class TrackView extends TableLayout {
 	public static final int ROW_COUNT = 13;
 	private List<TrackRowView> trackRowViews = new ArrayList<>(ROW_COUNT);
 	private static final int[] BLACK_KEY_INDICES = {
-		1, 3, 6, 8, 10
+			1, 3, 6, 8, 10
 	};
 
 	public TrackView(Context context, AttributeSet attrs) {

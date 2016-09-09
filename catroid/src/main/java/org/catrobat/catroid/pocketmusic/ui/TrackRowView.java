@@ -37,7 +37,7 @@ public class TrackRowView extends TableRow {
 	private List<NoteView> noteViews = new ArrayList<>(QUARTER_COUNT);
 	private boolean isBlackRow;
 
-	public  TrackRowView(Context context, boolean isBlackRow) {
+	public TrackRowView(Context context, boolean isBlackRow) {
 		super(context);
 		this.setBlackRow(isBlackRow);
 		initializeRow();
@@ -49,8 +49,7 @@ public class TrackRowView extends TableRow {
 		int noteColor;
 		if (isBlackRow) {
 			noteColor = ContextCompat.getColor(getContext(), R.color.spritelist_details_text_color);
-		}
-		else {
+		} else {
 			noteColor = ContextCompat.getColor(getContext(), R.color.white);
 		}
 		for (int i = 0; i < QUARTER_COUNT; i++) {

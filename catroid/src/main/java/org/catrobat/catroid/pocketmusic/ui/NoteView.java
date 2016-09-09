@@ -54,8 +54,7 @@ public class NoteView extends View implements View.OnClickListener {
 	private int getToggledColor() {
 		if (toggled) {
 			return toggledColor;
-		}
-		else {
+		} else {
 			return getUntoggledColor();
 		}
 	}
