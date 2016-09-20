@@ -72,7 +72,7 @@ import static android.view.View.VISIBLE;
 
 public class ScratchProgramDetailsActivity extends BaseActivity implements
 		FetchScratchProgramDetailsTask.ScratchProgramListTaskDelegate, ScratchRemixedProgramEditListener,
-		JobViewListener, Client.DownloadFinishedCallback {
+		JobViewListener, Client.DownloadCallback {
 
 	private static final String TAG = ScratchProgramDetailsActivity.class.getSimpleName();
 
@@ -145,8 +145,8 @@ public class ScratchProgramDetailsActivity extends BaseActivity implements
 			onJobNotInProgress();
 		}
 
-		conversionManager.addJobConsoleViewListener(programData.getId(), this);
-		conversionManager.addDownloadFinishedCallback(this);
+		conversionManager.addJobViewListener(programData.getId(), this);
+		conversionManager.addGlobalDownloadCallback(this);
 
 		final Activity activity = this;
 		convertButton.setOnClickListener(new View.OnClickListener() {
@@ -182,8 +182,8 @@ public class ScratchProgramDetailsActivity extends BaseActivity implements
 	protected void onDestroy() {
 		super.onDestroy();
 		Log.d(TAG, "Destroyed " + TAG);
-		conversionManager.removeJobConsoleViewListener(programData.getId(), this);
-		conversionManager.removeDownloadFinishedCallback(this);
+		conversionManager.removeJobViewListener(programData.getId(), this);
+		conversionManager.removeGlobalDownloadCallback(this);
 		fetchRemixesTask.cancel(true);
 		progressDialog.dismiss();
 	}
@@ -432,6 +432,11 @@ public class ScratchProgramDetailsActivity extends BaseActivity implements
 		if (jobID == programData.getId()) {
 			convertButton.setText(R.string.status_downloading);
 		}
+	}
+
+	@Override
+	public void onDownloadProgress(short progress, String url) {
+		// nothing to do
 	}
 
 	@Override
