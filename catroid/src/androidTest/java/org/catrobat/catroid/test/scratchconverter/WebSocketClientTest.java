@@ -54,7 +54,6 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import java.lang.reflect.Field;
-import java.util.Date;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyFloat;
