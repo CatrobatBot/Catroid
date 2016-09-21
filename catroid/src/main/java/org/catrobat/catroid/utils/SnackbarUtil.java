@@ -30,7 +30,6 @@ import android.preference.PreferenceManager;
 
 import com.github.mrengineer13.snackbar.SnackBar;
 
-import org.catrobat.catroid.BuildConfig;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.ui.SettingsActivity;
 

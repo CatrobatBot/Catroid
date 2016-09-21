@@ -25,7 +25,6 @@ package org.catrobat.catroid.utils;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-
 public class SnackbarToken implements Parcelable {
 
 	public String id;
