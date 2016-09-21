@@ -70,6 +70,7 @@ import org.catrobat.catroid.ui.dialogs.SignInDialog;
 import org.catrobat.catroid.ui.fragment.ListItemActionsInterface;
 import org.catrobat.catroid.ui.fragment.ScenesListFragment;
 import org.catrobat.catroid.ui.fragment.SpritesListFragment;
+import org.catrobat.catroid.utils.SnackbarUtil;
 import org.catrobat.catroid.utils.ToastUtil;
 import org.catrobat.catroid.utils.Utils;
 
