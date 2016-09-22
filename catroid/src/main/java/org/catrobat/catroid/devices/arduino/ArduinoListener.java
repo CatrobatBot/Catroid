@@ -44,7 +44,7 @@ public class ArduinoListener implements IFirmata.Listener {
 	private int analogPin4 = 0;
 	private int analogPin5 = 0;
 
-	private int[] portValue = new int[ArduinoImpl.NUMBER_OF_DIGITAL_PINS];
+	private int[] portValue = new int[(ArduinoImpl.NUMBER_OF_DIGITAL_PINS + 7) / 8];
 
 	@Override
 	public void onAnalogMessageReceived(AnalogMessage message) {
@@ -87,24 +87,15 @@ public class ArduinoListener implements IFirmata.Listener {
 
 		switch (message.getPort()) {
 			case ArduinoImpl.PORT_DIGITAL_0:
-				portValue [2] = (message.getValue() & 0x4) == 0 ? 0 : 1;
-				portValue [3] = (message.getValue() & 0x8) == 0 ? 0 : 1;
-				portValue [4] = (message.getValue() & 0x16) == 0 ? 0 : 1;
-				portValue [5] = (message.getValue() & 0x32) == 0 ? 0 : 1;
-				portValue [6] = (message.getValue() & 0x64) == 0 ? 0 : 1;
+				portValue[0] = message.getValue();
 				break;
 			case ArduinoImpl.PORT_DIGITAL_1:
-				portValue [8] = (message.getValue() & 0x1) == 0 ? 0 : 1;
-				portValue [9] = (message.getValue() & 0x2) == 0 ? 0 : 1;
-				portValue [10] = (message.getValue() & 0x4) == 0 ? 0 : 1;
-				portValue [11] = (message.getValue() & 0x8) == 0 ? 0 : 1;
-				portValue [12] = (message.getValue() & 0x16) == 0 ? 0 : 1;
-				portValue [13] = (message.getValue() & 0x32) == 0 ? 0 : 1;
+				portValue[1] = message.getValue();
 				break;
 		}
 
-		for (int i = 0; i <= 13; i++) {
-			Log.d(TAG, String.format("Digital Port Values: %d", portValue[i]));
+		for (int i = 0; i < ArduinoImpl.NUMBER_OF_DIGITAL_PINS; i++) {
+			Log.d(TAG, String.format("Digital Pin %d Value: %d", i, getPinValue(i)));
 		}
 	}
 
@@ -164,11 +155,28 @@ public class ArduinoListener implements IFirmata.Listener {
 		return analogPin5;
 	}
 
-	public int getPortValue(int pin) {
-		return portValue[pin];
+	public int getPinValue(int pin) {
+		if ((pin >= 0) && (pin < ArduinoImpl.NUMBER_OF_DIGITAL_PINS)) {
+			int port = (pin + 7) / 8;
+			int index = pin % 8;
+			return ArduinoImpl.getBit(this.portValue[port], index);
+		}
+		return 0;
 	}
 
-	public void setPortValue(int pin, int value) {
-		this.portValue[pin] = value;
+	public void setPinValue(int pin, int value) {
+		if ((pin >= 0) && (pin < ArduinoImpl.NUMBER_OF_DIGITAL_PINS)) {
+			int port = (pin + 7) / 8;
+			int index = pin % 8;
+			this.portValue[port] =  ArduinoImpl.setBit(this.portValue[port], index, value);
+		}
+	}
+
+	public int getPortValue(int port) {
+		return portValue[port];
+	}
+
+	public void setPortValue(int port, int value) {
+		this.portValue[port] = value;
 	}
 }
