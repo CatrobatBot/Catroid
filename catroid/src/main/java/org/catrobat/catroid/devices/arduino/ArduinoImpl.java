@@ -222,30 +222,36 @@ public class ArduinoImpl implements Arduino {
 		sendAnalogFirmataMessage(pin, value);
 	}
 
+	public static int setBit(int number, int index, int value) {
+		if (value == 0) {
+			return number & ~(1 << index);
+		} else {
+			return number | (1 << index);
+		}
+	}
+
 	@Override
 	public void setDigitalArduinoPin(int digitalPinNumber, int pinValue) {
-		int digitalPort = 0;
-		double value;
+		int digitalPort;
+		int pinNumberOfPort;
+
 		if (digitalPinNumber < 8) {
-			if (pinValue > 0) {
-				value = Math.pow(2, (double) digitalPinNumber);
-				sendDigitalFirmataMessage(digitalPort, digitalPinNumber, (int) value);
-				arduinoListener.setPortValue(digitalPinNumber, 1);
-			} else {
-				sendDigitalFirmataMessage(digitalPort, digitalPinNumber, 0);
-				arduinoListener.setPortValue(digitalPinNumber, 0);
-			}
+			digitalPort = 0;
+			pinNumberOfPort = digitalPinNumber;
 		} else {
 			digitalPort = 1;
-			if (pinValue > 0) {
-				value = Math.pow(2, (double) digitalPinNumber - 8);
-				sendDigitalFirmataMessage(digitalPort, digitalPinNumber, (int) value);
-				arduinoListener.setPortValue(digitalPinNumber, 1);
-			} else {
-				sendDigitalFirmataMessage(digitalPort, digitalPinNumber, 0);
-				arduinoListener.setPortValue(digitalPinNumber, 0);
-			}
+			pinNumberOfPort = digitalPinNumber - 8;
 		}
+
+		int portValue = arduinoListener.getPortValue(digitalPort);
+		portValue = setBit(portValue, pinNumberOfPort, pinValue);
+		if (pinValue > 0) {
+			arduinoListener.setPinValue(digitalPinNumber, 1);
+		} else {
+			arduinoListener.setPinValue(digitalPinNumber, 0);
+		}
+		sendDigitalFirmataMessage(digitalPort, digitalPinNumber, portValue);
+		arduinoListener.setPortValue(digitalPort, portValue);
 	}
 
 	@Override
@@ -267,7 +273,7 @@ public class ArduinoImpl implements Arduino {
 			Log.d(TAG, "Error Arduino sensor thread sleep()");
 		}
 
-		double result = arduinoListener.getPortValue(digitalPinNumber);
+		double result = arduinoListener.getPinValue(digitalPinNumber);
 
 		sendFirmataMessage(new ReportDigitalPortMessage(port, false));
 
