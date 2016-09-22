@@ -974,4 +974,22 @@ public final class Utils {
 	public static String getNumberStringForBricks(float value) {
 		return (int) value == value ? "" + (int) value : "" + value;
 	}
+
+	public static int setBit(int number, int index, int value) {
+		if ((index >= 0) && (index < 32)) {
+			if (value == 0) {
+				return number & ~(1 << index);
+			} else {
+				return number | (1 << index);
+			}
+		}
+		return number;
+	}
+
+	public static int getBit(int number, int index) {
+		if ((index >= 0) && (index < 32)) {
+			return (number >> index) & 0x1;
+		}
+		return 0;
+	}
 }
