@@ -45,6 +45,7 @@ public class ArduinoListener implements IFirmata.Listener {
 	private int analogPin5 = 0;
 
 	int[] portValue = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	int[] uCPortValue = new int[] {0, 0};
 
 	@Override
 	public void onAnalogMessageReceived(AnalogMessage message) {
@@ -92,6 +93,7 @@ public class ArduinoListener implements IFirmata.Listener {
 				portValue [4] = (message.getValue() & 0x16) == 0 ? 0 : 1;
 				portValue [5] = (message.getValue() & 0x32) == 0 ? 0 : 1;
 				portValue [6] = (message.getValue() & 0x64) == 0 ? 0 : 1;
+				uCPortValue[0] = message.getValue();
 				break;
 			case ArduinoImpl.PORT_DIGITAL_1:
 				portValue [8] = (message.getValue() & 0x1) == 0 ? 0 : 1;
@@ -100,6 +102,7 @@ public class ArduinoListener implements IFirmata.Listener {
 				portValue [11] = (message.getValue() & 0x8) == 0 ? 0 : 1;
 				portValue [12] = (message.getValue() & 0x16) == 0 ? 0 : 1;
 				portValue [13] = (message.getValue() & 0x32) == 0 ? 0 : 1;
+				uCPortValue[1] = message.getValue();
 				break;
 		}
 
@@ -170,5 +173,13 @@ public class ArduinoListener implements IFirmata.Listener {
 
 	public void setPortValue(int pin, int value) {
 		this.portValue[pin] = value;
+	}
+
+	public int getuCPortValue(int port) {
+		return uCPortValue[port];
+	}
+
+	public void setuCPortValue(int port, int value) {
+		this.uCPortValue[port] = value;
 	}
 }

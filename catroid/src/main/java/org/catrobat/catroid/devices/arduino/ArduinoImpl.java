@@ -187,6 +187,10 @@ public class ArduinoImpl implements Arduino {
 			sendFirmataMessage(new SetPinModeMessage(pin, SetPinModeMessage.PIN_MODE.PWM.getMode()));
 		}
 		reportSensorData(true);
+
+		// get status of digital ports
+		sendFirmataMessage(new ReportDigitalPortMessage(0, true));
+		sendFirmataMessage(new ReportDigitalPortMessage(1, true));
 	}
 
 	private void reportSensorData(boolean report) {
@@ -225,27 +229,27 @@ public class ArduinoImpl implements Arduino {
 	@Override
 	public void setDigitalArduinoPin(int digitalPinNumber, int pinValue) {
 		int digitalPort = 0;
-		double value;
+		int PinNumberOfPort;
+		int PortValue;
+
 		if (digitalPinNumber < 8) {
-			if (pinValue > 0) {
-				value = Math.pow(2, (double) digitalPinNumber);
-				sendDigitalFirmataMessage(digitalPort, digitalPinNumber, (int) value);
-				arduinoListener.setPortValue(digitalPinNumber, 1);
-			} else {
-				sendDigitalFirmataMessage(digitalPort, digitalPinNumber, 0);
-				arduinoListener.setPortValue(digitalPinNumber, 0);
-			}
+			digitalPort = 0;
+			PinNumberOfPort = digitalPinNumber;
 		} else {
 			digitalPort = 1;
-			if (pinValue > 0) {
-				value = Math.pow(2, (double) digitalPinNumber - 8);
-				sendDigitalFirmataMessage(digitalPort, digitalPinNumber, (int) value);
-				arduinoListener.setPortValue(digitalPinNumber, 1);
-			} else {
-				sendDigitalFirmataMessage(digitalPort, digitalPinNumber, 0);
-				arduinoListener.setPortValue(digitalPinNumber, 0);
-			}
+			PinNumberOfPort = digitalPinNumber - 8;
 		}
+
+		PortValue = arduinoListener.getuCPortValue(digitalPort);
+		if (pinValue > 0) { // set pin
+			PortValue = PortValue | (1 << PinNumberOfPort);
+			arduinoListener.setPortValue(digitalPinNumber, 1);
+		} else { // clear pin
+			PortValue = PortValue & ~(1 << PinNumberOfPort);
+			arduinoListener.setPortValue(digitalPinNumber, 0);
+		}
+		sendDigitalFirmataMessage(digitalPort, digitalPinNumber, PortValue);
+		arduinoListener.setuCPortValue(digitalPort, PortValue);
 	}
 
 	@Override
