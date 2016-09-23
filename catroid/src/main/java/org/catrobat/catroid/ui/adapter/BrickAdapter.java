@@ -91,6 +91,7 @@ public class BrickAdapter extends BrickBaseAdapter implements DragAndDropListene
 	private int toEndDrag;
 	private boolean retryScriptDragging;
 	private boolean showDetails = false;
+	public boolean isDragging = false;
 
 	private List<Brick> animatedBricks;
 
@@ -410,6 +411,7 @@ public class BrickAdapter extends BrickBaseAdapter implements DragAndDropListene
 			scrollTo = getCount() - 1;
 		}
 		dragAndDropListView.smoothScrollToPosition(scrollTo);
+		isDragging = false;
 	}
 
 	private void addScriptToProject(int position, ScriptBrick scriptBrick) {
@@ -850,16 +852,13 @@ public class BrickAdapter extends BrickBaseAdapter implements DragAndDropListene
 		if (draggedBrick != null && dragTargetPosition == position) {
 			return insertionView;
 		}
+
 		listItemCount = position + 1;
 
 		BrickBaseType brick = (BrickBaseType) getItem(position);
 
-		if (brick.isCommentedOut()) {
-			BrickViewProvider.setSaturationOnBrick(brick, true);
-		}
-
 		View currentBrickView = brick.getView(context, position, this);
-
+		BrickViewProvider.setSaturationOnView(currentBrickView, brick.isCommentedOut());
 		currentBrickView.setOnClickListener(this);
 
 		if (!(brick instanceof ScriptBrick)) {
@@ -937,6 +936,10 @@ public class BrickAdapter extends BrickBaseAdapter implements DragAndDropListene
 	@Override
 	public void onClick(final View view) {
 		if (actionMode != ActionModeEnum.NO_ACTION) {
+			return;
+		}
+
+		if (isDragging) {
 			return;
 		}
 
@@ -1031,9 +1034,9 @@ public class BrickAdapter extends BrickBaseAdapter implements DragAndDropListene
 					List<String> backPackedScriptGroups = BackPackListManager.getInstance().getAllBackPackedScriptGroups();
 					showNewGroupBackPackDialog(backPackedScriptGroups, false);
 				} else if (clickedItemText.equals(context.getText(R.string.brick_context_dialog_comment_in))) {
-					smartBrickSelection(brickList.get(itemPosition), false);
+					commentBrickOut(brickList.get(itemPosition), false);
 				} else if (clickedItemText.equals(context.getText(R.string.brick_context_dialog_comment_out))) {
-					smartBrickSelection(brickList.get(itemPosition), true);
+					commentBrickOut(brickList.get(itemPosition), true);
 				}
 			}
 		});
@@ -1245,6 +1248,12 @@ public class BrickAdapter extends BrickBaseAdapter implements DragAndDropListene
 		}
 	}
 
+	private void commentBrickOut(Brick brick, boolean commentOut) {
+		actionMode = ActionModeEnum.COMMENT_OUT;
+		handleCheck(brick, commentOut);
+		actionMode = ActionModeEnum.NO_ACTION;
+	}
+
 	public void handleCheck(Brick brick, boolean checked) {
 		smartBrickSelection(brick, checked);
 	}
@@ -1258,7 +1267,9 @@ public class BrickAdapter extends BrickBaseAdapter implements DragAndDropListene
 			NestingBrick firstNestingBrick = nestingBricks.get(0);
 			NestingBrick lastNestingBrick = nestingBricks.get(nestingBricks.size() - 1);
 
-			setCheckbox((Brick) firstNestingBrick, checked);
+			if(actionMode != ActionModeEnum.NO_ACTION) {
+				setCheckbox((Brick) firstNestingBrick, checked);
+			}
 
 			positionFrom = brickList.indexOf(firstNestingBrick);
 			positionTo = brickList.indexOf(lastNestingBrick);
@@ -1288,9 +1299,6 @@ public class BrickAdapter extends BrickBaseAdapter implements DragAndDropListene
 				break;
 			}
 
-			setCheckbox(currentBrick, checked);
-			BrickViewProvider.setCheckboxClickability(currentBrick, !checked);
-
 			if (checked) {
 				addElementToCheckedBricks(currentBrick);
 			} else {
@@ -1304,14 +1312,20 @@ public class BrickAdapter extends BrickBaseAdapter implements DragAndDropListene
 				case BACKPACK:
 					int alphaValue = checked ? BrickViewProvider.ALPHA_GREYED : BrickViewProvider.ALPHA_FULL;
 					BrickViewProvider.setAlphaForBrick(currentBrick, alphaValue);
+					setCheckbox(currentBrick, checked);
+					BrickViewProvider.setCheckboxClickability(currentBrick, !checked);
 					break;
 				case COMMENT_OUT:
 					currentBrick.setCommentedOut(checked);
 					BrickViewProvider.setSaturationOnBrick(currentBrick, checked);
+					setCheckbox(currentBrick, checked);
+					BrickViewProvider.setCheckboxClickability(currentBrick, !checked);
 					break;
 			}
 		}
-		scriptFragment.updateActionModeTitle();
+		if (scriptFragment.getActionModeActive()) {
+			scriptFragment.updateActionModeTitle();
+		}
 	}
 
 	void enableCorrespondingScriptBrick(int indexBegin) {
