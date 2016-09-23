@@ -1267,7 +1267,7 @@ public class BrickAdapter extends BrickBaseAdapter implements DragAndDropListene
 			NestingBrick firstNestingBrick = nestingBricks.get(0);
 			NestingBrick lastNestingBrick = nestingBricks.get(nestingBricks.size() - 1);
 
-			if(actionMode != ActionModeEnum.NO_ACTION) {
+			if (actionMode != ActionModeEnum.NO_ACTION) {
 				setCheckbox((Brick) firstNestingBrick, checked);
 			}
 

@@ -141,7 +141,7 @@ public abstract class BrickBaseType implements Brick {
 	}
 
 	public View getNoPuzzleView(Context context, int brickId, BaseAdapter adapter) {
-		return getView(context,brickId,adapter);
+		return getView(context, brickId, adapter);
 	}
 
 	@Override
