@@ -109,7 +109,6 @@ public class ArduinoSendDigitalValueBrick extends FormulaBrick {
 		getFormulaWithBrickField(BrickField.ARDUINO_DIGITAL_PIN_VALUE).setTextFieldId(R.id.brick_arduino_set_digital_value_edit_text);
 		getFormulaWithBrickField(BrickField.ARDUINO_DIGITAL_PIN_VALUE).refreshTextField(view);
 
-
 		editPinValue.setOnClickListener(this);
 
 		return view;
