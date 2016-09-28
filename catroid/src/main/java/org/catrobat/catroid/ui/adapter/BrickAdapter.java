@@ -416,8 +416,7 @@ public class BrickAdapter extends BrickBaseAdapter implements DragAndDropListene
 		setSpinnersEnabled(true);
 		isDragging = false;
 
-		SnackbarUtil.showHintSnackbar(((Activity) getContext()),R.string.hint_brick_added);
-
+		SnackbarUtil.showHintSnackbar(((Activity) getContext()), R.string.hint_brick_added);
 	}
 
 	private void addScriptToProject(int position, ScriptBrick scriptBrick) {
