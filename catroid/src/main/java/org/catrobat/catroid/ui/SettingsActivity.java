@@ -75,7 +75,6 @@ public class SettingsActivity extends PreferenceActivity {
 
 	public static final String SETTINGS_CRASH_REPORTS = "setting_enable_crash_reports";
 
-
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
