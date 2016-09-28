@@ -73,6 +73,9 @@ public class SettingsActivity extends PreferenceActivity {
 	public static final String RASPI_PORT = "setting_raspi_port_preference";
 	public static final String RASPI_VERSION_SPINNER = "setting_raspi_version_preference";
 
+	public static final String SETTINGS_CRASH_REPORTS = "setting_enable_crash_reports";
+
+
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +85,6 @@ public class SettingsActivity extends PreferenceActivity {
 
 		setNXTSensors();
 		setDronePreferences();
-
 		updateActionBar();
 
 		screen = getPreferenceScreen();
@@ -322,6 +324,12 @@ public class SettingsActivity extends PreferenceActivity {
 		return getBooleanSharedPreference(false, SETTINGS_SHOW_RASPI_BRICKS, context);
 	}
 
+	public static void setAutoCrashReportingEnabled(Context context, boolean value) {
+		SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+		editor.putBoolean(SETTINGS_CRASH_REPORTS, value);
+		editor.commit();
+	}
+
 	private static void setBooleanSharedPreference(boolean value, String settingsString, Context context) {
 		getSharedPreferences(context).edit().putBoolean(settingsString, value).commit();
 	}
@@ -405,7 +413,6 @@ public class SettingsActivity extends PreferenceActivity {
 	public static void enableARDroneBricks(Context context, Boolean newValue) {
 		getSharedPreferences(context).edit().putBoolean(SETTINGS_SHOW_PARROT_AR_DRONE_BRICKS, newValue).commit();
 	}
-
 	public static void setLegoMindstormsNXTBricks(Context context, Boolean newValue) {
 		getSharedPreferences(context).edit().putBoolean(SETTINGS_MINDSTORMS_NXT_BRICKS_ENABLED, newValue).commit();
 	}

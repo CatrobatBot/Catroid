@@ -28,6 +28,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 public class BaseExceptionHandler implements
 		java.lang.Thread.UncaughtExceptionHandler {
 
@@ -35,6 +37,7 @@ public class BaseExceptionHandler implements
 
 	public static final int EXIT_CODE = 10;
 	public static final String RECOVERED_FROM_CRASH = "RECOVERED_FROM_CRASH";
+	public static final String EXCEPTION_FOR_REPORT = "EXCEPTION_FOR_REPORT";
 
 	private final SharedPreferences preferences;
 
@@ -44,6 +47,15 @@ public class BaseExceptionHandler implements
 
 	public void uncaughtException(Thread thread, Throwable exception) {
 		Log.e(TAG, "unhandled exception", exception);
+
+		SharedPreferences.Editor prefsEditor = preferences.edit();
+		Gson gson = new Gson();
+		String check = preferences.getString(BaseExceptionHandler.EXCEPTION_FOR_REPORT, "");
+		if (check.isEmpty()) {
+			String json = gson.toJson(exception);
+			prefsEditor.putString(EXCEPTION_FOR_REPORT, json);
+			prefsEditor.commit();
+		}
 		preferences.edit().putBoolean(RECOVERED_FROM_CRASH, true).commit();
 		System.exit(EXIT_CODE);
 		android.os.Process.killProcess(android.os.Process.myPid());
