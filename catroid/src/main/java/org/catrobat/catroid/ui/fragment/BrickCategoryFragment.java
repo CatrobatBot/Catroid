@@ -122,14 +122,13 @@ public class BrickCategoryFragment extends ListFragment {
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	public void onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
 		menu.findItem(R.id.delete).setVisible(false);
 		menu.findItem(R.id.copy).setVisible(false);
 		menu.findItem(R.id.backpack).setVisible(false);
-		if (scriptFragment != null) {
-			((ScriptFragment) scriptFragment).setBackpackMenuIsVisible(false);
-		}
-		super.onCreateOptionsMenu(menu, inflater);
+		menu.findItem(R.id.comment_in_out).setVisible(false);
+
 	}
 
 	private void setUpActionBar() {
@@ -186,7 +185,7 @@ public class BrickCategoryFragment extends ListFragment {
 	}
 
 	public interface OnCategorySelectedListener {
-
+		
 		void onCategorySelected(String category);
 	}
 }
