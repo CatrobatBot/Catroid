@@ -51,7 +51,7 @@ public class BaseExceptionHandler implements
 		Log.e(TAG, "unhandled exception", exception);
 
 		SharedPreferences.Editor prefsEditor = preferences.edit();
-		if(BuildConfig.FIREBASE_CRASH_REPORT) {
+		if (BuildConfig.FIREBASE_CRASH_REPORT) {
 			Gson gson = new Gson();
 			String check = preferences.getString(BaseExceptionHandler.EXCEPTION_FOR_REPORT, "");
 			if (check.isEmpty()) {
