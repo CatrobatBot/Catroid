@@ -58,3 +58,6 @@ Thumbs.db
 # Gradle
 .gradle/
 build/
+
+#google-services
+catroid/google-services.json
