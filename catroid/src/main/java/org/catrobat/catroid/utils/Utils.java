@@ -75,7 +75,6 @@ import org.catrobat.catroid.ui.SettingsActivity;
 import org.catrobat.catroid.ui.WebViewActivity;
 import org.catrobat.catroid.ui.controller.BackPackListManager;
 import org.catrobat.catroid.ui.dialogs.CustomAlertDialogBuilder;
-import org.catrobat.catroid.ui.dialogs.SendReportDialog;
 import org.catrobat.catroid.web.ServerCalls;
 import org.catrobat.catroid.web.WebconnectionException;
 
