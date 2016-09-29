@@ -27,7 +27,6 @@ import android.app.ListFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -128,7 +127,6 @@ public class BrickCategoryFragment extends ListFragment {
 		menu.findItem(R.id.copy).setVisible(false);
 		menu.findItem(R.id.backpack).setVisible(false);
 		menu.findItem(R.id.comment_in_out).setVisible(false);
-
 	}
 
 	private void setUpActionBar() {
@@ -185,7 +183,7 @@ public class BrickCategoryFragment extends ListFragment {
 	}
 
 	public interface OnCategorySelectedListener {
-		
+
 		void onCategorySelected(String category);
 	}
 }
