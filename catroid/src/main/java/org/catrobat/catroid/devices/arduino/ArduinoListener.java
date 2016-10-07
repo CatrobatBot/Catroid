@@ -45,7 +45,7 @@ public class ArduinoListener implements IFirmata.Listener {
 	private int analogPin5 = 0;
 
 	int[] portValue = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-	int[] uCPortValue = new int[] {0, 0};
+	int[] uCPortValue = new int[] { 0, 0 };
 
 	@Override
 	public void onAnalogMessageReceived(AnalogMessage message) {
