@@ -446,8 +446,14 @@ public class ProjectActivity extends BaseActivity {
 		// Dismiss ActionMode without effecting sounds
 		if (actionListener.getActionModeActive() && event.getKeyCode() == KeyEvent.KEYCODE_BACK
 				&& event.getAction() == KeyEvent.ACTION_UP) {
-			SpriteAdapter adapter = spritesListFragment.getSpriteAdapter();
-			adapter.clearCheckedItems();
+			switch (currentFragmentPosition) {
+				case FRAGMENT_SCENES:
+					scenesListFragment.getAdapter().clearCheckedItems();
+					break;
+				case FRAGMENT_SPRITES:
+					spritesListFragment.getSpriteAdapter().clearCheckedItems();
+					break;
+			}
 		}
 
 		return super.dispatchKeyEvent(event);
