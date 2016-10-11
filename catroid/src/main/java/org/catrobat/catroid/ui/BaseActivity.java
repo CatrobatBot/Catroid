@@ -51,7 +51,6 @@ public abstract class BaseActivity extends Activity {
 
 	private boolean returnToProjectsList;
 	private String titleActionBar;
-	private Menu baseMenu;
 	private boolean returnByPressingBackButton;
 
 	@Override
@@ -85,24 +84,6 @@ public abstract class BaseActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		baseMenu = menu;
-		getMenuInflater().inflate(R.menu.menu_base_menu, menu);
-
-		final MenuItem scratchConverterMenuItem = menu.findItem(R.id.menu_scratch_converter);
-		if (scratchConverterMenuItem != null) {
-			if (!(this instanceof MainMenuActivity)) {
-				scratchConverterMenuItem.setVisible(false);
-			} else {
-				final String title = getString(R.string.main_menu_scratch_converter);
-				final String beta = getString(R.string.beta).toUpperCase(Locale.getDefault());
-				final SpannableString spanTitle = new SpannableString(title + " " + beta);
-				final int begin = title.length() + 1;
-				final int end = begin + beta.length();
-				final int betaLabelColor = ContextCompat.getColor(this, R.color.beta_label_color);
-				spanTitle.setSpan(new ForegroundColorSpan(betaLabelColor), begin, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-				scratchConverterMenuItem.setTitle(spanTitle);
-			}
-		}
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -203,17 +184,5 @@ public abstract class BaseActivity extends Activity {
 
 	public void setTitleActionBar(String titleActionBar) {
 		this.titleActionBar = titleActionBar;
-	}
-
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		MenuItem logout = baseMenu.findItem(R.id.menu_logout);
-		MenuItem login = baseMenu.findItem(R.id.menu_login);
-		logout.setVisible(Utils.isUserLoggedIn(this));
-		login.setVisible(!Utils.isUserLoggedIn(this));
-
-		if (!BuildConfig.FEATURE_SCRATCH_CONVERTER_ENABLED) {
-			baseMenu.removeItem(R.id.menu_scratch_converter);
-		}
-		return true;
 	}
 }
