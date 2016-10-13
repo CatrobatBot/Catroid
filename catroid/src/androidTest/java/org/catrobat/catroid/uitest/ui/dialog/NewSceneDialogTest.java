@@ -30,6 +30,8 @@ import org.catrobat.catroid.io.StorageHandler;
 import org.catrobat.catroid.ui.MainMenuActivity;
 import org.catrobat.catroid.uitest.util.BaseActivityInstrumentationTestCase;
 import org.catrobat.catroid.uitest.util.UiTestUtils;
+import org.catrobat.catroid.utils.UtilUi;
+import org.catrobat.catroid.utils.Utils;
 
 public class NewSceneDialogTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
@@ -57,8 +59,8 @@ public class NewSceneDialogTest extends BaseActivityInstrumentationTestCase<Main
 	public void testNewSceneDialogEmpty() {
 		testingProject = ProjectManager.getInstance().getCurrentProject();
 		UiTestUtils.clickOnBottomBar(solo, R.id.button_add);
-		String defaultSceneName = String.format(solo.getString(R.string.default_scene_name), testingProject
-				.getSceneList().size());
+		String defaultSceneName = Utils.searchForNonExistingSceneName(solo.getString(R.string.default_scene_name), 1,
+				false);
 		assertTrue("Default name should be " + defaultSceneName, solo.waitForText(defaultSceneName));
 
 		solo.clickOnText(solo.getString(R.string.ok));

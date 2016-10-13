@@ -708,7 +708,7 @@ public final class Utils {
 		if (nextNumber == 0) {
 			newName = sceneName;
 		} else {
-			newName = sceneName + nextNumber;
+			newName = sceneName + " " + nextNumber;
 		}
 		for (Scene sceneListItem : sceneList) {
 			if (sceneListItem.getName().equals(newName)) {

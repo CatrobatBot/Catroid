@@ -828,7 +828,7 @@
 
     <!-- defaultValues -->
     <string name="default_project_name">My first program</string>
-    <string name="default_scene_name">Scene "%1$d"</string>
+    <string name="default_scene_name">Scene</string>
     <string name="default_project_background_name">Background</string>
     <string name="default_project_cloud_name">Clouds</string>
     <string name="default_project_cloud_sprite_name_1">Clouds1</string>
@@ -1389,10 +1389,10 @@
 
     <string name="merge_conflict">Merging not possible</string>
 
-    <string name="merge_conflict_variable">Variable \"%1$s\" is used in both programs. If programs use the same
+    <string name="merge_conflict_variable">Variable "%1$s" is used in both programs. If programs use the same
     variable name they cannot be merged. Please rename the variable in one of the programs and try again.</string>
 
-    <string name="merge_conflict_list">List \"%1$s\" is used in both programs. If programs use the same
+    <string name="merge_conflict_list">List "%1$s" is used in both programs. If programs use the same
     name for their lists they cannot be merged. Please rename the list in one of the programs and try again.</string>
 
     <!-- Camera related strings -->
