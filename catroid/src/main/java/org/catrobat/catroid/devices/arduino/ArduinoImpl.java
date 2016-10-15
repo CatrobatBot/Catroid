@@ -226,30 +226,35 @@ public class ArduinoImpl implements Arduino {
 		sendAnalogFirmataMessage(pin, value);
 	}
 
+	public static int setBit(int number, int index, int value) {
+		if (value == 0) {
+			return number & ~(1 << index);
+		} else {
+			return number | (1 << index);
+		}
+	}
+
 	@Override
 	public void setDigitalArduinoPin(int digitalPinNumber, int pinValue) {
-		int digitalPort = 0;
-		int PinNumberOfPort;
-		int PortValue;
+		int digitalPort, pinNumberOfPort;
 
 		if (digitalPinNumber < 8) {
 			digitalPort = 0;
-			PinNumberOfPort = digitalPinNumber;
+			pinNumberOfPort = digitalPinNumber;
 		} else {
 			digitalPort = 1;
-			PinNumberOfPort = digitalPinNumber - 8;
+			pinNumberOfPort = digitalPinNumber - 8;
 		}
 
-		PortValue = arduinoListener.getuCPortValue(digitalPort);
-		if (pinValue > 0) { // set pin
-			PortValue = PortValue | (1 << PinNumberOfPort);
-			arduinoListener.setPortValue(digitalPinNumber, 1);
-		} else { // clear pin
-			PortValue = PortValue & ~(1 << PinNumberOfPort);
-			arduinoListener.setPortValue(digitalPinNumber, 0);
+		int portValue = arduinoListener.getPortValue(digitalPort);
+		portValue = setBit(portValue, pinNumberOfPort, pinValue);
+		if (pinValue > 0) {
+			arduinoListener.setPinValue(digitalPinNumber, 1);
+		} else {
+			arduinoListener.setPinValue(digitalPinNumber, 0);
 		}
-		sendDigitalFirmataMessage(digitalPort, digitalPinNumber, PortValue);
-		arduinoListener.setuCPortValue(digitalPort, PortValue);
+		sendDigitalFirmataMessage(digitalPort, digitalPinNumber, portValue);
+		arduinoListener.setPortValue(digitalPort, portValue);
 	}
 
 	@Override
@@ -271,7 +276,7 @@ public class ArduinoImpl implements Arduino {
 			Log.d(TAG, "Error Arduino sensor thread sleep()");
 		}
 
-		double result = arduinoListener.getPortValue(digitalPinNumber);
+		double result = arduinoListener.getPinValue(digitalPinNumber);
 
 		sendFirmataMessage(new ReportDigitalPortMessage(port, false));
 
