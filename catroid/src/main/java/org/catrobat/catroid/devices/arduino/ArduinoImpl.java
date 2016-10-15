@@ -187,10 +187,6 @@ public class ArduinoImpl implements Arduino {
 			sendFirmataMessage(new SetPinModeMessage(pin, SetPinModeMessage.PIN_MODE.PWM.getMode()));
 		}
 		reportSensorData(true);
-
-		// get status of digital ports
-		sendFirmataMessage(new ReportDigitalPortMessage(0, true));
-		sendFirmataMessage(new ReportDigitalPortMessage(1, true));
 	}
 
 	private void reportSensorData(boolean report) {
