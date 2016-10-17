@@ -64,12 +64,26 @@ public class XmlHeader implements Serializable {
 	private double platformVersion = 0;
 	@SuppressWarnings("unused")
 	private String programLicense = "";
+
+	//---------------------------------------------------------------------------
+	//              *** Catrobat Remix Specification ***
+	//---------------------------------------------------------------------------
+	//  Keep in mind that the remixOf-field is used and supposed to be modified
+	//  by Catroweb's web application *only*!
+	//  Once new Catrobat programs get uploaded, Catroweb automatically
+	//  updates the remixOf-field and sets the program as being remixed.
+	//  In order to do so, Catroweb takes the value from the remixUrlsString-field and
+	//  assigns it to the remixOf-field.
+	//
+	//  With that said, the only correct way to set a new remix-URL (e.g. when
+	//  two programs get merged locally) is to assign it to the remixUrlsString-field.
+	//---------------------------------------------------------------------------
 	@SuppressWarnings("unused")
-	private String remixOf = "";
+	private String remixOf = ""; // read-only by convention!
 	@SuppressWarnings("unused")
 	private String tags = "";
-	@SuppressWarnings("unused")
-	private String url = "";
+	@XStreamAlias("url")
+	private String remixUrlsString = "";
 	@SuppressWarnings("unused")
 	private String userHandle = "";
 
@@ -90,14 +104,6 @@ public class XmlHeader implements Serializable {
 
 	public void setVirtualScreenWidth(int width) {
 		virtualScreenWidth = width;
-	}
-
-	public String getRemixOf() {
-		return remixOf;
-	}
-
-	public void setRemixOf(String remixOf) {
-		this.remixOf = remixOf;
 	}
 
 	public String getProgramName() {
@@ -204,7 +210,11 @@ public class XmlHeader implements Serializable {
 		this.tags = TextUtils.join(",", tags);
 	}
 
-	public String getUrl() {
-		return this.url;
+	public String getRemixUrlsString() {
+		return this.remixUrlsString;
+	}
+
+	public void setRemixUrlsString(String remixUrlsString) {
+		this.remixUrlsString = remixUrlsString;
 	}
 }

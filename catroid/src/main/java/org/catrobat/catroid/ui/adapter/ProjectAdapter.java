@@ -342,8 +342,8 @@ public class ProjectAdapter extends ArrayAdapter<ProjectData> implements EditTex
 			boolean userHandleNotPresent = header.getUserHandle() == null || header.getUserHandle().trim().equals("");
 			String text = userHandleNotPresent ? getContext().getString(R.string.unknown) : header.getUserHandle();
 			authorView.setText(text);
-			boolean remixOfNotPresent = header.getRemixOf() == null || header.getRemixOf().trim().equals("");
-			text = remixOfNotPresent ? getContext().getString(R.string.nxt_no_sensor) : header.getRemixOf();
+			boolean remixOfUrlsNotPresent = header.getRemixUrlsString() == null || header.getRemixUrlsString().trim().equals("");
+			text = remixOfUrlsNotPresent ? getContext().getString(R.string.nxt_no_sensor) : header.getRemixUrlsString();
 			remixView.setText(text);
 			holder.projectOverview.setVisibility(View.VISIBLE);
 			holder.projectProgressBar.setVisibility(View.GONE);
