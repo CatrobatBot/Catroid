@@ -265,6 +265,25 @@ public class StageListener implements ApplicationListener {
 			copy.look.setLookData(copy.getLookDataList().get(0));
 		}
 
+		copy.look.setPositionInUserInterfaceDimensionUnit(cloneMe.look.getXInUserInterfaceDimensionUnit(),
+				cloneMe.look.getYInUserInterfaceDimensionUnit());
+		copy.look.setTransparencyInUserInterfaceDimensionUnit(cloneMe.look.getTransparencyInUserInterfaceDimensionUnit());
+		copy.look.setColorInUserInterfaceDimensionUnit(cloneMe.look.getColorInUserInterfaceDimensionUnit());
+
+		int rotationMode = cloneMe.look.getRotationMode();
+		copy.look.setRotationMode(rotationMode);
+		if (rotationMode != Look.ROTATION_STYLE_LEFT_RIGHT_ONLY && copy.look.isFlipped()) {
+			copy.look.getLookData().getTextureRegion().flip(true, false);
+			copy.look.setFlipped(false);
+		}
+		boolean orientedLeft = copy.look.getDirectionInUserInterfaceDimensionUnit() < 0;
+		if (rotationMode == Look.ROTATION_STYLE_LEFT_RIGHT_ONLY && orientedLeft) {
+			copy.look.getLookData().getTextureRegion().flip(true, false);
+			copy.look.setFlipped(true);
+		}
+		
+		copy.look.setDirectionInUserInterfaceDimensionUnit(cloneMe.look.getDirectionInUserInterfaceDimensionUnit());
+
 		copy.createWhenClonedAction();
 	}
 
