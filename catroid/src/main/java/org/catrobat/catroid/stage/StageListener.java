@@ -281,7 +281,7 @@ public class StageListener implements ApplicationListener {
 			copy.look.getLookData().getTextureRegion().flip(true, false);
 			copy.look.setFlipped(true);
 		}
-		
+
 		copy.look.setDirectionInUserInterfaceDimensionUnit(cloneMe.look.getDirectionInUserInterfaceDimensionUnit());
 
 		copy.createWhenClonedAction();
