@@ -131,7 +131,7 @@ public class SetLookBrick extends BrickBaseType implements OnLookDataListChanged
 		setSpinnerSelection(lookBrickSpinner);
 
 		if (getSprite().getName().equals(context.getString(R.string.background))) {
-			TextView textField = (TextView) view.findViewById(R.id.brick_set_look_and_wait);
+			TextView textField = (TextView) view.findViewById(R.id.brick_set_look_prototype_text_view);
 			textField.setText(R.string.brick_set_background);
 		}
 
@@ -158,7 +158,7 @@ public class SetLookBrick extends BrickBaseType implements OnLookDataListChanged
 	public View getPrototypeView(Context context) {
 		prototypeView = View.inflate(context, R.layout.brick_set_look, null);
 		if (getSprite().getName().equals(context.getString(R.string.background))) {
-			TextView textField = (TextView) prototypeView.findViewById(R.id.brick_set_look_and_wait);
+			TextView textField = (TextView) prototypeView.findViewById(R.id.brick_set_look_prototype_text_view);
 			textField.setText(R.string.brick_set_background);
 		}
 
@@ -182,7 +182,8 @@ public class SetLookBrick extends BrickBaseType implements OnLookDataListChanged
 
 	@Override
 	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createSetLookAction(sprite, look, wait));
+		sequence.addAction(sprite.getActionFactory().createSetLookAction(getSprite(), look, wait));
+		
 		return null;
 	}
 
