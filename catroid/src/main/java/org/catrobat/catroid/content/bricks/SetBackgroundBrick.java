@@ -32,7 +32,7 @@ public class SetBackgroundBrick extends SetLookBrick {
 	}
 
 	@Override
-	protected Sprite getSprite() {
+	protected Sprite getSpriteToChange() {
 		return ProjectManager.getInstance().getCurrentScene().getSpriteList().get(0);
 	}
 

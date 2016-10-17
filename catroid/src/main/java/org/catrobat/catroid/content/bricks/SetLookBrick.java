@@ -130,7 +130,7 @@ public class SetLookBrick extends BrickBaseType implements OnLookDataListChanged
 
 		setSpinnerSelection(lookBrickSpinner);
 
-		if (getSprite().getName().equals(context.getString(R.string.background))) {
+		if (getSpriteToChange().getName().equals(context.getString(R.string.background))) {
 			TextView textField = (TextView) view.findViewById(R.id.brick_set_look_and_wait);
 			textField.setText(R.string.brick_set_background);
 		}
@@ -148,7 +148,7 @@ public class SetLookBrick extends BrickBaseType implements OnLookDataListChanged
 		LookData dummyLookData = new LookData();
 		dummyLookData.setLookName(context.getString(R.string.new_broadcast_message));
 		arrayAdapter.add(dummyLookData);
-		for (LookData lookData : getSprite().getLookDataList()) {
+		for (LookData lookData : getSpriteToChange().getLookDataList()) {
 			arrayAdapter.add(lookData);
 		}
 		return arrayAdapter;
@@ -157,7 +157,7 @@ public class SetLookBrick extends BrickBaseType implements OnLookDataListChanged
 	@Override
 	public View getPrototypeView(Context context) {
 		prototypeView = View.inflate(context, R.layout.brick_set_look, null);
-		if (getSprite().getName().equals(context.getString(R.string.background))) {
+		if (getSpriteToChange().getName().equals(context.getString(R.string.background))) {
 			TextView textField = (TextView) prototypeView.findViewById(R.id.brick_set_look_and_wait);
 			textField.setText(R.string.brick_set_background);
 		}
@@ -182,18 +182,23 @@ public class SetLookBrick extends BrickBaseType implements OnLookDataListChanged
 
 	@Override
 	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createSetLookAction(sprite, look, wait));
+		if (this instanceof SetBackgroundBrick){
+			Sprite backgroundSprite = getSpriteToChange();
+			sequence.addAction(sprite.getActionFactory().createSetLookAction(backgroundSprite, look, wait));
+		} else {
+			sequence.addAction(sprite.getActionFactory().createSetLookAction(sprite, look, wait));
+		}
 		return null;
 	}
 
 	private void setSpinnerSelection(Spinner spinner) {
-		if (getSprite().getLookDataList().contains(look)) {
+		if (getSpriteToChange().getLookDataList().contains(look)) {
 			oldSelectedLook = look;
-			spinner.setSelection(getSprite().getLookDataList().indexOf(look) + 1, true);
+			spinner.setSelection(getSpriteToChange().getLookDataList().indexOf(look) + 1, true);
 		} else {
 			if (spinner.getAdapter() != null && spinner.getAdapter().getCount() > 1) {
-				if (getSprite().getLookDataList().indexOf(oldSelectedLook) >= 0) {
-					spinner.setSelection(getSprite().getLookDataList()
+				if (getSpriteToChange().getLookDataList().indexOf(oldSelectedLook) >= 0) {
+					spinner.setSelection(getSpriteToChange().getLookDataList()
 							.indexOf(oldSelectedLook) + 1, true);
 				} else {
 					spinner.setSelection(1, true);
@@ -302,7 +307,7 @@ public class SetLookBrick extends BrickBaseType implements OnLookDataListChanged
 		}
 
 		private void switchToLookFragmentFromScriptFragment() {
-			ProjectManager.getInstance().setCurrentSprite(getSprite());
+			ProjectManager.getInstance().setCurrentSprite(getSpriteToChange());
 			ScriptActivity scriptActivity = ((ScriptActivity) context);
 			scriptActivity.switchToFragmentFromScriptFragment(ScriptActivity.FRAGMENT_LOOKS);
 
@@ -327,7 +332,7 @@ public class SetLookBrick extends BrickBaseType implements OnLookDataListChanged
 		}
 	}
 
-	protected Sprite getSprite() {
+	protected Sprite getSpriteToChange() {
 		return ProjectManager.getInstance().getCurrentSprite();
 	}
 }
