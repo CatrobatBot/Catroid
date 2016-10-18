@@ -138,7 +138,6 @@ public class Look extends Image {
 		cloneLook.whenParallelAction = null;
 		cloneLook.allActionsAreFinished = this.allActionsAreFinished;
 
-
 		cloneLook.setPositionInUserInterfaceDimensionUnit(this.getXInUserInterfaceDimensionUnit(),
 				this.getYInUserInterfaceDimensionUnit());
 		cloneLook.setTransparencyInUserInterfaceDimensionUnit(this.getTransparencyInUserInterfaceDimensionUnit());
