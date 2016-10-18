@@ -99,7 +99,8 @@ import java.util.Locale;
 public final class Utils {
 
 	private static final String TAG = Utils.class.getSimpleName();
-	private enum RemixUrlParsingState { STARTING, TOKEN, BETWEEN }
+
+	private enum RemixUrlParsingState {STARTING, TOKEN, BETWEEN}
 
 	public static final int TRANSLATION_PLURAL_OTHER_INTEGER = 767676;
 
@@ -278,8 +279,7 @@ public final class Utils {
 					if (state == RemixUrlParsingState.TOKEN) {
 						String extractedUrl = temp.toString().trim();
 						if (!extractedUrl.contains(String.valueOf(Constants.REMIX_URL_SEPARATOR))
-								&& extractedUrl.length() > 0)
-						{
+								&& extractedUrl.length() > 0) {
 							extractedUrls.add(extractedUrl);
 						}
 						temp.delete(0, temp.length());
