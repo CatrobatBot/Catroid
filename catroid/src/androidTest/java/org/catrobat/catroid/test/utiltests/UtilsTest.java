@@ -339,7 +339,6 @@ public class UtilsTest extends AndroidTestCase {
 		headerOfSecondMergedProgram.setProgramName("いやいや棒");
 		headerOfSecondMergedProgram.setRemixUrlsString(secondMergedRemixUrlsString);
 
-
 		final XmlHeader headerOfFourthProgram = new XmlHeader();
 		headerOfFourthProgram.setProgramName("NYAN CAT RUNNER [BETA]");
 		headerOfFourthProgram.setRemixUrlsString(expectedFourthProgramRemixUrl);
