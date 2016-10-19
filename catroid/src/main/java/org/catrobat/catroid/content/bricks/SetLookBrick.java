@@ -182,7 +182,7 @@ public class SetLookBrick extends BrickBaseType implements OnLookDataListChanged
 
 	@Override
 	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		if (this instanceof SetBackgroundBrick){
+		if (this instanceof SetBackgroundBrick) {
 			Sprite backgroundSprite = getSpriteToChange();
 			sequence.addAction(sprite.getActionFactory().createSetLookAction(backgroundSprite, look, wait));
 		} else {
