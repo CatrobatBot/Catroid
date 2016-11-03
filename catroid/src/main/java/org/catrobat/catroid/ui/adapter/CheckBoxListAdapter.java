@@ -201,7 +201,7 @@ public abstract class CheckBoxListAdapter<T> extends ArrayAdapter<T> {
 		void handleOnItemLongClick(int position, View view);
 	}
 
-	public interface  ListItemCheckHandler {
+	public interface ListItemCheckHandler {
 
 		void onItemChecked();
 	}

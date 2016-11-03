@@ -254,7 +254,6 @@ public class ProjectListFragment extends ListActivityFragment implements OnProje
 		dialogCopyProject.show(getActivity().getFragmentManager(), CopyProjectDialog.DIALOG_FRAGMENT_TAG);
 	}
 
-
 	public void showRenameDialog() {
 		if (!projectAdapter.getCheckedItems().isEmpty()) {
 			projectToEdit = projectAdapter.getCheckedItems().get(0);

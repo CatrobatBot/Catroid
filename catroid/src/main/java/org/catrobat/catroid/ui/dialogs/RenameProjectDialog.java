@@ -68,7 +68,7 @@ public class RenameProjectDialog extends TextDialog {
 			dismiss();
 			return false;
 		}
-		
+
 		if (Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase(newProjectName)) {
 			Utils.showErrorDialog(getActivity(), R.string.error_project_exists);
 			return false;
