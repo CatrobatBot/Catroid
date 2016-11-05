@@ -26,7 +26,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.robotium.solo.Condition;
 
-import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.ScreenValues;
 import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.ui.MainMenuActivity;
