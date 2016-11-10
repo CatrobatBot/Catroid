@@ -183,7 +183,7 @@ public class ProjectListFragment extends ListActivityFragment implements LoadPro
 		}
 
 		boolean isCurrentProject = projectToEdit.projectName.equals(ProjectManager.getInstance().getCurrentProject().getName());
-		if(!isCurrentProject) {
+		if (!isCurrentProject) {
 			menu.add(0, R.string.merge_button, 1, getString(R.string.merge_button) + ": " + ProjectManager.getInstance().getCurrentProject().getName());
 		}
 		menu.setHeaderTitle(projectToEdit.projectName);
