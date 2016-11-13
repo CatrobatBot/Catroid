@@ -31,7 +31,6 @@ import org.catrobat.catroid.pocketmusic.note.MusicalBeat;
 import org.catrobat.catroid.pocketmusic.note.trackgrid.GridRow;
 import org.catrobat.catroid.pocketmusic.note.trackgrid.GridRowPosition;
 
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
