@@ -130,34 +130,32 @@ public class DragAndDropListView extends ListView implements CheckBoxListAdapter
 	}
 
 	@Override
-		public boolean onTouch(final View view, MotionEvent event) {
-			switch (event.getAction()) {
-				case MotionEvent.ACTION_DOWN:
-					longpressTimer = new Timer();
-					TimerTask longPressTask = new TimerTask() {
+	public boolean onTouch(final View view, MotionEvent event) {
+		switch (event.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				longpressTimer = new Timer();
+				TimerTask longPressTask = new TimerTask() {
+					@Override
+					public void run() {((Activity) getContext()).runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
-							((Activity) getContext()).runOnUiThread(new Runnable() {
-								@Override
-								public void run() {
-									view.performLongClick();
-								}
-							});
+							view.performLongClick();
 						}
-					};
-					longpressTimer.schedule(longPressTask, longpressTime);
-					return true;
-				case MotionEvent.ACTION_MOVE:
-					break;
-				case MotionEvent.ACTION_UP:
-					longpressTimer.cancel();
-					view.performClick();
-					break;
-				default:
-					break;
-			}
-				return false;
-			}
+					});}
+				};
+				longpressTimer.schedule(longPressTask, longpressTime);
+				return true;
+			case MotionEvent.ACTION_MOVE:
+				break;
+			case MotionEvent.ACTION_UP:
+				longpressTimer.cancel();
+				view.performClick();
+				break;
+			default:
+				break;
+		}
+		return false;
+	}
 
 	private BitmapDrawable getHoveringListItem(View view) {
 		Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
