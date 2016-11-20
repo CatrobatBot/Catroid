@@ -87,7 +87,7 @@ public class ProjectListAdapter extends CheckBoxListAdapter<ProjectData> {
 		int[] attributes = { android.R.attr.textSize };
 		TypedArray typedArray = getContext().obtainStyledAttributes(R.style.look_fragment_main, attributes);
 		float originalTextSize = Float.valueOf(typedArray.getString(0).replace("sp", ""));
-		listItemViewHolder.checkBox.setTextSize(TypedValue.COMPLEX_UNIT_SP,  originalTextSize * TextSizeUtil.getModifier());
+		listItemViewHolder.checkBox.setTextSize(TypedValue.COMPLEX_UNIT_SP, originalTextSize * TextSizeUtil.getModifier());
 		listItemViewHolder.name.setTextSize(TypedValue.COMPLEX_UNIT_SP, originalTextSize * TextSizeUtil.getModifier());
 		typedArray.recycle();
 	}
