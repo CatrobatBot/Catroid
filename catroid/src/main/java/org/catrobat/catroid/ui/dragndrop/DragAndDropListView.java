@@ -136,12 +136,14 @@ public class DragAndDropListView extends ListView implements CheckBoxListAdapter
 				longpressTimer = new Timer();
 				TimerTask longPressTask = new TimerTask() {
 					@Override
-					public void run() {((Activity) getContext()).runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							view.performLongClick();
-						}
-					});}
+					public void run() {
+						((Activity) getContext()).runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								view.performLongClick();
+							}
+						});
+					}
 				};
 				longpressTimer.schedule(longPressTask, longpressTime);
 				return true;
