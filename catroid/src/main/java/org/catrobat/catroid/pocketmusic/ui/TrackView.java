@@ -24,7 +24,6 @@ package org.catrobat.catroid.pocketmusic.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.TableLayout;
 
 import org.catrobat.catroid.pocketmusic.note.MusicalBeat;
@@ -38,7 +37,6 @@ import org.catrobat.catroid.pocketmusic.note.trackgrid.TrackToTrackGridConverter
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 public class TrackView extends TableLayout {
@@ -60,7 +58,7 @@ public class TrackView extends TableLayout {
 	}
 
 	private void initializeRows() {
-		if (!trackRowViews.isEmpty()){
+		if (!trackRowViews.isEmpty()) {
 			removeAllViews();
 			trackRowViews.clear();
 		}
