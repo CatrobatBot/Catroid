@@ -110,6 +110,7 @@ import org.catrobat.catroid.content.actions.SceneTransitionAction;
 import org.catrobat.catroid.content.actions.SetBrightnessAction;
 import org.catrobat.catroid.content.actions.SetColorAction;
 import org.catrobat.catroid.content.actions.SetLookAction;
+import org.catrobat.catroid.content.actions.SetNfcTagAction;
 import org.catrobat.catroid.content.actions.SetPenColorAction;
 import org.catrobat.catroid.content.actions.SetPenSizeAction;
 import org.catrobat.catroid.content.actions.SetRotationStyleAction;
@@ -1022,5 +1023,13 @@ public class ActionFactory extends Actions {
 			default:
 				return Actions.action(StopAllScriptsAction.class);
 		}
+	}
+
+	public Action createSetNfcTagAction(Sprite sprite, Formula nfcNdefMessage, int spinnerSelection) {
+		SetNfcTagAction setNfcTagAction = Actions.action(SetNfcTagAction.class);
+		setNfcTagAction.setSprite(sprite);
+		setNfcTagAction.setSpinnerSelection(spinnerSelection);
+		setNfcTagAction.setNfcNdefMessage(nfcNdefMessage);
+		return setNfcTagAction;
 	}
 }
