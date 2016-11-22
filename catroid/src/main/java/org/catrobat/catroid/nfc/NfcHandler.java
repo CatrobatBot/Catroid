@@ -155,7 +155,7 @@ public final class NfcHandler {
 					ndefTag.close();
 				}
 			} catch (Exception e) {
-				Log.d(NfcHandler.class.getSimpleName(), "Couldn't create message",e);
+				Log.d(NfcHandler.class.getSimpleName(), "Couldn't create message", e);
 			}
 		}
 	}
