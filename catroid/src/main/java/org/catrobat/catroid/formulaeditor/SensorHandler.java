@@ -67,7 +67,7 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 	private float[] rotationVector = new float[3];
 	private float[] accelerationXYZ = new float[3];
 	private float signAccelerationZ = 0f;
-	private float[] gravity = new float[]{0f, 0f, 0f};
+	private float[] gravity = new float[] { 0f, 0f, 0f };
 	private boolean useLinearAccelerationFallback = false;
 	private boolean useRotationVectorFallback = false;
 	private float linearAccelerationX = 0f;
@@ -518,9 +518,6 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 				} else {
 					return 0.0;
 				}
-
-			case NFC_TAG_ID:
-				return (double) NfcHandler.getLastNfcTagId();
 		}
 		return 0d;
 	}
@@ -652,5 +649,18 @@ public final class SensorHandler implements SensorEventListener, SensorCustomEve
 				isGpsConnected = true;
 				break;
 		}
+	}
+
+	public static Object getNfcSensorValue(Sensors sensor) {
+		String returnValue = "";
+		switch (sensor) {
+			case NFC_TAG_MESSAGE:
+				returnValue = String.valueOf(NfcHandler.getLastNfcTagMessage());
+				break;
+			case NFC_TAG_ID:
+				returnValue = String.valueOf(NfcHandler.getLastNfcTagId());
+				break;
+		}
+		return returnValue;
 	}
 }

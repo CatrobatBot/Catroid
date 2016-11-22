@@ -38,6 +38,7 @@ import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.devices.arduino.Arduino;
 import org.catrobat.catroid.devices.raspberrypi.RPiSocketConnection;
 import org.catrobat.catroid.devices.raspberrypi.RaspberryPiService;
+import org.catrobat.catroid.nfc.NfcHandler;
 import org.catrobat.catroid.sensing.CollisionDetection;
 import org.catrobat.catroid.utils.TouchUtil;
 
@@ -381,6 +382,8 @@ public class FormulaElement implements Serializable {
 		Sensors sensor = Sensors.getSensorByValue(value);
 		if (sensor.isObjectSensor) {
 			return interpretObjectSensor(sensor, sprite);
+		} else if (sensor.isNfcSensor) {
+			return SensorHandler.getNfcSensorValue(sensor);
 		} else {
 			return SensorHandler.getSensorValue(sensor);
 		}
@@ -849,6 +852,13 @@ public class FormulaElement implements Serializable {
 				break;
 			case OBJECT_DISTANCE_TO:
 				returnValue = (double) sprite.look.getDistanceToTouchPositionInUserInterfaceDimensions();
+				break;
+			case NFC_TAG_MESSAGE:
+				returnValue = NfcHandler.getLastNfcTagMessage();
+				break;
+			case NFC_TAG_ID:
+				returnValue = NfcHandler.getLastNfcTagId();
+				break;
 		}
 		return returnValue;
 	}
@@ -1127,6 +1137,7 @@ public class FormulaElement implements Serializable {
 					resources |= Brick.ARDRONE_SUPPORT;
 					break;
 
+				case NFC_TAG_MESSAGE:
 				case NFC_TAG_ID:
 					resources |= Brick.NFC_ADAPTER;
 					break;
