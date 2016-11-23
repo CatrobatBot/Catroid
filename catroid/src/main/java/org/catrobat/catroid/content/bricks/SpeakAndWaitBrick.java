@@ -124,8 +124,4 @@ public class SpeakAndWaitBrick extends FormulaBrick {
 	public void showFormulaEditorToEditFormula(View view) {
 		FormulaEditorFragment.showFragment(view, this, BrickField.SPEAK);
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

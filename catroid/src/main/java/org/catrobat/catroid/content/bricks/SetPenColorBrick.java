@@ -189,8 +189,4 @@ public class SetPenColorBrick extends FormulaBrick {
 				getFormulaWithBrickField(BrickField.PHIRO_LIGHT_BLUE)));
 		return null;
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

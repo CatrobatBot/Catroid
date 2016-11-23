@@ -141,8 +141,4 @@ public class RaspiPwmBrick extends FormulaBrick {
 				break;
 		}
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

@@ -137,8 +137,4 @@ public class WaitBrick extends FormulaBrick {
 	public void showFormulaEditorToEditFormula(View view) {
 		FormulaEditorFragment.showFragment(view, this, BrickField.TIME_TO_WAIT_IN_SECONDS);
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

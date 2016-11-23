@@ -154,10 +154,6 @@ public class SetTextBrick extends FormulaBrick implements View.OnClickListener {
 	}
 
 	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
-
-	@Override
 	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
 		sequence.addAction(sprite.getActionFactory().createSetTextAction(sprite, getFormulaWithBrickField(BrickField.X_DESTINATION),
 				getFormulaWithBrickField(BrickField.Y_DESTINATION),

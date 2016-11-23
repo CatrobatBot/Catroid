@@ -198,8 +198,4 @@ public class IfLogicBeginBrick extends FormulaBrick implements NestingBrick {
 		this.copy = copyBrick;
 		return copyBrick;
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

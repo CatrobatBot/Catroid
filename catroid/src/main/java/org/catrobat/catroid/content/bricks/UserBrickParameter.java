@@ -98,10 +98,6 @@ public class UserBrickParameter extends FormulaBrick {
 		FormulaEditorFragment.showFragment(view, this, BrickField.USER_BRICK);
 	}
 
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
-
 	public void setParent(UserBrick parent) {
 		this.parent = parent;
 	}

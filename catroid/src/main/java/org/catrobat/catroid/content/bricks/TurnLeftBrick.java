@@ -103,8 +103,4 @@ public class TurnLeftBrick extends FormulaBrick {
 	public void showFormulaEditorToEditFormula(View view) {
 		FormulaEditorFragment.showFragment(view, this, BrickField.TURN_LEFT_DEGREES);
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

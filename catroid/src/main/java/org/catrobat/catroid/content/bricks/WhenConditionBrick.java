@@ -70,10 +70,6 @@ public class WhenConditionBrick extends FormulaBrick implements ScriptBrick {
 	}
 
 	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
-
-	@Override
 	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
 		if (animationState) {
 			return view;

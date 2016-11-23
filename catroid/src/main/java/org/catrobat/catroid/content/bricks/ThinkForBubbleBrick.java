@@ -177,8 +177,4 @@ public class ThinkForBubbleBrick extends FormulaBrick {
 			FormulaEditorFragment.showFragment(view, this, BrickField.DURATION_IN_SECONDS);
 		}
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

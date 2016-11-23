@@ -130,8 +130,4 @@ public class MoveNStepsBrick extends FormulaBrick {
 	public void showFormulaEditorToEditFormula(View view) {
 		FormulaEditorFragment.showFragment(view, this, BrickField.STEPS);
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

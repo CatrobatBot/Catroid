@@ -182,8 +182,4 @@ public class PhiroMotorMoveBackwardBrick extends FormulaBrick {
 		sequence.addAction(sprite.getActionFactory().createPhiroMotorMoveBackwardActionAction(sprite, motorEnum, getFormulaWithBrickField(BrickField.PHIRO_SPEED)));
 		return null;
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

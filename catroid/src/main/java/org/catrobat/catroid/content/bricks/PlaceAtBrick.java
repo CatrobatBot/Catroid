@@ -129,8 +129,4 @@ public class PlaceAtBrick extends FormulaBrick {
 				break;
 		}
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

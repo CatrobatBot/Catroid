@@ -166,8 +166,4 @@ public class LegoNxtMotorTurnAngleBrick extends FormulaBrick {
 				getFormulaWithBrickField(BrickField.LEGO_NXT_DEGREES)));
 		return null;
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

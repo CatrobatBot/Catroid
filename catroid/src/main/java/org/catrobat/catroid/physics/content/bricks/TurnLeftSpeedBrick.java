@@ -110,8 +110,4 @@ public class TurnLeftSpeedBrick extends FormulaBrick {
 				getFormulaWithBrickField(BrickField.PHYSICS_TURN_LEFT_SPEED)));
 		return null;
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

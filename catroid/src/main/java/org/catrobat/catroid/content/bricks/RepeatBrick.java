@@ -204,8 +204,4 @@ public class RepeatBrick extends FormulaBrick implements LoopBeginBrick {
 
 		return nestingBrickList;
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

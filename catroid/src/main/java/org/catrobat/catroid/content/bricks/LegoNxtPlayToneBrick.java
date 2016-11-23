@@ -133,8 +133,4 @@ public class LegoNxtPlayToneBrick extends FormulaBrick {
 				getFormulaWithBrickField(BrickField.LEGO_NXT_DURATION_IN_SECONDS)));
 		return null;
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

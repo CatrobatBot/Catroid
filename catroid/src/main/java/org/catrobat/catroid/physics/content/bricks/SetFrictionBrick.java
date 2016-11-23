@@ -115,8 +115,4 @@ public class SetFrictionBrick extends FormulaBrick {
 				getFormulaWithBrickField(BrickField.PHYSICS_FRICTION)));
 		return null;
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

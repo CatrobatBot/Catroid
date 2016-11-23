@@ -165,8 +165,4 @@ public class LegoNxtMotorMoveBrick extends FormulaBrick {
 				getFormulaWithBrickField(BrickField.LEGO_NXT_SPEED)));
 		return null;
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

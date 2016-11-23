@@ -111,8 +111,4 @@ public class ThinkBubbleBrick extends FormulaBrick implements OnClickListener {
 	public void showFormulaEditorToEditFormula(View view) {
 		FormulaEditorFragment.showFragment(view, this, BrickField.STRING);
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

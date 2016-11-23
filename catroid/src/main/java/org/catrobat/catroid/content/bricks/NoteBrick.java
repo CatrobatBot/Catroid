@@ -95,8 +95,4 @@ public class NoteBrick extends FormulaBrick implements OnClickListener {
 	public void showFormulaEditorToEditFormula(View view) {
 		FormulaEditorFragment.showFragment(view, this, BrickField.NOTE);
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

@@ -57,8 +57,4 @@ public class DroneMoveDownBrick extends DroneMoveBrick {
 				getFormulaWithBrickField(BrickField.DRONE_POWER_IN_PERCENT)));
 		return null;
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

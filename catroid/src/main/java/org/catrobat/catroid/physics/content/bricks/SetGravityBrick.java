@@ -131,8 +131,4 @@ public class SetGravityBrick extends FormulaBrick {
 				getFormulaWithBrickField(BrickField.PHYSICS_GRAVITY_Y)));
 		return null;
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

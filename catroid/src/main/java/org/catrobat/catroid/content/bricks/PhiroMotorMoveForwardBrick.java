@@ -185,8 +185,4 @@ public class PhiroMotorMoveForwardBrick extends FormulaBrick {
 				getFormulaWithBrickField(BrickField.PHIRO_SPEED)));
 		return null;
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

@@ -171,8 +171,4 @@ public class GlideToBrick extends FormulaBrick {
 				break;
 		}
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

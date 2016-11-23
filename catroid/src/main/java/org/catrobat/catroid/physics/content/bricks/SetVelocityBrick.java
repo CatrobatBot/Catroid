@@ -130,8 +130,4 @@ public class SetVelocityBrick extends FormulaBrick {
 				getFormulaWithBrickField(BrickField.PHYSICS_VELOCITY_Y)));
 		return null;
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

@@ -80,8 +80,4 @@ public class DroneTurnRightMagnetoBrick extends DroneMoveBrick {
 		textView.setText(R.string.brick_drone_angle);
 		return prototypeView;
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

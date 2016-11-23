@@ -110,8 +110,4 @@ public class SetMassBrick extends FormulaBrick {
 				getFormulaWithBrickField(BrickField.PHYSICS_MASS)));
 		return null;
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

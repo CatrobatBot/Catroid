@@ -165,8 +165,4 @@ public class PhiroPlayToneBrick extends FormulaBrick {
 				.PHIRO_DURATION_IN_SECONDS)));
 		return null;
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

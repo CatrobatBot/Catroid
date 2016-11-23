@@ -111,8 +111,4 @@ public class SetBounceBrick extends FormulaBrick {
 				getFormulaWithBrickField(BrickField.PHYSICS_BOUNCE_FACTOR)));
 		return null;
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

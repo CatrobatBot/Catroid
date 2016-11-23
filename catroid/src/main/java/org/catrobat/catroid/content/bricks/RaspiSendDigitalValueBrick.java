@@ -133,8 +133,4 @@ public class RaspiSendDigitalValueBrick extends FormulaBrick {
 				break;
 		}
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }
