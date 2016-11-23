@@ -150,10 +150,6 @@ public class SetNfcTagBrick extends FormulaBrick {
 		FormulaEditorFragment.showFragment(view, this, BrickField.NFC_NDEF_MESSAGE);
 	}
 
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
-
 	private ArrayAdapter<String> createArrayAdapter(Context context) {
 		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item);
 

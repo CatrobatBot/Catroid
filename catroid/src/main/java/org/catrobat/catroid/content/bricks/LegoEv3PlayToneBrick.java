@@ -151,8 +151,4 @@ public class LegoEv3PlayToneBrick extends FormulaBrick {
 				getFormulaWithBrickField(BrickField.LEGO_EV3_VOLUME)));
 		return null;
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

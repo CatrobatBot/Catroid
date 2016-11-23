@@ -205,8 +205,4 @@ public class LegoEv3MotorMoveBrick extends FormulaBrick {
 				getFormulaWithBrickField(BrickField.LEGO_EV3_PERIOD_IN_SECONDS)));
 		return null;
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }

@@ -174,8 +174,4 @@ public class LegoEv3MotorTurnAngleBrick extends FormulaBrick {
 				getFormulaWithBrickField(BrickField.LEGO_EV3_DEGREES)));
 		return null;
 	}
-
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-	}
 }
