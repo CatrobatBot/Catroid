@@ -32,86 +32,84 @@ import org.catrobat.catroid.devices.arduino.ArduinoImpl;
 
 public class ArduinoImplTest extends AndroidTestCase {
 
-    private Arduino arduino;
-    private ConnectionDataLogger logger;
-    private FirmataUtils firmataUtils;
+	private Arduino arduino;
+	private ConnectionDataLogger logger;
+	private FirmataUtils firmataUtils;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
 
-        arduino = new ArduinoImpl();
-        logger = ConnectionDataLogger.createLocalConnectionLogger();
-        firmataUtils = new FirmataUtils(logger);
-        arduino.setConnection(logger.getConnectionProxy());
-    }
+		arduino = new ArduinoImpl();
+		logger = ConnectionDataLogger.createLocalConnectionLogger();
+		firmataUtils = new FirmataUtils(logger);
+		arduino.setConnection(logger.getConnectionProxy());
+	}
 
-    @Override
-    protected void tearDown() throws Exception {
-        arduino.disconnect();
-        logger.disconnectAndDestroy();
-        super.tearDown();
-    }
+	@Override
+	protected void tearDown() throws Exception {
+		arduino.disconnect();
+		logger.disconnectAndDestroy();
+		super.tearDown();
+	}
 
-    private void testSetBit_allOnesSetIndex0To1() {
-        assertEquals("Setting an already set bit should not change numberToModify",
-                0b11111111, ArduinoImpl.setBit(0b11111111, 0, 1));
-    }
+	private void testSetBit_allOnesSetIndex0To1() {
+		assertEquals("Setting an already set bit should not change numberToModify",
+				0b11111111, ArduinoImpl.setBit(0b11111111, 0, 1));
+	}
 
-    private void testSetBit_allButOneZerosSetIndex3To1() {
-        assertEquals("Setting an already set bit should not change numberToModify",
-                0b00001000, ArduinoImpl.setBit(0b00001000, 3, 1));
-    }
+	private void testSetBit_allButOneZerosSetIndex3To1() {
+		assertEquals("Setting an already set bit should not change numberToModify",
+				0b00001000, ArduinoImpl.setBit(0b00001000, 3, 1));
+	}
 
-    private void testSetBit_allZerosSetIndex7To0() {
-        assertEquals("Clearing an already cleared bit should not change numberToModify",
-                0b00000000, ArduinoImpl.setBit(0b00000000, 7, 0));
-    }
+	private void testSetBit_allZerosSetIndex7To0() {
+		assertEquals("Clearing an already cleared bit should not change numberToModify",
+				0b00000000, ArduinoImpl.setBit(0b00000000, 7, 0));
+	}
 
-    private void testSetBit_allButOneOnesSetIndex4To0() {
-        assertEquals("Clearing an already cleared bit should not change numberToModify",
-                0b11011111, ArduinoImpl.setBit(0b11011111, 5, 0));
-    }
+	private void testSetBit_allButOneOnesSetIndex4To0() {
+		assertEquals("Clearing an already cleared bit should not change numberToModify",
+				0b11011111, ArduinoImpl.setBit(0b11011111, 5, 0));
+	}
 
+	private void testSetBit_allZerosSetIndex0To1() {
+		assertEquals("Didn't set bit as expected",
+				0b00000001, ArduinoImpl.setBit(0b00000000, 0, 1));
+	}
 
-    private void testSetBit_allZerosSetIndex0To1() {
-        assertEquals("Didn't set bit as expected",
-                0b00000001, ArduinoImpl.setBit(0b00000000, 0, 1));
-    }
+	private void testSetBit_allOnesSetIndex0To0() {
+		assertEquals("Didn't clear bit as expected",
+				0b11111110, ArduinoImpl.setBit(0b11111111, 0, 0));
+	}
 
-    private void testSetBit_allOnesSetIndex0To0() {
-        assertEquals("Didn't clear bit as expected",
-                0b11111110, ArduinoImpl.setBit(0b11111111, 0, 0));
-    }
+	private void testSetBit_allZerosSetIndex7To1() {
+		assertEquals("Didn't set bit as expected",
+				0b10000000, ArduinoImpl.setBit(0b00000000, 7, 1));
+	}
 
-    private void testSetBit_allZerosSetIndex7To1() {
-        assertEquals("Didn't set bit as expected",
-                0b10000000, ArduinoImpl.setBit(0b00000000, 7, 1));
-    }
+	private void testSetBit_allOnesSetIndex7To0() {
+		assertEquals("Didn't clear bit as expected",
+				0b01111111, ArduinoImpl.setBit(0b11111111, 7, 0));
+	}
 
-    private void testSetBit_allOnesSetIndex7To0() {
-        assertEquals("Didn't clear bit as expected",
-                0b01111111, ArduinoImpl.setBit(0b11111111, 7, 0));
-    }
+	private void testSetBit_negativeIndex() {
+		assertEquals("Negative index should not modify numberToModify",
+				0, ArduinoImpl.setBit(0, -3, 1));
+	}
 
+	private void testSetBit_maxIndex() {
+		assertEquals("Didn't set bit as expected",
+				0x80000000, ArduinoImpl.setBit(0x00000000, 31, 1));
+	}
 
-    private void testSetBit_negativeIndex() {
-        assertEquals("Negative index should not modify numberToModify",
-                0, ArduinoImpl.setBit(0, -3, 1));
-    }
+	private void testSetBit_tooLargeIndex() {
+		assertEquals("Too large index (>=32) should not modify numberToModify",
+				0, ArduinoImpl.setBit(0, 32, 1));
+	}
 
-    private void testSetBit_maxIndex() {
-        assertEquals("Didn't set bit as expected",
-                0x80000000, ArduinoImpl.setBit(0x00000000, 31, 1));
-    }
-
-    private void testSetBit_tooLargeIndex() {
-        assertEquals("Too large index (>=32) should not modify numberToModify",
-                0, ArduinoImpl.setBit(0, 32, 1));
-    }
-
-    private void testSetBit_nonBinaryValue() {
-        assertEquals("Any value other than 0 should set the bit specified by index",
-                0b00000001, ArduinoImpl.setBit(0b00000000, 0, 4));
-    }
+	private void testSetBit_nonBinaryValue() {
+		assertEquals("Any value other than 0 should set the bit specified by index",
+				0b00000001, ArduinoImpl.setBit(0b00000000, 0, 4));
+	}
 }
