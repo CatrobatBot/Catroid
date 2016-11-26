@@ -223,11 +223,14 @@ public class ArduinoImpl implements Arduino {
 	}
 
 	public static int setBit(int number, int index, int value) {
-		if (value == 0) {
-			return number & ~(1 << index);
-		} else {
-			return number | (1 << index);
+		if ((index >= 0) && (index < 32)) {
+			if (value == 0) {
+				return number & ~(1 << index);
+			} else {
+				return number | (1 << index);
+			}
 		}
+		return number;
 	}
 
 	@Override
