@@ -168,7 +168,7 @@ public class ArduinoListener implements IFirmata.Listener {
 		if ((pin >= 0) && (pin < ArduinoImpl.NUMBER_OF_DIGITAL_PINS)) {
 			int port = (pin + 7) / 8;
 			int index = pin % 8;
-			this.portValue[port] =  ArduinoImpl.setBit(this.portValue[port], index, value);
+			this.portValue[port] = ArduinoImpl.setBit(this.portValue[port], index, value);
 		}
 	}
 
