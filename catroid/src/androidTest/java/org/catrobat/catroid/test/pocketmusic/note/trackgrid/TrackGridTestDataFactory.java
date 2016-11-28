@@ -85,10 +85,10 @@ public final class TrackGridTestDataFactory {
 
 		List<GridRow> gridRows = new ArrayList<GridRow>();
 
-		gridRows.add(new GridRow(NoteName.C4, createGridRowPositionsGridRow(new int[]{0, 3})));
-		gridRows.add(new GridRow(NoteName.E4, createGridRowPositionsGridRow(new int[]{1})));
-		gridRows.add(new GridRow(NoteName.F4, createGridRowPositionsGridRow(new int[]{2})));
-		gridRows.add(new GridRow(NoteName.C5, createGridRowPositionsGridRow(new int[]{4})));
+		gridRows.add(new GridRow(NoteName.C4, createGridRowPositionsGridRow(new int[] { 0, 3 })));
+		gridRows.add(new GridRow(NoteName.E4, createGridRowPositionsGridRow(new int[] { 1 })));
+		gridRows.add(new GridRow(NoteName.F4, createGridRowPositionsGridRow(new int[] { 2 })));
+		gridRows.add(new GridRow(NoteName.C5, createGridRowPositionsGridRow(new int[] { 4 })));
 
 		return new TrackGrid(MusicalKey.VIOLIN, MusicalInstrument.ACOUSTIC_GRAND_PIANO, MusicalBeat
 				.BEAT_4_4, gridRows);
@@ -98,7 +98,7 @@ public final class TrackGridTestDataFactory {
 
 		List<GridRow> gridRows = new ArrayList<GridRow>();
 
-		gridRows.add(new GridRow(NoteName.C4, createGridRowPositionsGridRow(new int[]{3})));
+		gridRows.add(new GridRow(NoteName.C4, createGridRowPositionsGridRow(new int[] { 3 })));
 
 		return new TrackGrid(MusicalKey.VIOLIN, MusicalInstrument.ACOUSTIC_GRAND_PIANO, MusicalBeat
 				.BEAT_4_4, gridRows);
@@ -108,11 +108,11 @@ public final class TrackGridTestDataFactory {
 
 		List<GridRow> gridRows = new ArrayList<GridRow>();
 
-		gridRows.add(new GridRow(NoteName.C5, createGridRowPositionsGridRow(new int[]{0})));
-		gridRows.add(new GridRow(NoteName.C4, createGridRowPositionsGridRow(new int[]{1, 2})));
-		gridRows.add(new GridRow(NoteName.D4, createGridRowPositionsGridRow(new int[]{1, 2})));
-		gridRows.add(new GridRow(NoteName.E4, createGridRowPositionsGridRow(new int[]{3})));
-		gridRows.add(new GridRow(NoteName.F4, createGridRowPositionsGridRow(new int[]{3})));
+		gridRows.add(new GridRow(NoteName.C5, createGridRowPositionsGridRow(new int[] { 0 })));
+		gridRows.add(new GridRow(NoteName.C4, createGridRowPositionsGridRow(new int[] { 1, 2 })));
+		gridRows.add(new GridRow(NoteName.D4, createGridRowPositionsGridRow(new int[] { 1, 2 })));
+		gridRows.add(new GridRow(NoteName.E4, createGridRowPositionsGridRow(new int[] { 3 })));
+		gridRows.add(new GridRow(NoteName.F4, createGridRowPositionsGridRow(new int[] { 3 })));
 
 		return new TrackGrid(MusicalKey.VIOLIN, MusicalInstrument.ACOUSTIC_GRAND_PIANO, MusicalBeat
 				.BEAT_4_4, gridRows);

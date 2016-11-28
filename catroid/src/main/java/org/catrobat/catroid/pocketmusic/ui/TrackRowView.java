@@ -54,7 +54,7 @@ public class TrackRowView extends TableRow {
 
 	public TrackRowView(Context context, MusicalBeat beat, boolean isBlackRow, NoteName noteName, GridRow gridRow,
 			TrackView
-			trackView) {
+					trackView) {
 		super(context);
 		this.beat = beat;
 		this.noteName = noteName;
