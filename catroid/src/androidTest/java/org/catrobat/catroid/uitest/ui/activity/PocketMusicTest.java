@@ -102,7 +102,7 @@ public class PocketMusicTest extends BaseActivityInstrumentationTestCase<MainMen
 		ScriptActivity scriptActivity = (ScriptActivity) solo.getCurrentActivity();
 		SoundFragment soundFragment = (SoundFragment) scriptActivity.getFragment(ScriptActivity.FRAGMENT_SOUNDS);
 
-		assertEquals(       "Saving Pocketmusic MIDI did not work.", 1, soundFragment.getSoundInfoList().size());
+		assertEquals("Saving Pocketmusic MIDI did not work.", 1, soundFragment.getSoundInfoList().size());
 
 		View firstPocketMusicView = null;
 
