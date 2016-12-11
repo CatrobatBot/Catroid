@@ -198,15 +198,15 @@ public class LookData implements Serializable, Cloneable {
 	}
 
 	String getPathToImageDirectory() {
-		return Utils.buildPath(Utils.buildProjectPath(ProjectManager.getInstance().getCurrentProject().getName()),
-				getSceneNameByLookData(), Constants.IMAGE_DIRECTORY);
+		return Utils.buildPath(Utils.buildScenePath(ProjectManager.getInstance().getCurrentProject().getName(),
+				getSceneNameByLookData()), Constants.IMAGE_DIRECTORY);
 	}
 
 	private String getSceneNameByLookData() {
 		for (Scene scene : ProjectManager.getInstance().getCurrentProject().getSceneList()) {
 			for (Sprite sprite : scene.getSpriteList()) {
 				if (sprite.getLookDataList().contains(this)) {
-					return UtilFile.encodeSpecialCharsForFileSystem(scene.getName());
+					return scene.getName();
 				}
 			}
 		}
