@@ -40,7 +40,6 @@ import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.sensing.CollisionInformation;
 import org.catrobat.catroid.utils.ImageEditing;
-import org.catrobat.catroid.utils.UtilFile;
 import org.catrobat.catroid.utils.Utils;
 
 import java.io.FileNotFoundException;
