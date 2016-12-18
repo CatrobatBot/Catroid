@@ -29,7 +29,7 @@ public final class MidiDriver implements NativeMidiDriver.OnMidiStartListener {
 
 	private final NativeMidiDriver nativeMidiDriver;
 
-	  public MidiDriver() {
+	public MidiDriver() {
 		nativeMidiDriver = new NativeMidiDriver();
 		nativeMidiDriver.setOnMidiStartListener(this);
 	}
