@@ -56,9 +56,9 @@ public class NativeMidiDriver {
 
 	private native boolean init();
 
-	public  native int[] config();
+	public native int[] config();
 
-	public  native boolean write(byte[] a);
+	public native boolean write(byte[] a);
 
 	private native boolean shutdown();
 
