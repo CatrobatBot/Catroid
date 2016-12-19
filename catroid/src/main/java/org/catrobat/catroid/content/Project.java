@@ -450,10 +450,10 @@ public class Project implements Serializable {
 		}
 	}
 
-	public void updateCollisionFormulasToNewVersion() {
+	public void updateCollisionFormulasToVersion(float catroidLanguageVersion) {
 		for (Scene scene : sceneList) {
 			for (Sprite sprite : scene.getSpriteList()) {
-				sprite.updateCollisionFormulasToNewVersion();
+				sprite.updateCollisionFormulasToVersion(catroidLanguageVersion);
 			}
 		}
 	}

@@ -277,8 +277,6 @@ public class FormulaEditorCategoryListFragment extends ListFragment implements D
 						}
 					}
 					if (secondSprite != null) {
-						//String formula = getActivity().getString(itemsIds[pos]) + "(" + dialog.getSprite() +")";
-
 						formulaEditor.addCollideFormulaToActiveFormula(secondSprite.getName());
 					}
 				}

@@ -49,7 +49,6 @@ import org.catrobat.catroid.content.bricks.UserVariableBrick;
 import org.catrobat.catroid.content.bricks.WhenConditionBrick;
 import org.catrobat.catroid.formulaeditor.DataContainer;
 import org.catrobat.catroid.formulaeditor.Formula;
-import org.catrobat.catroid.formulaeditor.FormulaElement;
 import org.catrobat.catroid.formulaeditor.InterpretationException;
 import org.catrobat.catroid.formulaeditor.UserList;
 import org.catrobat.catroid.formulaeditor.UserVariable;
@@ -823,26 +822,9 @@ public class Sprite implements Serializable, Cloneable {
 	}
 
 	public boolean hasCollision() {
-		for (Script script : getScriptList()) {
-			Brick scriptBrick = script.getScriptBrick();
-			if (scriptBrick instanceof FormulaBrick) {
-				FormulaBrick formulaBrick = (FormulaBrick) scriptBrick;
-				for (Formula formula : formulaBrick.getFormulas()) {
-					if (formula.containsElement(FormulaElement.ElementType.COLLISION_FORMULA)) {
+		boolean hasCollision = (this.getRequiredResources() & Brick.COLLISION) > 0;
+		if (hasCollision) {
 						return true;
-					}
-				}
-			}
-			for (Brick brick : script.brickList) {
-				if (brick instanceof FormulaBrick) {
-					FormulaBrick formulaBrick = (FormulaBrick) brick;
-					for (Formula formula : formulaBrick.getFormulas()) {
-						if (formula.containsElement(FormulaElement.ElementType.COLLISION_FORMULA)) {
-							return true;
-						}
-					}
-				}
-			}
 		}
 		Scene scene = ProjectManager.getInstance().getCurrentScene();
 		for (Sprite sprite : scene.getSpriteList()) {
@@ -878,25 +860,25 @@ public class Sprite implements Serializable, Cloneable {
 		return false;
 	}
 
-	public void updateCollisionFormulasToNewVersion() {
+	public void updateCollisionFormulasToVersion(float catroidLanguageVersion) {
 		for (Script script : getScriptList()) {
 			Brick scriptBrick = script.getScriptBrick();
 			if (scriptBrick instanceof FormulaBrick) {
 				FormulaBrick formulaBrick = (FormulaBrick) scriptBrick;
 				for (Formula formula : formulaBrick.getFormulas()) {
-					formula.updateCollisionFormulasToNewVersion();
+					formula.updateCollisionFormulasToVersion(catroidLanguageVersion);
 				}
 			}
 			for (Brick brick : script.getBrickList()) {
 				if (brick instanceof UserBrick) {
 					UserBrick formulaBrick = (UserBrick) brick;
 					for (Formula formula : formulaBrick.getFormulas()) {
-						formula.updateCollisionFormulasToNewVersion();
+						formula.updateCollisionFormulasToVersion(catroidLanguageVersion);
 					}
 				} else if (brick instanceof FormulaBrick) {
 					FormulaBrick formulaBrick = (FormulaBrick) brick;
 					for (Formula formula : formulaBrick.getFormulas()) {
-						formula.updateCollisionFormulasToNewVersion();
+						formula.updateCollisionFormulasToVersion(catroidLanguageVersion);
 					}
 				}
 			}

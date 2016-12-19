@@ -105,9 +105,9 @@ public class Formula implements Serializable {
 		displayText = null;
 	}
 
-	public void updateCollisionFormulasToNewVersion() {
-		formulaTree.updateCollisionFormulaToNewVersion();
-		internFormula.generateExternFormulaStringAndInternExternMapping(CatroidApplication.getAppContext());
+	public void updateCollisionFormulasToVersion(float catroidLanguageVersion) {
+		internFormula.updateCollisionFormulaToVersion(CatroidApplication.getAppContext(), catroidLanguageVersion);
+		formulaTree.updateCollisionFormulaToVersion(catroidLanguageVersion);
 		displayText = null;
 	}
 
