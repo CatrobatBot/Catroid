@@ -255,7 +255,7 @@ public class SpriteTest extends AndroidTestCase {
 
 		SequenceAction sequence = new SequenceAction();
 		sequence.addAction(sprite2.getActionFactory().createShowVariableAction(sprite2, new Formula(10), new
-						Formula(10), userVariable));
+				Formula(10), userVariable));
 		secondScript.run(sprite2, sequence);
 
 		DataContainer dataContainer = ProjectManager.getInstance().getSceneToPlay().getDataContainer();
