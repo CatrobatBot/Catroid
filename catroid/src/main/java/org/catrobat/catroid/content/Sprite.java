@@ -893,8 +893,7 @@ public class Sprite implements Serializable, Cloneable {
 					for (Formula formula : formulaBrick.getFormulas()) {
 						formula.updateCollisionFormulasToNewVersion();
 					}
-				}
-				else if (brick instanceof FormulaBrick) {
+				} else if (brick instanceof FormulaBrick) {
 					FormulaBrick formulaBrick = (FormulaBrick) brick;
 					for (Formula formula : formulaBrick.getFormulas()) {
 						formula.updateCollisionFormulasToNewVersion();
