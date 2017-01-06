@@ -684,7 +684,7 @@ public final class ProjectManager implements OnLoadProjectCompleteListener, OnCh
 		int numberOfScripts = currentSprite.getNumberOfScripts();
 		for (int pos = 0; pos < numberOfScripts; pos++) {
 			Script script = currentSprite.getScript(pos);
-			if(!checkCurrentScript(script, assumeWrong)) {
+			if (!checkCurrentScript(script, assumeWrong)) {
 				spriteCorrect = false;
 			}
 		}

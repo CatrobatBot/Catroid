@@ -30,7 +30,6 @@ import org.catrobat.catroid.io.StorageHandler;
 import org.catrobat.catroid.test.utils.TestUtils;
 import org.catrobat.catroid.utils.UtilZip;
 
-import java.io.File;
 import java.util.Locale;
 
 public class XStreamToSupportCatrobatLanguageVersion0992AndBeforeTest extends InstrumentationTestCase {
