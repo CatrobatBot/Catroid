@@ -115,7 +115,7 @@ public abstract class TextDialog extends DialogFragment {
 	protected abstract void handleNegativeButtonClick();
 
 	protected void showKeyboard() {
-		if(input.requestFocus()) {
+		if (input.requestFocus()) {
 			InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 			imm.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT);
 		}
