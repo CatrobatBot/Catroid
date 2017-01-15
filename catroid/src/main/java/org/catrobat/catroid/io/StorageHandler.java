@@ -1417,14 +1417,11 @@ public final class StorageHandler {
 	}
 
 	public void unzipTemplate(String projectName, String templateName, String zipFileName, Activity activity) {
-		String zipFileString = Constants.DEFAULT_ROOT + "/" + zipFileName;
-		StorageHandler.getInstance().copyProgramZip(activity.getResources(), zipFileName);
-		Log.d(StorageHandler.TAG, "default root " + Constants.DEFAULT_ROOT);
 		Log.d(StorageHandler.TAG, "zip file name:" + zipFileName);
 		Archiver archiver = ArchiverFactory.createArchiver("zip");
 		File unpackedDirectory = new File(Constants.DEFAULT_ROOT + "/" + templateName);
 		try {
-			archiver.extract(new File(zipFileString), unpackedDirectory);
+			archiver.extract(new File(zipFileName), unpackedDirectory);
 		} catch (IOException e) {
 			Log.d(StorageHandler.TAG, "Can't extract program", e);
 		}
@@ -1434,7 +1431,7 @@ public final class StorageHandler {
 			unpackedDirectory.renameTo(destination);
 		}
 
-		File zipFile = new File(zipFileString);
+		File zipFile = new File(zipFileName);
 		if (zipFile.exists()) {
 			zipFile.delete();
 		}
