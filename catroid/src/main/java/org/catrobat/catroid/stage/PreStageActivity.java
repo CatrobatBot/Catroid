@@ -594,6 +594,7 @@ public class PreStageActivity extends BaseActivity implements GatherCollisionInf
 		}
 		resourceInitialized();
 	}
+
 	private static ArrayList<Brick> getBricksRequieringResource(int resource) {
 		ArrayList<Brick> brickList = new ArrayList<Brick>();
 		ArrayList<Sprite> spriteList = (ArrayList<Sprite>) ProjectManager.getInstance().getCurrentProject()

@@ -24,7 +24,6 @@ package org.catrobat.catroid.content.actions;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Message;
 import android.speech.RecognizerIntent;
 import android.util.Log;
@@ -38,9 +37,8 @@ import org.catrobat.catroid.formulaeditor.UserVariable;
 import org.catrobat.catroid.stage.StageActivity;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class AskSpeechAction extends Action implements StageActivity.IntentListener{
+public class AskSpeechAction extends Action implements StageActivity.IntentListener {
 
 	private static final String TAG = "AskSpeechAction";
 	private Sprite sprite;
@@ -62,6 +60,7 @@ public class AskSpeechAction extends Action implements StageActivity.IntentListe
 
 		questionAsked = true;
 	}
+
 	private Intent createRecognitionIntent(String question) {
 		Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
 		intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
@@ -71,7 +70,6 @@ public class AskSpeechAction extends Action implements StageActivity.IntentListe
 		}
 		return intent;
 	}
-
 
 	public void setAnswerText(String answer) {
 		if (answerVariable == null) {
@@ -114,7 +112,8 @@ public class AskSpeechAction extends Action implements StageActivity.IntentListe
 	}
 
 	@Override
-	public Intent getTargetIntent() {String question = "";
+	public Intent getTargetIntent() {
+		String question = "";
 		try {
 			if (questionFormula != null) {
 				question = questionFormula.interpretString(sprite);

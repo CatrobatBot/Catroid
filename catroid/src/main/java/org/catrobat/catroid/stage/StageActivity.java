@@ -156,8 +156,7 @@ public class StageActivity extends AndroidApplication {
 			public void handleMessage(Message message) {
 				ArrayList<Object> params = (ArrayList<Object>) message.obj;
 
-				switch (message.what)
-				{
+				switch (message.what) {
 					case ASK_MESSAGE:
 						showDialog((String) params.get(1), (AskAction) params.get(0));
 						break;
@@ -168,7 +167,7 @@ public class StageActivity extends AndroidApplication {
 						currentStage.startQueuedIntent((Integer) params.get(0));
 						break;
 					default:
-						Log.e(TAG,"Unhandled message in messagehandler, case "+message.what);
+						Log.e(TAG, "Unhandled message in messagehandler, case " + message.what);
 				}
 			}
 		};
@@ -459,8 +458,6 @@ public class StageActivity extends AndroidApplication {
 		return ++numberOfSpritesCloned;
 	}
 
-
-
 	public synchronized void queueIntent(IntentListener asker) {
 		int newIdentId;
 		do {
@@ -479,8 +476,7 @@ public class StageActivity extends AndroidApplication {
 	}
 
 	private void startQueuedIntent(int intentKey) {
-		if(!intentListeners.containsKey(intentKey))
-		{
+		if (!intentListeners.containsKey(intentKey)) {
 			return;
 		}
 		Intent i = intentListeners.get(intentKey).getTargetIntent();

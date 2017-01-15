@@ -29,7 +29,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -61,7 +60,7 @@ public class NoNetworkDialog extends AlertDialog {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		View dialogLayout = View.inflate(this.getContext(),R.layout.dialog_error_networkconnection,null);
+		View dialogLayout = View.inflate(this.getContext(), R.layout.dialog_error_networkconnection, null);
 		LinearLayout imageLayout = (LinearLayout) dialogLayout
 				.findViewById(R.id.dialog_error_network_brickimages_layout);
 
