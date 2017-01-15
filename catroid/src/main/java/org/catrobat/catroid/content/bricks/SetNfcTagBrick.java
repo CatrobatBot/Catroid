@@ -149,7 +149,6 @@ public class SetNfcTagBrick extends FormulaBrick {
 			textSetNfcTag.setText(context.getText(defaultValueId));
 		} else {
 			textSetNfcTag.setText(context.getString(R.string.brick_set_nfc_tag_default_value));
-
 		}
 
 		return prototypeView;
