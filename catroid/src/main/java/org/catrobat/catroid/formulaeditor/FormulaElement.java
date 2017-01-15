@@ -32,7 +32,6 @@ import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.common.ServiceProvider;
 import org.catrobat.catroid.content.GroupSprite;
 import org.catrobat.catroid.content.Look;
-import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.devices.arduino.Arduino;

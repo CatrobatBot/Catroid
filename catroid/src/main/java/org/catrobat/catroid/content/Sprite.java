@@ -824,7 +824,7 @@ public class Sprite implements Serializable, Cloneable {
 	public boolean hasCollision() {
 		boolean hasCollision = (this.getRequiredResources() & Brick.COLLISION) > 0;
 		if (hasCollision) {
-						return true;
+			return true;
 		}
 		Scene scene = ProjectManager.getInstance().getCurrentScene();
 		for (Sprite sprite : scene.getSpriteList()) {
