@@ -1381,62 +1381,11 @@ public final class StorageHandler {
 		xstream.updateCollisionReceiverBrickMessage(projectCodeFile);
 	}
 
-	public void copyProgramZip(Resources resources, String zipFileName) {
-		AssetManager assetManager = resources.getAssets();
-		String[] files = null;
-		try {
-			files = assetManager.list("");
-		} catch (IOException e) {
-			Log.e("STANDALONE", "Failed to get asset file list.", e);
-		}
-		for (String filename : files) {
-			if (filename.contains(zipFileName)) {
-				InputStream in;
-				OutputStream out;
-				try {
-					in = assetManager.open(filename);
-					File outFile = new File(Constants.DEFAULT_ROOT, filename);
-					out = new FileOutputStream(outFile);
-					copyFile(in, out);
-					out.flush();
-					out.close();
-					in.close();
-				} catch (IOException e) {
-					Log.e("STANDALONE", "Failed to copy asset file: " + filename, e);
-				}
-			}
-		}
-	}
-
-	private void copyFile(InputStream in, OutputStream out) throws IOException {
+	public void copyFile(InputStream in, OutputStream out) throws IOException {
 		byte[] buffer = new byte[1024];
 		int read;
 		while ((read = in.read(buffer)) != -1) {
 			out.write(buffer, 0, read);
-		}
-	}
-
-	public void unzipTemplate(String projectName, String templateName, String zipFileName, Activity activity) {
-		String zipFileString = Constants.DEFAULT_ROOT + "/" + zipFileName;
-		StorageHandler.getInstance().copyProgramZip(activity.getResources(), zipFileName);
-		Log.d(StorageHandler.TAG, "default root " + Constants.DEFAULT_ROOT);
-		Log.d(StorageHandler.TAG, "zip file name:" + zipFileName);
-		Archiver archiver = ArchiverFactory.createArchiver("zip");
-		File unpackedDirectory = new File(Constants.DEFAULT_ROOT + "/" + templateName);
-		try {
-			archiver.extract(new File(zipFileString), unpackedDirectory);
-		} catch (IOException e) {
-			Log.d(StorageHandler.TAG, "Can't extract program", e);
-		}
-
-		File destination = new File(Constants.DEFAULT_ROOT + "/" + projectName);
-		if (unpackedDirectory.isDirectory()) {
-			unpackedDirectory.renameTo(destination);
-		}
-
-		File zipFile = new File(zipFileString);
-		if (zipFile.exists()) {
-			zipFile.delete();
 		}
 	}
 }
