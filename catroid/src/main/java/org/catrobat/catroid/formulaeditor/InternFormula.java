@@ -705,7 +705,7 @@ public class InternFormula {
 
 			cursorPositionInternToken = null;
 			cursorPositionInternTokenIndex = cursorPositionInternTokenIndex + 1;
-			
+
 			return CursorTokenPropertiesAfterModification.RIGHT;
 		}
 
