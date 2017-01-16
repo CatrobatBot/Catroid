@@ -284,7 +284,7 @@ public class ScriptFragment extends ScriptActivityFragment implements OnCategory
 	public void onPrepareOptionsMenu(Menu menu) {
 		menu.findItem(R.id.show_details).setVisible(false);
 		menu.findItem(R.id.rename).setVisible(false);
-		menu.findItem(R.id.unpacking).setVisible(false);
+		menu.findItem(R.id.unpack).setVisible(false);
 
 		if (getActivity() instanceof UserBrickScriptActivity || isInUserBrickOverview()) {
 			backpackMenuIsVisible = false;
@@ -760,7 +760,7 @@ public class ScriptFragment extends ScriptActivityFragment implements OnCategory
 
 	private void openBackPack() {
 		Intent intent = new Intent(getActivity(), BackPackActivity.class);
-		intent.putExtra(BackPackActivity.EXTRA_FRAGMENT_POSITION, BackPackActivity.FRAGMENT_BACKPACK_SCRIPTS);
+		intent.putExtra(BackPackActivity.FRAGMENT, BackPackScriptListFragment.class);
 		startActivity(intent);
 	}
 
