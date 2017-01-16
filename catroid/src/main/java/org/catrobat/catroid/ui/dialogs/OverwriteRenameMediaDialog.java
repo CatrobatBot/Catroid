@@ -131,7 +131,7 @@ public class OverwriteRenameMediaDialog extends DialogFragment implements OnClic
 				renameHeaderText = R.string.new_sound_name;
 				break;
 			default:
-				header = R.string.rename_sprite_dialog;
+				header = R.string.dialog_rename_sprite;
 				replaceText = R.string.overwrite_replace_default;
 				renameText = R.string.overwrite_rename_default;
 				renameHeaderText = R.string.new_sound_name;

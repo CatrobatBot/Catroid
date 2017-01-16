@@ -41,7 +41,7 @@ import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.ui.MainMenuActivity;
 import org.catrobat.catroid.ui.ProgramMenuActivity;
 import org.catrobat.catroid.ui.ScriptActivity;
-import org.catrobat.catroid.ui.controller.LookController;
+import org.catrobat.catroid.ui.controller.OldLookController;
 import org.catrobat.catroid.ui.fragment.LookFragment;
 import org.catrobat.catroid.uitest.util.BaseActivityInstrumentationTestCase;
 import org.catrobat.catroid.uitest.util.UiTestUtils;
@@ -212,7 +212,7 @@ public class SetLookBrickTest extends BaseActivityInstrumentationTestCase<MainMe
 		solo.waitForFragmentByTag(LookFragment.TAG);
 
 		LookFragment lookFragment = (LookFragment) currentActivity.getFragment(ScriptActivity.FRAGMENT_LOOKS);
-		lookFragment.startActivityForResult(intent, LookController.REQUEST_SELECT_OR_DRAW_IMAGE);
+		lookFragment.startActivityForResult(intent, OldLookController.REQUEST_SELECT_OR_DRAW_IMAGE);
 		solo.waitForActivity(ScriptActivity.class.getSimpleName());
 		solo.goBack();
 		//This is needed, because the spinner is only updated, when you actually click on the dialog

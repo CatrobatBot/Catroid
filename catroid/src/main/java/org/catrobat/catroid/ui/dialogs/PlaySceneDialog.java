@@ -39,7 +39,6 @@ import android.widget.RadioButton;
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.ui.ProgramMenuActivity;
-import org.catrobat.catroid.ui.ProjectActivity;
 import org.catrobat.catroid.ui.ScriptActivity;
 
 public class PlaySceneDialog extends DialogFragment {
@@ -102,18 +101,14 @@ public class PlaySceneDialog extends DialogFragment {
 	}
 
 	protected void handleOkButtonClick() {
-		if (getActivity() == null) {
-			Log.e(TAG, "handleOkButtonClick() Activity was null!");
-			return;
-		}
 		if (playFirstScene.isChecked()) {
 			ProjectManager.getInstance().setSceneToPlay(ProjectManager.getInstance().getCurrentProject().getDefaultScene());
 		} else {
 			ProjectManager.getInstance().setSceneToPlay(ProjectManager.getInstance().getCurrentScene());
 		}
-		if (getActivity() instanceof ProjectActivity) {
-			((ProjectActivity) getActivity()).startPreStageActivity();
-		}
+//		if (getActivity() instanceof ProjectActivity) {
+//			((ProjectActivity) getActivity()).startPreStageActivity();
+//		}
 		if (getActivity() instanceof ScriptActivity) {
 			((ScriptActivity) getActivity()).startPreStageActivity();
 		}

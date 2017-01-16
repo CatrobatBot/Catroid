@@ -257,12 +257,6 @@ public class MainMenuActivity extends BaseActivity implements OnLoadProjectCompl
 		}
 		getIntent().removeExtra(StatusBarNotificationManager.EXTRA_PROJECT_NAME);
 
-		if (ProjectManager.getInstance().getHandleNewSceneFromScriptActivity()) {
-			Intent intent = new Intent(this, ProjectActivity.class);
-			intent.putExtra(ProjectActivity.EXTRA_FRAGMENT_POSITION, ProjectActivity.FRAGMENT_SCENES);
-			intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-			startActivity(intent);
-		}
 		idlingResource.decrement();
 	}
 

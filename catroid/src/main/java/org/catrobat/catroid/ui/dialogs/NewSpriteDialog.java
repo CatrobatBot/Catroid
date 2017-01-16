@@ -57,9 +57,9 @@ import org.catrobat.catroid.ui.ProgramMenuActivity;
 import org.catrobat.catroid.ui.ScriptActivity;
 import org.catrobat.catroid.ui.SettingsActivity;
 import org.catrobat.catroid.ui.WebViewActivity;
-import org.catrobat.catroid.ui.controller.LookController;
+import org.catrobat.catroid.ui.controller.OldLookController;
 import org.catrobat.catroid.ui.fragment.SpriteFactory;
-import org.catrobat.catroid.ui.fragment.SpritesListFragment;
+import org.catrobat.catroid.ui.fragment.SpriteListFragment;
 import org.catrobat.catroid.utils.ImageEditing;
 import org.catrobat.catroid.utils.UtilCamera;
 import org.catrobat.catroid.utils.Utils;
@@ -283,7 +283,7 @@ public class NewSpriteDialog extends DialogFragment {
 		paintroidButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if (LookController.getInstance().checkIfPocketPaintIsInstalled(intent, getActivity())) {
+				if (OldLookController.getInstance().checkIfPocketPaintIsInstalled(intent, getActivity())) {
 					Intent intent = new Intent("android.intent.action.MAIN");
 					intent.setComponent(new ComponentName(Constants.POCKET_PAINT_PACKAGE_NAME,
 							Constants.POCKET_PAINT_INTENT_ACTIVITY_NAME));

@@ -57,7 +57,7 @@ import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.ui.adapter.ActionModeActivityAdapterInterface;
 import org.catrobat.catroid.ui.adapter.BrickAdapter;
 import org.catrobat.catroid.ui.controller.BackPackListManager;
-import org.catrobat.catroid.ui.controller.LookController;
+import org.catrobat.catroid.ui.controller.OldLookController;
 import org.catrobat.catroid.ui.dialogs.NewSceneDialog;
 import org.catrobat.catroid.ui.dialogs.PlaySceneDialog;
 import org.catrobat.catroid.ui.dragndrop.BrickDragAndDropListView;
@@ -121,7 +121,7 @@ public class ScriptActivity extends BaseActivity {
 	private FragmentManager fragmentManager = getFragmentManager();
 	private ScriptFragment scriptFragment = null;
 	private LookFragment lookFragment = null;
-	private SoundFragment soundFragment = null;
+	private SoundFragment soundListFragment = null;
 	private NfcTagFragment nfcTagFragment = null;
 
 	private ScriptActivityFragment currentFragment = null;
@@ -166,7 +166,7 @@ public class ScriptActivity extends BaseActivity {
 		buttonAdd = (ImageButton) findViewById(R.id.button_add);
 
 		if (switchToScriptFragment) {
-			LookController.getInstance().switchToScriptFragment(lookFragment, this);
+			OldLookController.getInstance().switchToScriptFragment(lookFragment, this);
 			switchToScriptFragment = false;
 		}
 	}
@@ -207,17 +207,6 @@ public class ScriptActivity extends BaseActivity {
 		setupBottomBar();
 	}
 
-	@Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		// needed for NFC
-		Log.d("ScriptActivity", "onNewIntent");
-		//setIntent(intent);
-		if (nfcTagFragment != null && currentFragment == nfcTagFragment) {
-			nfcTagFragment.onNewIntent(intent);
-		}
-	}
-
 	public void updateHandleAddButtonClickListener() {
 		buttonAdd = (ImageButton) findViewById(R.id.button_add);
 		buttonAdd.setOnClickListener(new OnClickListener() {
@@ -250,20 +239,12 @@ public class ScriptActivity extends BaseActivity {
 				currentFragment = lookFragment;
 				break;
 			case FRAGMENT_SOUNDS:
-				if (soundFragment == null) {
-					soundFragment = new SoundFragment();
+				if (soundListFragment == null) {
+					soundListFragment = new SoundFragment();
 					fragmentExists = false;
 					currentFragmentTag = SoundFragment.TAG;
 				}
-				currentFragment = soundFragment;
-				break;
-			case FRAGMENT_NFCTAGS:
-				if (nfcTagFragment == null) {
-					nfcTagFragment = new NfcTagFragment();
-					fragmentExists = false;
-					currentFragmentTag = NfcTagFragment.TAG;
-				}
-				currentFragment = nfcTagFragment;
+				currentFragment = soundListFragment;
 				break;
 		}
 
@@ -395,15 +376,11 @@ public class ScriptActivity extends BaseActivity {
 	private void openBackPack() {
 		Intent intent = new Intent(currentFragment.getActivity(), BackPackActivity.class);
 		if (currentFragment == lookFragment) {
-			intent.putExtra(BackPackActivity.EXTRA_FRAGMENT_POSITION, FRAGMENT_LOOKS);
-		} else if (currentFragment == soundFragment) {
-			intent.putExtra(BackPackActivity.EXTRA_FRAGMENT_POSITION, FRAGMENT_SOUNDS);
+			intent.putExtra(BackPackActivity.FRAGMENT, BackPackLookListFragment.class);
+		} else if (currentFragment == soundListFragment) {
+			intent.putExtra(BackPackActivity.FRAGMENT, BackPackSoundListFragment.class);
 		} else if (currentFragment == scriptFragment) {
-			if (scriptFragment.isInUserBrickOverview()) {
-				intent.putExtra(BackPackActivity.EXTRA_FRAGMENT_POSITION, USERBRICKS_PROTOTYPE_VIEW);
-			} else {
-				intent.putExtra(BackPackActivity.EXTRA_FRAGMENT_POSITION, FRAGMENT_SCRIPTS);
-			}
+			intent.putExtra(BackPackActivity.FRAGMENT, BackPackScriptListFragment.class);
 		}
 		startActivity(intent);
 	}
@@ -445,7 +422,7 @@ public class ScriptActivity extends BaseActivity {
 				currentFragment.startBackPackActionMode();
 			}
 		} else {
-			items = new CharSequence[] { getString(R.string.packing), getString(R.string.unpack) };
+			items = new CharSequence[] { getString(R.string.pack), getString(R.string.unpack) };
 
 			builder.setItems(items, new DialogInterface.OnClickListener() {
 				@Override
@@ -517,15 +494,11 @@ public class ScriptActivity extends BaseActivity {
 			return formulaEditor.onKey(null, keyCode, event);
 		}
 
-		if (soundFragment != null && soundFragment.isVisible() && soundFragment.onKey(null, keyCode, event)) {
+		if (soundListFragment != null && soundListFragment.isVisible() && soundListFragment.onKey(null, keyCode, event)) {
 			return true;
 		}
 
 		if (lookFragment != null && lookFragment.isVisible() && lookFragment.onKey(null, keyCode, event)) {
-			return true;
-		}
-
-		if (nfcTagFragment != null && nfcTagFragment.isVisible() && nfcTagFragment.onKey(null, keyCode, event)) {
 			return true;
 		}
 
@@ -568,12 +541,8 @@ public class ScriptActivity extends BaseActivity {
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
 		if (hasFocus) {
-			if (soundFragment != null && soundFragment.isVisible()) {
+			if (soundListFragment != null && soundListFragment.isVisible()) {
 				sendBroadcast(new Intent(ScriptActivity.ACTION_SOUNDS_LIST_INIT));
-			}
-
-			if (nfcTagFragment != null && nfcTagFragment.isVisible()) {
-				sendBroadcast(new Intent(ScriptActivity.ACTION_NFCTAGS_LIST_INIT));
 			}
 
 			if (lookFragment != null && lookFragment.isVisible()) {
@@ -599,11 +568,11 @@ public class ScriptActivity extends BaseActivity {
 			fragmentTransaction.remove(formulaEditorFragment);
 			fragmentTransaction.commit();
 		}
-		if (soundFragment != null && currentFragment != soundFragment) {
+		if (soundListFragment != null && currentFragment != soundListFragment) {
 			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-			fragmentTransaction.remove(soundFragment);
+			fragmentTransaction.remove(soundListFragment);
 			fragmentTransaction.commit();
-			soundFragment = null;
+			soundListFragment = null;
 		}
 		if (lookFragment != null && currentFragment != lookFragment) {
 			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -611,12 +580,7 @@ public class ScriptActivity extends BaseActivity {
 			fragmentTransaction.commit();
 			lookFragment = null;
 		}
-		if (nfcTagFragment != null && currentFragment != nfcTagFragment) {
-			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-			fragmentTransaction.remove(nfcTagFragment);
-			fragmentTransaction.commit();
-			nfcTagFragment = null;
-		}
+
 		BroadcastHandler.clearActionMaps();
 		if (isHoveringActive()) {
 			scriptFragment.getListView().animateHoveringBrick();
@@ -711,10 +675,7 @@ public class ScriptActivity extends BaseActivity {
 				fragment = lookFragment;
 				break;
 			case FRAGMENT_SOUNDS:
-				fragment = soundFragment;
-				break;
-			case FRAGMENT_NFCTAGS:
-				fragment = nfcTagFragment;
+				fragment = soundListFragment;
 				break;
 		}
 		return fragment;
@@ -734,14 +695,9 @@ public class ScriptActivity extends BaseActivity {
 				currentFragmentTag = LookFragment.TAG;
 				break;
 			case FRAGMENT_SOUNDS:
-				currentFragment = soundFragment;
+				currentFragment = soundListFragment;
 				currentFragmentPosition = FRAGMENT_SOUNDS;
 				currentFragmentTag = SoundFragment.TAG;
-				break;
-			case FRAGMENT_NFCTAGS:
-				currentFragment = nfcTagFragment;
-				currentFragmentPosition = FRAGMENT_NFCTAGS;
-				currentFragmentTag = NfcTagFragment.TAG;
 				break;
 		}
 	}
@@ -828,13 +784,13 @@ public class ScriptActivity extends BaseActivity {
 			case FRAGMENT_SOUNDS:
 				isSoundFragmentFromPlaySoundBrickNew = true;
 				fragmentTransaction.addToBackStack(SoundFragment.TAG);
-				if (soundFragment == null) {
+				if (soundListFragment == null) {
 					ProjectManager.getInstance().setComingFromScriptFragmentToSoundFragment(true);
-					soundFragment = new SoundFragment();
-					fragmentTransaction.add(R.id.fragment_container, soundFragment, SoundFragment.TAG);
+					soundListFragment = new SoundFragment();
+					fragmentTransaction.add(R.id.fragment_container, soundListFragment, SoundFragment.TAG);
 				} else {
 					ProjectManager.getInstance().setComingFromScriptFragmentToSoundFragment(true);
-					fragmentTransaction.show(soundFragment);
+					fragmentTransaction.show(soundListFragment);
 				}
 				setCurrentFragment(FRAGMENT_SOUNDS);
 				break;
@@ -861,7 +817,7 @@ public class ScriptActivity extends BaseActivity {
 	}
 
 	public void switchFromLookToScriptFragment() {
-		LookController.getInstance().switchToScriptFragment(lookFragment, this);
+		OldLookController.getInstance().switchToScriptFragment(lookFragment, this);
 	}
 
 	public void showEmptyActionModeDialog(String actionMode) {

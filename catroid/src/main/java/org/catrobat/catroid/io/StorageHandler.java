@@ -1225,21 +1225,24 @@ public final class StorageHandler {
 		return compressedFile;
 	}
 
-	public void deleteFile(String filepath, boolean isBackPackFile) {
+	public boolean deleteFile(String filepath, boolean isBackPackFile) {
 		FileChecksumContainer container = ProjectManager.getInstance().getFileChecksumContainer();
 		try {
 			if (isBackPackFile) {
 				File toDelete = new File(filepath);
 				Log.d(TAG, "delete" + toDelete);
 				toDelete.delete();
+				return true;
 			} else if (container.decrementUsage(filepath)) {
 				File toDelete = new File(filepath);
 				Log.d(TAG, "delete" + toDelete);
 				toDelete.delete();
+				return true;
 			}
 		} catch (FileNotFoundException fileNotFoundException) {
 			Log.e(TAG, Log.getStackTraceString(fileNotFoundException));
 		}
+		return false;
 	}
 
 	public void deleteAllFile(String filepath) {

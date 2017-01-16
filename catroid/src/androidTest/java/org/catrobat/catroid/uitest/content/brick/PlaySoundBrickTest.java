@@ -42,7 +42,7 @@ import org.catrobat.catroid.test.utils.Reflection;
 import org.catrobat.catroid.ui.MainMenuActivity;
 import org.catrobat.catroid.ui.ProgramMenuActivity;
 import org.catrobat.catroid.ui.ScriptActivity;
-import org.catrobat.catroid.ui.fragment.SoundFragment;
+import org.catrobat.catroid.ui.fragment.SoundListFragment;
 import org.catrobat.catroid.uitest.util.BaseActivityInstrumentationTestCase;
 import org.catrobat.catroid.uitest.util.UiTestUtils;
 
@@ -189,7 +189,7 @@ public class PlaySoundBrickTest extends BaseActivityInstrumentationTestCase<Main
 		solo.clickOnImageButton(0);
 
 		solo.waitForText(recordedFilename);
-		solo.waitForFragmentByTag(SoundFragment.TAG);
+		solo.waitForFragmentByTag(SoundListFragment.TAG);
 		solo.sleep(1000);
 		assertTrue("New sound file is not selected", solo.waitForText(recordedFilename));
 

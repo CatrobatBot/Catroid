@@ -40,7 +40,7 @@ import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.test.utils.Reflection;
 import org.catrobat.catroid.ui.MainMenuActivity;
-import org.catrobat.catroid.ui.MyProjectsActivity;
+import org.catrobat.catroid.ui.ProjectListActivity;
 import org.catrobat.catroid.ui.ProgramMenuActivity;
 import org.catrobat.catroid.ui.ProjectActivity;
 import org.catrobat.catroid.ui.ScriptActivity;
@@ -51,7 +51,7 @@ import org.catrobat.catroid.ui.dialogs.SignInDialog;
 import org.catrobat.catroid.ui.fragment.BrickCategoryFragment;
 import org.catrobat.catroid.ui.fragment.LookFragment;
 import org.catrobat.catroid.ui.fragment.ScriptFragment;
-import org.catrobat.catroid.ui.fragment.SoundFragment;
+import org.catrobat.catroid.ui.fragment.SoundListFragment;
 import org.catrobat.catroid.uitest.util.UiTestUtils;
 
 import java.io.File;
@@ -273,17 +273,17 @@ public class DoubleClickOpensViewOnceTest extends TestSuite {
 	}
 
 	public static class MyProjectsDoubleClickOpensViewOnceTest extends
-			ActivityInstrumentationTestBase<MyProjectsActivity> {
-		private MyProjectsActivity activity;
+			ActivityInstrumentationTestBase<ProjectListActivity> {
+		private ProjectListActivity activity;
 
 		public MyProjectsDoubleClickOpensViewOnceTest() {
-			super(MyProjectsActivity.class);
+			super(ProjectListActivity.class);
 		}
 
 		@Override
 		public void setUp() throws Exception {
 			super.setUp();
-			activity = (MyProjectsActivity) solo.getCurrentActivity();
+			activity = (ProjectListActivity) solo.getCurrentActivity();
 		}
 
 		@Override
@@ -357,7 +357,7 @@ public class DoubleClickOpensViewOnceTest extends TestSuite {
 				public void execute() {
 					activity.handleSoundsButton(null);
 				}
-			}, R.id.program_menu_button_sounds, SoundFragment.TAG);
+			}, R.id.program_menu_button_sounds, SoundListFragment.TAG);
 		}
 	}
 

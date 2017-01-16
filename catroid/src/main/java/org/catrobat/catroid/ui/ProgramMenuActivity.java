@@ -48,7 +48,6 @@ import org.catrobat.catroid.drone.DroneStageActivity;
 import org.catrobat.catroid.stage.PreStageActivity;
 import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.ui.dialogs.PlaySceneDialog;
-import org.catrobat.catroid.ui.dialogs.RenameSpriteDialog;
 
 import java.util.concurrent.locks.Lock;
 
@@ -58,7 +57,6 @@ public class ProgramMenuActivity extends BaseActivity {
 
 	private static final String TAG = ProgramMenuActivity.class.getSimpleName();
 	private Lock viewSwitchLock = new ViewSwitchLock();
-	private SpriteRenamedReceiver spriteRenamedReceiver;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -71,7 +69,7 @@ public class ProgramMenuActivity extends BaseActivity {
 			startActivity(intent);
 		}
 
-		setContentView(R.layout.activity_program_menu);
+		setContentView(R.layout.activity_sprite_member_selection);
 
 		BottomBar.hideAddButton(this);
 
@@ -116,27 +114,11 @@ public class ProgramMenuActivity extends BaseActivity {
 			((Button) findViewById(R.id.program_menu_button_looks)).setText(R.string.looks);
 		}
 
-		//Hide NFC if option is not set
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		if (sharedPreferences.getBoolean("setting_nfc_bricks", false) && BuildConfig.FEATURE_NFC_ENABLED) {
 			findViewById(R.id.program_menu_button_nfctags).setVisibility(View.VISIBLE);
 		} else {
 			findViewById(R.id.program_menu_button_nfctags).setVisibility(View.INVISIBLE);
-		}
-
-		if (spriteRenamedReceiver == null) {
-			spriteRenamedReceiver = new SpriteRenamedReceiver();
-		}
-
-		IntentFilter intentFilterSpriteRenamed = new IntentFilter(ScriptActivity.ACTION_SPRITE_RENAMED);
-		getBaseContext().registerReceiver(spriteRenamedReceiver, intentFilterSpriteRenamed);
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-		if (spriteRenamedReceiver != null) {
-			getBaseContext().unregisterReceiver(spriteRenamedReceiver);
 		}
 	}
 
@@ -149,23 +131,8 @@ public class ProgramMenuActivity extends BaseActivity {
 		return super.onCreateOptionsMenu(menu);
 	}
 
-	private class SpriteRenamedReceiver extends BroadcastReceiver {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			if (intent.getAction().equals(ScriptActivity.ACTION_SPRITE_RENAMED)) {
-				String newSpriteName = intent.getExtras().getString(RenameSpriteDialog.EXTRA_NEW_SPRITE_NAME);
-				ProjectManager.getInstance().getCurrentSprite().rename(newSpriteName);
-				final ActionBar actionBar = getActionBar();
-				actionBar.setTitle(newSpriteName);
-			}
-		}
-	}
-
 	private void showRenameDialog() {
-		Sprite sprite = ProjectManager.getInstance().getCurrentSprite();
-		RenameSpriteDialog dialog = new RenameSpriteDialog(R.string.rename_sprite_dialog, R.string.sprite_name, sprite
-				.getName());
-		dialog.show(getFragmentManager(), RenameSpriteDialog.DIALOG_FRAGMENT_TAG);
+
 	}
 
 	@Override

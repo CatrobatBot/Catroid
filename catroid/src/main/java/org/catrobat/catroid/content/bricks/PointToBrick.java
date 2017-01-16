@@ -360,7 +360,7 @@ public class PointToBrick extends BrickBaseType {
 	@Override
 	public void storeDataForBackPack(Sprite sprite) {
 		Sprite spriteToRestore = ProjectManager.getInstance().getCurrentSprite();
-		Sprite backPackedSprite = BackPackSpriteController.getInstance().backpackHiddenSprite(getPointedObject());
+		Sprite backPackedSprite = BackPackSpriteController.backpackHidden(getPointedObject());
 		setPointedObject(backPackedSprite);
 		ProjectManager.getInstance().setCurrentSprite(spriteToRestore);
 	}
