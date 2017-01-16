@@ -257,12 +257,6 @@ public class MainMenuActivity extends BaseActivity implements OnLoadProjectCompl
 		}
 		getIntent().removeExtra(StatusBarNotificationManager.EXTRA_PROJECT_NAME);
 
-		if (ProjectManager.getInstance().getHandleNewSceneFromScriptActivity()) {
-			Intent intent = new Intent(this, ProjectActivity.class);
-			intent.putExtra(ProjectActivity.EXTRA_FRAGMENT_POSITION, ProjectActivity.FRAGMENT_SCENES);
-			intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-			startActivity(intent);
-		}
 		idlingResource.decrement();
 	}
 
@@ -294,7 +288,7 @@ public class MainMenuActivity extends BaseActivity implements OnLoadProjectCompl
 			Log.d("STANDALONE", "onLoadProjectSucess -> startStage");
 			startStageProject();
 		} else if (ProjectManager.getInstance().getCurrentProject() != null && startProjectActivity) {
-			Intent intent = new Intent(MainMenuActivity.this, ProjectActivity.class);
+			Intent intent = new Intent(MainMenuActivity.this, SceneListActivity.class);
 			startActivity(intent);
 		}
 	}
@@ -312,7 +306,7 @@ public class MainMenuActivity extends BaseActivity implements OnLoadProjectCompl
 		if (!viewSwitchLock.tryLock()) {
 			return;
 		}
-		Intent intent = new Intent(MainMenuActivity.this, MyProjectsActivity.class);
+		Intent intent = new Intent(MainMenuActivity.this, ProjectListActivity.class);
 		startActivity(intent);
 	}
 

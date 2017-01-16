@@ -28,7 +28,6 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnShowListener;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -47,7 +46,6 @@ import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.drone.DroneServiceWrapper;
-import org.catrobat.catroid.ui.ProjectActivity;
 import org.catrobat.catroid.utils.Utils;
 
 import java.io.IOException;
@@ -182,14 +180,14 @@ public class NewProjectDialog extends DialogFragment {
 				return;
 			}
 
-			Intent intent = new Intent(getActivity(), ProjectActivity.class);
-			intent.putExtra(Constants.PROJECTNAME_TO_LOAD, projectName);
+//			Intent intent = new Intent(getActivity(), ProjectActivity.class);
+//			intent.putExtra(Constants.PROJECTNAME_TO_LOAD, projectName);
+//
+//			if (openedFromProjectList) {
+//				intent.putExtra(Constants.PROJECT_OPENED_FROM_PROJECTS_LIST, true);
+//			}
 
-			if (openedFromProjectList) {
-				intent.putExtra(Constants.PROJECT_OPENED_FROM_PROJECTS_LIST, true);
-			}
-
-			getActivity().startActivity(intent);
+//			getActivity().startActivity(intent);
 			dismiss();
 		} else {
 			orientationDialog = new OrientationDialog();

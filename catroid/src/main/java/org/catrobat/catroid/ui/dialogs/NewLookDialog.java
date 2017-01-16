@@ -35,7 +35,7 @@ import android.view.View;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.ui.SettingsActivity;
-import org.catrobat.catroid.ui.controller.LookController;
+import org.catrobat.catroid.ui.controller.OldLookController;
 import org.catrobat.catroid.ui.fragment.LookFragment;
 import org.catrobat.catroid.utils.Utils;
 
@@ -114,7 +114,7 @@ public class NewLookDialog extends DialogFragment {
 		paintroidButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if (LookController.getInstance().checkIfPocketPaintIsInstalled(intent, getActivity())) {
+				if (OldLookController.getInstance().checkIfPocketPaintIsInstalled(intent, getActivity())) {
 					fragment.addLookDrawNewImage();
 					NewLookDialog.this.dismiss();
 				}

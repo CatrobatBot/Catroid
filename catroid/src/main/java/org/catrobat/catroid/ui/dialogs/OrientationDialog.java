@@ -27,7 +27,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,8 +36,6 @@ import android.widget.RadioButton;
 
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
-import org.catrobat.catroid.common.Constants;
-import org.catrobat.catroid.ui.ProjectActivity;
 import org.catrobat.catroid.utils.Utils;
 
 import java.io.IOException;
@@ -110,15 +107,15 @@ public class OrientationDialog extends DialogFragment {
 			return;
 		}
 
-		Intent intent = new Intent(getActivity(), ProjectActivity.class);
-
-		intent.putExtra(Constants.PROJECTNAME_TO_LOAD, projectName);
-
-		if (isOpenedFromProjectList()) {
-			intent.putExtra(Constants.PROJECT_OPENED_FROM_PROJECTS_LIST, true);
-		}
-
-		getActivity().startActivity(intent);
+//		Intent intent = new Intent(getActivity(), ProjectActivity.class);
+//
+//		intent.putExtra(Constants.PROJECTNAME_TO_LOAD, projectName);
+//
+//		if (isOpenedFromProjectList()) {
+//			intent.putExtra(Constants.PROJECT_OPENED_FROM_PROJECTS_LIST, true);
+//		}
+//
+//		getActivity().startActivity(intent);
 
 		dismiss();
 	}
