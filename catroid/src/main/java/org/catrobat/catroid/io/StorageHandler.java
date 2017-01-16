@@ -27,6 +27,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.google.common.base.Charsets;
@@ -36,6 +37,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.parrot.freeflight.utils.FileUtils;
+import com.parrot.freeflight.utils.StreamUtils;
 import com.thoughtworks.xstream.converters.reflection.FieldDictionary;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 
@@ -1332,38 +1334,34 @@ public final class StorageHandler {
 		return permissionsSet;
 	}
 
-	public boolean copyImageFiles(String targetScene, String targetProject, String sourceScene, String sourceProject) {
-		return copyFiles(targetScene, targetProject, sourceScene, sourceProject, false);
+	public void copyImageFiles(String targetScene, String targetProject, String sourceScene, String sourceProject) throws Exception {
+		copyFiles(targetScene, targetProject, sourceScene, sourceProject, false);
 	}
 
-	public boolean copySoundFiles(String targetScene, String targetProject, String sourceScene, String sourceProject) {
-		return copyFiles(targetScene, targetProject, sourceScene, sourceProject, true);
+	public void copySoundFiles(String targetScene, String targetProject, String sourceScene, String sourceProject) throws Exception {
+		copyFiles(targetScene, targetProject, sourceScene, sourceProject, true);
 	}
 
-	private boolean copyFiles(String targetScene, String targetProject, String sourceScene, String sourceProject, boolean copySoundFiles) {
+	private void copyFiles(String targetScene, String targetProject, String sourceScene, String sourceProject, boolean copySoundFiles) throws Exception {
 		String type = IMAGE_DIRECTORY;
 		if (copySoundFiles) {
 			type = SOUND_DIRECTORY;
 		}
-		File targetDirectory = new File(buildPath(buildScenePath(targetProject, targetScene), type));
+
 		File sourceDirectory = new File(buildPath(buildScenePath(sourceProject, sourceScene), type));
-		if (!targetDirectory.exists() || !sourceDirectory.exists()) {
-			return false;
+		File targetDirectory = new File(buildPath(buildScenePath(targetProject, targetScene), type));
+		targetDirectory.mkdirs();
+
+		for (File sourceFile : sourceDirectory.listFiles()) {
+			File targetFile = new File(targetDirectory.getAbsolutePath(), sourceFile.getName());
+			targetFile.createNewFile();
+
+			FileChannel source = new FileInputStream(sourceFile).getChannel();
+			FileChannel target = new FileOutputStream(targetFile).getChannel();
+			target.transferFrom(source, 0, source.size());
+			source.close();
+			target.close();
 		}
-		try {
-			for (File sourceFile : sourceDirectory.listFiles()) {
-				File targetFile = new File(targetDirectory.getAbsolutePath(), sourceFile.getName());
-				FileChannel source = new FileInputStream(sourceFile).getChannel();
-				FileChannel target = new FileOutputStream(targetFile).getChannel();
-				target.transferFrom(source, 0, source.size());
-				source.close();
-				target.close();
-			}
-		} catch (IOException e) {
-			Log.e(TAG, e.getMessage());
-			return false;
-		}
-		return true;
 	}
 
 	public void updateCodefileOnDownload(String projectName) {
