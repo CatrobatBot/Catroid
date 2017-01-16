@@ -345,7 +345,7 @@ public class NewSpriteDialog extends DialogFragment {
 
 					intent.putExtra(WebViewActivity.INTENT_PARAMETER_URL, url);
 					intent.putExtra(WebViewActivity.CALLING_ACTIVITY, SpritesListFragment.TAG);
-					
+
 					startActivityForResult(intent, REQUEST_MEDIA_LIBRARY);
 				}
 			}
