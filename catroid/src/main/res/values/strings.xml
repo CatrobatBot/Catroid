@@ -29,6 +29,7 @@
     <string name="next">Next</string>
     <string name="done">Done</string>
     <string name="name_already_exists">This name already exists, please choose another one!</string>
+    <string name="dialog_confirm_delete">This cannot be undone!</string>
     <string name="name_consists_of_spaces_only">The name cannot consist of spaces only.</string>
     <string name="rename">Rename</string>
     <string name="delete">Delete</string>
@@ -39,7 +40,7 @@
     <string name="move">Move</string>
     <string name="backpack_add">Add to backpack</string>
     <string name="backpack">Backpack</string>
-    <string name="packing">Pack</string>
+    <string name="pack">Pack</string>
     <string name="unpack">Unpack</string>
     <string name="unpack_bg">Unpack as background</string>
     <string name="unpack_object">Unpack as object</string>
@@ -283,12 +284,6 @@
     <string name="show_details">Show details</string>
     <string name="hide_details">Hide details</string>
     <string name="insert_below">Insert below</string>
-    <string name="sprite">Object</string>
-    <string name="sprites">Objects</string>
-    <string name="spritelist_background_headline">Background</string>
-    <string name="dialog_confirm_delete_object_title">Delete this Object?</string>
-    <string name="dialog_confirm_delete_multiple_objects_title">Delete these Objects?</string>
-    <string name="dialog_confirm_delete_object_message">This cannot be undone!</string>
     <string name="select_all">Select all</string>
     <string name="deselect_all">Deselect all</string>
     <string name="backpack_replace_object">The object %1$s already exists in the backpack. Do you want to replace it?</string>
@@ -305,35 +300,45 @@
     <!--  -->
 
 
-    <!-- Sprite activity -->
+    <!-- Sprite List -->
+    <plurals name="sprites">
+        <item quantity="one">Object</item>
+        <item quantity="other">Objects</item>
+    </plurals>
+    <plurals name="dialog_delete_sprite">
+        <item quantity="one">Delete this Object?</item>
+        <item quantity="other">Delete these Objects?</item>
+    </plurals>
+    <string name="spritelist_background_headline">Background</string>
     <string name="copy_sprite_name_suffix">_Copy</string>
     <!--  -->
 
 
     <!-- Script activity -->
-    <string name="scripts">Scripts</string>
-    <string name="look">Look</string>
-    <string name="looks">Looks</string>
-    <string name="sound">Sound</string>
-    <string name="sounds">Sounds</string>
     <string name="backgrounds">Backgrounds</string>
     <string name="size">Size:</string>
-    <string name="script_group">Script Group</string>
-    <string name="script_groups">Script Groups</string>
-    <string name="script_group_name_given">A Group with this name already exists. Please choose a different one!</string>
-    <string name="group_or_object_name_given">A Group or object with this name already exists. Please choose a
-        different one!</string>
+
     <!--  -->
 
 
-    <!-- Script fragment -->
+    <!-- Script List -->
+    <plurals name="script_groups">
+        <item quantity="one">Script Group</item>
+        <item quantity="other">Script Groups</item>
+    </plurals>
+    <plurals name="dialog_delete_group">
+        <item quantity="one">Delete this Group?</item>
+        <item quantity="other">Delete these Groups?</item>
+    </plurals>
+
+    <string name="script_group_name_given">A Group with this name already exists. Please choose a different one!</string>
+    <string name="group_or_object_name_given">A Group or object with this name already exists. Please choose a
+        different one!</string>
+
     <string name="fragment_script_text_description">Tap \"+\" to add Scripts</string>
     <string name="dialog_confirm_delete_brick_title">Delete this Brick?</string>
     <string name="dialog_confirm_delete_script_title">Delete this Script?</string>
     <string name="dialog_confirm_delete_multiple_bricks_title">Delete these Bricks?</string>
-    <string name="dialog_confirm_delete_backpack_group_title">Delete this Group?</string>
-    <string name="dialog_confirm_delete_multiple_backpack_groups_title">Delete these Groups?</string>
-    <string name="dialog_confirm_delete_brick_message">This cannot be undone!</string>
 
     <plurals name="number_of_bricks_to_delete">
         <item quantity="one">Delete %d Brick</item>
@@ -350,7 +355,16 @@
     <!--  -->
 
 
-    <!-- Look fragment -->
+    <!-- Look List -->
+    <plurals name="looks">
+        <item quantity="one">Look</item>
+        <item quantity="other">Looks</item>
+    </plurals>
+        <plurals name="dialog_delete_look">
+        <item quantity="one">Delete this Look?</item>
+        <item quantity="other">Delete these Looks?</item>
+    </plurals>
+
     <string name="fragment_look_text_description">Tap \"+\" to add Looks</string>
     <string name="fragment_background_text_description">Tap \"+\" to add Backgrounds</string>
     <string name="rename_look_dialog">Rename Look</string>
@@ -363,14 +377,21 @@
     <string name="look_measure">Measure:</string>
     <string name="dialog_confirm_delete_look_title">Delete this Look?</string>
     <string name="dialog_confirm_delete_multiple_looks_title">Delete these Looks?</string>
-    <string name="dialog_confirm_delete_look_message">This cannot be undone!</string>
     <string name="lookname">Look name:</string>
     <string name="backpack_replace_look">The look %1$s already exists in the backpack. Do you want to replace it?</string>
     <string name="backpack_replace_look_multiple">Looks already exist in the backpack. Do you want to replace them?</string>
     <!--  -->
 
 
-    <!-- Sound fragment -->
+    <!-- Sound List -->
+    <plurals name="sounds">
+        <item quantity="one">Sound</item>
+        <item quantity="other">Sounds</item>
+    </plurals>
+    <plurals name="dialog_delete_sound">
+        <item quantity="one">Delete this Sound?</item>
+        <item quantity="other">Delete these Sounds?</item>
+    </plurals>
     <string name="fragment_sound_text_description">Tap \"+\" to add Sounds</string>
     <string name="rename_sound_dialog">Rename Sound</string>
     <string name="backpack_title">Your Backpack</string>
@@ -380,9 +401,6 @@
     <string name="sound_time_seperator">/</string>
     <string name="delete_sound_dialog">Delete Sound?</string>
     <string name="length">Length:</string>
-    <string name="dialog_confirm_delete_sound_title">Delete this Sound?</string>
-    <string name="dialog_confirm_delete_multiple_sounds_title">Delete these Sounds?</string>
-    <string name="dialog_confirm_delete_sound_message">This cannot be undone!</string>
     <string name="sound_name">Sound name:</string>
     <string name="new_sound_name">Sound name:</string>
     <string name="rename_sound_overwrite">Sound with this name already exists. Please choose a different one!</string>
@@ -399,7 +417,6 @@
     <string name="delete_nfctag_dialog">Delete nfctag?</string>
     <string name="dialog_confirm_delete_nfctag_title">Delete this nfctag?</string>
     <string name="dialog_confirm_delete_multiple_nfctags_title">Delete these nfctags?</string>
-    <string name="dialog_confirm_delete_nfctag_message">This can not be undone!</string>
     <string name="nfctag_name">nfctag name:</string>
     <string name="nfctag">NFC Tag</string>
     <string name="nfctags">NFC Tags</string>
@@ -422,23 +439,36 @@
         <item quantity="other">Scripts</item>
     </plurals>
 
-    <!-- My Projects activity -->
+    <!-- Project List -->
     <string name="last_used">Last access:</string>
     <string name="description">Description:</string>
     <string name="set_description">Set description</string>
     <string name="rename_project">Rename Program</string>
     <string name="copy_project_finished"> copied.</string>
-    <string name="program">Program</string>
-    <string name="programs">Programs</string>
-    <string name="scene">Scene</string>
-    <string name="scenes">Scenes</string>
-    <string name="dialog_confirm_delete_program_title">Delete this Program?</string>
-    <string name="dialog_confirm_delete_multiple_programs_title">Delete these Programs?</string>
-    <string name="dialog_confirm_delete_scene_title">Delete this Scene?</string>
-    <string name="dialog_confirm_delete_multiple_scenes_title">Delete these Scenes?</string>
+    <plurals name="programs">
+        <item quantity="one">Program</item>
+        <item quantity="other">Programs</item>
+    </plurals>
+        <plurals name="dialog_delete_program">
+        <item quantity="one">Delete this Program?</item>
+        <item quantity="other">Delete these Programs?</item>
+    </plurals>
     <string name="details_date_today">Today</string>
     <string name="details_date_yesterday">Yesterday</string>
     <string name="dialog_copy_project_title">Copy Program</string>
+    <!--  -->
+
+
+    <!-- Scene List -->
+    <string name="scene_list_header">Scenes</string>
+    <plurals name="scenes">
+        <item quantity="one">Scene</item>
+        <item quantity="other">Scenes</item>
+    </plurals>
+    <plurals name="dialog_delete_scene">
+        <item quantity="one">Delete this Scene?</item>
+        <item quantity="other">Delete these Scenes?</item>
+    </plurals>
     <!--  -->
 
 

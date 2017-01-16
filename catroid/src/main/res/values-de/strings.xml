@@ -37,7 +37,7 @@
   <string name="move">Verschieben</string>
   <string name="backpack_add">Zum Rucksack hinzufügen</string>
   <string name="backpack">Rucksack</string>
-  <string name="packing">Einpacken</string>
+  <string name="pack">Einpacken</string>
   <string name="unpack">Auspacken</string>
   <string name="unpack_keep">Auspacken und behalten</string>
   <string name="unpack_bg">Als Hintergrund entpacken</string>

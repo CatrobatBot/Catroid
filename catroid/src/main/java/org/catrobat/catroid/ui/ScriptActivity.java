@@ -395,15 +395,11 @@ public class ScriptActivity extends BaseActivity {
 	private void openBackPack() {
 		Intent intent = new Intent(currentFragment.getActivity(), BackPackActivity.class);
 		if (currentFragment == lookFragment) {
-			intent.putExtra(BackPackActivity.EXTRA_FRAGMENT_POSITION, FRAGMENT_LOOKS);
+			intent.putExtra(BackPackActivity.FRAGMENT, BackPackLookListFragment.class);
 		} else if (currentFragment == soundFragment) {
-			intent.putExtra(BackPackActivity.EXTRA_FRAGMENT_POSITION, FRAGMENT_SOUNDS);
+			intent.putExtra(BackPackActivity.FRAGMENT, BackPackSoundListFragment.class);
 		} else if (currentFragment == scriptFragment) {
-			if (scriptFragment.isInUserBrickOverview()) {
-				intent.putExtra(BackPackActivity.EXTRA_FRAGMENT_POSITION, USERBRICKS_PROTOTYPE_VIEW);
-			} else {
-				intent.putExtra(BackPackActivity.EXTRA_FRAGMENT_POSITION, FRAGMENT_SCRIPTS);
-			}
+			intent.putExtra(BackPackActivity.FRAGMENT, BackPackScriptListFragment.class);
 		}
 		startActivity(intent);
 	}
@@ -445,7 +441,7 @@ public class ScriptActivity extends BaseActivity {
 				currentFragment.startBackPackActionMode();
 			}
 		} else {
-			items = new CharSequence[] { getString(R.string.packing), getString(R.string.unpack) };
+			items = new CharSequence[] { getString(R.string.pack), getString(R.string.unpack) };
 
 			builder.setItems(items, new DialogInterface.OnClickListener() {
 				@Override

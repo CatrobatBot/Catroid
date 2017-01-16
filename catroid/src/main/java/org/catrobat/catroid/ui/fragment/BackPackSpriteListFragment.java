@@ -24,23 +24,18 @@ package org.catrobat.catroid.ui.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.common.SoundInfo;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.io.StorageHandler;
-import org.catrobat.catroid.ui.BottomBar;
 import org.catrobat.catroid.ui.adapter.CheckBoxListAdapter;
 import org.catrobat.catroid.ui.adapter.SpriteListAdapter;
 import org.catrobat.catroid.ui.controller.BackPackListManager;
@@ -48,46 +43,35 @@ import org.catrobat.catroid.ui.controller.BackPackSpriteController;
 import org.catrobat.catroid.ui.controller.LookController;
 import org.catrobat.catroid.ui.controller.SoundController;
 import org.catrobat.catroid.ui.dialogs.CustomAlertDialogBuilder;
-import org.catrobat.catroid.utils.Utils;
 
 import java.util.List;
 
 public class BackPackSpriteListFragment extends BackPackActivityFragment implements CheckBoxListAdapter
-		.ListItemClickHandler<Sprite>, CheckBoxListAdapter.ListItemLongClickHandler {
+		.ListItemClickHandler<Sprite> {
 
 	public static final String TAG = BackPackSpriteListFragment.class.getSimpleName();
 	private static final String BUNDLE_ARGUMENTS_SPRITE_TO_EDIT = "sprite_to_edit";
 
 	private SpriteListAdapter spriteAdapter;
-	private ListView listView;
-
 	private Sprite spriteToEdit;
-	private int selectedSpritePosition;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View backPackSpriteListFragment = inflater.inflate(R.layout.fragment_backpack, container, false);
-		listView = (ListView) backPackSpriteListFragment.findViewById(android.R.id.list);
-
-		return backPackSpriteListFragment;
+		return inflater.inflate(R.layout.fragment_backpack, container, false);
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		registerForContextMenu(listView);
-
-		singleItemTitle = getString(R.string.sprite);
-		multipleItemsTitle = getString(R.string.sprites);
+		itemIdentifier = R.plurals.sprites;
+		deleteDialogTitle = R.plurals.dialog_delete_sprite;
 
 		if (savedInstanceState != null) {
 			spriteToEdit = (Sprite) savedInstanceState.get(BUNDLE_ARGUMENTS_SPRITE_TO_EDIT);
 		}
 
 		initializeList();
-		checkEmptyBackgroundBackPack();
-		BottomBar.hideBottomBar(getActivity());
 	}
 
 	private void initializeList() {
@@ -110,90 +94,50 @@ public class BackPackSpriteListFragment extends BackPackActivityFragment impleme
 	@Override
 	public void onResume() {
 		super.onResume();
-
-		if (!Utils.checkForExternalStorageAvailableAndDisplayErrorIfNot(getActivity())) {
-			return;
-		}
-
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity()
-				.getApplicationContext());
-
-		setShowDetails(settings.getBoolean(SpritesListFragment.SHARED_PREFERENCE_NAME, false));
+		loadShowDetailsPreferences(SpritesListFragment.SHARED_PREFERENCE_NAME);
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-
-		BackPackListManager.getInstance().saveBackpack();
-
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity()
-				.getApplicationContext());
-		SharedPreferences.Editor editor = settings.edit();
-
-		editor.putBoolean(SpritesListFragment.SHARED_PREFERENCE_NAME, getShowDetails());
-		editor.commit();
+		putShowDetailsPreferences(SpritesListFragment.SHARED_PREFERENCE_NAME);
 	}
 
-	@Override
-	public void onPrepareOptionsMenu(Menu menu) {
-		super.onPrepareOptionsMenu(menu);
-		if (BackPackListManager.getInstance().getBackPackedSprites().isEmpty()) {
-			menu.findItem(R.id.unpacking).setVisible(false);
-		}
-	}
 
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
 
-		spriteToEdit = spriteAdapter.getItem(selectedSpritePosition);
+		spriteToEdit = spriteAdapter.getItem(selectedItemPosition);
 		menu.setHeaderTitle(spriteToEdit.getName());
 
-		getActivity().getMenuInflater().inflate(R.menu.context_menu_unpacking_sprite, menu);
+		getActivity().getMenuInflater().inflate(R.menu.context_menu_backpack_sprite, menu);
 	}
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.context_menu_unpacking_background:
+			case R.id.unpack_as_background:
 				showUnpackAsBackgroundDialog();
 				break;
-			case R.id.context_menu_unpacking_object:
-				unpackCheckedItems(true);
+			case R.id.unpack_as_object:
+				unpackCheckedItems();
 				break;
-			case R.id.context_menu_delete:
-				showDeleteDialog(true);
-				break;
+			default:
+				return super.onContextItemSelected(item);
 		}
-		return super.onContextItemSelected(item);
+		return true;
 	}
 
 	@Override
 	public void handleOnItemClick(int position, View view, Sprite listItem) {
-		selectedSpritePosition = position;
-		listView.showContextMenuForChild(view);
+		selectedItemPosition = position;
+		getListView().showContextMenuForChild(view);
 	}
 
 	@Override
-	public void handleOnItemLongClick(int position, View view) {
-		selectedSpritePosition = position;
-		listView.showContextMenuForChild(view);
-	}
-
-	public void showDeleteDialog(boolean singleItem) {
-		int titleId;
-		if (spriteAdapter.getCheckedItems().size() == 1 || singleItem) {
-			titleId = R.string.dialog_confirm_delete_object_title;
-		} else {
-			titleId = R.string.dialog_confirm_delete_multiple_objects_title;
-		}
-		showDeleteDialog(titleId, singleItem);
-	}
-
-	@Override
-	protected void deleteCheckedItems(boolean singleItem) {
-		if (singleItem) {
+	protected void deleteCheckedItems() {
+		if (spriteAdapter.getCheckedItems().isEmpty()) {
 			deleteSprite();
 			return;
 		}
@@ -226,8 +170,8 @@ public class BackPackSpriteListFragment extends BackPackActivityFragment impleme
 		}
 	}
 
-	protected void unpackCheckedItems(boolean singleItem) {
-		if (singleItem) {
+	protected void unpackCheckedItems() {
+		if (spriteAdapter.getCheckedItems().isEmpty()) {
 			BackPackSpriteController.getInstance().unpack(spriteToEdit, false, false, false, false);
 			showUnpackingCompleteToast(1);
 			return;
@@ -247,7 +191,7 @@ public class BackPackSpriteListFragment extends BackPackActivityFragment impleme
 		builder.setPositiveButton(R.string.main_menu_continue, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int id) {
-				unpackCheckedItems(true);
+				unpackCheckedItems();
 				clearCheckedItems();
 			}
 		});

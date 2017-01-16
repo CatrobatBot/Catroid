@@ -23,9 +23,7 @@
 package org.catrobat.catroid.ui.fragment;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -47,6 +45,7 @@ import org.catrobat.catroid.exceptions.ProjectException;
 import org.catrobat.catroid.io.LoadProjectTask;
 import org.catrobat.catroid.io.StorageHandler;
 import org.catrobat.catroid.merge.MergeManager;
+import org.catrobat.catroid.ui.BottomBar;
 import org.catrobat.catroid.ui.ProjectActivity;
 import org.catrobat.catroid.ui.adapter.CheckBoxListAdapter;
 import org.catrobat.catroid.ui.adapter.ProjectListAdapter;
@@ -68,9 +67,9 @@ public class ProjectListFragment extends ListActivityFragment implements LoadPro
 		CheckBoxListAdapter.ListItemClickHandler<ProjectData>, CheckBoxListAdapter.ListItemLongClickHandler,
 		SetDescriptionDialog.ChangeDescriptionInterface {
 
-	private static final String TAG = ProjectListFragment.class.getSimpleName();
+	public static final String TAG = ProjectListFragment.class.getSimpleName();
 	private static final String BUNDLE_ARGUMENTS_PROJECT_DATA = "project_data";
-	private static final String SHARED_PREFERENCE_NAME = "showDetailsMyProjects";
+	private static final String SHARED_PREFERENCE_NAME = "showProjectDetails";
 
 	private ProjectListAdapter projectAdapter;
 	private ListView listView;
@@ -81,8 +80,10 @@ public class ProjectListFragment extends ListActivityFragment implements LoadPro
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View projectListFragment = inflater.inflate(R.layout.fragment_projects_list, container);
+		View projectListFragment = inflater.inflate(R.layout.fragment_project_list, container, false);
 		listView = (ListView) projectListFragment.findViewById(android.R.id.list);
+
+		setHasOptionsMenu(true);
 		return projectListFragment;
 	}
 
@@ -91,15 +92,15 @@ public class ProjectListFragment extends ListActivityFragment implements LoadPro
 		super.onActivityCreated(savedInstanceState);
 
 		registerForContextMenu(getListView());
-
-		singleItemTitle = getString(R.string.program);
-		multipleItemsTitle = getString(R.string.programs);
+		itemIdentifier = R.plurals.programs;
+		deleteDialogTitle = R.plurals.dialog_delete_group;
 
 		if (savedInstanceState != null) {
 			projectToEdit = (ProjectData) savedInstanceState.getSerializable(BUNDLE_ARGUMENTS_PROJECT_DATA);
 		}
 
 		initializeList();
+		BottomBar.hidePlayButton(getActivity());
 	}
 
 	public void initializeList() {
@@ -135,11 +136,8 @@ public class ProjectListFragment extends ListActivityFragment implements LoadPro
 	public void onResume() {
 		super.onResume();
 
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity()
-				.getApplicationContext());
-
-		setShowDetails(settings.getBoolean(SHARED_PREFERENCE_NAME, false));
-		getActivity().findViewById(R.id.fragment_container).setVisibility(View.VISIBLE);
+		loadShowDetailsPreferences(SHARED_PREFERENCE_NAME);
+		setProgressCircleVisibility(false);
 
 		if (ProjectManager.getInstance().getHandleNewSceneFromScriptActivity()) {
 			Intent intent = new Intent(getActivity(), ProjectActivity.class);
@@ -153,13 +151,7 @@ public class ProjectListFragment extends ListActivityFragment implements LoadPro
 	@Override
 	public void onPause() {
 		super.onPause();
-
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity()
-				.getApplicationContext());
-		SharedPreferences.Editor editor = settings.edit();
-
-		editor.putBoolean(SHARED_PREFERENCE_NAME, getShowDetails());
-		editor.commit();
+		putShowDetailsPreferences(SHARED_PREFERENCE_NAME);
 	}
 
 	@Override
@@ -184,35 +176,36 @@ public class ProjectListFragment extends ListActivityFragment implements LoadPro
 			}
 		}
 
-		boolean isCurrentProject = projectToEdit.projectName.equals(ProjectManager.getInstance().getCurrentProject().getName());
+		boolean isCurrentProject = ProjectManager.getInstance().getCurrentProject().getName().equals(projectToEdit
+				.projectName);
 		if (!isCurrentProject) {
 			menu.add(0, R.string.merge_button, 1, getString(R.string.merge_button) + ": " + ProjectManager.getInstance().getCurrentProject().getName());
 		}
 		menu.setHeaderTitle(projectToEdit.projectName);
 
-		getActivity().getMenuInflater().inflate(R.menu.context_menu_my_projects, menu);
+		getActivity().getMenuInflater().inflate(R.menu.context_menu_project_list, menu);
 	}
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.context_menu_delete:
+			case R.id.delete:
 				showDeleteDialog();
 				break;
-			case R.id.context_menu_copy:
+			case R.id.copy:
 				showCopyProjectDialog();
 				break;
-			case R.id.context_menu_rename:
+			case R.id.rename:
 				showRenameDialog();
 				break;
 			case R.id.show_details:
-				showDetailsDialog();
+				showDetailsFragment();
 				break;
-			case R.id.context_menu_set_description:
+			case R.id.set_description:
 				showSetDescriptionDialog();
 				break;
-			case R.id.context_menu_upload:
-				ProjectManager.getInstance().uploadProject(projectToEdit.projectName, this.getActivity());
+			case R.id.upload:
+				ProjectManager.getInstance().uploadProject(projectToEdit.projectName, getActivity());
 				break;
 			case R.string.merge_button:
 				String firstProjectName = ProjectManager.getInstance().getCurrentProject().getName();
@@ -239,18 +232,23 @@ public class ProjectListFragment extends ListActivityFragment implements LoadPro
 	}
 
 	@Override
-	public void showDeleteDialog() {
-		int titleId;
-		if (adapter.getCheckedItems().size() == 1) {
-			titleId = R.string.dialog_confirm_delete_program_title;
-		} else {
-			titleId = R.string.dialog_confirm_delete_multiple_programs_title;
-		}
-		showDeleteDialog(titleId);
+	public void showReplaceItemsInBackPackDialog() {
+		//NO BackPack for Projects.
 	}
 
 	@Override
 	protected void packCheckedItems() {
+		//NO BackPack for Projects.
+	}
+
+	@Override
+	protected boolean isBackPackEmpty() {
+		//NO BackPack for Projects.
+		return true;
+	}
+
+	@Override
+	protected void changeToBackPack() {
 		//NO BackPack for Projects.
 	}
 
@@ -331,7 +329,7 @@ public class ProjectListFragment extends ListActivityFragment implements LoadPro
 		}
 	}
 
-	private void showDetailsDialog() {
+	private void showDetailsFragment() {
 	}
 
 	private void showSetDescriptionDialog() {
@@ -361,23 +359,12 @@ public class ProjectListFragment extends ListActivityFragment implements LoadPro
 
 	private void initializeDefaultProjectAfterDelete() {
 		final ProjectManager projectManager = ProjectManager.getInstance();
-		getActivity().findViewById(R.id.fragment_container).setVisibility(View.GONE);
-		getActivity().findViewById(R.id.progress_circle).setVisibility(View.VISIBLE);
-		Runnable r = new Runnable() {
-			@Override
-			public void run() {
-				projectManager.initializeDefaultProject(getActivity());
-				getActivity().runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						getActivity().findViewById(R.id.fragment_container).setVisibility(View.VISIBLE);
-						getActivity().findViewById(R.id.progress_circle).setVisibility(View.GONE);
-						initializeList();
-					}
-				});
-			}
-		};
-		(new Thread(r)).start();
+
+		setProgressCircleVisibility(true);
+		projectManager.initializeDefaultProject(getActivity());
+		setProgressCircleVisibility(false);
+
+		initializeList();
 	}
 
 	@Override

@@ -139,8 +139,6 @@ public final class BackPackScriptController {
 				SharedPreferences sharedPreferences = PreferenceManager
 						.getDefaultSharedPreferences(activity);
 				sharedPreferences.edit().putInt(Constants.NUMBER_OF_BRICKS_INSERTED_FROM_BACKPACK, numberOfBricks).commit();
-				((BackPackActivity) activity)
-						.returnToScriptActivity(ScriptActivity.FRAGMENT_SCRIPTS);
 			}
 		}
 	}

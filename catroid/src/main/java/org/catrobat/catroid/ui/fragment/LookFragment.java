@@ -347,7 +347,7 @@ public class LookFragment extends ScriptActivityFragment implements LookBaseAdap
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
 		menu.findItem(R.id.copy).setVisible(true);
-		menu.findItem(R.id.unpacking).setVisible(false);
+		menu.findItem(R.id.unpack).setVisible(false);
 		menu.findItem(R.id.backpack).setVisible(true);
 		if (BackPackListManager.getInstance().getAllBackPackedLooks().isEmpty()) {
 			StorageHandler.getInstance().clearBackPackLookDirectory();
@@ -513,7 +513,7 @@ public class LookFragment extends ScriptActivityFragment implements LookBaseAdap
 
 	private void openBackPack() {
 		Intent intent = new Intent(getActivity(), BackPackActivity.class);
-		intent.putExtra(BackPackActivity.EXTRA_FRAGMENT_POSITION, BackPackActivity.FRAGMENT_BACKPACK_LOOKS);
+		intent.putExtra(BackPackActivity.FRAGMENT, BackPackLookListFragment.class);
 		startActivity(intent);
 	}
 

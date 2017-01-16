@@ -70,6 +70,8 @@ import org.catrobat.catroid.ui.dialogs.NewSceneDialog;
 import org.catrobat.catroid.ui.dialogs.NewSpriteDialog;
 import org.catrobat.catroid.ui.dialogs.PlaySceneDialog;
 import org.catrobat.catroid.ui.dialogs.SignInDialog;
+import org.catrobat.catroid.ui.fragment.BackPackSceneListFragment;
+import org.catrobat.catroid.ui.fragment.BackPackSpriteListFragment;
 import org.catrobat.catroid.ui.fragment.ListItemActionsInterface;
 import org.catrobat.catroid.ui.fragment.SceneListFragment;
 import org.catrobat.catroid.ui.fragment.SpritesListFragment;
@@ -189,7 +191,6 @@ public class ProjectActivity extends BaseActivity {
 				}
 				currentFragmentTag = SceneListFragment.TAG;
 				currentFragment = sceneListFragment;
-				actionListener = sceneListFragment;
 				break;
 			case FRAGMENT_SPRITES:
 				if (spritesListFragment == null) {
@@ -210,50 +211,11 @@ public class ProjectActivity extends BaseActivity {
 	}
 
 	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		if (currentFragmentPosition == FRAGMENT_SPRITES && spritesListFragment != null) {
-			handleShowDetails(spritesListFragment.getShowDetails(), menu.findItem(R.id.show_details));
-		} else {
-			menu.findItem(R.id.groups_create).setVisible(false);
-		}
-
-		return super.onPrepareOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		if (currentFragment != null) {
-			getMenuInflater().inflate(R.menu.menu_current_project, menu);
-
-			if (currentFragmentPosition == FRAGMENT_SCENES) {
-				menu.findItem(R.id.show_details).setVisible(false);
-				menu.findItem(R.id.backpack).setVisible(true);
-				menu.findItem(R.id.merge_scene).setVisible(true);
-			} else {
-				menu.findItem(R.id.backpack).setVisible(true);
-			}
-		}
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case android.R.id.home:
 				onBackPressed();
 				return true;
-
-			case R.id.show_details:
-				handleShowDetails(!spritesListFragment.getShowDetails(), item);
-				break;
-
-			case R.id.backpack:
-				showBackPackChooser();
-				break;
-
-			case R.id.copy:
-				actionListener.startCopyActionMode();
-				break;
 
 			case R.id.cut:
 				break;
@@ -323,7 +285,7 @@ public class ProjectActivity extends BaseActivity {
 		if (numberOfItemsInBackpack == 0) {
 			actionListener.startBackPackActionMode();
 		} else {
-			items = new CharSequence[] { getString(R.string.packing), getString(R.string.unpack) };
+			items = new CharSequence[] { getString(R.string.pack), getString(R.string.unpack) };
 			builder.setItems(items, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -344,16 +306,14 @@ public class ProjectActivity extends BaseActivity {
 	private void openBackPack() {
 		updateFragmentPosition();
 		Intent intent = new Intent(this, BackPackActivity.class);
-		int fragmentPos = 0;
 		switch (currentFragmentPosition) {
 			case FRAGMENT_SCENES:
-				fragmentPos = BackPackActivity.FRAGMENT_BACKPACK_SCENES;
+				intent.putExtra(BackPackActivity.FRAGMENT, BackPackSceneListFragment.class);
 				break;
 			case FRAGMENT_SPRITES:
-				fragmentPos = BackPackActivity.FRAGMENT_BACKPACK_SPRITES;
+				intent.putExtra(BackPackActivity.FRAGMENT, BackPackSpriteListFragment.class);
 				break;
 		}
-		intent.putExtra(BackPackActivity.EXTRA_FRAGMENT_POSITION, fragmentPos);
 		startActivity(intent);
 	}
 

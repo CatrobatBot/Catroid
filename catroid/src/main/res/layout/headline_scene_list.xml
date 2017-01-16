@@ -21,12 +21,13 @@
   ~ You should have received a copy of the GNU Affero General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item
-        android:id="@+id/context_menu_unpacking"
-        android:title="@string/unpack" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/sceneList_headline"
+              style="@style/headlineLinearLayout">
 
-    <item
-        android:id="@+id/context_menu_delete"
-        android:title="@string/delete" />
-</menu>
+    <org.catrobat.catroid.ui.CapitalizedTextView
+        style="@style/headlineTextViewObjects"
+        android:text="@string/scene_list_header" />
+    <View style="@style/headlineView" />
+
+</LinearLayout>

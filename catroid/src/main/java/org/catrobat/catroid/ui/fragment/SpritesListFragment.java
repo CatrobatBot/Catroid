@@ -259,7 +259,7 @@ public class SpritesListFragment extends Fragment implements SpriteAdapter.OnSpr
 
 	public void switchToBackPack() {
 		Intent intent = new Intent(getActivity(), BackPackActivity.class);
-		intent.putExtra(BackPackActivity.EXTRA_FRAGMENT_POSITION, BackPackActivity.FRAGMENT_BACKPACK_SPRITES);
+		intent.putExtra(BackPackActivity.FRAGMENT, BackPackSpriteListFragment.class);
 		startActivity(intent);
 	}
 

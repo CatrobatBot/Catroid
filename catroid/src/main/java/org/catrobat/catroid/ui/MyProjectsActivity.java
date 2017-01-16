@@ -72,7 +72,7 @@ public class MyProjectsActivity extends BaseActivity {
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		handleShowDetails(projectListFragment.getShowDetails(), menu.findItem(R.id.show_details));
+		projectListFragment.setShowDetailsTitle(menu.findItem(R.id.show_details));
 		return super.onPrepareOptionsMenu(menu);
 	}
 
@@ -96,7 +96,7 @@ public class MyProjectsActivity extends BaseActivity {
 				break;
 
 			case R.id.show_details:
-				handleShowDetails(!projectListFragment.getShowDetails(), item);
+				projectListFragment.setShowDetailsTitle(item);
 				break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -116,11 +116,5 @@ public class MyProjectsActivity extends BaseActivity {
 		NewProjectDialog dialog = new NewProjectDialog();
 		dialog.setOpenedFromProjectList(true);
 		dialog.show(getFragmentManager(), NewProjectDialog.DIALOG_FRAGMENT_TAG);
-	}
-
-	private void handleShowDetails(boolean showDetails, MenuItem item) {
-		projectListFragment.setShowDetails(showDetails);
-
-		item.setTitle(showDetails ? R.string.hide_details : R.string.show_details);
 	}
 }

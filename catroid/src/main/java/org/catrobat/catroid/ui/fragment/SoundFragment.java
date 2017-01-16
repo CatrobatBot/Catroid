@@ -196,7 +196,7 @@ public class SoundFragment extends ScriptActivityFragment implements SoundBaseAd
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
 		menu.findItem(R.id.copy).setVisible(true);
-		menu.findItem(R.id.unpacking).setVisible(false);
+		menu.findItem(R.id.unpack).setVisible(false);
 		menu.findItem(R.id.backpack).setVisible(true);
 		if (BackPackListManager.getInstance().getAllBackPackedSounds().isEmpty()) {
 			StorageHandler.getInstance().clearBackPackSoundDirectory();
@@ -534,7 +534,7 @@ public class SoundFragment extends ScriptActivityFragment implements SoundBaseAd
 
 	private void openBackPack() {
 		Intent intent = new Intent(getActivity(), BackPackActivity.class);
-		intent.putExtra(BackPackActivity.EXTRA_FRAGMENT_POSITION, BackPackActivity.FRAGMENT_BACKPACK_SOUNDS);
+		intent.putExtra(BackPackActivity.FRAGMENT, BackPackSoundListFragment.class);
 		startActivity(intent);
 	}
 

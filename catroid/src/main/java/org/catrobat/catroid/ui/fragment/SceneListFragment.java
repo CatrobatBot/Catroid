@@ -22,18 +22,18 @@
  */
 package org.catrobat.catroid.ui.fragment;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
-import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.io.StorageHandler;
 import org.catrobat.catroid.ui.BackPackActivity;
@@ -41,11 +41,12 @@ import org.catrobat.catroid.ui.BottomBar;
 import org.catrobat.catroid.ui.ProjectActivity;
 import org.catrobat.catroid.ui.adapter.CheckBoxListAdapter;
 import org.catrobat.catroid.ui.adapter.SceneListAdapter;
-import org.catrobat.catroid.ui.controller.BackPackListManager;
 import org.catrobat.catroid.ui.controller.BackPackSceneController;
+import org.catrobat.catroid.ui.dialogs.MergeSceneDialog;
 import org.catrobat.catroid.ui.dialogs.RenameItemDialog;
 import org.catrobat.catroid.ui.dragndrop.DragAndDropListView;
 import org.catrobat.catroid.utils.SnackbarUtil;
+import org.catrobat.catroid.utils.ToastUtil;
 import org.catrobat.catroid.utils.Utils;
 
 import java.io.File;
@@ -58,29 +59,20 @@ public class SceneListFragment extends ListActivityFragment implements CheckBoxL
 	private static final String BUNDLE_ARGUMENTS_SCENE_TO_EDIT = "scene_to_edit";
 
 	private SceneListAdapter sceneAdapter;
-	private DragAndDropListView listView;
-
 	private Scene sceneToEdit;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View sceneListFragment = inflater.inflate(R.layout.fragment_scenes_list, container, false);
-		listView = (DragAndDropListView) sceneListFragment.findViewById(android.R.id.list);
-		sceneListFragment.findViewById(R.id.sceneList_headline).setVisibility(View.VISIBLE);
-
 		SnackbarUtil.showHintSnackbar(getActivity(), R.string.hint_scenes);
-
-		return sceneListFragment;
+		return inflater.inflate(R.layout.fragment_scene_list, container, false);
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		registerForContextMenu(getListView());
-
-		singleItemTitle = getString(R.string.scene);
-		multipleItemsTitle = getString(R.string.scenes);
+		itemIdentifier = R.plurals.scenes;
+		deleteDialogTitle = R.plurals.dialog_delete_scene;
 
 		if (savedInstanceState != null) {
 			sceneToEdit = (Scene) savedInstanceState.get(BUNDLE_ARGUMENTS_SCENE_TO_EDIT);
@@ -93,6 +85,8 @@ public class SceneListFragment extends ListActivityFragment implements CheckBoxL
 		List<Scene> sceneList = ProjectManager.getInstance().getCurrentProject().getSceneList();
 
 		sceneAdapter = new SceneListAdapter(getActivity(), R.layout.list_item, sceneList);
+
+		DragAndDropListView listView = (DragAndDropListView) getListView();
 
 		setListAdapter(sceneAdapter);
 		sceneAdapter.setListItemClickHandler(this);
@@ -110,34 +104,31 @@ public class SceneListFragment extends ListActivityFragment implements CheckBoxL
 	@Override
 	public void onResume() {
 		super.onResume();
-
 		getActivity().getActionBar().setTitle(ProjectManager.getInstance().getCurrentProject().getName());
-		getActivity().findViewById(R.id.fragment_container).setVisibility(View.VISIBLE);
-		getActivity().findViewById(R.id.progress_bar_activity_project).setVisibility(View.GONE);
-
-		if (!Utils.checkForExternalStorageAvailableAndDisplayErrorIfNot(getActivity())) {
-			return;
-		}
-
-		if (BackPackListManager.getInstance().isBackpackEmpty()) {
-			BackPackListManager.getInstance().loadBackpack();
-		}
-
-		StorageHandler.getInstance().fillChecksumContainer();
-
 		ProjectManager.getInstance().setCurrentScene(ProjectManager.getInstance().getCurrentProject().getDefaultScene());
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
+		saveCurrentProject();
+	}
 
-		getActivity().getIntent().removeExtra(Constants.PROJECTNAME_TO_LOAD);
-
-		ProjectManager projectManager = ProjectManager.getInstance();
-		if (projectManager.getCurrentProject() != null) {
-			projectManager.saveProject(getActivity().getApplicationContext());
+	@Override
+	public boolean onOptionsItemSelected(MenuItem menuItem) {
+		switch (menuItem.getItemId()) {
+			case R.id.upload:
+				ProjectManager.getInstance().uploadProject(Utils.getCurrentProjectName(getActivity()), getActivity());
+				break;
+			case R.id.merge_scene:
+				FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+				MergeSceneDialog mergeSceneDialog = new MergeSceneDialog();
+				mergeSceneDialog.show(fragmentTransaction, MergeSceneDialog.DIALOG_FRAGMENT_TAG);
+				break;
+			default:
+				return super.onOptionsItemSelected(menuItem);
 		}
+		return true;
 	}
 
 	@Override
@@ -158,12 +149,14 @@ public class SceneListFragment extends ListActivityFragment implements CheckBoxL
 			return;
 		}
 		if (sceneAdapter.getCount() == 1) {
-			if (actionModeCallback.equals(copyModeCallBack)) {
-				((ProjectActivity) getActivity()).showEmptyActionModeDialog(getString(R.string.copy));
-			} else if (actionModeCallback.equals(deleteModeCallBack)) {
-				((ProjectActivity) getActivity()).showEmptyActionModeDialog(getString(R.string.delete));
+			if (actionModeCallback.equals(deleteModeCallBack)) {
+				showEmptyActionModeDialog(R.string.delete, R.string.nothing_to_delete);
+			} else if (actionModeCallback.equals(copyModeCallBack)) {
+				showEmptyActionModeDialog(R.string.copy, R.string.nothing_to_copy);
 			} else if (actionModeCallback.equals(renameModeCallBack)) {
-				((ProjectActivity) getActivity()).showEmptyActionModeDialog(getString(R.string.rename));
+				showEmptyActionModeDialog(R.string.rename, R.string.nothing_to_rename);
+			} else if (actionModeCallback.equals(backPackModeCallBack)) {
+				showEmptyActionModeDialog(R.string.backpack, R.string.nothing_to_backpack_and_unpack);
 			}
 		} else {
 			actionMode = getActivity().startActionMode(actionModeCallback);
@@ -191,22 +184,6 @@ public class SceneListFragment extends ListActivityFragment implements CheckBoxL
 		}
 	}
 
-	public void switchToBackPack() {
-		Intent intent = new Intent(getActivity(), BackPackActivity.class);
-		intent.putExtra(BackPackActivity.EXTRA_FRAGMENT_POSITION, BackPackActivity.FRAGMENT_BACKPACK_SCENES);
-		startActivity(intent);
-	}
-
-	public void showDeleteDialog() {
-		int titleId;
-		if (sceneAdapter.getCheckedItems().size() == 1) {
-			titleId = R.string.dialog_confirm_delete_scene_title;
-		} else {
-			titleId = R.string.dialog_confirm_delete_multiple_scenes_title;
-		}
-		showDeleteDialog(titleId);
-	}
-
 	protected void deleteCheckedItems() {
 		boolean success = true;
 		for (Scene scene : sceneAdapter.getCheckedItems()) {
@@ -218,7 +195,7 @@ public class SceneListFragment extends ListActivityFragment implements CheckBoxL
 			ProjectManager.getInstance().saveProject(getActivity());
 			checkSceneCountAfterDeletion();
 		} else {
-			showError(R.string.error_scene_not_deleted);
+			ToastUtil.showError(getActivity(), R.string.error_scene_not_deleted);
 		}
 	}
 
@@ -250,7 +227,7 @@ public class SceneListFragment extends ListActivityFragment implements CheckBoxL
 		if (success) {
 			ProjectManager.getInstance().saveProject(getActivity());
 		} else {
-			showError(R.string.error_scene_not_copied);
+			ToastUtil.showError(getActivity(), R.string.error_scene_not_copied);
 		}
 	}
 
@@ -285,8 +262,7 @@ public class SceneListFragment extends ListActivityFragment implements CheckBoxL
 	@Override
 	public void showRenameDialog() {
 		sceneToEdit = sceneAdapter.getCheckedItems().get(0);
-		RenameItemDialog dialog = new RenameItemDialog(R.string.rename_scene_dialog, R.string.scene_name, sceneToEdit
-				.getName(), this);
+		RenameItemDialog dialog = new RenameItemDialog(R.string.rename_scene_dialog, R.string.scene_name, sceneToEdit.getName(), this);
 		dialog.show(getFragmentManager(), RenameItemDialog.DIALOG_FRAGMENT_TAG);
 	}
 
@@ -305,12 +281,17 @@ public class SceneListFragment extends ListActivityFragment implements CheckBoxL
 		sceneAdapter.notifyDataSetChanged();
 	}
 
+	@Override
+	public void showReplaceItemsInBackPackDialog() {
+
+	}
+
 	protected void packCheckedItems() {
 		List<Scene> sceneListToBackpack = sceneAdapter.getCheckedItems();
 		boolean sceneAlreadyInBackpack = BackPackSceneController.getInstance().checkScenesReplaceInBackpack(sceneListToBackpack);
 
 		if (!sceneAlreadyInBackpack) {
-			showProgressCircle();
+			setProgressCircleVisibility(true);
 			packScenes(sceneListToBackpack);
 		} else {
 			SceneListFragment fragment = ((ProjectActivity) getActivity()).getSceneListFragment();
@@ -318,24 +299,28 @@ public class SceneListFragment extends ListActivityFragment implements CheckBoxL
 		}
 	}
 
+	@Override
+	protected boolean isBackPackEmpty() {
+		return false;
+	}
+
 	public void packScenes(List<Scene> sceneList) {
 		boolean success = BackPackSceneController.getInstance().backpackScenes(sceneList);
 		clearCheckedItems();
 
 		if (success) {
-			switchToBackPack();
+			changeToBackPack();
 			return;
 		}
 
-		showError(R.string.error_scene_backpack);
+		ToastUtil.showError(getActivity(), R.string.error_scene_backpack);
 	}
 
-	public void showProgressCircle() {
-		ProgressBar progressCircle = (ProgressBar) getActivity().findViewById(R.id.progress_bar_activity_project);
-		progressCircle.setVisibility(View.VISIBLE);
-		progressCircle.bringToFront();
-		getActivity().findViewById(R.id.fragment_container).setVisibility(View.GONE);
-		BottomBar.showBottomBar(getActivity());
+	@Override
+	protected void changeToBackPack() {
+		Intent intent = new Intent(getActivity(), BackPackActivity.class);
+		intent.putExtra(BackPackActivity.FRAGMENT, BackPackSceneListFragment.class);
+		startActivity(intent);
 	}
 
 	private static String getNewValidSceneName(String name, int nextNumber) {

@@ -30,6 +30,7 @@ import android.view.ViewGroup;
 import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.ui.BackPackActivity;
 import org.catrobat.catroid.ui.controller.LookController;
+import org.catrobat.catroid.ui.fragment.BackPackLookListFragment;
 import org.catrobat.catroid.ui.fragment.LookFragment;
 
 import java.util.ArrayList;
@@ -135,7 +136,7 @@ public class LookAdapter extends LookBaseAdapter implements ActionModeActivityAd
 	public void onBackpackLookComplete(boolean startBackpackActivity) {
 		if (!checkedLookPositions.isEmpty() && startBackpackActivity) {
 			Intent intent = new Intent(lookFragment.getActivity(), BackPackActivity.class);
-			intent.putExtra(BackPackActivity.EXTRA_FRAGMENT_POSITION, BackPackActivity.FRAGMENT_BACKPACK_LOOKS);
+			intent.putExtra(BackPackActivity.FRAGMENT, BackPackLookListFragment.class);
 			lookFragment.getActivity().startActivity(intent);
 		}
 		lookFragment.clearCheckedLooksAndEnableButtons();
