@@ -33,7 +33,6 @@ import org.catrobat.catroid.content.StartScript;
 import org.catrobat.catroid.content.bricks.SetVariableBrick;
 import org.catrobat.catroid.formulaeditor.DataContainer;
 import org.catrobat.catroid.formulaeditor.UserVariable;
-import org.catrobat.catroid.ui.BaseActivity;
 import org.catrobat.catroid.ui.ScriptActivity;
 import org.catrobat.catroid.uiespresso.util.BaseActivityInstrumentationRule;
 import org.junit.After;
