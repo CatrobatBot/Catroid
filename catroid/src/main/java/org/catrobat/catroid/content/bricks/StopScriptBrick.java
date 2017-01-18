@@ -121,7 +121,15 @@ public class StopScriptBrick extends BrickBaseType {
 		spinnerValue[BrickValues.STOP_OTHER_SCRIPTS] = context.getString(R.string.brick_stop_other_scripts);
 
 		ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item,
-				spinnerValue);
+				spinnerValue) {
+			@Override
+			public View getDropDownView(int position, View convertView, ViewGroup parent) {
+				View dropDownView = super.getDropDownView(position, convertView, parent);
+				TextSizeUtil.enlargeTextView((TextView) dropDownView);
+
+				return dropDownView;
+			}
+		};
 		spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		return spinnerAdapter;

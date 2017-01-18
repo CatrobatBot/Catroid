@@ -23,12 +23,16 @@
 package org.catrobat.catroid.common;
 
 import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.content.BroadcastScript;
 import org.catrobat.catroid.content.CollisionScript;
 import org.catrobat.catroid.physics.PhysicsCollision;
+import org.catrobat.catroid.utils.TextSizeUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -127,7 +131,15 @@ public final class MessageContainer {
 
 	public static ArrayAdapter<String> getMessageAdapter(Context context) {
 		if (messageAdapter == null) {
-			messageAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item);
+			messageAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item) {
+				@Override
+				public View getDropDownView(int position, View convertView, ViewGroup parent) {
+					View dropDownView = super.getDropDownView(position, convertView, parent);
+					TextSizeUtil.enlargeTextView((TextView) dropDownView);
+
+					return dropDownView;
+				}
+			};
 			messageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			messageAdapter.add(context.getString(R.string.new_broadcast_message));
 			if (receiverMap.size() == hiddenEntries) {

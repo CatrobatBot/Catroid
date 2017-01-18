@@ -66,8 +66,16 @@ public abstract class DroneSpinnerBrick extends BrickBaseType {
 		spinner.setFocusableInTouchMode(false);
 		spinner.setFocusable(false);
 
-		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(view.getContext(),
-				android.R.layout.simple_spinner_item, getSpinnerItems(view));
+		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(view.getContext(),
+				android.R.layout.simple_spinner_item, getSpinnerItems(view)) {
+			@Override
+			public View getDropDownView(int position, View convertView, ViewGroup parent) {
+				View dropDownView = super.getDropDownView(position, convertView, parent);
+				TextSizeUtil.enlargeTextView((TextView) dropDownView);
+
+				return dropDownView;
+			}
+		};
 		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		spinner.setAdapter(arrayAdapter);
@@ -106,8 +114,16 @@ public abstract class DroneSpinnerBrick extends BrickBaseType {
 
 		Spinner spinner = (Spinner) prototypeView.findViewById(R.id.brick_drone_spinner_ID);
 
-		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(prototypeView.getContext(),
-				android.R.layout.simple_spinner_item, getSpinnerItems(prototypeView));
+		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(prototypeView.getContext(),
+				android.R.layout.simple_spinner_item, getSpinnerItems(prototypeView)) {
+			@Override
+			public View getDropDownView(int position, View convertView, ViewGroup parent) {
+				View dropDownView = super.getDropDownView(position, convertView, parent);
+				TextSizeUtil.enlargeTextView((TextView) dropDownView);
+
+				return dropDownView;
+			}
+		};
 		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		spinner.setAdapter(arrayAdapter);

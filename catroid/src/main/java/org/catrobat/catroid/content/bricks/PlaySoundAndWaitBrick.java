@@ -156,7 +156,15 @@ public class PlaySoundAndWaitBrick extends BrickBaseType implements OnItemSelect
 
 	private ArrayAdapter<SoundInfo> createSoundAdapter(Context context) {
 		ArrayAdapter<SoundInfo> arrayAdapter = new ArrayAdapter<SoundInfo>(context,
-				android.R.layout.simple_spinner_item);
+				android.R.layout.simple_spinner_item) {
+			@Override
+			public View getDropDownView(int position, View convertView, ViewGroup parent) {
+				View dropDownView = super.getDropDownView(position, convertView, parent);
+				TextSizeUtil.enlargeTextView((TextView) dropDownView);
+
+				return dropDownView;
+			}
+		};
 
 		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		SoundInfo dummySoundInfo = new SoundInfo();
@@ -307,6 +315,7 @@ public class PlaySoundAndWaitBrick extends BrickBaseType implements OnItemSelect
 					return false;
 				}
 			});
+			TextSizeUtil.enlargeTextView((TextView) dropDownView);
 
 			return dropDownView;
 		}

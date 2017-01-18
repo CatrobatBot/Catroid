@@ -179,7 +179,15 @@ public class SceneTransitionBrick extends BrickBaseType implements NewSceneDialo
 	}
 
 	private ArrayAdapter<String> createSceneAdapter(Context context) {
-		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item);
+		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item) {
+			@Override
+			public View getDropDownView(int position, View convertView, ViewGroup parent) {
+				View dropDownView = super.getDropDownView(position, convertView, parent);
+				TextSizeUtil.enlargeTextView((TextView) dropDownView);
+
+				return dropDownView;
+			}
+		};
 		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		String dummyScene = context.getString(R.string.new_broadcast_message);
 		arrayAdapter.add(dummyScene);
@@ -303,6 +311,7 @@ public class SceneTransitionBrick extends BrickBaseType implements NewSceneDialo
 					return false;
 				}
 			});
+			TextSizeUtil.enlargeTextView((TextView) dropDownView);
 
 			return dropDownView;
 		}

@@ -43,6 +43,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
@@ -73,11 +74,29 @@ public class MergeSceneDialog extends DialogFragment {
 		Spinner spinnerFirstScene = (Spinner) dialogView.findViewById(R.id.merge_scene_spinner_first);
 		Spinner spinnerSecondScene = (Spinner) dialogView.findViewById(R.id.merge_scene_spinner_second);
 
-		ArrayAdapter<String> firstAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item,
-				ProjectManager.getInstance().getCurrentProject().getSceneOrder());
+		ArrayAdapter<String> firstAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout
+				.simple_spinner_item,
+				ProjectManager.getInstance().getCurrentProject().getSceneOrder()) {
+			@Override
+			public View getDropDownView(int position, View convertView, ViewGroup parent) {
+				View dropDownView = super.getDropDownView(position, convertView, parent);
+				TextSizeUtil.enlargeTextView((TextView) dropDownView);
+
+				return dropDownView;
+			}
+		};
 		firstAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		ArrayAdapter<String> secondAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item,
-				ProjectManager.getInstance().getCurrentProject().getSceneOrder());
+		ArrayAdapter<String> secondAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout
+				.simple_spinner_item,
+				ProjectManager.getInstance().getCurrentProject().getSceneOrder()) {
+			@Override
+			public View getDropDownView(int position, View convertView, ViewGroup parent) {
+				View dropDownView = super.getDropDownView(position, convertView, parent);
+				TextSizeUtil.enlargeTextView((TextView) dropDownView);
+
+				return dropDownView;
+			}
+		};
 		secondAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerFirstScene.setAdapter(firstAdapter);
 		spinnerSecondScene.setAdapter(secondAdapter);

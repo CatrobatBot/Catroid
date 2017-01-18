@@ -190,8 +190,16 @@ public class PointToBrick extends BrickBaseType {
 	}
 
 	private ArrayAdapter<String> getArrayAdapterFromSpriteList(Context context) {
-		final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context,
-				android.R.layout.simple_spinner_item);
+		final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context,
+				android.R.layout.simple_spinner_item) {
+			@Override
+			public View getDropDownView(int position, View convertView, ViewGroup parent) {
+				View dropDownView = super.getDropDownView(position, convertView, parent);
+				TextSizeUtil.enlargeTextView((TextView) dropDownView);
+
+				return dropDownView;
+			}
+		};
 		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		arrayAdapter.add(context.getString(R.string.new_broadcast_message));
 
@@ -300,6 +308,7 @@ public class PointToBrick extends BrickBaseType {
 					return false;
 				}
 			});
+			TextSizeUtil.enlargeTextView((TextView) dropDownView);
 
 			return dropDownView;
 		}

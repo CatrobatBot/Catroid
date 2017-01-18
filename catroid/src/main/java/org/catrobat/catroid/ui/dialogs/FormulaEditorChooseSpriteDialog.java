@@ -29,13 +29,16 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.content.Sprite;
+import org.catrobat.catroid.utils.TextSizeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,8 +112,16 @@ public class FormulaEditorChooseSpriteDialog extends DialogFragment {
 				spriteNames.add(sprite.getName());
 			}
 		}
-		ArrayAdapter<String> adapterOne = new ArrayAdapter<>(getActivity(),
-				android.R.layout.simple_spinner_item, spriteNames);
+		ArrayAdapter<String> adapterOne = new ArrayAdapter<String>(getActivity(),
+				android.R.layout.simple_spinner_item, spriteNames) {
+			@Override
+			public View getDropDownView(int position, View convertView, ViewGroup parent) {
+				View dropDownView = super.getDropDownView(position, convertView, parent);
+				TextSizeUtil.enlargeTextView((TextView) dropDownView);
+
+				return dropDownView;
+			}
+		};
 
 		adapterOne.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerOne.setAdapter(adapterOne);

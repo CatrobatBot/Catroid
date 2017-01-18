@@ -24,9 +24,13 @@ package org.catrobat.catroid.common;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import org.catrobat.catroid.R;
+import org.catrobat.catroid.utils.TextSizeUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,7 +51,15 @@ public final class NfcTagContainer {
 	//TODO: rename to getNfcAdapter/getTagAdapter
 	public static ArrayAdapter<String> getMessageAdapter(Context context) {
 		if (tagNameAdapter == null) {
-			tagNameAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, tagNameList);
+			tagNameAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, tagNameList) {
+				@Override
+				public View getDropDownView(int position, View convertView, ViewGroup parent) {
+					View dropDownView = super.getDropDownView(position, convertView, parent);
+					TextSizeUtil.enlargeTextView((TextView) dropDownView);
+
+					return dropDownView;
+				}
+			};
 			//TODO: use .add() instead of .insert()
 			tagNameAdapter.insert(context.getString(R.string.new_nfc_tag), 0);
 			tagNameAdapter.insert(context.getString(R.string.brick_when_nfc_default_all), 1);

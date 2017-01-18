@@ -95,7 +95,15 @@ public class SetRotationStyleBrick extends BrickBaseType {
 	}
 
 	private ArrayAdapter<String> createSpinnerAdapter(Context context) {
-		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item);
+		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item) {
+			@Override
+			public View getDropDownView(int position, View convertView, ViewGroup parent) {
+				View dropDownView = super.getDropDownView(position, convertView, parent);
+				TextSizeUtil.enlargeTextView((TextView) dropDownView);
+
+				return dropDownView;
+			}
+		};
 		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		arrayAdapter.add(context.getString(R.string.brick_set_rotation_style_lr));
 		arrayAdapter.add(context.getString(R.string.brick_set_rotation_style_normal));
@@ -202,6 +210,8 @@ public class SetRotationStyleBrick extends BrickBaseType {
 					return false;
 				}
 			});
+			TextSizeUtil.enlargeTextView((TextView) dropDownView);
+
 			return dropDownView;
 		}
 	}
