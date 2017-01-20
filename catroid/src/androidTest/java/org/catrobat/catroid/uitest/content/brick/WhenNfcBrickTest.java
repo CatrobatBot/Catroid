@@ -152,7 +152,7 @@ public class WhenNfcBrickTest extends BaseActivityInstrumentationTestCase<MainMe
 
 		solo.clickOnText(solo.getString(R.string.nfctags));
 
-		clickOnContextMenuItem(FIRST_TEST_TAG_NAME, solo.getString(R.string.rename),R.id.rename);
+		clickOnContextMenuItem(FIRST_TEST_TAG_NAME, solo.getString(R.string.rename), R.id.rename);
 		solo.clearEditText(0);
 		solo.enterText(0, newName);
 		solo.clickOnButton(solo.getString(R.string.ok));
