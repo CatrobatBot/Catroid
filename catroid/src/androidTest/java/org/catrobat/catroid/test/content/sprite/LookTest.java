@@ -367,10 +367,10 @@ public class LookTest extends InstrumentationTestCase {
 		assertEquals("Wrong color value!", 40.0f, look.getColorInUserInterfaceDimensionUnit());
 	}
 
-	public void testDistanceTo() {
+	public void testDistanceToTouchPosition() {
 		look.setXInUserInterfaceDimensionUnit(25);
 		look.setYInUserInterfaceDimensionUnit(55);
-		float touchPosition = look.getDistanceToTouchPositionInUserInterfaceDimensions();
+		double touchPosition = look.getDistanceToTouchPositionInUserInterfaceDimensions();
 
 		float pointAx = look.getXInUserInterfaceDimensionUnit();
 		float pointAy = look.getYInUserInterfaceDimensionUnit();
@@ -381,10 +381,31 @@ public class LookTest extends InstrumentationTestCase {
 		float vectorX = pointBx - pointAx;
 		float vectorY = pointBy - pointAy;
 
-		double squareX = (float) Math.pow(vectorX, 2);
-		double squareY = (float) Math.pow(vectorY, 2);
+		double squareX = (double) Math.pow(vectorX, 2);
+		double squareY = (double) Math.pow(vectorY, 2);
 
-		float squareRootOfScalar = (float) Math.sqrt(squareX + squareY);
+		double squareRootOfScalar = (double) Math.sqrt(squareX + squareY);
+
+		assertEquals("Wrong distance to value!", touchPosition, squareRootOfScalar);
+	}
+
+	public void testDistanceToSpritePosition() {
+		float spriteAx = 25;
+		float spriteAy = 55;
+		float spriteBx = 100;
+		float spriteBy = 200;
+
+		look.setXInUserInterfaceDimensionUnit(spriteAx);
+		look.setYInUserInterfaceDimensionUnit(spriteAy);
+		double touchPosition = look.getDistanceToSpritePositionInUserInterfaceDimensions(spriteBx, spriteBy);
+
+		float vectorX = spriteBx - spriteAx;
+		float vectorY = spriteBy - spriteAy;
+
+		double squareX = (double) Math.pow(vectorX, 2);
+		double squareY = (double) Math.pow(vectorY, 2);
+
+		double squareRootOfScalar = (double) Math.sqrt(squareX + squareY);
 
 		assertEquals("Wrong distance to value!", touchPosition, squareRootOfScalar);
 	}

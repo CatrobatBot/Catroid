@@ -76,8 +76,8 @@ public class FormulaEditorCategoryListFragment extends ListFragment implements D
 	private CategoryListAdapter adapter;
 
 	private static final int[] OBJECT_GENERAL_PROPERTIES_ITEMS = { R.string.formula_editor_object_transparency,
-			R.string.formula_editor_object_brightness, R.string.formula_editor_object_color/*,
-			R.string.formula_editor_object_distance_to*/ };
+			R.string.formula_editor_object_brightness, R.string.formula_editor_object_color,
+			R.string.formula_editor_object_distance_to };
 
 	private static final int[] OBJECT_PHYSICAL_PROPERTIES_ITEMS = { R.string.formula_editor_object_x,
 			R.string.formula_editor_object_y, R.string.formula_editor_object_size,
@@ -233,8 +233,9 @@ public class FormulaEditorCategoryListFragment extends ListFragment implements D
 			if (formulaEditor != null) {
 				if (itemsIds[position] == R.string.formula_editor_function_collision) {
 					showChooseSpriteDialog(formulaEditor);
+				} else if (itemsIds[position] == R.string.formula_editor_object_distance_to) {
+					showDistanceToSpriteDialog(formulaEditor);
 				} else {
-
 					formulaEditor.addResourceToActiveFormula(itemsIds[position]);
 					formulaEditor.updateButtonsOnKeyboardAndInvalidateOptionsMenu();
 				}
@@ -267,6 +268,7 @@ public class FormulaEditorCategoryListFragment extends ListFragment implements D
 	private void showChooseSpriteDialog(FormulaEditorFragment fragment) {
 		final FormulaEditorFragment formulaEditor = fragment;
 		final FormulaEditorChooseSpriteDialog dialog = FormulaEditorChooseSpriteDialog.newInstance();
+		dialog.setFormulaType(R.string.formula_editor_function_collision);
 		dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
 			@Override
 			public void onDismiss(DialogInterface dialogInterface) {
@@ -282,6 +284,37 @@ public class FormulaEditorCategoryListFragment extends ListFragment implements D
 					}
 					if (secondSprite != null) {
 						formulaEditor.addCollideFormulaToActiveFormula(secondSprite.getName());
+					}
+				}
+			}
+		});
+		dialog.showDialog(this);
+	}
+
+	private void showDistanceToSpriteDialog(FormulaEditorFragment formulaEditorFragment) {
+		final FormulaEditorFragment formulaEditor = formulaEditorFragment;
+		final FormulaEditorChooseSpriteDialog dialog = FormulaEditorChooseSpriteDialog.newInstance();
+		dialog.setFormulaType(R.string.formula_editor_object_distance_to);
+		dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+
+			@Override
+			public void onDismiss(DialogInterface dialogInterface) {
+				if (dialog.getSuccessStatus()) {
+					Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
+					Sprite secondSprite = null;
+
+					for (Sprite sprite : ProjectManager.getInstance().getCurrentScene().getSpriteList()) {
+						if (sprite.getName().compareTo(dialog.getSprite()) == 0) {
+							secondSprite = sprite;
+						}
+					}
+					if (secondSprite != null) {
+						formulaEditor.addDistanceToSpritePositionFormulaToActiveFormula(secondSprite.getName());
+					}
+					if (secondSprite == null && dialog.getSprite() == getString(R.string
+							.formula_editor_object_distance_to_touch_position)) {
+						formulaEditor.addDistanceToTouchPositionFormulaToActiveFormula(
+								getString(R.string.formula_editor_object_distance_to_touch_position));
 					}
 				}
 			}
