@@ -157,7 +157,7 @@ public class SceneListFragment extends ListActivityFragment implements CheckBoxL
 			projectManager.setCurrentScene(emptyScene);
 		}
 
-		if(!projectManager.getCurrentProject().isScenesEnabled()) {
+		if (!projectManager.getCurrentProject().isScenesEnabled()) {
 			Intent intent = new Intent(getActivity(), SpriteListActivity.class);
 			startActivity(intent);
 			getActivity().finish();

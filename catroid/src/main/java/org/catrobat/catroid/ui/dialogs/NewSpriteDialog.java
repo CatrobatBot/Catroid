@@ -59,7 +59,6 @@ import org.catrobat.catroid.ui.SettingsActivity;
 import org.catrobat.catroid.ui.WebViewActivity;
 import org.catrobat.catroid.ui.controller.OldLookController;
 import org.catrobat.catroid.ui.fragment.SpriteFactory;
-import org.catrobat.catroid.ui.fragment.SpriteListFragment;
 import org.catrobat.catroid.utils.ImageEditing;
 import org.catrobat.catroid.utils.UtilCamera;
 import org.catrobat.catroid.utils.Utils;

@@ -79,7 +79,6 @@ public class SpriteMemberSelectionActivity extends Activity implements RenameIte
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		boolean isNfcEnabled = sharedPreferences.getBoolean("setting_nfc_bricks", false);
 		findViewById(R.id.program_menu_button_nfctags).setVisibility(isNfcEnabled ? View.VISIBLE : View.GONE);
-
 	}
 
 	@Override
