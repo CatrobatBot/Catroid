@@ -319,12 +319,9 @@ public class Look extends Image {
 		setY(y - getHeight() / 2f);
 	}
 
-	public float getDistanceToTouchPositionInUserInterfaceDimensions() {
-		int touchIndex = TouchUtil.getLastTouchIndex();
-
-		return (float)
-				Math.sqrt(Math.pow((TouchUtil.getX(touchIndex) - getXInUserInterfaceDimensionUnit()), 2)
-						+ Math.pow((TouchUtil.getY(touchIndex) - getYInUserInterfaceDimensionUnit()), 2));
+	public double getDistanceToInUserInterfaceDimensions(float xPosition, float yPosition) {
+		return Math.hypot((xPosition - getXInUserInterfaceDimensionUnit()),
+				(yPosition - getYInUserInterfaceDimensionUnit()));
 	}
 
 	public float getAngularVelocityInUserInterfaceDimensionUnit() {
