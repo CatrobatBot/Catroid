@@ -78,6 +78,18 @@ public class InternToken {
 		}
 	}
 
+	public void updateDistanceToTouchPositionFormula(String oldName, String newName) {
+		if (internTokenType == InternTokenType.DISTANCE_TO_TOUCH_POSITION && tokenStringValue.equals(oldName)) {
+			tokenStringValue = newName;
+		}
+	}
+
+	public void updateDistanceToSpritePositionFormula(String oldName, String newName) {
+		if (internTokenType == InternTokenType.DISTANCE_TO_SPRITE_POSITION && tokenStringValue.equals(oldName)) {
+			tokenStringValue = newName;
+		}
+	}
+
 	public boolean isNumber() {
 		return internTokenType == InternTokenType.NUMBER;
 	}
