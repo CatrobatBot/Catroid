@@ -114,11 +114,7 @@ public abstract class BrickBaseType implements Brick {
 		checkbox.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if (adapter instanceof BrickAdapter) {
-					((BrickAdapter) adapter).handleCheck(instance, ((CheckBox) view).isChecked());
-				} else if (adapter instanceof UserBrickAdapter) {
-					((UserBrickAdapter) adapter).handleCheck(instance, ((CheckBox) view).isChecked());
-				}
+				adapter.handleCheck(instance, ((CheckBox) view).isChecked());
 			}
 		});
 	}
