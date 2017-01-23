@@ -243,7 +243,8 @@ public abstract class ListActivityFragment extends CheckBoxListFragment implemen
 		}
 	}
 
-	public void onNewIntent(Intent intent) {}
+	public void onNewIntent(Intent intent) {
+	}
 
 	public void handleAddButton() {
 	}
