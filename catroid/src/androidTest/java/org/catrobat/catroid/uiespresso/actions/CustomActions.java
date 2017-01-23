@@ -33,8 +33,6 @@ import org.hamcrest.Matcher;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
-import static org.hamcrest.core.AllOf.allOf;
-
 public final class CustomActions {
 	// Suppress default constructor for noninstantiability
 	private CustomActions() {
