@@ -61,7 +61,7 @@ public class SpriteActivity extends Activity {
 			fragmentTransaction.replace(R.id.fragment_container, newFragment, fragmentClass.getSimpleName());
 			fragmentTransaction.commit();
 		} catch (Exception e) {
-			Log.e(TAG, "Error while instantiating new fragment" ,e);
+			Log.e(TAG, "Error while instantiating new fragment", e);
 		}
 	}
 

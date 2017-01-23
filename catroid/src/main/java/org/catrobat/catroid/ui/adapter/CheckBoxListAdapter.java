@@ -56,6 +56,7 @@ public abstract class CheckBoxListAdapter<T> extends ArrayAdapter<T> {
 			rightTopDetails = (TextView) listItemView.findViewById(R.id.details_right_top);
 			rightBottomDetails = (TextView) listItemView.findViewById(R.id.details_right_bottom);
 		}
+
 		public RelativeLayout background;
 		protected CheckBox checkBox;
 		protected TextView name;

@@ -70,7 +70,6 @@ public class LookListFragment extends ListActivityFragment implements CheckBoxLi
 	public static final int REQUEST_CAMERA_IMAGE = 4;
 	public static final int REQUEST_DRONE_VIDEO = 5;
 
-
 	private LookListAdapter lookAdapter;
 	private DragAndDropListView listView;
 
@@ -173,7 +172,7 @@ public class LookListFragment extends ListActivityFragment implements CheckBoxLi
 					break;
 				case REQUEST_DRONE_VIDEO:
 					String droneFilePath = getString(R.string.add_look_drone_video);
-					if (!LookController.loadDroneVideo(droneFilePath, getActivity(),lookDataList)) {
+					if (!LookController.loadDroneVideo(droneFilePath, getActivity(), lookDataList)) {
 						ToastUtil.showError(getActivity(), R.string.error_load_image);
 					}
 					break;
