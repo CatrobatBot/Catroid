@@ -25,7 +25,6 @@ package org.catrobat.catroid.pocketmusic;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import org.catrobat.catroid.ProjectManager;
@@ -99,16 +98,6 @@ public class PocketMusicActivity extends BaseActivity {
 			soundInfo.setSoundFileName("MUS-" + Math.abs(randomGenerator.nextInt()) + ".midi");
 		}
 		return soundInfo;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				finish();
-				break;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
