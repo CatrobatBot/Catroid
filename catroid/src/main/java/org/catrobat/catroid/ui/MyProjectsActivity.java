@@ -41,7 +41,7 @@ import java.util.concurrent.locks.Lock;
 
 public class MyProjectsActivity extends BaseActivity {
 
-	public static final  String TAG = MyProjectsActivity.class.getSimpleName();
+	public static final String TAG = MyProjectsActivity.class.getSimpleName();
 	public static final String ACTION_PROJECT_LIST_INIT = "org.catrobat.catroid.PROJECT_LIST_INIT";
 
 	private Lock viewSwitchLock = new ViewSwitchLock();
@@ -71,11 +71,11 @@ public class MyProjectsActivity extends BaseActivity {
 			Fragment newFragment = fragmentClass.newInstance();
 			fragmentTransaction.replace(R.id.fragment_container, newFragment, fragmentClass.getSimpleName());
 
-			if(addCurrentFragmentToBackStack) {
+			if (addCurrentFragmentToBackStack) {
 				fragmentTransaction.addToBackStack(null);
 			}
 
-			if(bundle != null) {
+			if (bundle != null) {
 				newFragment.setArguments(bundle);
 			}
 

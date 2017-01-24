@@ -24,11 +24,7 @@
 package org.catrobat.catroid.ui.fragment;
 
 import android.app.Fragment;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -37,10 +33,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.ProjectData;
-import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.XmlHeader;
 import org.catrobat.catroid.io.ProjectAndSceneScreenshotLoader;
 import org.catrobat.catroid.io.StorageHandler;
@@ -53,9 +47,8 @@ import org.catrobat.catroid.utils.Utils;
 
 import java.io.File;
 import java.util.Date;
-import java.util.concurrent.ExecutionException;
 
-public class ShowDetailsFragment extends Fragment implements SetDescriptionDialog.ChangeDescriptionInterface{
+public class ShowDetailsFragment extends Fragment implements SetDescriptionDialog.ChangeDescriptionInterface {
 
 	public static final String TAG = ShowDetailsFragment.class.getSimpleName();
 
@@ -72,7 +65,7 @@ public class ShowDetailsFragment extends Fragment implements SetDescriptionDialo
 			projectData = (ProjectData) getArguments().getSerializable(SELECTED_PROJECT_KEY);
 			projectData.project = StorageHandler.getInstance().loadProject(projectData.projectName, getActivity());
 
-			if(projectData.project == null) {
+			if (projectData.project == null) {
 				throw new Exception("Can't load Project!");
 			}
 		} catch (Exception E) {
@@ -136,7 +129,7 @@ public class ShowDetailsFragment extends Fragment implements SetDescriptionDialo
 
 	private String getUserHandle() {
 		String userHandle = projectData.project.getXmlHeader().getUserHandle();
-		if(userHandle == null || userHandle.equals("")) {
+		if (userHandle == null || userHandle.equals("")) {
 			return getString(R.string.unknown);
 		}
 		return userHandle;
@@ -144,7 +137,7 @@ public class ShowDetailsFragment extends Fragment implements SetDescriptionDialo
 
 	private String getRemixOf() {
 		String remixOf = projectData.project.getXmlHeader().getRemixParentsUrlString();
-		if(remixOf == null || remixOf.equals("")) {
+		if (remixOf == null || remixOf.equals("")) {
 			return getString(R.string.nxt_no_sensor);
 		}
 		return remixOf;

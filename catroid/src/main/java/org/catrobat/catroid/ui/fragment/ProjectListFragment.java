@@ -22,8 +22,6 @@
  */
 package org.catrobat.catroid.ui.fragment;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -341,7 +339,7 @@ public class ProjectListFragment extends ListActivityFragment implements LoadPro
 	private void showDetailsFragment() {
 		Bundle bundle = new Bundle();
 		bundle.putSerializable(ShowDetailsFragment.SELECTED_PROJECT_KEY, projectToEdit);
-		((MyProjectsActivity)getActivity()).loadFragment(ShowDetailsFragment.class, bundle, true);
+		((MyProjectsActivity) getActivity()).loadFragment(ShowDetailsFragment.class, bundle, true);
 	}
 
 	private void showSetDescriptionDialog() {
