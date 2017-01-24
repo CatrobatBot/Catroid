@@ -179,7 +179,8 @@ public class SoundListFragment extends ListActivityFragment implements CheckBoxL
 
 	public void addSoundMediaLibrary() {
 		Intent intent = new Intent(getActivity(), WebViewActivity.class);
-		String url = Constants.LIBRARY_SOUNDS_URL;;
+		String url = Constants.LIBRARY_SOUNDS_URL;
+		;
 		intent.putExtra(WebViewActivity.INTENT_PARAMETER_URL, url);
 		intent.putExtra(WebViewActivity.CALLING_ACTIVITY, TAG);
 		//startActivityForResult(intent, SoundController.REQUEST_MEDIA_LIBRARY);
