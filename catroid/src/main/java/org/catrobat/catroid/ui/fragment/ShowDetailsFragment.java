@@ -47,7 +47,7 @@ import org.catrobat.catroid.utils.Utils;
 import java.io.File;
 import java.util.Date;
 
-public class ShowDetailsFragment extends Fragment implements SetDescriptionDialog.ChangeDescriptionInterface{
+public class ShowDetailsFragment extends Fragment implements SetDescriptionDialog.ChangeDescriptionInterface {
 
 	public static final String TAG = ShowDetailsFragment.class.getSimpleName();
 	public static final String SELECTED_PROJECT_KEY = "selectedProject";
