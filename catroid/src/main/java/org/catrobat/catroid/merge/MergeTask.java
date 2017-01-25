@@ -24,7 +24,6 @@
 package org.catrobat.catroid.merge;
 
 import android.app.Activity;
-import android.os.storage.StorageManager;
 import android.util.Log;
 
 import org.catrobat.catroid.ProjectManager;

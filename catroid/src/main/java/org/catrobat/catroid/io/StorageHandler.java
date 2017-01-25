@@ -27,7 +27,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.google.common.base.Charsets;
@@ -37,7 +36,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.parrot.freeflight.utils.FileUtils;
-import com.parrot.freeflight.utils.StreamUtils;
 import com.thoughtworks.xstream.converters.reflection.FieldDictionary;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 
