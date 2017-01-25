@@ -1111,6 +1111,6 @@ public final class Utils {
 		for (T objectInstance : listToDistinct) {
 			uniqueMap.put(objectInstance.getClass(), objectInstance);
 		}
-		return  new ArrayList<>(uniqueMap.values());
+		return new ArrayList<>(uniqueMap.values());
 	}
 }

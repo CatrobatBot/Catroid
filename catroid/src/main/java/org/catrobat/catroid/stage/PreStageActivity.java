@@ -251,7 +251,7 @@ public class PreStageActivity extends BaseActivity implements GatherCollisionInf
 			if (!Utils.isNetworkAvailable(finalBaseContext)) {
 				List<Brick> networkBrickList = getBricksRequiringResource(Brick.NETWORK_CONNECTION);
 				networkBrickList = Utils.distinctListByClassOfObjects(networkBrickList);
-				NoNetworkDialog networkDialog = new NoNetworkDialog(this,networkBrickList);
+				NoNetworkDialog networkDialog = new NoNetworkDialog(this, networkBrickList);
 				networkDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
 					@Override
 					public void onCancel(DialogInterface dialogInterface) {
