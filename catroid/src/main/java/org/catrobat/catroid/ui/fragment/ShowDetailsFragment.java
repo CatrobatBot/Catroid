@@ -23,11 +23,7 @@
 package org.catrobat.catroid.ui.fragment;
 
 import android.app.Fragment;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -36,10 +32,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.ProjectData;
-import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.XmlHeader;
 import org.catrobat.catroid.io.ProjectAndSceneScreenshotLoader;
 import org.catrobat.catroid.io.StorageHandler;
@@ -52,7 +46,6 @@ import org.catrobat.catroid.utils.Utils;
 
 import java.io.File;
 import java.util.Date;
-import java.util.concurrent.ExecutionException;
 
 public class ShowDetailsFragment extends Fragment implements SetDescriptionDialog.ChangeDescriptionInterface {
 

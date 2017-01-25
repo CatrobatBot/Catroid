@@ -22,8 +22,6 @@
  */
 package org.catrobat.catroid.ui.fragment;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
