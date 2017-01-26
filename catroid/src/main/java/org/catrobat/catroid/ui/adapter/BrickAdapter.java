@@ -56,9 +56,6 @@ import org.catrobat.catroid.content.bricks.LoopEndBrick;
 import org.catrobat.catroid.content.bricks.LoopEndlessBrick;
 import org.catrobat.catroid.content.bricks.NestingBrick;
 import org.catrobat.catroid.content.bricks.ScriptBrick;
-import org.catrobat.catroid.content.bricks.UserBrick;
-import org.catrobat.catroid.content.bricks.UserBrickParameter;
-import org.catrobat.catroid.content.bricks.UserScriptDefinitionBrick;
 import org.catrobat.catroid.ui.ViewSwitchLock;
 import org.catrobat.catroid.ui.controller.BackPackListManager;
 import org.catrobat.catroid.ui.dialogs.CustomAlertDialogBuilder;
@@ -84,7 +81,6 @@ public class BrickAdapter extends BrickBaseAdapter implements DragAndDropListene
 	private static final String TAG = BrickAdapter.class.getSimpleName();
 	public int listItemCount = 0;
 	private Sprite sprite;
-	private UserBrick userBrick;
 	private Script script;
 	private int dragTargetPosition;
 	private Brick draggedBrick;
@@ -134,10 +130,6 @@ public class BrickAdapter extends BrickBaseAdapter implements DragAndDropListene
 	public void initBrickList() {
 		brickList = new ArrayList<>();
 
-		if (userBrick != null) {
-			initBrickListUserScript();
-			return;
-		}
 		Sprite sprite = ProjectManager.getInstance().getCurrentSprite();
 
 		int numberOfScripts = sprite.getNumberOfScripts();
@@ -150,23 +142,6 @@ public class BrickAdapter extends BrickBaseAdapter implements DragAndDropListene
 				brick.setBrickAdapter(this);
 			}
 		}
-	}
-
-	private void initBrickListUserScript() {
-		script = getUserScript();
-		brickList = new ArrayList<>();
-		brickList.add(script.getScriptBrick());
-
-		script.getScriptBrick().setBrickAdapter(this);
-		for (Brick brick : script.getBrickList()) {
-			brickList.add(brick);
-			brick.setBrickAdapter(this);
-		}
-	}
-
-	private Script getUserScript() {
-		UserScriptDefinitionBrick definitionBrick = userBrick.getDefinitionBrick();
-		return definitionBrick.getScriptSafe();
 	}
 
 	public void resetAlphas() {
@@ -386,10 +361,6 @@ public class BrickAdapter extends BrickBaseAdapter implements DragAndDropListene
 
 			if (!draggedBrick.isCommentedOut()) {
 				enableCorrespondingScriptBrick(to);
-			}
-
-			if (draggedBrick instanceof UserBrick) {
-				((UserBrick) draggedBrick).updateUserBrickParametersAndVariables();
 			}
 
 			addingNewBrick = false;
@@ -728,7 +699,7 @@ public class BrickAdapter extends BrickBaseAdapter implements DragAndDropListene
 		this.initInsertedBrick = initInsertedBrick;
 		this.positionOfInsertedBrick = position;
 
-		if (scriptCount == 0 && userBrick == null) {
+		if (scriptCount == 0) {
 			Script script = new StartScript();
 			currentSprite.addScript(script);
 			brickList.add(0, script.getScriptBrick());
@@ -994,8 +965,7 @@ public class BrickAdapter extends BrickBaseAdapter implements DragAndDropListene
 		} else {
 			items.add(context.getText(R.string.brick_context_dialog_comment_out));
 		}
-		if (!(brickList.get(itemPosition) instanceof UserBrick)
-				&& !isBrickWithoutDescription(brickList.get(itemPosition))) {
+		if (!isBrickWithoutDescription(brickList.get(itemPosition))) {
 			items.add(context.getText(R.string.brick_context_dialog_help));
 		}
 
@@ -1124,12 +1094,6 @@ public class BrickAdapter extends BrickBaseAdapter implements DragAndDropListene
 		if (brick instanceof FormulaBrick) {
 			formulaBrick = (FormulaBrick) brick;
 		}
-		if (brick instanceof UserBrick) {
-			List<UserBrickParameter> userBrickParameters = ((UserBrick) brick).getUserBrickParameters();
-			if (userBrickParameters != null && userBrickParameters.size() > 0) {
-				formulaBrick = userBrickParameters.get(0);
-			}
-		}
 
 		if (formulaBrick != null) {
 			formulaBrick.showFormulaEditorToEditFormula(view);
@@ -1138,9 +1102,6 @@ public class BrickAdapter extends BrickBaseAdapter implements DragAndDropListene
 
 	private boolean brickHasAFormula(Brick brick) {
 		boolean multiFormulaValid = false;
-		if (brick instanceof UserBrick) {
-			multiFormulaValid = ((UserBrick) brick).getFormulas().size() > 0;
-		}
 		return (brick instanceof FormulaBrick || multiFormulaValid);
 	}
 
@@ -1368,7 +1329,7 @@ public class BrickAdapter extends BrickBaseAdapter implements DragAndDropListene
 	}
 
 	private void addElementToCheckedBricks(Brick brick) {
-		if (!(checkedBricks.contains(brick)) && !(brick instanceof UserScriptDefinitionBrick)) {
+		if (!checkedBricks.contains(brick)) {
 			checkedBricks.add(brick);
 		}
 	}
@@ -1402,14 +1363,6 @@ public class BrickAdapter extends BrickBaseAdapter implements DragAndDropListene
 			reverseCheckedList.add(checkedBricks.get(counter));
 		}
 		return reverseCheckedList;
-	}
-
-	public UserBrick getUserBrick() {
-		return userBrick;
-	}
-
-	public void setUserBrick(UserBrick userBrick) {
-		this.userBrick = userBrick;
 	}
 
 	public void animateUnpackingFromBackpack(int numberOfInsertedBricks) {

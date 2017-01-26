@@ -31,7 +31,6 @@ import com.badlogic.gdx.utils.Array;
 
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.content.Sprite;
-import org.catrobat.catroid.content.bricks.UserBrick;
 import org.catrobat.catroid.formulaeditor.DataContainer;
 import org.catrobat.catroid.formulaeditor.Formula;
 import org.catrobat.catroid.formulaeditor.InterpretationException;
@@ -51,7 +50,6 @@ public class ShowTextAction extends TemporalAction {
 	private UserVariable variableToShow;
 
 	private Sprite sprite;
-	private UserBrick userBrick;
 	private ShowTextActor actor;
 
 	@Override
@@ -66,29 +64,26 @@ public class ShowTextAction extends TemporalAction {
 			Map<Sprite, List<UserVariable>> spriteVariableMap = dataContainer.getSpriteVariableMap();
 			Sprite currentSprite = sprite;
 			List<UserVariable> spriteVariableList = spriteVariableMap.get(currentSprite);
-			List<UserVariable> userBrickVariableList = dataContainer.getOrCreateVariableListForUserBrick(userBrick);
 			if (StageActivity.stageListener != null) {
 				Array<Actor> stageActors = StageActivity.stageListener.getStage().getActors();
-				ShowTextActor dummyActor = new ShowTextActor(new UserVariable("dummyActor"), 0, 0, sprite, userBrick);
+				ShowTextActor dummyActor = new ShowTextActor(new UserVariable("dummyActor"), 0, 0, sprite);
 
 				for (Actor actor : stageActors) {
 					if (actor.getClass().equals(dummyActor.getClass())) {
 						ShowTextActor showTextActor = (ShowTextActor) actor;
 						if (showTextActor.getVariableNameToCompare().equals(variableToShow.getName())
-								&& showTextActor.getSprite().equals(sprite)
-								&& (userBrick != null ? showTextActor.getUserBrick().equals(userBrick) : true)) {
+								&& showTextActor.getSprite().equals(sprite)) {
 							actor.remove();
 						}
 					}
 				}
 
-				actor = new ShowTextActor(variableToShow, xPosition, yPosition, sprite, userBrick);
+				actor = new ShowTextActor(variableToShow, xPosition, yPosition, sprite);
 				StageActivity.stageListener.addActor(actor);
 			}
 
 			setVariablesVisible(variableList);
 			setVariablesVisible(spriteVariableList);
-			setVariablesVisible(userBrickVariableList);
 		} catch (InterpretationException e) {
 			Log.d(TAG, "InterpretationException: " + e);
 		}
@@ -132,9 +127,5 @@ public class ShowTextAction extends TemporalAction {
 
 	public void setVariableToShow(UserVariable userVariable) {
 		this.variableToShow = userVariable;
-	}
-
-	public void setUserBrick(UserBrick userBrick) {
-		this.userBrick = userBrick;
 	}
 }

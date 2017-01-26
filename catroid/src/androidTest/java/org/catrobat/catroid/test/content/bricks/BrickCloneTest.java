@@ -61,7 +61,6 @@ import org.catrobat.catroid.content.bricks.SetYBrick;
 import org.catrobat.catroid.content.bricks.SpeakBrick;
 import org.catrobat.catroid.content.bricks.TurnLeftBrick;
 import org.catrobat.catroid.content.bricks.TurnRightBrick;
-import org.catrobat.catroid.content.bricks.UserBrickParameter;
 import org.catrobat.catroid.content.bricks.UserVariableBrick;
 import org.catrobat.catroid.content.bricks.VibrationBrick;
 import org.catrobat.catroid.content.bricks.WaitBrick;
@@ -183,9 +182,6 @@ public class BrickCloneTest extends AndroidTestCase {
 
 		brick = new SpeakBrick(String.valueOf(BRICK_FORMULA_VALUE));
 		brickClone(brick, Brick.BrickField.SPEAK);
-
-		brick = new UserBrickParameter(new Formula(0));
-		brickClone(brick, Brick.BrickField.USER_BRICK);
 	}
 
 	public void testVariableReferencesChangeVariableBrick() throws Exception {

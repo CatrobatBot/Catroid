@@ -61,7 +61,6 @@ import org.catrobat.catroid.ui.controller.LookController;
 import org.catrobat.catroid.ui.dialogs.NewSceneDialog;
 import org.catrobat.catroid.ui.dialogs.PlaySceneDialog;
 import org.catrobat.catroid.ui.dragndrop.BrickDragAndDropListView;
-import org.catrobat.catroid.ui.fragment.AddBrickFragment;
 import org.catrobat.catroid.ui.fragment.BackPackLookListFragment;
 import org.catrobat.catroid.ui.fragment.BackPackScriptListFragment;
 import org.catrobat.catroid.ui.fragment.BackPackSoundListFragment;
@@ -73,7 +72,6 @@ import org.catrobat.catroid.ui.fragment.NfcTagFragment;
 import org.catrobat.catroid.ui.fragment.ScriptActivityFragment;
 import org.catrobat.catroid.ui.fragment.ScriptFragment;
 import org.catrobat.catroid.ui.fragment.SoundFragment;
-import org.catrobat.catroid.ui.fragment.UserBrickElementEditorFragment;
 
 import java.util.concurrent.locks.Lock;
 
@@ -82,7 +80,6 @@ public class ScriptActivity extends BaseActivity {
 	public static final int FRAGMENT_LOOKS = 1;
 	public static final int FRAGMENT_SOUNDS = 2;
 	public static final int FRAGMENT_NFCTAGS = 3;
-	public static final int USERBRICKS_PROTOTYPE_VIEW = 4;
 
 	public static final String EXTRA_FRAGMENT_POSITION = "org.catrobat.catroid.ui.fragmentPosition";
 
@@ -107,8 +104,6 @@ public class ScriptActivity extends BaseActivity {
 	public static final String ACTION_NFCTAGS_LIST_INIT = "org.catrobat.catroid.NFCTAGS_LIST_INIT";
 	public static final String ACTION_VARIABLE_DELETED = "org.catrobat.catroid.VARIABLE_DELETED";
 	public static final String ACTION_USERLIST_DELETED = "org.catrobat.catroid.USERLIST_DELETED";
-	public static final String ACTION_SCRIPT_GROUP_DELETED = "org.catrobat.catroid.SCRIPTGROUP_DELETED";
-	public static final String ACTION_USERBRICK_GROUP_DELETED = "org.catrobat.catroid.USERBRICKGROUP_DELETED";
 	public static final String ACTION_SPRITE_DELETED = "org.catrobat.catroid.SPRITE_DELETED";
 	public static final String ACTION_SPRITE_TOUCH_ACTION_UP = "org.catrobat.catroid.SPRITE_TOUCH_ACTION_UP";
 	public static final String ACTION_LOOK_TOUCH_ACTION_UP = "org.catrobat.catroid.LOOK_TOUCH_ACTION_UP";
@@ -399,11 +394,7 @@ public class ScriptActivity extends BaseActivity {
 		} else if (currentFragment == soundFragment) {
 			intent.putExtra(BackPackActivity.EXTRA_FRAGMENT_POSITION, FRAGMENT_SOUNDS);
 		} else if (currentFragment == scriptFragment) {
-			if (scriptFragment.isInUserBrickOverview()) {
-				intent.putExtra(BackPackActivity.EXTRA_FRAGMENT_POSITION, USERBRICKS_PROTOTYPE_VIEW);
-			} else {
-				intent.putExtra(BackPackActivity.EXTRA_FRAGMENT_POSITION, FRAGMENT_SCRIPTS);
-			}
+			intent.putExtra(BackPackActivity.EXTRA_FRAGMENT_POSITION, FRAGMENT_SCRIPTS);
 		}
 		startActivity(intent);
 	}
@@ -417,14 +408,8 @@ public class ScriptActivity extends BaseActivity {
 
 		switch (currentFragmentPosition) {
 			case FRAGMENT_SCRIPTS:
-				if (scriptFragment.isInUserBrickOverview()) {
-					numberOfItemsInBackpack = BackPackListManager.getInstance().getBackPackedUserBricks().size();
-					Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
-					numberOfItemsInAdapter = currentSprite.getUserBrickList().size();
-				} else {
-					numberOfItemsInBackpack = BackPackListManager.getInstance().getBackPackedScripts().size();
-					numberOfItemsInAdapter = ((ScriptFragment) currentFragment).getAdapter().getCount();
-				}
+				numberOfItemsInBackpack = BackPackListManager.getInstance().getBackPackedScripts().size();
+				numberOfItemsInAdapter = ((ScriptFragment) currentFragment).getAdapter().getCount();
 				break;
 			case FRAGMENT_LOOKS:
 				numberOfItemsInBackpack = BackPackListManager.getInstance().getBackPackedLooks().size();
@@ -496,12 +481,6 @@ public class ScriptActivity extends BaseActivity {
 			}
 		}
 
-		String tag1 = UserBrickElementEditorFragment.BRICK_DATA_EDITOR_FRAGMENT_TAG;
-		UserBrickElementEditorFragment fragment = (UserBrickElementEditorFragment) fragmentManager.findFragmentByTag(tag1);
-		if (fragment != null && fragment.isVisible()) {
-			return fragment.onKey(null, keyCode, event);
-		}
-
 		FormulaEditorDataFragment formulaEditorDataFragment = (FormulaEditorDataFragment) getFragmentManager()
 				.findFragmentByTag(FormulaEditorDataFragment.USER_DATA_TAG);
 
@@ -545,10 +524,6 @@ public class ScriptActivity extends BaseActivity {
 		if (keyCode == KeyEvent.KEYCODE_BACK && currentFragmentPosition == FRAGMENT_SCRIPTS) {
 			if (scriptFragment.getAdapter().getActionMode() == BrickAdapter.ActionModeEnum.BACKPACK) {
 				scriptFragment.getAdapter().setActionMode(BrickAdapter.ActionModeEnum.NO_ACTION);
-			}
-			AddBrickFragment addBrickFragment = (AddBrickFragment) getFragmentManager().findFragmentByTag(AddBrickFragment.ADD_BRICK_FRAGMENT_TAG);
-			if (addBrickFragment == null || !addBrickFragment.isVisible()) {
-				scriptFragment.setBackpackMenuIsVisible(true);
 			}
 
 			BrickDragAndDropListView listView = scriptFragment.getListView();

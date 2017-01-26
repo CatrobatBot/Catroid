@@ -493,7 +493,6 @@
 
     <!-- Brick context dialog -->
     <string name="brick_context_dialog_move_brick">Move Brick</string>
-    <string name="brick_context_dialog_show_source">Show Source Brick</string>
     <string name="brick_context_dialog_delete_brick">Delete Brick</string>
     <string name="brick_context_dialog_copy_brick">Copy Brick</string>
     <string name="brick_context_dialog_animate_bricks">Animate Brick-Parts</string>
@@ -640,7 +639,6 @@
     <string name="category_sound">Sound</string>
     <string name="category_control">Control</string>
     <string name="category_event">Event</string>
-    <string name="category_user_bricks">My Bricks</string>
     <string name="category_data">Data</string>
     <string name="category_lego_nxt">Lego NXT</string>
     <string name="category_lego_ev3">Lego EV3</string>
@@ -937,7 +935,6 @@
     <!-- Error messages -->
     <string name="error_no_writiable_external_storage_available">Pocket Code requires writable external storage like a SD card in order to run, but none was found.\nYou can fix this by making the external storage writable or inserting a SD card, then try again.</string>
     <string name="error_no_program_name_entered">Please enter a program name.</string>
-    <string name="error_no_userbrick_name_entered">Please enter a brick name.</string>
     <string name="error_project_exists">Please choose another program name.</string>
     <string name="error_scene_exists">Please choose another scene name.</string>
     <string name="error_scene_not_deleted">An error occurred while deleting a scene.</string>
@@ -1431,26 +1428,11 @@
     <!--  -->
 
     <!-- Brick Data Editor Strings -->
-    <string name="brick_data_editor_title">Brick editor</string>
-    <string name="separator">|</string>
-    <string name="add_text">Add text</string>
-    <string name="edit_text">Edit text</string>
-    <string name="text_hint">Brick text</string>
-    <string name="add_variable">Add variable</string>
-    <string name="add_line_break">Add line break</string>
-    <string name="edit_variable">Edit variable</string>
-    <string name="variable_hint">Variable name</string>
     <string name="brick_show_variable">Show variable</string>
     <string name="brick_show_variable_position">"at "</string>
     <string name="brick_hide_variable">Hide variable</string>
     <!-- -->
 
-    <!-- User Bricks strings -->
-    <string name="define">Define</string>
-    <string name="new_user_brick">New Brick</string>
-    <string name="new_user_brick_variable">Variable</string>
-    <string name="new_user_brick_name">Please choose a brick name:</string>
-    <string name="recursive_user_brick_forbidden">Adding UserBrick to UserBrick is not allowed yet!</string>
 
     <!-- Merge strings -->
     <string name="merge_button">Merge with</string>

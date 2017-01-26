@@ -36,7 +36,6 @@ import org.catrobat.catroid.content.bricks.FormulaBrick;
 import org.catrobat.catroid.content.bricks.PointToBrick;
 import org.catrobat.catroid.content.bricks.SceneStartBrick;
 import org.catrobat.catroid.content.bricks.SceneTransitionBrick;
-import org.catrobat.catroid.content.bricks.UserBrick;
 import org.catrobat.catroid.content.bricks.UserListBrick;
 import org.catrobat.catroid.content.bricks.UserVariableBrick;
 import org.catrobat.catroid.formulaeditor.DataContainer;
@@ -138,11 +137,6 @@ public class Scene implements Serializable {
 		ProjectManager.getInstance().setCurrentScene(this);
 		for (Sprite sprite : spriteList) {
 			Sprite cloneSprite = sprite.cloneForScene();
-			for (UserBrick userBrick : cloneSprite.getUserBrickList()) {
-				ProjectManager.getInstance().setCurrentScene(clonedScene);
-				userBrick.updateUserBrickParametersAndVariables();
-				ProjectManager.getInstance().setCurrentScene(this);
-			}
 			clonedScene.spriteList.add(cloneSprite);
 		}
 
@@ -198,9 +192,6 @@ public class Scene implements Serializable {
 		for (String variable : variables) {
 			if (dataContainer.existVariableInAnySprite(variable, spriteList)) {
 				return false;
-			}
-			if (!dataContainer.existProjectVariableWithName(variable) && !dataContainer.existUserVariableWithName(variable)) {
-				dataContainer.addProjectUserVariable(variable);
 			}
 		}
 
@@ -352,14 +343,6 @@ public class Scene implements Serializable {
 
 				for (int brickIndex = 0; brickIndex < currentScript.getBrickList().size(); brickIndex++) {
 					Brick currentBrick = currentScript.getBrick(brickIndex);
-					if (currentBrick instanceof BroadcastMessage) {
-						addBroadcastMessage(((BroadcastMessage) currentBrick).getBroadcastMessage(), usedMessages);
-					}
-				}
-			}
-			for (UserBrick userBrick : currentSprite.getUserBrickList()) {
-				Script userScript = userBrick.getDefinitionBrick().getUserScript();
-				for (Brick currentBrick : userScript.getBrickList()) {
 					if (currentBrick instanceof BroadcastMessage) {
 						addBroadcastMessage(((BroadcastMessage) currentBrick).getBroadcastMessage(), usedMessages);
 					}

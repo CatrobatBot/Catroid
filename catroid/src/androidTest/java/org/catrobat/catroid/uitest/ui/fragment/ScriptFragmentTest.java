@@ -49,7 +49,6 @@ import org.catrobat.catroid.content.bricks.ForeverBrick;
 import org.catrobat.catroid.content.bricks.LoopEndBrick;
 import org.catrobat.catroid.content.bricks.SetVariableBrick;
 import org.catrobat.catroid.content.bricks.ShowBrick;
-import org.catrobat.catroid.content.bricks.UserBrick;
 import org.catrobat.catroid.formulaeditor.DataContainer;
 import org.catrobat.catroid.formulaeditor.UserList;
 import org.catrobat.catroid.formulaeditor.UserVariable;
@@ -945,20 +944,6 @@ public class ScriptFragmentTest extends BaseActivityInstrumentationTestCase<Main
 				TIME_TO_WAIT_BACKPACK));
 	}
 
-	public void testBackPackMultipleUnpackingVariablesWithSameName() {
-		UiTestUtils.createTestProjectWithUserVariablesAndUserBrick();
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
-		checkNumberOfElementsInDataContainer();
-
-		backPackFirstScriptWithContextMenu(DEFAULT_SCRIPT_GROUP_NAME);
-		assertTrue("Script wasn't backpacked!", solo.waitForText(DEFAULT_SCRIPT_GROUP_NAME, 0, TIME_TO_WAIT_BACKPACK));
-		unpackScriptGroup(DEFAULT_SCRIPT_GROUP_NAME, unpack);
-		solo.waitForFragmentByTag(ScriptFragment.TAG);
-		solo.sleep(500);
-
-		checkNumberOfElementsInDataContainer();
-	}
-
 	public void testBackPackAndUnPackFromDifferentProgrammes() {
 		UiTestUtils.createTestProject(UiTestUtils.PROJECTNAME1);
 		UiTestUtils.createTestProject();
@@ -1425,38 +1410,6 @@ public class ScriptFragmentTest extends BaseActivityInstrumentationTestCase<Main
 		assertTrue("Sprite was not unpacked!", solo.waitForText("dog", 1, TIME_TO_WAIT_BACKPACK));
 	}
 
-	public void testBackPackScriptWithUserBrick() {
-		UiTestUtils.createTestProjectWithUserBrick();
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
-
-		backPackFirstScriptWithContextMenu(DEFAULT_SCRIPT_GROUP_NAME);
-		assertTrue("Script wasn't backpacked!", solo.waitForText(DEFAULT_SCRIPT_GROUP_NAME, 0, TIME_TO_WAIT_BACKPACK));
-		solo.goBack();
-		solo.goBack();
-		solo.goBack();
-		solo.clickOnText(SECOND_SPRITE_NAME);
-		solo.clickOnText(solo.getString(R.string.scripts));
-		solo.sleep(TIME_TO_WAIT_BACKPACK);
-
-		int numberOfBricksInBrickList = ProjectManager.getInstance().getCurrentSprite().getNumberOfBricks();
-
-		UiTestUtils.openBackPackFromEmptyAdapter(solo);
-		solo.sleep(TIME_TO_WAIT_BACKPACK);
-		clickOnContextMenuItem(DEFAULT_SCRIPT_GROUP_NAME, unpack);
-		solo.waitForDialogToClose(TIME_TO_WAIT_BACKPACK);
-		solo.sleep(TIME_TO_WAIT_BACKPACK);
-
-		assertEquals("Brick count in current sprite not correct", numberOfBricksInBrickList + 7,
-				ProjectManager.getInstance().getCurrentSprite().getNumberOfBricks());
-		assertEquals("UserBrick prototype count in current sprite not correct", 1,
-				ProjectManager.getInstance().getCurrentSprite().getUserBrickList().size());
-
-		UiTestUtils.getIntoUserBrickOverView(solo);
-		assertTrue("No UserBrick was unpacked!", solo.waitForText(UiTestUtils.TEST_USER_BRICK_NAME, 0,
-				TIME_TO_WAIT_BACKPACK, false,
-				true));
-	}
-
 	public void testBackPackScriptGroupWithSameName() {
 		UiTestUtils.createTestProject();
 		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
@@ -1616,18 +1569,5 @@ public class ScriptFragmentTest extends BaseActivityInstrumentationTestCase<Main
 	private void checkIfNumberOfBricksIsEqualInBackPack(int expectedNumber) {
 		int currentNumberOfScriptGroups = BackPackListManager.getInstance().getBackPackedScriptGroups().size();
 		assertEquals("Number of script groups is not as expected", expectedNumber, currentNumberOfScriptGroups);
-	}
-
-	private void checkNumberOfElementsInDataContainer() {
-		DataContainer dataContainer = ProjectManager.getInstance().getCurrentScene().getDataContainer();
-		Sprite sprite = ProjectManager.getInstance().getCurrentSprite();
-		UserBrick userBrick = ProjectManager.getInstance().getCurrentUserBrick();
-
-		assertTrue("There is not exactly one global variable in the data container!",
-				dataContainer.getProjectVariables().size() == 1);
-		assertTrue("There is not exactly one sprite variable in the data container!",
-				dataContainer.getVariableListForSprite(sprite).size() == 1);
-		assertTrue("There is not exactly one userbrick variable in the data container!",
-				dataContainer.getOrCreateVariableListForUserBrick(userBrick).size() == 1);
 	}
 }

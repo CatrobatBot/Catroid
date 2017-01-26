@@ -927,35 +927,6 @@ public class SpritesListFragmentTest extends BaseActivityInstrumentationTestCase
 		assertTrue("Sprite from PointToBrick was not unpacked!", solo.waitForText("dog", 1, TIME_TO_WAIT_BACKPACK));
 	}
 
-	public void testBackPackSpriteWithUserBrick() {
-		solo.goBack();
-		UiTestUtils.createTestProjectWithUserBrick();
-		solo.clickOnText(continueMenu);
-		solo.waitForActivity(ProjectActivity.class);
-		solo.waitForFragmentByTag(SpritesListFragment.TAG);
-
-		SpriteAdapter adapter = getSpriteAdapter();
-		assertNotNull("Could not get Adapter", adapter);
-		clickOnActionModeSingleItem(SPRITE_NAME_BACKGROUND, R.string.backpack, R.id.backpack);
-		solo.sleep(TIME_TO_WAIT_BACKPACK);
-		switchToProgrammeBackgroundFromBackpack(UiTestUtils.PROJECTNAME1);
-
-		UiTestUtils.openBackPack(solo);
-		solo.sleep(TIME_TO_WAIT_BACKPACK);
-		clickOnBackPackItem(SPRITE_NAME_BACKGROUND, unpackAsObject);
-		solo.waitForDialogToClose(TIME_TO_WAIT_BACKPACK);
-		assertTrue("Sprite wasn't unpacked!", solo.waitForText(SPRITE_NAME_BACKGROUND, 0,
-				TIME_TO_WAIT_BACKPACK, false, true));
-
-		solo.clickOnText(SPRITE_NAME_BACKGROUND);
-		solo.clickOnText(solo.getString(R.string.scripts));
-		solo.waitForActivity(ScriptActivity.class);
-		solo.waitForFragmentByTag(ScriptFragment.TAG);
-		UiTestUtils.getIntoUserBrickOverView(solo);
-		assertTrue("No UserBrick was unpacked!", solo.waitForText(UiTestUtils.TEST_USER_BRICK_NAME, 0,
-				TIME_TO_WAIT_BACKPACK, false, true));
-	}
-
 	public void testBackPackAlreadyPackedDialogSingleItem() {
 		packSingleItem(SPRITE_NAME, true);
 		solo.sleep(TIME_TO_WAIT_BACKPACK);

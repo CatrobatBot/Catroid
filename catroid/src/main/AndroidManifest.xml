@@ -189,10 +189,6 @@
             android:name=".ui.ScriptActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.UserBrickScriptActivity"
-
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.MyProjectsActivity"
             android:noHistory="false"
 

@@ -187,11 +187,7 @@ import org.catrobat.catroid.content.bricks.ThinkBubbleBrick;
 import org.catrobat.catroid.content.bricks.ThinkForBubbleBrick;
 import org.catrobat.catroid.content.bricks.TurnLeftBrick;
 import org.catrobat.catroid.content.bricks.TurnRightBrick;
-import org.catrobat.catroid.content.bricks.UserBrick;
-import org.catrobat.catroid.content.bricks.UserBrickParameter;
 import org.catrobat.catroid.content.bricks.UserListBrick;
-import org.catrobat.catroid.content.bricks.UserScriptDefinitionBrick;
-import org.catrobat.catroid.content.bricks.UserScriptDefinitionBrickElement;
 import org.catrobat.catroid.content.bricks.UserVariableBrick;
 import org.catrobat.catroid.content.bricks.VibrationBrick;
 import org.catrobat.catroid.content.bricks.WaitBrick;
@@ -462,8 +458,6 @@ public final class StorageHandler {
 		xstream.alias("brick", SayForBubbleBrick.class);
 		xstream.alias("brick", TurnLeftBrick.class);
 		xstream.alias("brick", TurnRightBrick.class);
-		xstream.alias("brick", UserBrick.class);
-		xstream.alias("brick", UserScriptDefinitionBrick.class);
 		xstream.alias("brick", VibrationBrick.class);
 		xstream.alias("brick", WaitBrick.class);
 		xstream.alias("brick", WaitUntilBrick.class);
@@ -509,9 +503,6 @@ public final class StorageHandler {
 		xstream.alias("brick", RaspiSendDigitalValueBrick.class);
 		xstream.alias("brick", RaspiIfLogicBeginBrick.class);
 		xstream.alias("brick", RaspiPwmBrick.class);
-
-		xstream.alias("userBrickElement", UserScriptDefinitionBrickElement.class);
-		xstream.alias("userBrickParameter", UserBrickParameter.class);
 
 		// Physics Script
 		xstream.alias("script", CollisionScript.class);

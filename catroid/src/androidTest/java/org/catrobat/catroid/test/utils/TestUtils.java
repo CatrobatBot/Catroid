@@ -53,8 +53,6 @@ import org.catrobat.catroid.content.bricks.IfLogicElseBrick;
 import org.catrobat.catroid.content.bricks.IfLogicEndBrick;
 import org.catrobat.catroid.content.bricks.SetVariableBrick;
 import org.catrobat.catroid.content.bricks.ShowBrick;
-import org.catrobat.catroid.content.bricks.UserBrick;
-import org.catrobat.catroid.content.bricks.UserScriptDefinitionBrick;
 import org.catrobat.catroid.exceptions.ProjectException;
 import org.catrobat.catroid.formulaeditor.Formula;
 import org.catrobat.catroid.formulaeditor.FormulaElement;
@@ -339,13 +337,6 @@ public final class TestUtils {
 		}
 
 		notificationMap.clear();
-	}
-
-	public static Script addUserBrickToSpriteAndGetUserScript(UserBrick userBrick, Sprite sprite) {
-		UserScriptDefinitionBrick definitionBrick = (UserScriptDefinitionBrick) Reflection.getPrivateField(userBrick,
-				"definitionBrick");
-		sprite.addUserBrick(userBrick);
-		return definitionBrick.getScriptSafe();
 	}
 
 	public static void removeFromPreferences(Context context, String key) {

@@ -29,9 +29,6 @@ import org.catrobat.catroid.R;
 import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.Sprite;
-import org.catrobat.catroid.content.bricks.UserBrick;
-import org.catrobat.catroid.content.bricks.UserScriptDefinitionBrickElement;
-import org.catrobat.catroid.ui.UserBrickScriptActivity;
 import org.catrobat.catroid.ui.adapter.DataAdapter;
 
 import java.util.ArrayList;
@@ -45,7 +42,6 @@ import java.util.Map;
 public class DataContainer extends BaseDataContainer {
 	public static final transient int USER_VARIABLE_SPRITE = 0;
 	public static final transient int USER_VARIABLE_PROJECT = 1;
-	public static final transient int USER_VARIABLE_USERBRICK = 2;
 	public static final transient int USER_LIST_SPRITE = 4;
 	public static final transient int USER_LIST_PROJECT = 5;
 	public static final transient int USER_DATA_EMPTY = 6;
@@ -102,9 +98,7 @@ public class DataContainer extends BaseDataContainer {
 		if (container.spriteVariables != null) {
 			spriteVariables = container.spriteVariables;
 		}
-		if (container.userBrickVariables != null) {
-			userBrickVariables = container.userBrickVariables;
-		}
+
 		if (container.spriteListOfLists != null) {
 			spriteListOfLists = container.spriteListOfLists;
 		}
@@ -154,18 +148,6 @@ public class DataContainer extends BaseDataContainer {
 				userBrickVariables);
 	}
 
-	public DataAdapter createDataAdapter(Context context, UserBrick userBrick, Sprite sprite) {
-		List<UserVariable> userBrickVariables;
-		if (userBrick == null || !(context instanceof UserBrickScriptActivity)) {
-			userBrickVariables = new LinkedList<>();
-		} else {
-			userBrickVariables = getOrCreateVariableListForUserBrick(userBrick);
-		}
-		List<UserVariable> spriteVariables = getOrCreateVariableListForSprite(sprite);
-		List<UserList> spriteUserList = getOrCreateUserListListForSprite(sprite);
-		return new DataAdapter(context, spriteUserList, getProjectLists(), spriteVariables, getProjectVariables(), userBrickVariables);
-	}
-
 	public UserVariable getUserVariable(String userVariableName, Sprite sprite) {
 		UserVariable userVariable;
 		userVariable = findUserVariable(userVariableName, getOrCreateVariableListForSprite(sprite));
@@ -173,10 +155,6 @@ public class DataContainer extends BaseDataContainer {
 			userVariable = findUserVariable(userVariableName, getProjectVariables());
 		}
 
-		UserBrick userBrick = getCurrentUserBrick();
-		if (userVariable == null && userBrick != null) {
-			userVariable = findUserVariable(userVariableName, getOrCreateVariableListForUserBrick(userBrick));
-		}
 		return userVariable;
 	}
 
@@ -222,33 +200,6 @@ public class DataContainer extends BaseDataContainer {
 			spriteListOfLists.put(sprite, lists);
 		}
 		return addedUserList;
-	}
-
-	public UserVariable addUserBrickVariableToUserBrickIfNotExists(UserBrick userBrick, String userVariableName, Object userVariableValue) {
-		List<UserVariable> varList = getOrCreateVariableListForUserBrick(userBrick);
-		UserVariable userVariableToAdd = null;
-
-		for (UserVariable existingVariable : varList) {
-			if (existingVariable.getName().equals(userVariableName)) {
-				userVariableToAdd = existingVariable;
-				break;
-			}
-		}
-
-		if (userVariableToAdd == null) {
-			userVariableToAdd = new UserVariable(userVariableName, userVariableValue);
-			varList.add(userVariableToAdd);
-		}
-
-		return userVariableToAdd;
-	}
-
-	public UserVariable addUserBrickVariableToUserBrick(UserBrick userBrick, String userVariableName,
-			Object userVariableValue) {
-		List<UserVariable> varList = getOrCreateVariableListForUserBrick(userBrick);
-		UserVariable userVariableToAdd = new UserVariable(userVariableName, userVariableValue);
-		varList.add(userVariableToAdd);
-		return userVariableToAdd;
 	}
 
 	public UserVariable addSpriteUserVariable(String userVariableName) {
@@ -299,22 +250,11 @@ public class DataContainer extends BaseDataContainer {
 	 */
 	public void deleteUserVariableByName(String userVariableName) {
 		Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
-		UserBrick userBrick = getCurrentUserBrick();
-		List<UserVariable> context = getUserVariableContext(userVariableName, userBrick, currentSprite);
+		List<UserVariable> context = getUserVariableContext(userVariableName, currentSprite);
 		if (context != null) {
 			UserVariable variableToDelete = findUserVariable(userVariableName, context);
 			if (variableToDelete != null) {
 				context.remove(variableToDelete);
-				if (userBrick != null) {
-					List<UserScriptDefinitionBrickElement> currentElements = userBrick.getUserScriptDefinitionBrickElements();
-					for (int id = 0; id < currentElements.size(); id++) {
-						if (currentElements.get(id).getText().equals(userVariableName) && currentElements.get(id).isVariable()) {
-							Context brickContext = userBrick.getDefinitionBrick().view.getContext();
-							userBrick.getDefinitionBrick().removeVariablesInFormulas(currentElements.get(id).getText(), brickContext);
-							currentElements.remove(id);
-						}
-					}
-				}
 			}
 		}
 	}
@@ -349,10 +289,6 @@ public class DataContainer extends BaseDataContainer {
 	public void removeVariableListForSprite(Sprite sprite) {
 		spriteVariables.remove(sprite);
 		spriteListOfLists.remove(sprite);
-
-		for (UserBrick userBrick : sprite.getUserBrickList()) {
-			userBrickVariables.remove(userBrick);
-		}
 	}
 
 	public List<UserVariable> getVariableListForSprite(Sprite sprite) {
@@ -372,31 +308,18 @@ public class DataContainer extends BaseDataContainer {
 		spriteVariables.remove(sprite);
 	}
 
-	public UserVariable getUserVariable(String name, UserBrick userBrick, Sprite currentSprite) {
-		List<UserVariable> contextList = getUserVariableContext(name, userBrick, currentSprite);
-		return findUserVariable(name, contextList);
-	}
-
 	/**
 	 * This function finds the user variable with userVariableName in the current context.
 	 *
 	 * The current context consists of all global variables, the sprite variables for the current sprite,
 	 * and the user brick variables for the current user brick.
 	 */
-	public List<UserVariable> getUserVariableContext(String name, UserBrick userBrick, Sprite currentSprite) {
+	public List<UserVariable> getUserVariableContext(String name, Sprite currentSprite) {
 		UserVariable variableToReturn;
 		List<UserVariable> spriteVariables = getOrCreateVariableListForSprite(currentSprite);
 		variableToReturn = findUserVariable(name, spriteVariables);
 		if (variableToReturn != null) {
 			return spriteVariables;
-		}
-
-		if (userBrick != null) {
-			List<UserVariable> userBrickVariables = getOrCreateVariableListForUserBrick(userBrick);
-			variableToReturn = findUserVariable(name, userBrickVariables);
-			if (variableToReturn != null) {
-				return userBrickVariables;
-			}
 		}
 
 		variableToReturn = findUserVariable(name, getProjectVariables());
@@ -641,17 +564,6 @@ public class DataContainer extends BaseDataContainer {
 		return false;
 	}
 
-	public boolean existUserVariableWithName(String name) {
-		for (List<UserVariable> variables : userBrickVariables.values()) {
-			for (UserVariable variable : variables) {
-				if (variable.getName().equals(name)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
 	public Integer getTypeOfUserVariable(String userVariableName, Sprite sprite) {
 		UserVariable userVariable;
 		userVariable = findUserVariable(userVariableName, getOrCreateVariableListForSprite(sprite));
@@ -662,13 +574,7 @@ public class DataContainer extends BaseDataContainer {
 		if (userVariable != null) {
 			return USER_VARIABLE_PROJECT;
 		}
-		UserBrick userBrick = getCurrentUserBrick();
-		if (userBrick != null) {
-			userVariable = findUserVariable(userVariableName, getOrCreateVariableListForUserBrick(userBrick));
-			if (userVariable != null) {
-				return USER_VARIABLE_USERBRICK;
-			}
-		}
+
 		return USER_VARIABLE_PROJECT;
 	}
 
@@ -689,32 +595,6 @@ public class DataContainer extends BaseDataContainer {
 		return spriteListOfLists.get(sprite);
 	}
 
-	public UserBrick getCurrentUserBrick() {
-		return ProjectManager.getInstance().getCurrentUserBrick();
-	}
-
-	public void deleteUserVariableFromUserBrick(UserBrick userBrick, String userVariableName) {
-		List<UserVariable> context = userBrickVariables.get(userBrick);
-		UserVariable variableToDelete = findUserVariable(userVariableName, context);
-		if (variableToDelete != null) {
-			context.remove(variableToDelete);
-		}
-	}
-
-	public List<UserVariable> getOrCreateVariableListForUserBrick(UserBrick userBrick) {
-		if (userBrick == null) {
-			return new ArrayList<>();
-		}
-		List<UserVariable> variables = userBrickVariables.get(userBrick);
-
-		if (variables == null) {
-			variables = new ArrayList<>();
-			userBrickVariables.put(userBrick, variables);
-		}
-
-		return variables;
-	}
-
 	public String getUniqueVariableName(Context context) {
 		Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
 		String name = context.getResources().getString(R.string.new_user_brick_variable).trim();
@@ -730,9 +610,5 @@ public class DataContainer extends BaseDataContainer {
 		name = originalName + " " + variableCounter;
 
 		return name;
-	}
-
-	public void setUserBrickVariables(UserBrick key, List<UserVariable> userVariables) {
-		userBrickVariables.put(key, userVariables);
 	}
 }

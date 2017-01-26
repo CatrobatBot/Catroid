@@ -34,11 +34,9 @@ import org.catrobat.catroid.content.bricks.LoopBeginBrick;
 import org.catrobat.catroid.content.bricks.LoopEndBrick;
 import org.catrobat.catroid.content.bricks.NestingBrick;
 import org.catrobat.catroid.content.bricks.ScriptBrick;
-import org.catrobat.catroid.content.bricks.UserBrick;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public abstract class Script implements Serializable {
@@ -110,39 +108,12 @@ public abstract class Script implements Serializable {
 	public void addBrick(Brick brick) {
 		if (brick != null) {
 			brickList.add(brick);
-			updateUserBricksIfNecessary(brick);
 		}
 	}
 
 	public void addBrick(int position, Brick brick) {
 		if (brick != null) {
 			brickList.add(position, brick);
-			updateUserBricksIfNecessary(brick);
-		}
-	}
-
-	private void updateUserBricksIfNecessary(Brick brick) {
-		if (brick instanceof UserBrick) {
-			UserBrick userBrick = (UserBrick) brick;
-			userBrick.updateUserBrickParametersAndVariables();
-		}
-	}
-
-	public void removeInstancesOfUserBrick(UserBrick userBrickToRemove) {
-
-		LinkedList<Brick> toRemove = new LinkedList<>();
-
-		for (Brick brick : brickList) {
-			if (brick instanceof UserBrick) {
-				UserBrick userBrick = (UserBrick) brick;
-				if (userBrick.getDefinitionBrick() == userBrickToRemove.getDefinitionBrick()) {
-					toRemove.add(brick);
-				}
-			}
-		}
-
-		for (Brick brick : toRemove) {
-			brickList.remove(brick);
 		}
 	}
 

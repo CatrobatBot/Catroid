@@ -31,7 +31,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.content.Sprite;
-import org.catrobat.catroid.content.bricks.UserBrick;
 import org.catrobat.catroid.formulaeditor.DataContainer;
 import org.catrobat.catroid.formulaeditor.UserVariable;
 
@@ -48,18 +47,16 @@ public class ShowTextActor extends Actor {
 	private String variableValueWithoutDecimal;
 
 	private Sprite sprite;
-	private UserBrick userBrick;
 	private float scale = 3f;
 	private BitmapFont font;
 
-	public ShowTextActor(UserVariable userVariable, int xPosition, int yPosition, Sprite sprite, UserBrick userBrick) {
+	public ShowTextActor(UserVariable userVariable, int xPosition, int yPosition, Sprite sprite) {
 		this.variableToShow = userVariable;
 		this.variableNameToCompare = variableToShow.getName();
 		this.variableValueWithoutDecimal = null;
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
 		this.sprite = sprite;
-		this.userBrick = userBrick;
 		init();
 	}
 
@@ -70,11 +67,9 @@ public class ShowTextActor extends Actor {
 		List<UserVariable> projectVariableList = dataContainer.getProjectVariables();
 		Map<Sprite, List<UserVariable>> spriteVariableMap = dataContainer.getSpriteVariableMap();
 		List<UserVariable> spriteVariableList = spriteVariableMap.get(sprite);
-		List<UserVariable> userBrickVariableList = dataContainer.getOrCreateVariableListForUserBrick(userBrick);
 
 		drawVariables(projectVariableList, batch);
 		drawVariables(spriteVariableList, batch);
-		drawVariables(userBrickVariableList, batch);
 	}
 
 	private void drawVariables(List<UserVariable> variableList, Batch batch) {
@@ -138,9 +133,5 @@ public class ShowTextActor extends Actor {
 
 	public Sprite getSprite() {
 		return sprite;
-	}
-
-	public UserBrick getUserBrick() {
-		return userBrick;
 	}
 }

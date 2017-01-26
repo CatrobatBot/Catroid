@@ -27,7 +27,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.content.Sprite;
-import org.catrobat.catroid.content.bricks.UserBrick;
 import org.catrobat.catroid.formulaeditor.DataContainer;
 import org.catrobat.catroid.formulaeditor.UserVariable;
 
@@ -39,7 +38,6 @@ public class HideTextAction extends TemporalAction {
 	private UserVariable variableToHide;
 
 	private Sprite sprite;
-	private UserBrick userBrick;
 
 	@Override
 	protected void begin() {
@@ -53,10 +51,6 @@ public class HideTextAction extends TemporalAction {
 		if (sprite != null) {
 			List<UserVariable> spriteVariableList = spriteVariableMap.get(sprite);
 			setVariablesVisible(spriteVariableList);
-		}
-		if (userBrick != null) {
-			List<UserVariable> userBrickVariableList = dataContainer.getOrCreateVariableListForUserBrick(userBrick);
-			setVariablesVisible(userBrickVariableList);
 		}
 	}
 
@@ -78,10 +72,6 @@ public class HideTextAction extends TemporalAction {
 
 	public void setVariableToHide(UserVariable userVariable) {
 		this.variableToHide = userVariable;
-	}
-
-	public void setUserBrick(UserBrick userBrick) {
-		this.userBrick = userBrick;
 	}
 
 	public void setSprite(Sprite sprite) {
