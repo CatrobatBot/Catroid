@@ -55,13 +55,11 @@ import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.Sprite;
-import org.catrobat.catroid.content.bricks.UserBrick;
 import org.catrobat.catroid.formulaeditor.DataContainer;
 import org.catrobat.catroid.formulaeditor.UserList;
 import org.catrobat.catroid.formulaeditor.UserVariable;
 import org.catrobat.catroid.ui.BottomBar;
 import org.catrobat.catroid.ui.ScriptActivity;
-import org.catrobat.catroid.ui.UserBrickScriptActivity;
 import org.catrobat.catroid.ui.adapter.DataAdapter;
 import org.catrobat.catroid.ui.dialogs.NewDataDialog;
 import org.catrobat.catroid.ui.dialogs.NewDataDialog.NewUserListDialogListener;
@@ -114,9 +112,6 @@ public class FormulaEditorDataFragment extends ListFragment implements Dialog.On
 		if (!inContextMode) {
 			super.onCreateContextMenu(menu, view, menuInfo);
 			getActivity().getMenuInflater().inflate(R.menu.context_menu_formulaeditor_userlist, menu);
-			boolean visible = !(getActivity() instanceof UserBrickScriptActivity);
-			menu.findItem(R.id.context_formula_editor_userlist_delete).setVisible(visible);
-			menu.findItem(R.id.context_formula_editor_userlist_rename).setVisible(visible);
 		}
 	}
 
@@ -131,8 +126,6 @@ public class FormulaEditorDataFragment extends ListFragment implements Dialog.On
 		for (int index = 0; index < menu.size(); index++) {
 			menu.getItem(index).setVisible(false);
 		}
-		boolean deleteVisible = !(getActivity() instanceof UserBrickScriptActivity);
-		menu.findItem(R.id.formula_editor_data_item_delete).setVisible(deleteVisible);
 
 		getActivity().getActionBar().setDisplayShowTitleEnabled(true);
 		getActivity().getActionBar().setTitle(actionBarTitle);
@@ -319,9 +312,8 @@ public class FormulaEditorDataFragment extends ListFragment implements Dialog.On
 	private void initializeDataAdapter() {
 		Scene currentScene = ProjectManager.getInstance().getCurrentScene();
 		Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
-		UserBrick currentUserBrick = ProjectManager.getInstance().getCurrentUserBrick();
 		DataContainer dataContainer = currentScene.getDataContainer();
-		adapter = dataContainer.createDataAdapter(getActivity(), currentUserBrick, currentSprite);
+		adapter = dataContainer.createDataAdapter(getActivity(), currentSprite);
 		setListAdapter(adapter);
 		adapter.setOnCheckedChangeListener(this);
 		adapter.setOnListItemClickListener(this);

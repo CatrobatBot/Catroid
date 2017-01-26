@@ -131,10 +131,8 @@ public class ShowTextBrick extends UserVariableBrick {
 
 		Spinner showVariableSpinner = (Spinner) view.findViewById(R.id.show_variable_spinner);
 
-		UserBrick currentBrick = ProjectManager.getInstance().getCurrentUserBrick();
-
 		DataAdapter dataAdapter = ProjectManager.getInstance().getCurrentScene().getDataContainer()
-				.createDataAdapter(context, currentBrick, ProjectManager.getInstance().getCurrentSprite());
+				.createDataAdapter(context, ProjectManager.getInstance().getCurrentSprite());
 		UserVariableAdapterWrapper userVariableAdapterWrapper = new UserVariableAdapterWrapper(context,
 				dataAdapter);
 		userVariableAdapterWrapper.setItemLayout(android.R.layout.simple_spinner_item, android.R.id.text1);
@@ -203,18 +201,6 @@ public class ShowTextBrick extends UserVariableBrick {
 		sequence.addAction(sprite.getActionFactory().createShowVariableAction(sprite, getFormulaWithBrickField(BrickField.X_POSITION),
 				getFormulaWithBrickField(BrickField.Y_POSITION), userVariable));
 		return null;
-	}
-
-	void setUserVariableName(UserVariable userVariable) {
-		if (userVariable.getName() != null) {
-			userVariableName = userVariable.getName();
-		} else {
-			userVariableName = Constants.NO_VARIABLE_SELECTED;
-		}
-	}
-
-	void setUserVariableName(String userVariableName) {
-		this.userVariableName = userVariableName;
 	}
 
 	@Override

@@ -68,9 +68,6 @@ public class HideTextBrick extends UserVariableBrick {
 		if (animationState) {
 			return view;
 		}
-		if (view == null) {
-			alphaValue = 255;
-		}
 
 		view = View.inflate(context, R.layout.brick_hide_variable, null);
 		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
@@ -78,10 +75,8 @@ public class HideTextBrick extends UserVariableBrick {
 
 		Spinner hideVariableSpinner = (Spinner) view.findViewById(R.id.hide_variable_spinner);
 
-		UserBrick currentBrick = ProjectManager.getInstance().getCurrentUserBrick();
-
 		DataAdapter dataAdapter = ProjectManager.getInstance().getCurrentScene().getDataContainer()
-				.createDataAdapter(context, currentBrick, ProjectManager.getInstance().getCurrentSprite());
+				.createDataAdapter(context, ProjectManager.getInstance().getCurrentSprite());
 		UserVariableAdapterWrapper userVariableAdapterWrapper = new UserVariableAdapterWrapper(context,
 				dataAdapter);
 		userVariableAdapterWrapper.setItemLayout(android.R.layout.simple_spinner_item, android.R.id.text1);
@@ -145,18 +140,6 @@ public class HideTextBrick extends UserVariableBrick {
 
 		sequence.addAction(sprite.getActionFactory().createHideVariableAction(sprite, userVariable));
 		return null;
-	}
-
-	void setUserVariableName(UserVariable userVariable) {
-		if (userVariable.getName() != null) {
-			userVariableName = userVariable.getName();
-		} else {
-			userVariableName = Constants.NO_VARIABLE_SELECTED;
-		}
-	}
-
-	void setUserVariableName(String userVariableName) {
-		this.userVariableName = userVariableName;
 	}
 
 	@Override

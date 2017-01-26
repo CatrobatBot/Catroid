@@ -150,7 +150,6 @@ import org.catrobat.catroid.ui.ProgramMenuActivity;
 import org.catrobat.catroid.ui.ProjectActivity;
 import org.catrobat.catroid.ui.ScriptActivity;
 import org.catrobat.catroid.ui.SettingsActivity;
-import org.catrobat.catroid.ui.UserBrickScriptActivity;
 import org.catrobat.catroid.ui.adapter.BrickAdapter;
 import org.catrobat.catroid.ui.controller.BackPackListManager;
 import org.catrobat.catroid.ui.dialogs.NewSpriteDialog;
@@ -158,7 +157,6 @@ import org.catrobat.catroid.ui.dialogs.NewSpriteDialog.ActionAfterFinished;
 import org.catrobat.catroid.ui.dragndrop.BrickDragAndDropListView;
 import org.catrobat.catroid.ui.fragment.AddBrickFragment;
 import org.catrobat.catroid.ui.fragment.FormulaEditorDataFragment;
-import org.catrobat.catroid.ui.fragment.ScriptFragment;
 import org.catrobat.catroid.utils.NotificationData;
 import org.catrobat.catroid.utils.StatusBarNotificationManager;
 import org.catrobat.catroid.utils.UtilFile;
@@ -762,28 +760,6 @@ public final class UiTestUtils {
 			solo.drag(40, 40, 300, 40, DRAG_FRAMES);
 		}
 		solo.clickOnText(category);
-	}
-
-	public static void showSourceAndEditBrick(String brickName, Solo solo) {
-		showSourceAndEditBrick(brickName, true, solo);
-	}
-
-	public static void showSourceAndEditBrick(String brickName, boolean click, Solo solo) {
-		if (click) {
-			solo.clickOnText(UiTestUtils.TEST_USER_BRICK_NAME);
-		}
-
-		String stringOnShowSourceButton = solo.getCurrentActivity()
-				.getString(R.string.brick_context_dialog_show_source);
-		solo.waitForText(stringOnShowSourceButton);
-		solo.clickOnText(stringOnShowSourceButton);
-
-		boolean activityShowedUp = solo.waitForActivity(UserBrickScriptActivity.class, 3000);
-		if (!activityShowedUp) {
-			fail("UserBrickScriptActivity should have showed up");
-		}
-
-		solo.sleep(50);
 	}
 
 	public static boolean clickOnBrickInAddBrickFragment(Solo solo, String brickName, boolean addToScript) {
@@ -2786,13 +2762,6 @@ public final class UiTestUtils {
 		((AddItemToUserListBrick) bricks.get(5)).setUserList(projectUserList);
 		((SetVariableBrick) bricks.get(6)).setUserVariable(spriteUserVariable);
 		((ChangeVariableBrick) bricks.get(7)).setUserVariable(projectUserVariable);
-	}
-
-	public static void getIntoUserBrickOverView(Solo solo) {
-		solo.clickOnView(solo.getCurrentActivity().findViewById(R.id.button_add));
-		UiTestUtils.clickOnBrickCategory(solo, solo.getCurrentActivity().getString(R.string.category_user_bricks));
-		solo.waitForActivity(UserBrickScriptActivity.class);
-		solo.waitForFragmentByTag(ScriptFragment.TAG);
 	}
 
 	public static void pauseStage(Solo solo) {

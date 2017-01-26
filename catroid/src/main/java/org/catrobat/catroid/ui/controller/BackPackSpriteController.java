@@ -189,7 +189,6 @@ public final class BackPackSpriteController {
 		}
 
 		BackPackScriptController.getInstance().unpack(selectedSprite.getName(), delete, false, null, true);
-		selectedSprite.setUserAndVariableBrickReferences(unpackedSprite, unpackedSprite.getUserBrickList());
 
 		if (asBackground) {
 			ProjectManager.getInstance().getCurrentScene().replaceBackgroundSprite(unpackedSprite);

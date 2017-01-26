@@ -42,11 +42,7 @@ import org.catrobat.catroid.content.bricks.PlaySoundBrick;
 import org.catrobat.catroid.content.bricks.PointToBrick;
 import org.catrobat.catroid.content.bricks.ScriptBrick;
 import org.catrobat.catroid.content.bricks.SetLookBrick;
-import org.catrobat.catroid.content.bricks.UserBrick;
-import org.catrobat.catroid.content.bricks.UserBrickParameter;
 import org.catrobat.catroid.content.bricks.UserListBrick;
-import org.catrobat.catroid.content.bricks.UserScriptDefinitionBrick;
-import org.catrobat.catroid.content.bricks.UserScriptDefinitionBrickElement;
 import org.catrobat.catroid.content.bricks.UserVariableBrick;
 import org.catrobat.catroid.formulaeditor.DataContainer;
 import org.catrobat.catroid.formulaeditor.UserList;
@@ -156,8 +152,6 @@ public final class BackPackScriptController {
 			handleVariableListUnpacking(brickOfScript);
 		} else if (brickOfScript instanceof PointToBrick) {
 			handlePointToBrickUnpacking(brickOfScript, deleteUnpackedItems);
-		} else if (brickOfScript instanceof UserBrick) {
-			handleUserBrickUnpacking(brickOfScript, deleteUnpackedItems);
 		} else if (brickOfScript instanceof FormulaBrick) {
 			handleFormulaBrickUnpacking(brickOfScript);
 		}
@@ -224,34 +218,7 @@ public final class BackPackScriptController {
 		brick.setPointedObject(unpackedPointToSprite);
 	}
 
-	private void handleUserBrickUnpacking(Brick brickOfScript, boolean deleteUnpackedItems) {
-		UserBrick brick = (UserBrick) brickOfScript;
-		Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
 
-		UserBrick clonedPrototypeUserBrick = (UserBrick) brick.clone();
-		clonedPrototypeUserBrick.updateUserBrickParametersAndVariables();
-		currentSprite.addUserBrick(clonedPrototypeUserBrick);
-
-		for (Brick brickOfUserScript : brick.getDefinitionBrick().getUserScript().getBrickList()) {
-			handleBackPackedBricksWithAdditionalData(brickOfUserScript, deleteUnpackedItems);
-		}
-
-		setUserBrickElementReferences(brick);
-		brick.updateUserBrickParametersAndVariables();
-	}
-
-	private void setUserBrickElementReferences(UserBrick brick) {
-		UserScriptDefinitionBrick definitionBrick = brick.getDefinitionBrick();
-		List<UserScriptDefinitionBrickElement> userScriptDefinitionBrickElementList = definitionBrick.getUserScriptDefinitionBrickElements();
-		Iterator<UserBrickParameter> userBrickParameterIterator = brick.getUserBrickParameters().iterator();
-
-		for (UserScriptDefinitionBrickElement element : userScriptDefinitionBrickElementList) {
-			if (element.isVariable() && userBrickParameterIterator.hasNext()) {
-				UserBrickParameter parameter = userBrickParameterIterator.next();
-				parameter.setElement(element);
-			}
-		}
-	}
 
 	private UserVariable updateVariablesInDataContainer(BackPackedVariableData backPackedData, UserVariable userVariable) {
 		ProjectManager projectManager = ProjectManager.getInstance();
@@ -268,13 +235,6 @@ public final class BackPackScriptController {
 						dataContainer.getProjectVariables());
 				if (unpackedVariable == null) {
 					unpackedVariable = dataContainer.addProjectUserVariable(userVariable.getName());
-				}
-				break;
-			case DataContainer.USER_VARIABLE_USERBRICK:
-				UserBrick userBrick = ProjectManager.getInstance().getCurrentUserBrick();
-				if (userVariable != null) {
-					unpackedVariable = dataContainer.addUserBrickVariableToUserBrickIfNotExists(userBrick, userVariable.getName(),
-							userVariable.getValue());
 				}
 				break;
 		}

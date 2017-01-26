@@ -629,7 +629,6 @@
     <string name="category_sound">Sound</string>
     <string name="category_control">Control</string>
     <string name="category_event">Event</string>
-    <string name="category_user_bricks">My Bricks</string>
     <string name="category_data">Data</string>
     <string name="category_lego_nxt">Lego NXT</string>
     <string name="category_lego_ev3">Lego EV3</string>
@@ -923,7 +922,6 @@
     <!-- Error messages -->
     <string name="error_no_writiable_external_storage_available">Pocket Code requires writable external storage like a SD card in order to run, but none was found.\nYou can fix this by making the external storage writable or inserting a SD card, then try again.</string>
     <string name="error_no_program_name_entered">Please enter a program name.</string>
-    <string name="error_no_userbrick_name_entered">Please enter a brick name.</string>
     <string name="error_project_exists">Please choose another program name.</string>
     <string name="error_scene_exists">Please choose another scene name.</string>
     <string name="error_scene_not_deleted">An error occurred while deleting a scene.</string>
@@ -1425,12 +1423,6 @@
     <string name="brick_hide_variable">Hide variable</string>
     <!-- -->
 
-    <!-- User Bricks strings -->
-    <string name="define">Define</string>
-    <string name="new_user_brick">New Brick</string>
-    <string name="new_user_brick_variable">Variable</string>
-    <string name="new_user_brick_name">Please choose a brick name:</string>
-    <string name="recursive_user_brick_forbidden">Adding UserBrick to UserBrick is not allowed yet!</string>
 
     <!-- Merge strings -->
     <string name="merge_button">Merge with</string>

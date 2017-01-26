@@ -59,8 +59,6 @@ import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.content.bricks.FormulaBrick;
-import org.catrobat.catroid.content.bricks.UserBrick;
-import org.catrobat.catroid.content.bricks.UserBrickParameter;
 import org.catrobat.catroid.content.commands.OnFormulaChangedListener;
 import org.catrobat.catroid.formulaeditor.Formula;
 import org.catrobat.catroid.formulaeditor.FormulaEditorEditText;
@@ -184,41 +182,11 @@ public class FormulaEditorFragment extends Fragment implements OnKeyListener,
 			fragTransaction.show(formulaEditorFragment);
 			BottomBar.hideBottomBar(activity);
 		} else {
-			refreshUserBrickParameterValuesIfNecessary(formulaBrick, brickField, formulaEditorFragment);
 			formulaEditorFragment.showCustomView = false;
 			formulaEditorFragment.updateBrickView();
 			formulaEditorFragment.setInputFormula(brickField, SET_FORMULA_ON_SWITCH_EDIT_TEXT);
 		}
 		fragTransaction.commit();
-	}
-
-	public static boolean saveFormulaForUserBrickParameterChange() {
-		InternFormulaParser formulaToParse = formulaEditorEditText.getFormulaParser();
-		FormulaElement formulaParseTree = formulaToParse.parseFormula();
-
-		switch (formulaToParse.getErrorTokenIndex()) {
-			case PARSER_OK:
-				currentFormula.setRoot(formulaParseTree);
-				if (onFormulaChangedListener != null) {
-					onFormulaChangedListener.onFormulaChanged(formulaBrick, currentBrickField, currentFormula);
-				}
-				if (formulaEditorBrick != null) {
-					currentFormula.refreshTextField(brickView);
-				}
-				formulaEditorEditText.formulaSaved();
-				return true;
-		}
-		return false;
-	}
-
-	private static void refreshUserBrickParameterValuesIfNecessary(FormulaBrick formulaBrick, Brick.BrickField
-			brickField, FormulaEditorFragment formulaEditorFragment) {
-		if (formulaBrick instanceof UserBrickParameter) {
-			saveFormulaForUserBrickParameterChange();
-			updateUserBricksIfNecessary();
-			formulaEditorFragment.updateBrickViewAndFormula(formulaBrick, brickField);
-			updateUserBricksIfNecessary();
-		}
 	}
 
 	private boolean showCustomView = false;
@@ -705,18 +673,10 @@ public class FormulaEditorFragment extends Fragment implements OnKeyListener,
 	private void endFormulaEditor() {
 		if (formulaEditorEditText.hasChanges()) {
 			if (saveFormulaIfPossible()) {
-				updateUserBricksIfNecessary();
 				onUserDismiss();
 			}
 		} else {
 			onUserDismiss();
-		}
-	}
-
-	private static void updateUserBricksIfNecessary() {
-		if (formulaBrick instanceof UserBrickParameter) {
-			UserBrick userBrick = ((UserBrickParameter) formulaBrick).getParent();
-			userBrick.updateUserBrickParametersAndVariables();
 		}
 	}
 

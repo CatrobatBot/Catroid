@@ -34,7 +34,6 @@ import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.content.bricks.SceneStartBrick;
 import org.catrobat.catroid.content.bricks.SceneTransitionBrick;
-import org.catrobat.catroid.content.bricks.UserBrick;
 import org.catrobat.catroid.io.StorageHandler;
 import org.catrobat.catroid.ui.adapter.LookBaseAdapter;
 import org.catrobat.catroid.ui.adapter.SoundBaseAdapter;
@@ -94,26 +93,6 @@ public final class BackPackListManager {
 		allScripts.putAll(getBackpack().backpackedScripts);
 		allScripts.putAll(getBackpack().hiddenBackpackedScripts);
 		return allScripts;
-	}
-
-	public void clearBackPackUserBricks() {
-		getBackpack().backpackedUserBricks.clear();
-	}
-
-	public void removeItemFromUserBrickBackPack(String userBrickGroup) {
-		getBackpack().backpackedUserBricks.remove(userBrickGroup);
-	}
-
-	public ArrayList<String> getBackPackedUserBrickGroups() {
-		return new ArrayList<>(getBackpack().backpackedUserBricks.keySet());
-	}
-
-	public void addUserBrickToBackPack(String userBrickGroup, List<UserBrick> userBricks) {
-		getBackpack().backpackedUserBricks.put(userBrickGroup, userBricks);
-	}
-
-	public HashMap<String, List<UserBrick>> getBackPackedUserBricks() {
-		return getBackpack().backpackedUserBricks;
 	}
 
 	public void clearBackPackLooks() {

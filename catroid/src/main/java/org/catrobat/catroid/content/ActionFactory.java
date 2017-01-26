@@ -27,7 +27,6 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
-import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.camera.CameraManager;
 import org.catrobat.catroid.common.BrickValues;
 import org.catrobat.catroid.common.Constants;
@@ -135,7 +134,6 @@ import org.catrobat.catroid.content.actions.StopThisScriptAction;
 import org.catrobat.catroid.content.actions.ThinkSayBubbleAction;
 import org.catrobat.catroid.content.actions.TurnLeftAction;
 import org.catrobat.catroid.content.actions.TurnRightAction;
-import org.catrobat.catroid.content.actions.UserBrickAction;
 import org.catrobat.catroid.content.actions.VibrateAction;
 import org.catrobat.catroid.content.actions.WaitAction;
 import org.catrobat.catroid.content.actions.WaitForBubbleBrickAction;
@@ -154,7 +152,6 @@ import org.catrobat.catroid.content.bricks.PhiroMotorMoveForwardBrick;
 import org.catrobat.catroid.content.bricks.PhiroMotorStopBrick;
 import org.catrobat.catroid.content.bricks.PhiroPlayToneBrick;
 import org.catrobat.catroid.content.bricks.PhiroRGBLightBrick;
-import org.catrobat.catroid.content.bricks.UserBrick;
 import org.catrobat.catroid.formulaeditor.Formula;
 import org.catrobat.catroid.formulaeditor.UserList;
 import org.catrobat.catroid.formulaeditor.UserVariable;
@@ -800,13 +797,6 @@ public class ActionFactory extends Actions {
 		return action;
 	}
 
-	public Action createUserBrickAction(Action userBrickAction, UserBrick userBrick) {
-		UserBrickAction action = action(UserBrickAction.class);
-		action.setAction(userBrickAction);
-		action.setUserBrick(userBrick);
-		return action;
-	}
-
 	public Action createSequence() {
 		return Actions.sequence();
 	}
@@ -957,17 +947,13 @@ public class ActionFactory extends Actions {
 		ShowTextAction action = action(ShowTextAction.class);
 		action.setPosition(xPosition, yPosition);
 		action.setVariableToShow(userVariable);
-		action.setSprite(sprite);
-		UserBrick userBrick = ProjectManager.getInstance().getCurrentUserBrick();
-		action.setUserBrick(userBrick);
+		action.setSprite(sprite);;
 		return action;
 	}
 
 	public Action createHideVariableAction(Sprite sprite, UserVariable userVariable) {
 		HideTextAction action = action(HideTextAction.class);
 		action.setVariableToHide(userVariable);
-		UserBrick userBrick = ProjectManager.getInstance().getCurrentUserBrick();
-		action.setUserBrick(userBrick);
 		action.setSprite(sprite);
 		return action;
 	}
