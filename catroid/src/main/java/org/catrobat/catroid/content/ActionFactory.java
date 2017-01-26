@@ -947,7 +947,8 @@ public class ActionFactory extends Actions {
 		ShowTextAction action = action(ShowTextAction.class);
 		action.setPosition(xPosition, yPosition);
 		action.setVariableToShow(userVariable);
-		action.setSprite(sprite);;
+		action.setSprite(sprite);
+		;
 		return action;
 	}
 
