@@ -40,7 +40,6 @@ import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.ui.CapitalizedTextView;
 import org.catrobat.catroid.ui.adapter.CheckBoxListAdapter;
-import org.catrobat.catroid.ui.dialogs.CustomAlertDialog;
 import org.catrobat.catroid.utils.Utils;
 
 public abstract class CheckBoxListFragment extends ListFragment implements CheckBoxListAdapter.ListItemCheckHandler {

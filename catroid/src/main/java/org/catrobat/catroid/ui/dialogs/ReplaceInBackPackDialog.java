@@ -39,7 +39,6 @@ public class ReplaceInBackPackDialog extends DialogFragment {
 	private String objectName;
 	private ReplaceInBackPackInterface replaceInBackPackInterface;
 
-
 	public ReplaceInBackPackDialog(int replaceDialogMessage, String objectName, ReplaceInBackPackInterface
 			replaceInBackPackInterface) {
 		this.replaceDialogMessage = replaceDialogMessage;

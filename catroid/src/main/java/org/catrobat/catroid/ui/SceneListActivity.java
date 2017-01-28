@@ -73,7 +73,8 @@ public class SceneListActivity extends CoreActivity {
 				getFragment().startRenameActionMode();
 				break;
 			case R.id.backpack:
-				getFragment().showPackOrUnpackDialog();;
+				getFragment().showPackOrUnpackDialog();
+				;
 				break;
 			case R.id.upload:
 				ProjectManager.getInstance().uploadProject(Utils.getCurrentProjectName(this), this);
