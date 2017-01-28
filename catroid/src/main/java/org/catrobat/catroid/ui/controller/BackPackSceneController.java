@@ -47,11 +47,10 @@ public final class BackPackSceneController {
 	public static final String TAG = BackPackSceneController.class.getSimpleName();
 
 	private static ArrayList<Scene> backPackedScenes = new ArrayList<>();
-	private  static Map<String, String> backPackedNameMap = new HashMap<>();
+	private static Map<String, String> backPackedNameMap = new HashMap<>();
 
 	private static ArrayList<Scene> unpackedScenes = new ArrayList<>();
 	private static Map<String, String> unPackedNameMap = new HashMap<>();
-
 
 	public static boolean existsInBackPack(List<Scene> sceneList) {
 		for (Scene scene : sceneList) {
@@ -114,7 +113,7 @@ public final class BackPackSceneController {
 
 		if (hidden) {
 			BackPackListManager.getInstance().addSceneToHiddenBackpack(clonedScene);
-		}  else {
+		} else {
 			BackPackListManager.getInstance().addSceneToBackPack(clonedScene);
 		}
 
