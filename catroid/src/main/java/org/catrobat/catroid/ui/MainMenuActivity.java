@@ -288,7 +288,7 @@ public class MainMenuActivity extends BaseActivity implements OnLoadProjectCompl
 		if (STANDALONE_MODE) {
 			Log.d("STANDALONE", "onLoadProjectSucess -> startStage");
 			startStageProject();
-		} else if (startProjectActivity){
+		} else if (startProjectActivity) {
 			Intent intent = new Intent(MainMenuActivity.this, SceneListActivity.class);
 			startActivity(intent);
 		}

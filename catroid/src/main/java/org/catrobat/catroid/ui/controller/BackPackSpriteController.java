@@ -53,7 +53,7 @@ public final class BackPackSpriteController {
 
 	public static boolean backpack(List<Sprite> spriteList, boolean visible) {
 		for (Sprite sprite : spriteList) {
-			if(!backpack(sprite, visible)) {
+			if (!backpack(sprite, visible)) {
 				return false;
 			}
 		}
