@@ -163,7 +163,7 @@ public class NfcTagFragment extends ListActivityFragment implements CheckBoxList
 	}
 
 	@Override
-	public void handleAddButton(){
+	public void handleAddButton() {
 	}
 
 	@Override
@@ -234,7 +234,7 @@ public class NfcTagFragment extends ListActivityFragment implements CheckBoxList
 	}
 
 	@Override
-	protected void changeToBackPack(){
+	protected void changeToBackPack() {
 		//NO BACKPACK FOR NFC TAGS
 	}
 }

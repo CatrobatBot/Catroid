@@ -39,7 +39,6 @@ import org.catrobat.catroid.transfers.ProjectDownloadService;
 import org.catrobat.catroid.ui.WebViewActivity;
 import org.catrobat.catroid.ui.dialogs.OverwriteRenameDialog;
 import org.catrobat.catroid.ui.dialogs.OverwriteRenameMediaDialog;
-import org.catrobat.catroid.ui.fragment.LookFragment;
 import org.catrobat.catroid.ui.fragment.LookListFragment;
 import org.catrobat.catroid.ui.fragment.SoundListFragment;
 import org.catrobat.catroid.web.ProgressResponseBody;
