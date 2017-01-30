@@ -132,7 +132,7 @@ public class Project implements Serializable {
 		sceneList.add(scene);
 	}
 
-	public String getProjectPath(){
+	public String getProjectPath() {
 		return Utils.buildProjectPath(getName());
 	}
 

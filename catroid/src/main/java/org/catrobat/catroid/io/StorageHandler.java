@@ -229,7 +229,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.channels.FileChannel;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -1274,14 +1273,14 @@ public final class StorageHandler {
 	/**
 	 * Copies all files within the given source path into the given destination path. Directories within the source
 	 * path are NOT handled!
+	 *
 	 * @param srcDirectoryPath Path to source directory.
 	 * @param dstDirectoryPath Path to destination directory. This gets created if it does not exist yet.
 	 * @return true if all fies were copied successfully, alse otherwise.
 	 */
-	public static boolean copyAllFiles(String srcDirectoryPath, String dstDirectoryPath)
-	{
+	public static boolean copyAllFiles(String srcDirectoryPath, String dstDirectoryPath) {
 		File srcDirectory = new File(srcDirectoryPath);
-		if(!srcDirectory.exists() || !srcDirectory.isDirectory()) {
+		if (!srcDirectory.exists() || !srcDirectory.isDirectory()) {
 			return false;
 		}
 
@@ -1290,8 +1289,8 @@ public final class StorageHandler {
 
 		boolean success = true;
 
-		for(File file : srcDirectory.listFiles()){
-			if(file.isDirectory()){
+		for (File file : srcDirectory.listFiles()) {
+			if (file.isDirectory()) {
 				continue;
 			}
 
@@ -1303,27 +1302,29 @@ public final class StorageHandler {
 
 	/**
 	 * Creates a copy of a file in the same directory.
-	 * @param srcFilePath Path to the original file.
-	 * @param checksumContainer	FileChecksumContainer instance for usage count handling (shallow copy). Set to null
-	 *                             for plain copy without usage counter handling.
+	 *
+	 * @param srcFilePath       Path to the original file.
+	 * @param checksumContainer FileChecksumContainer instance for usage count handling (shallow copy). Set to null
+	 *                          for plain copy without usage counter handling.
 	 * @return Copied File or referenced original File depending on usage count handling.
 	 */
-	public static File copyFile(String srcFilePath, FileChecksumContainer checksumContainer){
+	public static File copyFile(String srcFilePath, FileChecksumContainer checksumContainer) {
 		return copyFile(srcFilePath, new File(srcFilePath).getParent(), checksumContainer);
 	}
 
 	/**
 	 * Creates a copy of a file in the specified destination directory (will be created if non existent).
-	 * @param srcFilePath Path to the original file.
-	 * @param dstFileDirectory Destination directory for the copied file.
+	 *
+	 * @param srcFilePath       Path to the original file.
+	 * @param dstFileDirectory  Destination directory for the copied file.
 	 * @param checksumContainer FileChecksumContainer instance for usage count handling (shallow copy). Set to null
-	 *                             for plain copy without usage counter handling.
+	 *                          for plain copy without usage counter handling.
 	 * @return Copied File or referenced original File depending on usage count handling.
 	 */
 	public static File copyFile(String srcFilePath, String dstFileDirectory, FileChecksumContainer checksumContainer) {
 		File original = new File(srcFilePath);
 
-		if(!original.exists()) {
+		if (!original.exists()) {
 			Log.e(TAG, "Cannot create copy of non existent file.");
 			return null;
 		}
@@ -1334,7 +1335,7 @@ public final class StorageHandler {
 
 		File copy;
 		try {
-			if(checksumContainer != null && checksumContainer.containsChecksum(checksum)){
+			if (checksumContainer != null && checksumContainer.containsChecksum(checksum)) {
 				checksumContainer.incrementUsage(srcFilePath);
 				return original;
 			}
@@ -1345,7 +1346,7 @@ public final class StorageHandler {
 			copy = File.createTempFile(fileName, extension, destinationDir);
 			Files.copy(original, copy);
 
-			if(checksumContainer != null){
+			if (checksumContainer != null){
 				checksumContainer.addChecksum(checksum, copy.getAbsolutePath());
 			}
 		} catch (IOException e) {

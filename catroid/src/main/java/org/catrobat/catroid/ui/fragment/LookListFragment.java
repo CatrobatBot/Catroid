@@ -53,7 +53,6 @@ import org.catrobat.catroid.utils.ToastUtil;
 import org.catrobat.catroid.utils.UtilCamera;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 public class LookListFragment extends ListActivityFragment implements CheckBoxListAdapter
@@ -71,7 +70,6 @@ public class LookListFragment extends ListActivityFragment implements CheckBoxLi
 	public static final int REQUEST_SELECT_IMAGE = 3;
 	public static final int REQUEST_CAMERA_IMAGE = 4;
 	public static final int REQUEST_DRONE_VIDEO = 5;
-
 
 	private LookListAdapter lookAdapter;
 	private DragAndDropListView listView;
@@ -167,7 +165,7 @@ public class LookListFragment extends ListActivityFragment implements CheckBoxLi
 					break;
 				case REQUEST_DRONE_VIDEO:
 					String droneFilePath = getString(R.string.add_look_drone_video);
-					if (!LookController.loadDroneVideo(droneFilePath, getActivity(),lookDataList)) {
+					if (!LookController.loadDroneVideo(droneFilePath, getActivity(), lookDataList)) {
 						ToastUtil.showError(getActivity(), R.string.error_load_image);
 					}
 					break;
@@ -318,7 +316,7 @@ public class LookListFragment extends ListActivityFragment implements CheckBoxLi
 		File copiedImageFile = StorageHandler.copyFile(lookToEdit.getAbsolutePath(),
 				ProjectManager.getInstance().getFileChecksumContainer());
 
-		if(copiedImageFile == null) {
+		if (copiedImageFile == null) {
 			return false;
 		}
 
