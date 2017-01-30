@@ -24,8 +24,6 @@ package org.catrobat.catroid.io;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
@@ -221,8 +219,6 @@ import org.catrobat.catroid.utils.ImageEditing;
 import org.catrobat.catroid.utils.TrackingUtil;
 import org.catrobat.catroid.utils.UtilFile;
 import org.catrobat.catroid.utils.Utils;
-import org.rauschig.jarchivelib.Archiver;
-import org.rauschig.jarchivelib.ArchiverFactory;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
