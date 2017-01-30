@@ -408,7 +408,7 @@ public class NewSpriteDialog extends DialogFragment {
 						projectManager.getCurrentScene().getSceneImageDirectoryPath(),
 						projectManager.getFileChecksumContainer());
 
-				if(newLookFile == null) {
+				if (newLookFile == null) {
 					return false;
 				}
 
