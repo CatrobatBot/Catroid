@@ -328,7 +328,7 @@ public class Look extends Image {
 	}
 
 	public double getDistanceToSpritePositionInUserInterfaceDimensions(float xPosition, float yPosition) {
-		return  (double)
+		return (double)
 				Math.sqrt(Math.pow((xPosition - getXInUserInterfaceDimensionUnit()), 2)
 						+ Math.pow((yPosition - getYInUserInterfaceDimensionUnit()), 2));
 	}

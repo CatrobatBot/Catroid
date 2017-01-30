@@ -148,7 +148,7 @@ public class FormulaEditorChooseSpriteDialog extends DialogFragment {
 		return String.valueOf(spinnerOne.getSelectedItem());
 	}
 
-	public void setFormulaType (int type) {
+	public void setFormulaType(int type) {
 		this.formulaTpye = type;
 	}
 }
