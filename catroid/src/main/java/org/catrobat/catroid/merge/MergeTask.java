@@ -145,7 +145,7 @@ public class MergeTask {
 
 		File projectCodeFile = new File(Utils.buildPath(Utils.buildProjectPath(mergeProjectName), Constants.PROJECTCODE_NAME));
 
-		if(adapter != null) {
+		if (adapter != null) {
 			adapter.insert(new ProjectData(mergeProjectName, projectCodeFile.lastModified()), 0);
 			adapter.notifyDataSetChanged();
 		}
@@ -173,7 +173,7 @@ public class MergeTask {
 	public boolean mergeScenes(String sceneName) {
 		mergeResult = new Scene(context, sceneName, mergedProject);
 
-		if(mergeResult.getSpriteList().size() > 0) {
+		if (mergeResult.getSpriteList().size() > 0) {
 			mergeResult.getSpriteList().remove(0);
 		}
 
