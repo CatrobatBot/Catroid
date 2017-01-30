@@ -41,7 +41,7 @@ public class MergeTaskTest extends AndroidTestCase {
 
 	private Project secondProject;
 
-	public void tearDown () {
+	public void tearDown() {
 		if (firstProject != null) {
 			StorageHandler.getInstance().deleteProject(firstProject.getName());
 		}
