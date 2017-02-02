@@ -1,6 +1,6 @@
 /*
  * Catroid: An on-device visual programming system for Android devices
- * Copyright (C) 2010-2016 The Catrobat Team
+ * Copyright (C) 2010-2017 The Catrobat Team
  * (<http://developer.catrobat.org/credits>)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -23,42 +23,28 @@
 package org.catrobat.catroid.ui.dialogs;
 
 import org.catrobat.catroid.R;
-import org.catrobat.catroid.ui.dialogs.base.InputDialog;
-import org.catrobat.catroid.ui.fragment.ProjectListFragment;
-import org.catrobat.catroid.utils.CopyProjectTask;
-import org.catrobat.catroid.utils.Utils;
+import org.catrobat.catroid.ui.dialogs.base.TextDialog;
 
-public class CopyProjectDialog extends InputDialog {
+public class DifferentResolutionDialog extends TextDialog {
 
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_copy_project";
+	public static final String TAG = DifferentResolutionDialog.class.getSimpleName();
+	private DifferentResolutionInterface differentResolutionInterface;
 
-	public CopyProjectDialog(int title, int inputLabel, String previousText) {
-		super(title, inputLabel, previousText, false);
+	public DifferentResolutionDialog(String text, DifferentResolutionInterface differentResolutionInterface) {
+		super(R.string.warning, text, R.string.main_menu_continue, R.string.abort);
+		this.differentResolutionInterface = differentResolutionInterface;
 	}
-
 	@Override
 	protected boolean handlePositiveButtonClick() {
-		String newProjectName = input.getText().toString().trim();
-
-		boolean newNameConsistsOfSpacesOnly = newProjectName.isEmpty();
-
-		if (newNameConsistsOfSpacesOnly) {
-			input.setError(getString(R.string.name_consists_of_spaces_only));
-			return false;
-		}
-
-		if (Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase(newProjectName)) {
-			input.setError(getString(R.string.error_project_exists));
-			return false;
-		}
-
-		new CopyProjectTask((ProjectListFragment) getTargetFragment()).execute(newProjectName, previousText);
-		dismiss();
-
-		return false;
+		differentResolutionInterface.showMergeDialog();
+		return true;
 	}
 
 	@Override
 	protected void handleNegativeButtonClick() {
+	}
+
+	public interface DifferentResolutionInterface {
+		void showMergeDialog();
 	}
 }

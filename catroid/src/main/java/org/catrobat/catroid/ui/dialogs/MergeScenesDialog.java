@@ -20,6 +20,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.catrobat.catroid.ui.dialogs;
 
 import android.app.AlertDialog;
@@ -33,31 +34,36 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Spinner;
 
+import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 
-public abstract class TextDialog extends DialogFragment {
+import java.util.List;
 
-	protected EditText input;
+public class MergeScenesDialog extends DialogFragment {
 
-	protected int title;
-	protected int inputLabel;
-	protected String previousText;
-	protected boolean allowEmptyInput;
+	public static final String TAG = MergeScenesDialog.class.getSimpleName();
 
-	public TextDialog(int title, int inputLabel, String previousText, boolean allowEmptyInput) {
-		this.title = title;
-		this.inputLabel = inputLabel;
-		this.previousText = previousText;
-		this.allowEmptyInput = allowEmptyInput;
+	private MergeScenesInterface mergeScenesInterface;
+
+	private EditText input;
+	private Spinner firstScene;
+	private Spinner secondScene;
+
+	private List<String> scenes;
+
+	public MergeScenesDialog(MergeScenesInterface mergeScenesInterface) {
+		this.mergeScenesInterface = mergeScenesInterface;
 	}
+
 
 	protected View inflateLayout() {
 		final LayoutInflater inflater = getActivity().getLayoutInflater();
-		return inflater.inflate(R.layout.dialog_text_input, null);
+		return inflater.inflate(R.layout.dialog_merge_scenes, null);
 	}
 
 	@Override
@@ -65,15 +71,19 @@ public abstract class TextDialog extends DialogFragment {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
 		View view = inflateLayout();
-
-		builder.setTitle(title);
 		builder.setView(view);
 
-		final TextView inputLabelView = (TextView) view.findViewById(R.id.input_label);
-		inputLabelView.setText(inputLabel);
+		input = (EditText) view.findViewById(R.id.scene_merge_name_edittext);
+		firstScene = (Spinner) view.findViewById(R.id.merge_scene_spinner_first);
+		secondScene = (Spinner) view.findViewById(R.id.merge_scene_spinner_second);
+		scenes = ProjectManager.getInstance().getCurrentProject().getSceneOrder();
 
-		input = (EditText) view.findViewById(R.id.edit_text);
-		input.setText(previousText);
+		ArrayAdapter adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, scenes);
+
+		firstScene.setAdapter(adapter);
+		secondScene.setAdapter(adapter);
+		firstScene.setSelection(0);
+		secondScene.setSelection(1);
 
 		builder.setPositiveButton(R.string.ok, null);
 		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -88,38 +98,38 @@ public abstract class TextDialog extends DialogFragment {
 			public void onShow(DialogInterface dialog) {
 				showKeyboard();
 				Button buttonPositive = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+				buttonPositive.setEnabled(false);
 				buttonPositive.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						if (handlePositiveButtonClick()) {
+						if(!hasError()) {
+							handlePositiveButtonClick();
 							dismiss();
 						}
 					}
 				});
-				if (!allowEmptyInput) {
-					input.addTextChangedListener(getInputTextWatcher(buttonPositive));
-				}
+				input.addTextChangedListener(getInputTextWatcher(buttonPositive));
 			}
 		});
 
 		return alertDialog;
 	}
 
-	@Override
-	public void onCancel(DialogInterface dialog) {
-		handleNegativeButtonClick();
-		dismiss();
-	}
+	protected boolean hasError() {
+		String first = firstScene.getSelectedItem().toString();
+		String second = secondScene.getSelectedItem().toString();
+		String result = input.getText().toString();
 
-	protected abstract boolean handlePositiveButtonClick();
-
-	protected abstract void handleNegativeButtonClick();
-
-	protected void showKeyboard() {
-		if (input.requestFocus()) {
-			InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-			imm.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT);
+		if(first.equals(second)) {
+			input.setError(getString(R.string.error_merge_with_self_scene));
+			return true;
 		}
+
+		if(scenes.contains(result)) {
+			input.setError(getString(R.string.name_already_exists));
+			return true;
+		}
+		return false;
 	}
 
 	protected TextWatcher getInputTextWatcher(final Button positiveButton) {
@@ -141,5 +151,24 @@ public abstract class TextDialog extends DialogFragment {
 			public void afterTextChanged(Editable s) {
 			}
 		};
+	}
+
+	protected void showKeyboard() {
+		if (input.requestFocus()) {
+			InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT);
+		}
+	}
+
+	private void handlePositiveButtonClick() {
+		String first = firstScene.getSelectedItem().toString();
+		String second = secondScene.getSelectedItem().toString();
+		String result = input.getText().toString();
+
+		mergeScenesInterface.mergeScenes(first, second, result);
+	}
+
+	public interface MergeScenesInterface {
+		void mergeScenes(String firstScene, String secondScene, String resultName);
 	}
 }

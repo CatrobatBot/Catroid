@@ -1,6 +1,6 @@
 /*
  * Catroid: An on-device visual programming system for Android devices
- * Copyright (C) 2010-2016 The Catrobat Team
+ * Copyright (C) 2010-2017 The Catrobat Team
  * (<http://developer.catrobat.org/credits>)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,21 +20,27 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.catrobat.catroid.ui.dialogs;
+package org.catrobat.catroid.formulaeditor;
 
-public class BrickTextDialog extends TextDialog {
+import java.io.Serializable;
 
-	public BrickTextDialog(int title, int inputLabel, String previousText) {
-		super(title, inputLabel, previousText, false);
+public abstract class UserObject implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	private String name;
+
+	public UserObject() {
 	}
 
-	@Override
-	protected boolean handlePositiveButtonClick() {
-		return false;
+	public UserObject(String name) {
+		this.name = name;
 	}
 
-	@Override
-	protected void handleNegativeButtonClick() {
-		dismiss();
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

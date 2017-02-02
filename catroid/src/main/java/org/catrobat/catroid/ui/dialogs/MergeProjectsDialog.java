@@ -23,42 +23,36 @@
 package org.catrobat.catroid.ui.dialogs;
 
 import org.catrobat.catroid.R;
+import org.catrobat.catroid.io.StorageHandler;
 import org.catrobat.catroid.ui.dialogs.base.InputDialog;
-import org.catrobat.catroid.ui.fragment.ProjectListFragment;
-import org.catrobat.catroid.utils.CopyProjectTask;
-import org.catrobat.catroid.utils.Utils;
 
-public class CopyProjectDialog extends InputDialog {
+public class MergeProjectsDialog extends InputDialog {
 
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_copy_project";
+	public static final String TAG = MergeProjectsDialog.class.getSimpleName();
+	private MergeProjectsInterface mergeProjectsInterface;
 
-	public CopyProjectDialog(int title, int inputLabel, String previousText) {
-		super(title, inputLabel, previousText, false);
+	public MergeProjectsDialog(MergeProjectsInterface mergeProjectsInterface) {
+		super(R.string.merge_programs, R.string.new_project_name, "", false);
+		this.mergeProjectsInterface = mergeProjectsInterface;
 	}
 
 	@Override
 	protected boolean handlePositiveButtonClick() {
-		String newProjectName = input.getText().toString().trim();
+		String resultName = input.getText().toString().trim();
 
-		boolean newNameConsistsOfSpacesOnly = newProjectName.isEmpty();
-
-		if (newNameConsistsOfSpacesOnly) {
-			input.setError(getString(R.string.name_consists_of_spaces_only));
-			return false;
-		}
-
-		if (Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase(newProjectName)) {
+		if(StorageHandler.getInstance().projectExists(resultName)) {
 			input.setError(getString(R.string.error_project_exists));
-			return false;
+		} else {
+			mergeProjectsInterface.mergeProjects(resultName);
 		}
-
-		new CopyProjectTask((ProjectListFragment) getTargetFragment()).execute(newProjectName, previousText);
-		dismiss();
-
-		return false;
+		return true;
 	}
 
 	@Override
 	protected void handleNegativeButtonClick() {
+	}
+
+	public interface MergeProjectsInterface {
+		void mergeProjects(String name);
 	}
 }

@@ -22,43 +22,21 @@
  */
 package org.catrobat.catroid.ui.dialogs;
 
-import org.catrobat.catroid.R;
 import org.catrobat.catroid.ui.dialogs.base.InputDialog;
-import org.catrobat.catroid.ui.fragment.ProjectListFragment;
-import org.catrobat.catroid.utils.CopyProjectTask;
-import org.catrobat.catroid.utils.Utils;
 
-public class CopyProjectDialog extends InputDialog {
+public class BrickInputDialog extends InputDialog {
 
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_copy_project";
-
-	public CopyProjectDialog(int title, int inputLabel, String previousText) {
+	public BrickInputDialog(int title, int inputLabel, String previousText) {
 		super(title, inputLabel, previousText, false);
 	}
 
 	@Override
 	protected boolean handlePositiveButtonClick() {
-		String newProjectName = input.getText().toString().trim();
-
-		boolean newNameConsistsOfSpacesOnly = newProjectName.isEmpty();
-
-		if (newNameConsistsOfSpacesOnly) {
-			input.setError(getString(R.string.name_consists_of_spaces_only));
-			return false;
-		}
-
-		if (Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase(newProjectName)) {
-			input.setError(getString(R.string.error_project_exists));
-			return false;
-		}
-
-		new CopyProjectTask((ProjectListFragment) getTargetFragment()).execute(newProjectName, previousText);
-		dismiss();
-
 		return false;
 	}
 
 	@Override
 	protected void handleNegativeButtonClick() {
+		dismiss();
 	}
 }
