@@ -128,7 +128,7 @@ public class TrackGrid {
 			if (indexInList >= 0) {
 				currentGridRowPositions.remove(indexInList);
 				Log.d("TrackGrid", String.format("Removed GridRowPosition with name %s on Tact %d with columnIndex %d "
-						+ "and noteLength %s.", noteName.name(), tactIndex, columnIndex,
+								+ "and noteLength %s.", noteName.name(), tactIndex, columnIndex,
 						noteLength.toString()));
 				if (currentGridRowPositions.isEmpty()) {
 					gridRow.getGridRowPositions().remove(tactIndex);
