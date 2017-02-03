@@ -23,7 +23,6 @@
 package org.catrobat.catroid.pocketmusic.note.trackgrid;
 
 import android.os.Handler;
-import android.util.Log;
 import android.util.SparseArray;
 
 import org.catrobat.catroid.pocketmusic.mididriver.MidiDriver;
