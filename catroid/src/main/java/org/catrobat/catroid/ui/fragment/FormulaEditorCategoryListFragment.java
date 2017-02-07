@@ -294,7 +294,7 @@ public class FormulaEditorCategoryListFragment extends ListFragment implements D
 	private void showDistanceToSpriteDialog(FormulaEditorFragment formulaEditorFragment) {
 		final FormulaEditorFragment formulaEditor = formulaEditorFragment;
 		final FormulaEditorChooseSpriteDialog dialog = FormulaEditorChooseSpriteDialog.newInstance();
-		
+
 		dialog.setFormulaType(R.string.formula_editor_object_distance_to);
 		dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
 
