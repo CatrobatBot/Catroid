@@ -226,7 +226,7 @@ public class BackPackSpriteListFragment extends BackPackActivityFragment impleme
 		}
 	}
 
-	public  void unpackAsBackground() {
+	public void unpackAsBackground() {
 		BackPackSpriteController.getInstance().unpack(spriteToEdit, false, false, false, true);
 		showUnpackingCompleteToast(1);
 		getActivity().finish();
