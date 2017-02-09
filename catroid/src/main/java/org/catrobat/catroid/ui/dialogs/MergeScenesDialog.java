@@ -60,7 +60,6 @@ public class MergeScenesDialog extends DialogFragment {
 		this.mergeScenesInterface = mergeScenesInterface;
 	}
 
-
 	protected View inflateLayout() {
 		final LayoutInflater inflater = getActivity().getLayoutInflater();
 		return inflater.inflate(R.layout.dialog_merge_scenes, null);
@@ -102,7 +101,7 @@ public class MergeScenesDialog extends DialogFragment {
 				buttonPositive.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						if(!hasError()) {
+						if (!hasError()) {
 							handlePositiveButtonClick();
 							dismiss();
 						}
@@ -120,12 +119,12 @@ public class MergeScenesDialog extends DialogFragment {
 		String second = secondScene.getSelectedItem().toString();
 		String result = input.getText().toString();
 
-		if(first.equals(second)) {
+		if (first.equals(second)) {
 			input.setError(getString(R.string.error_merge_with_self_scene));
 			return true;
 		}
 
-		if(scenes.contains(result)) {
+		if (scenes.contains(result)) {
 			input.setError(getString(R.string.name_already_exists));
 			return true;
 		}

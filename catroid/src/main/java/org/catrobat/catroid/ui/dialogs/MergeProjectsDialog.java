@@ -40,7 +40,7 @@ public class MergeProjectsDialog extends InputDialog {
 	protected boolean handlePositiveButtonClick() {
 		String resultName = input.getText().toString().trim();
 
-		if(StorageHandler.getInstance().projectExists(resultName)) {
+		if (StorageHandler.getInstance().projectExists(resultName)) {
 			input.setError(getString(R.string.error_project_exists));
 		} else {
 			mergeProjectsInterface.mergeProjects(resultName);

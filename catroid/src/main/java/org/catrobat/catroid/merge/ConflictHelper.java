@@ -49,7 +49,7 @@ public final class ConflictHelper {
 
 			List<String> conflicts = checkObjectNames(globalValues, localValues);
 			if (conflicts.size() > 0) {
-				for(String name : conflicts) {
+				for (String name : conflicts) {
 					String newName = getUniqueGlobalObjectName(name.concat("_").concat(conflictEnding), globalValues);
 					scene.getDataContainer().renameProjectUserVariable(newName, name);
 				}
@@ -65,7 +65,7 @@ public final class ConflictHelper {
 
 			List<String> conflicts = checkObjectNames(globalLists, localLists);
 			if (conflicts.size() > 0) {
-				for(String name : conflicts) {
+				for (String name : conflicts) {
 					String newName = getUniqueGlobalObjectName(name.concat("_").concat(conflictEnding), globalLists);
 					scene.getDataContainer().renameProjectUserList(newName, name);
 				}
@@ -91,12 +91,12 @@ public final class ConflictHelper {
 
 	private static String getUniqueGlobalObjectName(String name, List<? extends UserObject> globalObjects, int number) {
 		String newName = name;
-		if(number != 0) {
+		if (number != 0) {
 			newName = name.concat(String.valueOf(number));
 		}
 
-		for(UserObject object : globalObjects) {
-			if(object.getName().equals(newName)) {
+		for (UserObject object : globalObjects) {
+			if (object.getName().equals(newName)) {
 				return getUniqueGlobalObjectName(name, globalObjects, number++);
 			}
 		}

@@ -31,8 +31,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import org.catrobat.catroid.R;
-
 public abstract class TextDialog extends DialogFragment {
 
 	protected int title;

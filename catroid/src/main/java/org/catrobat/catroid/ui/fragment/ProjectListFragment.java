@@ -47,7 +47,6 @@ import org.catrobat.catroid.exceptions.OutdatedVersionProjectException;
 import org.catrobat.catroid.exceptions.ProjectException;
 import org.catrobat.catroid.io.LoadProjectTask;
 import org.catrobat.catroid.io.StorageHandler;
-import org.catrobat.catroid.merge.ConflictHelper;
 import org.catrobat.catroid.merge.MergeTask;
 import org.catrobat.catroid.ui.BottomBar;
 import org.catrobat.catroid.ui.MyProjectsActivity;
@@ -437,7 +436,7 @@ public class ProjectListFragment extends ListActivityFragment implements LoadPro
 		Project secondProject = StorageHandler.getInstance().loadProject(projectToEdit.projectName, getActivity());
 
 		MergeTask merge = new MergeTask(firstProject, secondProject, getActivity());
-		if(merge.mergeProjects(name)) {
+		if (merge.mergeProjects(name)) {
 			File projectCodeFile = new File(Utils.buildPath(Utils.buildProjectPath(name), Constants.PROJECTCODE_NAME));
 			projectAdapter.insert(new ProjectData(name, projectCodeFile.lastModified()), 0);
 			projectAdapter.notifyDataSetChanged();

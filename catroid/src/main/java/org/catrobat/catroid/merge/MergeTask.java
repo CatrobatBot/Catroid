@@ -88,13 +88,13 @@ public class MergeTask {
 		}
 
 		for (Scene scene : firstProject.getSceneList()) {
-			if(!mergedProject.containsScene(scene)) {
+			if (!mergedProject.containsScene(scene)) {
 				addSceneToProject(scene, firstProject, mergedProject);
 			}
 		}
 
 		for (Scene scene : secondProject.getSceneList()) {
-			if(!mergedProject.containsScene(scene)) {
+			if (!mergedProject.containsScene(scene)) {
 				addSceneToProject(scene, firstProject, mergedProject);
 			}
 		}

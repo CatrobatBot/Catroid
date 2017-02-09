@@ -34,6 +34,7 @@ public class DifferentResolutionDialog extends TextDialog {
 		super(R.string.warning, text, R.string.main_menu_continue, R.string.abort);
 		this.differentResolutionInterface = differentResolutionInterface;
 	}
+
 	@Override
 	protected boolean handlePositiveButtonClick() {
 		differentResolutionInterface.showMergeDialog();
