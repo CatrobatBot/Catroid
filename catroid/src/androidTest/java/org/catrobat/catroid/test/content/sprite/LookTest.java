@@ -39,7 +39,6 @@ import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.test.utils.Reflection;
 import org.catrobat.catroid.test.utils.Reflection.ParameterList;
 import org.catrobat.catroid.test.utils.TestUtils;
-import org.catrobat.catroid.utils.TouchUtil;
 
 public class LookTest extends InstrumentationTestCase {
 	private Look look;
