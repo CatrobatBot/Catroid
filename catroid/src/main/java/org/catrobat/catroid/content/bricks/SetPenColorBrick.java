@@ -80,10 +80,8 @@ public class SetPenColorBrick extends FormulaBrick {
 	}
 
 	@Override
-	public int getRequiredResources() {
-		return getFormulaWithBrickField(BrickField.PHIRO_LIGHT_RED).getRequiredResources()
-				| getFormulaWithBrickField(BrickField.PHIRO_LIGHT_GREEN).getRequiredResources()
-				| getFormulaWithBrickField(BrickField.PHIRO_LIGHT_BLUE).getRequiredResources();
+	public int getRequiredResources()  {
+		return NO_RESOURCES;
 	}
 
 	@Override
