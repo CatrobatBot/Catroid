@@ -80,7 +80,9 @@ public class SetPenColorBrick extends FormulaBrick {
 	}
 
 	@Override
-	public int getRequiredResources()  { return NO_RESOURCES; }
+	public int getRequiredResources() {
+		return NO_RESOURCES;
+	}
 
 	@Override
 	public View getPrototypeView(Context context) {

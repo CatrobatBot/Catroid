@@ -668,7 +668,7 @@ public class FormulaEditorFragment extends Fragment implements OnKeyListener,
 	public boolean onKey(View view, int keyCode, KeyEvent event) {
 		switch (keyCode) {
 			case KeyEvent.KEYCODE_BACK:
-				if(hasFormulaBeenChanged){
+				if (hasFormulaBeenChanged) {
 					showToast(R.string.formula_editor_changes_saved, false);
 					hasFormulaBeenChanged = false;
 				}
