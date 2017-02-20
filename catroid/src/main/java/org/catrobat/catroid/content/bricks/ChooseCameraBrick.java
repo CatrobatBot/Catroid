@@ -116,7 +116,7 @@ public class ChooseCameraBrick extends BrickBaseType {
 		spinnerValues[FRONT] = context.getString(R.string.choose_camera_front);
 
 		ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item,
-				spinnerValues)  {
+				spinnerValues) {
 			@Override
 			public View getDropDownView(int position, View convertView, ViewGroup parent) {
 				View dropDownView = super.getDropDownView(position, convertView, parent);
