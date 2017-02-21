@@ -365,17 +365,14 @@ public final class ProjectManager implements OnLoadProjectCompleteListener, OnCh
 		sceneToPlay = scene;
 	}
 
-	public Scene getStartScene()
-	{
-		if(startScene == null)
-		{
+	public Scene getStartScene() {
+		if (startScene == null) {
 			startScene = getCurrentScene();
 		}
 		return startScene;
 	}
 
-	public void setStartScene(Scene scene)
-	{
+	public void setStartScene(Scene scene) {
 		startScene = scene;
 	}
 
