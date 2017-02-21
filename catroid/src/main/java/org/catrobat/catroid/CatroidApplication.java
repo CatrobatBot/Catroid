@@ -80,13 +80,4 @@ public class CatroidApplication extends MultiDexApplication {
 	public static Context getAppContext() {
 		return CatroidApplication.context;
 	}
-
-	public static void restartApplication(Context context) {
-		int delay = 100;
-		Intent restartIntent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
-		PendingIntent intent = PendingIntent.getActivity(context, 0, restartIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-		AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-		manager.set(AlarmManager.RTC, System.currentTimeMillis() + delay, intent);
-		System.exit(2);
-	}
 }

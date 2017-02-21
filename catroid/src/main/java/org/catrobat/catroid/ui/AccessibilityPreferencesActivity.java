@@ -273,7 +273,11 @@ public class AccessibilityPreferencesActivity extends BaseActivity {
 						saveAccessibilityProfilePreference();
 						SettingsActivity.setActiveAccessibilityProfile(getApplicationContext(), selectedProfileName);
 						updateAccessibilityActiveProfile();
-						CatroidApplication.restartApplication(CatroidApplication.getAppContext());
+
+						Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
+						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						intent.putExtra(MainMenuActivity.RESTART_INTENT, true);
+						startActivity(intent);
 						break;
 				}
 			}
