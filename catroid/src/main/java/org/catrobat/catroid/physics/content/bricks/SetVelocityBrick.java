@@ -118,8 +118,10 @@ public class SetVelocityBrick extends FormulaBrick {
 			case R.id.brick_set_velocity_edit_text_y:
 				FormulaEditorFragment.showFragment(view, this, BrickField.PHYSICS_VELOCITY_Y);
 				break;
+
 			default:
-				// nothing to do
+				FormulaEditorFragment.showFragment(view, this, BrickField.PHYSICS_VELOCITY_X);
+				break;
 		}
 	}
 

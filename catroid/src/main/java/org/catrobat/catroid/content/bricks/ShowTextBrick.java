@@ -97,6 +97,10 @@ public class ShowTextBrick extends UserVariableBrick {
 			case R.id.brick_show_variable_edit_text_y:
 				FormulaEditorFragment.showFragment(view, this, BrickField.Y_POSITION);
 				break;
+
+			default:
+				FormulaEditorFragment.showFragment(view, this, BrickField.X_POSITION);
+				break;
 		}
 	}
 
