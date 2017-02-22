@@ -44,18 +44,11 @@ import name.antonsmirnov.firmata.serial.StreamingSerialAdapter;
 
 public class ArduinoImpl implements Arduino {
 
-	public static final int NUMBER_OF_DIGITAL_PINS = 14;
+	public static final int NUMBER_OF_DIGITAL_PINS = 14; // assuming numbered from 0 to NUMBER_OF_DIGITAL_PINS-1
 	public static final int PINS_IN_A_PORT = 8;
 	public static final int NUMBER_OF_DIGITAL_PORTS = (NUMBER_OF_DIGITAL_PINS + PINS_IN_A_PORT - 1) / PINS_IN_A_PORT;
 
-	public static final int NUMBER_OF_ANALOG_PINS = 6;
-
-	public static final int PIN_ANALOG_0 = 0;
-	public static final int PIN_ANALOG_1 = 1;
-	public static final int PIN_ANALOG_2 = 2;
-	public static final int PIN_ANALOG_3 = 3;
-	public static final int PIN_ANALOG_4 = 4;
-	public static final int PIN_ANALOG_5 = 5;
+	public static final int NUMBER_OF_ANALOG_PINS = 6; // assuming numbered from 0 to NUMBER_OF_ANALOG_PINS-1
 
 	public static final int PORT_DIGITAL_0 = 0;
 	public static final int PORT_DIGITAL_1 = 1;
@@ -66,9 +59,6 @@ public class ArduinoImpl implements Arduino {
 	private static final int MAX_PWM_PIN_GROUP_2 = 6;
 	private static final int MIN_PWM_PIN_GROUP_3 = 9;
 	private static final int MAX_PWM_PIN_GROUP_3 = 11;
-
-	private static final int MIN_ANALOG_SENSOR_PIN = 0;
-	private static final int MAX_ANALOG_SENSOR_PIN = 5;
 
 	private static final UUID ARDUINO_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 	private static final String TAG = ArduinoImpl.class.getSimpleName();
@@ -202,7 +192,7 @@ public class ArduinoImpl implements Arduino {
 
 		isReportingSensorData = report;
 
-		for (int i = MIN_ANALOG_SENSOR_PIN; i <= MAX_ANALOG_SENSOR_PIN; i++) {
+		for (int i = 0; i < NUMBER_OF_ANALOG_PINS; i++) {
 			sendFirmataMessage(new ReportAnalogPinMessage(i, report));
 		}
 	}
@@ -240,8 +230,8 @@ public class ArduinoImpl implements Arduino {
 	@Override
 	public double getDigitalArduinoPin(int digitalPinNumber) {
 		sendFirmataMessage(new SetPinModeMessage(digitalPinNumber, SetPinModeMessage.PIN_MODE.INPUT.getMode()));
-		int port = getPortFromPin(digitalPinNumber);
 
+		int port = getPortFromPin(digitalPinNumber);
 		sendFirmataMessage(new ReportDigitalPortMessage(port, true));
 
 		try {
@@ -259,25 +249,15 @@ public class ArduinoImpl implements Arduino {
 
 	@Override
 	public double getAnalogArduinoPin(int analogPinNumber) {
-		switch (analogPinNumber) {
-			case 0:
-				return arduinoListener.getAnalogPin0();
-			case 1:
-				return arduinoListener.getAnalogPin1();
-			case 2:
-				return arduinoListener.getAnalogPin2();
-			case 3:
-				return arduinoListener.getAnalogPin3();
-			case 4:
-				return arduinoListener.getAnalogPin4();
-			case 5:
-				return arduinoListener.getAnalogPin5();
-		}
-		return 0;
+		return arduinoListener.getAnalogPinValue(analogPinNumber);
 	}
 
-	public static boolean isValidPin(int pin) {
+	public static boolean isValidDigitalPin(int pin) {
 		return (pin >= 0) && (pin < NUMBER_OF_DIGITAL_PINS);
+	}
+
+	public static boolean isValidAnalogPin(int analogPinNumber) {
+		return (analogPinNumber >= 0) && (analogPinNumber < NUMBER_OF_ANALOG_PINS);
 	}
 
 	public static int getPortFromPin(int pin) {
