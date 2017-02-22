@@ -45,20 +45,11 @@ import name.antonsmirnov.firmata.serial.StreamingSerialAdapter;
 public class ArduinoImpl implements Arduino {
 
 	public static final int NUMBER_OF_DIGITAL_PINS = 14; // assuming numbered from 0 to NUMBER_OF_DIGITAL_PINS-1
+	public static final int NUMBER_OF_ANALOG_PINS = 6;   // assuming numbered from 0 to NUMBER_OF_ANALOG_PINS-1
+	public static final int[] PWM_PINS = {3, 5, 6, 9, 10, 11};
+
 	public static final int PINS_IN_A_PORT = 8;
 	public static final int NUMBER_OF_DIGITAL_PORTS = (NUMBER_OF_DIGITAL_PINS + PINS_IN_A_PORT - 1) / PINS_IN_A_PORT;
-
-	public static final int NUMBER_OF_ANALOG_PINS = 6; // assuming numbered from 0 to NUMBER_OF_ANALOG_PINS-1
-
-	public static final int PORT_DIGITAL_0 = 0;
-	public static final int PORT_DIGITAL_1 = 1;
-
-	private static final int MIN_PWM_PIN_GROUP_1 = 3;
-	private static final int MAX_PWM_PIN_GROUP_1 = 3;
-	private static final int MIN_PWM_PIN_GROUP_2 = 5;
-	private static final int MAX_PWM_PIN_GROUP_2 = 6;
-	private static final int MIN_PWM_PIN_GROUP_3 = 9;
-	private static final int MAX_PWM_PIN_GROUP_3 = 11;
 
 	private static final UUID ARDUINO_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 	private static final String TAG = ArduinoImpl.class.getSimpleName();
@@ -173,13 +164,7 @@ public class ArduinoImpl implements Arduino {
 
 		firmata.getSerial().start();
 
-		for (int pin = MIN_PWM_PIN_GROUP_1; pin <= MAX_PWM_PIN_GROUP_1; ++pin) {
-			sendFirmataMessage(new SetPinModeMessage(pin, SetPinModeMessage.PIN_MODE.PWM.getMode()));
-		}
-		for (int pin = MIN_PWM_PIN_GROUP_2; pin <= MAX_PWM_PIN_GROUP_2; ++pin) {
-			sendFirmataMessage(new SetPinModeMessage(pin, SetPinModeMessage.PIN_MODE.PWM.getMode()));
-		}
-		for (int pin = MIN_PWM_PIN_GROUP_3; pin <= MAX_PWM_PIN_GROUP_3; ++pin) {
+		for (int pin : PWM_PINS) {
 			sendFirmataMessage(new SetPinModeMessage(pin, SetPinModeMessage.PIN_MODE.PWM.getMode()));
 		}
 		reportSensorData(true);
