@@ -68,7 +68,7 @@ public final class FirmataUtils {
 		return new FirmataMessage(command, port, data);
 	}
 
-	public FirmataMessage getAnalogMesageData() {
+	public FirmataMessage getAnalogMessageData() {
 
 		int pinAndCommand = getNextMessage();
 
