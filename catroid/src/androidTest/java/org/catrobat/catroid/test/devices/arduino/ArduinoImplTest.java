@@ -258,8 +258,12 @@ public class ArduinoImplTest extends AndroidTestCase {
 	}
 
 	private void testAnalog(int percent, int pin) {
-		FirmataMessage m = firmataUtils.getAnalogMessageData();
+		FirmataMessage m = firmataUtils.getSetPinModeMessage();
+		assertEquals("Wrong Command, SET_PIN_MODE command expected", SET_PIN_MODE_COMMAND, m.getCommand());
+		assertEquals("Wrong pin used to set pin mode", pin, m.getPin());
+		assertEquals("Wrong pin mode is used", PWM_MODE, m.getData());
 
+		m = firmataUtils.getAnalogMessageData();
 		assertEquals("Wrong command, ANALOG_MESSAGE command expected",
 				ANALOG_MESSAGE_COMMAND, m.getCommand());
 		assertEquals("Wrong pin", pin, m.getPin());

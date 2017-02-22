@@ -254,6 +254,7 @@ public class ArduinoImpl implements Arduino {
 	}
 
 	private void sendAnalogFirmataMessage(int pin, int value) {
+		sendFirmataMessage(new SetPinModeMessage(pin, SetPinModeMessage.PIN_MODE.PWM.getMode()));
 		sendFirmataMessage(new AnalogMessage(pin, castValue(value)));
 	}
 
