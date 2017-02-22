@@ -279,7 +279,7 @@ public class ArduinoImplTest extends AndroidTestCase {
 	}
 
 	private void testAnalog(int percent, int pin) {
-		FirmataMessage m = firmataUtils.getAnalogMesageData();
+		FirmataMessage m = firmataUtils.getAnalogMessageData();
 
 		assertEquals("Wrong command, ANALOG_MESSAGE command expected",
 				ANALOG_MESSAGE_COMMAND, m.getCommand());
