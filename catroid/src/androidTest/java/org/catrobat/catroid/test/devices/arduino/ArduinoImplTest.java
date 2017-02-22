@@ -37,8 +37,9 @@ import name.antonsmirnov.firmata.message.SetPinModeMessage;
 import name.antonsmirnov.firmata.writer.AnalogMessageWriter;
 import name.antonsmirnov.firmata.writer.DigitalMessageWriter;
 import name.antonsmirnov.firmata.writer.ReportAnalogPinMessageWriter;
-//import name.antonsmirnov.firmata.writer.ReportDigitalPortMessageWriter;
 import name.antonsmirnov.firmata.writer.SetPinModeMessageWriter;
+
+//import name.antonsmirnov.firmata.writer.ReportDigitalPortMessageWriter;
 
 public class ArduinoImplTest extends AndroidTestCase {
 
