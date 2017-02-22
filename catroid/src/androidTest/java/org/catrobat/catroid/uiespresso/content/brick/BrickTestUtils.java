@@ -45,7 +45,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 import static org.hamcrest.Matchers.instanceOf;
 
-public final class  BrickTestUtils {
+public final class BrickTestUtils {
 	private BrickTestUtils() {
 		throw new AssertionError();
 	}
