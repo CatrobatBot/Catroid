@@ -38,11 +38,11 @@ import name.antonsmirnov.firmata.writer.SetPinModeMessageWriter;
 
 public final class FirmataUtils {
 
-	private static final int DIGITAL_MESSAGE_COMMAND     = DigitalMessageWriter.COMMAND;           // 0x90
-	private static final int ANALOG_MESSAGE_COMMAND      = AnalogMessageWriter.COMMAND;            // 0xE0
+	private static final int DIGITAL_MESSAGE_COMMAND = DigitalMessageWriter.COMMAND;           // 0x90
+	private static final int ANALOG_MESSAGE_COMMAND = AnalogMessageWriter.COMMAND;            // 0xE0
 	private static final int REPORT_DIGITAL_PORT_COMMAND = ReportDigitalPortMessageWriter.COMMAND; // 0xD0
-	private static final int REPORT_ANALOG_PIN_COMMAND   = ReportAnalogPinMessageWriter.COMMAND;   // 0xC0
-	private static final int SET_PIN_MODE_COMMAND        = SetPinModeMessageWriter.COMMAND;        // 0xF4
+	private static final int REPORT_ANALOG_PIN_COMMAND = ReportAnalogPinMessageWriter.COMMAND;   // 0xC0
+	private static final int SET_PIN_MODE_COMMAND = SetPinModeMessageWriter.COMMAND;        // 0xF4
 
 	private final ConnectionDataLogger logger;
 
