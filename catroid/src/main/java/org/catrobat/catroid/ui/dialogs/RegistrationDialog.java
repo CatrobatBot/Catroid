@@ -125,31 +125,29 @@ public class RegistrationDialog extends DialogFragment implements OnRegistration
 		ProjectManager.getInstance().signInFinished(getFragmentManager(), bundle);
 	}
 
-    public static boolean isEmailValid(String email) {
-        boolean isValid = false;
+	public static boolean isEmailValid(String email) {
+		boolean isValid = false;
 
-        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
-        CharSequence inputStr = email;
+		String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+		CharSequence inputStr = email;
 
-        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(inputStr);
-        if (matcher.matches()) {
-            isValid = true;
-        }
-        return isValid;
-    }
+		Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+		Matcher matcher = pattern.matcher(inputStr);
+		if (matcher.matches()) {
+			isValid = true;
+		}
+		return isValid;
+	}
 
 	private void handleRegisterButtonClick() {
 		String username = usernameEditText.getText().toString();
 		String password = passwordEditText.getText().toString();
 		String passwordConfirmation = passwordConfirmEditText.getText().toString();
 		String email = emailEditText.getText().toString();
-		if(isEmailValid(username))
-		{
+		if (isEmailValid(username)) {
 			new AlertDialog.Builder(getActivity()).setTitle(R.string.register_error)
 					.setMessage(R.string.register_username_email).setPositiveButton(R.string.ok, null).show();
-		}
-		else if (!password.equals(passwordConfirmation)) {
+		} else if (!password.equals(passwordConfirmation)) {
 			new AlertDialog.Builder(getActivity()).setTitle(R.string.register_error)
 					.setMessage(R.string.register_password_mismatch).setPositiveButton(R.string.ok, null).show();
 		} else {
