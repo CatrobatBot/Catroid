@@ -43,7 +43,6 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import com.badlogic.gdx.backends.android.surfaceview.GLSurfaceView20;
-
 import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.cast.CastMediaControlIntent;
 import com.google.android.gms.cast.CastRemoteDisplayLocalService;
@@ -306,7 +305,7 @@ public final class CastManager {
 				pausedView = (RelativeLayout) LayoutInflater.from(context)
 						.inflate(R.layout.cast_pause_screen, null);
 				remoteLayout.addView(pausedView);
-				RelativeLayout.LayoutParams layoutParams =	(RelativeLayout.LayoutParams) pausedView.getLayoutParams();
+				RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) pausedView.getLayoutParams();
 				Project p = ProjectManager.getInstance().getCurrentProject();
 				layoutParams.height = p.getXmlHeader().getVirtualScreenHeight();
 				layoutParams.width = p.getXmlHeader().getVirtualScreenWidth();

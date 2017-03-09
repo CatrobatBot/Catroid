@@ -48,6 +48,7 @@ public class CastService extends CastRemoteDisplayLocalService {
 	public void onDismissPresentation() {
 		dismissPresentation();
 	}
+
 	@SuppressLint("NewApi")
 	private void dismissPresentation() {
 		if (presentation != null) {
@@ -55,6 +56,7 @@ public class CastService extends CastRemoteDisplayLocalService {
 			presentation = null;
 		}
 	}
+
 	@SuppressLint("NewApi")
 	public void createPresentation(Display display) {
 		if (display != null) {

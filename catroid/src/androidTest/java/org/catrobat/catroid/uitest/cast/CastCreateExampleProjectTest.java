@@ -55,6 +55,7 @@ public class CastCreateExampleProjectTest extends BaseActivityInstrumentationTes
 		solo.finishOpenedActivities();
 		super.tearDown();
 	}
+
 	public void testCreateExampleCastProgram() {
 		solo.waitForActivity(MainMenuActivity.class);
 		solo.clickOnText(solo.getString(R.string.main_menu_new));
