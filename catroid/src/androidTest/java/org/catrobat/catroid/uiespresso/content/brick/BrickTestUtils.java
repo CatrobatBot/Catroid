@@ -108,7 +108,7 @@ public final class BrickTestUtils {
 	}
 
 	public static void enterStringInFormulaTextFieldOnBrickAtPosition(String stringToBeEntered,
-			int	editTextResourceId, int position) {
+			int editTextResourceId, int position) {
 		onScriptList().atPosition(position).onChildView(withId(editTextResourceId))
 				.perform(click());
 		onView(withId(R.id.formula_editor_keyboard_string))
