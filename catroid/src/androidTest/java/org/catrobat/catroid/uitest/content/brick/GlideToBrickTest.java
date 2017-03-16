@@ -43,96 +43,96 @@ import java.util.List;
 
 public class GlideToBrickTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
-	private Project project;
-	private Sprite sprite;
+    private Project project;
+    private Sprite sprite;
 
-	public GlideToBrickTest() {
-		super(MainMenuActivity.class);
-	}
+    public GlideToBrickTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		createProject();
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
-	}
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        createProject();
+        UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
+    }
 
-	public void testNumberInput() {
-		double duration = 1.5;
-		int xPosition = 123;
-		int yPosition = 567;
+    public void testNumberInput() {
+        double duration = 1.5;
+        int xPosition = 123;
+        int yPosition = 567;
 
-		UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_glide_to_edit_text_duration, duration);
-		UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_glide_to_edit_text_x, xPosition);
-		UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_glide_to_edit_text_y, yPosition);
+        UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_glide_to_edit_text_duration, duration);
+        UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_glide_to_edit_text_x, xPosition);
+        UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_glide_to_edit_text_y, yPosition);
 
-		TextView textViewDuration = ((TextView) solo.getView(R.id.brick_glide_to_edit_text_duration));
-		TextView textViewX = ((TextView) solo.getView(R.id.brick_glide_to_edit_text_x));
-		TextView textViewY = ((TextView) solo.getView(R.id.brick_glide_to_edit_text_y));
+        TextView textViewDuration = ((TextView) solo.getView(R.id.brick_glide_to_edit_text_duration));
+        TextView textViewX = ((TextView) solo.getView(R.id.brick_glide_to_edit_text_x));
+        TextView textViewY = ((TextView) solo.getView(R.id.brick_glide_to_edit_text_y));
 
-		assertEquals("Text not updated within FormulaEditor", duration,
-				Double.parseDouble(textViewDuration.getText().toString().replace(',', '.')));
-		assertEquals("Text not updated within FormulaEditor", xPosition,
-				Integer.parseInt(textViewX.getText().toString().substring(0, 3)));
-		assertEquals("Text not updated within FormulaEditor", yPosition,
-				Integer.parseInt(textViewY.getText().toString().substring(0, 3)));
+        assertEquals("Text not updated within FormulaEditor", duration,
+                Double.parseDouble(textViewDuration.getText().toString().replace(',', '.')));
+        assertEquals("Text not updated within FormulaEditor", xPosition,
+                Integer.parseInt(textViewX.getText().toString().substring(0, 3)));
+        assertEquals("Text not updated within FormulaEditor", yPosition,
+                Integer.parseInt(textViewY.getText().toString().substring(0, 3)));
 
-		ProjectManager manager = ProjectManager.getInstance();
-		List<Brick> brickList = manager.getCurrentSprite().getScript(0).getBrickList();
-		GlideToBrick glideToBrick = (GlideToBrick) brickList.get(0);
+        ProjectManager manager = ProjectManager.getInstance();
+        List<Brick> brickList = manager.getCurrentSprite().getScript(0).getBrickList();
+        GlideToBrick glideToBrick = (GlideToBrick) brickList.get(0);
 
-		Formula formula = glideToBrick.getFormulaWithBrickField(Brick.BrickField.DURATION_IN_SECONDS);
-		try {
-			float temp = formula.interpretFloat(sprite);
-			assertEquals("Wrong duration input in Glide to brick", Math.round(duration * 1000), Math.round(temp * 1000));
-		} catch (InterpretationException interpretationException) {
-			fail("Wrong duration input in Glide to brick");
-		}
+        Formula formula = glideToBrick.getFormulaWithBrickField(Brick.BrickField.DURATION_IN_SECONDS);
+        try {
+            float temp = formula.interpretFloat(sprite);
+            assertEquals("Wrong duration input in Glide to brick", Math.round(duration * 1000), Math.round(temp * 1000));
+        } catch (InterpretationException interpretationException) {
+            fail("Wrong duration input in Glide to brick");
+        }
 
-		formula = glideToBrick.getFormulaWithBrickField(Brick.BrickField.X_DESTINATION);
-		try {
-			int temp = formula.interpretInteger(sprite);
-			assertEquals("Wrong x input in Glide to brick", xPosition, temp);
-		} catch (InterpretationException interpretationException) {
-			fail("Wrong xDestination input in Glide to brick");
-		}
+        formula = glideToBrick.getFormulaWithBrickField(Brick.BrickField.X_DESTINATION);
+        try {
+            int temp = formula.interpretInteger(sprite);
+            assertEquals("Wrong x input in Glide to brick", xPosition, temp);
+        } catch (InterpretationException interpretationException) {
+            fail("Wrong xDestination input in Glide to brick");
+        }
 
-		formula = glideToBrick.getFormulaWithBrickField(Brick.BrickField.Y_DESTINATION);
-		try {
-			int temp = formula.interpretInteger(sprite);
-			assertEquals("Wrong y input in Glide to brick", yPosition, temp);
-		} catch (InterpretationException interpretationException) {
-			fail("Wrong yDestination input in Glide to brick");
-		}
+        formula = glideToBrick.getFormulaWithBrickField(Brick.BrickField.Y_DESTINATION);
+        try {
+            int temp = formula.interpretInteger(sprite);
+            assertEquals("Wrong y input in Glide to brick", yPosition, temp);
+        } catch (InterpretationException interpretationException) {
+            fail("Wrong yDestination input in Glide to brick");
+        }
 
-		UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_glide_to_edit_text_duration, 1);
-		TextView secondsTextView = (TextView) solo.getView(R.id.brick_glide_to_seconds_text_view);
-		assertTrue(
-				"Specifier hasn't changed from plural to singular",
-				secondsTextView.getText().equals(
-						secondsTextView.getResources().getQuantityString(R.plurals.second_plural, 1))
-		);
+        UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_glide_to_edit_text_duration, 1);
+        TextView secondsTextView = (TextView) solo.getView(R.id.brick_glide_to_seconds_text_view);
+        assertTrue(
+                "Specifier hasn't changed from plural to singular",
+                secondsTextView.getText().equals(
+                        secondsTextView.getResources().getQuantityString(R.plurals.second_plural, 1))
+        );
 
-		UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_glide_to_edit_text_duration, 5);
-		secondsTextView = (TextView) solo.getView(R.id.brick_glide_to_seconds_text_view);
-		assertTrue(
-				"Specifier hasn't changed from singular to plural",
-				secondsTextView.getText().equals(
-						secondsTextView.getResources().getQuantityString(R.plurals.second_plural, 5))
-		);
-	}
+        UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_glide_to_edit_text_duration, 5);
+        secondsTextView = (TextView) solo.getView(R.id.brick_glide_to_seconds_text_view);
+        assertTrue(
+                "Specifier hasn't changed from singular to plural",
+                secondsTextView.getText().equals(
+                        secondsTextView.getResources().getQuantityString(R.plurals.second_plural, 5))
+        );
+    }
 
-	private void createProject() {
-		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		sprite = new SingleSprite("cat");
-		Script script = new StartScript();
-		script.addBrick(new GlideToBrick(0, 0, 0));
+    private void createProject() {
+        project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        sprite = new SingleSprite("cat");
+        Script script = new StartScript();
+        script.addBrick(new GlideToBrick(0, 0, 0));
 
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 }

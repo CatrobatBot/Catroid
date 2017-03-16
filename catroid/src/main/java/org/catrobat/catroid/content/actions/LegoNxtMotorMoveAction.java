@@ -37,62 +37,62 @@ import org.catrobat.catroid.formulaeditor.Formula;
 import org.catrobat.catroid.formulaeditor.InterpretationException;
 
 public class LegoNxtMotorMoveAction extends TemporalAction {
-	private static final int MIN_SPEED = -100;
-	private static final int MAX_SPEED = 100;
+    private static final int MIN_SPEED = -100;
+    private static final int MAX_SPEED = 100;
 
-	private BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
+    private BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
 
-	private Motor motorEnum;
-	private Formula speed;
-	private Sprite sprite;
+    private Motor motorEnum;
+    private Formula speed;
+    private Sprite sprite;
 
-	@Override
-	protected void update(float percent) {
-		int speedValue;
-		try {
-			speedValue = speed.interpretInteger(sprite);
-		} catch (InterpretationException interpretationException) {
-			speedValue = 0;
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}
+    @Override
+    protected void update(float percent) {
+        int speedValue;
+        try {
+            speedValue = speed.interpretInteger(sprite);
+        } catch (InterpretationException interpretationException) {
+            speedValue = 0;
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+        }
 
-		if (speedValue < MIN_SPEED) {
-			speedValue = MIN_SPEED;
-		} else if (speedValue > MAX_SPEED) {
-			speedValue = MAX_SPEED;
-		}
+        if (speedValue < MIN_SPEED) {
+            speedValue = MIN_SPEED;
+        } else if (speedValue > MAX_SPEED) {
+            speedValue = MAX_SPEED;
+        }
 
-		LegoNXT nxt = btService.getDevice(BluetoothDevice.LEGO_NXT);
-		if (nxt == null) {
-			return;
-		}
+        LegoNXT nxt = btService.getDevice(BluetoothDevice.LEGO_NXT);
+        if (nxt == null) {
+            return;
+        }
 
-		switch (motorEnum) {
-			case MOTOR_A:
-				nxt.getMotorA().move(speedValue);
-				break;
-			case MOTOR_B:
-				nxt.getMotorB().move(speedValue);
-				break;
-			case MOTOR_C:
-				nxt.getMotorC().move(speedValue);
-				break;
-			case MOTOR_B_C:
-				nxt.getMotorB().move(speedValue);
-				nxt.getMotorC().move(speedValue);
-				break;
-		}
-	}
+        switch (motorEnum) {
+            case MOTOR_A:
+                nxt.getMotorA().move(speedValue);
+                break;
+            case MOTOR_B:
+                nxt.getMotorB().move(speedValue);
+                break;
+            case MOTOR_C:
+                nxt.getMotorC().move(speedValue);
+                break;
+            case MOTOR_B_C:
+                nxt.getMotorB().move(speedValue);
+                nxt.getMotorC().move(speedValue);
+                break;
+        }
+    }
 
-	public void setMotorEnum(Motor motorEnum) {
-		this.motorEnum = motorEnum;
-	}
+    public void setMotorEnum(Motor motorEnum) {
+        this.motorEnum = motorEnum;
+    }
 
-	public void setSpeed(Formula speed) {
-		this.speed = speed;
-	}
+    public void setSpeed(Formula speed) {
+        this.speed = speed;
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 }

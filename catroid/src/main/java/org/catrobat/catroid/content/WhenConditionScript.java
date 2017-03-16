@@ -33,51 +33,51 @@ import java.util.ArrayList;
 
 public class WhenConditionScript extends Script {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private ConcurrentFormulaHashMap formulaMap;
+    private ConcurrentFormulaHashMap formulaMap;
 
-	public WhenConditionScript(ScriptBrick brick) {
-		this.brick = brick;
-	}
+    public WhenConditionScript(ScriptBrick brick) {
+        this.brick = brick;
+    }
 
-	@Override
-	public Script copyScriptForSprite(Sprite copySprite) {
-		WhenConditionScript cloneScript = new WhenConditionScript(null);
+    @Override
+    public Script copyScriptForSprite(Sprite copySprite) {
+        WhenConditionScript cloneScript = new WhenConditionScript(null);
 
-		try {
-			cloneScript.formulaMap = this.formulaMap.clone();
-		} catch (CloneNotSupportedException e) {
-			Log.e(getClass().getSimpleName(), "clone exception should never happen");
-		}
+        try {
+            cloneScript.formulaMap = this.formulaMap.clone();
+        } catch (CloneNotSupportedException e) {
+            Log.e(getClass().getSimpleName(), "clone exception should never happen");
+        }
 
-		doCopy(copySprite, cloneScript);
-		return cloneScript;
-	}
+        doCopy(copySprite, cloneScript);
+        return cloneScript;
+    }
 
-	@Override
-	public ScriptBrick getScriptBrick() {
-		if (brick == null) {
-			brick = new WhenConditionBrick(this);
-		}
-		return brick;
-	}
+    @Override
+    public ScriptBrick getScriptBrick() {
+        if (brick == null) {
+            brick = new WhenConditionBrick(this);
+        }
+        return brick;
+    }
 
-	public ConcurrentFormulaHashMap getFormulaMap() {
-		if (formulaMap == null) {
-			formulaMap = new ConcurrentFormulaHashMap();
-		}
-		return formulaMap;
-	}
+    public ConcurrentFormulaHashMap getFormulaMap() {
+        if (formulaMap == null) {
+            formulaMap = new ConcurrentFormulaHashMap();
+        }
+        return formulaMap;
+    }
 
-	@Override
-	public int getRequiredResources() {
-		int resources = Brick.NO_RESOURCES;
-		resources |= getScriptBrick().getRequiredResources();
-		ArrayList<Brick> brickList = getBrickList();
-		for (Brick brick : brickList) {
-			resources |= brick.getRequiredResources();
-		}
-		return resources;
-	}
+    @Override
+    public int getRequiredResources() {
+        int resources = Brick.NO_RESOURCES;
+        resources |= getScriptBrick().getRequiredResources();
+        ArrayList<Brick> brickList = getBrickList();
+        for (Brick brick : brickList) {
+            resources |= brick.getRequiredResources();
+        }
+        return resources;
+    }
 }

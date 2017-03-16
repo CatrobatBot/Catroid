@@ -29,56 +29,56 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 
 public class ViewSwitchLock implements Lock {
-	private static final long UNLOCK_TIMEOUT = 200;
-	private static final String TAG = ViewSwitchLock.class.getSimpleName();
+    private static final long UNLOCK_TIMEOUT = 200;
+    private static final String TAG = ViewSwitchLock.class.getSimpleName();
 
-	private boolean locked = false;
+    private boolean locked = false;
 
-	@Override
-	public synchronized boolean tryLock() {
-		if (locked) {
-			return false;
-		}
+    @Override
+    public synchronized boolean tryLock() {
+        if (locked) {
+            return false;
+        }
 
-		locked = true;
-		new Thread(new Runnable() {
+        locked = true;
+        new Thread(new Runnable() {
 
-			@Override
-			public void run() {
-				try {
-					Thread.sleep(UNLOCK_TIMEOUT);
-				} catch (InterruptedException interruptedException) {
-					Log.e(TAG, Log.getStackTraceString(interruptedException));
-				}
-				ViewSwitchLock.this.unlock();
-			}
-		}).start();
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(UNLOCK_TIMEOUT);
+                } catch (InterruptedException interruptedException) {
+                    Log.e(TAG, Log.getStackTraceString(interruptedException));
+                }
+                ViewSwitchLock.this.unlock();
+            }
+        }).start();
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public synchronized void unlock() {
-		locked = false;
-	}
+    @Override
+    public synchronized void unlock() {
+        locked = false;
+    }
 
-	@Override
-	public void lock() {
-		throw new UnsupportedOperationException("Unsupported Method");
-	}
+    @Override
+    public void lock() {
+        throw new UnsupportedOperationException("Unsupported Method");
+    }
 
-	@Override
-	public void lockInterruptibly() throws InterruptedException {
-		throw new UnsupportedOperationException("Unsupported Method");
-	}
+    @Override
+    public void lockInterruptibly() throws InterruptedException {
+        throw new UnsupportedOperationException("Unsupported Method");
+    }
 
-	@Override
-	public Condition newCondition() {
-		throw new UnsupportedOperationException("Unsupported Method");
-	}
+    @Override
+    public Condition newCondition() {
+        throw new UnsupportedOperationException("Unsupported Method");
+    }
 
-	@Override
-	public boolean tryLock(long arg0, TimeUnit arg1) throws InterruptedException {
-		throw new UnsupportedOperationException("Unsupported Method");
-	}
+    @Override
+    public boolean tryLock(long arg0, TimeUnit arg1) throws InterruptedException {
+        throw new UnsupportedOperationException("Unsupported Method");
+    }
 }

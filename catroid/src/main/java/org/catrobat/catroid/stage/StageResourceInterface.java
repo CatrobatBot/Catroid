@@ -23,11 +23,11 @@
 package org.catrobat.catroid.stage;
 
 public interface StageResourceInterface {
-	void initialise();
+    void initialise();
 
-	void start();
+    void start();
 
-	void pause();
+    void pause();
 
-	void destroy();
+    void destroy();
 }

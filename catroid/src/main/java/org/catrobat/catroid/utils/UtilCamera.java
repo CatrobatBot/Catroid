@@ -37,66 +37,67 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public final class UtilCamera {
-	private static final String TAG = UtilCamera.class.getSimpleName();
-	// Suppress default constructor for noninstantiability
-	private UtilCamera() {
-		throw new AssertionError();
-	}
+    private static final String TAG = UtilCamera.class.getSimpleName();
 
-	public static Uri getDefaultLookFromCameraUri(String defLookName) {
-		File pictureFile = new File(Constants.DEFAULT_ROOT, defLookName + ".jpg");
-		return Uri.fromFile(pictureFile);
-	}
+    // Suppress default constructor for noninstantiability
+    private UtilCamera() {
+        throw new AssertionError();
+    }
 
-	public static Uri rotatePictureIfNecessary(Uri lookFromCameraUri, String defLookName) {
-		Uri rotatedPictureUri;
-		int rotate = getPhotoRotationDegree(lookFromCameraUri.getPath());
+    public static Uri getDefaultLookFromCameraUri(String defLookName) {
+        File pictureFile = new File(Constants.DEFAULT_ROOT, defLookName + ".jpg");
+        return Uri.fromFile(pictureFile);
+    }
 
-		if (rotate != 0) {
-			Project project = ProjectManager.getInstance().getCurrentProject();
-			File fullSizeImage = new File(lookFromCameraUri.getPath());
+    public static Uri rotatePictureIfNecessary(Uri lookFromCameraUri, String defLookName) {
+        Uri rotatedPictureUri;
+        int rotate = getPhotoRotationDegree(lookFromCameraUri.getPath());
 
-			// Height and Width switched for proper scaling for portrait format photos from camera
-			Bitmap fullSizeBitmap = ImageEditing.getScaledBitmapFromPath(fullSizeImage.getAbsolutePath(),
-					project.getXmlHeader().virtualScreenHeight, project.getXmlHeader().virtualScreenWidth,
-					ImageEditing.ResizeType.FILL_RECTANGLE_WITH_SAME_ASPECT_RATIO, true);
-			Bitmap rotatedBitmap = ImageEditing.rotateBitmap(fullSizeBitmap, rotate);
-			File downScaledCameraPicture = new File(Constants.DEFAULT_ROOT, defLookName + ".jpg");
-			rotatedPictureUri = Uri.fromFile(downScaledCameraPicture);
-			try {
-				StorageHandler.saveBitmapToImageFile(downScaledCameraPicture, rotatedBitmap);
-			} catch (FileNotFoundException e) {
-				Log.e(TAG, "Could not find file to save bitmap.", e);
-			}
+        if (rotate != 0) {
+            Project project = ProjectManager.getInstance().getCurrentProject();
+            File fullSizeImage = new File(lookFromCameraUri.getPath());
 
-			return rotatedPictureUri;
-		}
+            // Height and Width switched for proper scaling for portrait format photos from camera
+            Bitmap fullSizeBitmap = ImageEditing.getScaledBitmapFromPath(fullSizeImage.getAbsolutePath(),
+                    project.getXmlHeader().virtualScreenHeight, project.getXmlHeader().virtualScreenWidth,
+                    ImageEditing.ResizeType.FILL_RECTANGLE_WITH_SAME_ASPECT_RATIO, true);
+            Bitmap rotatedBitmap = ImageEditing.rotateBitmap(fullSizeBitmap, rotate);
+            File downScaledCameraPicture = new File(Constants.DEFAULT_ROOT, defLookName + ".jpg");
+            rotatedPictureUri = Uri.fromFile(downScaledCameraPicture);
+            try {
+                StorageHandler.saveBitmapToImageFile(downScaledCameraPicture, rotatedBitmap);
+            } catch (FileNotFoundException e) {
+                Log.e(TAG, "Could not find file to save bitmap.", e);
+            }
 
-		return lookFromCameraUri;
-	}
+            return rotatedPictureUri;
+        }
 
-	private static int getPhotoRotationDegree(String imagePath) {
-		int rotate = 0;
-		try {
-			File imageFile = new File(imagePath);
-			ExifInterface exifDataReader = new ExifInterface(imageFile.getAbsolutePath());
-			int orientation = exifDataReader.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-					ExifInterface.ORIENTATION_NORMAL);
+        return lookFromCameraUri;
+    }
 
-			switch (orientation) {
-				case ExifInterface.ORIENTATION_ROTATE_270:
-					rotate = 270;
-					break;
-				case ExifInterface.ORIENTATION_ROTATE_180:
-					rotate = 180;
-					break;
-				case ExifInterface.ORIENTATION_ROTATE_90:
-					rotate = 90;
-					break;
-			}
-		} catch (IOException e) {
-			Log.e(TAG, "Could not find file to initialize ExifInterface.", e);
-		}
-		return rotate;
-	}
+    private static int getPhotoRotationDegree(String imagePath) {
+        int rotate = 0;
+        try {
+            File imageFile = new File(imagePath);
+            ExifInterface exifDataReader = new ExifInterface(imageFile.getAbsolutePath());
+            int orientation = exifDataReader.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_NORMAL);
+
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    rotate = 270;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    rotate = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    rotate = 90;
+                    break;
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Could not find file to initialize ExifInterface.", e);
+        }
+        return rotate;
+    }
 }

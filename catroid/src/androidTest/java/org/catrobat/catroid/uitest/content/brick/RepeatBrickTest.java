@@ -43,60 +43,60 @@ import java.util.ArrayList;
 
 public class RepeatBrickTest extends BaseActivityInstrumentationTestCase<ScriptActivity> {
 
-	private Project project;
+    private Project project;
 
-	public RepeatBrickTest() {
-		super(ScriptActivity.class);
-	}
+    public RepeatBrickTest() {
+        super(ScriptActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		// normally super.setUp should be called first
-		// but kept the test failing due to view is null
-		// when starting in ScriptActivity
-		createProject();
-		super.setUp();
-	}
+    @Override
+    public void setUp() throws Exception {
+        // normally super.setUp should be called first
+        // but kept the test failing due to view is null
+        // when starting in ScriptActivity
+        createProject();
+        super.setUp();
+    }
 
-	public void testRepeatBrick() {
-		ListView dragDropListView = UiTestUtils.getScriptListView(solo);
-		BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
+    public void testRepeatBrick() {
+        ListView dragDropListView = UiTestUtils.getScriptListView(solo);
+        BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
 
-		int childrenCount = adapter.getChildCountFromLastGroup();
-		int groupCount = adapter.getScriptCount();
-		assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
-		assertEquals("Incorrect number of bricks.", 1, childrenCount);
+        int childrenCount = adapter.getChildCountFromLastGroup();
+        int groupCount = adapter.getScriptCount();
+        assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
+        assertEquals("Incorrect number of bricks.", 1, childrenCount);
 
-		ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
-		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
+        ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
+        assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
-		assertNotNull("TextView does not exist", solo.getText(solo.getString(R.string.brick_repeat)));
+        assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
+        assertNotNull("TextView does not exist", solo.getText(solo.getString(R.string.brick_repeat)));
 
-		UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_repeat_edit_text, 1);
-		TextView timesTextView = (TextView) solo.getView(R.id.brick_repeat_time_text_view);
-		assertTrue("Specifier hasn't changed from plural to singular",
-				timesTextView.getText()
-						.equals(timesTextView.getResources().getQuantityString(R.plurals.time_plural, 1)));
+        UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_repeat_edit_text, 1);
+        TextView timesTextView = (TextView) solo.getView(R.id.brick_repeat_time_text_view);
+        assertTrue("Specifier hasn't changed from plural to singular",
+                timesTextView.getText()
+                        .equals(timesTextView.getResources().getQuantityString(R.plurals.time_plural, 1)));
 
-		UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_repeat_edit_text, 5);
-		timesTextView = (TextView) solo.getView(R.id.brick_repeat_time_text_view);
-		assertTrue("Specifier hasn't changed from singular to plural",
-				timesTextView.getText()
-						.equals(timesTextView.getResources().getQuantityString(R.plurals.time_plural, 5)));
-	}
+        UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_repeat_edit_text, 5);
+        timesTextView = (TextView) solo.getView(R.id.brick_repeat_time_text_view);
+        assertTrue("Specifier hasn't changed from singular to plural",
+                timesTextView.getText()
+                        .equals(timesTextView.getResources().getQuantityString(R.plurals.time_plural, 5)));
+    }
 
-	private void createProject() {
-		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite sprite = new SingleSprite("cat");
-		Script script = new StartScript();
-		script.addBrick(new RepeatBrick(3));
+    private void createProject() {
+        project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Sprite sprite = new SingleSprite("cat");
+        Script script = new StartScript();
+        script.addBrick(new RepeatBrick(3));
 
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 }

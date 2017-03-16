@@ -38,66 +38,66 @@ import org.catrobat.catroid.ui.fragment.FormulaEditorFragment;
 import java.util.List;
 
 public class SetVolumeToBrick extends FormulaBrick {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private transient View prototypeView;
+    private transient View prototypeView;
 
-	public SetVolumeToBrick() {
-		addAllowedBrickField(BrickField.VOLUME);
-	}
+    public SetVolumeToBrick() {
+        addAllowedBrickField(BrickField.VOLUME);
+    }
 
-	public SetVolumeToBrick(float volumeValue) {
-		initializeBrickFields(new Formula(volumeValue));
-	}
+    public SetVolumeToBrick(float volumeValue) {
+        initializeBrickFields(new Formula(volumeValue));
+    }
 
-	public SetVolumeToBrick(Formula volume) {
-		initializeBrickFields(volume);
-	}
+    public SetVolumeToBrick(Formula volume) {
+        initializeBrickFields(volume);
+    }
 
-	private void initializeBrickFields(Formula volume) {
-		addAllowedBrickField(BrickField.VOLUME);
-		setFormulaWithBrickField(BrickField.VOLUME, volume);
-	}
+    private void initializeBrickFields(Formula volume) {
+        addAllowedBrickField(BrickField.VOLUME);
+        setFormulaWithBrickField(BrickField.VOLUME, volume);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return getFormulaWithBrickField(BrickField.VOLUME).getRequiredResources();
-	}
+    @Override
+    public int getRequiredResources() {
+        return getFormulaWithBrickField(BrickField.VOLUME).getRequiredResources();
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		view = View.inflate(context, R.layout.brick_set_volume_to, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        view = View.inflate(context, R.layout.brick_set_volume_to, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_set_volume_to_checkbox);
-		TextView edit = (TextView) view.findViewById(R.id.brick_set_volume_to_edit_text);
-		getFormulaWithBrickField(BrickField.VOLUME).setTextFieldId(R.id.brick_set_volume_to_edit_text);
-		getFormulaWithBrickField(BrickField.VOLUME).refreshTextField(view);
+        setCheckboxView(R.id.brick_set_volume_to_checkbox);
+        TextView edit = (TextView) view.findViewById(R.id.brick_set_volume_to_edit_text);
+        getFormulaWithBrickField(BrickField.VOLUME).setTextFieldId(R.id.brick_set_volume_to_edit_text);
+        getFormulaWithBrickField(BrickField.VOLUME).refreshTextField(view);
 
-		edit.setOnClickListener(this);
-		return view;
-	}
+        edit.setOnClickListener(this);
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_set_volume_to, null);
-		TextView textSetVolumeTo = (TextView) prototypeView.findViewById(R.id.brick_set_volume_to_edit_text);
-		textSetVolumeTo.setText(String.valueOf(BrickValues.SET_VOLUME_TO));
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_set_volume_to, null);
+        TextView textSetVolumeTo = (TextView) prototypeView.findViewById(R.id.brick_set_volume_to_edit_text);
+        textSetVolumeTo.setText(String.valueOf(BrickValues.SET_VOLUME_TO));
+        return prototypeView;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createSetVolumeToAction(sprite,
-				getFormulaWithBrickField(BrickField.VOLUME)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createSetVolumeToAction(sprite,
+                getFormulaWithBrickField(BrickField.VOLUME)));
+        return null;
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		FormulaEditorFragment.showFragment(view, this, BrickField.VOLUME);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        FormulaEditorFragment.showFragment(view, this, BrickField.VOLUME);
+    }
 }

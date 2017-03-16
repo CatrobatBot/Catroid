@@ -42,50 +42,50 @@ import java.util.ArrayList;
 
 public class NextLookBrickTest extends BaseActivityInstrumentationTestCase<ScriptActivity> {
 
-	private Project project;
+    private Project project;
 
-	public NextLookBrickTest() {
-		super(ScriptActivity.class);
-	}
+    public NextLookBrickTest() {
+        super(ScriptActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		// normally super.setUp should be called first
-		// but kept the test failing due to view is null
-		// when starting in ScriptActivity
-		createProject();
-		super.setUp();
-	}
+    @Override
+    public void setUp() throws Exception {
+        // normally super.setUp should be called first
+        // but kept the test failing due to view is null
+        // when starting in ScriptActivity
+        createProject();
+        super.setUp();
+    }
 
-	public void testNextLookBrick() {
-		ListView view = UiTestUtils.getScriptListView(solo);
-		BrickAdapter adapter = (BrickAdapter) view.getAdapter();
+    public void testNextLookBrick() {
+        ListView view = UiTestUtils.getScriptListView(solo);
+        BrickAdapter adapter = (BrickAdapter) view.getAdapter();
 
-		int childrenCount = adapter.getChildCountFromLastGroup();
-		int groupCount = adapter.getScriptCount();
+        int childrenCount = adapter.getChildCountFromLastGroup();
+        int groupCount = adapter.getScriptCount();
 
-		assertEquals("Incorrect number of bricks.", 2, solo.getCurrentViews(ListView.class).get(0).getChildCount());
-		assertEquals("Incorrect number of bricks.", 1, childrenCount);
+        assertEquals("Incorrect number of bricks.", 2, solo.getCurrentViews(ListView.class).get(0).getChildCount());
+        assertEquals("Incorrect number of bricks.", 1, childrenCount);
 
-		ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
-		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
+        ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
+        assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
-		assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.brick_next_look)));
-	}
+        assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
+        assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.brick_next_look)));
+    }
 
-	private void createProject() {
-		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite sprite = new SingleSprite("cat");
-		Script script = new StartScript();
-		ProjectManager.getInstance().setProject(project);
-		script.addBrick(new NextLookBrick());
+    private void createProject() {
+        project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Sprite sprite = new SingleSprite("cat");
+        Script script = new StartScript();
+        ProjectManager.getInstance().setProject(project);
+        script.addBrick(new NextLookBrick());
 
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 }

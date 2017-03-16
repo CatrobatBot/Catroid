@@ -24,42 +24,42 @@ package org.catrobat.catroid.common;
 
 public abstract class DroneConfigPreference {
 
-	public enum Preferences {
-		FIRST,
-		SECOND,
-		THIRD,
-		FOURTH;
+    public enum Preferences {
+        FIRST,
+        SECOND,
+        THIRD,
+        FOURTH;
 
-		public static String[] getPreferenceCodes() {
-			String[] valueStrings = new String[values().length];
+        public static String[] getPreferenceCodes() {
+            String[] valueStrings = new String[values().length];
 
-			for (int i = 0; i < values().length; ++i) {
-				valueStrings[i] = values()[i].name();
-			}
+            for (int i = 0; i < values().length; ++i) {
+                valueStrings[i] = values()[i].name();
+            }
 
-			return valueStrings;
-		}
+            return valueStrings;
+        }
 
-		public String getPreferenceCode() {
-			return getPreferenceCode(this);
-		}
+        public String getPreferenceCode() {
+            return getPreferenceCode(this);
+        }
 
-		public static String getPreferenceCode(DroneConfigPreference.Preferences preference) {
-			return preference.name();
-		}
+        public static String getPreferenceCode(DroneConfigPreference.Preferences preference) {
+            return preference.name();
+        }
 
-		public static DroneConfigPreference.Preferences getPreferenceFromPreferenceCode(String preferenceCode) {
-			if (preferenceCode == null) {
-				return Preferences.FIRST;
-			}
+        public static DroneConfigPreference.Preferences getPreferenceFromPreferenceCode(String preferenceCode) {
+            if (preferenceCode == null) {
+                return Preferences.FIRST;
+            }
 
-			try {
-				return valueOf(preferenceCode);
-			} catch (IllegalArgumentException e) {
-				return Preferences.FIRST;
-			}
-		}
-	}
+            try {
+                return valueOf(preferenceCode);
+            } catch (IllegalArgumentException e) {
+                return Preferences.FIRST;
+            }
+        }
+    }
 
-	public static final String TAG = DroneConfigPreference.class.getSimpleName();
+    public static final String TAG = DroneConfigPreference.class.getSimpleName();
 }

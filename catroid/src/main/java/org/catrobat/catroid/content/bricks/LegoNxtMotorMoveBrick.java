@@ -43,125 +43,125 @@ import org.catrobat.catroid.ui.fragment.FormulaEditorFragment;
 import java.util.List;
 
 public class LegoNxtMotorMoveBrick extends FormulaBrick {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private transient View prototypeView;
+    private transient View prototypeView;
 
-	private String motor;
-	private transient Motor motorEnum;
-	private transient TextView editSpeed;
+    private String motor;
+    private transient Motor motorEnum;
+    private transient TextView editSpeed;
 
-	public static enum Motor {
-		MOTOR_A, MOTOR_B, MOTOR_C, MOTOR_B_C
-	}
+    public static enum Motor {
+        MOTOR_A, MOTOR_B, MOTOR_C, MOTOR_B_C
+    }
 
-	public LegoNxtMotorMoveBrick() {
-		addAllowedBrickField(BrickField.LEGO_NXT_SPEED);
-	}
+    public LegoNxtMotorMoveBrick() {
+        addAllowedBrickField(BrickField.LEGO_NXT_SPEED);
+    }
 
-	public LegoNxtMotorMoveBrick(Motor motor, int speedValue) {
-		this.motorEnum = motor;
-		this.motor = motorEnum.name();
-		initializeBrickFields(new Formula(speedValue));
-	}
+    public LegoNxtMotorMoveBrick(Motor motor, int speedValue) {
+        this.motorEnum = motor;
+        this.motor = motorEnum.name();
+        initializeBrickFields(new Formula(speedValue));
+    }
 
-	public LegoNxtMotorMoveBrick(Motor motor, Formula speedFormula) {
-		this.motorEnum = motor;
-		this.motor = motorEnum.name();
-		initializeBrickFields(speedFormula);
-	}
+    public LegoNxtMotorMoveBrick(Motor motor, Formula speedFormula) {
+        this.motorEnum = motor;
+        this.motor = motorEnum.name();
+        initializeBrickFields(speedFormula);
+    }
 
-	protected Object readResolve() {
-		if (motor != null) {
-			motorEnum = Motor.valueOf(motor);
-		}
-		return this;
-	}
+    protected Object readResolve() {
+        if (motor != null) {
+            motorEnum = Motor.valueOf(motor);
+        }
+        return this;
+    }
 
-	private void initializeBrickFields(Formula speed) {
-		addAllowedBrickField(BrickField.LEGO_NXT_SPEED);
-		setFormulaWithBrickField(BrickField.LEGO_NXT_SPEED, speed);
-	}
+    private void initializeBrickFields(Formula speed) {
+        addAllowedBrickField(BrickField.LEGO_NXT_SPEED);
+        setFormulaWithBrickField(BrickField.LEGO_NXT_SPEED, speed);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return BLUETOOTH_LEGO_NXT | getFormulaWithBrickField(BrickField.LEGO_NXT_SPEED).getRequiredResources();
-	}
+    @Override
+    public int getRequiredResources() {
+        return BLUETOOTH_LEGO_NXT | getFormulaWithBrickField(BrickField.LEGO_NXT_SPEED).getRequiredResources();
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_nxt_motor_action, null);
-		TextView textSpeed = (TextView) prototypeView.findViewById(R.id.motor_action_speed_edit_text);
-		textSpeed.setText(String.valueOf(BrickValues.LEGO_SPEED));
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_nxt_motor_action, null);
+        TextView textSpeed = (TextView) prototypeView.findViewById(R.id.motor_action_speed_edit_text);
+        textSpeed.setText(String.valueOf(BrickValues.LEGO_SPEED));
 
-		Spinner legoSpinner = (Spinner) prototypeView.findViewById(R.id.lego_motor_action_spinner);
+        Spinner legoSpinner = (Spinner) prototypeView.findViewById(R.id.lego_motor_action_spinner);
 
-		ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter.createFromResource(context, R.array.nxt_motor_chooser,
-				android.R.layout.simple_spinner_item);
-		motorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter.createFromResource(context, R.array.nxt_motor_chooser,
+                android.R.layout.simple_spinner_item);
+        motorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-		legoSpinner.setAdapter(motorAdapter);
-		legoSpinner.setSelection(motorEnum.ordinal());
-		legoSpinner.setGravity(Gravity.CENTER);
-		return prototypeView;
-	}
+        legoSpinner.setAdapter(motorAdapter);
+        legoSpinner.setSelection(motorEnum.ordinal());
+        legoSpinner.setGravity(Gravity.CENTER);
+        return prototypeView;
+    }
 
-	@Override
-	public Brick clone() {
-		return new LegoNxtMotorMoveBrick(motorEnum, getFormulaWithBrickField(BrickField.LEGO_NXT_SPEED).clone());
-	}
+    @Override
+    public Brick clone() {
+        return new LegoNxtMotorMoveBrick(motorEnum, getFormulaWithBrickField(BrickField.LEGO_NXT_SPEED).clone());
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		FormulaEditorFragment.showFragment(view, this, BrickField.LEGO_NXT_SPEED);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        FormulaEditorFragment.showFragment(view, this, BrickField.LEGO_NXT_SPEED);
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_nxt_motor_action, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
-		setCheckboxView(R.id.brick_nxt_motor_action_checkbox);
+        view = View.inflate(context, R.layout.brick_nxt_motor_action, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        setCheckboxView(R.id.brick_nxt_motor_action_checkbox);
 
-		editSpeed = (TextView) view.findViewById(R.id.motor_action_speed_edit_text);
-		getFormulaWithBrickField(BrickField.LEGO_NXT_SPEED).setTextFieldId(R.id.motor_action_speed_edit_text);
-		getFormulaWithBrickField(BrickField.LEGO_NXT_SPEED).refreshTextField(view);
+        editSpeed = (TextView) view.findViewById(R.id.motor_action_speed_edit_text);
+        getFormulaWithBrickField(BrickField.LEGO_NXT_SPEED).setTextFieldId(R.id.motor_action_speed_edit_text);
+        getFormulaWithBrickField(BrickField.LEGO_NXT_SPEED).refreshTextField(view);
 
-		editSpeed.setOnClickListener(this);
+        editSpeed.setOnClickListener(this);
 
-		ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter.createFromResource(context, R.array.nxt_motor_chooser,
-				android.R.layout.simple_spinner_item);
-		motorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		Spinner motorSpinner = (Spinner) view.findViewById(R.id.lego_motor_action_spinner);
+        ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter.createFromResource(context, R.array.nxt_motor_chooser,
+                android.R.layout.simple_spinner_item);
+        motorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner motorSpinner = (Spinner) view.findViewById(R.id.lego_motor_action_spinner);
 
-		motorSpinner.setAdapter(motorAdapter);
-		motorSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+        motorSpinner.setAdapter(motorAdapter);
+        motorSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
-			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
-				motorEnum = Motor.values()[position];
-				motor = motorEnum.name();
-			}
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                motorEnum = Motor.values()[position];
+                motor = motorEnum.name();
+            }
 
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-			}
-		});
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
 
-		motorSpinner.setSelection(motorEnum.ordinal());
-		motorSpinner.setGravity(Gravity.CENTER);
+        motorSpinner.setSelection(motorEnum.ordinal());
+        motorSpinner.setGravity(Gravity.CENTER);
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createLegoNxtMotorMoveAction(sprite, motorEnum,
-				getFormulaWithBrickField(BrickField.LEGO_NXT_SPEED)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createLegoNxtMotorMoveAction(sprite, motorEnum,
+                getFormulaWithBrickField(BrickField.LEGO_NXT_SPEED)));
+        return null;
+    }
 }

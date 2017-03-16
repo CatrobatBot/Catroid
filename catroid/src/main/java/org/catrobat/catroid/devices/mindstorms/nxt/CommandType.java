@@ -23,25 +23,25 @@
 package org.catrobat.catroid.devices.mindstorms.nxt;
 
 public enum CommandType {
-	DIRECT_COMMAND(0X00),
-	REPLY_COMMAND(0X02);
+    DIRECT_COMMAND(0X00),
+    REPLY_COMMAND(0X02);
 
-	private int commandTypeValue;
+    private int commandTypeValue;
 
-	private CommandType(int commandTypeValue) {
-		this.commandTypeValue = commandTypeValue;
-	}
+    private CommandType(int commandTypeValue) {
+        this.commandTypeValue = commandTypeValue;
+    }
 
-	public byte getByte() {
-		return (byte) commandTypeValue;
-	}
+    public byte getByte() {
+        return (byte) commandTypeValue;
+    }
 
-	public static boolean isMember(byte memberToTest) {
-		for (CommandType commandType : CommandType.values()) {
-			if (commandType.getByte() == memberToTest) {
-				return true;
-			}
-		}
-		return false;
-	}
+    public static boolean isMember(byte memberToTest) {
+        for (CommandType commandType : CommandType.values()) {
+            if (commandType.getByte() == memberToTest) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

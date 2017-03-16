@@ -37,64 +37,64 @@ import java.util.List;
 
 public class InsertItemintoUserListActionTest extends AndroidTestCase {
 
-	private static final String TEST_USERLIST_NAME = "testUserList";
-	private static final double DOUBLE_VALUE_ITEM_TO_ADD = 3.0;
-	private static final List<Object> INITIALIZED_LIST_VALUES = new ArrayList<Object>();
+    private static final String TEST_USERLIST_NAME = "testUserList";
+    private static final double DOUBLE_VALUE_ITEM_TO_ADD = 3.0;
+    private static final List<Object> INITIALIZED_LIST_VALUES = new ArrayList<Object>();
 
-	private Sprite testSprite;
-	private Project project;
-	private UserList userList;
+    private Sprite testSprite;
+    private Project project;
+    private UserList userList;
 
-	private ActionFactory actionFactory;
+    private ActionFactory actionFactory;
 
-	@Override
-	protected void setUp() throws Exception {
-		actionFactory = new ActionFactory();
-		testSprite = new SingleSprite("testSingleSprite");
-		project = new Project(null, "testProject");
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().getCurrentScene().getDataContainer().addProjectUserList(TEST_USERLIST_NAME);
-		userList = ProjectManager.getInstance().getCurrentScene().getDataContainer()
-				.getUserList(TEST_USERLIST_NAME, null);
-		userList.setList(INITIALIZED_LIST_VALUES);
-		INITIALIZED_LIST_VALUES.clear();
-		INITIALIZED_LIST_VALUES.add(1.0);
-		INITIALIZED_LIST_VALUES.add(2.0);
-		super.setUp();
-	}
+    @Override
+    protected void setUp() throws Exception {
+        actionFactory = new ActionFactory();
+        testSprite = new SingleSprite("testSingleSprite");
+        project = new Project(null, "testProject");
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().getCurrentScene().getDataContainer().addProjectUserList(TEST_USERLIST_NAME);
+        userList = ProjectManager.getInstance().getCurrentScene().getDataContainer()
+                .getUserList(TEST_USERLIST_NAME, null);
+        userList.setList(INITIALIZED_LIST_VALUES);
+        INITIALIZED_LIST_VALUES.clear();
+        INITIALIZED_LIST_VALUES.add(1.0);
+        INITIALIZED_LIST_VALUES.add(2.0);
+        super.setUp();
+    }
 
-	public void testInsertNumericalValueToUserList() {
-		actionFactory.createInsertItemIntoUserListAction(testSprite, new Formula(1), new Formula(DOUBLE_VALUE_ITEM_TO_ADD), userList).act(1f);
-		Object firstItemOfUserList = userList.getList().get(0);
+    public void testInsertNumericalValueToUserList() {
+        actionFactory.createInsertItemIntoUserListAction(testSprite, new Formula(1), new Formula(DOUBLE_VALUE_ITEM_TO_ADD), userList).act(1f);
+        Object firstItemOfUserList = userList.getList().get(0);
 
-		assertEquals("UserList size not changed!", 3, userList.getList().size());
-		assertEquals("UserList not changed!", String.valueOf(DOUBLE_VALUE_ITEM_TO_ADD), firstItemOfUserList);
-	}
+        assertEquals("UserList size not changed!", 3, userList.getList().size());
+        assertEquals("UserList not changed!", String.valueOf(DOUBLE_VALUE_ITEM_TO_ADD), firstItemOfUserList);
+    }
 
-	public void testInsertNumericalValueToUserListAtLastPosition() {
-		actionFactory.createInsertItemIntoUserListAction(testSprite, new Formula(3), new Formula(DOUBLE_VALUE_ITEM_TO_ADD), userList).act(1f);
-		Object lastItemOfUserList = userList.getList().get(userList.getList().size() - 1);
+    public void testInsertNumericalValueToUserListAtLastPosition() {
+        actionFactory.createInsertItemIntoUserListAction(testSprite, new Formula(3), new Formula(DOUBLE_VALUE_ITEM_TO_ADD), userList).act(1f);
+        Object lastItemOfUserList = userList.getList().get(userList.getList().size() - 1);
 
-		assertEquals("UserList size not changed!", 3, userList.getList().size());
-		assertEquals("UserList not changed!", String.valueOf(DOUBLE_VALUE_ITEM_TO_ADD), lastItemOfUserList);
-	}
+        assertEquals("UserList size not changed!", 3, userList.getList().size());
+        assertEquals("UserList not changed!", String.valueOf(DOUBLE_VALUE_ITEM_TO_ADD), lastItemOfUserList);
+    }
 
-	public void testInsertItemWithInvalidUserList() {
-		actionFactory.createInsertItemIntoUserListAction(testSprite, new Formula(1), new Formula(DOUBLE_VALUE_ITEM_TO_ADD), null).act(1f);
-		assertEquals("UserList changed, but should not!", 2, userList.getList().size());
-	}
+    public void testInsertItemWithInvalidUserList() {
+        actionFactory.createInsertItemIntoUserListAction(testSprite, new Formula(1), new Formula(DOUBLE_VALUE_ITEM_TO_ADD), null).act(1f);
+        assertEquals("UserList changed, but should not!", 2, userList.getList().size());
+    }
 
-	public void testInsertNullFormula() {
-		actionFactory.createInsertItemIntoUserListAction(testSprite, new Formula(1), null, userList).act(1f);
-		Object firstItemOfUserList = userList.getList().get(0);
+    public void testInsertNullFormula() {
+        actionFactory.createInsertItemIntoUserListAction(testSprite, new Formula(1), null, userList).act(1f);
+        Object firstItemOfUserList = userList.getList().get(0);
 
-		assertEquals("UserList size not changed!", 3, userList.getList().size());
-		assertEquals("UserList not changed!", 0d, firstItemOfUserList);
-	}
+        assertEquals("UserList size not changed!", 3, userList.getList().size());
+        assertEquals("UserList not changed!", 0d, firstItemOfUserList);
+    }
 
-	public void testNotANumberFormula() {
-		actionFactory.createInsertItemIntoUserListAction(testSprite, new Formula(1), new Formula(Double.NaN), userList).act(1f);
-		Object firstItemOfUserList = userList.getList().get(0);
-		assertEquals("UserList not changed!", String.valueOf(Double.NaN), firstItemOfUserList);
-	}
+    public void testNotANumberFormula() {
+        actionFactory.createInsertItemIntoUserListAction(testSprite, new Formula(1), new Formula(Double.NaN), userList).act(1f);
+        Object firstItemOfUserList = userList.getList().get(0);
+        assertEquals("UserList not changed!", String.valueOf(Double.NaN), firstItemOfUserList);
+    }
 }

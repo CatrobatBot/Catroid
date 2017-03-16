@@ -31,40 +31,40 @@ import org.catrobat.catroid.utils.Utils;
 
 public class RenameSoundDialog extends TextDialog {
 
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_rename_sound";
-	public static final String EXTRA_NEW_SOUND_TITLE = "new_sound_name";
+    public static final String DIALOG_FRAGMENT_TAG = "dialog_rename_sound";
+    public static final String EXTRA_NEW_SOUND_TITLE = "new_sound_name";
 
-	public RenameSoundDialog(int title, int inputLabel, String previousText) {
-		super(title, inputLabel, previousText, false);
-	}
+    public RenameSoundDialog(int title, int inputLabel, String previousText) {
+        super(title, inputLabel, previousText, false);
+    }
 
-	@Override
-	protected boolean handlePositiveButtonClick() {
-		String newSoundTitle = input.getText().toString().trim();
+    @Override
+    protected boolean handlePositiveButtonClick() {
+        String newSoundTitle = input.getText().toString().trim();
 
-		if (newSoundTitle.equals(previousText)) {
-			return true;
-		}
+        if (newSoundTitle.equals(previousText)) {
+            return true;
+        }
 
-		boolean newNameConsistsOfSpacesOnly = newSoundTitle.isEmpty();
+        boolean newNameConsistsOfSpacesOnly = newSoundTitle.isEmpty();
 
-		if (newNameConsistsOfSpacesOnly) {
-			input.setError(getString(R.string.name_consists_of_spaces_only));
-			return false;
-		}
+        if (newNameConsistsOfSpacesOnly) {
+            input.setError(getString(R.string.name_consists_of_spaces_only));
+            return false;
+        }
 
-		SoundInfo soundInfo = new SoundInfo();
-		soundInfo.setTitle(newSoundTitle);
-		newSoundTitle = Utils.getUniqueSoundName(soundInfo, false);
+        SoundInfo soundInfo = new SoundInfo();
+        soundInfo.setTitle(newSoundTitle);
+        newSoundTitle = Utils.getUniqueSoundName(soundInfo, false);
 
-		Intent intent = new Intent(ScriptActivity.ACTION_SOUND_RENAMED);
-		intent.putExtra(EXTRA_NEW_SOUND_TITLE, newSoundTitle);
-		getActivity().sendBroadcast(intent);
+        Intent intent = new Intent(ScriptActivity.ACTION_SOUND_RENAMED);
+        intent.putExtra(EXTRA_NEW_SOUND_TITLE, newSoundTitle);
+        getActivity().sendBroadcast(intent);
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	protected void handleNegativeButtonClick() {
-	}
+    @Override
+    protected void handleNegativeButtonClick() {
+    }
 }

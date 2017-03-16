@@ -33,24 +33,24 @@ import org.catrobat.catroid.io.SoundManager;
 
 public class SetVolumeToAction extends TemporalAction {
 
-	private Formula volume;
-	private Sprite sprite;
+    private Formula volume;
+    private Sprite sprite;
 
-	@Override
-	protected void update(float percent) {
-		try {
-			Float newVolume = volume == null ? Float.valueOf(0f) : volume.interpretFloat(sprite);
-			SoundManager.getInstance().setVolume(newVolume);
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}
-	}
+    @Override
+    protected void update(float percent) {
+        try {
+            Float newVolume = volume == null ? Float.valueOf(0f) : volume.interpretFloat(sprite);
+            SoundManager.getInstance().setVolume(newVolume);
+        } catch (InterpretationException interpretationException) {
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+        }
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setVolume(Formula volume) {
-		this.volume = volume;
-	}
+    public void setVolume(Formula volume) {
+        this.volume = volume;
+    }
 }

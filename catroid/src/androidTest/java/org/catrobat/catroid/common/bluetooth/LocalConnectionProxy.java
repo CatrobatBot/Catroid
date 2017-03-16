@@ -38,94 +38,94 @@ import java.io.PipedOutputStream;
 
 class LocalConnectionProxy implements BluetoothConnection {
 
-	public static final String TAG = LocalConnectionProxy.class.getSimpleName();
+    public static final String TAG = LocalConnectionProxy.class.getSimpleName();
 
-	private InputStream observedInputStream;
-	private OutputStream observedOutputStream;
+    private InputStream observedInputStream;
+    private OutputStream observedOutputStream;
 
-	private State connectionState = State.NOT_CONNECTED;
-	private ModelRunner modelRunner;
+    private State connectionState = State.NOT_CONNECTED;
+    private ModelRunner modelRunner;
 
-	LocalConnectionProxy(BluetoothLogger logger) {
+    LocalConnectionProxy(BluetoothLogger logger) {
 
-		observedInputStream = new ObservedInputStream(new InputStream() {
-			@Override
-			public int read() throws IOException {
-				return 0;
-			}
-		}, logger);
+        observedInputStream = new ObservedInputStream(new InputStream() {
+            @Override
+            public int read() throws IOException {
+                return 0;
+            }
+        }, logger);
 
-		observedOutputStream = new ObservedOutputStream(new OutputStream() {
-			@Override
-			public void write(int i) throws IOException {
-			}
-		}, logger);
+        observedOutputStream = new ObservedOutputStream(new OutputStream() {
+            @Override
+            public void write(int i) throws IOException {
+            }
+        }, logger);
 
-		logger.loggerAttached(this);
-	}
+        logger.loggerAttached(this);
+    }
 
-	LocalConnectionProxy(BluetoothLogger logger, DeviceModel deviceModel) {
+    LocalConnectionProxy(BluetoothLogger logger, DeviceModel deviceModel) {
 
-		PipedInputStream serverInputStreamFromClientsOutputStream = new PipedInputStream();
-		PipedOutputStream serverOutputStreamToClientsInputStream = new PipedOutputStream();
+        PipedInputStream serverInputStreamFromClientsOutputStream = new PipedInputStream();
+        PipedOutputStream serverOutputStreamToClientsInputStream = new PipedOutputStream();
 
-		PipedInputStream pipedInputStreamForClient = new PipedInputStream();
-		PipedOutputStream pipedOutputStreamForClient = new PipedOutputStream();
+        PipedInputStream pipedInputStreamForClient = new PipedInputStream();
+        PipedOutputStream pipedOutputStreamForClient = new PipedOutputStream();
 
-		try {
-			serverInputStreamFromClientsOutputStream.connect(pipedOutputStreamForClient);
-			serverOutputStreamToClientsInputStream.connect(pipedInputStreamForClient);
+        try {
+            serverInputStreamFromClientsOutputStream.connect(pipedOutputStreamForClient);
+            serverOutputStreamToClientsInputStream.connect(pipedInputStreamForClient);
 
-			observedInputStream = new ObservedInputStream(pipedInputStreamForClient, logger);
-			observedOutputStream = new ObservedOutputStream(pipedOutputStreamForClient, logger);
+            observedInputStream = new ObservedInputStream(pipedInputStreamForClient, logger);
+            observedOutputStream = new ObservedOutputStream(pipedOutputStreamForClient, logger);
 
-			modelRunner = new ModelRunner(deviceModel, serverInputStreamFromClientsOutputStream, serverOutputStreamToClientsInputStream);
-			modelRunner.start();
-		} catch (IOException e) {
-			Assert.fail("Error with ConnectionProxy Stream pipes.");
-		}
-	}
+            modelRunner = new ModelRunner(deviceModel, serverInputStreamFromClientsOutputStream, serverOutputStreamToClientsInputStream);
+            modelRunner.start();
+        } catch (IOException e) {
+            Assert.fail("Error with ConnectionProxy Stream pipes.");
+        }
+    }
 
-	@Override
-	public BluetoothConnection.State connect() {
-		connectionState = BluetoothConnection.State.CONNECTED;
-		return connectionState;
-	}
+    @Override
+    public BluetoothConnection.State connect() {
+        connectionState = BluetoothConnection.State.CONNECTED;
+        return connectionState;
+    }
 
-	@Override
-	public BluetoothConnection.State connectSocket(BluetoothSocket socket) {
-		connectionState = BluetoothConnection.State.CONNECTED;
-		return connectionState;
-	}
+    @Override
+    public BluetoothConnection.State connectSocket(BluetoothSocket socket) {
+        connectionState = BluetoothConnection.State.CONNECTED;
+        return connectionState;
+    }
 
-	@Override
-	public void disconnect() {
-		try {
-			observedOutputStream.close();
-			observedInputStream.close();
-		} catch (IOException e) {
-			Log.e(TAG, "Error on disconnect while closing streams");
-		}
+    @Override
+    public void disconnect() {
+        try {
+            observedOutputStream.close();
+            observedInputStream.close();
+        } catch (IOException e) {
+            Log.e(TAG, "Error on disconnect while closing streams");
+        }
 
-		if (modelRunner != null) {
-			modelRunner.stopModelRunner();
-		}
+        if (modelRunner != null) {
+            modelRunner.stopModelRunner();
+        }
 
-		connectionState = State.NOT_CONNECTED;
-	}
+        connectionState = State.NOT_CONNECTED;
+    }
 
-	@Override
-	public InputStream getInputStream() throws IOException {
-		return observedInputStream;
-	}
+    @Override
+    public InputStream getInputStream() throws IOException {
+        return observedInputStream;
+    }
 
-	@Override
-	public OutputStream getOutputStream() throws IOException {
-		return observedOutputStream;
-	}
+    @Override
+    public OutputStream getOutputStream() throws IOException {
+        return observedOutputStream;
+    }
 
-	@Override
-	public BluetoothConnection.State getState() {
-		return connectionState;
-	}
+    @Override
+    public BluetoothConnection.State getState() {
+        return connectionState;
+    }
 }

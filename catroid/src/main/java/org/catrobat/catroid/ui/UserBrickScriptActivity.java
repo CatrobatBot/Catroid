@@ -29,19 +29,19 @@ import org.catrobat.catroid.content.bricks.UserBrick;
 import org.catrobat.catroid.ui.adapter.BrickAdapter;
 
 public class UserBrickScriptActivity extends ScriptActivity {
-	public void setupBrickAdapter(BrickAdapter adapter) {
-		UserBrick userBrick = ProjectManager.getInstance().getCurrentUserBrick();
-		adapter.setUserBrick(userBrick);
-		adapter.updateProjectBrickList();
-	}
+    public void setupBrickAdapter(BrickAdapter adapter) {
+        UserBrick userBrick = ProjectManager.getInstance().getCurrentUserBrick();
+        adapter.setUserBrick(userBrick);
+        adapter.updateProjectBrickList();
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				onBackPressed();
-				return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

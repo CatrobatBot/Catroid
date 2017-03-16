@@ -24,13 +24,13 @@ package org.catrobat.catroid.content.bricks;
 
 public interface LoopBeginBrick extends NestingBrick {
 
-	long getBeginLoopTime();
+    long getBeginLoopTime();
 
-	void setBeginLoopTime(long beginLoopTime);
+    void setBeginLoopTime(long beginLoopTime);
 
-	LoopEndBrick getLoopEndBrick();
+    LoopEndBrick getLoopEndBrick();
 
-	void setLoopEndBrick(LoopEndBrick loopEndBrick);
+    void setLoopEndBrick(LoopEndBrick loopEndBrick);
 
-	LoopBeginBrick getCopy();
+    LoopBeginBrick getCopy();
 }

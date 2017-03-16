@@ -29,18 +29,18 @@ import org.catrobat.catroid.formulaeditor.Formula;
 
 public final class CommandFactory {
 
-	private CommandFactory() {
-	}
+    private CommandFactory() {
+    }
 
-	public static ChangeFormulaCommand makeChangeFormulaCommand(FormulaBrick formulaBrick, Brick.BrickField brickField,
-			Formula newFormula) {
-		ConcurrentFormulaHashMap newFormulaMap = new ConcurrentFormulaHashMap();
-		newFormulaMap.putIfAbsent(brickField, newFormula);
-		return makeChangeFormulaCommand(formulaBrick, newFormulaMap);
-	}
+    public static ChangeFormulaCommand makeChangeFormulaCommand(FormulaBrick formulaBrick, Brick.BrickField brickField,
+                                                                Formula newFormula) {
+        ConcurrentFormulaHashMap newFormulaMap = new ConcurrentFormulaHashMap();
+        newFormulaMap.putIfAbsent(brickField, newFormula);
+        return makeChangeFormulaCommand(formulaBrick, newFormulaMap);
+    }
 
-	public static ChangeFormulaCommand makeChangeFormulaCommand(FormulaBrick formulaBrick,
-			ConcurrentFormulaHashMap newFormulaMap) {
-		return new ChangeFormulaCommand(formulaBrick, newFormulaMap);
-	}
+    public static ChangeFormulaCommand makeChangeFormulaCommand(FormulaBrick formulaBrick,
+                                                                ConcurrentFormulaHashMap newFormulaMap) {
+        return new ChangeFormulaCommand(formulaBrick, newFormulaMap);
+    }
 }

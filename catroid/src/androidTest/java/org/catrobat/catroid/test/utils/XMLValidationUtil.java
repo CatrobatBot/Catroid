@@ -40,50 +40,50 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public final class XMLValidationUtil {
-	// TODO: change to new XML schema
-	private static final String XML_VALIDATING_URL = "http://catroid.org/CatrobatLanguage/xmlSchema/version-0.3/validateXmlVersion3.php";
-	private static final String LOG_TAG = XMLValidationUtil.class.getSimpleName();
+    // TODO: change to new XML schema
+    private static final String XML_VALIDATING_URL = "http://catroid.org/CatrobatLanguage/xmlSchema/version-0.3/validateXmlVersion3.php";
+    private static final String LOG_TAG = XMLValidationUtil.class.getSimpleName();
 
-	// Suppress default constructor for noninstantiability
-	private XMLValidationUtil() {
-		throw new AssertionError();
-	}
+    // Suppress default constructor for noninstantiability
+    private XMLValidationUtil() {
+        throw new AssertionError();
+    }
 
-	public static void sendProjectXMLToServerForValidating(Project projectToValidate) throws IOException,
-			JSONException, WebconnectionException {
-		String projectName = projectToValidate.getName();
-		String fullPathFilename = Utils.buildPath(Utils.buildProjectPath(projectName), Constants.PROJECTCODE_NAME);
-		sendProjectXMLToServerForValidating(fullPathFilename);
-	}
+    public static void sendProjectXMLToServerForValidating(Project projectToValidate) throws IOException,
+            JSONException, WebconnectionException {
+        String projectName = projectToValidate.getName();
+        String fullPathFilename = Utils.buildPath(Utils.buildProjectPath(projectName), Constants.PROJECTCODE_NAME);
+        sendProjectXMLToServerForValidating(fullPathFilename);
+    }
 
-	public static void sendProjectXMLToServerForValidating(String fullPathFilename) throws IOException, JSONException,
-			WebconnectionException {
+    public static void sendProjectXMLToServerForValidating(String fullPathFilename) throws IOException, JSONException,
+            WebconnectionException {
 
-		String xmlContent = readTextFile(fullPathFilename);
+        String xmlContent = readTextFile(fullPathFilename);
 
-		HashMap<String, String> postValues = new HashMap<String, String>();
-		postValues.put("xmlToValidate", xmlContent);
+        HashMap<String, String> postValues = new HashMap<String, String>();
+        postValues.put("xmlToValidate", xmlContent);
 
-		String response = ServerCalls.getInstance().httpFormUpload(XML_VALIDATING_URL, postValues);
+        String response = ServerCalls.getInstance().httpFormUpload(XML_VALIDATING_URL, postValues);
 
-		JSONObject jsonResponse = new JSONObject(response);
-		Log.i(LOG_TAG, "JSON response: " + jsonResponse.toString());
-		boolean valid = jsonResponse.getBoolean("valid");
-		String message = jsonResponse.optString("message");
+        JSONObject jsonResponse = new JSONObject(response);
+        Log.i(LOG_TAG, "JSON response: " + jsonResponse.toString());
+        boolean valid = jsonResponse.getBoolean("valid");
+        String message = jsonResponse.optString("message");
 
-		Assert.assertTrue(message, valid);
-	}
+        Assert.assertTrue(message, valid);
+    }
 
-	private static String readTextFile(String fullPathFilename) throws IOException {
-		StringBuffer contents = new StringBuffer();
-		BufferedReader reader = new BufferedReader(new FileReader(fullPathFilename));
-		String text;
+    private static String readTextFile(String fullPathFilename) throws IOException {
+        StringBuffer contents = new StringBuffer();
+        BufferedReader reader = new BufferedReader(new FileReader(fullPathFilename));
+        String text;
 
-		while ((text = reader.readLine()) != null) {
-			contents.append(text).append(System.getProperty("line.separator"));
-		}
-		reader.close();
+        while ((text = reader.readLine()) != null) {
+            contents.append(text).append(System.getProperty("line.separator"));
+        }
+        reader.close();
 
-		return contents.toString();
-	}
+        return contents.toString();
+    }
 }

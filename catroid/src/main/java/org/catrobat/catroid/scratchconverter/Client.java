@@ -33,48 +33,72 @@ import java.util.Date;
 
 public interface Client {
 
-	enum State {
-		NOT_CONNECTED, CONNECTED, CONNECTED_AUTHENTICATED
-	}
+    enum State {
+        NOT_CONNECTED, CONNECTED, CONNECTED_AUTHENTICATED
+    }
 
-	long INVALID_CLIENT_ID = -1;
+    long INVALID_CLIENT_ID = -1;
 
-	void setConvertCallback(ConvertCallback convertCallback);
-	boolean isClosed();
-	boolean isAuthenticated();
-	void connectAndAuthenticate(ConnectAuthCallback connectAuthCallback);
-	void retrieveInfo();
-	boolean isJobInProgress(long jobID);
-	int getNumberOfJobsInProgress();
-	void convertProgram(long jobID, String title, WebImage image, boolean verbose, boolean force);
-	void onUserCanceledConversion(long jobID);
-	void close();
+    void setConvertCallback(ConvertCallback convertCallback);
 
-	// callbacks
-	interface ConnectAuthCallback {
-		void onSuccess(long clientID);
-		void onConnectionClosed(ClientException ex);
-		void onConnectionFailure(ClientException ex);
-		void onAuthenticationFailure(ClientException ex);
-	}
+    boolean isClosed();
 
-	interface ConvertCallback {
-		void onInfo(float supportedCatrobatLanguageVersion, Job[] jobs);
-		void onJobScheduled(Job job);
-		void onConversionReady(Job job);
-		void onConversionStart(Job job);
-		void onJobProgress(Job job, short progress);
-		void onJobOutput(Job job, String[] lines);
-		void onConversionFinished(Job job, DownloadCallback downloadCallback, String downloadURL, Date cachedDate);
-		void onConversionAlreadyFinished(Job job, DownloadCallback downloadCallback, String downloadURL);
-		void onConversionFailure(@Nullable Job job, ClientException ex);
-		void onError(String errorMessage);
-	}
+    boolean isAuthenticated();
 
-	interface DownloadCallback {
-		void onDownloadStarted(String url);
-		void onDownloadProgress(short progress, String url);
-		void onDownloadFinished(String catrobatProgramName, String url);
-		void onUserCanceledDownload(String url);
-	}
+    void connectAndAuthenticate(ConnectAuthCallback connectAuthCallback);
+
+    void retrieveInfo();
+
+    boolean isJobInProgress(long jobID);
+
+    int getNumberOfJobsInProgress();
+
+    void convertProgram(long jobID, String title, WebImage image, boolean verbose, boolean force);
+
+    void onUserCanceledConversion(long jobID);
+
+    void close();
+
+    // callbacks
+    interface ConnectAuthCallback {
+        void onSuccess(long clientID);
+
+        void onConnectionClosed(ClientException ex);
+
+        void onConnectionFailure(ClientException ex);
+
+        void onAuthenticationFailure(ClientException ex);
+    }
+
+    interface ConvertCallback {
+        void onInfo(float supportedCatrobatLanguageVersion, Job[] jobs);
+
+        void onJobScheduled(Job job);
+
+        void onConversionReady(Job job);
+
+        void onConversionStart(Job job);
+
+        void onJobProgress(Job job, short progress);
+
+        void onJobOutput(Job job, String[] lines);
+
+        void onConversionFinished(Job job, DownloadCallback downloadCallback, String downloadURL, Date cachedDate);
+
+        void onConversionAlreadyFinished(Job job, DownloadCallback downloadCallback, String downloadURL);
+
+        void onConversionFailure(@Nullable Job job, ClientException ex);
+
+        void onError(String errorMessage);
+    }
+
+    interface DownloadCallback {
+        void onDownloadStarted(String url);
+
+        void onDownloadProgress(short progress, String url);
+
+        void onDownloadFinished(String catrobatProgramName, String url);
+
+        void onUserCanceledDownload(String url);
+    }
 }

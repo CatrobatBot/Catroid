@@ -27,103 +27,103 @@ import android.util.SparseIntArray;
 
 public class ExternInternRepresentationMapping {
 
-	private SparseIntArray externInternMapping;
-	private SparseArray<ExternToken> internExternMapping;
+    private SparseIntArray externInternMapping;
+    private SparseArray<ExternToken> internExternMapping;
 
-	public static final int MAPPING_NOT_FOUND = Integer.MIN_VALUE;
+    public static final int MAPPING_NOT_FOUND = Integer.MIN_VALUE;
 
-	private int externStringLength = 0;
+    private int externStringLength = 0;
 
-	public ExternInternRepresentationMapping() {
-		externInternMapping = new SparseIntArray();
-		internExternMapping = new SparseArray<ExternToken>();
-	}
+    public ExternInternRepresentationMapping() {
+        externInternMapping = new SparseIntArray();
+        internExternMapping = new SparseArray<ExternToken>();
+    }
 
-	public void putMapping(int externStringStartIndex, int externStringEndIndex, int internListIndex) {
-		externInternMapping.put(externStringStartIndex, internListIndex);
+    public void putMapping(int externStringStartIndex, int externStringEndIndex, int internListIndex) {
+        externInternMapping.put(externStringStartIndex, internListIndex);
 
-		// Set externStringEndIndex -1 because of token separation.
-		// Otherwise, tokens would overlap and mapping would fail.
-		externInternMapping.put(externStringEndIndex - 1, internListIndex);
+        // Set externStringEndIndex -1 because of token separation.
+        // Otherwise, tokens would overlap and mapping would fail.
+        externInternMapping.put(externStringEndIndex - 1, internListIndex);
 
-		ExternToken externToken = new ExternToken(externStringStartIndex, externStringEndIndex);
-		internExternMapping.put(internListIndex, externToken);
+        ExternToken externToken = new ExternToken(externStringStartIndex, externStringEndIndex);
+        internExternMapping.put(internListIndex, externToken);
 
-		if (externStringEndIndex >= externStringLength) {
-			externStringLength = externStringEndIndex;
-		}
-	}
+        if (externStringEndIndex >= externStringLength) {
+            externStringLength = externStringEndIndex;
+        }
+    }
 
-	public int getExternTokenStartIndex(int internIndex) {
-		ExternToken externToken = internExternMapping.get(internIndex);
+    public int getExternTokenStartIndex(int internIndex) {
+        ExternToken externToken = internExternMapping.get(internIndex);
 
-		if (externToken == null) {
-			return MAPPING_NOT_FOUND;
-		}
+        if (externToken == null) {
+            return MAPPING_NOT_FOUND;
+        }
 
-		return externToken.getStartIndex();
-	}
+        return externToken.getStartIndex();
+    }
 
-	public int getExternTokenEndIndex(int internIndex) {
-		ExternToken externToken = internExternMapping.get(internIndex);
+    public int getExternTokenEndIndex(int internIndex) {
+        ExternToken externToken = internExternMapping.get(internIndex);
 
-		if (externToken == null) {
-			return MAPPING_NOT_FOUND;
-		}
+        if (externToken == null) {
+            return MAPPING_NOT_FOUND;
+        }
 
-		return externToken.getEndIndex();
-	}
+        return externToken.getEndIndex();
+    }
 
-	public int getInternTokenByExternIndex(int externIndex) {
+    public int getInternTokenByExternIndex(int externIndex) {
 
-		if (externIndex < 0) {
-			return MAPPING_NOT_FOUND;
-		}
+        if (externIndex < 0) {
+            return MAPPING_NOT_FOUND;
+        }
 
-		int searchDownInternToken = searchDown(externInternMapping, externIndex - 1);
-		int currentInternToken = externInternMapping.get(externIndex, MAPPING_NOT_FOUND);
-		int searchUpInternToken = searchUp(externInternMapping, externIndex + 1);
+        int searchDownInternToken = searchDown(externInternMapping, externIndex - 1);
+        int currentInternToken = externInternMapping.get(externIndex, MAPPING_NOT_FOUND);
+        int searchUpInternToken = searchUp(externInternMapping, externIndex + 1);
 
-		if (currentInternToken != MAPPING_NOT_FOUND) {
-			return currentInternToken;
-		}
-		if (searchDownInternToken != MAPPING_NOT_FOUND && searchUpInternToken != MAPPING_NOT_FOUND
-				&& searchDownInternToken == searchUpInternToken) {
-			return searchDownInternToken;
-		}
+        if (currentInternToken != MAPPING_NOT_FOUND) {
+            return currentInternToken;
+        }
+        if (searchDownInternToken != MAPPING_NOT_FOUND && searchUpInternToken != MAPPING_NOT_FOUND
+                && searchDownInternToken == searchUpInternToken) {
+            return searchDownInternToken;
+        }
 
-		return MAPPING_NOT_FOUND;
-	}
+        return MAPPING_NOT_FOUND;
+    }
 
-	public int getExternTokenStartOffset(int externIndex, int internTokenOffsetTo) {
-		for (int searchIndex = externIndex; searchIndex >= 0; searchIndex--) {
-			if (externInternMapping.get(searchIndex, MAPPING_NOT_FOUND) != MAPPING_NOT_FOUND
-					&& externInternMapping.get(searchIndex, MAPPING_NOT_FOUND) == internTokenOffsetTo) {
-				int rightEdgeSelectionToken = getExternTokenStartOffset(searchIndex - 1, internTokenOffsetTo);
-				if (rightEdgeSelectionToken == -1) {
-					return externIndex - searchIndex;
-				}
-				return externIndex - searchIndex + rightEdgeSelectionToken + 1;
-			}
-		}
-		return -1;
-	}
+    public int getExternTokenStartOffset(int externIndex, int internTokenOffsetTo) {
+        for (int searchIndex = externIndex; searchIndex >= 0; searchIndex--) {
+            if (externInternMapping.get(searchIndex, MAPPING_NOT_FOUND) != MAPPING_NOT_FOUND
+                    && externInternMapping.get(searchIndex, MAPPING_NOT_FOUND) == internTokenOffsetTo) {
+                int rightEdgeSelectionToken = getExternTokenStartOffset(searchIndex - 1, internTokenOffsetTo);
+                if (rightEdgeSelectionToken == -1) {
+                    return externIndex - searchIndex;
+                }
+                return externIndex - searchIndex + rightEdgeSelectionToken + 1;
+            }
+        }
+        return -1;
+    }
 
-	private int searchDown(SparseIntArray mapping, int index) {
-		for (int searchIndex = index; searchIndex >= 0; searchIndex--) {
-			if (mapping.get(searchIndex, MAPPING_NOT_FOUND) != MAPPING_NOT_FOUND) {
-				return mapping.get(searchIndex);
-			}
-		}
-		return MAPPING_NOT_FOUND;
-	}
+    private int searchDown(SparseIntArray mapping, int index) {
+        for (int searchIndex = index; searchIndex >= 0; searchIndex--) {
+            if (mapping.get(searchIndex, MAPPING_NOT_FOUND) != MAPPING_NOT_FOUND) {
+                return mapping.get(searchIndex);
+            }
+        }
+        return MAPPING_NOT_FOUND;
+    }
 
-	private int searchUp(SparseIntArray mapping, int index) {
-		for (int searchIndex = index; searchIndex < externStringLength; searchIndex++) {
-			if (mapping.get(searchIndex, MAPPING_NOT_FOUND) != MAPPING_NOT_FOUND) {
-				return mapping.get(searchIndex);
-			}
-		}
-		return MAPPING_NOT_FOUND;
-	}
+    private int searchUp(SparseIntArray mapping, int index) {
+        for (int searchIndex = index; searchIndex < externStringLength; searchIndex++) {
+            if (mapping.get(searchIndex, MAPPING_NOT_FOUND) != MAPPING_NOT_FOUND) {
+                return mapping.get(searchIndex);
+            }
+        }
+        return MAPPING_NOT_FOUND;
+    }
 }

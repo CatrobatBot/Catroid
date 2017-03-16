@@ -42,55 +42,55 @@ import java.util.ArrayList;
 
 public class SetColorBrickTest extends BaseActivityInstrumentationTestCase<ScriptActivity> {
 
-	private Project project;
-	private SetColorBrick setColorBrick;
+    private Project project;
+    private SetColorBrick setColorBrick;
 
-	public SetColorBrickTest() {
-		super(ScriptActivity.class);
-	}
+    public SetColorBrickTest() {
+        super(ScriptActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		// normally super.setUp should be called first
-		// but kept the test failing due to view is null
-		// when starting in ScriptActivity
-		createProject();
-		super.setUp();
-	}
+    @Override
+    public void setUp() throws Exception {
+        // normally super.setUp should be called first
+        // but kept the test failing due to view is null
+        // when starting in ScriptActivity
+        createProject();
+        super.setUp();
+    }
 
-	public void testSetColorBrick() {
-		ListView dragDropListView = UiTestUtils.getScriptListView(solo);
-		BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
+    public void testSetColorBrick() {
+        ListView dragDropListView = UiTestUtils.getScriptListView(solo);
+        BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
 
-		int childrenCount = adapter.getChildCountFromLastGroup();
-		int groupCount = adapter.getScriptCount();
+        int childrenCount = adapter.getChildCountFromLastGroup();
+        int groupCount = adapter.getScriptCount();
 
-		assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
-		assertEquals("Incorrect number of bricks.", 1, childrenCount);
+        assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
+        assertEquals("Incorrect number of bricks.", 1, childrenCount);
 
-		ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
-		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
+        ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
+        assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
-		assertNotNull("TextView does not exist", solo.getText(solo.getString(R.string.brick_set_color)));
+        assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
+        assertNotNull("TextView does not exist", solo.getText(solo.getString(R.string.brick_set_color)));
 
-		int newColor = 3;
-		UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
-				R.id.brick_set_color_edit_text, newColor, Brick.BrickField.COLOR, setColorBrick);
-	}
+        int newColor = 3;
+        UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
+                R.id.brick_set_color_edit_text, newColor, Brick.BrickField.COLOR, setColorBrick);
+    }
 
-	private void createProject() {
-		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite sprite = new SingleSprite("cat");
-		Script script = new StartScript();
-		setColorBrick = new SetColorBrick(0f);
-		script.addBrick(setColorBrick);
+    private void createProject() {
+        project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Sprite sprite = new SingleSprite("cat");
+        Script script = new StartScript();
+        setColorBrick = new SetColorBrick(0f);
+        script.addBrick(setColorBrick);
 
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 }

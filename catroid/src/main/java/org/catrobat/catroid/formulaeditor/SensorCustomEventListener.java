@@ -23,5 +23,5 @@
 package org.catrobat.catroid.formulaeditor;
 
 public interface SensorCustomEventListener {
-	void onCustomSensorChanged(SensorCustomEvent event);
+    void onCustomSensorChanged(SensorCustomEvent event);
 }

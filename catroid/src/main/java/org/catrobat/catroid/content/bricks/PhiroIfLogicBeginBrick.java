@@ -41,163 +41,163 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class PhiroIfLogicBeginBrick extends IfLogicBeginBrick implements OnItemSelectedListener {
-	private static final long serialVersionUID = 1L;
-	protected transient IfLogicElseBrick ifElseBrick;
-	protected transient IfLogicEndBrick ifEndBrick;
-	private transient PhiroIfLogicBeginBrick copy;
-	private int sensorSpinnerPosition = 0;
+    private static final long serialVersionUID = 1L;
+    protected transient IfLogicElseBrick ifElseBrick;
+    protected transient IfLogicEndBrick ifEndBrick;
+    private transient PhiroIfLogicBeginBrick copy;
+    private int sensorSpinnerPosition = 0;
 
-	public PhiroIfLogicBeginBrick() {
-		addAllowedBrickField(BrickField.IF_PHIRO_SENSOR_CONDITION);
-	}
+    public PhiroIfLogicBeginBrick() {
+        addAllowedBrickField(BrickField.IF_PHIRO_SENSOR_CONDITION);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return BLUETOOTH_PHIRO;
-	}
+    @Override
+    public int getRequiredResources() {
+        return BLUETOOTH_PHIRO;
+    }
 
-	public IfLogicElseBrick getIfElseBrick() {
-		return ifElseBrick;
-	}
+    public IfLogicElseBrick getIfElseBrick() {
+        return ifElseBrick;
+    }
 
-	public IfLogicEndBrick getIfEndBrick() {
-		return ifEndBrick;
-	}
+    public IfLogicEndBrick getIfEndBrick() {
+        return ifEndBrick;
+    }
 
-	public PhiroIfLogicBeginBrick getCopy() {
-		return copy;
-	}
+    public PhiroIfLogicBeginBrick getCopy() {
+        return copy;
+    }
 
-	public void setIfElseBrick(IfLogicElseBrick elseBrick) {
-		this.ifElseBrick = elseBrick;
-	}
+    public void setIfElseBrick(IfLogicElseBrick elseBrick) {
+        this.ifElseBrick = elseBrick;
+    }
 
-	public void setIfEndBrick(IfLogicEndBrick ifEndBrick) {
-		this.ifEndBrick = ifEndBrick;
-	}
+    public void setIfEndBrick(IfLogicEndBrick ifEndBrick) {
+        this.ifEndBrick = ifEndBrick;
+    }
 
-	@Override
-	public Brick clone() {
-		return new PhiroIfLogicBeginBrick();
-	}
+    @Override
+    public Brick clone() {
+        return new PhiroIfLogicBeginBrick();
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_phiro_if_sensor, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_phiro_if_sensor, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_phiro_sensor_checkbox);
+        setCheckboxView(R.id.brick_phiro_sensor_checkbox);
 
-		Spinner phiroProSensorSpinner = (Spinner) view.findViewById(R.id.brick_phiro_sensor_action_spinner);
+        Spinner phiroProSensorSpinner = (Spinner) view.findViewById(R.id.brick_phiro_sensor_action_spinner);
 
-		ArrayAdapter<CharSequence> phiroProSensorAdapter = ArrayAdapter.createFromResource(context,
-				R.array.brick_phiro_select_sensor_spinner, android.R.layout.simple_spinner_item);
-		phiroProSensorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> phiroProSensorAdapter = ArrayAdapter.createFromResource(context,
+                R.array.brick_phiro_select_sensor_spinner, android.R.layout.simple_spinner_item);
+        phiroProSensorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-		phiroProSensorSpinner.setAdapter(phiroProSensorAdapter);
-		phiroProSensorSpinner.setSelection(sensorSpinnerPosition);
+        phiroProSensorSpinner.setAdapter(phiroProSensorAdapter);
+        phiroProSensorSpinner.setSelection(sensorSpinnerPosition);
 
-		phiroProSensorSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+        phiroProSensorSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				sensorSpinnerPosition = position;
-			}
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                sensorSpinnerPosition = position;
+            }
 
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-	}
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+    }
 
-	@Override
-	public void onNothingSelected(AdapterView<?> arg0) {
-	}
+    @Override
+    public void onNothingSelected(AdapterView<?> arg0) {
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		View prototypeView = View.inflate(context, R.layout.brick_phiro_if_sensor, null);
+    @Override
+    public View getPrototypeView(Context context) {
+        View prototypeView = View.inflate(context, R.layout.brick_phiro_if_sensor, null);
 
-		Spinner phiroProSensorSpinner = (Spinner) prototypeView.findViewById(R.id.brick_phiro_sensor_action_spinner);
+        Spinner phiroProSensorSpinner = (Spinner) prototypeView.findViewById(R.id.brick_phiro_sensor_action_spinner);
 
-		ArrayAdapter<CharSequence> phiroProSensorSpinnerAdapter = ArrayAdapter.createFromResource(context,
-				R.array.brick_phiro_select_sensor_spinner, android.R.layout.simple_spinner_item);
-		phiroProSensorSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> phiroProSensorSpinnerAdapter = ArrayAdapter.createFromResource(context,
+                R.array.brick_phiro_select_sensor_spinner, android.R.layout.simple_spinner_item);
+        phiroProSensorSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-		phiroProSensorSpinner.setAdapter(phiroProSensorSpinnerAdapter);
-		phiroProSensorSpinner.setSelection(sensorSpinnerPosition);
+        phiroProSensorSpinner.setAdapter(phiroProSensorSpinnerAdapter);
+        phiroProSensorSpinner.setSelection(sensorSpinnerPosition);
 
-		return prototypeView;
-	}
+        return prototypeView;
+    }
 
-	@Override
-	public boolean isInitialized() {
-		return ifElseBrick != null;
-	}
+    @Override
+    public boolean isInitialized() {
+        return ifElseBrick != null;
+    }
 
-	@Override
-	public void initialize() {
-		ifElseBrick = new IfLogicElseBrick(this);
-		ifEndBrick = new IfLogicEndBrick(ifElseBrick, this);
-	}
+    @Override
+    public void initialize() {
+        ifElseBrick = new IfLogicElseBrick(this);
+        ifEndBrick = new IfLogicEndBrick(ifElseBrick, this);
+    }
 
-	@Override
-	public List<NestingBrick> getAllNestingBrickParts(boolean sorted) {
-		//TODO: handle sorting
-		List<NestingBrick> nestingBrickList = new ArrayList<NestingBrick>();
-		if (sorted) {
-			nestingBrickList.add(this);
-			nestingBrickList.add(ifElseBrick);
-			nestingBrickList.add(ifEndBrick);
-		} else {
-			nestingBrickList.add(this);
-			nestingBrickList.add(ifEndBrick);
-		}
+    @Override
+    public List<NestingBrick> getAllNestingBrickParts(boolean sorted) {
+        //TODO: handle sorting
+        List<NestingBrick> nestingBrickList = new ArrayList<NestingBrick>();
+        if (sorted) {
+            nestingBrickList.add(this);
+            nestingBrickList.add(ifElseBrick);
+            nestingBrickList.add(ifEndBrick);
+        } else {
+            nestingBrickList.add(this);
+            nestingBrickList.add(ifEndBrick);
+        }
 
-		return nestingBrickList;
-	}
+        return nestingBrickList;
+    }
 
-	@Override
-	public boolean isDraggableOver(Brick brick) {
-		return ifElseBrick != null;
-	}
+    @Override
+    public boolean isDraggableOver(Brick brick) {
+        return ifElseBrick != null;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		SequenceAction ifAction = (SequenceAction) sprite.getActionFactory().createSequence();
-		SequenceAction elseAction = (SequenceAction) sprite.getActionFactory().createSequence();
-		Action action = sprite.getActionFactory().createPhiroSendSelectedSensorAction(sprite, sensorSpinnerPosition,
-				ifAction, elseAction);
-		sequence.addAction(action);
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        SequenceAction ifAction = (SequenceAction) sprite.getActionFactory().createSequence();
+        SequenceAction elseAction = (SequenceAction) sprite.getActionFactory().createSequence();
+        Action action = sprite.getActionFactory().createPhiroSendSelectedSensorAction(sprite, sensorSpinnerPosition,
+                ifAction, elseAction);
+        sequence.addAction(action);
 
-		LinkedList<SequenceAction> returnActionList = new LinkedList<SequenceAction>();
-		returnActionList.add(elseAction);
-		returnActionList.add(ifAction);
+        LinkedList<SequenceAction> returnActionList = new LinkedList<SequenceAction>();
+        returnActionList.add(elseAction);
+        returnActionList.add(ifAction);
 
-		return returnActionList;
-	}
+        return returnActionList;
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		//ifEndBrick and ifElseBrick will be set in the copyBrickForSprite method of IfLogicEndBrick
-		PhiroIfLogicBeginBrick copyBrick = (PhiroIfLogicBeginBrick) clone(); //Using the clone method because of its flexibility if new fields are added
-		copyBrick.ifElseBrick = null; //if the Formula gets a field sprite, a separate copy method will be needed
-		copyBrick.ifEndBrick = null;
-		this.copy = copyBrick;
-		return copyBrick;
-	}
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        //ifEndBrick and ifElseBrick will be set in the copyBrickForSprite method of IfLogicEndBrick
+        PhiroIfLogicBeginBrick copyBrick = (PhiroIfLogicBeginBrick) clone(); //Using the clone method because of its flexibility if new fields are added
+        copyBrick.ifElseBrick = null; //if the Formula gets a field sprite, a separate copy method will be needed
+        copyBrick.ifEndBrick = null;
+        this.copy = copyBrick;
+        return copyBrick;
+    }
 }

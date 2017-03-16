@@ -26,5 +26,5 @@ import java.util.List;
 
 public interface LineBreakListener {
 
-	void setBreaks(List<Integer> breaks);
+    void setBreaks(List<Integer> breaks);
 }

@@ -55,199 +55,199 @@ import java.util.ArrayList;
 
 public class ArduinoTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
-	public ArduinoTest() {
-		super(MainMenuActivity.class);
-	}
+    public ArduinoTest() {
+        super(MainMenuActivity.class);
+    }
 
-	private static final int PWM_PIN = 3;
+    private static final int PWM_PIN = 3;
 
-	private static final int PWM_PIN_GROUP_1 = 3;
-	private static final int PWM_PIN_GROUP_2_MIN = 5;
-	private static final int PWM_PIN_GROUP_2_MAX = 6;
-	private static final int PWM_PIN_GROUP_3_MIN = 9;
-	private static final int PWM_PIN_GROUP_3_MAX = 11;
+    private static final int PWM_PIN_GROUP_1 = 3;
+    private static final int PWM_PIN_GROUP_2_MIN = 5;
+    private static final int PWM_PIN_GROUP_2_MAX = 6;
+    private static final int PWM_PIN_GROUP_3_MIN = 9;
+    private static final int PWM_PIN_GROUP_3_MAX = 11;
 
-	private static final int MIN_SENSOR_PIN = 0;
-	private static final int MAX_SENSOR_PIN = 5;
+    private static final int MIN_SENSOR_PIN = 0;
+    private static final int MAX_SENSOR_PIN = 5;
 
-	private static final int PWM_MODE = 3;
+    private static final int PWM_MODE = 3;
 
-	private static final int SET_PIN_MODE_COMMAND = 0xF4;
-	private static final int REPORT_ANALOG_PIN_COMMAND = 0xC0;
+    private static final int SET_PIN_MODE_COMMAND = 0xF4;
+    private static final int REPORT_ANALOG_PIN_COMMAND = 0xC0;
 
-	private static final int IMAGE_FILE_ID = org.catrobat.catroid.test.R.raw.icon;
+    private static final int IMAGE_FILE_ID = org.catrobat.catroid.test.R.raw.icon;
 
-	private final String projectName = UiTestUtils.PROJECTNAME1;
-	private static final String LOCAL_BLUETOOTH_TEST_DUMMY_DEVICE_NAME = "dummy_device";
-	private final String spriteName = "testSprite";
+    private final String projectName = UiTestUtils.PROJECTNAME1;
+    private static final String LOCAL_BLUETOOTH_TEST_DUMMY_DEVICE_NAME = "dummy_device";
+    private final String spriteName = "testSprite";
 
-	private static final int PIN_LOW = 0;
-	private static final int PIN_HIGH = 255;
+    private static final int PIN_LOW = 0;
+    private static final int PIN_HIGH = 255;
 
-	private ConnectionDataLogger logger;
-	private FirmataUtils firmataUtils;
+    private ConnectionDataLogger logger;
+    private FirmataUtils firmataUtils;
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		UiTestUtils.prepareStageForTest();
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        UiTestUtils.prepareStageForTest();
 
-		logger = ConnectionDataLogger.createLocalConnectionLogger();
-		firmataUtils = new FirmataUtils(logger);
-	}
+        logger = ConnectionDataLogger.createLocalConnectionLogger();
+        firmataUtils = new FirmataUtils(logger);
+    }
 
-	@Override
-	protected void tearDown() throws Exception {
-		logger.disconnectAndDestroy();
-		super.tearDown();
-	}
+    @Override
+    protected void tearDown() throws Exception {
+        logger.disconnectAndDestroy();
+        super.tearDown();
+    }
 
-	@Device
-	public void testArduinoFunctionality() {
-		ArrayList<int[]> commands = createTestproject(projectName);
+    @Device
+    public void testArduinoFunctionality() {
+        ArrayList<int[]> commands = createTestproject(projectName);
 
-		BluetoothTestUtils.enableBluetooth();
+        BluetoothTestUtils.enableBluetooth();
 
-		solo.clickOnText(solo.getString(R.string.main_menu_continue));
-		solo.waitForActivity(ProjectActivity.class.getSimpleName());
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.sleep(1000);
+        solo.clickOnText(solo.getString(R.string.main_menu_continue));
+        solo.waitForActivity(ProjectActivity.class.getSimpleName());
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.sleep(1000);
 
-		solo.assertCurrentActivity("Not in BTConnectDeviceActivity", ConnectBluetoothDeviceActivity.class);
+        solo.assertCurrentActivity("Not in BTConnectDeviceActivity", ConnectBluetoothDeviceActivity.class);
 
-		// use this only, if ConnectionDataLogger is in local mode (localProxy)
-		BluetoothTestUtils.addPairedDevice(LOCAL_BLUETOOTH_TEST_DUMMY_DEVICE_NAME,
-				(ConnectBluetoothDeviceActivity) solo.getCurrentActivity(), getInstrumentation());
+        // use this only, if ConnectionDataLogger is in local mode (localProxy)
+        BluetoothTestUtils.addPairedDevice(LOCAL_BLUETOOTH_TEST_DUMMY_DEVICE_NAME,
+                (ConnectBluetoothDeviceActivity) solo.getCurrentActivity(), getInstrumentation());
 
-		ListView deviceList = solo.getCurrentViews(ListView.class).get(0);
-		String connectedDeviceName = null;
-		for (int i = 0; i < deviceList.getCount(); i++) {
-			String deviceName = (String) deviceList.getItemAtPosition(i);
-			if (deviceName.startsWith(LOCAL_BLUETOOTH_TEST_DUMMY_DEVICE_NAME)) {
-				connectedDeviceName = deviceName;
-				break;
-			}
-		}
+        ListView deviceList = solo.getCurrentViews(ListView.class).get(0);
+        String connectedDeviceName = null;
+        for (int i = 0; i < deviceList.getCount(); i++) {
+            String deviceName = (String) deviceList.getItemAtPosition(i);
+            if (deviceName.startsWith(LOCAL_BLUETOOTH_TEST_DUMMY_DEVICE_NAME)) {
+                connectedDeviceName = deviceName;
+                break;
+            }
+        }
 
-		solo.clickOnText(connectedDeviceName);
-		solo.sleep(2000);
-		solo.assertCurrentActivity("Not in stage - connection to bluetooth-device failed", StageActivity.class);
+        solo.clickOnText(connectedDeviceName);
+        solo.sleep(2000);
+        solo.assertCurrentActivity("Not in stage - connection to bluetooth-device failed", StageActivity.class);
 
-		doTestFirmataInitialization();
+        doTestFirmataInitialization();
 
-		solo.clickOnScreen(ScreenValues.SCREEN_WIDTH / 2, ScreenValues.SCREEN_HEIGHT / 2);
+        solo.clickOnScreen(ScreenValues.SCREEN_WIDTH / 2, ScreenValues.SCREEN_HEIGHT / 2);
 
-		FirmataMessage m;
-		for (int[] item : commands) {
+        FirmataMessage m;
+        for (int[] item : commands) {
 
-			switch (item[0]) {
-				case PIN_HIGH:
-					m = firmataUtils.getAnalogMesageData();
-					assertEquals("Wrong pin", item[1], m.getPin());
-					assertEquals("Wrong speed", percentToSpeed(item[2]), m.getData());
-					break;
-				case PIN_LOW:
-					m = firmataUtils.getAnalogMesageData();
-					assertEquals("Wrong pin", item[1], m.getPin());
-					assertEquals("Wrong speed", percentToSpeed(item[2]), m.getData());
-					break;
-			}
-		}
+            switch (item[0]) {
+                case PIN_HIGH:
+                    m = firmataUtils.getAnalogMesageData();
+                    assertEquals("Wrong pin", item[1], m.getPin());
+                    assertEquals("Wrong speed", percentToSpeed(item[2]), m.getData());
+                    break;
+                case PIN_LOW:
+                    m = firmataUtils.getAnalogMesageData();
+                    assertEquals("Wrong pin", item[1], m.getPin());
+                    assertEquals("Wrong speed", percentToSpeed(item[2]), m.getData());
+                    break;
+            }
+        }
 
-		solo.goBack();
-		solo.goBack();
-	}
+        solo.goBack();
+        solo.goBack();
+    }
 
-	private ArrayList<int[]> createTestproject(String projectName) {
-		ArrayList<int[]> commands = new ArrayList<int[]>();
+    private ArrayList<int[]> createTestproject(String projectName) {
+        ArrayList<int[]> commands = new ArrayList<int[]>();
 
-		Sprite firstSprite = new SingleSprite(spriteName);
-		Script startScript = new StartScript();
-		Script whenScript = new WhenScript();
-		SetLookBrick setLookBrick = new SetLookBrick();
+        Sprite firstSprite = new SingleSprite(spriteName);
+        Script startScript = new StartScript();
+        Script whenScript = new WhenScript();
+        SetLookBrick setLookBrick = new SetLookBrick();
 
-		ArduinoSendPWMValueBrick arduinoArduinoSendPWMValueBrick1 = new ArduinoSendPWMValueBrick(
-				PWM_PIN, PIN_HIGH);
-		commands.add(new int[] { PIN_HIGH, PWM_PIN, PIN_HIGH });
-		WaitBrick firstWaitBrick = new WaitBrick(100);
+        ArduinoSendPWMValueBrick arduinoArduinoSendPWMValueBrick1 = new ArduinoSendPWMValueBrick(
+                PWM_PIN, PIN_HIGH);
+        commands.add(new int[]{PIN_HIGH, PWM_PIN, PIN_HIGH});
+        WaitBrick firstWaitBrick = new WaitBrick(100);
 
-		ArduinoSendPWMValueBrick arduinoArduinoSendPWMValueBrick2 = new ArduinoSendPWMValueBrick(
-				PWM_PIN, PIN_LOW);
-		commands.add(new int[] { PIN_LOW, PWM_PIN, PIN_LOW });
+        ArduinoSendPWMValueBrick arduinoArduinoSendPWMValueBrick2 = new ArduinoSendPWMValueBrick(
+                PWM_PIN, PIN_LOW);
+        commands.add(new int[]{PIN_LOW, PWM_PIN, PIN_LOW});
 
-		whenScript.addBrick(arduinoArduinoSendPWMValueBrick1);
-		whenScript.addBrick(firstWaitBrick);
-		whenScript.addBrick(arduinoArduinoSendPWMValueBrick2);
+        whenScript.addBrick(arduinoArduinoSendPWMValueBrick1);
+        whenScript.addBrick(firstWaitBrick);
+        whenScript.addBrick(arduinoArduinoSendPWMValueBrick2);
 
-		startScript.addBrick(setLookBrick);
-		firstSprite.addScript(startScript);
-		firstSprite.addScript(whenScript);
+        startScript.addBrick(setLookBrick);
+        firstSprite.addScript(startScript);
+        firstSprite.addScript(whenScript);
 
-		ArrayList<Sprite> spriteList = new ArrayList<>();
-		spriteList.add(firstSprite);
-		Project project = UiTestUtils.createProject(projectName, spriteList, getActivity());
+        ArrayList<Sprite> spriteList = new ArrayList<>();
+        spriteList.add(firstSprite);
+        Project project = UiTestUtils.createProject(projectName, spriteList, getActivity());
 
-		String imageName = "image";
-		File image = UiTestUtils.saveFileToProject(projectName, project.getDefaultScene().getName(), imageName, IMAGE_FILE_ID, getInstrumentation()
-				.getContext(), UiTestUtils.FileTypes.IMAGE);
+        String imageName = "image";
+        File image = UiTestUtils.saveFileToProject(projectName, project.getDefaultScene().getName(), imageName, IMAGE_FILE_ID, getInstrumentation()
+                .getContext(), UiTestUtils.FileTypes.IMAGE);
 
-		LookData lookData = new LookData();
-		lookData.setLookFilename(image.getName());
-		lookData.setLookName(imageName);
-		setLookBrick.setLook(lookData);
-		firstSprite.getLookDataList().add(lookData);
+        LookData lookData = new LookData();
+        lookData.setLookFilename(image.getName());
+        lookData.setLookName(imageName);
+        setLookBrick.setLook(lookData);
+        firstSprite.getLookDataList().add(lookData);
 
-		StorageHandler.getInstance().saveProject(project);
+        StorageHandler.getInstance().saveProject(project);
 
-		return commands;
-	}
+        return commands;
+    }
 
-	private void doTestFirmataInitialization() {
-		for (int i = PWM_PIN_GROUP_1; i <= PWM_PIN_GROUP_1; ++i) {
-			FirmataMessage m = firmataUtils.getSetPinModeMessage();
+    private void doTestFirmataInitialization() {
+        for (int i = PWM_PIN_GROUP_1; i <= PWM_PIN_GROUP_1; ++i) {
+            FirmataMessage m = firmataUtils.getSetPinModeMessage();
 
-			assertEquals("Wrong Command, SET_PIN_MODE command expected", SET_PIN_MODE_COMMAND, m.getCommand());
-			assertEquals("Wrong pin used to set pin mode", i, m.getPin());
-			assertEquals("Wrong pin mode is used", PWM_MODE, m.getData());
-		}
+            assertEquals("Wrong Command, SET_PIN_MODE command expected", SET_PIN_MODE_COMMAND, m.getCommand());
+            assertEquals("Wrong pin used to set pin mode", i, m.getPin());
+            assertEquals("Wrong pin mode is used", PWM_MODE, m.getData());
+        }
 
-		for (int i = PWM_PIN_GROUP_2_MIN; i <= PWM_PIN_GROUP_2_MAX; ++i) {
-			FirmataMessage m = firmataUtils.getSetPinModeMessage();
+        for (int i = PWM_PIN_GROUP_2_MIN; i <= PWM_PIN_GROUP_2_MAX; ++i) {
+            FirmataMessage m = firmataUtils.getSetPinModeMessage();
 
-			assertEquals("Wrong Command, SET_PIN_MODE command expected", SET_PIN_MODE_COMMAND, m.getCommand());
-			assertEquals("Wrong pin used to set pin mode", i, m.getPin());
-			assertEquals("Wrong pin mode is used", PWM_MODE, m.getData());
-		}
+            assertEquals("Wrong Command, SET_PIN_MODE command expected", SET_PIN_MODE_COMMAND, m.getCommand());
+            assertEquals("Wrong pin used to set pin mode", i, m.getPin());
+            assertEquals("Wrong pin mode is used", PWM_MODE, m.getData());
+        }
 
-		for (int i = PWM_PIN_GROUP_3_MIN; i <= PWM_PIN_GROUP_3_MAX; ++i) {
-			FirmataMessage m = firmataUtils.getSetPinModeMessage();
+        for (int i = PWM_PIN_GROUP_3_MIN; i <= PWM_PIN_GROUP_3_MAX; ++i) {
+            FirmataMessage m = firmataUtils.getSetPinModeMessage();
 
-			assertEquals("Wrong Command, SET_PIN_MODE command expected", SET_PIN_MODE_COMMAND, m.getCommand());
-			assertEquals("Wrong pin used to set pin mode", i, m.getPin());
-			assertEquals(
-					"Wrong pin mode is used", PWM_MODE, m.getData());
-		}
-		testReportAnalogPin(true);
-	}
+            assertEquals("Wrong Command, SET_PIN_MODE command expected", SET_PIN_MODE_COMMAND, m.getCommand());
+            assertEquals("Wrong pin used to set pin mode", i, m.getPin());
+            assertEquals(
+                    "Wrong pin mode is used", PWM_MODE, m.getData());
+        }
+        testReportAnalogPin(true);
+    }
 
-	private void testReportAnalogPin(boolean enable) {
-		for (int i = MIN_SENSOR_PIN; i <= MAX_SENSOR_PIN; ++i) {
-			FirmataMessage m = firmataUtils.getReportAnalogPinMessage();
+    private void testReportAnalogPin(boolean enable) {
+        for (int i = MIN_SENSOR_PIN; i <= MAX_SENSOR_PIN; ++i) {
+            FirmataMessage m = firmataUtils.getReportAnalogPinMessage();
 
-			assertEquals("Wrong Command, REPORT_ANALOG_PIN command expected", REPORT_ANALOG_PIN_COMMAND, m.getCommand());
-			assertEquals("Wrong pin used to set pin mode", i, m.getPin());
-			assertEquals("Wrong pin mode is used", enable ? 1 : 0, m.getData());
-		}
-	}
+            assertEquals("Wrong Command, REPORT_ANALOG_PIN command expected", REPORT_ANALOG_PIN_COMMAND, m.getCommand());
+            assertEquals("Wrong pin used to set pin mode", i, m.getPin());
+            assertEquals("Wrong pin mode is used", enable ? 1 : 0, m.getData());
+        }
+    }
 
-	private int percentToSpeed(int percent) {
-		if (percent <= 0) {
-			return 0;
-		}
-		if (percent >= 100) {
-			return 255;
-		}
+    private int percentToSpeed(int percent) {
+        if (percent <= 0) {
+            return 0;
+        }
+        if (percent >= 100) {
+            return 255;
+        }
 
-		return (int) (percent * 2.55);
-	}
+        return (int) (percent * 2.55);
+    }
 }

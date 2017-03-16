@@ -41,132 +41,132 @@ import javax.microedition.io.StreamConnection;
 import javax.microedition.io.StreamConnectionNotifier;
 
 public final class BTServer {
-	private static final String TAG = BTServer.class.getSimpleName();
-	private static final Logger LOGGER = Logger.getLogger(TAG);
+    private static final String TAG = BTServer.class.getSimpleName();
+    private static final Logger LOGGER = Logger.getLogger(TAG);
 
-	static BTServer btServer;
-	private static boolean gui = false;
-	private static Writer out = null;
-	private boolean run = true;
+    static BTServer btServer;
+    private static boolean gui = false;
+    private static Writer out = null;
+    private boolean run = true;
 
-	public static final String COMMON_BT_TEST_UUID = "fd2835bb9d8041e097215372b90342da";
+    public static final String COMMON_BT_TEST_UUID = "fd2835bb9d8041e097215372b90342da";
 
-	private Collection<Client> supportedClients = new ArrayList<Client>();
+    private Collection<Client> supportedClients = new ArrayList<Client>();
 
-	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
-	// Suppress default constructor for noninstantiability
-	private BTServer() {
-		supportedClients.add(new Client("Common BT Test", COMMON_BT_TEST_UUID));
-	}
+    // Suppress default constructor for noninstantiability
+    private BTServer() {
+        supportedClients.add(new Client("Common BT Test", COMMON_BT_TEST_UUID));
+    }
 
-	public static void writeMessage(String arg) {
-		if (!gui) {
-			try {
-				out.write(arg);
-				out.flush();
-			} catch (Exception localException) {
-				LOGGER.log(Level.SEVERE, "BTTestServer: Unable to log messages. Do you have permission to log file?",
-						localException);
-			}
-		} else {
-			GUI.writeMessage(arg);
-		}
-	}
+    public static void writeMessage(String arg) {
+        if (!gui) {
+            try {
+                out.write(arg);
+                out.flush();
+            } catch (Exception localException) {
+                LOGGER.log(Level.SEVERE, "BTTestServer: Unable to log messages. Do you have permission to log file?",
+                        localException);
+            }
+        } else {
+            GUI.writeMessage(arg);
+        }
+    }
 
-	private static String getTime() {
-		return DATE_FORMAT.format(new Date());
-	}
+    private static String getTime() {
+        return DATE_FORMAT.format(new Date());
+    }
 
-	public static void logMessage(String tag, String message) {
-		writeMessage(getTime() + " L/" + tag + ": " + message);
-	}
+    public static void logMessage(String tag, String message) {
+        writeMessage(getTime() + " L/" + tag + ": " + message);
+    }
 
-	public static void logMessage(String tag, String message, Exception e) {
-		logMessage(tag, message + ": " + e.getMessage());
-	}
+    public static void logMessage(String tag, String message, Exception e) {
+        logMessage(tag, message + ": " + e.getMessage());
+    }
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		try {
+        try {
 
-			if (args.length == 0) {
-				gui = true;
-				GUI.startGUI();
-			} else {
-				out = new OutputStreamWriter(new FileOutputStream(args[0]));
-			}
+            if (args.length == 0) {
+                gui = true;
+                GUI.startGUI();
+            } else {
+                out = new OutputStreamWriter(new FileOutputStream(args[0]));
+            }
 
-			printSystemConfiguration();
+            printSystemConfiguration();
 
-			btServer = new BTServer();
-			btServer.startServer();
-		} catch (IOException ioException) {
-			logMessage(TAG, "IOexception!", ioException);
-		}
-	}
+            btServer = new BTServer();
+            btServer.startServer();
+        } catch (IOException ioException) {
+            logMessage(TAG, "IOexception!", ioException);
+        }
+    }
 
-	private static void printSystemConfiguration()
-			throws BluetoothStateException {
-		LocalDevice localDevice = LocalDevice.getLocalDevice();
-		writeMessage("Local System:\n");
-		writeMessage("Address: "
-				+ localDevice.getBluetoothAddress().replaceAll("(.{2})(?!$)",
-				"$1:") + "\n");
-		writeMessage("Name: " + localDevice.getFriendlyName() + "\n");
-	}
+    private static void printSystemConfiguration()
+            throws BluetoothStateException {
+        LocalDevice localDevice = LocalDevice.getLocalDevice();
+        writeMessage("Local System:\n");
+        writeMessage("Address: "
+                + localDevice.getBluetoothAddress().replaceAll("(.{2})(?!$)",
+                "$1:") + "\n");
+        writeMessage("Name: " + localDevice.getFriendlyName() + "\n");
+    }
 
-	private void startServer() throws IOException {
+    private void startServer() throws IOException {
 
-		writeMessage("-----------------------------------------------------\n");
-		writeMessage("Bluetooth Server started on " + getTime() + "\n");
-		writeMessage("Waiting for Bluetooth test clients.\n");
-		writeMessage("Listening for: \n");
+        writeMessage("-----------------------------------------------------\n");
+        writeMessage("Bluetooth Server started on " + getTime() + "\n");
+        writeMessage("Waiting for Bluetooth test clients.\n");
+        writeMessage("Listening for: \n");
 
-		for (Client client : supportedClients) {
-			new InputConnectionHandler(client).start();
-		}
-	}
+        for (Client client : supportedClients) {
+            new InputConnectionHandler(client).start();
+        }
+    }
 
-	private class InputConnectionHandler extends Thread {
+    private class InputConnectionHandler extends Thread {
 
-		private Client client;
+        private Client client;
 
-		public InputConnectionHandler(Client client) {
-			this.client = client;
-		}
+        public InputConnectionHandler(Client client) {
+            this.client = client;
+        }
 
-		@Override
-		public void run() {
-			try {
-				tryHandleInputConnection();
-			} catch (IOException e) {
-				writeMessage("  -- connectionfailed! " + client.name + " (" + client.uuid + " | " + getTime() + ")\n");
-				logMessage(TAG, "IOException", e);
-			}
-		}
+        @Override
+        public void run() {
+            try {
+                tryHandleInputConnection();
+            } catch (IOException e) {
+                writeMessage("  -- connectionfailed! " + client.name + " (" + client.uuid + " | " + getTime() + ")\n");
+                logMessage(TAG, "IOException", e);
+            }
+        }
 
-		private void tryHandleInputConnection() throws IOException {
-			String connectionString = "btspp://localhost:" + client.uuid
-					+ ";name=BT Test Server";
+        private void tryHandleInputConnection() throws IOException {
+            String connectionString = "btspp://localhost:" + client.uuid
+                    + ";name=BT Test Server";
 
-			StreamConnectionNotifier streamConnNotifier = (StreamConnectionNotifier) Connector
-					.open(connectionString);
+            StreamConnectionNotifier streamConnNotifier = (StreamConnectionNotifier) Connector
+                    .open(connectionString);
 
-			writeMessage("  - " + client.name + " (" + client.uuid + ")\n");
+            writeMessage("  - " + client.name + " (" + client.uuid + ")\n");
 
-			while (BTServer.this.run) {
-				StreamConnection connection = streamConnNotifier.acceptAndOpen();
+            while (BTServer.this.run) {
+                StreamConnection connection = streamConnNotifier.acceptAndOpen();
 
-				BTServer.writeMessage("\n --> Incomming connection for " + client.name + "  (" + getTime() + ")\n");
+                BTServer.writeMessage("\n --> Incomming connection for " + client.name + "  (" + getTime() + ")\n");
 
-				BTClientHandler btc = BluetoothClientHandlerFactory.create(client.uuid);
-				btc.setConnection(connection);
+                BTClientHandler btc = BluetoothClientHandlerFactory.create(client.uuid);
+                btc.setConnection(connection);
 
-				btc.start();
-			}
+                btc.start();
+            }
 
-			streamConnNotifier.close();
-		}
-	}
+            streamConnNotifier.close();
+        }
+    }
 }

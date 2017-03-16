@@ -28,15 +28,15 @@ import java.io.Serializable;
 
 public class ProjectData implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public String projectName;
-	public long lastUsed;
-	public boolean overviewVisible = false;
-	public Project project = null;
+    public String projectName;
+    public long lastUsed;
+    public boolean overviewVisible = false;
+    public Project project = null;
 
-	public ProjectData(String projectName, long lastUsed) {
-		this.projectName = projectName;
-		this.lastUsed = lastUsed;
-	}
+    public ProjectData(String projectName, long lastUsed) {
+        this.projectName = projectName;
+        this.lastUsed = lastUsed;
+    }
 }

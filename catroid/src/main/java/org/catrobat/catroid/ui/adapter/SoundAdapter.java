@@ -41,113 +41,113 @@ import java.util.List;
 
 public class SoundAdapter extends SoundBaseAdapter implements ActionModeActivityAdapterInterface, SoundController.OnBackpackSoundCompleteListener {
 
-	private static final int INVALID_ID = -1;
+    private static final int INVALID_ID = -1;
 
-	private SoundFragment soundFragment;
+    private SoundFragment soundFragment;
 
-	private HashMap<SoundInfo, Integer> idMap = new HashMap<SoundInfo, Integer>();
+    private HashMap<SoundInfo, Integer> idMap = new HashMap<SoundInfo, Integer>();
 
-	public SoundAdapter(final Context context, int resource, int textViewResourceId, List<SoundInfo> items,
-			boolean showDetails) {
-		super(context, resource, textViewResourceId, items, showDetails, false);
-		for (int i = 0; i < items.size(); ++i) {
-			idMap.put(items.get(i), i);
-		}
-	}
+    public SoundAdapter(final Context context, int resource, int textViewResourceId, List<SoundInfo> items,
+                        boolean showDetails) {
+        super(context, resource, textViewResourceId, items, showDetails, false);
+        for (int i = 0; i < items.size(); ++i) {
+            idMap.put(items.get(i), i);
+        }
+    }
 
-	@Override
-	public long getItemId(int position) {
-		if (position < 0 || position >= idMap.size()) {
-			return INVALID_ID;
-		}
-		SoundInfo item = getItem(position);
-		return idMap.get(item);
-	}
+    @Override
+    public long getItemId(int position) {
+        if (position < 0 || position >= idMap.size()) {
+            return INVALID_ID;
+        }
+        SoundInfo item = getItem(position);
+        return idMap.get(item);
+    }
 
-	@Override
-	public void notifyDataSetChanged() {
-		super.notifyDataSetChanged();
-		if (getCount() != idMap.size()) {
-			idMap.clear();
-			for (int i = 0; i < getCount(); i++) {
-				idMap.put(getItem(i), i);
-			}
-		}
-	}
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        if (getCount() != idMap.size()) {
+            idMap.clear();
+            for (int i = 0; i < getCount(); i++) {
+                idMap.put(getItem(i), i);
+            }
+        }
+    }
 
-	@Override
-	public boolean hasStableIds() {
-		return true;
-	}
+    @Override
+    public boolean hasStableIds() {
+        return true;
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		if (soundFragment == null) {
-			return convertView;
-		}
-		return soundFragment.getView(position, convertView);
-	}
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (soundFragment == null) {
+            return convertView;
+        }
+        return soundFragment.getView(position, convertView);
+    }
 
-	public void onDestroyActionModeRename(ActionMode mode, ListView listView) {
-		Iterator<Integer> iterator = checkedSounds.iterator();
+    public void onDestroyActionModeRename(ActionMode mode, ListView listView) {
+        Iterator<Integer> iterator = checkedSounds.iterator();
 
-		if (iterator.hasNext()) {
-			int position = iterator.next();
-			soundFragment.setSelectedSoundInfo((SoundInfo) listView.getItemAtPosition(position));
-			soundFragment.showRenameDialog();
-		}
-		soundFragment.clearCheckedSoundsAndEnableButtons();
-	}
+        if (iterator.hasNext()) {
+            int position = iterator.next();
+            soundFragment.setSelectedSoundInfo((SoundInfo) listView.getItemAtPosition(position));
+            soundFragment.showRenameDialog();
+        }
+        soundFragment.clearCheckedSoundsAndEnableButtons();
+    }
 
-	public void onDestroyActionModeCopy(ActionMode mode) {
-		Iterator<Integer> iterator = checkedSounds.iterator();
+    public void onDestroyActionModeCopy(ActionMode mode) {
+        Iterator<Integer> iterator = checkedSounds.iterator();
 
-		while (iterator.hasNext()) {
-			int position = iterator.next();
-			SoundController.getInstance().copySound(position, soundFragment.getSoundInfoList(), this);
-		}
-		soundFragment.clearCheckedSoundsAndEnableButtons();
-	}
+        while (iterator.hasNext()) {
+            int position = iterator.next();
+            SoundController.getInstance().copySound(position, soundFragment.getSoundInfoList(), this);
+        }
+        soundFragment.clearCheckedSoundsAndEnableButtons();
+    }
 
-	public void onDestroyActionModeBackPack() {
-		List<SoundInfo> soundInfoListToBackpack = new ArrayList<>();
-		for (Integer position : checkedSounds) {
-			soundInfoListToBackpack.add(soundInfoItems.get(position));
-		}
+    public void onDestroyActionModeBackPack() {
+        List<SoundInfo> soundInfoListToBackpack = new ArrayList<>();
+        for (Integer position : checkedSounds) {
+            soundInfoListToBackpack.add(soundInfoItems.get(position));
+        }
 
-		boolean soundsAlreadyInBackpack = SoundController.getInstance().checkSoundReplaceInBackpack(soundInfoListToBackpack);
+        boolean soundsAlreadyInBackpack = SoundController.getInstance().checkSoundReplaceInBackpack(soundInfoListToBackpack);
 
-		if (!soundInfoListToBackpack.isEmpty()) {
-			if (!soundsAlreadyInBackpack) {
-				for (SoundInfo soundInfoToBackpack : soundInfoListToBackpack) {
-					SoundController.getInstance().backPackVisibleSound(soundInfoToBackpack);
-					onBackpackSoundComplete(true);
-				}
-			} else {
-				SoundController.getInstance().setOnBackpackSoundCompleteListener(this);
-				SoundController.getInstance().showBackPackReplaceDialog(soundInfoListToBackpack, soundFragment.getActivity());
-			}
-		} else {
-			soundFragment.clearCheckedSoundsAndEnableButtons();
-		}
-	}
+        if (!soundInfoListToBackpack.isEmpty()) {
+            if (!soundsAlreadyInBackpack) {
+                for (SoundInfo soundInfoToBackpack : soundInfoListToBackpack) {
+                    SoundController.getInstance().backPackVisibleSound(soundInfoToBackpack);
+                    onBackpackSoundComplete(true);
+                }
+            } else {
+                SoundController.getInstance().setOnBackpackSoundCompleteListener(this);
+                SoundController.getInstance().showBackPackReplaceDialog(soundInfoListToBackpack, soundFragment.getActivity());
+            }
+        } else {
+            soundFragment.clearCheckedSoundsAndEnableButtons();
+        }
+    }
 
-	public void setSoundFragment(SoundFragment soundFragment) {
-		this.soundFragment = soundFragment;
-	}
+    public void setSoundFragment(SoundFragment soundFragment) {
+        this.soundFragment = soundFragment;
+    }
 
-	@Override
-	public List<SoundInfo> getSoundInfoItems() {
-		return soundInfoItems;
-	}
+    @Override
+    public List<SoundInfo> getSoundInfoItems() {
+        return soundInfoItems;
+    }
 
-	@Override
-	public void onBackpackSoundComplete(boolean startBackpackActivity) {
-		if (!checkedSounds.isEmpty() && startBackpackActivity) {
-			Intent intent = new Intent(soundFragment.getActivity(), BackPackActivity.class);
-			intent.putExtra(BackPackActivity.EXTRA_FRAGMENT_POSITION, BackPackActivity.FRAGMENT_BACKPACK_SOUNDS);
-			soundFragment.getActivity().startActivity(intent);
-		}
-		soundFragment.clearCheckedSoundsAndEnableButtons();
-	}
+    @Override
+    public void onBackpackSoundComplete(boolean startBackpackActivity) {
+        if (!checkedSounds.isEmpty() && startBackpackActivity) {
+            Intent intent = new Intent(soundFragment.getActivity(), BackPackActivity.class);
+            intent.putExtra(BackPackActivity.EXTRA_FRAGMENT_POSITION, BackPackActivity.FRAGMENT_BACKPACK_SOUNDS);
+            soundFragment.getActivity().startActivity(intent);
+        }
+        soundFragment.clearCheckedSoundsAndEnableButtons();
+    }
 }

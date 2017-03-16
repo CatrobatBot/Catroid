@@ -44,97 +44,97 @@ import java.util.Map;
 
 public class ShowTextAction extends TemporalAction {
 
-	public static final String TAG = ShowTextAction.class.getSimpleName();
+    public static final String TAG = ShowTextAction.class.getSimpleName();
 
-	private Formula xPosition;
-	private Formula yPosition;
-	private UserVariable variableToShow;
+    private Formula xPosition;
+    private Formula yPosition;
+    private UserVariable variableToShow;
 
-	private Sprite sprite;
-	private UserBrick userBrick;
-	private ShowTextActor actor;
+    private Sprite sprite;
+    private UserBrick userBrick;
+    private ShowTextActor actor;
 
-	@Override
-	protected void begin() {
-		try {
-			int xPosition = this.xPosition.interpretInteger(sprite);
-			int yPosition = this.yPosition.interpretInteger(sprite);
+    @Override
+    protected void begin() {
+        try {
+            int xPosition = this.xPosition.interpretInteger(sprite);
+            int yPosition = this.yPosition.interpretInteger(sprite);
 
-			DataContainer dataContainer = ProjectManager.getInstance().getSceneToPlay().getDataContainer();
-			List<UserVariable> variableList = dataContainer.getProjectVariables();
+            DataContainer dataContainer = ProjectManager.getInstance().getSceneToPlay().getDataContainer();
+            List<UserVariable> variableList = dataContainer.getProjectVariables();
 
-			Map<Sprite, List<UserVariable>> spriteVariableMap = dataContainer.getSpriteVariableMap();
-			Sprite currentSprite = sprite;
-			List<UserVariable> spriteVariableList = spriteVariableMap.get(currentSprite);
-			List<UserVariable> userBrickVariableList = dataContainer.getOrCreateVariableListForUserBrick(userBrick);
-			if (StageActivity.stageListener != null) {
-				Array<Actor> stageActors = StageActivity.stageListener.getStage().getActors();
-				ShowTextActor dummyActor = new ShowTextActor(new UserVariable("dummyActor"), 0, 0, sprite, userBrick);
+            Map<Sprite, List<UserVariable>> spriteVariableMap = dataContainer.getSpriteVariableMap();
+            Sprite currentSprite = sprite;
+            List<UserVariable> spriteVariableList = spriteVariableMap.get(currentSprite);
+            List<UserVariable> userBrickVariableList = dataContainer.getOrCreateVariableListForUserBrick(userBrick);
+            if (StageActivity.stageListener != null) {
+                Array<Actor> stageActors = StageActivity.stageListener.getStage().getActors();
+                ShowTextActor dummyActor = new ShowTextActor(new UserVariable("dummyActor"), 0, 0, sprite, userBrick);
 
-				for (Actor actor : stageActors) {
-					if (actor.getClass().equals(dummyActor.getClass())) {
-						ShowTextActor showTextActor = (ShowTextActor) actor;
-						if (showTextActor.getVariableNameToCompare().equals(variableToShow.getName())
-								&& showTextActor.getSprite().equals(sprite)
-								&& (userBrick != null ? showTextActor.getUserBrick().equals(userBrick) : true)) {
-							actor.remove();
-						}
-					}
-				}
+                for (Actor actor : stageActors) {
+                    if (actor.getClass().equals(dummyActor.getClass())) {
+                        ShowTextActor showTextActor = (ShowTextActor) actor;
+                        if (showTextActor.getVariableNameToCompare().equals(variableToShow.getName())
+                                && showTextActor.getSprite().equals(sprite)
+                                && (userBrick != null ? showTextActor.getUserBrick().equals(userBrick) : true)) {
+                            actor.remove();
+                        }
+                    }
+                }
 
-				actor = new ShowTextActor(variableToShow, xPosition, yPosition, sprite, userBrick);
-				StageActivity.stageListener.addActor(actor);
-			}
+                actor = new ShowTextActor(variableToShow, xPosition, yPosition, sprite, userBrick);
+                StageActivity.stageListener.addActor(actor);
+            }
 
-			setVariablesVisible(variableList);
-			setVariablesVisible(spriteVariableList);
-			setVariablesVisible(userBrickVariableList);
-		} catch (InterpretationException e) {
-			Log.d(TAG, "InterpretationException: " + e);
-		}
-	}
+            setVariablesVisible(variableList);
+            setVariablesVisible(spriteVariableList);
+            setVariablesVisible(userBrickVariableList);
+        } catch (InterpretationException e) {
+            Log.d(TAG, "InterpretationException: " + e);
+        }
+    }
 
-	private void setVariablesVisible(List<UserVariable> variableList) {
-		if (variableList == null) {
-			return;
-		}
-		for (UserVariable userVariable : variableList) {
-			if (userVariable.getName().equals(variableToShow.getName())) {
-				userVariable.setVisible(true);
-				break;
-			}
-		}
-	}
+    private void setVariablesVisible(List<UserVariable> variableList) {
+        if (variableList == null) {
+            return;
+        }
+        for (UserVariable userVariable : variableList) {
+            if (userVariable.getName().equals(variableToShow.getName())) {
+                userVariable.setVisible(true);
+                break;
+            }
+        }
+    }
 
-	@Override
-	protected void update(float percent) {
-		try {
-			int xPosition = this.xPosition.interpretInteger(sprite);
-			int yPosition = this.yPosition.interpretInteger(sprite);
+    @Override
+    protected void update(float percent) {
+        try {
+            int xPosition = this.xPosition.interpretInteger(sprite);
+            int yPosition = this.yPosition.interpretInteger(sprite);
 
-			if (actor != null) {
-				actor.setPositionX(xPosition);
-				actor.setPositionY(yPosition);
-			}
-		} catch (InterpretationException e) {
-			Log.d(TAG, "InterpretationException");
-		}
-	}
+            if (actor != null) {
+                actor.setPositionX(xPosition);
+                actor.setPositionY(yPosition);
+            }
+        } catch (InterpretationException e) {
+            Log.d(TAG, "InterpretationException");
+        }
+    }
 
-	public void setPosition(Formula xPosition, Formula yPosition) {
-		this.xPosition = xPosition;
-		this.yPosition = yPosition;
-	}
+    public void setPosition(Formula xPosition, Formula yPosition) {
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setVariableToShow(UserVariable userVariable) {
-		this.variableToShow = userVariable;
-	}
+    public void setVariableToShow(UserVariable userVariable) {
+        this.variableToShow = userVariable;
+    }
 
-	public void setUserBrick(UserBrick userBrick) {
-		this.userBrick = userBrick;
-	}
+    public void setUserBrick(UserBrick userBrick) {
+        this.userBrick = userBrick;
+    }
 }

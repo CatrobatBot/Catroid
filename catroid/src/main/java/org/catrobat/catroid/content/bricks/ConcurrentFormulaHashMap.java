@@ -28,17 +28,17 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ConcurrentFormulaHashMap extends ConcurrentHashMap<Brick.BrickField, Formula> implements Cloneable {
 
-	private static final long serialVersionUID = 9030965461744658052L;
+    private static final long serialVersionUID = 9030965461744658052L;
 
-	@Override
-	public ConcurrentFormulaHashMap clone() throws CloneNotSupportedException {
-		ConcurrentFormulaHashMap copiedMap = new ConcurrentFormulaHashMap();
-		for (Brick.BrickField key : keySet()) {
-			Formula value = get(key);
-			if (value != null) {
-				copiedMap.putIfAbsent(key, value.clone());
-			}
-		}
-		return copiedMap;
-	}
+    @Override
+    public ConcurrentFormulaHashMap clone() throws CloneNotSupportedException {
+        ConcurrentFormulaHashMap copiedMap = new ConcurrentFormulaHashMap();
+        for (Brick.BrickField key : keySet()) {
+            Formula value = get(key);
+            if (value != null) {
+                copiedMap.putIfAbsent(key, value.clone());
+            }
+        }
+        return copiedMap;
+    }
 }

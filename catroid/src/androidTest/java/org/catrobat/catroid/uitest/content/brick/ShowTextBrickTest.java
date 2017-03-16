@@ -55,92 +55,92 @@ import java.util.ArrayList;
 
 public class ShowTextBrickTest extends BaseActivityInstrumentationTestCase<ScriptActivity> {
 
-	private Project project;
-	private SetVariableBrick setVariableBrick;
-	private ShowTextBrick showTextBrick;
-	private HideTextBrick hideTextBrick;
-	private WaitBrick waitBrick;
+    private Project project;
+    private SetVariableBrick setVariableBrick;
+    private ShowTextBrick showTextBrick;
+    private HideTextBrick hideTextBrick;
+    private WaitBrick waitBrick;
 
-	public ShowTextBrickTest() {
-		super(ScriptActivity.class);
-	}
+    public ShowTextBrickTest() {
+        super(ScriptActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		// normally super.setUp should be called first
-		// but kept the test failing due to view is null
-		// when starting in ScriptActivity
-		createProject();
-		super.setUp();
-	}
+    @Override
+    public void setUp() throws Exception {
+        // normally super.setUp should be called first
+        // but kept the test failing due to view is null
+        // when starting in ScriptActivity
+        createProject();
+        super.setUp();
+    }
 
-	public void testShowHideBrick() {
-		ListView dragDropListView = UiTestUtils.getScriptListView(solo);
-		BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
+    public void testShowHideBrick() {
+        ListView dragDropListView = UiTestUtils.getScriptListView(solo);
+        BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
 
-		int childrenCount = adapter.getChildCountFromLastGroup();
-		int groupCount = adapter.getScriptCount();
+        int childrenCount = adapter.getChildCountFromLastGroup();
+        int groupCount = adapter.getScriptCount();
 
-		assertEquals("Incorrect number of bricks.", 5, dragDropListView.getChildCount());
-		assertEquals("Incorrect number of bricks.", 4, childrenCount);
+        assertEquals("Incorrect number of bricks.", 5, dragDropListView.getChildCount());
+        assertEquals("Incorrect number of bricks.", 4, childrenCount);
 
-		ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
-		assertEquals("Incorrect number of bricks.", 4, projectBrickList.size());
+        ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
+        assertEquals("Incorrect number of bricks.", 4, projectBrickList.size());
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
-		assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.brick_set_variable)));
+        assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
+        assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.brick_set_variable)));
 
-		assertTrue("ScriptFragment not visible", solo.waitForText(solo.getString(R.string.brick_set_variable)));
+        assertTrue("ScriptFragment not visible", solo.waitForText(solo.getString(R.string.brick_set_variable)));
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
-				R.id.brick_show_variable_edit_text_x, 10, Brick.BrickField.X_POSITION, showTextBrick);
-		UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
-				R.id.brick_show_variable_edit_text_y, 10, Brick.BrickField.Y_POSITION, showTextBrick);
+        UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
+                R.id.brick_show_variable_edit_text_x, 10, Brick.BrickField.X_POSITION, showTextBrick);
+        UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
+                R.id.brick_show_variable_edit_text_y, 10, Brick.BrickField.Y_POSITION, showTextBrick);
 
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.goBack();
-		solo.waitForText(solo.getString(R.string.stage_dialog_back));
-		solo.clickOnText(solo.getString(R.string.stage_dialog_back));
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.goBack();
+        solo.waitForText(solo.getString(R.string.stage_dialog_back));
+        solo.clickOnText(solo.getString(R.string.stage_dialog_back));
 
-		solo.clickOnText(getInstrumentation().getTargetContext().getString(
-				R.string.brick_variable_spinner_create_new_variable), 1, true);
-		EditText varName = (EditText) solo.getView(R.id.dialog_formula_editor_data_name_edit_text);
-		solo.enterText(varName, "newVar");
-		solo.clickOnButton(solo.getString(R.string.ok));
+        solo.clickOnText(getInstrumentation().getTargetContext().getString(
+                R.string.brick_variable_spinner_create_new_variable), 1, true);
+        EditText varName = (EditText) solo.getView(R.id.dialog_formula_editor_data_name_edit_text);
+        solo.enterText(varName, "newVar");
+        solo.clickOnButton(solo.getString(R.string.ok));
 //		solo.clickOnText("newVar"); // ONLY on Android 5.0.1
-		UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
-				R.id.brick_set_variable_edit_text, 12345, Brick.BrickField.VARIABLE, setVariableBrick);
+        UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
+                R.id.brick_set_variable_edit_text, 12345, Brick.BrickField.VARIABLE, setVariableBrick);
 
-		UserVariable userVariable = (UserVariable) Reflection.getPrivateField(UserVariableBrick.class, setVariableBrick, "userVariable");
-		assertNotNull("UserVariable is null", userVariable);
-		assertTrue("UserVariable Name not as expected", userVariable.getName().equals("newVar"));
+        UserVariable userVariable = (UserVariable) Reflection.getPrivateField(UserVariableBrick.class, setVariableBrick, "userVariable");
+        assertNotNull("UserVariable is null", userVariable);
+        assertTrue("UserVariable Name not as expected", userVariable.getName().equals("newVar"));
 
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-	}
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+    }
 
-	private void createProject() {
-		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite sprite = new SingleSprite("cat");
-		Script script = new StartScript();
+    private void createProject() {
+        project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Sprite sprite = new SingleSprite("cat");
+        Script script = new StartScript();
 
-		setVariableBrick = new SetVariableBrick();
-		script.addBrick(setVariableBrick);
+        setVariableBrick = new SetVariableBrick();
+        script.addBrick(setVariableBrick);
 
-		showTextBrick = new ShowTextBrick(0, 0);
-		script.addBrick(showTextBrick);
+        showTextBrick = new ShowTextBrick(0, 0);
+        script.addBrick(showTextBrick);
 
-		waitBrick = new WaitBrick(3000);
-		script.addBrick(waitBrick);
+        waitBrick = new WaitBrick(3000);
+        script.addBrick(waitBrick);
 
-		hideTextBrick = new HideTextBrick();
-		script.addBrick(hideTextBrick);
+        hideTextBrick = new HideTextBrick();
+        script.addBrick(hideTextBrick);
 
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 }

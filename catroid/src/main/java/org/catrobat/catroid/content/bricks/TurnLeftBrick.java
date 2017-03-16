@@ -40,66 +40,66 @@ import java.util.List;
 
 public class TurnLeftBrick extends FormulaBrick {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private transient View prototypeView;
+    private transient View prototypeView;
 
-	public TurnLeftBrick() {
-		addAllowedBrickField(BrickField.TURN_LEFT_DEGREES);
-	}
+    public TurnLeftBrick() {
+        addAllowedBrickField(BrickField.TURN_LEFT_DEGREES);
+    }
 
-	public TurnLeftBrick(double degreesValue) {
-		initializeBrickFields(new Formula(degreesValue));
-	}
+    public TurnLeftBrick(double degreesValue) {
+        initializeBrickFields(new Formula(degreesValue));
+    }
 
-	public TurnLeftBrick(Formula degrees) {
-		initializeBrickFields(degrees);
-	}
+    public TurnLeftBrick(Formula degrees) {
+        initializeBrickFields(degrees);
+    }
 
-	private void initializeBrickFields(Formula degrees) {
-		addAllowedBrickField(BrickField.TURN_LEFT_DEGREES);
-		setFormulaWithBrickField(BrickField.TURN_LEFT_DEGREES, degrees);
-	}
+    private void initializeBrickFields(Formula degrees) {
+        addAllowedBrickField(BrickField.TURN_LEFT_DEGREES);
+        setFormulaWithBrickField(BrickField.TURN_LEFT_DEGREES, degrees);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return getFormulaWithBrickField(BrickField.TURN_LEFT_DEGREES).getRequiredResources();
-	}
+    @Override
+    public int getRequiredResources() {
+        return getFormulaWithBrickField(BrickField.TURN_LEFT_DEGREES).getRequiredResources();
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		view = View.inflate(context, R.layout.brick_turn_left, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        view = View.inflate(context, R.layout.brick_turn_left, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_turn_left_checkbox);
-		TextView editDegrees = (TextView) view.findViewById(R.id.brick_turn_left_edit_text);
-		getFormulaWithBrickField(BrickField.TURN_LEFT_DEGREES).setTextFieldId(R.id.brick_turn_left_edit_text);
-		getFormulaWithBrickField(BrickField.TURN_LEFT_DEGREES).refreshTextField(view);
+        setCheckboxView(R.id.brick_turn_left_checkbox);
+        TextView editDegrees = (TextView) view.findViewById(R.id.brick_turn_left_edit_text);
+        getFormulaWithBrickField(BrickField.TURN_LEFT_DEGREES).setTextFieldId(R.id.brick_turn_left_edit_text);
+        getFormulaWithBrickField(BrickField.TURN_LEFT_DEGREES).refreshTextField(view);
 
-		editDegrees.setOnClickListener(this);
-		return view;
-	}
+        editDegrees.setOnClickListener(this);
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_turn_left, null);
-		TextView textDegrees = (TextView) prototypeView.findViewById(R.id.brick_turn_left_edit_text);
-		textDegrees.setText(Utils.getNumberStringForBricks(BrickValues.TURN_DEGREES));
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_turn_left, null);
+        TextView textDegrees = (TextView) prototypeView.findViewById(R.id.brick_turn_left_edit_text);
+        textDegrees.setText(Utils.getNumberStringForBricks(BrickValues.TURN_DEGREES));
+        return prototypeView;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createTurnLeftAction(sprite,
-				getFormulaWithBrickField(BrickField.TURN_LEFT_DEGREES)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createTurnLeftAction(sprite,
+                getFormulaWithBrickField(BrickField.TURN_LEFT_DEGREES)));
+        return null;
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		FormulaEditorFragment.showFragment(view, this, BrickField.TURN_LEFT_DEGREES);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        FormulaEditorFragment.showFragment(view, this, BrickField.TURN_LEFT_DEGREES);
+    }
 }

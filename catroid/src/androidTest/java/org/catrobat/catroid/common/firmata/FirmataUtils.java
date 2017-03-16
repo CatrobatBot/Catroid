@@ -33,70 +33,70 @@ import name.antonsmirnov.firmata.BytesHelper;
 
 public final class FirmataUtils {
 
-	private static final int SET_PIN_MODE_COMMAND = 0xF4;
-	private static final int REPORT_ANALOG_PIN_COMMAND = 0xC0;
-	private static final int ANALOG_MESSAGE_COMMAND = 0xE0;
+    private static final int SET_PIN_MODE_COMMAND = 0xF4;
+    private static final int REPORT_ANALOG_PIN_COMMAND = 0xC0;
+    private static final int ANALOG_MESSAGE_COMMAND = 0xE0;
 
-	private final ConnectionDataLogger logger;
+    private final ConnectionDataLogger logger;
 
-	public FirmataUtils(ConnectionDataLogger logger) {
+    public FirmataUtils(ConnectionDataLogger logger) {
 
-		this.logger = logger;
-	}
+        this.logger = logger;
+    }
 
-	public FirmataMessage getAnalogMesageData() {
+    public FirmataMessage getAnalogMesageData() {
 
-		int pinAndCommand = getNextMessage();
+        int pinAndCommand = getNextMessage();
 
-		int pin = getPinFromHeader(pinAndCommand);
-		int command = getCommandFromHeader(pinAndCommand);
+        int pin = getPinFromHeader(pinAndCommand);
+        int command = getCommandFromHeader(pinAndCommand);
 
-		Assert.assertEquals("This is no analog message command", ANALOG_MESSAGE_COMMAND, command);
+        Assert.assertEquals("This is no analog message command", ANALOG_MESSAGE_COMMAND, command);
 
-		int lsb = getNextMessage();
-		int msb = getNextMessage();
+        int lsb = getNextMessage();
+        int msb = getNextMessage();
 
-		int data = BytesHelper.DECODE_BYTE(lsb, msb);
+        int data = BytesHelper.DECODE_BYTE(lsb, msb);
 
-		return new FirmataMessage(command, pin, data);
-	}
+        return new FirmataMessage(command, pin, data);
+    }
 
-	public FirmataMessage getSetPinModeMessage() {
-		int command = getNextMessage();
-		int pin = getNextMessage();
-		int mode = getNextMessage();
+    public FirmataMessage getSetPinModeMessage() {
+        int command = getNextMessage();
+        int pin = getNextMessage();
+        int mode = getNextMessage();
 
-		Assert.assertEquals("No set pin mode message", SET_PIN_MODE_COMMAND, command);
+        Assert.assertEquals("No set pin mode message", SET_PIN_MODE_COMMAND, command);
 
-		return new FirmataMessage(command, pin, mode);
-	}
+        return new FirmataMessage(command, pin, mode);
+    }
 
-	public FirmataMessage getReportAnalogPinMessage() {
+    public FirmataMessage getReportAnalogPinMessage() {
 
-		int pinAndCommand = getNextMessage();
+        int pinAndCommand = getNextMessage();
 
-		int pin = getPinFromHeader(pinAndCommand);
-		int command = getCommandFromHeader(pinAndCommand);
+        int pin = getPinFromHeader(pinAndCommand);
+        int command = getCommandFromHeader(pinAndCommand);
 
-		Assert.assertEquals("No report analog pin message", REPORT_ANALOG_PIN_COMMAND, command);
+        Assert.assertEquals("No report analog pin message", REPORT_ANALOG_PIN_COMMAND, command);
 
-		int data = getNextMessage();
+        int data = getNextMessage();
 
-		return new FirmataMessage(command, pin, data);
-	}
+        return new FirmataMessage(command, pin, data);
+    }
 
-	public int getNextMessage() {
-		byte[] message = logger.getNextSentMessage();
-		Assert.assertNotNull("There is no message", message);
-		ByteBuffer bb = ByteBuffer.wrap(message);
-		return bb.getInt();
-	}
+    public int getNextMessage() {
+        byte[] message = logger.getNextSentMessage();
+        Assert.assertNotNull("There is no message", message);
+        ByteBuffer bb = ByteBuffer.wrap(message);
+        return bb.getInt();
+    }
 
-	private int getPinFromHeader(int header) {
-		return header & 15;
-	}
+    private int getPinFromHeader(int header) {
+        return header & 15;
+    }
 
-	private int getCommandFromHeader(int header) {
-		return header & 240;
-	}
+    private int getCommandFromHeader(int header) {
+        return header & 240;
+    }
 }

@@ -53,64 +53,64 @@ import static android.support.test.espresso.matcher.ViewMatchers.isFocusable;
 
 @RunWith(AndroidJUnit4.class)
 public class StageTestSimple {
-	private static final int PROJECT_WIDTH = 480;
-	private static final int PROJECT_HEIGHT = 800;
+    private static final int PROJECT_WIDTH = 480;
+    private static final int PROJECT_HEIGHT = 800;
 
-	@Rule
-	public BaseActivityInstrumentationRule<StageActivity> baseActivityTestRule = new
-			BaseActivityInstrumentationRule<>(StageActivity.class, true, false);
+    @Rule
+    public BaseActivityInstrumentationRule<StageActivity> baseActivityTestRule = new
+            BaseActivityInstrumentationRule<>(StageActivity.class, true, false);
 
-	@Before
-	public void setUp() throws Exception {
-	}
+    @Before
+    public void setUp() throws Exception {
+    }
 
-	@Test
-	public void checkForBlueSpriteColor() {
-		createProjectWithBlueSprite("blueProject");
-		baseActivityTestRule.launchActivity(null);
+    @Test
+    public void checkForBlueSpriteColor() {
+        createProjectWithBlueSprite("blueProject");
+        baseActivityTestRule.launchActivity(null);
 
-		byte[] blue = { 0, (byte) 162, (byte) 232, (byte) 255 };
+        byte[] blue = {0, (byte) 162, (byte) 232, (byte) 255};
 
-		//color matcher only accepts a GL20View, this can be aquired by getting the only focusable element in the stage
-		onView(isFocusable())
-				.check(matches(StageMatchers.isColorAtPx(blue, 1, 1)));
-	}
+        //color matcher only accepts a GL20View, this can be aquired by getting the only focusable element in the stage
+        onView(isFocusable())
+                .check(matches(StageMatchers.isColorAtPx(blue, 1, 1)));
+    }
 
-	public Project createProjectWithBlueSprite(String projectName) {
-		ScreenValues.SCREEN_HEIGHT = PROJECT_HEIGHT;
-		ScreenValues.SCREEN_WIDTH = PROJECT_WIDTH;
+    public Project createProjectWithBlueSprite(String projectName) {
+        ScreenValues.SCREEN_HEIGHT = PROJECT_HEIGHT;
+        ScreenValues.SCREEN_WIDTH = PROJECT_WIDTH;
 
-		Project project = new Project(null, projectName);
+        Project project = new Project(null, projectName);
 
-		// blue Sprite
-		Sprite blueSprite = new SingleSprite("blueSprite");
-		StartScript blueStartScript = new StartScript();
-		LookData blueLookData = new LookData();
-		String blueImageName = "blue_image.bmp";
+        // blue Sprite
+        Sprite blueSprite = new SingleSprite("blueSprite");
+        StartScript blueStartScript = new StartScript();
+        LookData blueLookData = new LookData();
+        String blueImageName = "blue_image.bmp";
 
-		blueLookData.setLookName(blueImageName);
+        blueLookData.setLookName(blueImageName);
 
-		blueSprite.getLookDataList().add(blueLookData);
+        blueSprite.getLookDataList().add(blueLookData);
 
-		blueStartScript.addBrick(new PlaceAtBrick(0, 0));
-		blueStartScript.addBrick(new SetSizeToBrick(5000));
-		blueSprite.addScript(blueStartScript);
+        blueStartScript.addBrick(new PlaceAtBrick(0, 0));
+        blueStartScript.addBrick(new SetSizeToBrick(5000));
+        blueSprite.addScript(blueStartScript);
 
-		project.getDefaultScene().addSprite(blueSprite);
+        project.getDefaultScene().addSprite(blueSprite);
 
-		StorageHandler.getInstance().saveProject(project);
-		File blueImageFile = UiTestUtils.saveFileToProject(project.getName(), project.getDefaultScene().getName(),
-				blueImageName,
-				org.catrobat.catroid.test.R.raw.blue_image, InstrumentationRegistry.getContext(),
-				UiTestUtils.FileTypes.IMAGE);
+        StorageHandler.getInstance().saveProject(project);
+        File blueImageFile = UiTestUtils.saveFileToProject(project.getName(), project.getDefaultScene().getName(),
+                blueImageName,
+                org.catrobat.catroid.test.R.raw.blue_image, InstrumentationRegistry.getContext(),
+                UiTestUtils.FileTypes.IMAGE);
 
-		blueLookData.setLookFilename(blueImageFile.getName());
+        blueLookData.setLookFilename(blueImageFile.getName());
 
-		StorageHandler.getInstance().saveProject(project);
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(blueSprite);
-		UtilUi.updateScreenWidthAndHeight(InstrumentationRegistry.getContext());
+        StorageHandler.getInstance().saveProject(project);
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(blueSprite);
+        UtilUi.updateScreenWidthAndHeight(InstrumentationRegistry.getContext());
 
-		return project;
-	}
+        return project;
+    }
 }

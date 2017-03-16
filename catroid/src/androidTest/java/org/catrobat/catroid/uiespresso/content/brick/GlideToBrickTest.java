@@ -47,54 +47,54 @@ import static org.catrobat.catroid.uiespresso.content.brick.BrickTestUtils.enter
 
 @RunWith(AndroidJUnit4.class)
 public class GlideToBrickTest {
-	private int brickPosition;
-	private GlideToBrick glideToBrick;
+    private int brickPosition;
+    private GlideToBrick glideToBrick;
 
-	@Rule
-	public BaseActivityInstrumentationRule<ScriptActivity> baseActivityTestRule = new
-			BaseActivityInstrumentationRule<>(ScriptActivity.class, true, false);
+    @Rule
+    public BaseActivityInstrumentationRule<ScriptActivity> baseActivityTestRule = new
+            BaseActivityInstrumentationRule<>(ScriptActivity.class, true, false);
 
-	@Before
-	public void setUp() throws Exception {
-		glideToBrick = new GlideToBrick(0, 0, 0);
-		BrickTestUtils.createProjectAndGetStartScript("glideToBrickTest1").addBrick(glideToBrick);
-		brickPosition = 1;
-		baseActivityTestRule.launchActivity(null);
-	}
+    @Before
+    public void setUp() throws Exception {
+        glideToBrick = new GlideToBrick(0, 0, 0);
+        BrickTestUtils.createProjectAndGetStartScript("glideToBrickTest1").addBrick(glideToBrick);
+        brickPosition = 1;
+        baseActivityTestRule.launchActivity(null);
+    }
 
-	@Test
-	public void glideToBrickTest() throws InterpretationException {
-		int duration = 2;
-		int xPosition = 123;
-		int yPosition = 567;
+    @Test
+    public void glideToBrickTest() throws InterpretationException {
+        int duration = 2;
+        int xPosition = 123;
+        int yPosition = 567;
 
-		checkIfBrickAtPositionShowsString(0, R.string.brick_when_started);
-		checkIfBrickAtPositionShowsString(brickPosition, R.string.brick_glide_to_x);
+        checkIfBrickAtPositionShowsString(0, R.string.brick_when_started);
+        checkIfBrickAtPositionShowsString(brickPosition, R.string.brick_glide_to_x);
 
-		enterValueInFormulaTextFieldOnBrickAtPosition(duration, R.id.brick_glide_to_edit_text_duration, brickPosition);
-		enterValueInFormulaTextFieldOnBrickAtPosition(xPosition, R.id.brick_glide_to_edit_text_x, brickPosition);
-		enterValueInFormulaTextFieldOnBrickAtPosition(yPosition, R.id.brick_glide_to_edit_text_y, brickPosition);
+        enterValueInFormulaTextFieldOnBrickAtPosition(duration, R.id.brick_glide_to_edit_text_duration, brickPosition);
+        enterValueInFormulaTextFieldOnBrickAtPosition(xPosition, R.id.brick_glide_to_edit_text_x, brickPosition);
+        enterValueInFormulaTextFieldOnBrickAtPosition(yPosition, R.id.brick_glide_to_edit_text_y, brickPosition);
 
-		Sprite sprite = ProjectManager.getInstance().getCurrentSprite();
+        Sprite sprite = ProjectManager.getInstance().getCurrentSprite();
 
-		Formula formula = glideToBrick.getFormulaWithBrickField(Brick.BrickField.DURATION_IN_SECONDS);
-		assertEquals(Math.round(duration * 1000), Math.round(formula.interpretFloat(sprite) * 1000));
+        Formula formula = glideToBrick.getFormulaWithBrickField(Brick.BrickField.DURATION_IN_SECONDS);
+        assertEquals(Math.round(duration * 1000), Math.round(formula.interpretFloat(sprite) * 1000));
 
-		formula = glideToBrick.getFormulaWithBrickField(Brick.BrickField.X_DESTINATION);
-		assertEquals(xPosition, (int) formula.interpretInteger(sprite));
+        formula = glideToBrick.getFormulaWithBrickField(Brick.BrickField.X_DESTINATION);
+        assertEquals(xPosition, (int) formula.interpretInteger(sprite));
 
-		formula = glideToBrick.getFormulaWithBrickField(Brick.BrickField.Y_DESTINATION);
-		assertEquals(yPosition, (int) formula.interpretInteger(sprite));
-	}
+        formula = glideToBrick.getFormulaWithBrickField(Brick.BrickField.Y_DESTINATION);
+        assertEquals(yPosition, (int) formula.interpretInteger(sprite));
+    }
 
-	@Test
-	public void glideToBrickTestPluralSeconds() {
-		enterValueInFormulaTextFieldOnBrickAtPosition(1, R.id.brick_glide_to_edit_text_duration, brickPosition);
-		checkIfBrickAtPositionShowsString(brickPosition,
-				UiTestUtils.getResources().getQuantityString(R.plurals.second_plural, 1));
+    @Test
+    public void glideToBrickTestPluralSeconds() {
+        enterValueInFormulaTextFieldOnBrickAtPosition(1, R.id.brick_glide_to_edit_text_duration, brickPosition);
+        checkIfBrickAtPositionShowsString(brickPosition,
+                UiTestUtils.getResources().getQuantityString(R.plurals.second_plural, 1));
 
-		enterValueInFormulaTextFieldOnBrickAtPosition(5, R.id.brick_glide_to_edit_text_duration, brickPosition);
-		checkIfBrickAtPositionShowsString(brickPosition,
-				UiTestUtils.getResources().getQuantityString(R.plurals.second_plural, 5));
-	}
+        enterValueInFormulaTextFieldOnBrickAtPosition(5, R.id.brick_glide_to_edit_text_duration, brickPosition);
+        checkIfBrickAtPositionShowsString(brickPosition,
+                UiTestUtils.getResources().getQuantityString(R.plurals.second_plural, 5));
+    }
 }

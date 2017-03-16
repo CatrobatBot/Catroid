@@ -26,39 +26,39 @@ import java.io.IOException;
 import java.io.InputStream;
 
 class ObservedInputStream extends InputStream {
-	private final BluetoothLogger logger;
-	private final InputStream inputStream;
+    private final BluetoothLogger logger;
+    private final InputStream inputStream;
 
-	ObservedInputStream(InputStream inputStream, BluetoothLogger logger) {
-		this.inputStream = inputStream;
-		this.logger = logger;
-	}
+    ObservedInputStream(InputStream inputStream, BluetoothLogger logger) {
+        this.inputStream = inputStream;
+        this.logger = logger;
+    }
 
-	@Override
-	public int read() throws IOException {
-		int readByte = inputStream.read();
-		logger.logReceivedData(BluetoothTestUtils.intToByteArray(readByte));
+    @Override
+    public int read() throws IOException {
+        int readByte = inputStream.read();
+        logger.logReceivedData(BluetoothTestUtils.intToByteArray(readByte));
 
-		return readByte;
-	}
+        return readByte;
+    }
 
-	@Override
-	public int read(byte[] buffer) throws IOException {
-		int numOfReadBytes = inputStream.read(buffer);
-		logger.logReceivedData(buffer);
-		return numOfReadBytes;
-	}
+    @Override
+    public int read(byte[] buffer) throws IOException {
+        int numOfReadBytes = inputStream.read(buffer);
+        logger.logReceivedData(buffer);
+        return numOfReadBytes;
+    }
 
-	@Override
-	public int read(byte[] buffer, int byteOffset, int byteCount) throws IOException {
-		int numOfReadBytes = inputStream.read(buffer, byteOffset, byteCount);
-		logger.logReceivedData(BluetoothTestUtils.getSubArray(buffer, byteOffset, byteCount));
-		return numOfReadBytes;
-	}
+    @Override
+    public int read(byte[] buffer, int byteOffset, int byteCount) throws IOException {
+        int numOfReadBytes = inputStream.read(buffer, byteOffset, byteCount);
+        logger.logReceivedData(BluetoothTestUtils.getSubArray(buffer, byteOffset, byteCount));
+        return numOfReadBytes;
+    }
 
-	@Override
-	public void close() throws IOException {
-		super.close();
-		inputStream.close();
-	}
+    @Override
+    public void close() throws IOException {
+        super.close();
+        inputStream.close();
+    }
 }

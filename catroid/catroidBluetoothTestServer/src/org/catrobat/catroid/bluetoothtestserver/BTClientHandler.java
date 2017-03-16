@@ -30,40 +30,40 @@ import javax.bluetooth.RemoteDevice;
 import javax.microedition.io.StreamConnection;
 
 public abstract class BTClientHandler extends Thread {
-	private static final String TAG = BTClientHandler.class.getSimpleName();
+    private static final String TAG = BTClientHandler.class.getSimpleName();
 
-	private StreamConnection connection;
+    private StreamConnection connection;
 
-	public void setConnection(StreamConnection connection) {
-		this.connection = connection;
-	}
+    public void setConnection(StreamConnection connection) {
+        this.connection = connection;
+    }
 
-	public void run() {
-		try {
-			tryHandleClient();
-		} catch (IOException ioException) {
-			BTServer.logMessage(TAG, "BT Connection closed\n");
-		}
+    public void run() {
+        try {
+            tryHandleClient();
+        } catch (IOException ioException) {
+            BTServer.logMessage(TAG, "BT Connection closed\n");
+        }
 
-		BTServer.writeMessage("Client disconnected!\n");
-	}
+        BTServer.writeMessage("Client disconnected!\n");
+    }
 
-	private void tryHandleClient() throws IOException {
-		RemoteDevice dev = RemoteDevice.getRemoteDevice(this.connection);
-		String client = dev.getFriendlyName(true);
+    private void tryHandleClient() throws IOException {
+        RemoteDevice dev = RemoteDevice.getRemoteDevice(this.connection);
+        String client = dev.getFriendlyName(true);
 
-		BTServer.writeMessage("Address: " + dev.getBluetoothAddress().replaceAll("(.{2})(?!$)", "$1:") + "\n");
-		BTServer.writeMessage("Remote device name: " + client + "\n");
+        BTServer.writeMessage("Address: " + dev.getBluetoothAddress().replaceAll("(.{2})(?!$)", "$1:") + "\n");
+        BTServer.writeMessage("Remote device name: " + client + "\n");
 
-		DataInputStream inStream = new DataInputStream(this.connection.openInputStream());
-		OutputStream outStream = this.connection.openOutputStream();
+        DataInputStream inStream = new DataInputStream(this.connection.openInputStream());
+        OutputStream outStream = this.connection.openOutputStream();
 
-		this.handle(inStream, outStream);
+        this.handle(inStream, outStream);
 
-		outStream.close();
-		inStream.close();
-		this.connection.close();
-	}
+        outStream.close();
+        inStream.close();
+        this.connection.close();
+    }
 
-	public abstract void handle(DataInputStream inStream, OutputStream outStream) throws IOException;
+    public abstract void handle(DataInputStream inStream, OutputStream outStream) throws IOException;
 }

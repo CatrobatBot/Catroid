@@ -30,55 +30,55 @@ import org.catrobat.catroid.formulaeditor.Formula;
 
 public class WaitActionTest extends AndroidTestCase {
 
-	private static final String NOT_NUMERICAL_STRING = "NOT_NUMERICAL_STRING";
-	private static final float VALUE = 2f;
+    private static final String NOT_NUMERICAL_STRING = "NOT_NUMERICAL_STRING";
+    private static final float VALUE = 2f;
 
-	public void testWait() throws InterruptedException {
-		float waitOneSecond = 1.0f;
-		ActionFactory factory = new ActionFactory();
-		WaitAction action = (WaitAction) factory.createDelayAction(null, new Formula(waitOneSecond));
-		long currentTimeInMilliSeconds = System.currentTimeMillis();
-		do {
-			currentTimeInMilliSeconds = System.currentTimeMillis() - currentTimeInMilliSeconds;
-		} while (!action.act(currentTimeInMilliSeconds / 1000f));
+    public void testWait() throws InterruptedException {
+        float waitOneSecond = 1.0f;
+        ActionFactory factory = new ActionFactory();
+        WaitAction action = (WaitAction) factory.createDelayAction(null, new Formula(waitOneSecond));
+        long currentTimeInMilliSeconds = System.currentTimeMillis();
+        do {
+            currentTimeInMilliSeconds = System.currentTimeMillis() - currentTimeInMilliSeconds;
+        } while (!action.act(currentTimeInMilliSeconds / 1000f));
 
-		assertTrue("Unexpected waited time!", (action.getTime() - waitOneSecond) > 0.5f);
-	}
+        assertTrue("Unexpected waited time!", (action.getTime() - waitOneSecond) > 0.5f);
+    }
 
-	public void testBrickWithStringFormula() {
-		ActionFactory factory = new ActionFactory();
-		WaitAction action = (WaitAction) factory.createDelayAction(null, new Formula(String.valueOf(VALUE)));
-		long currentTimeInMilliSeconds = System.currentTimeMillis();
-		do {
-			currentTimeInMilliSeconds = System.currentTimeMillis() - currentTimeInMilliSeconds;
-		} while (!action.act(currentTimeInMilliSeconds / 1000f));
-		assertTrue("Unexpected waited time!", (action.getTime() - VALUE) > 0.5f);
+    public void testBrickWithStringFormula() {
+        ActionFactory factory = new ActionFactory();
+        WaitAction action = (WaitAction) factory.createDelayAction(null, new Formula(String.valueOf(VALUE)));
+        long currentTimeInMilliSeconds = System.currentTimeMillis();
+        do {
+            currentTimeInMilliSeconds = System.currentTimeMillis() - currentTimeInMilliSeconds;
+        } while (!action.act(currentTimeInMilliSeconds / 1000f));
+        assertTrue("Unexpected waited time!", (action.getTime() - VALUE) > 0.5f);
 
-		action = (WaitAction) factory.createDelayAction(null, new Formula(NOT_NUMERICAL_STRING));
-		currentTimeInMilliSeconds = System.currentTimeMillis();
-		do {
-			currentTimeInMilliSeconds = System.currentTimeMillis() - currentTimeInMilliSeconds;
-		} while (!action.act(currentTimeInMilliSeconds / 1000f));
-		assertTrue("Unexpected waited time!", action.getTime() == 0f);
-	}
+        action = (WaitAction) factory.createDelayAction(null, new Formula(NOT_NUMERICAL_STRING));
+        currentTimeInMilliSeconds = System.currentTimeMillis();
+        do {
+            currentTimeInMilliSeconds = System.currentTimeMillis() - currentTimeInMilliSeconds;
+        } while (!action.act(currentTimeInMilliSeconds / 1000f));
+        assertTrue("Unexpected waited time!", action.getTime() == 0f);
+    }
 
-	public void testNullFormula() {
-		ActionFactory factory = new ActionFactory();
-		WaitAction action = (WaitAction) factory.createDelayAction(null, null);
-		long currentTimeInMilliSeconds = System.currentTimeMillis();
-		do {
-			currentTimeInMilliSeconds = System.currentTimeMillis() - currentTimeInMilliSeconds;
-		} while (!action.act(currentTimeInMilliSeconds / 1000f));
-		assertTrue("Unexpected waited time!", action.getTime() == 0f);
-	}
+    public void testNullFormula() {
+        ActionFactory factory = new ActionFactory();
+        WaitAction action = (WaitAction) factory.createDelayAction(null, null);
+        long currentTimeInMilliSeconds = System.currentTimeMillis();
+        do {
+            currentTimeInMilliSeconds = System.currentTimeMillis() - currentTimeInMilliSeconds;
+        } while (!action.act(currentTimeInMilliSeconds / 1000f));
+        assertTrue("Unexpected waited time!", action.getTime() == 0f);
+    }
 
-	public void testNotANumberFormula() {
-		ActionFactory factory = new ActionFactory();
-		WaitAction action = (WaitAction) factory.createDelayAction(null, new Formula(Double.NaN));
-		long currentTimeInMilliSeconds = System.currentTimeMillis();
-		do {
-			currentTimeInMilliSeconds = System.currentTimeMillis() - currentTimeInMilliSeconds;
-		} while (!action.act(currentTimeInMilliSeconds / 1000f));
-		assertTrue("Unexpected waited time!", action.getTime() == 0f);
-	}
+    public void testNotANumberFormula() {
+        ActionFactory factory = new ActionFactory();
+        WaitAction action = (WaitAction) factory.createDelayAction(null, new Formula(Double.NaN));
+        long currentTimeInMilliSeconds = System.currentTimeMillis();
+        do {
+            currentTimeInMilliSeconds = System.currentTimeMillis() - currentTimeInMilliSeconds;
+        } while (!action.act(currentTimeInMilliSeconds / 1000f));
+        assertTrue("Unexpected waited time!", action.getTime() == 0f);
+    }
 }

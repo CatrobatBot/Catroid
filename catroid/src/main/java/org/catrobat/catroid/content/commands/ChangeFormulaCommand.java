@@ -29,36 +29,36 @@ import org.catrobat.catroid.formulaeditor.Formula;
 
 public class ChangeFormulaCommand implements Command {
 
-	private FormulaBrick formulaBrick;
-	private ConcurrentFormulaHashMap previousFormulaMap;
-	private ConcurrentFormulaHashMap newFormulaMap;
+    private FormulaBrick formulaBrick;
+    private ConcurrentFormulaHashMap previousFormulaMap;
+    private ConcurrentFormulaHashMap newFormulaMap;
 
-	public ChangeFormulaCommand(FormulaBrick formulaBrick, ConcurrentFormulaHashMap newFormulaMap) {
-		this.formulaBrick = formulaBrick;
-		this.newFormulaMap = newFormulaMap;
+    public ChangeFormulaCommand(FormulaBrick formulaBrick, ConcurrentFormulaHashMap newFormulaMap) {
+        this.formulaBrick = formulaBrick;
+        this.newFormulaMap = newFormulaMap;
 
-		previousFormulaMap = new ConcurrentFormulaHashMap();
-		for (BrickField key : newFormulaMap.keySet()) {
-			Formula formula = formulaBrick.getFormulaWithBrickField(key);
-			previousFormulaMap.putIfAbsent(key, formula.clone());
-		}
-	}
+        previousFormulaMap = new ConcurrentFormulaHashMap();
+        for (BrickField key : newFormulaMap.keySet()) {
+            Formula formula = formulaBrick.getFormulaWithBrickField(key);
+            previousFormulaMap.putIfAbsent(key, formula.clone());
+        }
+    }
 
-	@Override
-	public void execute() {
-		if (newFormulaMap != null) {
-			for (BrickField key : newFormulaMap.keySet()) {
-				formulaBrick.setFormulaWithBrickField(key, newFormulaMap.get(key));
-			}
-		}
-	}
+    @Override
+    public void execute() {
+        if (newFormulaMap != null) {
+            for (BrickField key : newFormulaMap.keySet()) {
+                formulaBrick.setFormulaWithBrickField(key, newFormulaMap.get(key));
+            }
+        }
+    }
 
-	@Override
-	public void undo() {
-		if (previousFormulaMap != null) {
-			for (BrickField key : previousFormulaMap.keySet()) {
-				formulaBrick.setFormulaWithBrickField(key, previousFormulaMap.get(key));
-			}
-		}
-	}
+    @Override
+    public void undo() {
+        if (previousFormulaMap != null) {
+            for (BrickField key : previousFormulaMap.keySet()) {
+                formulaBrick.setFormulaWithBrickField(key, previousFormulaMap.get(key));
+            }
+        }
+    }
 }

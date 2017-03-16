@@ -40,74 +40,74 @@ import org.catrobat.catroid.ui.fragment.FormulaEditorFragment;
 import java.util.List;
 
 public class SetBounceBrick extends FormulaBrick {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private transient View prototypeView;
+    private transient View prototypeView;
 
-	public SetBounceBrick() {
-		addAllowedBrickField(BrickField.PHYSICS_BOUNCE_FACTOR);
-	}
+    public SetBounceBrick() {
+        addAllowedBrickField(BrickField.PHYSICS_BOUNCE_FACTOR);
+    }
 
-	public SetBounceBrick(float bounceFactor) {
-		initializeBrickFields(new Formula(bounceFactor));
-	}
+    public SetBounceBrick(float bounceFactor) {
+        initializeBrickFields(new Formula(bounceFactor));
+    }
 
-	public SetBounceBrick(Formula bounceFactor) {
-		initializeBrickFields(bounceFactor);
-	}
+    public SetBounceBrick(Formula bounceFactor) {
+        initializeBrickFields(bounceFactor);
+    }
 
-	private void initializeBrickFields(Formula bounceFactor) {
-		addAllowedBrickField(BrickField.PHYSICS_BOUNCE_FACTOR);
-		setFormulaWithBrickField(BrickField.PHYSICS_BOUNCE_FACTOR, bounceFactor);
-	}
+    private void initializeBrickFields(Formula bounceFactor) {
+        addAllowedBrickField(BrickField.PHYSICS_BOUNCE_FACTOR);
+        setFormulaWithBrickField(BrickField.PHYSICS_BOUNCE_FACTOR, bounceFactor);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return PHYSICS;
-	}
+    @Override
+    public int getRequiredResources() {
+        return PHYSICS;
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_physics_set_bounce_factor, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_physics_set_bounce_factor, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_set_bounce_factor_checkbox);
+        setCheckboxView(R.id.brick_set_bounce_factor_checkbox);
 
-		TextView edit = (TextView) view.findViewById(R.id.brick_set_bounce_factor_edit_text);
+        TextView edit = (TextView) view.findViewById(R.id.brick_set_bounce_factor_edit_text);
 
-		getFormulaWithBrickField(BrickField.PHYSICS_BOUNCE_FACTOR).setTextFieldId(R.id.brick_set_bounce_factor_edit_text);
-		getFormulaWithBrickField(BrickField.PHYSICS_BOUNCE_FACTOR).refreshTextField(view);
+        getFormulaWithBrickField(BrickField.PHYSICS_BOUNCE_FACTOR).setTextFieldId(R.id.brick_set_bounce_factor_edit_text);
+        getFormulaWithBrickField(BrickField.PHYSICS_BOUNCE_FACTOR).refreshTextField(view);
 
-		edit.setOnClickListener(this);
+        edit.setOnClickListener(this);
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_physics_set_bounce_factor, null);
-		TextView textBounceFactor = (TextView) prototypeView
-				.findViewById(R.id.brick_set_bounce_factor_edit_text);
-		textBounceFactor.setText(String.valueOf(BrickValues.PHYSIC_BOUNCE_FACTOR * 100));
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_physics_set_bounce_factor, null);
+        TextView textBounceFactor = (TextView) prototypeView
+                .findViewById(R.id.brick_set_bounce_factor_edit_text);
+        textBounceFactor.setText(String.valueOf(BrickValues.PHYSIC_BOUNCE_FACTOR * 100));
+        return prototypeView;
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		if (checkbox.getVisibility() == View.VISIBLE) {
-			return;
-		}
-		FormulaEditorFragment.showFragment(view, this, BrickField.PHYSICS_BOUNCE_FACTOR);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        if (checkbox.getVisibility() == View.VISIBLE) {
+            return;
+        }
+        FormulaEditorFragment.showFragment(view, this, BrickField.PHYSICS_BOUNCE_FACTOR);
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createSetBounceFactorAction(sprite,
-				getFormulaWithBrickField(BrickField.PHYSICS_BOUNCE_FACTOR)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createSetBounceFactorAction(sprite,
+                getFormulaWithBrickField(BrickField.PHYSICS_BOUNCE_FACTOR)));
+        return null;
+    }
 }

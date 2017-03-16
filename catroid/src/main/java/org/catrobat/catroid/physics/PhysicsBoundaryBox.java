@@ -32,53 +32,53 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class PhysicsBoundaryBox {
 
-	public static final int FRAME_SIZE = 5;
+    public static final int FRAME_SIZE = 5;
 
-	private final World world;
+    private final World world;
 
-	public enum BoundaryBoxIdentifier { BBI_HORIZONTAL, BBI_VERTICAL }
+    public enum BoundaryBoxIdentifier {BBI_HORIZONTAL, BBI_VERTICAL}
 
-	public PhysicsBoundaryBox(World world) {
-		this.world = world;
-	}
+    public PhysicsBoundaryBox(World world) {
+        this.world = world;
+    }
 
-	/**
-	 * TODO[physics]: Create only one body with four shapes (sides). Refactor test after that.
-	 *
-	 * @param height
-	 * @param width
-	 */
-	public void create(int width, int height) {
-		float boxWidth = PhysicsWorldConverter.convertNormalToBox2dCoordinate(width);
-		float boxHeight = PhysicsWorldConverter.convertNormalToBox2dCoordinate(height);
-		float boxElementSize = PhysicsWorldConverter.convertNormalToBox2dCoordinate(PhysicsBoundaryBox.FRAME_SIZE);
-		float halfBoxElementSize = boxElementSize / 2.0f;
+    /**
+     * TODO[physics]: Create only one body with four shapes (sides). Refactor test after that.
+     *
+     * @param height
+     * @param width
+     */
+    public void create(int width, int height) {
+        float boxWidth = PhysicsWorldConverter.convertNormalToBox2dCoordinate(width);
+        float boxHeight = PhysicsWorldConverter.convertNormalToBox2dCoordinate(height);
+        float boxElementSize = PhysicsWorldConverter.convertNormalToBox2dCoordinate(PhysicsBoundaryBox.FRAME_SIZE);
+        float halfBoxElementSize = boxElementSize / 2.0f;
 
-		// Top
-		createSide(new Vector2(0.0f, (boxHeight / 2.0f) + halfBoxElementSize), boxWidth, boxElementSize, BoundaryBoxIdentifier.BBI_HORIZONTAL);
-		// Bottom
-		createSide(new Vector2(0.0f, -(boxHeight / 2.0f) - halfBoxElementSize), boxWidth, boxElementSize, BoundaryBoxIdentifier.BBI_HORIZONTAL);
-		// Left
-		createSide(new Vector2(-(boxWidth / 2.0f) - halfBoxElementSize, 0.0f), boxElementSize, boxHeight, BoundaryBoxIdentifier.BBI_VERTICAL);
-		// Right
-		createSide(new Vector2((boxWidth / 2.0f) + halfBoxElementSize, 0.0f), boxElementSize, boxHeight, BoundaryBoxIdentifier.BBI_VERTICAL);
-	}
+        // Top
+        createSide(new Vector2(0.0f, (boxHeight / 2.0f) + halfBoxElementSize), boxWidth, boxElementSize, BoundaryBoxIdentifier.BBI_HORIZONTAL);
+        // Bottom
+        createSide(new Vector2(0.0f, -(boxHeight / 2.0f) - halfBoxElementSize), boxWidth, boxElementSize, BoundaryBoxIdentifier.BBI_HORIZONTAL);
+        // Left
+        createSide(new Vector2(-(boxWidth / 2.0f) - halfBoxElementSize, 0.0f), boxElementSize, boxHeight, BoundaryBoxIdentifier.BBI_VERTICAL);
+        // Right
+        createSide(new Vector2((boxWidth / 2.0f) + halfBoxElementSize, 0.0f), boxElementSize, boxHeight, BoundaryBoxIdentifier.BBI_VERTICAL);
+    }
 
-	private void createSide(Vector2 center, float width, float height, BoundaryBoxIdentifier identifier) {
-		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyType.StaticBody;
-		bodyDef.allowSleep = false;
+    private void createSide(Vector2 center, float width, float height, BoundaryBoxIdentifier identifier) {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyType.StaticBody;
+        bodyDef.allowSleep = false;
 
-		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(width / 2.0f, height / 2f, center, 0.0f);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(width / 2.0f, height / 2f, center, 0.0f);
 
-		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.shape = shape;
-		fixtureDef.filter.maskBits = PhysicsWorld.MASK_BOUNDARYBOX;
-		fixtureDef.filter.categoryBits = PhysicsWorld.CATEGORY_BOUNDARYBOX;
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.filter.maskBits = PhysicsWorld.MASK_BOUNDARYBOX;
+        fixtureDef.filter.categoryBits = PhysicsWorld.CATEGORY_BOUNDARYBOX;
 
-		Body body = world.createBody(bodyDef);
-		body.createFixture(fixtureDef);
-		body.setUserData(identifier);
-	}
+        Body body = world.createBody(bodyDef);
+        body.createFixture(fixtureDef);
+        body.setUserData(identifier);
+    }
 }

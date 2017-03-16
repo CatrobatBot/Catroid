@@ -28,16 +28,16 @@ import org.catrobat.catroid.formulaeditor.UserVariable;
 import java.io.Serializable;
 
 public class BackPackedVariableData implements Serializable {
-	public UserVariable userVariable;
-	public Integer userVariableType;
+    public UserVariable userVariable;
+    public Integer userVariableType;
 
-	BackPackedVariableData() {
-	}
+    BackPackedVariableData() {
+    }
 
-	BackPackedVariableData(BackPackedVariableData backPackedData) {
-		if (backPackedData != null) {
-			this.userVariable = backPackedData.userVariable;
-			this.userVariableType = backPackedData.userVariableType;
-		}
-	}
+    BackPackedVariableData(BackPackedVariableData backPackedData) {
+        if (backPackedData != null) {
+            this.userVariable = backPackedData.userVariable;
+            this.userVariableType = backPackedData.userVariableType;
+        }
+    }
 }

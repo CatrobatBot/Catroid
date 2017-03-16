@@ -34,48 +34,48 @@ import org.catrobat.catroid.content.Sprite;
 import java.util.List;
 
 public class HideBrick extends BrickBaseType {
-	public static final String TAG = HideBrick.class.getSimpleName();
-	private static final long serialVersionUID = 1L;
+    public static final String TAG = HideBrick.class.getSimpleName();
+    private static final long serialVersionUID = 1L;
 
-	public HideBrick() {
-	}
+    public HideBrick() {
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return NO_RESOURCES;
-	}
+    @Override
+    public int getRequiredResources() {
+        return NO_RESOURCES;
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		view = View.inflate(context, R.layout.brick_hide, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        view = View.inflate(context, R.layout.brick_hide, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_hide_checkbox);
-		return view;
-	}
+        setCheckboxView(R.id.brick_hide_checkbox);
+        return view;
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		HideBrick copyBrick = (HideBrick) clone();
-		return copyBrick;
-	}
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        HideBrick copyBrick = (HideBrick) clone();
+        return copyBrick;
+    }
 
-	@Override
-	public Brick clone() {
-		return new HideBrick();
-	}
+    @Override
+    public Brick clone() {
+        return new HideBrick();
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		return View.inflate(context, R.layout.brick_hide, null);
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        return View.inflate(context, R.layout.brick_hide, null);
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createHideAction(sprite));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createHideAction(sprite));
+        return null;
+    }
 }

@@ -30,43 +30,43 @@ import org.catrobat.catroid.utils.Utils;
 
 public class RenameNfcTagDialog extends TextDialog {
 
-	public static final String EXTRA_NEW_NFCTAG_TITLE = "new_nfctag_name";
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_rename_nfctag";
+    public static final String EXTRA_NEW_NFCTAG_TITLE = "new_nfctag_name";
+    public static final String DIALOG_FRAGMENT_TAG = "dialog_rename_nfctag";
 
-	public RenameNfcTagDialog(int title, int inputLabel, String previousText) {
-		super(title, inputLabel, previousText, false);
-	}
+    public RenameNfcTagDialog(int title, int inputLabel, String previousText) {
+        super(title, inputLabel, previousText, false);
+    }
 
-	@Override
-	protected boolean handlePositiveButtonClick() {
-		String newNfcTagName = input.getText().toString().trim();
+    @Override
+    protected boolean handlePositiveButtonClick() {
+        String newNfcTagName = input.getText().toString().trim();
 
-		if (newNfcTagName.equals(previousText)) {
-			return true;
-		}
+        if (newNfcTagName.equals(previousText)) {
+            return true;
+        }
 
-		boolean newNameConsistsOfSpacesOnly = newNfcTagName.isEmpty();
+        boolean newNameConsistsOfSpacesOnly = newNfcTagName.isEmpty();
 
-		if (newNameConsistsOfSpacesOnly) {
-			input.setError(getString(R.string.name_consists_of_spaces_only));
-			return false;
-		}
+        if (newNameConsistsOfSpacesOnly) {
+            input.setError(getString(R.string.name_consists_of_spaces_only));
+            return false;
+        }
 
-		if (!newNfcTagName.equalsIgnoreCase(getString(R.string.brick_when_nfc_default_all))) {
-			newNfcTagName = Utils.getUniqueNfcTagName(newNfcTagName);
-		} else {
-			input.setError(getString(R.string.nfctagname_invalid));
-			return false;
-		}
+        if (!newNfcTagName.equalsIgnoreCase(getString(R.string.brick_when_nfc_default_all))) {
+            newNfcTagName = Utils.getUniqueNfcTagName(newNfcTagName);
+        } else {
+            input.setError(getString(R.string.nfctagname_invalid));
+            return false;
+        }
 
-		Intent intent = new Intent(ScriptActivity.ACTION_NFCTAG_RENAMED);
-		intent.putExtra(EXTRA_NEW_NFCTAG_TITLE, newNfcTagName);
-		getActivity().sendBroadcast(intent);
+        Intent intent = new Intent(ScriptActivity.ACTION_NFCTAG_RENAMED);
+        intent.putExtra(EXTRA_NEW_NFCTAG_TITLE, newNfcTagName);
+        getActivity().sendBroadcast(intent);
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	protected void handleNegativeButtonClick() {
-	}
+    @Override
+    protected void handleNegativeButtonClick() {
+    }
 }

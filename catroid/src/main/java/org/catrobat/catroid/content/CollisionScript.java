@@ -28,77 +28,77 @@ import org.catrobat.catroid.physics.content.bricks.CollisionReceiverBrick;
 
 public class CollisionScript extends BroadcastScript {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public CollisionScript(String broadcastMessage) {
-		super(broadcastMessage);
-	}
+    public CollisionScript(String broadcastMessage) {
+        super(broadcastMessage);
+    }
 
-	public CollisionObjectIdentifier splitBroadcastMessage() {
-		String broadcastMessage = getBroadcastMessage();
-		if (broadcastMessage == null) {
-			return new CollisionObjectIdentifier("", "");
-		}
+    public CollisionObjectIdentifier splitBroadcastMessage() {
+        String broadcastMessage = getBroadcastMessage();
+        if (broadcastMessage == null) {
+            return new CollisionObjectIdentifier("", "");
+        }
 
-		String[] collisionObjectIdentifierArray = broadcastMessage.split(PhysicsCollision.COLLISION_MESSAGE_CONNECTOR);
-		if (collisionObjectIdentifierArray.length != 2) {
-			return new CollisionObjectIdentifier("", "");
-		}
+        String[] collisionObjectIdentifierArray = broadcastMessage.split(PhysicsCollision.COLLISION_MESSAGE_CONNECTOR);
+        if (collisionObjectIdentifierArray.length != 2) {
+            return new CollisionObjectIdentifier("", "");
+        }
 
-		return new CollisionObjectIdentifier(collisionObjectIdentifierArray[0], collisionObjectIdentifierArray[1]);
-	}
+        return new CollisionObjectIdentifier(collisionObjectIdentifierArray[0], collisionObjectIdentifierArray[1]);
+    }
 
-	@Override
-	public ScriptBrick getScriptBrick() {
-		if (brick == null) {
-			brick = new CollisionReceiverBrick(this);
-		}
-		return brick;
-	}
+    @Override
+    public ScriptBrick getScriptBrick() {
+        if (brick == null) {
+            brick = new CollisionReceiverBrick(this);
+        }
+        return brick;
+    }
 
-	@Override
-	public Script copyScriptForSprite(Sprite copySprite) {
-		CollisionScript cloneScript = new CollisionScript(receivedMessage);
+    @Override
+    public Script copyScriptForSprite(Sprite copySprite) {
+        CollisionScript cloneScript = new CollisionScript(receivedMessage);
 
-		doCopy(copySprite, cloneScript);
-		return cloneScript;
-	}
+        doCopy(copySprite, cloneScript);
+        return cloneScript;
+    }
 
-	public void updateBroadcastMessage(String oldCollisionObjectIdentifier, String newCollisionObjectIdentifier) {
-		CollisionObjectIdentifier collisionObjectIdentifier = splitBroadcastMessage();
-		if (collisionObjectIdentifier.getCollisionObjectOneIdentifier().equals(oldCollisionObjectIdentifier)) {
-			// update first object identifier
-			String collisionObjectTwoIdentifier = collisionObjectIdentifier.getCollisionObjectTwoIdentifier();
-			setAndReturnBroadcastMessage(newCollisionObjectIdentifier, collisionObjectTwoIdentifier);
-		} else if (collisionObjectIdentifier.getCollisionObjectTwoIdentifier().equals(oldCollisionObjectIdentifier)) {
-			// update second object identifier
-			String collisionObjectOneIdentifier = collisionObjectIdentifier.getCollisionObjectOneIdentifier();
-			setAndReturnBroadcastMessage(collisionObjectOneIdentifier, newCollisionObjectIdentifier);
-		}
-	}
+    public void updateBroadcastMessage(String oldCollisionObjectIdentifier, String newCollisionObjectIdentifier) {
+        CollisionObjectIdentifier collisionObjectIdentifier = splitBroadcastMessage();
+        if (collisionObjectIdentifier.getCollisionObjectOneIdentifier().equals(oldCollisionObjectIdentifier)) {
+            // update first object identifier
+            String collisionObjectTwoIdentifier = collisionObjectIdentifier.getCollisionObjectTwoIdentifier();
+            setAndReturnBroadcastMessage(newCollisionObjectIdentifier, collisionObjectTwoIdentifier);
+        } else if (collisionObjectIdentifier.getCollisionObjectTwoIdentifier().equals(oldCollisionObjectIdentifier)) {
+            // update second object identifier
+            String collisionObjectOneIdentifier = collisionObjectIdentifier.getCollisionObjectOneIdentifier();
+            setAndReturnBroadcastMessage(collisionObjectOneIdentifier, newCollisionObjectIdentifier);
+        }
+    }
 
-	public String setAndReturnBroadcastMessage(String collisionObjectOneIdentifier, String collisionObjectTwoIdentifier) {
-		String collisionBroadcastMessage = PhysicsCollision.generateBroadcastMessage(collisionObjectOneIdentifier,
-				collisionObjectTwoIdentifier);
-		setBroadcastMessage(collisionBroadcastMessage);
-		return collisionBroadcastMessage;
-	}
+    public String setAndReturnBroadcastMessage(String collisionObjectOneIdentifier, String collisionObjectTwoIdentifier) {
+        String collisionBroadcastMessage = PhysicsCollision.generateBroadcastMessage(collisionObjectOneIdentifier,
+                collisionObjectTwoIdentifier);
+        setBroadcastMessage(collisionBroadcastMessage);
+        return collisionBroadcastMessage;
+    }
 
-	public class CollisionObjectIdentifier {
-		private String collisionObjectOneIdentifier;
-		private String collisionObjectTwoIdentifier;
+    public class CollisionObjectIdentifier {
+        private String collisionObjectOneIdentifier;
+        private String collisionObjectTwoIdentifier;
 
-		public CollisionObjectIdentifier(String collisionObjectOneIdentifier, String collisionObjectTwoIdentifier) {
-			this.collisionObjectOneIdentifier = collisionObjectOneIdentifier;
-			this.collisionObjectTwoIdentifier = collisionObjectTwoIdentifier;
-		}
+        public CollisionObjectIdentifier(String collisionObjectOneIdentifier, String collisionObjectTwoIdentifier) {
+            this.collisionObjectOneIdentifier = collisionObjectOneIdentifier;
+            this.collisionObjectTwoIdentifier = collisionObjectTwoIdentifier;
+        }
 
-		public String getCollisionObjectTwoIdentifier() {
-			return collisionObjectTwoIdentifier;
-		}
+        public String getCollisionObjectTwoIdentifier() {
+            return collisionObjectTwoIdentifier;
+        }
 
-		public String getCollisionObjectOneIdentifier() {
-			return collisionObjectOneIdentifier;
-		}
-	}
+        public String getCollisionObjectOneIdentifier() {
+            return collisionObjectOneIdentifier;
+        }
+    }
 }

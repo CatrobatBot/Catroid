@@ -24,16 +24,16 @@
 package org.catrobat.catroid.devices.mindstorms.ev3.sensors;
 
 public enum EV3SensorMode {
-	MODE0(0x00), MODE1(0x01), MODE2(0x02), MODE3(0x03),
-	MODE4(0x04), MODE5(0x05), MODE6(0x06), MODE7(0x07);
+    MODE0(0x00), MODE1(0x01), MODE2(0x02), MODE3(0x03),
+    MODE4(0x04), MODE5(0x05), MODE6(0x06), MODE7(0x07);
 
-	private int sensorModeValue;
+    private int sensorModeValue;
 
-	EV3SensorMode(int sensorModeValue) {
-		this.sensorModeValue = sensorModeValue;
-	}
+    EV3SensorMode(int sensorModeValue) {
+        this.sensorModeValue = sensorModeValue;
+    }
 
-	public byte getByte() {
-		return (byte) sensorModeValue;
-	}
+    public byte getByte() {
+        return (byte) sensorModeValue;
+    }
 }

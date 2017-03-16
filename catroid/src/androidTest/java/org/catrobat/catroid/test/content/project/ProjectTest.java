@@ -37,85 +37,85 @@ import org.catrobat.catroid.test.utils.Reflection;
 
 public class ProjectTest extends AndroidTestCase {
 
-	private static final float OLD_LANGUAGE_VERSION = 0.8f;
-	private static final String OLD_APPLICATION_NAME = "catty";
-	private static final String OLD_PLATFORM = "iOS";
+    private static final float OLD_LANGUAGE_VERSION = 0.8f;
+    private static final String OLD_APPLICATION_NAME = "catty";
+    private static final String OLD_PLATFORM = "iOS";
 
-	public void testVersionName() throws NameNotFoundException {
-		Project project = new Project(getContext(), "testProject");
-		PackageInfo packageInfo = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0);
-		XmlHeader projectXmlHeader = project.getXmlHeader();
-		assertEquals("Incorrect version name", packageInfo.versionName,
-				(String) Reflection.getPrivateField(projectXmlHeader, "applicationVersion"));
-	}
+    public void testVersionName() throws NameNotFoundException {
+        Project project = new Project(getContext(), "testProject");
+        PackageInfo packageInfo = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0);
+        XmlHeader projectXmlHeader = project.getXmlHeader();
+        assertEquals("Incorrect version name", packageInfo.versionName,
+                (String) Reflection.getPrivateField(projectXmlHeader, "applicationVersion"));
+    }
 
-	public void testAddRemoveSprite() {
-		Project project = new Project(getContext(), "testProject");
-		Sprite bottomSprite = new SingleSprite("bottom");
-		Sprite topSprite = new SingleSprite("top");
+    public void testAddRemoveSprite() {
+        Project project = new Project(getContext(), "testProject");
+        Sprite bottomSprite = new SingleSprite("bottom");
+        Sprite topSprite = new SingleSprite("top");
 
-		project.getDefaultScene().addSprite(bottomSprite);
-		project.getDefaultScene().addSprite(topSprite);
+        project.getDefaultScene().addSprite(bottomSprite);
+        project.getDefaultScene().addSprite(topSprite);
 
-		assertTrue("spriteList did not contain bottomSprite", project.getDefaultScene().getSpriteList().contains(bottomSprite));
-		assertTrue("spriteList did not contain topSprite", project.getDefaultScene().getSpriteList().contains(topSprite));
+        assertTrue("spriteList did not contain bottomSprite", project.getDefaultScene().getSpriteList().contains(bottomSprite));
+        assertTrue("spriteList did not contain topSprite", project.getDefaultScene().getSpriteList().contains(topSprite));
 
-		assertTrue("bottomSprite was not removed from data structure", project.getDefaultScene().removeSprite(bottomSprite));
-		assertFalse("bottomSprite was not removed from data structure", project.getDefaultScene().getSpriteList().contains(bottomSprite));
-		assertFalse("bottomSprite could be removed from data structure twice", project.getDefaultScene().removeSprite(bottomSprite));
+        assertTrue("bottomSprite was not removed from data structure", project.getDefaultScene().removeSprite(bottomSprite));
+        assertFalse("bottomSprite was not removed from data structure", project.getDefaultScene().getSpriteList().contains(bottomSprite));
+        assertFalse("bottomSprite could be removed from data structure twice", project.getDefaultScene().removeSprite(bottomSprite));
 
-		assertTrue("topSprite was not removed from data structure", project.getDefaultScene().removeSprite(topSprite));
-		assertFalse("topSprite was not removed from data structure", project.getDefaultScene().getSpriteList().contains(topSprite));
-	}
+        assertTrue("topSprite was not removed from data structure", project.getDefaultScene().removeSprite(topSprite));
+        assertFalse("topSprite was not removed from data structure", project.getDefaultScene().getSpriteList().contains(topSprite));
+    }
 
-	public void testAddRemoveScene() {
-		Project project = new Project(getContext(), "testProject");
-		Scene sceneOne = new Scene(null, "test1", project);
-		Scene sceneTwo = new Scene(null, "test2", project);
+    public void testAddRemoveScene() {
+        Project project = new Project(getContext(), "testProject");
+        Scene sceneOne = new Scene(null, "test1", project);
+        Scene sceneTwo = new Scene(null, "test2", project);
 
-		project.addScene(sceneOne);
-		project.addScene(sceneTwo);
+        project.addScene(sceneOne);
+        project.addScene(sceneTwo);
 
-		assertTrue("sceneList did not contain sceneOne", project.getSceneList().contains(sceneOne));
-		assertTrue("sceneList did not contain sceneTwo", project.getSceneList().contains(sceneTwo));
+        assertTrue("sceneList did not contain sceneOne", project.getSceneList().contains(sceneOne));
+        assertTrue("sceneList did not contain sceneTwo", project.getSceneList().contains(sceneTwo));
 
-		project.removeScene(sceneOne);
-		project.removeScene(sceneTwo);
+        project.removeScene(sceneOne);
+        project.removeScene(sceneTwo);
 
-		assertFalse("sceneOne was not removed from data structure", project.getSceneList().contains(sceneOne));
-		assertFalse("sceneOne was not removed from name list", project.getSceneOrder().contains(sceneOne.getName()));
+        assertFalse("sceneOne was not removed from data structure", project.getSceneList().contains(sceneOne));
+        assertFalse("sceneOne was not removed from name list", project.getSceneOrder().contains(sceneOne.getName()));
 
-		assertFalse("scene Two was not removed from data structure", project.getSceneList().contains(sceneTwo));
-		assertFalse("sceneTwo was not removed from name list", project.getSceneOrder().contains(sceneTwo.getName()));
-	}
+        assertFalse("scene Two was not removed from data structure", project.getSceneList().contains(sceneTwo));
+        assertFalse("sceneTwo was not removed from name list", project.getSceneOrder().contains(sceneTwo.getName()));
+    }
 
-	public void testSetDeviceData() {
-		Project project = new Project();
-		XmlHeader header = project.getXmlHeader();
-		Reflection.setPrivateField(header, "catrobatLanguageVersion", OLD_LANGUAGE_VERSION);
-		Reflection.setPrivateField(header, "applicationName", OLD_APPLICATION_NAME);
-		Reflection.setPrivateField(header, "platform", OLD_PLATFORM);
+    public void testSetDeviceData() {
+        Project project = new Project();
+        XmlHeader header = project.getXmlHeader();
+        Reflection.setPrivateField(header, "catrobatLanguageVersion", OLD_LANGUAGE_VERSION);
+        Reflection.setPrivateField(header, "applicationName", OLD_APPLICATION_NAME);
+        Reflection.setPrivateField(header, "platform", OLD_PLATFORM);
 
-		float languageVersion = (Float) Reflection.getPrivateField(header, "catrobatLanguageVersion");
-		assertEquals("Version should be old", OLD_LANGUAGE_VERSION, languageVersion);
+        float languageVersion = (Float) Reflection.getPrivateField(header, "catrobatLanguageVersion");
+        assertEquals("Version should be old", OLD_LANGUAGE_VERSION, languageVersion);
 
-		String applicationName = (String) Reflection.getPrivateField(header, "applicationName");
-		assertEquals("Application name should be the old one", OLD_APPLICATION_NAME, applicationName);
+        String applicationName = (String) Reflection.getPrivateField(header, "applicationName");
+        assertEquals("Application name should be the old one", OLD_APPLICATION_NAME, applicationName);
 
-		String platform = (String) Reflection.getPrivateField(header, "platform");
-		assertEquals("Platform should be the old one", OLD_PLATFORM, platform);
+        String platform = (String) Reflection.getPrivateField(header, "platform");
+        assertEquals("Platform should be the old one", OLD_PLATFORM, platform);
 
-		// update the device data
-		project.setDeviceData(getContext());
+        // update the device data
+        project.setDeviceData(getContext());
 
-		languageVersion = (Float) Reflection.getPrivateField(header, "catrobatLanguageVersion");
-		assertEquals("Version should be the current one", Constants.CURRENT_CATROBAT_LANGUAGE_VERSION, languageVersion);
+        languageVersion = (Float) Reflection.getPrivateField(header, "catrobatLanguageVersion");
+        assertEquals("Version should be the current one", Constants.CURRENT_CATROBAT_LANGUAGE_VERSION, languageVersion);
 
-		applicationName = (String) Reflection.getPrivateField(header, "applicationName");
-		assertEquals("Application name should be the current one", getContext().getString(R.string.app_name),
-				applicationName);
+        applicationName = (String) Reflection.getPrivateField(header, "applicationName");
+        assertEquals("Application name should be the current one", getContext().getString(R.string.app_name),
+                applicationName);
 
-		platform = (String) Reflection.getPrivateField(header, "platform");
-		assertEquals("Platform should be the current one", Constants.PLATFORM_NAME, platform);
-	}
+        platform = (String) Reflection.getPrivateField(header, "platform");
+        assertEquals("Platform should be the current one", Constants.PLATFORM_NAME, platform);
+    }
 }

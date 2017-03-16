@@ -37,142 +37,142 @@ import java.util.TreeSet;
 
 public class SoundBaseAdapter extends ArrayAdapter<SoundInfo> implements ActionModeActivityAdapterInterface {
 
-	protected List<SoundInfo> soundInfoItems;
+    protected List<SoundInfo> soundInfoItems;
 
-	protected Context context;
-	protected OnSoundEditListener onSoundEditListener;
+    protected Context context;
+    protected OnSoundEditListener onSoundEditListener;
 
-	protected int selectMode;
-	protected static long elapsedMilliSeconds;
-	protected static long currentPlayingBase;
-	protected boolean showDetails;
-	public boolean backPackAdapter;
+    protected int selectMode;
+    protected static long elapsedMilliSeconds;
+    protected static long currentPlayingBase;
+    protected boolean showDetails;
+    public boolean backPackAdapter;
 
-	protected SortedSet<Integer> checkedSounds = new TreeSet<>();
+    protected SortedSet<Integer> checkedSounds = new TreeSet<>();
 
-	private int currentPlayingPosition = Constants.NO_POSITION;
+    private int currentPlayingPosition = Constants.NO_POSITION;
 
-	public SoundBaseAdapter(final Context context, int currentPlayingposition, boolean backPackAdapter) {
-		super(context, currentPlayingposition);
-		this.backPackAdapter = backPackAdapter;
-	}
+    public SoundBaseAdapter(final Context context, int currentPlayingposition, boolean backPackAdapter) {
+        super(context, currentPlayingposition);
+        this.backPackAdapter = backPackAdapter;
+    }
 
-	public SoundBaseAdapter(final Context context, int resource, int textViewResourceId, List<SoundInfo> items,
-			boolean showDetails, boolean backPackAdapter) {
-		super(context, resource, textViewResourceId, items);
-		this.context = context;
-		this.showDetails = showDetails;
-		this.soundInfoItems = items;
-		this.selectMode = ListView.CHOICE_MODE_NONE;
-		this.backPackAdapter = backPackAdapter;
-	}
+    public SoundBaseAdapter(final Context context, int resource, int textViewResourceId, List<SoundInfo> items,
+                            boolean showDetails, boolean backPackAdapter) {
+        super(context, resource, textViewResourceId, items);
+        this.context = context;
+        this.showDetails = showDetails;
+        this.soundInfoItems = items;
+        this.selectMode = ListView.CHOICE_MODE_NONE;
+        this.backPackAdapter = backPackAdapter;
+    }
 
-	public List<SoundInfo> getSoundInfoItems() {
-		return soundInfoItems;
-	}
+    public List<SoundInfo> getSoundInfoItems() {
+        return soundInfoItems;
+    }
 
-	public void setOnSoundEditListener(OnSoundEditListener listener) {
-		onSoundEditListener = listener;
-	}
+    public void setOnSoundEditListener(OnSoundEditListener listener) {
+        onSoundEditListener = listener;
+    }
 
-	@Override
-	public int getAmountOfCheckedItems() {
-		return checkedSounds.size();
-	}
+    @Override
+    public int getAmountOfCheckedItems() {
+        return checkedSounds.size();
+    }
 
-	@Override
-	public SortedSet<Integer> getCheckedItems() {
-		return checkedSounds;
-	}
+    @Override
+    public SortedSet<Integer> getCheckedItems() {
+        return checkedSounds;
+    }
 
-	public void addCheckedItem(int position) {
-		checkedSounds.add(position);
-	}
+    public void addCheckedItem(int position) {
+        checkedSounds.add(position);
+    }
 
-	public void addCheckedItemIfNotExists(int position) {
-		if (!checkedSounds.contains(position)) {
-			checkedSounds.add(position);
-		}
-	}
+    public void addCheckedItemIfNotExists(int position) {
+        if (!checkedSounds.contains(position)) {
+            checkedSounds.add(position);
+        }
+    }
 
-	@Override
-	public void clearCheckedItems() {
-		checkedSounds.clear();
-	}
+    @Override
+    public void clearCheckedItems() {
+        checkedSounds.clear();
+    }
 
-	@Override
-	public void setSelectMode(int mode) {
-		selectMode = mode;
-	}
+    @Override
+    public void setSelectMode(int mode) {
+        selectMode = mode;
+    }
 
-	@Override
-	public int getSelectMode() {
-		return selectMode;
-	}
+    @Override
+    public int getSelectMode() {
+        return selectMode;
+    }
 
-	@Override
-	public void setShowDetails(boolean showDetails) {
-		this.showDetails = showDetails;
-	}
+    @Override
+    public void setShowDetails(boolean showDetails) {
+        this.showDetails = showDetails;
+    }
 
-	@Override
-	public boolean getShowDetails() {
-		return showDetails;
-	}
+    @Override
+    public boolean getShowDetails() {
+        return showDetails;
+    }
 
-	public void setSoundInfoItems(ArrayList<SoundInfo> soundInfoItems) {
-		this.soundInfoItems = soundInfoItems;
-	}
+    public void setSoundInfoItems(ArrayList<SoundInfo> soundInfoItems) {
+        this.soundInfoItems = soundInfoItems;
+    }
 
-	@Override
-	public Context getContext() {
-		return context;
-	}
+    @Override
+    public Context getContext() {
+        return context;
+    }
 
-	public void setContext(Context context) {
-		this.context = context;
-	}
+    public void setContext(Context context) {
+        this.context = context;
+    }
 
-	public static long getElapsedMilliSeconds() {
-		return elapsedMilliSeconds;
-	}
+    public static long getElapsedMilliSeconds() {
+        return elapsedMilliSeconds;
+    }
 
-	public static void setElapsedMilliSeconds(long elapsedMilliSeconds) {
-		SoundBaseAdapter.elapsedMilliSeconds = elapsedMilliSeconds;
-	}
+    public static void setElapsedMilliSeconds(long elapsedMilliSeconds) {
+        SoundBaseAdapter.elapsedMilliSeconds = elapsedMilliSeconds;
+    }
 
-	public static long getCurrentPlayingBase() {
-		return currentPlayingBase;
-	}
+    public static long getCurrentPlayingBase() {
+        return currentPlayingBase;
+    }
 
-	public static void setCurrentPlayingBase(long currentPlayingBase) {
-		SoundBaseAdapter.currentPlayingBase = currentPlayingBase;
-	}
+    public static void setCurrentPlayingBase(long currentPlayingBase) {
+        SoundBaseAdapter.currentPlayingBase = currentPlayingBase;
+    }
 
-	public SortedSet<Integer> getCheckedSounds() {
-		return checkedSounds;
-	}
+    public SortedSet<Integer> getCheckedSounds() {
+        return checkedSounds;
+    }
 
-	public int getCurrentPlayingPosition() {
-		return currentPlayingPosition;
-	}
+    public int getCurrentPlayingPosition() {
+        return currentPlayingPosition;
+    }
 
-	public void setCurrentPlayingPosition(int currentPlayingPosition) {
-		this.currentPlayingPosition = currentPlayingPosition;
-	}
+    public void setCurrentPlayingPosition(int currentPlayingPosition) {
+        this.currentPlayingPosition = currentPlayingPosition;
+    }
 
-	public OnSoundEditListener getOnSoundEditListener() {
-		return onSoundEditListener;
-	}
+    public OnSoundEditListener getOnSoundEditListener() {
+        return onSoundEditListener;
+    }
 
-	public interface OnSoundEditListener {
+    public interface OnSoundEditListener {
 
-		void onSoundPlay(View view);
+        void onSoundPlay(View view);
 
-		void onSoundPause(View view);
+        void onSoundPause(View view);
 
-		void onSoundChecked();
+        void onSoundChecked();
 
-		void onSoundEdit(View view);
-	}
+        void onSoundEdit(View view);
+    }
 }

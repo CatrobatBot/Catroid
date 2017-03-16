@@ -26,76 +26,76 @@ package org.catrobat.catroid.sensing;
 import android.graphics.PointF;
 
 public class CollisionPolygonVertex {
-	public float startX;
-	public float startY;
-	public float endX;
-	public float endY;
+    public float startX;
+    public float startY;
+    public float endX;
+    public float endY;
 
-	public CollisionPolygonVertex(float startX, float startY, float endX, float endY) {
-		this.startX = startX;
-		this.startY = startY;
-		this.endX = endX;
-		this.endY = endY;
-	}
+    public CollisionPolygonVertex(float startX, float startY, float endX, float endY) {
+        this.startX = startX;
+        this.startY = startY;
+        this.endX = endX;
+        this.endY = endY;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (!(o instanceof CollisionPolygonVertex)) {
-			return false;
-		}
-		if (o == this) {
-			return true;
-		}
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof CollisionPolygonVertex)) {
+            return false;
+        }
+        if (o == this) {
+            return true;
+        }
 
-		CollisionPolygonVertex other = (CollisionPolygonVertex) o;
-		return other.startX == startX && other.startY == startY && other.endX == endX && other.endY == endY;
-	}
+        CollisionPolygonVertex other = (CollisionPolygonVertex) o;
+        return other.startX == startX && other.startY == startY && other.endX == endX && other.endY == endY;
+    }
 
-	@Override
-	public int hashCode() {
-		return this.toString().hashCode();
-	}
+    @Override
+    public int hashCode() {
+        return this.toString().hashCode();
+    }
 
-	public void extend(float x, float y) {
-		endX = x;
-		endY = y;
-	}
+    public void extend(float x, float y) {
+        endX = x;
+        endY = y;
+    }
 
-	public String toString() {
-		return startX + "/" + startY + " -> " + endX + "/" + endY;
-	}
+    public String toString() {
+        return startX + "/" + startY + " -> " + endX + "/" + endY;
+    }
 
-	public void flip() {
-		float xTemp = startX;
-		float yTemp = startY;
-		startX = endX;
-		startY = endY;
-		endX = xTemp;
-		endY = yTemp;
-	}
+    public void flip() {
+        float xTemp = startX;
+        float yTemp = startY;
+        startX = endX;
+        startY = endY;
+        endX = xTemp;
+        endY = yTemp;
+    }
 
-	public PointF getStartPoint() {
-		return new PointF(startX, startY);
-	}
+    public PointF getStartPoint() {
+        return new PointF(startX, startY);
+    }
 
-	public PointF getEndPoint() {
-		return new PointF(endX, endY);
-	}
+    public PointF getEndPoint() {
+        return new PointF(endX, endY);
+    }
 
-	public boolean isConnected(CollisionPolygonVertex other) {
-		boolean connected = other.startX == this.endX
-				&& other.startY == this.endY;
-		if (connected) {
-			return true;
-		} else if (isConnectedBackwards(other)) {
-			other.flip();
-			return true;
-		}
-		return false;
-	}
+    public boolean isConnected(CollisionPolygonVertex other) {
+        boolean connected = other.startX == this.endX
+                && other.startY == this.endY;
+        if (connected) {
+            return true;
+        } else if (isConnectedBackwards(other)) {
+            other.flip();
+            return true;
+        }
+        return false;
+    }
 
-	private boolean isConnectedBackwards(CollisionPolygonVertex other) {
-		return other.endX == this.endX
-				&& other.endY == this.endY;
-	}
+    private boolean isConnectedBackwards(CollisionPolygonVertex other) {
+        return other.endX == this.endX
+                && other.endY == this.endY;
+    }
 }

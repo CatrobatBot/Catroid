@@ -33,55 +33,55 @@ import org.catrobat.catroid.uitest.util.UiTestUtils;
 
 public class LogoutLoginTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
-	private SharedPreferences preferences;
-	private String saveToken;
+    private SharedPreferences preferences;
+    private String saveToken;
 
-	public LogoutLoginTest() {
-		super(MainMenuActivity.class);
-	}
+    public LogoutLoginTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		saveToken = preferences.getString(Constants.TOKEN, Constants.NO_TOKEN);
-		preferences.edit().putString(Constants.TOKEN, Constants.NO_TOKEN).commit();
-	}
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        saveToken = preferences.getString(Constants.TOKEN, Constants.NO_TOKEN);
+        preferences.edit().putString(Constants.TOKEN, Constants.NO_TOKEN).commit();
+    }
 
-	@Override
-	public void tearDown() throws Exception {
-		preferences.edit().putString(Constants.TOKEN, saveToken).commit();
-		super.tearDown();
-	}
+    @Override
+    public void tearDown() throws Exception {
+        preferences.edit().putString(Constants.TOKEN, saveToken).commit();
+        super.tearDown();
+    }
 
-	public void testMenuItemVisibility() {
-		solo.sendKey(solo.MENU);
-		assertFalse("Logout menu item visible although no user logged in yet", solo.searchText(solo.getString(R.string
-				.main_menu_logout)));
-		assertTrue("Login menu item not visible", solo.searchText(solo.getString(R.string
-				.main_menu_login)));
+    public void testMenuItemVisibility() {
+        solo.sendKey(solo.MENU);
+        assertFalse("Logout menu item visible although no user logged in yet", solo.searchText(solo.getString(R.string
+                .main_menu_logout)));
+        assertTrue("Login menu item not visible", solo.searchText(solo.getString(R.string
+                .main_menu_login)));
 
-		solo.goBack();
-		UiTestUtils.createValidUser(getActivity());
+        solo.goBack();
+        UiTestUtils.createValidUser(getActivity());
 
-		solo.sendKey(solo.MENU);
-		assertTrue("Logout menu item not visible after user logged in", solo.searchText(solo.getString(R.string
-				.main_menu_logout)));
-		assertFalse("Login menu visible despite user beeing logged in", solo.searchText(solo.getString(R.string
-				.main_menu_login)));
+        solo.sendKey(solo.MENU);
+        assertTrue("Logout menu item not visible after user logged in", solo.searchText(solo.getString(R.string
+                .main_menu_logout)));
+        assertFalse("Login menu visible despite user beeing logged in", solo.searchText(solo.getString(R.string
+                .main_menu_login)));
 
-		solo.clickOnMenuItem(solo.getString(R.string.main_menu_logout));
-		solo.sleep(2000);
-		solo.sendKey(solo.MENU);
-		assertFalse("Logout menu item visible after user logged out", solo.searchText(solo.getString(R.string
-				.main_menu_logout)));
+        solo.clickOnMenuItem(solo.getString(R.string.main_menu_logout));
+        solo.sleep(2000);
+        solo.sendKey(solo.MENU);
+        assertFalse("Logout menu item visible after user logged out", solo.searchText(solo.getString(R.string
+                .main_menu_logout)));
 
-		assertTrue("Login menu item not visible after user logged out", solo.searchText(solo.getString(R.string
-				.main_menu_login)));
+        assertTrue("Login menu item not visible after user logged out", solo.searchText(solo.getString(R.string
+                .main_menu_login)));
 
-		String token = preferences.getString(Constants.TOKEN, Constants.NO_TOKEN);
-		String username = preferences.getString(Constants.USERNAME, Constants.NO_USERNAME);
-		assertEquals("Token not cleared in preferences after logout", token, Constants.NO_TOKEN);
-		assertEquals("Username not cleared in preferences after logout", username, Constants.NO_USERNAME);
-	}
+        String token = preferences.getString(Constants.TOKEN, Constants.NO_TOKEN);
+        String username = preferences.getString(Constants.USERNAME, Constants.NO_USERNAME);
+        assertEquals("Token not cleared in preferences after logout", token, Constants.NO_TOKEN);
+        assertEquals("Username not cleared in preferences after logout", username, Constants.NO_USERNAME);
+    }
 }

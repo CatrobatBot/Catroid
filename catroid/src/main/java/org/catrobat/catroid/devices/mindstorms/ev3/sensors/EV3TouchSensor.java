@@ -27,21 +27,21 @@ import org.catrobat.catroid.devices.mindstorms.MindstormsConnection;
 
 public class EV3TouchSensor extends EV3Sensor {
 
-	public static final String TAG = EV3TouchSensor.class.getSimpleName();
-	private static final int DEFAULT_VALUE = 0;
+    public static final String TAG = EV3TouchSensor.class.getSimpleName();
+    private static final int DEFAULT_VALUE = 0;
 
-	public EV3TouchSensor(int port, MindstormsConnection connection) {
-		super(port, EV3SensorType.EV3_TOUCH, EV3SensorMode.MODE0, connection);
-		lastValidValue = DEFAULT_VALUE;
-	}
+    public EV3TouchSensor(int port, MindstormsConnection connection) {
+        super(port, EV3SensorType.EV3_TOUCH, EV3SensorMode.MODE0, connection);
+        lastValidValue = DEFAULT_VALUE;
+    }
 
-	@Override
-	public int getValue() {
-		int percent = getPercentValue();
-		if (percent > 50) {
-			return 1;
-		} else {
-			return 0;
-		}
-	}
+    @Override
+    public int getValue() {
+        int percent = getPercentValue();
+        if (percent > 50) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 }

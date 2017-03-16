@@ -31,40 +31,40 @@ import java.util.ArrayList;
 
 public class WhenBackgroundChangesScript extends Script {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private LookData look;
+    private LookData look;
 
-	@Override
-	public Script copyScriptForSprite(Sprite copySprite) {
-		WhenBackgroundChangesScript cloneScript = new WhenBackgroundChangesScript();
-		doCopy(copySprite, cloneScript);
-		return cloneScript;
-	}
+    @Override
+    public Script copyScriptForSprite(Sprite copySprite) {
+        WhenBackgroundChangesScript cloneScript = new WhenBackgroundChangesScript();
+        doCopy(copySprite, cloneScript);
+        return cloneScript;
+    }
 
-	@Override
-	public ScriptBrick getScriptBrick() {
-		if (brick == null) {
-			brick = new WhenBackgroundChangesBrick(this);
-		}
-		return brick;
-	}
+    @Override
+    public ScriptBrick getScriptBrick() {
+        if (brick == null) {
+            brick = new WhenBackgroundChangesBrick(this);
+        }
+        return brick;
+    }
 
-	@Override
-	public int getRequiredResources() {
-		int resources = Brick.NO_RESOURCES;
-		ArrayList<Brick> brickList = getBrickList();
-		for (Brick brick : brickList) {
-			resources |= brick.getRequiredResources();
-		}
-		return resources;
-	}
+    @Override
+    public int getRequiredResources() {
+        int resources = Brick.NO_RESOURCES;
+        ArrayList<Brick> brickList = getBrickList();
+        for (Brick brick : brickList) {
+            resources |= brick.getRequiredResources();
+        }
+        return resources;
+    }
 
-	public LookData getLook() {
-		return look;
-	}
+    public LookData getLook() {
+        return look;
+    }
 
-	public void setLook(LookData look) {
-		this.look = look;
-	}
+    public void setLook(LookData look) {
+        this.look = look;
+    }
 }

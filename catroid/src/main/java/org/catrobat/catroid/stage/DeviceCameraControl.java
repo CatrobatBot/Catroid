@@ -25,27 +25,27 @@ package org.catrobat.catroid.stage;
 
 public interface DeviceCameraControl {
 
-	// Synchronous interface
-	void prepareCamera();
+    // Synchronous interface
+    void prepareCamera();
 
-	void stopPreview();
+    void stopPreview();
 
-	void pausePreview();
+    void pausePreview();
 
-	void resumePreview();
+    void resumePreview();
 
-	void changeCamera();
+    void changeCamera();
 
-	// Asynchronous interface - need when called from a non platform thread (GDX OpenGl thread)
-	void prepareCameraAsync();
+    // Asynchronous interface - need when called from a non platform thread (GDX OpenGl thread)
+    void prepareCameraAsync();
 
-	void stopPreviewAsync();
+    void stopPreviewAsync();
 
-	void pausePreviewAsync();
+    void pausePreviewAsync();
 
-	void resumePreviewAsync();
+    void resumePreviewAsync();
 
-	void changeCameraAsync();
+    void changeCameraAsync();
 
-	boolean isReady();
+    boolean isReady();
 }

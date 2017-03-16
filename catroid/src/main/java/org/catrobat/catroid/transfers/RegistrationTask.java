@@ -40,108 +40,108 @@ import org.catrobat.catroid.web.WebconnectionException;
 
 public class RegistrationTask extends AsyncTask<Void, Void, Boolean> {
 
-	private static final String TAG = RegistrationTask.class.getSimpleName();
+    private static final String TAG = RegistrationTask.class.getSimpleName();
 
-	private Context context;
-	private ProgressDialog progressDialog;
-	private String username;
-	private String password;
-	private String email;
+    private Context context;
+    private ProgressDialog progressDialog;
+    private String username;
+    private String password;
+    private String email;
 
-	private String message;
-	private boolean userRegistered;
+    private String message;
+    private boolean userRegistered;
 
-	private OnRegistrationCompleteListener onRegistrationCompleteListener;
-	private WebconnectionException exception;
+    private OnRegistrationCompleteListener onRegistrationCompleteListener;
+    private WebconnectionException exception;
 
-	public RegistrationTask(Context activity, String username, String password, String email) {
-		this.context = activity;
-		this.username = username;
-		this.password = password;
-		this.email = email;
-	}
+    public RegistrationTask(Context activity, String username, String password, String email) {
+        this.context = activity;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
 
-	public void setOnRegistrationCompleteListener(OnRegistrationCompleteListener listener) {
-		onRegistrationCompleteListener = listener;
-	}
+    public void setOnRegistrationCompleteListener(OnRegistrationCompleteListener listener) {
+        onRegistrationCompleteListener = listener;
+    }
 
-	@Override
-	protected void onPreExecute() {
-		super.onPreExecute();
-		if (context == null) {
-			return;
-		}
-		String title = context.getString(R.string.please_wait);
-		String message = context.getString(R.string.loading);
-		progressDialog = ProgressDialog.show(context, title, message);
-	}
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        if (context == null) {
+            return;
+        }
+        String title = context.getString(R.string.please_wait);
+        String message = context.getString(R.string.loading);
+        progressDialog = ProgressDialog.show(context, title, message);
+    }
 
-	@Override
-	protected Boolean doInBackground(Void... arg0) {
-		try {
-			if (!Utils.isNetworkAvailable(context)) {
-				exception = new WebconnectionException(WebconnectionException.ERROR_NETWORK, "Network not available!");
-				return false;
-			}
+    @Override
+    protected Boolean doInBackground(Void... arg0) {
+        try {
+            if (!Utils.isNetworkAvailable(context)) {
+                exception = new WebconnectionException(WebconnectionException.ERROR_NETWORK, "Network not available!");
+                return false;
+            }
 
-			String language = UtilDeviceInfo.getUserLanguageCode();
-			String country = UtilDeviceInfo.getUserCountryCode();
-			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-			String token = sharedPreferences.getString(Constants.TOKEN, Constants.NO_TOKEN);
+            String language = UtilDeviceInfo.getUserLanguageCode();
+            String country = UtilDeviceInfo.getUserCountryCode();
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            String token = sharedPreferences.getString(Constants.TOKEN, Constants.NO_TOKEN);
 
-			userRegistered = ServerCalls.getInstance().register(username, password, email, language,
-					country, token, context);
+            userRegistered = ServerCalls.getInstance().register(username, password, email, language,
+                    country, token, context);
 
-			return true;
-		} catch (WebconnectionException webconnectionException) {
-			Log.e(TAG, Log.getStackTraceString(webconnectionException));
-			message = webconnectionException.getMessage();
-		}
-		return false;
-	}
+            return true;
+        } catch (WebconnectionException webconnectionException) {
+            Log.e(TAG, Log.getStackTraceString(webconnectionException));
+            message = webconnectionException.getMessage();
+        }
+        return false;
+    }
 
-	@Override
-	protected void onPostExecute(Boolean success) {
-		super.onPostExecute(success);
+    @Override
+    protected void onPostExecute(Boolean success) {
+        super.onPostExecute(success);
 
-		if (progressDialog != null && progressDialog.isShowing()) {
-			progressDialog.dismiss();
-		}
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
 
-		if (Utils.checkForNetworkError(exception)) {
-			showDialog(R.string.error_internet_connection);
-			return;
-		}
+        if (Utils.checkForNetworkError(exception)) {
+            showDialog(R.string.error_internet_connection);
+            return;
+        }
 
-		if (Utils.checkForSignInError(success, exception, context, userRegistered)) {
-			showDialog(R.string.sign_in_error);
-			return;
-		}
+        if (Utils.checkForSignInError(success, exception, context, userRegistered)) {
+            showDialog(R.string.sign_in_error);
+            return;
+        }
 
-		if (userRegistered) {
-			ToastUtil.showSuccess(context, R.string.new_user_registered);
-		}
+        if (userRegistered) {
+            ToastUtil.showSuccess(context, R.string.new_user_registered);
+        }
 
-		if (onRegistrationCompleteListener != null) {
-			onRegistrationCompleteListener.onRegistrationComplete();
-		}
-	}
+        if (onRegistrationCompleteListener != null) {
+            onRegistrationCompleteListener.onRegistrationComplete();
+        }
+    }
 
-	private void showDialog(int messageId) {
-		if (context == null) {
-			return;
-		}
-		if (message == null) {
-			new CustomAlertDialogBuilder(context).setTitle(R.string.register_error).setMessage(messageId)
-					.setPositiveButton(R.string.ok, null).show();
-		} else {
-			new CustomAlertDialogBuilder(context).setTitle(R.string.register_error).setMessage(message)
-					.setPositiveButton(R.string.ok, null).show();
-		}
-	}
+    private void showDialog(int messageId) {
+        if (context == null) {
+            return;
+        }
+        if (message == null) {
+            new CustomAlertDialogBuilder(context).setTitle(R.string.register_error).setMessage(messageId)
+                    .setPositiveButton(R.string.ok, null).show();
+        } else {
+            new CustomAlertDialogBuilder(context).setTitle(R.string.register_error).setMessage(message)
+                    .setPositiveButton(R.string.ok, null).show();
+        }
+    }
 
-	public interface OnRegistrationCompleteListener {
+    public interface OnRegistrationCompleteListener {
 
-		void onRegistrationComplete();
-	}
+        void onRegistrationComplete();
+    }
 }

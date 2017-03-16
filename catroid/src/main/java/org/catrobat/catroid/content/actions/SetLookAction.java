@@ -30,57 +30,57 @@ import org.catrobat.catroid.content.Sprite;
 
 public class SetLookAction extends Action {
 
-	private LookData look;
-	private Sprite sprite;
+    private LookData look;
+    private Sprite sprite;
 
-	private boolean wait = false;
-	private boolean setLookDone = false;
-	private boolean scriptsAreCompleted = false;
+    private boolean wait = false;
+    private boolean setLookDone = false;
+    private boolean scriptsAreCompleted = false;
 
-	protected void doLookUpdate() {
-		if (wait) {
-			BackgroundWaitHandler.addObserver(look, this);
-		}
-		if (look != null && sprite != null && sprite.getLookDataList().contains(look)) {
-			sprite.look.setLookData(look);
-			setLookDone = true;
-		}
-	}
+    protected void doLookUpdate() {
+        if (wait) {
+            BackgroundWaitHandler.addObserver(look, this);
+        }
+        if (look != null && sprite != null && sprite.getLookDataList().contains(look)) {
+            sprite.look.setLookData(look);
+            setLookDone = true;
+        }
+    }
 
-	@Override
-	public boolean act(float delta) {
-		if (!setLookDone) {
-			doLookUpdate();
-		}
+    @Override
+    public boolean act(float delta) {
+        if (!setLookDone) {
+            doLookUpdate();
+        }
 
-		if (wait) {
-			return scriptsAreCompleted;
-		} else {
-			return true;
-		}
-	}
+        if (wait) {
+            return scriptsAreCompleted;
+        } else {
+            return true;
+        }
+    }
 
-	@Override
-	public void restart() {
-		setLookDone = false;
-		if (wait) {
-			scriptsAreCompleted = false;
-		}
-	}
+    @Override
+    public void restart() {
+        setLookDone = false;
+        if (wait) {
+            scriptsAreCompleted = false;
+        }
+    }
 
-	public void setLookData(LookData look) {
-		this.look = look;
-	}
+    public void setLookData(LookData look) {
+        this.look = look;
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setWait(boolean wait) {
-		this.wait = wait;
-	}
+    public void setWait(boolean wait) {
+        this.wait = wait;
+    }
 
-	public void notifyScriptsCompleted() {
-		scriptsAreCompleted = true;
-	}
+    public void notifyScriptsCompleted() {
+        scriptsAreCompleted = true;
+    }
 }

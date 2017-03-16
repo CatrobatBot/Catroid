@@ -31,71 +31,71 @@ import java.io.IOException;
 
 public class SoundRecorder {
 
-	public static final String RECORDING_EXTENSION = ".m4a";
-	private MediaRecorder recorder;
-	private boolean isRecording;
+    public static final String RECORDING_EXTENSION = ".m4a";
+    private MediaRecorder recorder;
+    private boolean isRecording;
 
-	public static final String TAG = SoundRecorder.class.getSimpleName();
+    public static final String TAG = SoundRecorder.class.getSimpleName();
 
-	private String path;
+    private String path;
 
-	public SoundRecorder(String path) {
-		this.recorder = new MediaRecorder();
-		this.path = path;
-	}
+    public SoundRecorder(String path) {
+        this.recorder = new MediaRecorder();
+        this.path = path;
+    }
 
-	public void start() throws IOException, RuntimeException {
-		File soundFile = new File(path);
-		if (soundFile.exists()) {
-			soundFile.delete();
-		}
-		File directory = soundFile.getParentFile();
-		if (!directory.exists() && !directory.mkdirs()) {
-			throw new IOException("Path to file could not be created.");
-		}
+    public void start() throws IOException, RuntimeException {
+        File soundFile = new File(path);
+        if (soundFile.exists()) {
+            soundFile.delete();
+        }
+        File directory = soundFile.getParentFile();
+        if (!directory.exists() && !directory.mkdirs()) {
+            throw new IOException("Path to file could not be created.");
+        }
 
-		try {
-			recorder.reset();
-			recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-			recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-			recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-			recorder.setOutputFile(path);
-			recorder.prepare();
-			recorder.start();
-			isRecording = true;
-		} catch (IllegalStateException e) {
-			throw e;
-		} catch (RuntimeException e) {
-			throw e;
-		}
-	}
+        try {
+            recorder.reset();
+            recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+            recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+            recorder.setOutputFile(path);
+            recorder.prepare();
+            recorder.start();
+            isRecording = true;
+        } catch (IllegalStateException e) {
+            throw e;
+        } catch (RuntimeException e) {
+            throw e;
+        }
+    }
 
-	public void stop() throws IOException {
-		try {
-			recorder.stop();
-		} catch (RuntimeException e) {
-			Log.d(TAG, "Note that a RuntimeException is intentionally "
-					+ "thrown to the application, if no valid audio/video data "
-					+ "has been received when stop() is called. This happens if stop() "
-					+ "is called immediately after start(). The failure lets the application "
-					+ "take action accordingly to clean up the output file "
-					+ "(delete the output file, for instance), since the output file "
-					+ "is not properly constructed when this happens.");
-		}
-		recorder.reset();
-		recorder.release();
-		isRecording = false;
-	}
+    public void stop() throws IOException {
+        try {
+            recorder.stop();
+        } catch (RuntimeException e) {
+            Log.d(TAG, "Note that a RuntimeException is intentionally "
+                    + "thrown to the application, if no valid audio/video data "
+                    + "has been received when stop() is called. This happens if stop() "
+                    + "is called immediately after start(). The failure lets the application "
+                    + "take action accordingly to clean up the output file "
+                    + "(delete the output file, for instance), since the output file "
+                    + "is not properly constructed when this happens.");
+        }
+        recorder.reset();
+        recorder.release();
+        isRecording = false;
+    }
 
-	public Uri getPath() {
-		return Uri.fromFile(new File(path));
-	}
+    public Uri getPath() {
+        return Uri.fromFile(new File(path));
+    }
 
-	public int getMaxAmplitude() {
-		return recorder.getMaxAmplitude();
-	}
+    public int getMaxAmplitude() {
+        return recorder.getMaxAmplitude();
+    }
 
-	public boolean isRecording() {
-		return isRecording;
-	}
+    public boolean isRecording() {
+        return isRecording;
+    }
 }

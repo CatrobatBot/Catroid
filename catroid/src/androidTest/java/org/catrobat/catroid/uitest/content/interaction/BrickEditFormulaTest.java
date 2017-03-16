@@ -30,48 +30,48 @@ import org.catrobat.catroid.uitest.util.UiTestUtils;
 
 public class BrickEditFormulaTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
-	public BrickEditFormulaTest() {
-		super(MainMenuActivity.class);
-	}
+    public BrickEditFormulaTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		UiTestUtils.createTestProjectWithEveryBrick();
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
-	}
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        UiTestUtils.createTestProjectWithEveryBrick();
+        UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
+    }
 
-	private void checkBrick(int brickName) {
-		solo.clickOnText(solo.getString(brickName));
-		solo.clickOnMenuItem(solo.getString(R.string.brick_context_dialog_formula_edit_brick));
-		assertTrue("Formula Editor did not open!", solo.waitForView(solo.getView(R.id.formula_editor_brick_space)));
-		solo.goBack();
-	}
+    private void checkBrick(int brickName) {
+        solo.clickOnText(solo.getString(brickName));
+        solo.clickOnMenuItem(solo.getString(R.string.brick_context_dialog_formula_edit_brick));
+        assertTrue("Formula Editor did not open!", solo.waitForView(solo.getView(R.id.formula_editor_brick_space)));
+        solo.goBack();
+    }
 
-	@Device
-	public void testClickOnBrickItemEditFormula() {
-		checkBrick(R.string.brick_change_brightness);
-		checkBrick(R.string.brick_change_ghost_effect);
-		checkBrick(R.string.brick_change_size_by);
-		checkBrick(R.string.brick_change_volume_by);
-		checkBrick(R.string.brick_change_variable);
-		checkBrick(R.string.brick_change_x_by);
-		checkBrick(R.string.brick_change_y_by);
-		checkBrick(R.string.brick_glide);
-		checkBrick(R.string.brick_go_back);
-		checkBrick(R.string.brick_move);
-		checkBrick(R.string.brick_place_at);
-		checkBrick(R.string.brick_point_in_direction);
-		checkBrick(R.string.brick_set_brightness);
-		checkBrick(R.string.brick_set_transparency);
-		checkBrick(R.string.brick_set_size_to);
-		checkBrick(R.string.brick_set_variable);
-		checkBrick(R.string.brick_set_volume_to);
-		checkBrick(R.string.brick_set_x);
-		checkBrick(R.string.brick_set_y);
-		checkBrick(R.string.brick_turn_left);
-		checkBrick(R.string.brick_turn_right);
-		checkBrick(R.string.brick_set_color);
-		checkBrick(R.string.brick_change_color);
-	}
+    @Device
+    public void testClickOnBrickItemEditFormula() {
+        checkBrick(R.string.brick_change_brightness);
+        checkBrick(R.string.brick_change_ghost_effect);
+        checkBrick(R.string.brick_change_size_by);
+        checkBrick(R.string.brick_change_volume_by);
+        checkBrick(R.string.brick_change_variable);
+        checkBrick(R.string.brick_change_x_by);
+        checkBrick(R.string.brick_change_y_by);
+        checkBrick(R.string.brick_glide);
+        checkBrick(R.string.brick_go_back);
+        checkBrick(R.string.brick_move);
+        checkBrick(R.string.brick_place_at);
+        checkBrick(R.string.brick_point_in_direction);
+        checkBrick(R.string.brick_set_brightness);
+        checkBrick(R.string.brick_set_transparency);
+        checkBrick(R.string.brick_set_size_to);
+        checkBrick(R.string.brick_set_variable);
+        checkBrick(R.string.brick_set_volume_to);
+        checkBrick(R.string.brick_set_x);
+        checkBrick(R.string.brick_set_y);
+        checkBrick(R.string.brick_turn_left);
+        checkBrick(R.string.brick_turn_right);
+        checkBrick(R.string.brick_set_color);
+        checkBrick(R.string.brick_change_color);
+    }
 }

@@ -24,5 +24,5 @@ package org.catrobat.catroid.ui;
 
 public interface DeleteModeListener {
 
-	void startDeleteActionMode();
+    void startDeleteActionMode();
 }

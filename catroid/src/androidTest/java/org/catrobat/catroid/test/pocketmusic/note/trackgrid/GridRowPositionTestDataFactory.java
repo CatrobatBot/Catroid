@@ -28,18 +28,18 @@ import org.catrobat.catroid.pocketmusic.note.trackgrid.GridRowPosition;
 
 public final class GridRowPositionTestDataFactory {
 
-	private GridRowPositionTestDataFactory() {
-	}
+    private GridRowPositionTestDataFactory() {
+    }
 
-	public static GridRowPosition createSimpleGridRowPosition() {
-		return new GridRowPosition(0, NoteLength.QUARTER);
-	}
+    public static GridRowPosition createSimpleGridRowPosition() {
+        return new GridRowPosition(0, NoteLength.QUARTER);
+    }
 
-	public static GridRowPosition createGridRowPositionWithOffset() {
-		return new GridRowPosition(4, NoteLength.QUARTER);
-	}
+    public static GridRowPosition createGridRowPositionWithOffset() {
+        return new GridRowPosition(4, NoteLength.QUARTER);
+    }
 
-	public static GridRowPosition createGridRowPositionWithHalf() {
-		return new GridRowPosition(4, NoteLength.HALF);
-	}
+    public static GridRowPosition createGridRowPositionWithHalf() {
+        return new GridRowPosition(4, NoteLength.HALF);
+    }
 }

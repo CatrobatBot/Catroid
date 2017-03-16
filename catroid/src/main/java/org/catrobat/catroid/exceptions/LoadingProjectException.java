@@ -24,13 +24,13 @@ package org.catrobat.catroid.exceptions;
 
 public class LoadingProjectException extends ProjectException {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public LoadingProjectException() {
-		super();
-	}
+    public LoadingProjectException() {
+        super();
+    }
 
-	public LoadingProjectException(String message) {
-		super(message);
-	}
+    public LoadingProjectException(String message) {
+        super(message);
+    }
 }

@@ -39,74 +39,74 @@ import java.util.ArrayList;
 
 public class EditTextAlignmentTest extends AndroidTestCase {
 
-	private static LayoutInflater inflater;
-	private Context context;
+    private static LayoutInflater inflater;
+    private Context context;
 
-	@Override
-	protected void setUp() throws Exception {
-		context = getContext();
-		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	}
+    @Override
+    protected void setUp() throws Exception {
+        context = getContext();
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
 
-	/*
-	 * all bricks in R.layout must have "_brick_" in their names
-	 * and all bricks in R.id which have an EditText must have the same name as in R.layout plus "_edit_text" at the end
-	 * of their names
-	 */
-	public void testAllBricks() throws IllegalArgumentException, IllegalAccessException {
+    /*
+     * all bricks in R.layout must have "_brick_" in their names
+     * and all bricks in R.id which have an EditText must have the same name as in R.layout plus "_edit_text" at the end
+     * of their names
+     */
+    public void testAllBricks() throws IllegalArgumentException, IllegalAccessException {
 
-		Field[] layoutFields = R.layout.class.getFields();
+        Field[] layoutFields = R.layout.class.getFields();
 
-		for (Field layoutField : layoutFields) {
-			String layoutName = layoutField.getName();
+        for (Field layoutField : layoutFields) {
+            String layoutName = layoutField.getName();
 
-			if (layoutName.startsWith("brick_")) {
-				int brickId = layoutField.getInt(null);
-				View brickView = inflater.inflate(brickId, null);
-				ArrayList<View> allChildsOfLayout = getAllChildren(brickView);
+            if (layoutName.startsWith("brick_")) {
+                int brickId = layoutField.getInt(null);
+                View brickView = inflater.inflate(brickId, null);
+                ArrayList<View> allChildsOfLayout = getAllChildren(brickView);
 
-				for (View child : allChildsOfLayout) {
-					if (child.getId() != View.NO_ID) {
-						String idName = child.getResources().getResourceName(child.getId());
-						if (idName.contains(layoutName) && idName.contains("_edit_text")) {
-							TextView edit = (TextView) child;
-							LayoutParams layoutParams = (LayoutParams) edit.getLayoutParams();
+                for (View child : allChildsOfLayout) {
+                    if (child.getId() != View.NO_ID) {
+                        String idName = child.getResources().getResourceName(child.getId());
+                        if (idName.contains(layoutName) && idName.contains("_edit_text")) {
+                            TextView edit = (TextView) child;
+                            LayoutParams layoutParams = (LayoutParams) edit.getLayoutParams();
 
-							if (layoutParams.getInputType() == InputType.NUMBER) {
-								assertEquals("Brick " + layoutName + " does not have correct gravity (Gravity.RIGHT)",
-										Gravity.RIGHT, Gravity.RIGHT & edit.getGravity());
-							} else {
-								assertEquals("Brick " + layoutName + " does not have correct gravity (Gravity.LEFT)",
-										Gravity.LEFT, Gravity.LEFT & edit.getGravity());
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+                            if (layoutParams.getInputType() == InputType.NUMBER) {
+                                assertEquals("Brick " + layoutName + " does not have correct gravity (Gravity.RIGHT)",
+                                        Gravity.RIGHT, Gravity.RIGHT & edit.getGravity());
+                            } else {
+                                assertEquals("Brick " + layoutName + " does not have correct gravity (Gravity.LEFT)",
+                                        Gravity.LEFT, Gravity.LEFT & edit.getGravity());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-	private ArrayList<View> getAllChildren(View v) {
+    private ArrayList<View> getAllChildren(View v) {
 
-		if (!(v instanceof ViewGroup)) {
-			ArrayList<View> viewArrayList = new ArrayList<View>();
-			viewArrayList.add(v);
-			return viewArrayList;
-		}
+        if (!(v instanceof ViewGroup)) {
+            ArrayList<View> viewArrayList = new ArrayList<View>();
+            viewArrayList.add(v);
+            return viewArrayList;
+        }
 
-		ArrayList<View> result = new ArrayList<View>();
+        ArrayList<View> result = new ArrayList<View>();
 
-		ViewGroup vg = (ViewGroup) v;
-		for (int i = 0; i < vg.getChildCount(); i++) {
+        ViewGroup vg = (ViewGroup) v;
+        for (int i = 0; i < vg.getChildCount(); i++) {
 
-			View child = vg.getChildAt(i);
+            View child = vg.getChildAt(i);
 
-			ArrayList<View> viewArrayList = new ArrayList<View>();
-			viewArrayList.add(v);
-			viewArrayList.addAll(getAllChildren(child));
+            ArrayList<View> viewArrayList = new ArrayList<View>();
+            viewArrayList.add(v);
+            viewArrayList.addAll(getAllChildren(child));
 
-			result.addAll(viewArrayList);
-		}
-		return result;
-	}
+            result.addAll(viewArrayList);
+        }
+        return result;
+    }
 }

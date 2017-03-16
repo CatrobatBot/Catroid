@@ -31,45 +31,45 @@ import org.catrobat.catroid.content.bricks.FormulaBrick;
 
 public class ReferenceHelper {
 
-	Scene into;
-	Scene from;
+    Scene into;
+    Scene from;
 
-	public ReferenceHelper(Scene into, Scene from) {
-		this.into = into;
-		this.from = from;
-	}
+    public ReferenceHelper(Scene into, Scene from) {
+        this.into = into;
+        this.from = from;
+    }
 
-	public Scene updateAllReferences() {
-		for (int i = 0; i < into.getSpriteList().size(); i++) {
-			Sprite sprite = into.getSpriteList().get(i);
+    public Scene updateAllReferences() {
+        for (int i = 0; i < into.getSpriteList().size(); i++) {
+            Sprite sprite = into.getSpriteList().get(i);
 
-			if (from.containsSpriteBySpriteName(sprite.getName())) {
-				into.getSpriteList().set(i, updateReference(sprite));
-			}
-		}
-		return into;
-	}
+            if (from.containsSpriteBySpriteName(sprite.getName())) {
+                into.getSpriteList().set(i, updateReference(sprite));
+            }
+        }
+        return into;
+    }
 
-	public Sprite updateReference(Sprite sprite) {
-		for (int i = 0; i < sprite.getScriptList().size(); i++) {
-			Script script = sprite.getScript(i);
-			sprite.getScriptList().set(i, updateReference(script));
-		}
-		return sprite;
-	}
+    public Sprite updateReference(Sprite sprite) {
+        for (int i = 0; i < sprite.getScriptList().size(); i++) {
+            Script script = sprite.getScript(i);
+            sprite.getScriptList().set(i, updateReference(script));
+        }
+        return sprite;
+    }
 
-	public Script updateReference(Script script) {
-		for (int i = 0; i < script.getBrickList().size(); i++) {
-			Brick brick = script.getBrickList().get(i);
-			script.getBrickList().set(i, updateReference(brick));
-		}
-		return script;
-	}
+    public Script updateReference(Script script) {
+        for (int i = 0; i < script.getBrickList().size(); i++) {
+            Brick brick = script.getBrickList().get(i);
+            script.getBrickList().set(i, updateReference(brick));
+        }
+        return script;
+    }
 
-	public Brick updateReference(Brick brick) {
-		if (brick instanceof FormulaBrick) {
-			((FormulaBrick) brick).updateReferenceAfterMerge(into, from);
-		}
-		return brick;
-	}
+    public Brick updateReference(Brick brick) {
+        if (brick instanceof FormulaBrick) {
+            ((FormulaBrick) brick).updateReferenceAfterMerge(into, from);
+        }
+        return brick;
+    }
 }

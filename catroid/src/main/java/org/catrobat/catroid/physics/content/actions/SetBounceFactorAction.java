@@ -33,31 +33,31 @@ import org.catrobat.catroid.physics.PhysicsObject;
 
 public class SetBounceFactorAction extends TemporalAction {
 
-	private Sprite sprite;
-	private PhysicsObject physicsObject;
-	private Formula bounceFactor;
+    private Sprite sprite;
+    private PhysicsObject physicsObject;
+    private Formula bounceFactor;
 
-	@Override
-	protected void update(float percent) {
-		Float newBounceFactor;
-		try {
-			newBounceFactor = bounceFactor == null ? Float.valueOf(0f) : bounceFactor.interpretFloat(sprite);
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-			return;
-		}
-		physicsObject.setBounceFactor(newBounceFactor / 100.0f);
-	}
+    @Override
+    protected void update(float percent) {
+        Float newBounceFactor;
+        try {
+            newBounceFactor = bounceFactor == null ? Float.valueOf(0f) : bounceFactor.interpretFloat(sprite);
+        } catch (InterpretationException interpretationException) {
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+            return;
+        }
+        physicsObject.setBounceFactor(newBounceFactor / 100.0f);
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setPhysicsObject(PhysicsObject physicsObject) {
-		this.physicsObject = physicsObject;
-	}
+    public void setPhysicsObject(PhysicsObject physicsObject) {
+        this.physicsObject = physicsObject;
+    }
 
-	public void setBounceFactor(Formula bounceFactor) {
-		this.bounceFactor = bounceFactor;
-	}
+    public void setBounceFactor(Formula bounceFactor) {
+        this.bounceFactor = bounceFactor;
+    }
 }

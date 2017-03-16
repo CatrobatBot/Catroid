@@ -47,181 +47,181 @@ import org.catrobat.catroid.ui.controller.SoundController;
 import java.util.List;
 
 public class BackPackSoundListFragment extends BackPackActivityFragment implements CheckBoxListAdapter
-		.ListItemClickHandler, CheckBoxListAdapter.ListItemLongClickHandler {
+        .ListItemClickHandler, CheckBoxListAdapter.ListItemLongClickHandler {
 
-	public static final String TAG = BackPackSoundListFragment.class.getSimpleName();
+    public static final String TAG = BackPackSoundListFragment.class.getSimpleName();
 
-	private SoundListAdapter soundAdapter;
-	private ListView listView;
+    private SoundListAdapter soundAdapter;
+    private ListView listView;
 
-	private MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer;
 
-	private SoundInfo soundInfoToEdit;
-	private int selectedSoundPosition = Constants.NO_POSITION;
+    private SoundInfo soundInfoToEdit;
+    private int selectedSoundPosition = Constants.NO_POSITION;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View backPackSoundListFragment = inflater.inflate(R.layout.fragment_sound_backpack, container, false);
-		listView = (ListView) backPackSoundListFragment.findViewById(android.R.id.list);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View backPackSoundListFragment = inflater.inflate(R.layout.fragment_sound_backpack, container, false);
+        listView = (ListView) backPackSoundListFragment.findViewById(android.R.id.list);
 
-		return backPackSoundListFragment;
-	}
+        return backPackSoundListFragment;
+    }
 
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
-		registerForContextMenu(listView);
+        registerForContextMenu(listView);
 
-		singleItemTitle = getString(R.string.sound);
-		multipleItemsTitle = getString(R.string.sounds);
+        singleItemTitle = getString(R.string.sound);
+        multipleItemsTitle = getString(R.string.sounds);
 
-		if (savedInstanceState != null) {
-			soundInfoToEdit = (SoundInfo) savedInstanceState
-					.getSerializable(SoundController.BUNDLE_ARGUMENTS_SELECTED_SOUND);
-		}
+        if (savedInstanceState != null) {
+            soundInfoToEdit = (SoundInfo) savedInstanceState
+                    .getSerializable(SoundController.BUNDLE_ARGUMENTS_SELECTED_SOUND);
+        }
 
-		initializeList();
-		checkEmptyBackgroundBackPack();
-		BottomBar.hideBottomBar(getActivity());
-	}
+        initializeList();
+        checkEmptyBackgroundBackPack();
+        BottomBar.hideBottomBar(getActivity());
+    }
 
-	private void initializeList() {
-		List<SoundInfo> soundList = BackPackListManager.getInstance().getBackPackedSounds();
+    private void initializeList() {
+        List<SoundInfo> soundList = BackPackListManager.getInstance().getBackPackedSounds();
 
-		soundAdapter = new SoundListAdapter(getActivity(), R.layout.list_item, soundList);
-		setListAdapter(soundAdapter);
-		soundAdapter.setListItemClickHandler(this);
-		soundAdapter.setListItemCheckHandler(this);
-		soundAdapter.setListItemLongClickHandler(this);
-	}
+        soundAdapter = new SoundListAdapter(getActivity(), R.layout.list_item, soundList);
+        setListAdapter(soundAdapter);
+        soundAdapter.setListItemClickHandler(this);
+        soundAdapter.setListItemCheckHandler(this);
+        soundAdapter.setListItemLongClickHandler(this);
+    }
 
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		outState.putSerializable(SoundController.BUNDLE_ARGUMENTS_SELECTED_SOUND, soundInfoToEdit);
-		super.onSaveInstanceState(outState);
-	}
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(SoundController.BUNDLE_ARGUMENTS_SELECTED_SOUND, soundInfoToEdit);
+        super.onSaveInstanceState(outState);
+    }
 
-	@Override
-	public void onStart() {
-		super.onStart();
-		mediaPlayer = new MediaPlayer();
-	}
+    @Override
+    public void onStart() {
+        super.onStart();
+        mediaPlayer = new MediaPlayer();
+    }
 
-	@Override
-	public void onResume() {
-		super.onResume();
+    @Override
+    public void onResume() {
+        super.onResume();
 
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity()
-				.getApplicationContext());
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity()
+                .getApplicationContext());
 
-		setShowDetails(settings.getBoolean(SoundController.SHARED_PREFERENCE_NAME, false));
-	}
+        setShowDetails(settings.getBoolean(SoundController.SHARED_PREFERENCE_NAME, false));
+    }
 
-	@Override
-	public void onPause() {
-		super.onPause();
+    @Override
+    public void onPause() {
+        super.onPause();
 
-		BackPackListManager.getInstance().saveBackpack();
-		SoundController.getInstance().stopSound(mediaPlayer, BackPackListManager.getInstance().getBackPackedSounds());
-		soundAdapter.notifyDataSetChanged();
+        BackPackListManager.getInstance().saveBackpack();
+        SoundController.getInstance().stopSound(mediaPlayer, BackPackListManager.getInstance().getBackPackedSounds());
+        soundAdapter.notifyDataSetChanged();
 
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity()
-				.getApplicationContext());
-		SharedPreferences.Editor editor = settings.edit();
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity()
+                .getApplicationContext());
+        SharedPreferences.Editor editor = settings.edit();
 
-		editor.putBoolean(SoundController.SHARED_PREFERENCE_NAME, getShowDetails());
-		editor.commit();
-	}
+        editor.putBoolean(SoundController.SHARED_PREFERENCE_NAME, getShowDetails());
+        editor.commit();
+    }
 
-	@Override
-	public void onStop() {
-		super.onStop();
-		mediaPlayer.reset();
-		mediaPlayer.release();
-		mediaPlayer = null;
-	}
+    @Override
+    public void onStop() {
+        super.onStop();
+        mediaPlayer.reset();
+        mediaPlayer.release();
+        mediaPlayer = null;
+    }
 
-	@Override
-	public void onPrepareOptionsMenu(Menu menu) {
-		if (BackPackListManager.getInstance().getBackPackedSounds().isEmpty()) {
-			menu.findItem(R.id.unpacking).setVisible(false);
-		}
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        if (BackPackListManager.getInstance().getBackPackedSounds().isEmpty()) {
+            menu.findItem(R.id.unpacking).setVisible(false);
+        }
 
-		super.onPrepareOptionsMenu(menu);
-	}
+        super.onPrepareOptionsMenu(menu);
+    }
 
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, view, menuInfo);
 
-		if (SoundController.getInstance().isSoundPlaying(mediaPlayer)) {
-			SoundController.getInstance().stopSound(mediaPlayer, BackPackListManager.getInstance().getBackPackedSounds());
-		}
+        if (SoundController.getInstance().isSoundPlaying(mediaPlayer)) {
+            SoundController.getInstance().stopSound(mediaPlayer, BackPackListManager.getInstance().getBackPackedSounds());
+        }
 
-		soundInfoToEdit = soundAdapter.getItem(selectedSoundPosition);
-		menu.setHeaderTitle(soundInfoToEdit.getTitle());
+        soundInfoToEdit = soundAdapter.getItem(selectedSoundPosition);
+        menu.setHeaderTitle(soundInfoToEdit.getTitle());
 
-		getActivity().getMenuInflater().inflate(R.menu.context_menu_unpacking, menu);
-	}
+        getActivity().getMenuInflater().inflate(R.menu.context_menu_unpacking, menu);
+    }
 
-	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.context_menu_unpacking:
-				unpackCheckedItems(true);
-				break;
-			case R.id.context_menu_delete:
-				deleteCheckedItems(true);
-				break;
-		}
-		return super.onContextItemSelected(item);
-	}
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.context_menu_unpacking:
+                unpackCheckedItems(true);
+                break;
+            case R.id.context_menu_delete:
+                deleteCheckedItems(true);
+                break;
+        }
+        return super.onContextItemSelected(item);
+    }
 
-	@Override
-	public void handleOnItemClick(int position, View view, Object listItem) {
-		selectedSoundPosition = position;
-		soundInfoToEdit = soundAdapter.getItem(position);
-		listView.showContextMenuForChild(view);
-	}
+    @Override
+    public void handleOnItemClick(int position, View view, Object listItem) {
+        selectedSoundPosition = position;
+        soundInfoToEdit = soundAdapter.getItem(position);
+        listView.showContextMenuForChild(view);
+    }
 
-	@Override
-	public void handleOnItemLongClick(int position, View view) {
-		selectedSoundPosition = position;
-		soundInfoToEdit = soundAdapter.getItem(position);
-		listView.showContextMenuForChild(view);
-	}
+    @Override
+    public void handleOnItemLongClick(int position, View view) {
+        selectedSoundPosition = position;
+        soundInfoToEdit = soundAdapter.getItem(position);
+        listView.showContextMenuForChild(view);
+    }
 
-	public void pauseSound(SoundInfo soundInfo) {
-		mediaPlayer.pause();
-		soundInfo.isPlaying = false;
-	}
+    public void pauseSound(SoundInfo soundInfo) {
+        mediaPlayer.pause();
+        soundInfo.isPlaying = false;
+    }
 
-	@Override
-	protected void showDeleteDialog(boolean singleItem) {
-	}
+    @Override
+    protected void showDeleteDialog(boolean singleItem) {
+    }
 
-	@Override
-	protected void deleteCheckedItems(boolean singleItem) {
-	}
+    @Override
+    protected void deleteCheckedItems(boolean singleItem) {
+    }
 
-	protected void unpackCheckedItems(boolean singleItem) {
-		if (singleItem) {
-			unpackSound();
-			showUnpackingCompleteToast(1);
-			getActivity().finish();
-			return;
-		}
-		for (SoundInfo soundInfo : soundAdapter.getCheckedItems()) {
-			soundInfoToEdit = soundInfo;
-			unpackSound();
-		}
-		showUnpackingCompleteToast(soundAdapter.getCheckedItems().size());
-		clearCheckedItems();
-		getActivity().finish();
-	}
+    protected void unpackCheckedItems(boolean singleItem) {
+        if (singleItem) {
+            unpackSound();
+            showUnpackingCompleteToast(1);
+            getActivity().finish();
+            return;
+        }
+        for (SoundInfo soundInfo : soundAdapter.getCheckedItems()) {
+            soundInfoToEdit = soundInfo;
+            unpackSound();
+        }
+        showUnpackingCompleteToast(soundAdapter.getCheckedItems().size());
+        clearCheckedItems();
+        getActivity().finish();
+    }
 
-	private void unpackSound() {
-		SoundController.getInstance().unpack(soundInfoToEdit, false, false);
-	}
+    private void unpackSound() {
+        SoundController.getInstance().unpack(soundInfoToEdit, false, false);
+    }
 }

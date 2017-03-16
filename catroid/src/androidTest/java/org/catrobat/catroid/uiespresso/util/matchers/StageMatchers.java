@@ -34,26 +34,26 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
 public final class StageMatchers {
-	// Suppress default constructor for noninstantiability
-	private StageMatchers() {
-		throw new AssertionError();
-	}
+    // Suppress default constructor for noninstantiability
+    private StageMatchers() {
+        throw new AssertionError();
+    }
 
-	//usage: in stage activity call onView(isFocusable()).check(matches(StageMatchers.isColorAtPx(COLOR, X, Y)));
-	public static Matcher<View> isColorAtPx(final byte[] color, final int x, final int y) {
-		return new BoundedMatcher<View, GLSurfaceView20>(GLSurfaceView20.class) {
+    //usage: in stage activity call onView(isFocusable()).check(matches(StageMatchers.isColorAtPx(COLOR, X, Y)));
+    public static Matcher<View> isColorAtPx(final byte[] color, final int x, final int y) {
+        return new BoundedMatcher<View, GLSurfaceView20>(GLSurfaceView20.class) {
 
-			@Override
-			protected boolean matchesSafely(GLSurfaceView20 view) {
-				byte[] testPixels = StageActivity.stageListener.getPixels(x, y, 1, 1);
-				return UiTestUtils.comparePixelRgbaArrays(testPixels, color);
-			}
+            @Override
+            protected boolean matchesSafely(GLSurfaceView20 view) {
+                byte[] testPixels = StageActivity.stageListener.getPixels(x, y, 1, 1);
+                return UiTestUtils.comparePixelRgbaArrays(testPixels, color);
+            }
 
-			@Override
-			public void describeTo(Description description) {
-				description.appendText("Look if pixel at y=" + Integer.toString(x)
-						+ " y=" + Integer.toString(y) + " is white");
-			}
-		};
-	}
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Look if pixel at y=" + Integer.toString(x)
+                        + " y=" + Integer.toString(y) + " is white");
+            }
+        };
+    }
 }

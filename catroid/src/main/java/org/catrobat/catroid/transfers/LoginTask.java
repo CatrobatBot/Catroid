@@ -39,104 +39,104 @@ import org.catrobat.catroid.web.WebconnectionException;
 
 public class LoginTask extends AsyncTask<Void, Void, Boolean> {
 
-	private static final String TAG = LoginTask.class.getSimpleName();
+    private static final String TAG = LoginTask.class.getSimpleName();
 
-	private Context context;
-	private ProgressDialog progressDialog;
-	private String username;
-	private String password;
+    private Context context;
+    private ProgressDialog progressDialog;
+    private String username;
+    private String password;
 
-	private String message;
-	private boolean userLoggedIn;
+    private String message;
+    private boolean userLoggedIn;
 
-	private OnLoginCompleteListener onLoginCompleteListener;
-	private WebconnectionException exception;
+    private OnLoginCompleteListener onLoginCompleteListener;
+    private WebconnectionException exception;
 
-	public LoginTask(Context activity, String username, String password) {
-		this.context = activity;
-		this.username = username;
-		this.password = password;
-	}
+    public LoginTask(Context activity, String username, String password) {
+        this.context = activity;
+        this.username = username;
+        this.password = password;
+    }
 
-	public void setOnLoginCompleteListener(OnLoginCompleteListener listener) {
-		onLoginCompleteListener = listener;
-	}
+    public void setOnLoginCompleteListener(OnLoginCompleteListener listener) {
+        onLoginCompleteListener = listener;
+    }
 
-	@Override
-	protected void onPreExecute() {
-		super.onPreExecute();
-		if (context == null) {
-			return;
-		}
-		String title = context.getString(R.string.please_wait);
-		String message = context.getString(R.string.loading);
-		progressDialog = ProgressDialog.show(context, title, message);
-	}
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        if (context == null) {
+            return;
+        }
+        String title = context.getString(R.string.please_wait);
+        String message = context.getString(R.string.loading);
+        progressDialog = ProgressDialog.show(context, title, message);
+    }
 
-	@Override
-	protected Boolean doInBackground(Void... arg0) {
-		try {
-			if (!Utils.isNetworkAvailable(context)) {
-				exception = new WebconnectionException(WebconnectionException.ERROR_NETWORK, "Network not available!");
-				return false;
-			}
+    @Override
+    protected Boolean doInBackground(Void... arg0) {
+        try {
+            if (!Utils.isNetworkAvailable(context)) {
+                exception = new WebconnectionException(WebconnectionException.ERROR_NETWORK, "Network not available!");
+                return false;
+            }
 
-			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-			String token = sharedPreferences.getString(Constants.TOKEN, Constants.NO_TOKEN);
-			Log.d(TAG, token);
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            String token = sharedPreferences.getString(Constants.TOKEN, Constants.NO_TOKEN);
+            Log.d(TAG, token);
 
-			userLoggedIn = ServerCalls.getInstance().login(username, password, token, context);
+            userLoggedIn = ServerCalls.getInstance().login(username, password, token, context);
 
-			return true;
-		} catch (WebconnectionException webconnectionException) {
-			Log.e(TAG, Log.getStackTraceString(webconnectionException));
-			message = webconnectionException.getMessage();
-		}
-		return false;
-	}
+            return true;
+        } catch (WebconnectionException webconnectionException) {
+            Log.e(TAG, Log.getStackTraceString(webconnectionException));
+            message = webconnectionException.getMessage();
+        }
+        return false;
+    }
 
-	@Override
-	protected void onPostExecute(Boolean success) {
-		super.onPostExecute(success);
+    @Override
+    protected void onPostExecute(Boolean success) {
+        super.onPostExecute(success);
 
-		if (progressDialog != null && progressDialog.isShowing()) {
-			progressDialog.dismiss();
-		}
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
 
-		if (Utils.checkForNetworkError(exception)) {
-			showDialog(R.string.error_internet_connection);
-			return;
-		}
+        if (Utils.checkForNetworkError(exception)) {
+            showDialog(R.string.error_internet_connection);
+            return;
+        }
 
-		if (Utils.checkForSignInError(success, exception, context, userLoggedIn)) {
-			showDialog(R.string.sign_in_error);
-			return;
-		}
+        if (Utils.checkForSignInError(success, exception, context, userLoggedIn)) {
+            showDialog(R.string.sign_in_error);
+            return;
+        }
 
-		if (userLoggedIn) {
-			ToastUtil.showSuccess(context, R.string.user_logged_in);
-		}
+        if (userLoggedIn) {
+            ToastUtil.showSuccess(context, R.string.user_logged_in);
+        }
 
-		if (onLoginCompleteListener != null) {
-			onLoginCompleteListener.onLoginComplete();
-		}
-	}
+        if (onLoginCompleteListener != null) {
+            onLoginCompleteListener.onLoginComplete();
+        }
+    }
 
-	private void showDialog(int messageId) {
-		if (context == null) {
-			return;
-		}
-		if (message == null) {
-			new CustomAlertDialogBuilder(context).setTitle(R.string.register_error).setMessage(messageId)
-					.setPositiveButton(R.string.ok, null).show();
-		} else {
-			new CustomAlertDialogBuilder(context).setTitle(R.string.register_error).setMessage(message)
-					.setPositiveButton(R.string.ok, null).show();
-		}
-	}
+    private void showDialog(int messageId) {
+        if (context == null) {
+            return;
+        }
+        if (message == null) {
+            new CustomAlertDialogBuilder(context).setTitle(R.string.register_error).setMessage(messageId)
+                    .setPositiveButton(R.string.ok, null).show();
+        } else {
+            new CustomAlertDialogBuilder(context).setTitle(R.string.register_error).setMessage(message)
+                    .setPositiveButton(R.string.ok, null).show();
+        }
+    }
 
-	public interface OnLoginCompleteListener {
+    public interface OnLoginCompleteListener {
 
-		void onLoginComplete();
-	}
+        void onLoginComplete();
+    }
 }

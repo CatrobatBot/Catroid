@@ -30,42 +30,42 @@ import org.catrobat.catroid.ui.ScriptActivity;
 
 public class RenameSpriteDialog extends TextDialog {
 
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_rename_sprite";
-	public static final String EXTRA_NEW_SPRITE_NAME = "new_sprite_name";
+    public static final String DIALOG_FRAGMENT_TAG = "dialog_rename_sprite";
+    public static final String EXTRA_NEW_SPRITE_NAME = "new_sprite_name";
 
-	public RenameSpriteDialog(int title, int inputLabel, String previousText) {
-		super(title, inputLabel, previousText, false);
-	}
+    public RenameSpriteDialog(int title, int inputLabel, String previousText) {
+        super(title, inputLabel, previousText, false);
+    }
 
-	@Override
-	protected boolean handlePositiveButtonClick() {
-		String newSpriteName = input.getText().toString().trim();
-		ProjectManager projectManager = ProjectManager.getInstance();
+    @Override
+    protected boolean handlePositiveButtonClick() {
+        String newSpriteName = input.getText().toString().trim();
+        ProjectManager projectManager = ProjectManager.getInstance();
 
-		if (newSpriteName.equals(previousText)) {
-			return true;
-		}
+        if (newSpriteName.equals(previousText)) {
+            return true;
+        }
 
-		boolean newNameConsistsOfSpacesOnly = newSpriteName.isEmpty();
+        boolean newNameConsistsOfSpacesOnly = newSpriteName.isEmpty();
 
-		if (newNameConsistsOfSpacesOnly) {
-			input.setError(getString(R.string.name_consists_of_spaces_only));
-			return false;
-		}
+        if (newNameConsistsOfSpacesOnly) {
+            input.setError(getString(R.string.name_consists_of_spaces_only));
+            return false;
+        }
 
-		if (projectManager.spriteExists(newSpriteName) && !newSpriteName.equalsIgnoreCase(previousText)) {
-			input.setError(getString(R.string.spritename_already_exists));
-			return false;
-		}
+        if (projectManager.spriteExists(newSpriteName) && !newSpriteName.equalsIgnoreCase(previousText)) {
+            input.setError(getString(R.string.spritename_already_exists));
+            return false;
+        }
 
-		Intent intent = new Intent(ScriptActivity.ACTION_SPRITE_RENAMED);
-		intent.putExtra(EXTRA_NEW_SPRITE_NAME, newSpriteName);
-		getActivity().sendBroadcast(intent);
+        Intent intent = new Intent(ScriptActivity.ACTION_SPRITE_RENAMED);
+        intent.putExtra(EXTRA_NEW_SPRITE_NAME, newSpriteName);
+        getActivity().sendBroadcast(intent);
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	protected void handleNegativeButtonClick() {
-	}
+    @Override
+    protected void handleNegativeButtonClick() {
+    }
 }

@@ -39,54 +39,54 @@ import java.util.Collections;
 import java.util.List;
 
 public class GetTagsTask extends AsyncTask<String, Void, String> {
-	private static final String TAG = GetTagsTask.class.getSimpleName();
+    private static final String TAG = GetTagsTask.class.getSimpleName();
 
-	private static final String TAGS_JSON_KEY = "constantTags";
+    private static final String TAGS_JSON_KEY = "constantTags";
 
-	public interface AsyncResponse {
-		void onTagsReceived(List<String> tags);
-	}
+    public interface AsyncResponse {
+        void onTagsReceived(List<String> tags);
+    }
 
-	private AsyncResponse onTagsResponseListener;
-	private Context context;
+    private AsyncResponse onTagsResponseListener;
+    private Context context;
 
-	public GetTagsTask(Context activity) {
-		this.context = activity;
-	}
+    public GetTagsTask(Context activity) {
+        this.context = activity;
+    }
 
-	public void setOnTagsResponseListener(AsyncResponse listener) {
-		onTagsResponseListener = listener;
-	}
+    public void setOnTagsResponseListener(AsyncResponse listener) {
+        onTagsResponseListener = listener;
+    }
 
-	@Override
-	protected String doInBackground(String... arg0) {
-		if (!Utils.isNetworkAvailable(context)) {
-			return "No network";
-		}
-		return ServerCalls.getInstance().getTags(UtilDeviceInfo.getUserLanguageCode());
-	}
+    @Override
+    protected String doInBackground(String... arg0) {
+        if (!Utils.isNetworkAvailable(context)) {
+            return "No network";
+        }
+        return ServerCalls.getInstance().getTags(UtilDeviceInfo.getUserLanguageCode());
+    }
 
-	@Override
-	protected void onPostExecute(String response) {
-		Log.d(TAG, "Received tags: " + response);
-		if (onTagsResponseListener != null) {
-			try {
-				onTagsResponseListener.onTagsReceived(parseTags(response));
-			} catch (JSONException e) {
-				Log.e(TAG, "Failed to parse tags json", e);
-			}
-		}
-	}
+    @Override
+    protected void onPostExecute(String response) {
+        Log.d(TAG, "Received tags: " + response);
+        if (onTagsResponseListener != null) {
+            try {
+                onTagsResponseListener.onTagsReceived(parseTags(response));
+            } catch (JSONException e) {
+                Log.e(TAG, "Failed to parse tags json", e);
+            }
+        }
+    }
 
-	private List<String> parseTags(String response) throws JSONException {
-		List<String> tags = new ArrayList<>();
+    private List<String> parseTags(String response) throws JSONException {
+        List<String> tags = new ArrayList<>();
 
-		JSONObject json = new JSONObject(response);
-		JSONArray tagsJson = json.getJSONArray(TAGS_JSON_KEY);
-		for (int i = 0; i < tagsJson.length(); i++) {
-			tags.add(tagsJson.getString(i));
-		}
+        JSONObject json = new JSONObject(response);
+        JSONArray tagsJson = json.getJSONArray(TAGS_JSON_KEY);
+        for (int i = 0; i < tagsJson.length(); i++) {
+            tags.add(tagsJson.getString(i));
+        }
 
-		return Collections.unmodifiableList(tags);
-	}
+        return Collections.unmodifiableList(tags);
+    }
 }

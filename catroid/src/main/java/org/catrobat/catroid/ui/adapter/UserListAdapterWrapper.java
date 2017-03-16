@@ -36,93 +36,93 @@ import org.catrobat.catroid.formulaeditor.UserList;
 
 public class UserListAdapterWrapper extends BaseAdapter {
 
-	DataAdapter dataAdapter;
-	Context context;
-	private boolean isTouchInDropDownView;
+    DataAdapter dataAdapter;
+    Context context;
+    private boolean isTouchInDropDownView;
 
-	public UserListAdapterWrapper(Context context, DataAdapter dataAdapter) {
-		this.context = context;
-		this.dataAdapter = dataAdapter;
-	}
+    public UserListAdapterWrapper(Context context, DataAdapter dataAdapter) {
+        this.context = context;
+        this.dataAdapter = dataAdapter;
+    }
 
-	@Override
-	public int getCount() {
-		return dataAdapter.getUserListCount() + 1;
-	}
+    @Override
+    public int getCount() {
+        return dataAdapter.getUserListCount() + 1;
+    }
 
-	@Override
-	public UserList getItem(int position) {
-		if (position == 0) {
-			return null;
-		}
-		return dataAdapter.getUserListItem(position - 1);
-	}
+    @Override
+    public UserList getItem(int position) {
+        if (position == 0) {
+            return null;
+        }
+        return dataAdapter.getUserListItem(position - 1);
+    }
 
-	@Override
-	public long getItemId(int position) {
-		return position;
-	}
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
-	public int getPositionOfItem(UserList item) {
-		return dataAdapter.getPositionOfUserListItem(item) + 1;
-	}
+    public int getPositionOfItem(UserList item) {
+        return dataAdapter.getPositionOfUserListItem(item) + 1;
+    }
 
-	@Override
-	public View getView(final int position, View convertView, ViewGroup parent) {
-		View view = convertView;
-		TextView text1;
-		if (position == 0) {
-			if (view == null) {
-				view = View.inflate(context, android.R.layout.simple_spinner_dropdown_item, null);
-				text1 = (TextView) view.findViewById(android.R.id.text1);
-				view.setTag(text1);
-			} else {
-				text1 = (TextView) view.findViewById(android.R.id.text1);
-			}
-			text1.setText(R.string.brick_variable_spinner_create_new_variable);
-		} else {
-			view = dataAdapter.getViewForUserListItem(position - 1, convertView, parent);
-		}
-		return view;
-	}
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        View view = convertView;
+        TextView text1;
+        if (position == 0) {
+            if (view == null) {
+                view = View.inflate(context, android.R.layout.simple_spinner_dropdown_item, null);
+                text1 = (TextView) view.findViewById(android.R.id.text1);
+                view.setTag(text1);
+            } else {
+                text1 = (TextView) view.findViewById(android.R.id.text1);
+            }
+            text1.setText(R.string.brick_variable_spinner_create_new_variable);
+        } else {
+            view = dataAdapter.getViewForUserListItem(position - 1, convertView, parent);
+        }
+        return view;
+    }
 
-	@Override
-	public View getDropDownView(final int position, View convertView, ViewGroup parent) {
-		View view = convertView;
-		TextView text1;
-		if (position == 0) {
-			if (view == null) {
-				LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				view = inflater.inflate(android.R.layout.simple_spinner_dropdown_item, parent, false);
-				text1 = (TextView) view.findViewById(android.R.id.text1);
-				view.setTag(text1);
-			} else {
-				text1 = (TextView) view.findViewById(android.R.id.text1);
-			}
-			text1.setText(R.string.brick_variable_spinner_create_new_variable);
-		} else {
-			view = dataAdapter.getDropDownViewForUserListItem(position - 1, convertView, parent);
-		}
+    @Override
+    public View getDropDownView(final int position, View convertView, ViewGroup parent) {
+        View view = convertView;
+        TextView text1;
+        if (position == 0) {
+            if (view == null) {
+                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                view = inflater.inflate(android.R.layout.simple_spinner_dropdown_item, parent, false);
+                text1 = (TextView) view.findViewById(android.R.id.text1);
+                view.setTag(text1);
+            } else {
+                text1 = (TextView) view.findViewById(android.R.id.text1);
+            }
+            text1.setText(R.string.brick_variable_spinner_create_new_variable);
+        } else {
+            view = dataAdapter.getDropDownViewForUserListItem(position - 1, convertView, parent);
+        }
 
-		view.setOnTouchListener(new OnTouchListener() {
-			@Override
-			public boolean onTouch(View paramView, MotionEvent paramMotionEvent) {
-				isTouchInDropDownView = true;
-				return false;
-			}
-		});
-		return view;
-	}
+        view.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View paramView, MotionEvent paramMotionEvent) {
+                isTouchInDropDownView = true;
+                return false;
+            }
+        });
+        return view;
+    }
 
-	public void setItemLayout(int itemLayout, int textViewId) {
-		dataAdapter.setItemLayout(itemLayout, textViewId);
-	}
+    public void setItemLayout(int itemLayout, int textViewId) {
+        dataAdapter.setItemLayout(itemLayout, textViewId);
+    }
 
-	public boolean isTouchInDropDownView() {
-		return isTouchInDropDownView;
-	}
+    public boolean isTouchInDropDownView() {
+        return isTouchInDropDownView;
+    }
 
-	public void resetIsTouchInDropDownView() {
-		isTouchInDropDownView = false;
-	}
+    public void resetIsTouchInDropDownView() {
+        isTouchInDropDownView = false;
+    }
 }

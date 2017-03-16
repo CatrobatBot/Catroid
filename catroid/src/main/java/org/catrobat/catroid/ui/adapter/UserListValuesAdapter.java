@@ -36,90 +36,90 @@ import java.util.List;
 
 public class UserListValuesAdapter extends BaseAdapter implements View.OnClickListener {
 
-	private Context context;
-	private List<String> userListValuesList;
+    private Context context;
+    private List<String> userListValuesList;
 
-	private static class ViewHolder {
-		private TextView text1;
-	}
+    private static class ViewHolder {
+        private TextView text1;
+    }
 
-	public UserListValuesAdapter(Context context, List<String> userListValuesList) {
-		this.context = context;
-		this.userListValuesList = userListValuesList;
-	}
+    public UserListValuesAdapter(Context context, List<String> userListValuesList) {
+        this.context = context;
+        this.userListValuesList = userListValuesList;
+    }
 
-	@Override
-	public int getCount() {
-		if (userListValuesList.size() == 0) {
-			return 1;
-		}
-		return userListValuesList.size();
-	}
+    @Override
+    public int getCount() {
+        if (userListValuesList.size() == 0) {
+            return 1;
+        }
+        return userListValuesList.size();
+    }
 
-	@Override
-	public Object getItem(int index) {
-		if (index < userListValuesList.size()) {
-			return userListValuesList.get(index);
-		}
-		return null;
-	}
+    @Override
+    public Object getItem(int index) {
+        if (index < userListValuesList.size()) {
+            return userListValuesList.get(index);
+        }
+        return null;
+    }
 
-	@Override
-	public long getItemId(int index) {
-		return index;
-	}
+    @Override
+    public long getItemId(int index) {
+        return index;
+    }
 
-	@Override
-	public View getView(int position, View view, ViewGroup viewGroup) {
-		ViewHolder holder;
-		if (view == null) {
-			view = View.inflate(context, android.R.layout.simple_spinner_dropdown_item, null);
-			holder = new ViewHolder();
-			holder.text1 = (TextView) view.findViewById(android.R.id.text1);
-			view.setTag(holder);
-		} else if (view.getTag() instanceof ViewHolder) {
-			holder = (ViewHolder) view.getTag();
-		} else {
-			holder = new ViewHolder();
-			holder.text1 = (TextView) view.findViewById(android.R.id.text1);
-			view.setTag(holder);
-		}
+    @Override
+    public View getView(int position, View view, ViewGroup viewGroup) {
+        ViewHolder holder;
+        if (view == null) {
+            view = View.inflate(context, android.R.layout.simple_spinner_dropdown_item, null);
+            holder = new ViewHolder();
+            holder.text1 = (TextView) view.findViewById(android.R.id.text1);
+            view.setTag(holder);
+        } else if (view.getTag() instanceof ViewHolder) {
+            holder = (ViewHolder) view.getTag();
+        } else {
+            holder = new ViewHolder();
+            holder.text1 = (TextView) view.findViewById(android.R.id.text1);
+            view.setTag(holder);
+        }
 
-		holder.text1.setText(view.getContext().getString(R.string.formula_editor_fragment_data_current_items));
+        holder.text1.setText(view.getContext().getString(R.string.formula_editor_fragment_data_current_items));
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public View getDropDownView(final int position, View convertView, ViewGroup parent) {
-		View view = convertView;
-		ViewHolder holder;
-		if (view == null) {
-			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			view = inflater.inflate(android.R.layout.simple_spinner_dropdown_item, parent, false);
-			holder = new ViewHolder();
-			holder.text1 = (TextView) view.findViewById(android.R.id.text1);
-			view.setTag(holder);
-		} else if (view.getTag() instanceof ViewHolder) {
-			holder = (ViewHolder) view.getTag();
-		} else {
-			holder = new ViewHolder();
-			holder.text1 = (TextView) view.findViewById(android.R.id.text1);
-			view.setTag(holder);
-		}
-		view.setOnClickListener(this);
+    @Override
+    public View getDropDownView(final int position, View convertView, ViewGroup parent) {
+        View view = convertView;
+        ViewHolder holder;
+        if (view == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = inflater.inflate(android.R.layout.simple_spinner_dropdown_item, parent, false);
+            holder = new ViewHolder();
+            holder.text1 = (TextView) view.findViewById(android.R.id.text1);
+            view.setTag(holder);
+        } else if (view.getTag() instanceof ViewHolder) {
+            holder = (ViewHolder) view.getTag();
+        } else {
+            holder = new ViewHolder();
+            holder.text1 = (TextView) view.findViewById(android.R.id.text1);
+            view.setTag(holder);
+        }
+        view.setOnClickListener(this);
 
-		String currentItemStringValue = getItem(position) == null ? null : getItem(position).toString();
-		if (currentItemStringValue == null) {
-			currentItemStringValue = "";
-		}
+        String currentItemStringValue = getItem(position) == null ? null : getItem(position).toString();
+        if (currentItemStringValue == null) {
+            currentItemStringValue = "";
+        }
 
-		holder.text1.setText(currentItemStringValue);
+        holder.text1.setText(currentItemStringValue);
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public void onClick(View view) {
-	}
+    @Override
+    public void onClick(View view) {
+    }
 }

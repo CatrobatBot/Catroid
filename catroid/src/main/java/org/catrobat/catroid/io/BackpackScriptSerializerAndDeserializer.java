@@ -40,37 +40,37 @@ import java.lang.reflect.Type;
 
 public class BackpackScriptSerializerAndDeserializer implements JsonSerializer<Script>, JsonDeserializer<Script> {
 
-	private static final String TAG = BackpackScriptSerializerAndDeserializer.class.getSimpleName();
-	private static final String PACKAGE_NAME = "org.catrobat.catroid.content.";
-	private static final String PACKAGE_NAME_PHYSICS = "org.catrobat.catroid.physics.content.bricks.";
+    private static final String TAG = BackpackScriptSerializerAndDeserializer.class.getSimpleName();
+    private static final String PACKAGE_NAME = "org.catrobat.catroid.content.";
+    private static final String PACKAGE_NAME_PHYSICS = "org.catrobat.catroid.physics.content.bricks.";
 
-	private static final String TYPE = "scripttype";
-	private static final String PROPERTY = "properties";
+    private static final String TYPE = "scripttype";
+    private static final String PROPERTY = "properties";
 
-	@Override
-	public JsonElement serialize(Script script, Type typeOfSrc, JsonSerializationContext context) {
-		JsonObject jsonObject = new JsonObject();
-		jsonObject.add(TYPE, new JsonPrimitive(script.getClass().getSimpleName()));
-		jsonObject.add(PROPERTY, context.serialize(script, script.getClass()));
-		return jsonObject;
-	}
+    @Override
+    public JsonElement serialize(Script script, Type typeOfSrc, JsonSerializationContext context) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.add(TYPE, new JsonPrimitive(script.getClass().getSimpleName()));
+        jsonObject.add(PROPERTY, context.serialize(script, script.getClass()));
+        return jsonObject;
+    }
 
-	@Override
-	public Script deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    @Override
+    public Script deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 
-		JsonObject jsonObject = json.getAsJsonObject();
-		String type = jsonObject.get(TYPE).getAsString();
-		JsonElement element = jsonObject.get(PROPERTY);
+        JsonObject jsonObject = json.getAsJsonObject();
+        String type = jsonObject.get(TYPE).getAsString();
+        JsonElement element = jsonObject.get(PROPERTY);
 
-		try {
-			return context.deserialize(element, Class.forName(PACKAGE_NAME + type));
-		} catch (ClassNotFoundException e) {
-			try {
-				return context.deserialize(element, Class.forName(PACKAGE_NAME_PHYSICS + type));
-			} catch (ClassNotFoundException e2) {
-				Log.e(TAG, "Could not deserialize backpacked script element!");
-				throw new JsonParseException("Unknown element type: " + type, e2);
-			}
-		}
-	}
+        try {
+            return context.deserialize(element, Class.forName(PACKAGE_NAME + type));
+        } catch (ClassNotFoundException e) {
+            try {
+                return context.deserialize(element, Class.forName(PACKAGE_NAME_PHYSICS + type));
+            } catch (ClassNotFoundException e2) {
+                Log.e(TAG, "Could not deserialize backpacked script element!");
+                throw new JsonParseException("Unknown element type: " + type, e2);
+            }
+        }
+    }
 }

@@ -24,6 +24,7 @@ package org.catrobat.catroid.devices.mindstorms;
 
 public interface MindstormsCommand {
 
-	byte[] getRawCommand();
-	int getLength();
+    byte[] getRawCommand();
+
+    int getLength();
 }

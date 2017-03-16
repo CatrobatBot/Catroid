@@ -39,56 +39,56 @@ import java.util.List;
 
 public class WaitUntilBrick extends FormulaBrick {
 
-	public WaitUntilBrick(Formula condition) {
-		addAllowedBrickField(BrickField.IF_CONDITION);
-		setFormulaWithBrickField(BrickField.IF_CONDITION, condition);
-	}
+    public WaitUntilBrick(Formula condition) {
+        addAllowedBrickField(BrickField.IF_CONDITION);
+        setFormulaWithBrickField(BrickField.IF_CONDITION, condition);
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		FormulaEditorFragment.showFragment(view, this, BrickField.IF_CONDITION);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        FormulaEditorFragment.showFragment(view, this, BrickField.IF_CONDITION);
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		if (view == null) {
-			alphaValue = 255;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        if (view == null) {
+            alphaValue = 255;
+        }
 
-		view = View.inflate(context, R.layout.brick_wait_until, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_wait_until, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_wait_until_checkbox);
+        setCheckboxView(R.id.brick_wait_until_checkbox);
 
-		TextView ifBeginTextView = (TextView) view.findViewById(R.id.brick_wait_until_edit_text);
+        TextView ifBeginTextView = (TextView) view.findViewById(R.id.brick_wait_until_edit_text);
 
-		getFormulaWithBrickField(BrickField.IF_CONDITION).setTextFieldId(R.id.brick_wait_until_edit_text);
-		getFormulaWithBrickField(BrickField.IF_CONDITION).refreshTextField(view);
+        getFormulaWithBrickField(BrickField.IF_CONDITION).setTextFieldId(R.id.brick_wait_until_edit_text);
+        getFormulaWithBrickField(BrickField.IF_CONDITION).refreshTextField(view);
 
-		ifBeginTextView.setOnClickListener(this);
+        ifBeginTextView.setOnClickListener(this);
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		View prototypeView = View.inflate(context, R.layout.brick_wait_until, null);
-		TextView textIfBegin = (TextView) prototypeView.findViewById(R.id.brick_wait_until_edit_text);
-		textIfBegin.setText(String.valueOf(BrickValues.IF_CONDITION));
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        View prototypeView = View.inflate(context, R.layout.brick_wait_until, null);
+        TextView textIfBegin = (TextView) prototypeView.findViewById(R.id.brick_wait_until_edit_text);
+        textIfBegin.setText(String.valueOf(BrickValues.IF_CONDITION));
+        return prototypeView;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createWaitUntilAction(sprite, getFormulaWithBrickField(BrickField.IF_CONDITION)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createWaitUntilAction(sprite, getFormulaWithBrickField(BrickField.IF_CONDITION)));
+        return null;
+    }
 
-	@Override
-	public Brick clone() throws CloneNotSupportedException {
-		return new WaitUntilBrick(getFormulaWithBrickField(BrickField.IF_CONDITION).clone());
-	}
+    @Override
+    public Brick clone() throws CloneNotSupportedException {
+        return new WaitUntilBrick(getFormulaWithBrickField(BrickField.IF_CONDITION).clone());
+    }
 }

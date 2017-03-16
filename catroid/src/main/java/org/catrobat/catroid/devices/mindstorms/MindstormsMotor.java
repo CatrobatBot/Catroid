@@ -24,8 +24,11 @@ package org.catrobat.catroid.devices.mindstorms;
 
 public interface MindstormsMotor {
 
-	void stop();
-	void move(int speed);
-	void move(int speed, int degrees);
-	void move(int speed, int degrees, boolean reply);
+    void stop();
+
+    void move(int speed);
+
+    void move(int speed, int degrees);
+
+    void move(int speed, int degrees, boolean reply);
 }

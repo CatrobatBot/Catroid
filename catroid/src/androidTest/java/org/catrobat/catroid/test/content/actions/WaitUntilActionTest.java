@@ -39,54 +39,54 @@ import java.util.List;
 
 public class WaitUntilActionTest extends AndroidTestCase {
 
-	private Sprite testSprite;
-	private Project project;
-	private static final String TEST_USERVARIABLE = "testUservariable";
-	private StartScript testScript;
+    private Sprite testSprite;
+    private Project project;
+    private static final String TEST_USERVARIABLE = "testUservariable";
+    private StartScript testScript;
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		testSprite = new SingleSprite("testSprite");
-		project = new Project(null, "testProject");
-		testSprite.removeAllScripts();
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(new SingleSprite("testSprite1"));
-		ProjectManager.getInstance().getCurrentScene().getDataContainer().deleteUserVariableByName(TEST_USERVARIABLE);
-		ProjectManager.getInstance().getCurrentScene().getDataContainer().addProjectUserVariable(TEST_USERVARIABLE);
-	}
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        testSprite = new SingleSprite("testSprite");
+        project = new Project(null, "testProject");
+        testSprite.removeAllScripts();
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(new SingleSprite("testSprite1"));
+        ProjectManager.getInstance().getCurrentScene().getDataContainer().deleteUserVariableByName(TEST_USERVARIABLE);
+        ProjectManager.getInstance().getCurrentScene().getDataContainer().addProjectUserVariable(TEST_USERVARIABLE);
+    }
 
-	public void testWaitUntilBrick() {
+    public void testWaitUntilBrick() {
 
-		Formula validFormula = new Formula(1);
-		validFormula.setRoot(new FormulaElement(FormulaElement.ElementType.OPERATOR, Operators.SMALLER_THAN.name(), null,
-				new FormulaElement(FormulaElement.ElementType.NUMBER, "1", null), new FormulaElement(FormulaElement.ElementType.NUMBER, "2", null)));
+        Formula validFormula = new Formula(1);
+        validFormula.setRoot(new FormulaElement(FormulaElement.ElementType.OPERATOR, Operators.SMALLER_THAN.name(), null,
+                new FormulaElement(FormulaElement.ElementType.NUMBER, "1", null), new FormulaElement(FormulaElement.ElementType.NUMBER, "2", null)));
 
-		runScript(validFormula);
-		assertTrue("Not all actions are finished", testSprite.look.getAllActionsAreFinished());
-	}
+        runScript(validFormula);
+        assertTrue("Not all actions are finished", testSprite.look.getAllActionsAreFinished());
+    }
 
-	public void testWaitUntilBrickFail() {
+    public void testWaitUntilBrickFail() {
 
-		Formula validFormula = new Formula(1);
-		validFormula.setRoot(new FormulaElement(FormulaElement.ElementType.OPERATOR, Operators.SMALLER_THAN.name(), null,
-				new FormulaElement(FormulaElement.ElementType.NUMBER, "2", null), new FormulaElement(FormulaElement.ElementType.NUMBER, "1", null)));
+        Formula validFormula = new Formula(1);
+        validFormula.setRoot(new FormulaElement(FormulaElement.ElementType.OPERATOR, Operators.SMALLER_THAN.name(), null,
+                new FormulaElement(FormulaElement.ElementType.NUMBER, "2", null), new FormulaElement(FormulaElement.ElementType.NUMBER, "1", null)));
 
-		runScript(validFormula);
-		assertFalse("All actions are finished", testSprite.look.getAllActionsAreFinished());
-	}
+        runScript(validFormula);
+        assertFalse("All actions are finished", testSprite.look.getAllActionsAreFinished());
+    }
 
-	private void runScript(Formula validFormula) {
-		testScript = new StartScript();
+    private void runScript(Formula validFormula) {
+        testScript = new StartScript();
 
-		WaitUntilBrick waitUntilBrick = new WaitUntilBrick(validFormula);
-		testScript.addBrick(waitUntilBrick);
-		testSprite.addScript(testScript);
-		project.getDefaultScene().addSprite(testSprite);
-		ProjectManager.getInstance().setCurrentSprite(testSprite);
-		ProjectManager.getInstance().setCurrentScript(testScript);
-		testSprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
+        WaitUntilBrick waitUntilBrick = new WaitUntilBrick(validFormula);
+        testScript.addBrick(waitUntilBrick);
+        testSprite.addScript(testScript);
+        project.getDefaultScene().addSprite(testSprite);
+        ProjectManager.getInstance().setCurrentSprite(testSprite);
+        ProjectManager.getInstance().setCurrentScript(testScript);
+        testSprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
 
-		testSprite.look.act(100f);
-	}
+        testSprite.look.act(100f);
+    }
 }

@@ -26,50 +26,50 @@ import java.io.Serializable;
 
 public class NoteEvent implements Serializable {
 
-	private static final long serialVersionUID = 7483022549872527955L;
+    private static final long serialVersionUID = 7483022549872527955L;
 
-	private NoteName noteName;
-	private boolean noteOn;
+    private NoteName noteName;
+    private boolean noteOn;
 
-	public NoteEvent(NoteName noteName, boolean noteOn) {
-		this.noteName = noteName;
-		this.noteOn = noteOn;
-	}
+    public NoteEvent(NoteName noteName, boolean noteOn) {
+        this.noteName = noteName;
+        this.noteOn = noteOn;
+    }
 
-	public NoteEvent(NoteEvent noteEvent) {
-		this.noteName = noteEvent.getNoteName();
-		this.noteOn = noteEvent.isNoteOn();
-	}
+    public NoteEvent(NoteEvent noteEvent) {
+        this.noteName = noteEvent.getNoteName();
+        this.noteOn = noteEvent.isNoteOn();
+    }
 
-	public NoteName getNoteName() {
-		return noteName;
-	}
+    public NoteName getNoteName() {
+        return noteName;
+    }
 
-	public boolean isNoteOn() {
-		return noteOn;
-	}
+    public boolean isNoteOn() {
+        return noteOn;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if ((obj == null) || !(obj instanceof NoteEvent)) {
-			return false;
-		}
+    @Override
+    public boolean equals(Object obj) {
+        if ((obj == null) || !(obj instanceof NoteEvent)) {
+            return false;
+        }
 
-		NoteEvent noteEvent = (NoteEvent) obj;
+        NoteEvent noteEvent = (NoteEvent) obj;
 
-		return (noteName.equals(noteEvent.getNoteName())) && (noteOn == noteEvent.isNoteOn());
-	}
+        return (noteName.equals(noteEvent.getNoteName())) && (noteOn == noteEvent.isNoteOn());
+    }
 
-	@Override
-	public int hashCode() {
-		int hashCode = 15;
-		int primeWithGoodCollisionPrevention = 31;
-		hashCode = primeWithGoodCollisionPrevention * hashCode + noteName.hashCode();
-		return primeWithGoodCollisionPrevention * hashCode + (noteOn ? 1 : 0);
-	}
+    @Override
+    public int hashCode() {
+        int hashCode = 15;
+        int primeWithGoodCollisionPrevention = 31;
+        hashCode = primeWithGoodCollisionPrevention * hashCode + noteName.hashCode();
+        return primeWithGoodCollisionPrevention * hashCode + (noteOn ? 1 : 0);
+    }
 
-	@Override
-	public String toString() {
-		return "[NoteEvent] noteName= " + noteName + " noteOn=" + noteOn;
-	}
+    @Override
+    public String toString() {
+        return "[NoteEvent] noteName= " + noteName + " noteOn=" + noteOn;
+    }
 }

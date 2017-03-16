@@ -28,32 +28,32 @@ import android.test.InstrumentationTestCase;
 import org.catrobat.catroid.io.StageAudioFocus;
 
 public class StageAudioFocusTest extends InstrumentationTestCase {
-	private StageAudioFocus audioFocus = null;
+    private StageAudioFocus audioFocus = null;
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		audioFocus = new StageAudioFocus(getInstrumentation().getTargetContext());
-	}
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        audioFocus = new StageAudioFocus(getInstrumentation().getTargetContext());
+    }
 
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
-		audioFocus = null;
-	}
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        audioFocus = null;
+    }
 
-	public void testRequestAndReleaseAudioFocus() {
-		assertFalse("AudioFocus is held before requesting it", audioFocus.isAudioFocusGranted());
-		audioFocus.requestAudioFocus();
-		assertTrue("AudioFocus is not held, although it was requested", audioFocus.isAudioFocusGranted());
-		audioFocus.releaseAudioFocus();
-		assertFalse("Audio Focus is still held, although it is released", audioFocus.isAudioFocusGranted());
-	}
+    public void testRequestAndReleaseAudioFocus() {
+        assertFalse("AudioFocus is held before requesting it", audioFocus.isAudioFocusGranted());
+        audioFocus.requestAudioFocus();
+        assertTrue("AudioFocus is not held, although it was requested", audioFocus.isAudioFocusGranted());
+        audioFocus.releaseAudioFocus();
+        assertFalse("Audio Focus is still held, although it is released", audioFocus.isAudioFocusGranted());
+    }
 
-	public void testIfAudioFocusGetsAbandonedOnAudioFocusLossEvent() {
-		audioFocus.requestAudioFocus();
-		assertTrue("AudioFocus is not held, although it was requested", audioFocus.isAudioFocusGranted());
-		audioFocus.onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS);
-		assertFalse("AudioFocus should be abandoned after focus is lost", audioFocus.isAudioFocusGranted());
-	}
+    public void testIfAudioFocusGetsAbandonedOnAudioFocusLossEvent() {
+        audioFocus.requestAudioFocus();
+        assertTrue("AudioFocus is not held, although it was requested", audioFocus.isAudioFocusGranted());
+        audioFocus.onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS);
+        assertFalse("AudioFocus should be abandoned after focus is lost", audioFocus.isAudioFocusGranted());
+    }
 }

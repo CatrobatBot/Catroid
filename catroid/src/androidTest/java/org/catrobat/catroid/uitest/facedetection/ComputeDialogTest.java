@@ -41,62 +41,62 @@ import org.catrobat.catroid.uitest.util.BaseActivityInstrumentationTestCase;
 import org.catrobat.catroid.uitest.util.UiTestUtils;
 
 public class ComputeDialogTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
-	private static final int SCREEN_WIDTH = 480;
-	private static final int SCREEN_HEIGHT = 800;
-	private static final int SLEEP_TIME = 500;
+    private static final int SCREEN_WIDTH = 480;
+    private static final int SCREEN_HEIGHT = 800;
+    private static final int SLEEP_TIME = 500;
 
-	private Project projectFaceDetection;
-	Sprite sprite;
+    private Project projectFaceDetection;
+    Sprite sprite;
 
-	public ComputeDialogTest() {
-		super(MainMenuActivity.class);
-	}
+    public ComputeDialogTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		createProjectFaceDetection();
-		UiTestUtils.prepareStageForTest();
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
-		solo.sleep(SLEEP_TIME);
-	}
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        createProjectFaceDetection();
+        UiTestUtils.prepareStageForTest();
+        UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
+        solo.sleep(SLEEP_TIME);
+    }
 
-	public void testFaceDetectionStart() {
+    public void testFaceDetectionStart() {
 
-		solo.clickOnView(solo.getView(R.id.brick_set_size_to_edit_text));
-		solo.sleep(SLEEP_TIME);
-		solo.clickOnView(solo.getView(R.id.formula_editor_keyboard_compute));
-		solo.sleep(SLEEP_TIME);
-		assertTrue("Face detection was not started for compute dialog", FaceDetectionHandler.isFaceDetectionRunning());
-		solo.goBack();
-		solo.sleep(SLEEP_TIME);
-		assertFalse("Face detection was not stopped when compute dialog was closed",
-				FaceDetectionHandler.isFaceDetectionRunning());
-		solo.clickOnView(solo.getView(R.id.formula_editor_keyboard_0));
-		solo.clickOnView(solo.getView(R.id.formula_editor_keyboard_compute));
-		solo.sleep(SLEEP_TIME);
-		assertFalse("Face detection should not be started for compute dialog if it is not needed",
-				FaceDetectionHandler.isFaceDetectionRunning());
-		solo.goBack();
-	}
+        solo.clickOnView(solo.getView(R.id.brick_set_size_to_edit_text));
+        solo.sleep(SLEEP_TIME);
+        solo.clickOnView(solo.getView(R.id.formula_editor_keyboard_compute));
+        solo.sleep(SLEEP_TIME);
+        assertTrue("Face detection was not started for compute dialog", FaceDetectionHandler.isFaceDetectionRunning());
+        solo.goBack();
+        solo.sleep(SLEEP_TIME);
+        assertFalse("Face detection was not stopped when compute dialog was closed",
+                FaceDetectionHandler.isFaceDetectionRunning());
+        solo.clickOnView(solo.getView(R.id.formula_editor_keyboard_0));
+        solo.clickOnView(solo.getView(R.id.formula_editor_keyboard_compute));
+        solo.sleep(SLEEP_TIME);
+        assertFalse("Face detection should not be started for compute dialog if it is not needed",
+                FaceDetectionHandler.isFaceDetectionRunning());
+        solo.goBack();
+    }
 
-	private void createProjectFaceDetection() {
-		ScreenValues.SCREEN_HEIGHT = SCREEN_HEIGHT;
-		ScreenValues.SCREEN_WIDTH = SCREEN_WIDTH;
+    private void createProjectFaceDetection() {
+        ScreenValues.SCREEN_HEIGHT = SCREEN_HEIGHT;
+        ScreenValues.SCREEN_WIDTH = SCREEN_WIDTH;
 
-		projectFaceDetection = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        projectFaceDetection = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
 
-		sprite = new SingleSprite("fdSprite");
+        sprite = new SingleSprite("fdSprite");
 
-		StartScript startScript = new StartScript();
-		SetSizeToBrick setSizeToBrick = new SetSizeToBrick(new Formula(new FormulaElement(ElementType.SENSOR,
-				Sensors.FACE_SIZE.name(), null)));
-		startScript.addBrick(setSizeToBrick);
-		sprite.addScript(startScript);
+        StartScript startScript = new StartScript();
+        SetSizeToBrick setSizeToBrick = new SetSizeToBrick(new Formula(new FormulaElement(ElementType.SENSOR,
+                Sensors.FACE_SIZE.name(), null)));
+        startScript.addBrick(setSizeToBrick);
+        sprite.addScript(startScript);
 
-		projectFaceDetection.getDefaultScene().addSprite(sprite);
+        projectFaceDetection.getDefaultScene().addSprite(sprite);
 
-		StorageHandler.getInstance().saveProject(projectFaceDetection);
-		ProjectManager.getInstance().setProject(projectFaceDetection);
-	}
+        StorageHandler.getInstance().saveProject(projectFaceDetection);
+        ProjectManager.getInstance().setProject(projectFaceDetection);
+    }
 }

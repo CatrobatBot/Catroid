@@ -33,25 +33,25 @@ import org.catrobat.catroid.devices.mindstorms.nxt.LegoNXTImpl;
 
 public class BluetoothDeviceFactoryImpl implements BluetoothDeviceFactory {
 
-	@Override
-	public <T extends BluetoothDevice> BluetoothDevice createDevice(Class<T> service, Context applicationContext) {
+    @Override
+    public <T extends BluetoothDevice> BluetoothDevice createDevice(Class<T> service, Context applicationContext) {
 
-		if (service == BluetoothDevice.LEGO_NXT) {
-			return new LegoNXTImpl(applicationContext);
-		}
+        if (service == BluetoothDevice.LEGO_NXT) {
+            return new LegoNXTImpl(applicationContext);
+        }
 
-		if (service == BluetoothDevice.LEGO_EV3) {
-			return new LegoEV3Impl(applicationContext);
-		}
+        if (service == BluetoothDevice.LEGO_EV3) {
+            return new LegoEV3Impl(applicationContext);
+        }
 
-		if (service == BluetoothDevice.PHIRO) {
-			return new PhiroImpl();
-		}
+        if (service == BluetoothDevice.PHIRO) {
+            return new PhiroImpl();
+        }
 
-		if (service == BluetoothDevice.ARDUINO) {
-			return new ArduinoImpl();
-		}
+        if (service == BluetoothDevice.ARDUINO) {
+            return new ArduinoImpl();
+        }
 
-		return null; // may throw exception
-	}
+        return null; // may throw exception
+    }
 }

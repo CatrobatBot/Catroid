@@ -41,143 +41,143 @@ import org.catrobat.catroid.utils.Utils;
 
 public class NewLookDialog extends DialogFragment {
 
-	public static final String TAG = "dialog_new_look";
+    public static final String TAG = "dialog_new_look";
 
-	private LookFragment fragment = null;
-	private DialogInterface.OnDismissListener onDismissListener;
-	private DialogInterface.OnCancelListener onCancelListener;
+    private LookFragment fragment = null;
+    private DialogInterface.OnDismissListener onDismissListener;
+    private DialogInterface.OnCancelListener onCancelListener;
 
-	public static NewLookDialog newInstance() {
-		return new NewLookDialog();
-	}
+    public static NewLookDialog newInstance() {
+        return new NewLookDialog();
+    }
 
-	public void showDialog(Fragment fragment) {
-		if (!(fragment instanceof LookFragment)) {
-			throw new RuntimeException("This dialog (NewLookDialog) can only be called by the LookFragment.");
-		}
-		this.fragment = (LookFragment) fragment;
-		show(fragment.getActivity().getFragmentManager(), TAG);
-	}
+    public void showDialog(Fragment fragment) {
+        if (!(fragment instanceof LookFragment)) {
+            throw new RuntimeException("This dialog (NewLookDialog) can only be called by the LookFragment.");
+        }
+        this.fragment = (LookFragment) fragment;
+        show(fragment.getActivity().getFragmentManager(), TAG);
+    }
 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		View dialogView = View.inflate(getActivity(), R.layout.dialog_new_look, null);
-		setupPaintroidButton(dialogView);
-		setupGalleryButton(dialogView);
-		setupCameraButton(dialogView);
-		setupMediaLibraryButton(dialogView);
-		setupDroneVideoButton(dialogView);
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        View dialogView = View.inflate(getActivity(), R.layout.dialog_new_look, null);
+        setupPaintroidButton(dialogView);
+        setupGalleryButton(dialogView);
+        setupCameraButton(dialogView);
+        setupMediaLibraryButton(dialogView);
+        setupDroneVideoButton(dialogView);
 
-		AlertDialog dialog;
-		AlertDialog.Builder dialogBuilder = new CustomAlertDialogBuilder(getActivity()).setView(dialogView).setTitle(
-				R.string.new_look_dialog_title);
+        AlertDialog dialog;
+        AlertDialog.Builder dialogBuilder = new CustomAlertDialogBuilder(getActivity()).setView(dialogView).setTitle(
+                R.string.new_look_dialog_title);
 
-		dialog = createDialog(dialogBuilder);
-		dialog.setCanceledOnTouchOutside(true);
-		return dialog;
-	}
+        dialog = createDialog(dialogBuilder);
+        dialog.setCanceledOnTouchOutside(true);
+        return dialog;
+    }
 
-	public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener) {
-		this.onDismissListener = onDismissListener;
-	}
+    public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener) {
+        this.onDismissListener = onDismissListener;
+    }
 
-	public void setOnCancelListener(DialogInterface.OnCancelListener onCancelListener) {
-		this.onCancelListener = onCancelListener;
-	}
+    public void setOnCancelListener(DialogInterface.OnCancelListener onCancelListener) {
+        this.onCancelListener = onCancelListener;
+    }
 
-	@Override
-	public void onDismiss(final DialogInterface dialog) {
-		super.onDismiss(dialog);
-		if (onDismissListener != null) {
-			onDismissListener.onDismiss(dialog);
-		}
-	}
+    @Override
+    public void onDismiss(final DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (onDismissListener != null) {
+            onDismissListener.onDismiss(dialog);
+        }
+    }
 
-	@Override
-	public void onCancel(DialogInterface dialog) {
-		if (onCancelListener != null) {
-			onCancelListener.onCancel(dialog);
-		}
-	}
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        if (onCancelListener != null) {
+            onCancelListener.onCancel(dialog);
+        }
+    }
 
-	private AlertDialog createDialog(AlertDialog.Builder dialogBuilder) {
-		return dialogBuilder.create();
-	}
+    private AlertDialog createDialog(AlertDialog.Builder dialogBuilder) {
+        return dialogBuilder.create();
+    }
 
-	private void setupPaintroidButton(View parentView) {
-		View paintroidButton = parentView.findViewById(R.id.dialog_new_look_paintroid);
+    private void setupPaintroidButton(View parentView) {
+        View paintroidButton = parentView.findViewById(R.id.dialog_new_look_paintroid);
 
-		final Intent intent = new Intent("android.intent.action.MAIN");
-		intent.setComponent(new ComponentName(Constants.POCKET_PAINT_PACKAGE_NAME,
-				Constants.POCKET_PAINT_INTENT_ACTIVITY_NAME));
+        final Intent intent = new Intent("android.intent.action.MAIN");
+        intent.setComponent(new ComponentName(Constants.POCKET_PAINT_PACKAGE_NAME,
+                Constants.POCKET_PAINT_INTENT_ACTIVITY_NAME));
 
-		paintroidButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				if (LookController.getInstance().checkIfPocketPaintIsInstalled(intent, getActivity())) {
-					fragment.addLookDrawNewImage();
-					NewLookDialog.this.dismiss();
-				}
-			}
-		});
-	}
+        paintroidButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (LookController.getInstance().checkIfPocketPaintIsInstalled(intent, getActivity())) {
+                    fragment.addLookDrawNewImage();
+                    NewLookDialog.this.dismiss();
+                }
+            }
+        });
+    }
 
-	private void setupGalleryButton(View parentView) {
-		View galleryButton = parentView.findViewById(R.id.dialog_new_look_gallery);
+    private void setupGalleryButton(View parentView) {
+        View galleryButton = parentView.findViewById(R.id.dialog_new_look_gallery);
 
-		galleryButton.setOnClickListener(new View.OnClickListener() {
+        galleryButton.setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public void onClick(View view) {
-				fragment.addLookChooseImage();
-				NewLookDialog.this.dismiss();
-			}
-		});
-	}
+            @Override
+            public void onClick(View view) {
+                fragment.addLookChooseImage();
+                NewLookDialog.this.dismiss();
+            }
+        });
+    }
 
-	private void setupCameraButton(View parentView) {
-		View cameraButton = parentView.findViewById(R.id.dialog_new_look_camera);
+    private void setupCameraButton(View parentView) {
+        View cameraButton = parentView.findViewById(R.id.dialog_new_look_camera);
 
-		cameraButton.setOnClickListener(new View.OnClickListener() {
+        cameraButton.setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public void onClick(View view) {
-				fragment.addLookFromCamera();
-				NewLookDialog.this.dismiss();
-			}
-		});
-	}
+            @Override
+            public void onClick(View view) {
+                fragment.addLookFromCamera();
+                NewLookDialog.this.dismiss();
+            }
+        });
+    }
 
-	private void setupMediaLibraryButton(View parentView) {
-		View mediaLibraryButton = parentView.findViewById(R.id.dialog_new_look_media_library);
+    private void setupMediaLibraryButton(View parentView) {
+        View mediaLibraryButton = parentView.findViewById(R.id.dialog_new_look_media_library);
 
-		mediaLibraryButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				if (Utils.isNetworkAvailable(view.getContext(), true)) {
-					fragment.addLookMediaLibrary();
-					NewLookDialog.this.dismiss();
-				}
-			}
-		});
-	}
+        mediaLibraryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Utils.isNetworkAvailable(view.getContext(), true)) {
+                    fragment.addLookMediaLibrary();
+                    NewLookDialog.this.dismiss();
+                }
+            }
+        });
+    }
 
-	private void setupDroneVideoButton(View parentView) {
-		View droneVideoButton = parentView.findViewById(R.id.dialog_new_look_drone_video);
-		View droneDialogItem = parentView.findViewById(R.id.dialog_new_look_drone);
+    private void setupDroneVideoButton(View parentView) {
+        View droneVideoButton = parentView.findViewById(R.id.dialog_new_look_drone_video);
+        View droneDialogItem = parentView.findViewById(R.id.dialog_new_look_drone);
 
-		if (!SettingsActivity.isDroneSharedPreferenceEnabled(getActivity())) {
-			droneVideoButton.setVisibility(View.GONE);
-			droneDialogItem.setVisibility(View.GONE);
-			return;
-		}
-		droneDialogItem.setVisibility(View.VISIBLE);
-		droneVideoButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				fragment.addLookDroneVideo();
-				NewLookDialog.this.dismiss();
-			}
-		});
-	}
+        if (!SettingsActivity.isDroneSharedPreferenceEnabled(getActivity())) {
+            droneVideoButton.setVisibility(View.GONE);
+            droneDialogItem.setVisibility(View.GONE);
+            return;
+        }
+        droneDialogItem.setVisibility(View.VISIBLE);
+        droneVideoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fragment.addLookDroneVideo();
+                NewLookDialog.this.dismiss();
+            }
+        });
+    }
 }

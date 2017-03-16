@@ -29,78 +29,78 @@ import org.catrobat.catroid.common.BroadcastWaitSequenceMap;
 
 public class BroadcastEvent extends Event {
 
-	private BroadcastType type;
-	private String broadcastMessage;
-	private Sprite senderSprite;
-	private boolean run = true;
-	private int numberOfReceivers = 0;
-	private int numberOfFinishedReceivers = 0;
+    private BroadcastType type;
+    private String broadcastMessage;
+    private Sprite senderSprite;
+    private boolean run = true;
+    private int numberOfReceivers = 0;
+    private int numberOfFinishedReceivers = 0;
 
-	public Sprite getSenderSprite() {
-		return senderSprite;
-	}
+    public Sprite getSenderSprite() {
+        return senderSprite;
+    }
 
-	public void setSenderSprite(Sprite senderSprite) {
-		this.senderSprite = senderSprite;
-	}
+    public void setSenderSprite(Sprite senderSprite) {
+        this.senderSprite = senderSprite;
+    }
 
-	public String getBroadcastMessage() {
-		return broadcastMessage;
-	}
+    public String getBroadcastMessage() {
+        return broadcastMessage;
+    }
 
-	public void setBroadcastMessage(String broadcastMessage) {
-		this.broadcastMessage = broadcastMessage;
-	}
+    public void setBroadcastMessage(String broadcastMessage) {
+        this.broadcastMessage = broadcastMessage;
+    }
 
-	public BroadcastType getType() {
-		return type;
-	}
+    public BroadcastType getType() {
+        return type;
+    }
 
-	public void setType(BroadcastType type) {
-		this.type = type;
-	}
+    public void setType(BroadcastType type) {
+        this.type = type;
+    }
 
-	public boolean getRun() {
-		return run;
-	}
+    public boolean getRun() {
+        return run;
+    }
 
-	public void setRun(boolean run) {
-		this.run = run;
-	}
+    public void setRun(boolean run) {
+        this.run = run;
+    }
 
-	public int getNumberOfReceivers() {
-		return this.numberOfReceivers;
-	}
+    public int getNumberOfReceivers() {
+        return this.numberOfReceivers;
+    }
 
-	public void raiseNumberOfReceivers() {
-		this.numberOfReceivers++;
-	}
+    public void raiseNumberOfReceivers() {
+        this.numberOfReceivers++;
+    }
 
-	public void resetNumberOfReceivers() {
-		this.numberOfReceivers = 0;
-	}
+    public void resetNumberOfReceivers() {
+        this.numberOfReceivers = 0;
+    }
 
-	public void resetNumberOfFinishedReceivers() {
-		this.numberOfFinishedReceivers = 0;
-	}
+    public void resetNumberOfFinishedReceivers() {
+        this.numberOfFinishedReceivers = 0;
+    }
 
-	public void raiseNumberOfFinishedReceivers() {
-		this.numberOfFinishedReceivers++;
-	}
+    public void raiseNumberOfFinishedReceivers() {
+        this.numberOfFinishedReceivers++;
+    }
 
-	public boolean allReceiversHaveFinished() {
-		return numberOfReceivers <= numberOfFinishedReceivers;
-	}
+    public boolean allReceiversHaveFinished() {
+        return numberOfReceivers <= numberOfFinishedReceivers;
+    }
 
-	public void resetEventAndResumeScript() {
-		resetNumberOfReceivers();
-		resetNumberOfFinishedReceivers();
-		BroadcastWaitSequenceMap.remove(broadcastMessage, ProjectManager.getInstance().getSceneToPlay().getName());
-		BroadcastWaitSequenceMap.clearCurrentBroadcastEvent();
-		setRun(true);
-	}
+    public void resetEventAndResumeScript() {
+        resetNumberOfReceivers();
+        resetNumberOfFinishedReceivers();
+        BroadcastWaitSequenceMap.remove(broadcastMessage, ProjectManager.getInstance().getSceneToPlay().getName());
+        BroadcastWaitSequenceMap.clearCurrentBroadcastEvent();
+        setRun(true);
+    }
 
-	public static enum BroadcastType {
-		broadcast, broadcastWait
-	}
+    public static enum BroadcastType {
+        broadcast, broadcastWait
+    }
 }

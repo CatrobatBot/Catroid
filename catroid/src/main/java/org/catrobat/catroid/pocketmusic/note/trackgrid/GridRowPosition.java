@@ -29,52 +29,52 @@ import java.util.List;
 
 public class GridRowPosition {
 
-	private int columnStartIndex;
-	private final NoteLength noteLength;
+    private int columnStartIndex;
+    private final NoteLength noteLength;
 
-	public GridRowPosition(int columnStartIndex, NoteLength noteLength) {
-		this.columnStartIndex = columnStartIndex;
-		this.noteLength = noteLength;
-	}
+    public GridRowPosition(int columnStartIndex, NoteLength noteLength) {
+        this.columnStartIndex = columnStartIndex;
+        this.noteLength = noteLength;
+    }
 
-	public int getColumnStartIndex() {
-		return columnStartIndex;
-	}
+    public int getColumnStartIndex() {
+        return columnStartIndex;
+    }
 
-	public NoteLength getNoteLength() {
-		return noteLength;
-	}
+    public NoteLength getNoteLength() {
+        return noteLength;
+    }
 
-	public void setColumnStartIndex(int columnStartIndex) {
-		this.columnStartIndex = columnStartIndex;
-	}
+    public void setColumnStartIndex(int columnStartIndex) {
+        this.columnStartIndex = columnStartIndex;
+    }
 
-	public long getStartTicksInTrack() {
-		return columnStartIndex * NoteLength.QUARTER.toTicks(Project.DEFAULT_BEATS_PER_MINUTE);
-	}
+    public long getStartTicksInTrack() {
+        return columnStartIndex * NoteLength.QUARTER.toTicks(Project.DEFAULT_BEATS_PER_MINUTE);
+    }
 
-	@Override
-	public int hashCode() {
-		int hashCode = 23;
-		int primeWithGoodCollisionPrevention = 31;
-		hashCode = primeWithGoodCollisionPrevention * hashCode + columnStartIndex;
-		hashCode = primeWithGoodCollisionPrevention * hashCode + noteLength.hashCode();
-		return hashCode;
-	}
+    @Override
+    public int hashCode() {
+        int hashCode = 23;
+        int primeWithGoodCollisionPrevention = 31;
+        hashCode = primeWithGoodCollisionPrevention * hashCode + columnStartIndex;
+        hashCode = primeWithGoodCollisionPrevention * hashCode + noteLength.hashCode();
+        return hashCode;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		GridRowPosition reference = (GridRowPosition) o;
-		return reference.columnStartIndex == columnStartIndex
-				&& reference.noteLength.equals(noteLength);
-	}
+    @Override
+    public boolean equals(Object o) {
+        GridRowPosition reference = (GridRowPosition) o;
+        return reference.columnStartIndex == columnStartIndex
+                && reference.noteLength.equals(noteLength);
+    }
 
-	public static int getGridRowPositionIndexInList(List<GridRowPosition> gridRowPositions, int columnStartIndex) {
-		for (int i = 0; i < gridRowPositions.size(); i++) {
-			if (gridRowPositions.get(i).getColumnStartIndex() == columnStartIndex) {
-				return i;
-			}
-		}
-		return -1;
-	}
+    public static int getGridRowPositionIndexInList(List<GridRowPosition> gridRowPositions, int columnStartIndex) {
+        for (int i = 0; i < gridRowPositions.size(); i++) {
+            if (gridRowPositions.get(i).getColumnStartIndex() == columnStartIndex) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }

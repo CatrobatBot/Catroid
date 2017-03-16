@@ -31,30 +31,30 @@ import org.catrobat.catroid.ui.MainMenuActivity;
 
 public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainMenuActivity> {
 
-	public MainMenuActivityTest() {
-		super(MainMenuActivity.class);
-	}
+    public MainMenuActivityTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@UiThreadTest
-	public void testShouldNotCrashIfProjectIsNull() {
-		ProjectManager.getInstance().setProject(null);
-		getInstrumentation().callActivityOnPostCreate(getActivity(), null);
-		assertTrue("Test failed!", true);
-	}
+    @UiThreadTest
+    public void testShouldNotCrashIfProjectIsNull() {
+        ProjectManager.getInstance().setProject(null);
+        getInstrumentation().callActivityOnPostCreate(getActivity(), null);
+        assertTrue("Test failed!", true);
+    }
 
-	public void testContinueButtonIsBiggerThanOthers() {
-		float continueButtonHeight = getActivity().findViewById(R.id.main_menu_button_continue).getHeight();
-		float newButtonHeight = getActivity().findViewById(R.id.main_menu_button_new).getHeight();
-		float programsButtonHeight = getActivity().findViewById(R.id.main_menu_button_programs).getHeight();
-		float helpButtonHeight = getActivity().findViewById(R.id.main_menu_button_help).getHeight();
-		float communityButtonHeight = getActivity().findViewById(R.id.main_menu_button_web).getHeight();
-		float uploadButtonHeight = getActivity().findViewById(R.id.main_menu_button_upload).getHeight();
+    public void testContinueButtonIsBiggerThanOthers() {
+        float continueButtonHeight = getActivity().findViewById(R.id.main_menu_button_continue).getHeight();
+        float newButtonHeight = getActivity().findViewById(R.id.main_menu_button_new).getHeight();
+        float programsButtonHeight = getActivity().findViewById(R.id.main_menu_button_programs).getHeight();
+        float helpButtonHeight = getActivity().findViewById(R.id.main_menu_button_help).getHeight();
+        float communityButtonHeight = getActivity().findViewById(R.id.main_menu_button_web).getHeight();
+        float uploadButtonHeight = getActivity().findViewById(R.id.main_menu_button_upload).getHeight();
 
-		final String message = "Button heights are not in the correct relation to each other!";
-		assertEquals(message, 1.5, continueButtonHeight / newButtonHeight, 0.05);
-		assertEquals(message, 1.5, continueButtonHeight / programsButtonHeight, 0.05);
-		assertEquals(message, 1.5, continueButtonHeight / helpButtonHeight, 0.05);
-		assertEquals(message, 1.5, continueButtonHeight / communityButtonHeight, 0.05);
-		assertEquals(message, 1.5, continueButtonHeight / uploadButtonHeight, 0.05);
-	}
+        final String message = "Button heights are not in the correct relation to each other!";
+        assertEquals(message, 1.5, continueButtonHeight / newButtonHeight, 0.05);
+        assertEquals(message, 1.5, continueButtonHeight / programsButtonHeight, 0.05);
+        assertEquals(message, 1.5, continueButtonHeight / helpButtonHeight, 0.05);
+        assertEquals(message, 1.5, continueButtonHeight / communityButtonHeight, 0.05);
+        assertEquals(message, 1.5, continueButtonHeight / uploadButtonHeight, 0.05);
+    }
 }

@@ -35,44 +35,44 @@ import java.util.List;
 
 public class PenDownBrick extends BrickBaseType {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public PenDownBrick() {
-	}
+    public PenDownBrick() {
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		PenDownBrick copyBrick = (PenDownBrick) clone();
-		return copyBrick;
-	}
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        PenDownBrick copyBrick = (PenDownBrick) clone();
+        return copyBrick;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		View view = View.inflate(context, R.layout.brick_pen_down, null);
+    @Override
+    public View getPrototypeView(Context context) {
+        View view = View.inflate(context, R.layout.brick_pen_down, null);
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public Brick clone() {
-		return new PenDownBrick();
-	}
+    @Override
+    public Brick clone() {
+        return new PenDownBrick();
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		view = View.inflate(context, R.layout.brick_pen_down, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        view = View.inflate(context, R.layout.brick_pen_down, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_pen_down_checkbox);
-		return view;
-	}
+        setCheckboxView(R.id.brick_pen_down_checkbox);
+        return view;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createPenDownAction(sprite));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createPenDownAction(sprite));
+        return null;
+    }
 }

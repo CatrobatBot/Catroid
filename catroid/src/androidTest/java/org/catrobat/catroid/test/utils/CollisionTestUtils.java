@@ -41,44 +41,44 @@ import java.io.File;
 
 public final class CollisionTestUtils {
 
-	private CollisionTestUtils() {
-		throw new AssertionError();
-	}
+    private CollisionTestUtils() {
+        throw new AssertionError();
+    }
 
-	public static LookData generateLookData(File testImage) {
-		LookData lookData = new LookData();
-		lookData.setLookFilename(testImage.getName());
-		lookData.setLookName(testImage.getName());
-		Pixmap pixmap = Utils.getPixmapFromFile(testImage);
-		lookData.setPixmap(pixmap);
-		return lookData;
-	}
+    public static LookData generateLookData(File testImage) {
+        LookData lookData = new LookData();
+        lookData.setLookFilename(testImage.getName());
+        lookData.setLookName(testImage.getName());
+        Pixmap pixmap = Utils.getPixmapFromFile(testImage);
+        lookData.setPixmap(pixmap);
+        return lookData;
+    }
 
-	public static void initializeSprite(Sprite sprite, int resourceId, String filename, Context context, Project
-			project) {
-		sprite.look = new Look(sprite);
-		sprite.setActionFactory(new ActionFactory());
+    public static void initializeSprite(Sprite sprite, int resourceId, String filename, Context context, Project
+            project) {
+        sprite.look = new Look(sprite);
+        sprite.setActionFactory(new ActionFactory());
 
-		String hashedFileName = Utils.md5Checksum(filename) + "_" + filename;
-		File file = null;
+        String hashedFileName = Utils.md5Checksum(filename) + "_" + filename;
+        File file = null;
 
-		try {
-			file = TestUtils.saveFileToProject(TestUtils.DEFAULT_TEST_PROJECT_NAME, project.getDefaultScene().getName(),
-					hashedFileName, resourceId, context,
-					TestUtils.TYPE_IMAGE_FILE);
-		} catch (Exception e) {
-			Assert.fail("Couldn't load file, exception thrown!");
-		}
+        try {
+            file = TestUtils.saveFileToProject(TestUtils.DEFAULT_TEST_PROJECT_NAME, project.getDefaultScene().getName(),
+                    hashedFileName, resourceId, context,
+                    TestUtils.TYPE_IMAGE_FILE);
+        } catch (Exception e) {
+            Assert.fail("Couldn't load file, exception thrown!");
+        }
 
-		LookData lookData = generateLookData(file);
-		Assert.assertNotNull("lookData is null", lookData);
-		CollisionInformation collisionInformation = lookData.getCollisionInformation();
-		collisionInformation.loadOrCreateCollisionPolygon();
+        LookData lookData = generateLookData(file);
+        Assert.assertNotNull("lookData is null", lookData);
+        CollisionInformation collisionInformation = lookData.getCollisionInformation();
+        collisionInformation.loadOrCreateCollisionPolygon();
 
-		sprite.look.setLookData(lookData);
-		sprite.getLookDataList().add(lookData);
-		sprite.look.setHeight(sprite.look.getLookData().getPixmap().getHeight());
-		sprite.look.setWidth(sprite.look.getLookData().getPixmap().getWidth());
-		sprite.look.setPositionInUserInterfaceDimensionUnit(0, 0);
-	}
+        sprite.look.setLookData(lookData);
+        sprite.getLookDataList().add(lookData);
+        sprite.look.setHeight(sprite.look.getLookData().getPixmap().getHeight());
+        sprite.look.setWidth(sprite.look.getLookData().getPixmap().getWidth());
+        sprite.look.setPositionInUserInterfaceDimensionUnit(0, 0);
+    }
 }

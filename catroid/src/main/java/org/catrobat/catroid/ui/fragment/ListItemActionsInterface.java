@@ -25,29 +25,29 @@ package org.catrobat.catroid.ui.fragment;
 
 public interface ListItemActionsInterface {
 
-	boolean getActionModeActive();
+    boolean getActionModeActive();
 
-	void setActionModeActive(boolean actionModeActive);
+    void setActionModeActive(boolean actionModeActive);
 
-	boolean getShowDetails();
+    boolean getShowDetails();
 
-	void setShowDetails(boolean showDetails);
+    void setShowDetails(boolean showDetails);
 
-	void setSelectMode(int selectMode);
+    void setSelectMode(int selectMode);
 
-	int getSelectMode();
+    int getSelectMode();
 
-	void startCopyActionMode();
+    void startCopyActionMode();
 
-	void startRenameActionMode();
+    void startRenameActionMode();
 
-	void startDeleteActionMode();
+    void startDeleteActionMode();
 
-	void startBackPackActionMode();
+    void startBackPackActionMode();
 
-	void handleAddButton();
+    void handleAddButton();
 
-	void showDeleteDialog();
+    void showDeleteDialog();
 
-	void showRenameDialog();
+    void showRenameDialog();
 }

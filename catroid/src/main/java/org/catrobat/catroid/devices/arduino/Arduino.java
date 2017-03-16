@@ -26,11 +26,11 @@ import org.catrobat.catroid.bluetooth.base.BluetoothDevice;
 
 public interface Arduino extends BluetoothDevice {
 
-	void setDigitalArduinoPin(int digitalPinNumber, int pinValue);
+    void setDigitalArduinoPin(int digitalPinNumber, int pinValue);
 
-	double getDigitalArduinoPin(int digitalPinNumber);
+    double getDigitalArduinoPin(int digitalPinNumber);
 
-	double getAnalogArduinoPin(int analogPinNumber);
+    double getAnalogArduinoPin(int analogPinNumber);
 
-	void setAnalogArduinoPin(int pin, int value);
+    void setAnalogArduinoPin(int pin, int value);
 }

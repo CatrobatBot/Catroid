@@ -31,24 +31,24 @@ import org.catrobat.catroid.uitest.util.UiTestUtils;
 
 public abstract class BaseActivityUnitTestCase<T extends Activity> extends ActivityUnitTestCase<T> {
 
-	public static final String TAG = BaseActivityUnitTestCase.class.getSimpleName();
+    public static final String TAG = BaseActivityUnitTestCase.class.getSimpleName();
 
-	public BaseActivityUnitTestCase(Class<T> activityClass) {
-		super(activityClass);
-	}
+    public BaseActivityUnitTestCase(Class<T> activityClass) {
+        super(activityClass);
+    }
 
-	@Override
-	protected void setUp() throws Exception {
-		Log.v(TAG, "setUp");
-		super.setUp();
-		UiTestUtils.clearAllUtilTestProjects();
-		Reflection.setPrivateField(StageListener.class, "checkIfAutomaticScreenshotShouldBeTaken", false);
-	}
+    @Override
+    protected void setUp() throws Exception {
+        Log.v(TAG, "setUp");
+        super.setUp();
+        UiTestUtils.clearAllUtilTestProjects();
+        Reflection.setPrivateField(StageListener.class, "checkIfAutomaticScreenshotShouldBeTaken", false);
+    }
 
-	@Override
-	protected void tearDown() throws Exception {
-		Log.v(TAG, "tearDown");
-		UiTestUtils.clearAllUtilTestProjects();
-		super.tearDown();
-	}
+    @Override
+    protected void tearDown() throws Exception {
+        Log.v(TAG, "tearDown");
+        UiTestUtils.clearAllUtilTestProjects();
+        super.tearDown();
+    }
 }

@@ -39,67 +39,67 @@ import org.catrobat.catroid.utils.Utils;
 import java.util.List;
 
 public class SetSizeToBrick extends FormulaBrick {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private transient View prototypeView;
+    private transient View prototypeView;
 
-	public SetSizeToBrick() {
-		addAllowedBrickField(BrickField.SIZE);
-	}
+    public SetSizeToBrick() {
+        addAllowedBrickField(BrickField.SIZE);
+    }
 
-	public SetSizeToBrick(double sizeValue) {
-		initializeBrickFields(new Formula(sizeValue));
-	}
+    public SetSizeToBrick(double sizeValue) {
+        initializeBrickFields(new Formula(sizeValue));
+    }
 
-	public SetSizeToBrick(Formula size) {
-		initializeBrickFields(size);
-	}
+    public SetSizeToBrick(Formula size) {
+        initializeBrickFields(size);
+    }
 
-	private void initializeBrickFields(Formula size) {
-		addAllowedBrickField(BrickField.SIZE);
-		setFormulaWithBrickField(BrickField.SIZE, size);
-	}
+    private void initializeBrickFields(Formula size) {
+        addAllowedBrickField(BrickField.SIZE);
+        setFormulaWithBrickField(BrickField.SIZE, size);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return getFormulaWithBrickField(BrickField.SIZE).getRequiredResources();
-	}
+    @Override
+    public int getRequiredResources() {
+        return getFormulaWithBrickField(BrickField.SIZE).getRequiredResources();
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_set_size_to, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_set_size_to, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_set_size_to_checkbox);
+        setCheckboxView(R.id.brick_set_size_to_checkbox);
 
-		TextView edit = (TextView) view.findViewById(R.id.brick_set_size_to_edit_text);
-		getFormulaWithBrickField(BrickField.SIZE).setTextFieldId(R.id.brick_set_size_to_edit_text);
-		getFormulaWithBrickField(BrickField.SIZE).refreshTextField(view);
-		edit.setOnClickListener(this);
-		return view;
-	}
+        TextView edit = (TextView) view.findViewById(R.id.brick_set_size_to_edit_text);
+        getFormulaWithBrickField(BrickField.SIZE).setTextFieldId(R.id.brick_set_size_to_edit_text);
+        getFormulaWithBrickField(BrickField.SIZE).refreshTextField(view);
+        edit.setOnClickListener(this);
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_set_size_to, null);
-		TextView textSetSizeTo = (TextView) prototypeView.findViewById(R.id.brick_set_size_to_edit_text);
-		textSetSizeTo.setText(Utils.getNumberStringForBricks(BrickValues.SET_SIZE_TO));
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_set_size_to, null);
+        TextView textSetSizeTo = (TextView) prototypeView.findViewById(R.id.brick_set_size_to_edit_text);
+        textSetSizeTo.setText(Utils.getNumberStringForBricks(BrickValues.SET_SIZE_TO));
+        return prototypeView;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createSetSizeToAction(sprite,
-				getFormulaWithBrickField(BrickField.SIZE)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createSetSizeToAction(sprite,
+                getFormulaWithBrickField(BrickField.SIZE)));
+        return null;
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		FormulaEditorFragment.showFragment(view, this, BrickField.SIZE);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        FormulaEditorFragment.showFragment(view, this, BrickField.SIZE);
+    }
 }

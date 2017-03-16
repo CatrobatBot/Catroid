@@ -41,92 +41,92 @@ import org.catrobat.catroid.ui.fragment.FormulaEditorFragment;
 import java.util.List;
 
 public class SetGravityBrick extends FormulaBrick {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private transient View prototypeView;
+    private transient View prototypeView;
 
-	public SetGravityBrick() {
-		addAllowedBrickField(BrickField.PHYSICS_GRAVITY_X);
-		addAllowedBrickField(BrickField.PHYSICS_GRAVITY_Y);
-	}
+    public SetGravityBrick() {
+        addAllowedBrickField(BrickField.PHYSICS_GRAVITY_X);
+        addAllowedBrickField(BrickField.PHYSICS_GRAVITY_Y);
+    }
 
-	public SetGravityBrick(Vector2 gravity) {
-		initializeBrickFields(new Formula(gravity.x), new Formula(gravity.y));
-	}
+    public SetGravityBrick(Vector2 gravity) {
+        initializeBrickFields(new Formula(gravity.x), new Formula(gravity.y));
+    }
 
-	public SetGravityBrick(Formula gravityX, Formula gravityY) {
-		initializeBrickFields(gravityX, gravityY);
-	}
+    public SetGravityBrick(Formula gravityX, Formula gravityY) {
+        initializeBrickFields(gravityX, gravityY);
+    }
 
-	private void initializeBrickFields(Formula gravityX, Formula gravityY) {
-		addAllowedBrickField(BrickField.PHYSICS_GRAVITY_X);
-		addAllowedBrickField(BrickField.PHYSICS_GRAVITY_Y);
-		setFormulaWithBrickField(BrickField.PHYSICS_GRAVITY_X, gravityX);
-		setFormulaWithBrickField(BrickField.PHYSICS_GRAVITY_Y, gravityY);
-	}
+    private void initializeBrickFields(Formula gravityX, Formula gravityY) {
+        addAllowedBrickField(BrickField.PHYSICS_GRAVITY_X);
+        addAllowedBrickField(BrickField.PHYSICS_GRAVITY_Y);
+        setFormulaWithBrickField(BrickField.PHYSICS_GRAVITY_X, gravityX);
+        setFormulaWithBrickField(BrickField.PHYSICS_GRAVITY_Y, gravityY);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return PHYSICS;
-	}
+    @Override
+    public int getRequiredResources() {
+        return PHYSICS;
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_physics_set_gravity, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_physics_set_gravity, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_set_gravity_checkbox);
+        setCheckboxView(R.id.brick_set_gravity_checkbox);
 
-		TextView editX = (TextView) view.findViewById(R.id.brick_set_gravity_edit_text_x);
-		getFormulaWithBrickField(BrickField.PHYSICS_GRAVITY_X).setTextFieldId(R.id.brick_set_gravity_edit_text_x);
-		getFormulaWithBrickField(BrickField.PHYSICS_GRAVITY_X).refreshTextField(view);
+        TextView editX = (TextView) view.findViewById(R.id.brick_set_gravity_edit_text_x);
+        getFormulaWithBrickField(BrickField.PHYSICS_GRAVITY_X).setTextFieldId(R.id.brick_set_gravity_edit_text_x);
+        getFormulaWithBrickField(BrickField.PHYSICS_GRAVITY_X).refreshTextField(view);
 
-		editX.setOnClickListener(this);
+        editX.setOnClickListener(this);
 
-		TextView editY = (TextView) view.findViewById(R.id.brick_set_gravity_edit_text_y);
-		getFormulaWithBrickField(BrickField.PHYSICS_GRAVITY_Y).setTextFieldId(R.id.brick_set_gravity_edit_text_y);
-		getFormulaWithBrickField(BrickField.PHYSICS_GRAVITY_Y).refreshTextField(view);
+        TextView editY = (TextView) view.findViewById(R.id.brick_set_gravity_edit_text_y);
+        getFormulaWithBrickField(BrickField.PHYSICS_GRAVITY_Y).setTextFieldId(R.id.brick_set_gravity_edit_text_y);
+        getFormulaWithBrickField(BrickField.PHYSICS_GRAVITY_Y).refreshTextField(view);
 
-		editY.setOnClickListener(this);
-		return view;
-	}
+        editY.setOnClickListener(this);
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_physics_set_gravity, null);
-		TextView textGravityX = (TextView) prototypeView.findViewById(R.id.brick_set_gravity_edit_text_x);
-		textGravityX.setText(String.valueOf(BrickValues.PHYSIC_GRAVITY.x));
-		TextView textGravityY = (TextView) prototypeView.findViewById(R.id.brick_set_gravity_edit_text_y);
-		textGravityY.setText(String.valueOf(BrickValues.PHYSIC_GRAVITY.y));
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_physics_set_gravity, null);
+        TextView textGravityX = (TextView) prototypeView.findViewById(R.id.brick_set_gravity_edit_text_x);
+        textGravityX.setText(String.valueOf(BrickValues.PHYSIC_GRAVITY.x));
+        TextView textGravityY = (TextView) prototypeView.findViewById(R.id.brick_set_gravity_edit_text_y);
+        textGravityY.setText(String.valueOf(BrickValues.PHYSIC_GRAVITY.y));
+        return prototypeView;
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		if (checkbox.getVisibility() == View.VISIBLE) {
-			return;
-		}
-		switch (view.getId()) {
-			case R.id.brick_set_gravity_edit_text_y:
-				FormulaEditorFragment.showFragment(view, this, BrickField.PHYSICS_GRAVITY_Y);
-				break;
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        if (checkbox.getVisibility() == View.VISIBLE) {
+            return;
+        }
+        switch (view.getId()) {
+            case R.id.brick_set_gravity_edit_text_y:
+                FormulaEditorFragment.showFragment(view, this, BrickField.PHYSICS_GRAVITY_Y);
+                break;
 
-			case R.id.brick_set_gravity_edit_text_x:
-			default:
-				FormulaEditorFragment.showFragment(view, this, BrickField.PHYSICS_GRAVITY_X);
-				break;
-		}
-	}
+            case R.id.brick_set_gravity_edit_text_x:
+            default:
+                FormulaEditorFragment.showFragment(view, this, BrickField.PHYSICS_GRAVITY_X);
+                break;
+        }
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createSetGravityAction(sprite,
-				getFormulaWithBrickField(BrickField.PHYSICS_GRAVITY_X),
-				getFormulaWithBrickField(BrickField.PHYSICS_GRAVITY_Y)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createSetGravityAction(sprite,
+                getFormulaWithBrickField(BrickField.PHYSICS_GRAVITY_X),
+                getFormulaWithBrickField(BrickField.PHYSICS_GRAVITY_Y)));
+        return null;
+    }
 }

@@ -48,135 +48,135 @@ import java.io.IOException;
 
 public class ProjectUploadService extends IntentService {
 
-	private static final String TAG = ProjectUploadService.class.getSimpleName();
-	public static final String UPLOAD_FILE_NAME = "upload" + Constants.CATROBAT_EXTENSION;
+    private static final String TAG = ProjectUploadService.class.getSimpleName();
+    public static final String UPLOAD_FILE_NAME = "upload" + Constants.CATROBAT_EXTENSION;
 
-	private String projectPath;
-	private String projectName;
-	private String projectDescription;
-	private String token;
-	private String provider;
-	private String serverAnswer;
-	private boolean result;
-	public ResultReceiver receiver;
-	private Integer notificationId;
-	private String username;
-	private int statusCode;
-	private Bundle uploadBackupBundle;
+    private String projectPath;
+    private String projectName;
+    private String projectDescription;
+    private String token;
+    private String provider;
+    private String serverAnswer;
+    private boolean result;
+    public ResultReceiver receiver;
+    private Integer notificationId;
+    private String username;
+    private int statusCode;
+    private Bundle uploadBackupBundle;
 
-	public ProjectUploadService() {
-		super("ProjectUploadService");
-	}
+    public ProjectUploadService() {
+        super("ProjectUploadService");
+    }
 
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startID) {
-		int returnCode = super.onStartCommand(intent, flags, startID);
-		this.projectPath = intent.getStringExtra("projectPath");
-		this.projectName = intent.getStringExtra("uploadName");
-		this.projectDescription = intent.getStringExtra("projectDescription");
-		this.token = intent.getStringExtra("token");
-		this.username = intent.getStringExtra("username");
-		this.provider = intent.getStringExtra("provider");
-		this.serverAnswer = "";
-		this.result = true;
-		this.notificationId = intent.getIntExtra("notificationId", 0);
-		this.uploadBackupBundle = new Bundle();
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startID) {
+        int returnCode = super.onStartCommand(intent, flags, startID);
+        this.projectPath = intent.getStringExtra("projectPath");
+        this.projectName = intent.getStringExtra("uploadName");
+        this.projectDescription = intent.getStringExtra("projectDescription");
+        this.token = intent.getStringExtra("token");
+        this.username = intent.getStringExtra("username");
+        this.provider = intent.getStringExtra("provider");
+        this.serverAnswer = "";
+        this.result = true;
+        this.notificationId = intent.getIntExtra("notificationId", 0);
+        this.uploadBackupBundle = new Bundle();
 
-		return returnCode;
-	}
+        return returnCode;
+    }
 
-	@Override
-	protected void onHandleIntent(Intent intent) {
-		StorageHandler.getInstance().saveProject(ProjectManager.getInstance().getCurrentProject());
+    @Override
+    protected void onHandleIntent(Intent intent) {
+        StorageHandler.getInstance().saveProject(ProjectManager.getInstance().getCurrentProject());
 
-		receiver = intent.getParcelableExtra("receiver");
-		try {
-			if (projectPath == null) {
-				result = false;
-				Log.e(TAG, "project path is null");
-				return;
-			}
+        receiver = intent.getParcelableExtra("receiver");
+        try {
+            if (projectPath == null) {
+                result = false;
+                Log.e(TAG, "project path is null");
+                return;
+            }
 
-			File directoryPath = new File(projectPath);
-			String[] paths = directoryPath.list();
+            File directoryPath = new File(projectPath);
+            String[] paths = directoryPath.list();
 
-			if (paths == null) {
-				result = false;
-				Log.e(TAG, "project path is not valid");
-				return;
-			}
+            if (paths == null) {
+                result = false;
+                Log.e(TAG, "project path is not valid");
+                return;
+            }
 
-			for (int i = 0; i < paths.length; i++) {
-				paths[i] = Utils.buildPath(directoryPath.getAbsolutePath(), paths[i]);
-			}
+            for (int i = 0; i < paths.length; i++) {
+                paths[i] = Utils.buildPath(directoryPath.getAbsolutePath(), paths[i]);
+            }
 
-			String zipFileString = Utils.buildPath(Constants.TMP_PATH, UPLOAD_FILE_NAME);
-			File zipFile = new File(zipFileString);
-			if (!zipFile.exists()) {
-				zipFile.getParentFile().mkdirs();
-				zipFile.createNewFile();
-			}
-			if (!UtilZip.writeToZipFile(paths, zipFileString)) {
-				zipFile.delete();
-				result = false;
-				return;
-			}
+            String zipFileString = Utils.buildPath(Constants.TMP_PATH, UPLOAD_FILE_NAME);
+            File zipFile = new File(zipFileString);
+            if (!zipFile.exists()) {
+                zipFile.getParentFile().mkdirs();
+                zipFile.createNewFile();
+            }
+            if (!UtilZip.writeToZipFile(paths, zipFileString)) {
+                zipFile.delete();
+                result = false;
+                return;
+            }
 
-			Context context = getApplicationContext();
+            Context context = getApplicationContext();
 
-			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-			String userEmail = sharedPreferences.getString(Constants.EMAIL, Constants.NO_EMAIL);
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            String userEmail = sharedPreferences.getString(Constants.EMAIL, Constants.NO_EMAIL);
 
-			if (provider.equals(Constants.FACEBOOK)) {
-				userEmail = sharedPreferences.getString(Constants.FACEBOOK_EMAIL, Constants.NO_FACEBOOK_EMAIL);
-			} else if (provider.equals(Constants.GOOGLE_PLUS)) {
-				userEmail = sharedPreferences.getString(Constants.GOOGLE_EMAIL, Constants.NO_GOOGLE_EMAIL);
-			} else if (provider.equals(Constants.NO_OAUTH_PROVIDER)) {
-				userEmail = sharedPreferences.getString(Constants.EMAIL, Constants.NO_EMAIL);
-			}
+            if (provider.equals(Constants.FACEBOOK)) {
+                userEmail = sharedPreferences.getString(Constants.FACEBOOK_EMAIL, Constants.NO_FACEBOOK_EMAIL);
+            } else if (provider.equals(Constants.GOOGLE_PLUS)) {
+                userEmail = sharedPreferences.getString(Constants.GOOGLE_EMAIL, Constants.NO_GOOGLE_EMAIL);
+            } else if (provider.equals(Constants.NO_OAUTH_PROVIDER)) {
+                userEmail = sharedPreferences.getString(Constants.EMAIL, Constants.NO_EMAIL);
+            }
 
-			if (userEmail.equals(Constants.NO_EMAIL)) {
-				userEmail = UtilDeviceInfo.getUserEmail(this);
-			}
+            if (userEmail.equals(Constants.NO_EMAIL)) {
+                userEmail = UtilDeviceInfo.getUserEmail(this);
+            }
 
-			String language = UtilDeviceInfo.getUserLanguageCode();
+            String language = UtilDeviceInfo.getUserLanguageCode();
 
-			uploadBackupBundle.putString("projectName", projectName);
-			uploadBackupBundle.putString("projectDescription", projectDescription);
-			uploadBackupBundle.putString("projectPath", projectPath);
-			uploadBackupBundle.putString("userEmail", userEmail);
-			uploadBackupBundle.putString("language", language);
-			uploadBackupBundle.putString("token", token);
-			uploadBackupBundle.putString("username", username);
-			uploadBackupBundle.putInt("notificationId", notificationId);
-			uploadBackupBundle.putParcelable("receiver", receiver);
+            uploadBackupBundle.putString("projectName", projectName);
+            uploadBackupBundle.putString("projectDescription", projectDescription);
+            uploadBackupBundle.putString("projectPath", projectPath);
+            uploadBackupBundle.putString("userEmail", userEmail);
+            uploadBackupBundle.putString("language", language);
+            uploadBackupBundle.putString("token", token);
+            uploadBackupBundle.putString("username", username);
+            uploadBackupBundle.putInt("notificationId", notificationId);
+            uploadBackupBundle.putParcelable("receiver", receiver);
 
-			ServerCalls.getInstance().uploadProject(projectName, projectDescription, zipFileString, userEmail,
-					language, token, username, receiver, notificationId, context);
+            ServerCalls.getInstance().uploadProject(projectName, projectDescription, zipFileString, userEmail,
+                    language, token, username, receiver, notificationId, context);
 
-			zipFile.delete();
-		} catch (IOException ioException) {
-			Log.e(TAG, Log.getStackTraceString(ioException));
-			result = false;
-		} catch (WebconnectionException webconnectionException) {
-			serverAnswer = webconnectionException.getMessage();
-			statusCode = webconnectionException.getStatusCode();
-			Log.e(TAG, serverAnswer);
-			result = false;
-		}
-	}
+            zipFile.delete();
+        } catch (IOException ioException) {
+            Log.e(TAG, Log.getStackTraceString(ioException));
+            result = false;
+        } catch (WebconnectionException webconnectionException) {
+            serverAnswer = webconnectionException.getMessage();
+            statusCode = webconnectionException.getStatusCode();
+            Log.e(TAG, serverAnswer);
+            result = false;
+        }
+    }
 
-	@Override
-	public void onDestroy() {
-		if (!result) {
-			ToastUtil.showError(this, getResources().getText(R.string.error_project_upload).toString() + " " + serverAnswer);
-			StatusBarNotificationManager.getInstance().showUploadRejectedNotification(notificationId, statusCode, serverAnswer, uploadBackupBundle);
-		} else {
-			ToastUtil.showSuccess(this, R.string.notification_upload_finished);
-		}
+    @Override
+    public void onDestroy() {
+        if (!result) {
+            ToastUtil.showError(this, getResources().getText(R.string.error_project_upload).toString() + " " + serverAnswer);
+            StatusBarNotificationManager.getInstance().showUploadRejectedNotification(notificationId, statusCode, serverAnswer, uploadBackupBundle);
+        } else {
+            ToastUtil.showSuccess(this, R.string.notification_upload_finished);
+        }
 
-		Utils.invalidateLoginTokenIfUserRestricted(getApplicationContext());
+        Utils.invalidateLoginTokenIfUserRestricted(getApplicationContext());
 
-		super.onDestroy();
-	}
+        super.onDestroy();
+    }
 }

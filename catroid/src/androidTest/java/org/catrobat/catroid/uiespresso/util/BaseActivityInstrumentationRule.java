@@ -34,52 +34,52 @@ import org.catrobat.catroid.test.utils.Reflection;
 import java.io.File;
 
 public class BaseActivityInstrumentationRule<T extends Activity> extends ActivityTestRule<T> {
-	private SystemAnimations systemAnimations;
+    private SystemAnimations systemAnimations;
 
-	public BaseActivityInstrumentationRule(Class<T> activityClass, boolean initialTouchMode, boolean launchActivity) {
-		super(activityClass, initialTouchMode, launchActivity);
-		setUpTestProjectFolder();
-	}
+    public BaseActivityInstrumentationRule(Class<T> activityClass, boolean initialTouchMode, boolean launchActivity) {
+        super(activityClass, initialTouchMode, launchActivity);
+        setUpTestProjectFolder();
+    }
 
-	public BaseActivityInstrumentationRule(Class<T> activityClass, boolean initialTouchMode) {
-		super(activityClass, initialTouchMode);
-		setUpTestProjectFolder();
-	}
+    public BaseActivityInstrumentationRule(Class<T> activityClass, boolean initialTouchMode) {
+        super(activityClass, initialTouchMode);
+        setUpTestProjectFolder();
+    }
 
-	public BaseActivityInstrumentationRule(Class<T> activityClass) {
-		super(activityClass);
-		setUpTestProjectFolder();
-	}
+    public BaseActivityInstrumentationRule(Class<T> activityClass) {
+        super(activityClass);
+        setUpTestProjectFolder();
+    }
 
-	@Override
-	protected void afterActivityLaunched() {
-		systemAnimations = new SystemAnimations(InstrumentationRegistry.getTargetContext());
-		systemAnimations.disableAll();
-		super.afterActivityLaunched();
-	}
+    @Override
+    protected void afterActivityLaunched() {
+        systemAnimations = new SystemAnimations(InstrumentationRegistry.getTargetContext());
+        systemAnimations.disableAll();
+        super.afterActivityLaunched();
+    }
 
-	@Override
-	protected void afterActivityFinished() {
-		systemAnimations.enableAll();
-		super.afterActivityFinished();
-	}
+    @Override
+    protected void afterActivityFinished() {
+        systemAnimations.enableAll();
+        super.afterActivityFinished();
+    }
 
-	void deleteRecursive(File fileOrDirectory) {
-		if (fileOrDirectory.isDirectory()) {
-			for (File child : fileOrDirectory.listFiles()) {
-				deleteRecursive(child);
-			}
-		}
-		fileOrDirectory.delete();
-	}
+    void deleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory()) {
+            for (File child : fileOrDirectory.listFiles()) {
+                deleteRecursive(child);
+            }
+        }
+        fileOrDirectory.delete();
+    }
 
-	void setUpTestProjectFolder() {
-		Reflection.setPrivateField(StageListener.class, "checkIfAutomaticScreenshotShouldBeTaken", false);
-		Reflection.setPrivateField(Constants.class, "DEFAULT_ROOT", Environment.getExternalStorageDirectory()
-				.getAbsolutePath() + "/Pocket Code uiTest");
-		File uiTestFolder = new File(Constants.DEFAULT_ROOT);
-		if (uiTestFolder.exists()) {
-			deleteRecursive(uiTestFolder);
-		}
-	}
+    void setUpTestProjectFolder() {
+        Reflection.setPrivateField(StageListener.class, "checkIfAutomaticScreenshotShouldBeTaken", false);
+        Reflection.setPrivateField(Constants.class, "DEFAULT_ROOT", Environment.getExternalStorageDirectory()
+                .getAbsolutePath() + "/Pocket Code uiTest");
+        File uiTestFolder = new File(Constants.DEFAULT_ROOT);
+        if (uiTestFolder.exists()) {
+            deleteRecursive(uiTestFolder);
+        }
+    }
 }

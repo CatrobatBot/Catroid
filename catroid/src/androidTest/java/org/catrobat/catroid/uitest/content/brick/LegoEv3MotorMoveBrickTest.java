@@ -42,66 +42,66 @@ import java.util.ArrayList;
 
 public class LegoEv3MotorMoveBrickTest extends BaseActivityInstrumentationTestCase<ScriptActivity> {
 
-	private static final int INITIAL_SPEED = -70;
-	private static final int SET_SPEED = 25;
+    private static final int INITIAL_SPEED = -70;
+    private static final int SET_SPEED = 25;
 
-	private Project project;
-	private LegoEv3MotorMoveBrick motorBrick;
+    private Project project;
+    private LegoEv3MotorMoveBrick motorBrick;
 
-	public LegoEv3MotorMoveBrickTest() {
-		super(ScriptActivity.class);
-	}
+    public LegoEv3MotorMoveBrickTest() {
+        super(ScriptActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		// normally super.setUp should be called first
-		// but kept the test failing due to view is null
-		// when starting in ScriptActivity
-		createProject();
-		super.setUp();
-	}
+    @Override
+    public void setUp() throws Exception {
+        // normally super.setUp should be called first
+        // but kept the test failing due to view is null
+        // when starting in ScriptActivity
+        createProject();
+        super.setUp();
+    }
 
-	public void testEV3MotorMoveBrick() {
-		ListView dragDropListView = UiTestUtils.getScriptListView(solo);
-		BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
+    public void testEV3MotorMoveBrick() {
+        ListView dragDropListView = UiTestUtils.getScriptListView(solo);
+        BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
 
-		int childrenCount = adapter.getChildCountFromLastGroup();
-		int groupCount = adapter.getScriptCount();
+        int childrenCount = adapter.getChildCountFromLastGroup();
+        int groupCount = adapter.getScriptCount();
 
-		assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
-		assertEquals("Incorrect number of bricks.", 1, childrenCount);
+        assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
+        assertEquals("Incorrect number of bricks.", 1, childrenCount);
 
-		ArrayList<Brick> projectBrickList = project.getSceneList().get(0).getSpriteList().get(0).getScript(0)
-				.getBrickList();
-		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
+        ArrayList<Brick> projectBrickList = project.getSceneList().get(0).getSpriteList().get(0).getScript(0)
+                .getBrickList();
+        assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
-		assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.ev3_motor_move)));
-		assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.nxt_motor_speed_to)));
+        assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
+        assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.ev3_motor_move)));
+        assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.nxt_motor_speed_to)));
 
-		String[] motors = getActivity().getResources().getStringArray(R.array.ev3_motor_chooser);
-		assertTrue("Spinner items list too short!", motors.length == 5);
+        String[] motors = getActivity().getResources().getStringArray(R.array.ev3_motor_chooser);
+        assertTrue("Spinner items list too short!", motors.length == 5);
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
-				R.id.ev3_motor_move_speed_edit_text, SET_SPEED, Brick.BrickField.LEGO_EV3_SPEED,
-				motorBrick);
-	}
+        UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
+                R.id.ev3_motor_move_speed_edit_text, SET_SPEED, Brick.BrickField.LEGO_EV3_SPEED,
+                motorBrick);
+    }
 
-	private void createProject() {
-		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite sprite = new Sprite("cat");
-		Script script = new StartScript();
+    private void createProject() {
+        project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Sprite sprite = new Sprite("cat");
+        Script script = new StartScript();
 
-		motorBrick = new LegoEv3MotorMoveBrick(LegoEv3MotorMoveBrick.Motor.MOTOR_A,
-				INITIAL_SPEED);
+        motorBrick = new LegoEv3MotorMoveBrick(LegoEv3MotorMoveBrick.Motor.MOTOR_A,
+                INITIAL_SPEED);
 
-		script.addBrick(motorBrick);
+        script.addBrick(motorBrick);
 
-		sprite.addScript(script);
-		project.getSceneList().get(0).addSprite(sprite);
+        sprite.addScript(script);
+        project.getSceneList().get(0).addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 }

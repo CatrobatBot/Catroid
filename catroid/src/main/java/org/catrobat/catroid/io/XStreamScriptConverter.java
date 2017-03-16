@@ -36,37 +36,37 @@ import org.catrobat.catroid.content.Script;
 
 public class XStreamScriptConverter extends ReflectionConverter {
 
-	private static final String TAG = XStreamScriptConverter.class.getSimpleName();
-	private static final String SCRIPTS_PACKAGE_NAME = "org.catrobat.catroid.content";
-	private static final String TYPE = "type";
+    private static final String TAG = XStreamScriptConverter.class.getSimpleName();
+    private static final String SCRIPTS_PACKAGE_NAME = "org.catrobat.catroid.content";
+    private static final String TYPE = "type";
 
-	public XStreamScriptConverter(Mapper mapper, ReflectionProvider reflectionProvider) {
-		super(mapper, reflectionProvider);
-	}
+    public XStreamScriptConverter(Mapper mapper, ReflectionProvider reflectionProvider) {
+        super(mapper, reflectionProvider);
+    }
 
-	@Override
-	public boolean canConvert(Class type) {
-		return Script.class.isAssignableFrom(type);
-	}
+    @Override
+    public boolean canConvert(Class type) {
+        return Script.class.isAssignableFrom(type);
+    }
 
-	@Override
-	protected void doMarshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
-		writer.addAttribute(TYPE, source.getClass().getSimpleName());
-		super.doMarshal(source, writer, context);
-	}
+    @Override
+    protected void doMarshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
+        writer.addAttribute(TYPE, source.getClass().getSimpleName());
+        super.doMarshal(source, writer, context);
+    }
 
-	@Override
-	public Object doUnmarshal(Object result, HierarchicalStreamReader reader, UnmarshallingContext context) {
-		String type = reader.getAttribute(TYPE);
-		if (type != null) {
-			try {
-				Class cls = Class.forName(SCRIPTS_PACKAGE_NAME + "." + type);
-				Script script = (Script) reflectionProvider.newInstance(cls);
-				return super.doUnmarshal(script, reader, context);
-			} catch (ClassNotFoundException exception) {
-				Log.e(TAG, "Script class not found : " + result.toString(), exception);
-			}
-		}
-		return super.doUnmarshal(result, reader, context);
-	}
+    @Override
+    public Object doUnmarshal(Object result, HierarchicalStreamReader reader, UnmarshallingContext context) {
+        String type = reader.getAttribute(TYPE);
+        if (type != null) {
+            try {
+                Class cls = Class.forName(SCRIPTS_PACKAGE_NAME + "." + type);
+                Script script = (Script) reflectionProvider.newInstance(cls);
+                return super.doUnmarshal(script, reader, context);
+            } catch (ClassNotFoundException exception) {
+                Log.e(TAG, "Script class not found : " + result.toString(), exception);
+            }
+        }
+        return super.doUnmarshal(result, reader, context);
+    }
 }

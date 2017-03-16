@@ -28,42 +28,42 @@ import android.media.AudioManager.OnAudioFocusChangeListener;
 
 public class StageAudioFocus implements OnAudioFocusChangeListener {
 
-	private AudioManager audioManager = null;
-	private boolean isAudioFocusGranted = false;
+    private AudioManager audioManager = null;
+    private boolean isAudioFocusGranted = false;
 
-	public static final String TAG = StageAudioFocus.class.getSimpleName();
+    public static final String TAG = StageAudioFocus.class.getSimpleName();
 
-	public StageAudioFocus(Context context) {
-		audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-	}
+    public StageAudioFocus(Context context) {
+        audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+    }
 
-	public void requestAudioFocus() {
-		if (isAudioFocusGranted()) {
-			return;
-		}
+    public void requestAudioFocus() {
+        if (isAudioFocusGranted()) {
+            return;
+        }
 
-		int result = audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+        int result = audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
-		if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-			isAudioFocusGranted = true;
-		} else {
-			isAudioFocusGranted = false;
-		}
-	}
+        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+            isAudioFocusGranted = true;
+        } else {
+            isAudioFocusGranted = false;
+        }
+    }
 
-	public void releaseAudioFocus() {
-		audioManager.abandonAudioFocus(this);
-		isAudioFocusGranted = false;
-	}
+    public void releaseAudioFocus() {
+        audioManager.abandonAudioFocus(this);
+        isAudioFocusGranted = false;
+    }
 
-	public boolean isAudioFocusGranted() {
-		return isAudioFocusGranted;
-	}
+    public boolean isAudioFocusGranted() {
+        return isAudioFocusGranted;
+    }
 
-	@Override
-	public void onAudioFocusChange(int focusChange) {
-		if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
-			releaseAudioFocus();
-		}
-	}
+    @Override
+    public void onAudioFocusChange(int focusChange) {
+        if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+            releaseAudioFocus();
+        }
+    }
 }

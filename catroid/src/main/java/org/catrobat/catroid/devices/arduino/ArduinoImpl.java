@@ -44,266 +44,267 @@ import name.antonsmirnov.firmata.serial.StreamingSerialAdapter;
 
 public class ArduinoImpl implements Arduino {
 
-	public static final int NUMBER_OF_DIGITAL_PINS = 14;
-	public static final int PINS_IN_A_PORT = 8;
+    public static final int NUMBER_OF_DIGITAL_PINS = 14;
+    public static final int PINS_IN_A_PORT = 8;
 
-	public static final int PIN_ANALOG_0 = 0;
-	public static final int PIN_ANALOG_1 = 1;
-	public static final int PIN_ANALOG_2 = 2;
-	public static final int PIN_ANALOG_3 = 3;
-	public static final int PIN_ANALOG_4 = 4;
-	public static final int PIN_ANALOG_5 = 5;
+    public static final int PIN_ANALOG_0 = 0;
+    public static final int PIN_ANALOG_1 = 1;
+    public static final int PIN_ANALOG_2 = 2;
+    public static final int PIN_ANALOG_3 = 3;
+    public static final int PIN_ANALOG_4 = 4;
+    public static final int PIN_ANALOG_5 = 5;
 
-	public static final int PORT_DIGITAL_0 = 0;
-	public static final int PORT_DIGITAL_1 = 1;
+    public static final int PORT_DIGITAL_0 = 0;
+    public static final int PORT_DIGITAL_1 = 1;
 
-	private static final int MIN_PWM_PIN_GROUP_1 = 3;
-	private static final int MAX_PWM_PIN_GROUP_1 = 3;
-	private static final int MIN_PWM_PIN_GROUP_2 = 5;
-	private static final int MAX_PWM_PIN_GROUP_2 = 6;
-	private static final int MIN_PWM_PIN_GROUP_3 = 9;
-	private static final int MAX_PWM_PIN_GROUP_3 = 11;
+    private static final int MIN_PWM_PIN_GROUP_1 = 3;
+    private static final int MAX_PWM_PIN_GROUP_1 = 3;
+    private static final int MIN_PWM_PIN_GROUP_2 = 5;
+    private static final int MAX_PWM_PIN_GROUP_2 = 6;
+    private static final int MIN_PWM_PIN_GROUP_3 = 9;
+    private static final int MAX_PWM_PIN_GROUP_3 = 11;
 
-	private static final int MIN_ANALOG_SENSOR_PIN = 0;
-	private static final int MAX_ANALOG_SENSOR_PIN = 5;
+    private static final int MIN_ANALOG_SENSOR_PIN = 0;
+    private static final int MAX_ANALOG_SENSOR_PIN = 5;
 
-	private static final UUID ARDUINO_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-	private static final String TAG = ArduinoImpl.class.getSimpleName();
+    private static final UUID ARDUINO_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    private static final String TAG = ArduinoImpl.class.getSimpleName();
 
-	private Firmata firmata;
-	private boolean isReportingSensorData = false;
-	private boolean isInitialized = false;
+    private Firmata firmata;
+    private boolean isReportingSensorData = false;
+    private boolean isInitialized = false;
 
-	private ArduinoListener arduinoListener;
-	private BluetoothConnection btConnection;
+    private ArduinoListener arduinoListener;
+    private BluetoothConnection btConnection;
 
-	private int castValue(int value) {
-		if (value <= 0) {
-			return 0;
-		}
-		if (value >= 100) {
-			return 255;
-		}
+    private int castValue(int value) {
+        if (value <= 0) {
+            return 0;
+        }
+        if (value >= 100) {
+            return 255;
+        }
 
-		return (int) (value * 2.55);
-	}
+        return (int) (value * 2.55);
+    }
 
-	@Override
-	public String getName() {
-		return "ARDUINO";
-	}
+    @Override
+    public String getName() {
+        return "ARDUINO";
+    }
 
-	@Override
-	public void setConnection(BluetoothConnection connection) {
-		this.btConnection = connection;
-	}
+    @Override
+    public void setConnection(BluetoothConnection connection) {
+        this.btConnection = connection;
+    }
 
-	@Override
-	public Class<? extends BluetoothDevice> getDeviceType() {
-		return BluetoothDevice.ARDUINO;
-	}
+    @Override
+    public Class<? extends BluetoothDevice> getDeviceType() {
+        return BluetoothDevice.ARDUINO;
+    }
 
-	@Override
-	public void disconnect() {
+    @Override
+    public void disconnect() {
 
-		if (firmata == null) {
-			return;
-		}
+        if (firmata == null) {
+            return;
+        }
 
-		try {
-			this.reportSensorData(false);
-			firmata.clearListeners();
-			firmata.getSerial().stop();
-			isInitialized = false;
-			firmata = null;
-		} catch (SerialException e) {
-			Log.d(TAG, "Error stop Arduino serial");
-		}
-	}
+        try {
+            this.reportSensorData(false);
+            firmata.clearListeners();
+            firmata.getSerial().stop();
+            isInitialized = false;
+            firmata = null;
+        } catch (SerialException e) {
+            Log.d(TAG, "Error stop Arduino serial");
+        }
+    }
 
-	@Override
-	public boolean isAlive() {
+    @Override
+    public boolean isAlive() {
 
-		if (firmata == null) {
-			return false;
-		}
+        if (firmata == null) {
+            return false;
+        }
 
-		try {
-			firmata.send(new ReportFirmwareVersionMessage());
-			return true;
-		} catch (SerialException e) {
-			return false;
-		}
-	}
+        try {
+            firmata.send(new ReportFirmwareVersionMessage());
+            return true;
+        } catch (SerialException e) {
+            return false;
+        }
+    }
 
-	public void reportFirmwareVersion() {
-		if (firmata == null) {
-			return;
-		}
+    public void reportFirmwareVersion() {
+        if (firmata == null) {
+            return;
+        }
 
-		try {
-			firmata.send(new ReportFirmwareVersionMessage());
-		} catch (SerialException e) {
-			Log.d(TAG, "Firmata Serial error, cannot send message.");
-		}
-	}
+        try {
+            firmata.send(new ReportFirmwareVersionMessage());
+        } catch (SerialException e) {
+            Log.d(TAG, "Firmata Serial error, cannot send message.");
+        }
+    }
 
-	@Override
-	public UUID getBluetoothDeviceUUID() {
-		return ARDUINO_UUID;
-	}
+    @Override
+    public UUID getBluetoothDeviceUUID() {
+        return ARDUINO_UUID;
+    }
 
-	@Override
-	public void initialise() {
+    @Override
+    public void initialise() {
 
-		if (isInitialized) {
-			return;
-		}
+        if (isInitialized) {
+            return;
+        }
 
-		try {
-			tryInitialize();
-			isInitialized = true;
-		} catch (SerialException e) {
-			Log.d(TAG, "Error starting firmata serials");
-		} catch (IOException e) {
-			Log.d(TAG, "Error opening streams");
-		}
-	}
+        try {
+            tryInitialize();
+            isInitialized = true;
+        } catch (SerialException e) {
+            Log.d(TAG, "Error starting firmata serials");
+        } catch (IOException e) {
+            Log.d(TAG, "Error opening streams");
+        }
+    }
 
-	private void tryInitialize() throws IOException, SerialException {
-		ISerial serial = new StreamingSerialAdapter(btConnection.getInputStream(), btConnection.getOutputStream());
+    private void tryInitialize() throws IOException, SerialException {
+        ISerial serial = new StreamingSerialAdapter(btConnection.getInputStream(), btConnection.getOutputStream());
 
-		firmata = new Firmata(serial);
+        firmata = new Firmata(serial);
 
-		arduinoListener = new ArduinoListener();
-		firmata.addListener(arduinoListener);
+        arduinoListener = new ArduinoListener();
+        firmata.addListener(arduinoListener);
 
-		firmata.getSerial().start();
+        firmata.getSerial().start();
 
-		for (int pin = MIN_PWM_PIN_GROUP_1; pin <= MAX_PWM_PIN_GROUP_1; ++pin) {
-			sendFirmataMessage(new SetPinModeMessage(pin, SetPinModeMessage.PIN_MODE.PWM.getMode()));
-		}
-		for (int pin = MIN_PWM_PIN_GROUP_2; pin <= MAX_PWM_PIN_GROUP_2; ++pin) {
-			sendFirmataMessage(new SetPinModeMessage(pin, SetPinModeMessage.PIN_MODE.PWM.getMode()));
-		}
-		for (int pin = MIN_PWM_PIN_GROUP_3; pin <= MAX_PWM_PIN_GROUP_3; ++pin) {
-			sendFirmataMessage(new SetPinModeMessage(pin, SetPinModeMessage.PIN_MODE.PWM.getMode()));
-		}
-		reportSensorData(true);
-	}
+        for (int pin = MIN_PWM_PIN_GROUP_1; pin <= MAX_PWM_PIN_GROUP_1; ++pin) {
+            sendFirmataMessage(new SetPinModeMessage(pin, SetPinModeMessage.PIN_MODE.PWM.getMode()));
+        }
+        for (int pin = MIN_PWM_PIN_GROUP_2; pin <= MAX_PWM_PIN_GROUP_2; ++pin) {
+            sendFirmataMessage(new SetPinModeMessage(pin, SetPinModeMessage.PIN_MODE.PWM.getMode()));
+        }
+        for (int pin = MIN_PWM_PIN_GROUP_3; pin <= MAX_PWM_PIN_GROUP_3; ++pin) {
+            sendFirmataMessage(new SetPinModeMessage(pin, SetPinModeMessage.PIN_MODE.PWM.getMode()));
+        }
+        reportSensorData(true);
+    }
 
-	private void reportSensorData(boolean report) {
-		if (isReportingSensorData == report) {
-			return;
-		}
+    private void reportSensorData(boolean report) {
+        if (isReportingSensorData == report) {
+            return;
+        }
 
-		isReportingSensorData = report;
+        isReportingSensorData = report;
 
-		for (int i = MIN_ANALOG_SENSOR_PIN; i <= MAX_ANALOG_SENSOR_PIN; i++) {
-			sendFirmataMessage(new ReportAnalogPinMessage(i, report));
-		}
-	}
+        for (int i = MIN_ANALOG_SENSOR_PIN; i <= MAX_ANALOG_SENSOR_PIN; i++) {
+            sendFirmataMessage(new ReportAnalogPinMessage(i, report));
+        }
+    }
 
-	@Override
-	public void start() {
-		if (!isInitialized) {
-			initialise();
-		}
-		reportSensorData(true);
-	}
+    @Override
+    public void start() {
+        if (!isInitialized) {
+            initialise();
+        }
+        reportSensorData(true);
+    }
 
-	@Override
-	public void pause() { }
+    @Override
+    public void pause() {
+    }
 
-	@Override
-	public void destroy() {
-		reportSensorData(false);
-	}
+    @Override
+    public void destroy() {
+        reportSensorData(false);
+    }
 
-	@Override
-	public void setAnalogArduinoPin(int pin, int value) {
-		sendAnalogFirmataMessage(pin, value);
-	}
+    @Override
+    public void setAnalogArduinoPin(int pin, int value) {
+        sendAnalogFirmataMessage(pin, value);
+    }
 
-	@Override
-	public void setDigitalArduinoPin(int digitalPinNumber, int pinValue) {
-		int digitalPort = getPortFromPin(digitalPinNumber);
+    @Override
+    public void setDigitalArduinoPin(int digitalPinNumber, int pinValue) {
+        int digitalPort = getPortFromPin(digitalPinNumber);
 
-		arduinoListener.setDigitalPinValue(digitalPinNumber, pinValue);
+        arduinoListener.setDigitalPinValue(digitalPinNumber, pinValue);
 
-		sendDigitalFirmataMessage(digitalPort, digitalPinNumber, arduinoListener.getPortValue(digitalPort));
-	}
+        sendDigitalFirmataMessage(digitalPort, digitalPinNumber, arduinoListener.getPortValue(digitalPort));
+    }
 
-	@Override
-	public double getDigitalArduinoPin(int digitalPinNumber) {
-		sendFirmataMessage(new SetPinModeMessage(digitalPinNumber, SetPinModeMessage.PIN_MODE.INPUT.getMode()));
-		int port = getPortFromPin(digitalPinNumber);
+    @Override
+    public double getDigitalArduinoPin(int digitalPinNumber) {
+        sendFirmataMessage(new SetPinModeMessage(digitalPinNumber, SetPinModeMessage.PIN_MODE.INPUT.getMode()));
+        int port = getPortFromPin(digitalPinNumber);
 
-		sendFirmataMessage(new ReportDigitalPortMessage(port, true));
+        sendFirmataMessage(new ReportDigitalPortMessage(port, true));
 
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			Log.d(TAG, "Error Arduino sensor thread sleep()");
-		}
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            Log.d(TAG, "Error Arduino sensor thread sleep()");
+        }
 
-		double result = arduinoListener.getDigitalPinValue(digitalPinNumber);
+        double result = arduinoListener.getDigitalPinValue(digitalPinNumber);
 
-		sendFirmataMessage(new ReportDigitalPortMessage(port, false));
+        sendFirmataMessage(new ReportDigitalPortMessage(port, false));
 
-		return result;
-	}
+        return result;
+    }
 
-	@Override
-	public double getAnalogArduinoPin(int analogPinNumber) {
-		switch (analogPinNumber) {
-			case 0:
-				return arduinoListener.getAnalogPin0();
-			case 1:
-				return arduinoListener.getAnalogPin1();
-			case 2:
-				return arduinoListener.getAnalogPin2();
-			case 3:
-				return arduinoListener.getAnalogPin3();
-			case 4:
-				return arduinoListener.getAnalogPin4();
-			case 5:
-				return arduinoListener.getAnalogPin5();
-		}
-		return 0;
-	}
+    @Override
+    public double getAnalogArduinoPin(int analogPinNumber) {
+        switch (analogPinNumber) {
+            case 0:
+                return arduinoListener.getAnalogPin0();
+            case 1:
+                return arduinoListener.getAnalogPin1();
+            case 2:
+                return arduinoListener.getAnalogPin2();
+            case 3:
+                return arduinoListener.getAnalogPin3();
+            case 4:
+                return arduinoListener.getAnalogPin4();
+            case 5:
+                return arduinoListener.getAnalogPin5();
+        }
+        return 0;
+    }
 
-	public static boolean isValidPin(int pin) {
-		return (pin >= 0) && (pin < NUMBER_OF_DIGITAL_PINS);
-	}
+    public static boolean isValidPin(int pin) {
+        return (pin >= 0) && (pin < NUMBER_OF_DIGITAL_PINS);
+    }
 
-	public static int getPortFromPin(int pin) {
-		return pin / PINS_IN_A_PORT;
-	}
+    public static int getPortFromPin(int pin) {
+        return pin / PINS_IN_A_PORT;
+    }
 
-	public static int getIndexOfPinOnPort(int pin) {
-		return pin % PINS_IN_A_PORT;
-	}
+    public static int getIndexOfPinOnPort(int pin) {
+        return pin % PINS_IN_A_PORT;
+    }
 
-	private void sendAnalogFirmataMessage(int pin, int value) {
-		sendFirmataMessage(new SetPinModeMessage(pin, SetPinModeMessage.PIN_MODE.PWM.getMode()));
-		sendFirmataMessage(new AnalogMessage(pin, castValue(value)));
-	}
+    private void sendAnalogFirmataMessage(int pin, int value) {
+        sendFirmataMessage(new SetPinModeMessage(pin, SetPinModeMessage.PIN_MODE.PWM.getMode()));
+        sendFirmataMessage(new AnalogMessage(pin, castValue(value)));
+    }
 
-	private void sendDigitalFirmataMessage(int port, int pin, int value) {
-		sendFirmataMessage(new SetPinModeMessage(pin, SetPinModeMessage.PIN_MODE.OUTPUT.getMode()));
-		sendFirmataMessage(new DigitalMessage(port, value));
-	}
+    private void sendDigitalFirmataMessage(int port, int pin, int value) {
+        sendFirmataMessage(new SetPinModeMessage(pin, SetPinModeMessage.PIN_MODE.OUTPUT.getMode()));
+        sendFirmataMessage(new DigitalMessage(port, value));
+    }
 
-	private void sendFirmataMessage(Message message) {
-		if (firmata == null) {
-			return;
-		}
+    private void sendFirmataMessage(Message message) {
+        if (firmata == null) {
+            return;
+        }
 
-		try {
-			firmata.send(message);
-		} catch (SerialException e) {
-			Log.d(TAG, "Firmata Serial error, cannot send message.");
-		}
-	}
+        try {
+            firmata.send(message);
+        } catch (SerialException e) {
+            Log.d(TAG, "Firmata Serial error, cannot send message.");
+        }
+    }
 }

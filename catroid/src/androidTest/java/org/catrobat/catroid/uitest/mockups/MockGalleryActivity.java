@@ -31,29 +31,29 @@ import android.os.Bundle;
  * A mock gallery activity that simply returns an image file from the drawable resources.
  */
 public class MockGalleryActivity extends Activity {
-	@Override
-	protected void onCreate(android.os.Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		Bundle bundle = this.getIntent().getExtras();
+    @Override
+    protected void onCreate(android.os.Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = this.getIntent().getExtras();
 
-		String filePath = bundle.getString("filePath");
+        String filePath = bundle.getString("filePath");
 
-		Uri imageUri = Uri.parse(filePath);
+        Uri imageUri = Uri.parse(filePath);
 
-		Intent resultIntent;
-		boolean returnNullData = false;
-		if (bundle.containsKey("returnNullData")) {
-			returnNullData = bundle.getBoolean("returnNullData");
-		}
+        Intent resultIntent;
+        boolean returnNullData = false;
+        if (bundle.containsKey("returnNullData")) {
+            returnNullData = bundle.getBoolean("returnNullData");
+        }
 
-		if (returnNullData) {
-			resultIntent = null;
-		} else {
-			resultIntent = new Intent();
-			resultIntent.setData(imageUri);
-		}
+        if (returnNullData) {
+            resultIntent = null;
+        } else {
+            resultIntent = new Intent();
+            resultIntent.setData(imageUri);
+        }
 
-		setResult(RESULT_OK, resultIntent);
-		finish();
-	}
+        setResult(RESULT_OK, resultIntent);
+        finish();
+    }
 }

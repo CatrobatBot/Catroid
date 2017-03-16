@@ -50,150 +50,150 @@ import java.util.List;
 
 public class PlaySoundAndWaitBrickTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
-	private File soundFile;
-	private File soundFile2;
-	private String soundName = "testSound1";
-	private String soundName2 = "testSound2";
-	private List<SoundInfo> soundInfoList;
+    private File soundFile;
+    private File soundFile2;
+    private String soundName = "testSound1";
+    private String soundName2 = "testSound2";
+    private List<SoundInfo> soundInfoList;
 
-	public PlaySoundAndWaitBrickTest() {
-		super(MainMenuActivity.class);
-	}
+    public PlaySoundAndWaitBrickTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		createProject();
-		UiTestUtils.prepareStageForTest();
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
-	}
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        createProject();
+        UiTestUtils.prepareStageForTest();
+        UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
+    }
 
-	@Override
-	public void tearDown() throws Exception {
-		if (soundFile != null && soundFile.exists()) {
-			soundFile.delete();
-		}
-		if (soundFile2 != null && soundFile2.exists()) {
-			soundFile2.delete();
-		}
-		super.tearDown();
-	}
+    @Override
+    public void tearDown() throws Exception {
+        if (soundFile != null && soundFile.exists()) {
+            soundFile.delete();
+        }
+        if (soundFile2 != null && soundFile2.exists()) {
+            soundFile2.delete();
+        }
+        super.tearDown();
+    }
 
-	public void testSelectAndPlaySoundFile() {
-		solo.clickOnText(soundName);
-		solo.sleep(1000);
-		assertTrue(soundName + " is not in Spinner", solo.searchText(soundName));
-		assertTrue(soundName2 + " is not in Spinner", solo.searchText(soundName2));
-		solo.clickOnText(soundName);
-		assertTrue(soundName + " is not selected in Spinner", solo.searchText(soundName));
+    public void testSelectAndPlaySoundFile() {
+        solo.clickOnText(soundName);
+        solo.sleep(1000);
+        assertTrue(soundName + " is not in Spinner", solo.searchText(soundName));
+        assertTrue(soundName2 + " is not in Spinner", solo.searchText(soundName2));
+        solo.clickOnText(soundName);
+        assertTrue(soundName + " is not selected in Spinner", solo.searchText(soundName));
 
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(2000);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(2000);
 
-		MediaPlayer mediaPlayer = getMediaPlayers().get(0);
-		assertTrue("mediaPlayer is not playing", mediaPlayer.isPlaying());
-		assertEquals("wrong file playing", 7592, mediaPlayer.getDuration());
-		solo.goBack();
-		solo.waitForView(solo.getView(R.id.stage_dialog_button_back));
-		solo.clickOnView(solo.getView(R.id.stage_dialog_button_back));
+        MediaPlayer mediaPlayer = getMediaPlayers().get(0);
+        assertTrue("mediaPlayer is not playing", mediaPlayer.isPlaying());
+        assertEquals("wrong file playing", 7592, mediaPlayer.getDuration());
+        solo.goBack();
+        solo.waitForView(solo.getView(R.id.stage_dialog_button_back));
+        solo.clickOnView(solo.getView(R.id.stage_dialog_button_back));
 
-		solo.waitForActivity(ScriptActivity.class.getSimpleName());
-		solo.clickOnText(soundName);
-		solo.clickOnText(soundName2);
-		assertTrue(soundName2 + " is not selected in Spinner", solo.searchText(soundName2));
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(2000);
+        solo.waitForActivity(ScriptActivity.class.getSimpleName());
+        solo.clickOnText(soundName);
+        solo.clickOnText(soundName2);
+        assertTrue(soundName2 + " is not selected in Spinner", solo.searchText(soundName2));
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(2000);
 
-		mediaPlayer = getMediaPlayers().get(0);
-		assertTrue("mediaPlayer is not playing", mediaPlayer.isPlaying());
-		assertEquals("wrong file playing", 4875, mediaPlayer.getDuration());
-	}
+        mediaPlayer = getMediaPlayers().get(0);
+        assertTrue("mediaPlayer is not playing", mediaPlayer.isPlaying());
+        assertEquals("wrong file playing", 4875, mediaPlayer.getDuration());
+    }
 
-	public void testDismissNewSoundDialog() {
-		String newText = solo.getString(R.string.new_broadcast_message);
+    public void testDismissNewSoundDialog() {
+        String newText = solo.getString(R.string.new_broadcast_message);
 
-		solo.clickOnText(soundName);
-		solo.clickOnText(newText);
-		solo.waitForDialogToOpen(10000);
-		solo.goBack();
-		solo.waitForDialogToClose(10000);
-		solo.sleep(500);
-		assertEquals("Not in ScriptActivity", "ui.ScriptActivity", solo.getCurrentActivity().getLocalClassName());
-		assertTrue("Spinner not updated", solo.searchText(soundName));
-	}
+        solo.clickOnText(soundName);
+        solo.clickOnText(newText);
+        solo.waitForDialogToOpen(10000);
+        solo.goBack();
+        solo.waitForDialogToClose(10000);
+        solo.sleep(500);
+        assertEquals("Not in ScriptActivity", "ui.ScriptActivity", solo.getCurrentActivity().getLocalClassName());
+        assertTrue("Spinner not updated", solo.searchText(soundName));
+    }
 
-	public void testAddNewSound() {
-		String newText = solo.getString(R.string.new_broadcast_message);
-		String recordedFilename = solo.getString(R.string.soundrecorder_recorded_filename);
+    public void testAddNewSound() {
+        String newText = solo.getString(R.string.new_broadcast_message);
+        String recordedFilename = solo.getString(R.string.soundrecorder_recorded_filename);
 
-		solo.clickOnText(soundName);
-		solo.clickOnText(newText);
+        solo.clickOnText(soundName);
+        solo.clickOnText(newText);
 
-		String soundRecorderText = solo.getString(R.string.add_sound_from_recorder);
-		solo.waitForText(soundRecorderText);
-		assertTrue("Catroid Sound Recorder is not present", solo.searchText(soundRecorderText));
-		solo.clickOnText(soundRecorderText);
+        String soundRecorderText = solo.getString(R.string.add_sound_from_recorder);
+        solo.waitForText(soundRecorderText);
+        assertTrue("Catroid Sound Recorder is not present", solo.searchText(soundRecorderText));
+        solo.clickOnText(soundRecorderText);
 
-		solo.waitForActivity(SoundRecorderActivity.class.getSimpleName());
-		solo.clickOnImageButton(0);
-		solo.sleep(500);
-		solo.clickOnImageButton(0);
+        solo.waitForActivity(SoundRecorderActivity.class.getSimpleName());
+        solo.clickOnImageButton(0);
+        solo.sleep(500);
+        solo.clickOnImageButton(0);
 
-		solo.waitForText(recordedFilename);
-		solo.waitForFragmentByTag(SoundFragment.TAG);
-		solo.sleep(1000);
-		assertTrue("New sound file is not selected", solo.waitForText(recordedFilename));
+        solo.waitForText(recordedFilename);
+        solo.waitForFragmentByTag(SoundFragment.TAG);
+        solo.sleep(1000);
+        assertTrue("New sound file is not selected", solo.waitForText(recordedFilename));
 
-		solo.goBack();
-		String programMenuActivityClass = ProgramMenuActivity.class.getSimpleName();
-		assertTrue("Should be in " + programMenuActivityClass, solo.getCurrentActivity().getClass().getSimpleName()
-				.equals(programMenuActivityClass));
-	}
+        solo.goBack();
+        String programMenuActivityClass = ProgramMenuActivity.class.getSimpleName();
+        assertTrue("Should be in " + programMenuActivityClass, solo.getCurrentActivity().getClass().getSimpleName()
+                .equals(programMenuActivityClass));
+    }
 
-	private void createProject() {
-		ProjectManager projectManager = ProjectManager.getInstance();
-		Project project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite firstSprite = new SingleSprite("sprite");
-		Script testScript = new StartScript();
+    private void createProject() {
+        ProjectManager projectManager = ProjectManager.getInstance();
+        Project project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Sprite firstSprite = new SingleSprite("sprite");
+        Script testScript = new StartScript();
 
-		PlaySoundAndWaitBrick playSoundAndWaitBrick = new PlaySoundAndWaitBrick();
-		testScript.addBrick(playSoundAndWaitBrick);
+        PlaySoundAndWaitBrick playSoundAndWaitBrick = new PlaySoundAndWaitBrick();
+        testScript.addBrick(playSoundAndWaitBrick);
 
-		firstSprite.addScript(testScript);
-		project.getDefaultScene().addSprite(firstSprite);
+        firstSprite.addScript(testScript);
+        project.getDefaultScene().addSprite(firstSprite);
 
-		projectManager.setProject(project);
-		projectManager.setCurrentSprite(firstSprite);
-		projectManager.setCurrentScript(testScript);
-		soundInfoList = projectManager.getCurrentSprite().getSoundList();
+        projectManager.setProject(project);
+        projectManager.setCurrentSprite(firstSprite);
+        projectManager.setCurrentScript(testScript);
+        soundInfoList = projectManager.getCurrentSprite().getSoundList();
 
-		soundFile = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, project.getDefaultScene().getName(),
-				"longsound.mp3", org.catrobat.catroid.test.R.raw.longsound, getInstrumentation().getContext(),
-				UiTestUtils.FileTypes.SOUND);
-		SoundInfo soundInfo = new SoundInfo();
-		soundInfo.setSoundFileName(soundFile.getName());
-		soundInfo.setTitle(soundName);
+        soundFile = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, project.getDefaultScene().getName(),
+                "longsound.mp3", org.catrobat.catroid.test.R.raw.longsound, getInstrumentation().getContext(),
+                UiTestUtils.FileTypes.SOUND);
+        SoundInfo soundInfo = new SoundInfo();
+        soundInfo.setSoundFileName(soundFile.getName());
+        soundInfo.setTitle(soundName);
 
-		soundFile2 = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, project.getDefaultScene().getName(),
-				"testsoundui.mp3", org.catrobat.catroid.test.R.raw.testsoundui, getInstrumentation().getContext(),
-				UiTestUtils.FileTypes.SOUND);
-		SoundInfo soundInfo2 = new SoundInfo();
-		soundInfo2.setSoundFileName(soundFile2.getName());
-		soundInfo2.setTitle(soundName2);
+        soundFile2 = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, project.getDefaultScene().getName(),
+                "testsoundui.mp3", org.catrobat.catroid.test.R.raw.testsoundui, getInstrumentation().getContext(),
+                UiTestUtils.FileTypes.SOUND);
+        SoundInfo soundInfo2 = new SoundInfo();
+        soundInfo2.setSoundFileName(soundFile2.getName());
+        soundInfo2.setTitle(soundName2);
 
-		soundInfoList.add(soundInfo);
-		soundInfoList.add(soundInfo2);
+        soundInfoList.add(soundInfo);
+        soundInfoList.add(soundInfo2);
 
-		ProjectManager.getInstance().getFileChecksumContainer()
-				.addChecksum(soundInfo.getChecksum(), soundInfo.getAbsolutePath());
-		ProjectManager.getInstance().getFileChecksumContainer()
-				.addChecksum(soundInfo2.getChecksum(), soundInfo2.getAbsolutePath());
-	}
+        ProjectManager.getInstance().getFileChecksumContainer()
+                .addChecksum(soundInfo.getChecksum(), soundInfo.getAbsolutePath());
+        ProjectManager.getInstance().getFileChecksumContainer()
+                .addChecksum(soundInfo2.getChecksum(), soundInfo2.getAbsolutePath());
+    }
 
-	@SuppressWarnings("unchecked")
-	private List<MediaPlayer> getMediaPlayers() {
-		return (List<MediaPlayer>) Reflection.getPrivateField(SoundManager.getInstance(), "mediaPlayers");
-	}
+    @SuppressWarnings("unchecked")
+    private List<MediaPlayer> getMediaPlayers() {
+        return (List<MediaPlayer>) Reflection.getPrivateField(SoundManager.getInstance(), "mediaPlayers");
+    }
 }

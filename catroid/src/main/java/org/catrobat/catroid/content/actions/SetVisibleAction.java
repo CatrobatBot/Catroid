@@ -30,25 +30,25 @@ import org.catrobat.catroid.stage.StageActivity;
 
 public class SetVisibleAction extends TemporalAction {
 
-	private Sprite sprite;
-	private boolean visible;
+    private Sprite sprite;
+    private boolean visible;
 
-	@Override
-	protected void update(float delta) {
-		sprite.look.setLookVisible(visible);
-		if (StageActivity.stageListener != null) {
-			ShowBubbleActor actor = StageActivity.stageListener.getBubbleActorForSprite(sprite);
-			if (actor != null) {
-				actor.setVisible(visible);
-			}
-		}
-	}
+    @Override
+    protected void update(float delta) {
+        sprite.look.setLookVisible(visible);
+        if (StageActivity.stageListener != null) {
+            ShowBubbleActor actor = StageActivity.stageListener.getBubbleActorForSprite(sprite);
+            if (actor != null) {
+                actor.setVisible(visible);
+            }
+        }
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setVisible(boolean visible) {
-		this.visible = visible;
-	}
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
 }

@@ -29,42 +29,42 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class BroadcastSequenceMap {
-	private static Map<String, HashMap<String, ArrayList<SequenceAction>>> broadcastSequenceMap = new HashMap<>();
+    private static Map<String, HashMap<String, ArrayList<SequenceAction>>> broadcastSequenceMap = new HashMap<>();
 
-	private BroadcastSequenceMap() {
-		throw new AssertionError();
-	}
+    private BroadcastSequenceMap() {
+        throw new AssertionError();
+    }
 
-	public static boolean containsKey(String key, String sceneName) {
-		if (!BroadcastSequenceMap.broadcastSequenceMap.containsKey(sceneName)) {
-			return false;
-		}
-		return BroadcastSequenceMap.broadcastSequenceMap.get(sceneName).containsKey(key);
-	}
+    public static boolean containsKey(String key, String sceneName) {
+        if (!BroadcastSequenceMap.broadcastSequenceMap.containsKey(sceneName)) {
+            return false;
+        }
+        return BroadcastSequenceMap.broadcastSequenceMap.get(sceneName).containsKey(key);
+    }
 
-	public static ArrayList<SequenceAction> get(String key, String sceneName) {
-		if (!BroadcastSequenceMap.broadcastSequenceMap.containsKey(sceneName)) {
-			return null;
-		}
-		return BroadcastSequenceMap.broadcastSequenceMap.get(sceneName).get(key);
-	}
+    public static ArrayList<SequenceAction> get(String key, String sceneName) {
+        if (!BroadcastSequenceMap.broadcastSequenceMap.containsKey(sceneName)) {
+            return null;
+        }
+        return BroadcastSequenceMap.broadcastSequenceMap.get(sceneName).get(key);
+    }
 
-	public static ArrayList<SequenceAction> put(String sceneName, String key, ArrayList<SequenceAction> value) {
-		if (!broadcastSequenceMap.containsKey(sceneName)) {
-			HashMap<String, ArrayList<SequenceAction>> map = new HashMap<>();
-			broadcastSequenceMap.put(sceneName, map);
-		}
-		return BroadcastSequenceMap.broadcastSequenceMap.get(sceneName).put(key, value);
-	}
+    public static ArrayList<SequenceAction> put(String sceneName, String key, ArrayList<SequenceAction> value) {
+        if (!broadcastSequenceMap.containsKey(sceneName)) {
+            HashMap<String, ArrayList<SequenceAction>> map = new HashMap<>();
+            broadcastSequenceMap.put(sceneName, map);
+        }
+        return BroadcastSequenceMap.broadcastSequenceMap.get(sceneName).put(key, value);
+    }
 
-	public static void clear() {
-		BroadcastSequenceMap.broadcastSequenceMap.clear();
-	}
+    public static void clear() {
+        BroadcastSequenceMap.broadcastSequenceMap.clear();
+    }
 
-	public static void clear(String sceneName) {
-		if (!BroadcastSequenceMap.broadcastSequenceMap.containsKey(sceneName)) {
-			return;
-		}
-		BroadcastSequenceMap.broadcastSequenceMap.get(sceneName).clear();
-	}
+    public static void clear(String sceneName) {
+        if (!BroadcastSequenceMap.broadcastSequenceMap.containsKey(sceneName)) {
+            return;
+        }
+        BroadcastSequenceMap.broadcastSequenceMap.get(sceneName).clear();
+    }
 }

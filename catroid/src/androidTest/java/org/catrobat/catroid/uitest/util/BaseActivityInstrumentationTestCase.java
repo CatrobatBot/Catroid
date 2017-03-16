@@ -45,182 +45,182 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 
 public abstract class BaseActivityInstrumentationTestCase<T extends Activity> extends
-		ActivityInstrumentationTestCase2<T> {
-	protected Solo solo;
+        ActivityInstrumentationTestCase2<T> {
+    protected Solo solo;
 
-	private static final String TAG = "BaseActivityTestCase";
-	private Class clazz;
-	private SystemAnimations systemAnimations;
-	private static final String ZIPFILE_NAME = "testzip";
+    private static final String TAG = "BaseActivityTestCase";
+    private Class clazz;
+    private SystemAnimations systemAnimations;
+    private static final String ZIPFILE_NAME = "testzip";
 
-	private boolean createSoloInSetUp;
+    private boolean createSoloInSetUp;
 
-	public BaseActivityInstrumentationTestCase(Class<T> clazz) {
-		super(clazz);
-		this.clazz = clazz;
+    public BaseActivityInstrumentationTestCase(Class<T> clazz) {
+        super(clazz);
+        this.clazz = clazz;
 
-		createSoloInSetUp = true;
-	}
+        createSoloInSetUp = true;
+    }
 
-	/**
-	 * Methods like setActivityIntent(Intent) in child classes supposes that
-	 * setUp() of ActivityInstrumentationTestCase2 was called. But also it must be
-	 * called after getActivity() of ActivityInstrumentationTestCase2 otherwise
-	 * it has no effect. So a flag is needed to initialize solo later in child class
-	 * to use setActivityIntent.
-	 */
-	public BaseActivityInstrumentationTestCase(Class<T> clazz, boolean createSoloInSetUp) {
-		super(clazz);
-		this.clazz = clazz;
-		this.createSoloInSetUp = createSoloInSetUp;
-	}
+    /**
+     * Methods like setActivityIntent(Intent) in child classes supposes that
+     * setUp() of ActivityInstrumentationTestCase2 was called. But also it must be
+     * called after getActivity() of ActivityInstrumentationTestCase2 otherwise
+     * it has no effect. So a flag is needed to initialize solo later in child class
+     * to use setActivityIntent.
+     */
+    public BaseActivityInstrumentationTestCase(Class<T> clazz, boolean createSoloInSetUp) {
+        super(clazz);
+        this.clazz = clazz;
+        this.createSoloInSetUp = createSoloInSetUp;
+    }
 
-	private boolean unzip;
+    private boolean unzip;
 
-	@Override
-	protected void setUp() throws Exception {
-		Log.v(TAG, "setUp");
-		super.setUp();
+    @Override
+    protected void setUp() throws Exception {
+        Log.v(TAG, "setUp");
+        super.setUp();
 
-		systemAnimations = new SystemAnimations(getInstrumentation().getTargetContext());
-		systemAnimations.disableAll();
+        systemAnimations = new SystemAnimations(getInstrumentation().getTargetContext());
+        systemAnimations.disableAll();
 
-		unzip = false;
-		saveProjectsToZip();
+        unzip = false;
+        saveProjectsToZip();
 
-		if (clazz.getSimpleName().equalsIgnoreCase(MainMenuActivity.class.getSimpleName())) {
-			UiTestUtils.createEmptyProject();
-		}
-		if (createSoloInSetUp) {
-			solo = new Solo(getInstrumentation(), getActivity());
-		}
-		Reflection.setPrivateField(StageListener.class, "checkIfAutomaticScreenshotShouldBeTaken", false);
+        if (clazz.getSimpleName().equalsIgnoreCase(MainMenuActivity.class.getSimpleName())) {
+            UiTestUtils.createEmptyProject();
+        }
+        if (createSoloInSetUp) {
+            solo = new Solo(getInstrumentation(), getActivity());
+        }
+        Reflection.setPrivateField(StageListener.class, "checkIfAutomaticScreenshotShouldBeTaken", false);
 
-		if (solo != null) {
-			solo.unlockScreen();
-		}
+        if (solo != null) {
+            solo.unlockScreen();
+        }
 
-		Log.v(TAG, "setUp end");
-	}
+        Log.v(TAG, "setUp end");
+    }
 
-	@Override
-	protected void tearDown() throws Exception {
+    @Override
+    protected void tearDown() throws Exception {
 
-		Log.v(TAG, "tearDown");
-		Log.v(TAG, "remove Projectname from SharedPreferences");
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getInstrumentation().getTargetContext());
-		SharedPreferences.Editor edit = preferences.edit();
-		edit.remove(Constants.PREF_PROJECTNAME_KEY);
-		edit.commit();
+        Log.v(TAG, "tearDown");
+        Log.v(TAG, "remove Projectname from SharedPreferences");
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getInstrumentation().getTargetContext());
+        SharedPreferences.Editor edit = preferences.edit();
+        edit.remove(Constants.PREF_PROJECTNAME_KEY);
+        edit.commit();
 
-		if (solo != null) {
-			solo.finishOpenedActivities();
-		}
+        if (solo != null) {
+            solo.finishOpenedActivities();
+        }
 
-		systemAnimations.enableAll();
-		solo = null;
-		Log.i(TAG, "tearDown end 1");
+        systemAnimations.enableAll();
+        solo = null;
+        Log.i(TAG, "tearDown end 1");
 
-		unzipProjects();
+        unzipProjects();
 
-		Log.i(TAG, "tearDown end 2");
-		super.tearDown();
+        Log.i(TAG, "tearDown end 2");
+        super.tearDown();
 
-		Log.i(TAG, "tearDown end 3");
-	}
+        Log.i(TAG, "tearDown end 3");
+    }
 
-	@Override
-	public void runBare() throws Throwable {
-		try {
-			setUp();
-			runTest();
-		} finally {
-			tearDown();
-		}
-	}
+    @Override
+    public void runBare() throws Throwable {
+        try {
+            setUp();
+            runTest();
+        } finally {
+            tearDown();
+        }
+    }
 
-	public void saveProjectsToZip() {
-		File rootDirectory = new File(Constants.DEFAULT_ROOT);
+    public void saveProjectsToZip() {
+        File rootDirectory = new File(Constants.DEFAULT_ROOT);
 
-		rootDirectory.mkdirs();
+        rootDirectory.mkdirs();
 
-		String[] paths = rootDirectory.list(new FilenameFilter() {
-			@Override
-			public boolean accept(File file, String s) {
-				return !s.equals(ZIPFILE_NAME);
-			}
-		});
+        String[] paths = rootDirectory.list(new FilenameFilter() {
+            @Override
+            public boolean accept(File file, String s) {
+                return !s.equals(ZIPFILE_NAME);
+            }
+        });
 
-		if (paths == null) {
-			fail("could not determine catroid directory");
-		} else if (paths.length > 0) {
-			for (int i = 0; i < paths.length; i++) {
-				paths[i] = Utils.buildPath(rootDirectory.getAbsolutePath(), paths[i]);
-			}
-			try {
-				String zipFileString = Utils.buildPath(Constants.DEFAULT_ROOT, ZIPFILE_NAME);
-				Log.d(TAG, "i am the zipfile: " + zipFileString);
-				File zipFile = new File(zipFileString);
-				if (zipFile.exists()) {
-					zipFile.delete();
-				}
-				zipFile.getParentFile().mkdirs();
-				zipFile.createNewFile();
-				if (!UtilZip.writeToZipFile(paths, zipFileString)) {
-					zipFile.delete();
-					throw new IOException("Cannot write data to Zip File!");
-				}
+        if (paths == null) {
+            fail("could not determine catroid directory");
+        } else if (paths.length > 0) {
+            for (int i = 0; i < paths.length; i++) {
+                paths[i] = Utils.buildPath(rootDirectory.getAbsolutePath(), paths[i]);
+            }
+            try {
+                String zipFileString = Utils.buildPath(Constants.DEFAULT_ROOT, ZIPFILE_NAME);
+                Log.d(TAG, "i am the zipfile: " + zipFileString);
+                File zipFile = new File(zipFileString);
+                if (zipFile.exists()) {
+                    zipFile.delete();
+                }
+                zipFile.getParentFile().mkdirs();
+                zipFile.createNewFile();
+                if (!UtilZip.writeToZipFile(paths, zipFileString)) {
+                    zipFile.delete();
+                    throw new IOException("Cannot write data to Zip File!");
+                }
 
-				for (String projectName : UtilFile.getProjectNames(rootDirectory)) {
-					Log.d(TAG, projectName + "will be deleted");
-					ProjectManager.getInstance().deleteProject(projectName, this.getInstrumentation().getTargetContext());
-				}
+                for (String projectName : UtilFile.getProjectNames(rootDirectory)) {
+                    Log.d(TAG, projectName + "will be deleted");
+                    ProjectManager.getInstance().deleteProject(projectName, this.getInstrumentation().getTargetContext());
+                }
 
-				for (int i = 0; i < paths.length; i++) {
-					Log.d(TAG, "Path to delete: " + paths[i]);
-					StorageHandler.getInstance().deleteAllFile(paths[i]);
-				}
-				unzip = true;
-			} catch (IOException e) {
-				Log.d(TAG, "Zipping failed!", e);
-				fail("IOException while zipping projects");
-			}
-		}
-	}
+                for (int i = 0; i < paths.length; i++) {
+                    Log.d(TAG, "Path to delete: " + paths[i]);
+                    StorageHandler.getInstance().deleteAllFile(paths[i]);
+                }
+                unzip = true;
+            } catch (IOException e) {
+                Log.d(TAG, "Zipping failed!", e);
+                fail("IOException while zipping projects");
+            }
+        }
+    }
 
-	public void unzipProjects() {
+    public void unzipProjects() {
 
-		try {
+        try {
 
-			File rootDirectory = new File(Constants.DEFAULT_ROOT);
+            File rootDirectory = new File(Constants.DEFAULT_ROOT);
 
-			for (String projectName : UtilFile.getProjectNames(rootDirectory)) {
-				Log.d(TAG, projectName + "will be deleted");
-				ProjectManager.getInstance().deleteProject(projectName, this.getInstrumentation().getTargetContext());
-			}
+            for (String projectName : UtilFile.getProjectNames(rootDirectory)) {
+                Log.d(TAG, projectName + "will be deleted");
+                ProjectManager.getInstance().deleteProject(projectName, this.getInstrumentation().getTargetContext());
+            }
 
-			String[] paths = rootDirectory.list();
-			for (int i = 0; i < paths.length; i++) {
-				paths[i] = Utils.buildPath(rootDirectory.getAbsolutePath(), paths[i]);
-			}
+            String[] paths = rootDirectory.list();
+            for (int i = 0; i < paths.length; i++) {
+                paths[i] = Utils.buildPath(rootDirectory.getAbsolutePath(), paths[i]);
+            }
 
-			String zipFileString = Utils.buildPath(Constants.DEFAULT_ROOT, ZIPFILE_NAME);
+            String zipFileString = Utils.buildPath(Constants.DEFAULT_ROOT, ZIPFILE_NAME);
 
-			for (int i = 0; i < paths.length; i++) {
-				if (!paths[i].equals(zipFileString)) {
-					Log.d(TAG, "Path to delete: " + paths[i]);
-					StorageHandler.getInstance().deleteAllFile(paths[i]);
-				}
-			}
+            for (int i = 0; i < paths.length; i++) {
+                if (!paths[i].equals(zipFileString)) {
+                    Log.d(TAG, "Path to delete: " + paths[i]);
+                    StorageHandler.getInstance().deleteAllFile(paths[i]);
+                }
+            }
 
-			if (unzip) {
-				Log.d(TAG, "i am the unzipfile: " + zipFileString);
-				File zipFile = new File(zipFileString);
-				UtilZip.unZipFile(zipFileString, Constants.DEFAULT_ROOT);
-				zipFile.delete();
-			}
-		} catch (IOException e) {
-			Log.d(TAG, "Something wet wrong while unzip files in tear down", e);
-		}
-	}
+            if (unzip) {
+                Log.d(TAG, "i am the unzipfile: " + zipFileString);
+                File zipFile = new File(zipFileString);
+                UtilZip.unZipFile(zipFileString, Constants.DEFAULT_ROOT);
+                zipFile.delete();
+            }
+        } catch (IOException e) {
+            Log.d(TAG, "Something wet wrong while unzip files in tear down", e);
+        }
+    }
 }

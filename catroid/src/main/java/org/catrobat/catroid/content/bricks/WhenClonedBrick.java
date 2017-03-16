@@ -37,62 +37,62 @@ import java.util.Collections;
 import java.util.List;
 
 public class WhenClonedBrick extends BrickBaseType implements ScriptBrick {
-	protected WhenClonedScript whenClonedScript;
-	private static final long serialVersionUID = 1L;
+    protected WhenClonedScript whenClonedScript;
+    private static final long serialVersionUID = 1L;
 
-	public WhenClonedBrick(WhenClonedScript whenScript) {
-		this.whenClonedScript = whenScript;
-	}
+    public WhenClonedBrick(WhenClonedScript whenScript) {
+        this.whenClonedScript = whenScript;
+    }
 
-	public WhenClonedBrick() {
-	}
+    public WhenClonedBrick() {
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return NO_RESOURCES;
-	}
+    @Override
+    public int getRequiredResources() {
+        return NO_RESOURCES;
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		WhenClonedBrick copyBrick = (WhenClonedBrick) clone();
-		copyBrick.whenClonedScript = whenClonedScript;
-		return copyBrick;
-	}
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        WhenClonedBrick copyBrick = (WhenClonedBrick) clone();
+        copyBrick.whenClonedScript = whenClonedScript;
+        return copyBrick;
+    }
 
-	@Override
-	public View getView(final Context context, int brickId, final BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(final Context context, int brickId, final BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_when_cloned, null);
+        view = View.inflate(context, R.layout.brick_when_cloned, null);
 
-		setCheckboxView(R.id.brick_when_cloned_checkbox);
+        setCheckboxView(R.id.brick_when_cloned_checkbox);
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		return getView(context, 0, null);
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        return getView(context, 0, null);
+    }
 
-	@Override
-	public Brick clone() {
-		return new WhenClonedBrick(null);
-	}
+    @Override
+    public Brick clone() {
+        return new WhenClonedBrick(null);
+    }
 
-	@Override
-	public Script getScriptSafe() {
-		if (whenClonedScript == null) {
-			whenClonedScript = new WhenClonedScript();
-		}
+    @Override
+    public Script getScriptSafe() {
+        if (whenClonedScript == null) {
+            whenClonedScript = new WhenClonedScript();
+        }
 
-		return whenClonedScript;
-	}
+        return whenClonedScript;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		return Collections.emptyList();
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        return Collections.emptyList();
+    }
 }

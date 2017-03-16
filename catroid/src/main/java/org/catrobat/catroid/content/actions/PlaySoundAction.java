@@ -30,21 +30,21 @@ import org.catrobat.catroid.io.SoundManager;
 
 public class PlaySoundAction extends TemporalAction {
 
-	private Sprite sprite;
-	private SoundInfo sound;
+    private Sprite sprite;
+    private SoundInfo sound;
 
-	@Override
-	protected void update(float percent) {
-		if (sound != null && sprite.getSoundList().contains(sound) && sound.getAbsolutePath() != null) {
-			SoundManager.getInstance().playSoundFile(sound.getAbsolutePath());
-		}
-	}
+    @Override
+    protected void update(float percent) {
+        if (sound != null && sprite.getSoundList().contains(sound) && sound.getAbsolutePath() != null) {
+            SoundManager.getInstance().playSoundFile(sound.getAbsolutePath());
+        }
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setSound(SoundInfo sound) {
-		this.sound = sound;
-	}
+    public void setSound(SoundInfo sound) {
+        this.sound = sound;
+    }
 }

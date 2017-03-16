@@ -30,60 +30,60 @@ import org.catrobat.catroid.devices.raspberrypi.RaspberryPiService;
 
 public class RaspiInterruptScript extends BroadcastScript {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private String pin;
-	private String eventValue;
+    private String pin;
+    private String eventValue;
 
-	public RaspiInterruptScript(String pin, String eventValue) {
-		super(Constants.RASPI_BROADCAST_INTERRUPT_PREFIX + pin + " " + eventValue);
+    public RaspiInterruptScript(String pin, String eventValue) {
+        super(Constants.RASPI_BROADCAST_INTERRUPT_PREFIX + pin + " " + eventValue);
 
-		this.pin = pin;
-		this.eventValue = eventValue;
-	}
+        this.pin = pin;
+        this.eventValue = eventValue;
+    }
 
-	@Override
-	public ScriptBrick getScriptBrick() {
-		if (brick == null) {
-			brick = new WhenRaspiPinChangedBrick(this);
-		}
+    @Override
+    public ScriptBrick getScriptBrick() {
+        if (brick == null) {
+            brick = new WhenRaspiPinChangedBrick(this);
+        }
 
-		return brick;
-	}
+        return brick;
+    }
 
-	public void setPin(String pin) {
-		this.pin = pin;
-		updateBroadcastMessage();
-	}
+    public void setPin(String pin) {
+        this.pin = pin;
+        updateBroadcastMessage();
+    }
 
-	public void setEventValue(String eventValue) {
-		this.eventValue = eventValue;
-		updateBroadcastMessage();
-	}
+    public void setEventValue(String eventValue) {
+        this.eventValue = eventValue;
+        updateBroadcastMessage();
+    }
 
-	private void updateBroadcastMessage() {
-		setBroadcastMessage(Constants.RASPI_BROADCAST_INTERRUPT_PREFIX + pin + " " + eventValue);
-	}
+    private void updateBroadcastMessage() {
+        setBroadcastMessage(Constants.RASPI_BROADCAST_INTERRUPT_PREFIX + pin + " " + eventValue);
+    }
 
-	public String getPin() {
-		return pin;
-	}
+    public String getPin() {
+        return pin;
+    }
 
-	public String getEventValue() {
-		return eventValue;
-	}
+    public String getEventValue() {
+        return eventValue;
+    }
 
-	@Override
-	public Script copyScriptForSprite(Sprite copySprite) {
-		RaspiInterruptScript cloneScript = new RaspiInterruptScript(pin, eventValue);
+    @Override
+    public Script copyScriptForSprite(Sprite copySprite) {
+        RaspiInterruptScript cloneScript = new RaspiInterruptScript(pin, eventValue);
 
-		doCopy(copySprite, cloneScript);
-		return cloneScript;
-	}
+        doCopy(copySprite, cloneScript);
+        return cloneScript;
+    }
 
-	@Override
-	public int getRequiredResources() {
-		RaspberryPiService.getInstance().addPinInterrupt(Integer.parseInt(pin));
-		return super.getRequiredResources() | Brick.SOCKET_RASPI;
-	}
+    @Override
+    public int getRequiredResources() {
+        RaspberryPiService.getInstance().addPinInterrupt(Integer.parseInt(pin));
+        return super.getRequiredResources() | Brick.SOCKET_RASPI;
+    }
 }

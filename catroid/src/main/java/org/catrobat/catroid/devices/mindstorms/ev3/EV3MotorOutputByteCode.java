@@ -24,15 +24,15 @@
 package org.catrobat.catroid.devices.mindstorms.ev3;
 
 public enum EV3MotorOutputByteCode {
-	MOTOR_A_OUT(0x01), MOTOR_B_OUT(0x02), MOTOR_C_OUT(0x04), MOTOR_D_OUT(0x08);
+    MOTOR_A_OUT(0x01), MOTOR_B_OUT(0x02), MOTOR_C_OUT(0x04), MOTOR_D_OUT(0x08);
 
-	private int ev3MotorOutputValue;
+    private int ev3MotorOutputValue;
 
-	private EV3MotorOutputByteCode(int ev3MotorOutputValue) {
-		this.ev3MotorOutputValue = ev3MotorOutputValue;
-	}
+    private EV3MotorOutputByteCode(int ev3MotorOutputValue) {
+        this.ev3MotorOutputValue = ev3MotorOutputValue;
+    }
 
-	public byte getByte() {
-		return (byte) ev3MotorOutputValue;
-	}
+    public byte getByte() {
+        return (byte) ev3MotorOutputValue;
+    }
 }

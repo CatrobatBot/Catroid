@@ -34,107 +34,107 @@ import java.util.Map;
 
 public class BluetoothDeviceServiceImpl implements BluetoothDeviceService {
 
-	private Map<Class<? extends BluetoothDevice>, BluetoothDevice> connectedDevices =
-			new HashMap<Class<? extends BluetoothDevice>, BluetoothDevice>();
+    private Map<Class<? extends BluetoothDevice>, BluetoothDevice> connectedDevices =
+            new HashMap<Class<? extends BluetoothDevice>, BluetoothDevice>();
 
-	@Override
-	public ConnectDeviceResult connectDevice(Class<? extends BluetoothDevice> deviceToConnect,
-			Activity activity, int requestCode) {
+    @Override
+    public ConnectDeviceResult connectDevice(Class<? extends BluetoothDevice> deviceToConnect,
+                                             Activity activity, int requestCode) {
 
-		if (isDeviceConnectedAndAlive(deviceToConnect)) {
-			return ConnectDeviceResult.ALREADY_CONNECTED;
-		}
+        if (isDeviceConnectedAndAlive(deviceToConnect)) {
+            return ConnectDeviceResult.ALREADY_CONNECTED;
+        }
 
-		Intent intent = createStartIntent(deviceToConnect, activity);
-		activity.startActivityForResult(intent, requestCode);
+        Intent intent = createStartIntent(deviceToConnect, activity);
+        activity.startActivityForResult(intent, requestCode);
 
-		return ConnectDeviceResult.CONNECTION_REQUESTED;
-	}
+        return ConnectDeviceResult.CONNECTION_REQUESTED;
+    }
 
-	@Override
-	public ConnectDeviceResult connectDevice(Class<? extends BluetoothDevice> deviceToConnect,
-			Context context) {
+    @Override
+    public ConnectDeviceResult connectDevice(Class<? extends BluetoothDevice> deviceToConnect,
+                                             Context context) {
 
-		if (isDeviceConnectedAndAlive(deviceToConnect)) {
-			return ConnectDeviceResult.ALREADY_CONNECTED;
-		}
+        if (isDeviceConnectedAndAlive(deviceToConnect)) {
+            return ConnectDeviceResult.ALREADY_CONNECTED;
+        }
 
-		Intent intent = createStartIntent(deviceToConnect, context);
-		context.startActivity(intent);
+        Intent intent = createStartIntent(deviceToConnect, context);
+        context.startActivity(intent);
 
-		return ConnectDeviceResult.CONNECTION_REQUESTED;
-	}
+        return ConnectDeviceResult.CONNECTION_REQUESTED;
+    }
 
-	private synchronized boolean isDeviceConnectedAndAlive(Class<? extends BluetoothDevice> deviceToConnect) {
-		BluetoothDevice device = connectedDevices.get(deviceToConnect);
+    private synchronized boolean isDeviceConnectedAndAlive(Class<? extends BluetoothDevice> deviceToConnect) {
+        BluetoothDevice device = connectedDevices.get(deviceToConnect);
 
-		if (device != null) {
-			if (device.isAlive()) {
-				device.start();
-				return true;
-			}
+        if (device != null) {
+            if (device.isAlive()) {
+                device.start();
+                return true;
+            }
 
-			device.disconnect();
-			connectedDevices.remove(device);
-		}
-		return false;
-	}
+            device.disconnect();
+            connectedDevices.remove(device);
+        }
+        return false;
+    }
 
-	@Override
-	public synchronized void deviceConnected(BluetoothDevice device) {
-		connectedDevices.put(device.getDeviceType(), device);
-		device.start();
-	}
+    @Override
+    public synchronized void deviceConnected(BluetoothDevice device) {
+        connectedDevices.put(device.getDeviceType(), device);
+        device.start();
+    }
 
-	@Override
-	public synchronized void disconnectDevices() {
-		for (BluetoothDevice device : connectedDevices.values()) {
-			device.disconnect();
-		}
+    @Override
+    public synchronized void disconnectDevices() {
+        for (BluetoothDevice device : connectedDevices.values()) {
+            device.disconnect();
+        }
 
-		connectedDevices.clear();
-	}
+        connectedDevices.clear();
+    }
 
-	public synchronized <T extends BluetoothDevice> T getDevice(Class<T> btDevice) {
-		BluetoothDevice device = connectedDevices.get(btDevice);
-		if (device != null) {
-			return (T) device;
-		}
-		return null;
-	}
+    public synchronized <T extends BluetoothDevice> T getDevice(Class<T> btDevice) {
+        BluetoothDevice device = connectedDevices.get(btDevice);
+        if (device != null) {
+            return (T) device;
+        }
+        return null;
+    }
 
-	protected Intent createStartIntent(Class<? extends BluetoothDevice> deviceToConnect,
-			Context context) {
-		Intent intent = new Intent(context, ConnectBluetoothDeviceActivity.class);
-		intent.putExtra(ConnectBluetoothDeviceActivity.DEVICE_TO_CONNECT, deviceToConnect);
-		return intent;
-	}
+    protected Intent createStartIntent(Class<? extends BluetoothDevice> deviceToConnect,
+                                       Context context) {
+        Intent intent = new Intent(context, ConnectBluetoothDeviceActivity.class);
+        intent.putExtra(ConnectBluetoothDeviceActivity.DEVICE_TO_CONNECT, deviceToConnect);
+        return intent;
+    }
 
-	@Override
-	public synchronized void initialise() {
-		for (BluetoothDevice device : connectedDevices.values()) {
-			device.initialise();
-		}
-	}
+    @Override
+    public synchronized void initialise() {
+        for (BluetoothDevice device : connectedDevices.values()) {
+            device.initialise();
+        }
+    }
 
-	@Override
-	public synchronized void start() {
-		for (BluetoothDevice device : connectedDevices.values()) {
-			device.start();
-		}
-	}
+    @Override
+    public synchronized void start() {
+        for (BluetoothDevice device : connectedDevices.values()) {
+            device.start();
+        }
+    }
 
-	@Override
-	public synchronized void pause() {
-		for (BluetoothDevice device : connectedDevices.values()) {
-			device.pause();
-		}
-	}
+    @Override
+    public synchronized void pause() {
+        for (BluetoothDevice device : connectedDevices.values()) {
+            device.pause();
+        }
+    }
 
-	@Override
-	public synchronized void destroy() {
-		for (BluetoothDevice device : connectedDevices.values()) {
-			device.destroy();
-		}
-	}
+    @Override
+    public synchronized void destroy() {
+        for (BluetoothDevice device : connectedDevices.values()) {
+            device.destroy();
+        }
+    }
 }

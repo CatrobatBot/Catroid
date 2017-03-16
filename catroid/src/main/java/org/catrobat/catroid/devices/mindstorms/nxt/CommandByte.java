@@ -25,39 +25,41 @@ package org.catrobat.catroid.devices.mindstorms.nxt;
 import android.util.SparseArray;
 
 public enum CommandByte {
-	PLAY_TONE(0x03),
-	SET_OUTPUT_STATE(0x04),
-	SET_INPUT_MODE(0x05),
-	GET_INPUT_VALUES(0x07),
-	RESET_INPUT_SCALED_VALUE(0x08),
-	LS_WRITE(0x0F),
-	LS_GET_STATUS(0x0E),
-	LS_READ(0x10),
-	GET_BATTERY_LEVEL(0x0B),
-	KEEP_ALIVE(0x0D);
+    PLAY_TONE(0x03),
+    SET_OUTPUT_STATE(0x04),
+    SET_INPUT_MODE(0x05),
+    GET_INPUT_VALUES(0x07),
+    RESET_INPUT_SCALED_VALUE(0x08),
+    LS_WRITE(0x0F),
+    LS_GET_STATUS(0x0E),
+    LS_READ(0x10),
+    GET_BATTERY_LEVEL(0x0B),
+    KEEP_ALIVE(0x0D);
 
-	private int commandByteValue;
-	private static final SparseArray<CommandByte> LOOKUP = new SparseArray<CommandByte>();
-	static {
-		for (CommandByte c : CommandByte.values()) {
-			LOOKUP.put(c.commandByteValue, c);
-		}
-	}
-	private CommandByte(int commandByteValue) {
-		this.commandByteValue = commandByteValue;
-	}
+    private int commandByteValue;
+    private static final SparseArray<CommandByte> LOOKUP = new SparseArray<CommandByte>();
 
-	public byte getByte() {
-		return (byte) commandByteValue;
-	}
+    static {
+        for (CommandByte c : CommandByte.values()) {
+            LOOKUP.put(c.commandByteValue, c);
+        }
+    }
 
-	public static boolean isMember(byte memberToTest) {
-		return LOOKUP.get(memberToTest & 0xFF) != null;
-	}
+    private CommandByte(int commandByteValue) {
+        this.commandByteValue = commandByteValue;
+    }
 
-	public static CommandByte getTypeByValue(byte value) {
-		return LOOKUP.get(value & 0xFF);
-	}
+    public byte getByte() {
+        return (byte) commandByteValue;
+    }
+
+    public static boolean isMember(byte memberToTest) {
+        return LOOKUP.get(memberToTest & 0xFF) != null;
+    }
+
+    public static CommandByte getTypeByValue(byte value) {
+        return LOOKUP.get(value & 0xFF);
+    }
 
 	/* This are all commands lego supports, at the moment only some of them are implemented.
 

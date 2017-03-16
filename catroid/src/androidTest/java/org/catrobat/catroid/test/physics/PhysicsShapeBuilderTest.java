@@ -50,136 +50,138 @@ import java.io.File;
 
 public class PhysicsShapeBuilderTest extends InstrumentationTestCase {
 
-	private static final String TAG = PhysicsShapeBuilderTest.class.getSimpleName();
+    private static final String TAG = PhysicsShapeBuilderTest.class.getSimpleName();
 
-	private PhysicsShapeBuilder physicsShapeBuilder;
-	private PhysicsWorld physicsWorld;
-	private PhysicsLook physicsLook;
-	private Project project;
-	private File projectFile;
-	private static final int SIMPLE_SINGLE_CONVEX_POLYGON_RES_ID = R.raw.rectangle_125x125;
-	private File simpleSingleConvexPolygonFile;
+    private PhysicsShapeBuilder physicsShapeBuilder;
+    private PhysicsWorld physicsWorld;
+    private PhysicsLook physicsLook;
+    private Project project;
+    private File projectFile;
+    private static final int SIMPLE_SINGLE_CONVEX_POLYGON_RES_ID = R.raw.rectangle_125x125;
+    private File simpleSingleConvexPolygonFile;
 
-	private static final int COMPLEX_SINGLE_CONVEX_POLYGON_RES_ID = R.raw.complex_single_convex_polygon;
-	private File complexSingleConvexPolygonFile;
+    private static final int COMPLEX_SINGLE_CONVEX_POLYGON_RES_ID = R.raw.complex_single_convex_polygon;
+    private File complexSingleConvexPolygonFile;
 
-	private Sprite sprite;
-	static {
-		GdxNativesLoader.load();
-	}
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		physicsWorld = new PhysicsWorld(1920, 1600);
-		projectFile = new File(Constants.DEFAULT_ROOT + File.separator + TestUtils.DEFAULT_TEST_PROJECT_NAME);
+    private Sprite sprite;
 
-		if (projectFile.exists()) {
-			UtilFile.deleteDirectory(projectFile);
-		}
+    static {
+        GdxNativesLoader.load();
+    }
 
-		physicsShapeBuilder = PhysicsShapeBuilder.getInstance();
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        physicsWorld = new PhysicsWorld(1920, 1600);
+        projectFile = new File(Constants.DEFAULT_ROOT + File.separator + TestUtils.DEFAULT_TEST_PROJECT_NAME);
 
-		project = new Project(getInstrumentation().getTargetContext(), TestUtils.DEFAULT_TEST_PROJECT_NAME);
-		StorageHandler.getInstance().saveProject(project);
-		ProjectManager.getInstance().setProject(project);
+        if (projectFile.exists()) {
+            UtilFile.deleteDirectory(projectFile);
+        }
 
-		String simpleSingleConvexPolygonFileName = PhysicsTestUtils
-				.getInternalImageFilenameFromFilename("simple_single_convex_polygon.png");
-		simpleSingleConvexPolygonFile = TestUtils.saveFileToProject(TestUtils.DEFAULT_TEST_PROJECT_NAME, project.getDefaultScene().getName(),
-				simpleSingleConvexPolygonFileName, SIMPLE_SINGLE_CONVEX_POLYGON_RES_ID, getInstrumentation()
-						.getContext(), TestUtils.TYPE_IMAGE_FILE);
+        physicsShapeBuilder = PhysicsShapeBuilder.getInstance();
 
-		String complexSingleConvexPolygonFileName = PhysicsTestUtils
-				.getInternalImageFilenameFromFilename("complex_single_convex_polygon.png");
-		complexSingleConvexPolygonFile = TestUtils.saveFileToProject(TestUtils.DEFAULT_TEST_PROJECT_NAME, project.getDefaultScene().getName(),
-				complexSingleConvexPolygonFileName, COMPLEX_SINGLE_CONVEX_POLYGON_RES_ID, getInstrumentation()
-						.getContext(), TestUtils.TYPE_IMAGE_FILE);
+        project = new Project(getInstrumentation().getTargetContext(), TestUtils.DEFAULT_TEST_PROJECT_NAME);
+        StorageHandler.getInstance().saveProject(project);
+        ProjectManager.getInstance().setProject(project);
 
-		sprite = new SingleSprite("TestSprite");
+        String simpleSingleConvexPolygonFileName = PhysicsTestUtils
+                .getInternalImageFilenameFromFilename("simple_single_convex_polygon.png");
+        simpleSingleConvexPolygonFile = TestUtils.saveFileToProject(TestUtils.DEFAULT_TEST_PROJECT_NAME, project.getDefaultScene().getName(),
+                simpleSingleConvexPolygonFileName, SIMPLE_SINGLE_CONVEX_POLYGON_RES_ID, getInstrumentation()
+                        .getContext(), TestUtils.TYPE_IMAGE_FILE);
 
-		physicsLook = new PhysicsLook(sprite, physicsWorld);
-	}
+        String complexSingleConvexPolygonFileName = PhysicsTestUtils
+                .getInternalImageFilenameFromFilename("complex_single_convex_polygon.png");
+        complexSingleConvexPolygonFile = TestUtils.saveFileToProject(TestUtils.DEFAULT_TEST_PROJECT_NAME, project.getDefaultScene().getName(),
+                complexSingleConvexPolygonFileName, COMPLEX_SINGLE_CONVEX_POLYGON_RES_ID, getInstrumentation()
+                        .getContext(), TestUtils.TYPE_IMAGE_FILE);
 
-	@Override
-	protected void tearDown() throws Exception {
-		if (projectFile.exists()) {
-			UtilFile.deleteDirectory(projectFile);
-		}
-		physicsShapeBuilder.reset();
-		projectFile = null;
-		super.tearDown();
-	}
+        sprite = new SingleSprite("TestSprite");
 
-	public void testSimpleSingleConvexPolygon() {
-		LookData lookData = PhysicsTestUtils.generateLookData(simpleSingleConvexPolygonFile);
-		physicsLook.setLookData(lookData);
+        physicsLook = new PhysicsLook(sprite, physicsWorld);
+    }
 
-		Shape[] shapes = physicsShapeBuilder.getScaledShapes(lookData,
-				sprite.look.getSizeInUserInterfaceDimensionUnit() / 100f);
+    @Override
+    protected void tearDown() throws Exception {
+        if (projectFile.exists()) {
+            UtilFile.deleteDirectory(projectFile);
+        }
+        physicsShapeBuilder.reset();
+        projectFile = null;
+        super.tearDown();
+    }
 
-		int expectedPolynoms = 1;
-		int[] expectedVertices = { 4 };
-		checkBuiltShapes(shapes, expectedPolynoms, expectedVertices);
-	}
+    public void testSimpleSingleConvexPolygon() {
+        LookData lookData = PhysicsTestUtils.generateLookData(simpleSingleConvexPolygonFile);
+        physicsLook.setLookData(lookData);
 
-	public void testDifferentAccuracySettings() {
-		LookData lookData = PhysicsTestUtils.generateLookData(complexSingleConvexPolygonFile);
-		physicsLook.setLookData(lookData);
+        Shape[] shapes = physicsShapeBuilder.getScaledShapes(lookData,
+                sprite.look.getSizeInUserInterfaceDimensionUnit() / 100f);
 
-		float[] accuracyLevels = (float[]) Reflection.getPrivateField(PhysicsShapeBuilder.class, "ACCURACY_LEVELS");
+        int expectedPolynoms = 1;
+        int[] expectedVertices = {4};
+        checkBuiltShapes(shapes, expectedPolynoms, expectedVertices);
+    }
 
-		Shape[] lowerAccuracyShapes = physicsShapeBuilder.getScaledShapes(lookData, accuracyLevels[0]);
-		Shape[] lowestAccuracyShapes = lowerAccuracyShapes;
-		Shape[] highestAccuracyShapes = null;
-		for (int accuracyIdx = 1; accuracyIdx < accuracyLevels.length; accuracyIdx++) {
-			Shape[] higherAccuracyShapes = physicsShapeBuilder.getScaledShapes(lookData, accuracyLevels[accuracyIdx]);
-			assertTrue("lower accuracy must have less or equal shapes than higher accuracy", lowerAccuracyShapes
-					.length <= higherAccuracyShapes.length);
-			lowerAccuracyShapes = higherAccuracyShapes;
-			highestAccuracyShapes = higherAccuracyShapes;
-		}
-		assertTrue("lower accuracy must have less shapes than higher accuracy", lowestAccuracyShapes.length
-				< highestAccuracyShapes.length);
-	}
+    public void testDifferentAccuracySettings() {
+        LookData lookData = PhysicsTestUtils.generateLookData(complexSingleConvexPolygonFile);
+        physicsLook.setLookData(lookData);
 
-	private void checkBuiltShapes(Shape[] shapes, int expectedPolynomCount, int[] expectedVertices) {
-		boolean debug = false;
+        float[] accuracyLevels = (float[]) Reflection.getPrivateField(PhysicsShapeBuilder.class, "ACCURACY_LEVELS");
 
-		assertNotNull("Shapes should not be null", shapes);
+        Shape[] lowerAccuracyShapes = physicsShapeBuilder.getScaledShapes(lookData, accuracyLevels[0]);
+        Shape[] lowestAccuracyShapes = lowerAccuracyShapes;
+        Shape[] highestAccuracyShapes = null;
+        for (int accuracyIdx = 1; accuracyIdx < accuracyLevels.length; accuracyIdx++) {
+            Shape[] higherAccuracyShapes = physicsShapeBuilder.getScaledShapes(lookData, accuracyLevels[accuracyIdx]);
+            assertTrue("lower accuracy must have less or equal shapes than higher accuracy", lowerAccuracyShapes
+                    .length <= higherAccuracyShapes.length);
+            lowerAccuracyShapes = higherAccuracyShapes;
+            highestAccuracyShapes = higherAccuracyShapes;
+        }
+        assertTrue("lower accuracy must have less shapes than higher accuracy", lowestAccuracyShapes.length
+                < highestAccuracyShapes.length);
+    }
 
-		if (!debug) {
-			assertEquals("Polynom count is not correct", expectedPolynomCount, shapes.length);
-		}
-		if (!debug) {
-			assertEquals("The array expectedVertices must have length of expectedPolynomCount", expectedPolynomCount,
-					expectedVertices.length);
-		}
+    private void checkBuiltShapes(Shape[] shapes, int expectedPolynomCount, int[] expectedVertices) {
+        boolean debug = false;
 
-		for (int idx = 0; idx < shapes.length; idx++) {
-			Shape shape = shapes[idx];
-			switch (shape.getType()) {
-				case Chain:
-					Log.d(TAG, "type = Chain: ");
-					break;
-				case Circle:
-					Log.d(TAG, "type = Circle: ");
-					break;
-				case Edge:
-					Log.d(TAG, "type = Edge: ");
-					break;
-				case Polygon:
-					int vertexCount = ((PolygonShape) shape).getVertexCount();
-					Log.d(TAG, "type = Polygon: " + vertexCount);
-					for (int vertexIdx = 0; vertexIdx < vertexCount; vertexIdx++) {
-						Vector2 vertex = new Vector2();
-						((PolygonShape) shape).getVertex(vertexIdx, vertex);
-						Log.d(TAG, "x=" + vertex.x + ";y=" + vertex.y);
-					}
-					if (!debug) {
-						assertEquals("vertex count is not correct", expectedVertices[idx], vertexCount);
-					}
-					break;
-			}
-		}
-	}
+        assertNotNull("Shapes should not be null", shapes);
+
+        if (!debug) {
+            assertEquals("Polynom count is not correct", expectedPolynomCount, shapes.length);
+        }
+        if (!debug) {
+            assertEquals("The array expectedVertices must have length of expectedPolynomCount", expectedPolynomCount,
+                    expectedVertices.length);
+        }
+
+        for (int idx = 0; idx < shapes.length; idx++) {
+            Shape shape = shapes[idx];
+            switch (shape.getType()) {
+                case Chain:
+                    Log.d(TAG, "type = Chain: ");
+                    break;
+                case Circle:
+                    Log.d(TAG, "type = Circle: ");
+                    break;
+                case Edge:
+                    Log.d(TAG, "type = Edge: ");
+                    break;
+                case Polygon:
+                    int vertexCount = ((PolygonShape) shape).getVertexCount();
+                    Log.d(TAG, "type = Polygon: " + vertexCount);
+                    for (int vertexIdx = 0; vertexIdx < vertexCount; vertexIdx++) {
+                        Vector2 vertex = new Vector2();
+                        ((PolygonShape) shape).getVertex(vertexIdx, vertex);
+                        Log.d(TAG, "x=" + vertex.x + ";y=" + vertex.y);
+                    }
+                    if (!debug) {
+                        assertEquals("vertex count is not correct", expectedVertices[idx], vertexCount);
+                    }
+                    break;
+            }
+        }
+    }
 }

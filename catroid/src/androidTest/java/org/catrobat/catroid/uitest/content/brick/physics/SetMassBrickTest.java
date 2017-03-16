@@ -45,87 +45,87 @@ import org.catrobat.catroid.uitest.util.UiTestUtils;
 import java.util.ArrayList;
 
 public class SetMassBrickTest extends ActivityInstrumentationTestCase2<ScriptActivity> {
-	private Solo solo;
-	private Project project;
-	private SetMassBrick setMassBrick;
+    private Solo solo;
+    private Project project;
+    private SetMassBrick setMassBrick;
 
-	public SetMassBrickTest() {
-		super(ScriptActivity.class);
-	}
+    public SetMassBrickTest() {
+        super(ScriptActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		createProject();
-		solo = new Solo(getInstrumentation(), getActivity());
-	}
+    @Override
+    public void setUp() throws Exception {
+        createProject();
+        solo = new Solo(getInstrumentation(), getActivity());
+    }
 
-	@Override
-	public void tearDown() throws Exception {
-		UiTestUtils.goBackToHome(getInstrumentation());
-		solo.finishOpenedActivities();
-		UiTestUtils.clearAllUtilTestProjects();
-		super.tearDown();
-		solo = null;
-	}
+    @Override
+    public void tearDown() throws Exception {
+        UiTestUtils.goBackToHome(getInstrumentation());
+        solo.finishOpenedActivities();
+        UiTestUtils.clearAllUtilTestProjects();
+        super.tearDown();
+        solo = null;
+    }
 
-	@Smoke
-	public void testSetMassByBrick() {
-		this.checkSetup();
+    @Smoke
+    public void testSetMassByBrick() {
+        this.checkSetup();
 
-		float mass = 1.234f;
+        float mass = 1.234f;
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
-				R.id.brick_set_mass_edit_text, mass, Brick.BrickField.PHYSICS_GRAVITY_X.PHYSICS_MASS,
-				setMassBrick);
-	}
+        UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
+                R.id.brick_set_mass_edit_text, mass, Brick.BrickField.PHYSICS_GRAVITY_X.PHYSICS_MASS,
+                setMassBrick);
+    }
 
-	@Smoke
-	public void testSetInvalidMassValues() {
-		this.checkSetup();
+    @Smoke
+    public void testSetInvalidMassValues() {
+        this.checkSetup();
 
-		float[] masses = {
-				-1.0f,
-				0.0f,
-				PhysicsObject.MIN_MASS / 10.0f,
-				PhysicsObject.MIN_MASS / 1.1f
-		};
+        float[] masses = {
+                -1.0f,
+                0.0f,
+                PhysicsObject.MIN_MASS / 10.0f,
+                PhysicsObject.MIN_MASS / 1.1f
+        };
 
-		for (float mass : masses) {
-			UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
-					R.id.brick_set_mass_edit_text, mass, Brick.BrickField.PHYSICS_MASS, setMassBrick);
-		}
-	}
+        for (float mass : masses) {
+            UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
+                    R.id.brick_set_mass_edit_text, mass, Brick.BrickField.PHYSICS_MASS, setMassBrick);
+        }
+    }
 
-	private void checkSetup() {
-		ListView dragDropListView = UiTestUtils.getScriptListView(solo);
-		BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
+    private void checkSetup() {
+        ListView dragDropListView = UiTestUtils.getScriptListView(solo);
+        BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
 
-		int childrenCount = adapter.getChildCountFromLastGroup();
-		int groupCount = adapter.getScriptCount();
+        int childrenCount = adapter.getChildCountFromLastGroup();
+        int groupCount = adapter.getScriptCount();
 
-		assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
-		assertEquals("Incorrect number of bricks.", 1, childrenCount);
+        assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
+        assertEquals("Incorrect number of bricks.", 1, childrenCount);
 
-		ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
-		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
+        ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
+        assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
-		String textSetMass = solo.getString(R.string.brick_set_mass);
-		assertNotNull("TextView does not exist.", solo.getText(textSetMass));
-	}
+        assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
+        String textSetMass = solo.getString(R.string.brick_set_mass);
+        assertNotNull("TextView does not exist.", solo.getText(textSetMass));
+    }
 
-	private void createProject() {
-		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite sprite = new SingleSprite("cat");
-		Script script = new StartScript();
-		setMassBrick = new SetMassBrick(0.0f);
-		script.addBrick(setMassBrick);
+    private void createProject() {
+        project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Sprite sprite = new SingleSprite("cat");
+        Script script = new StartScript();
+        setMassBrick = new SetMassBrick(0.0f);
+        script.addBrick(setMassBrick);
 
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 }

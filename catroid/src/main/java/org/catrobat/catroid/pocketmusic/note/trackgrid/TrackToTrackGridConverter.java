@@ -37,47 +37,47 @@ import java.util.Map;
 
 public final class TrackToTrackGridConverter {
 
-	private TrackToTrackGridConverter() {
-	}
+    private TrackToTrackGridConverter() {
+    }
 
-	public static TrackGrid convertTrackToTrackGrid(Track track, MusicalBeat beat, int beatsPerMinute) {
-		Map<NoteName, Long> openNotes = new HashMap<NoteName, Long>();
-		Map<NoteName, GridRow> gridRows = new HashMap<NoteName, GridRow>();
+    public static TrackGrid convertTrackToTrackGrid(Track track, MusicalBeat beat, int beatsPerMinute) {
+        Map<NoteName, Long> openNotes = new HashMap<NoteName, Long>();
+        Map<NoteName, GridRow> gridRows = new HashMap<NoteName, GridRow>();
 
-		NoteLength minNoteLength = beat.getNoteLength();
+        NoteLength minNoteLength = beat.getNoteLength();
 
-		for (Long tick : track.getSortedTicks()) {
-			for (NoteEvent noteEvent : track.getNoteEventsForTick(tick)) {
-				NoteName noteName = noteEvent.getNoteName();
+        for (Long tick : track.getSortedTicks()) {
+            for (NoteEvent noteEvent : track.getNoteEventsForTick(tick)) {
+                NoteName noteName = noteEvent.getNoteName();
 
-				if (gridRows.get(noteName) == null) {
-					gridRows.put(noteName, new GridRow(noteName, new SparseArray<List<GridRowPosition>>()));
-				}
+                if (gridRows.get(noteName) == null) {
+                    gridRows.put(noteName, new GridRow(noteName, new SparseArray<List<GridRowPosition>>()));
+                }
 
-				if (noteEvent.isNoteOn()) {
-					openNotes.put(noteName, tick);
-				} else {
-					long openTick = openNotes.get(noteName);
-					NoteLength length = NoteLength.getNoteLengthFromTickDuration(tick - openTick, beatsPerMinute);
+                if (noteEvent.isNoteOn()) {
+                    openNotes.put(noteName, tick);
+                } else {
+                    long openTick = openNotes.get(noteName);
+                    NoteLength length = NoteLength.getNoteLengthFromTickDuration(tick - openTick, beatsPerMinute);
 
-					int columnStartIndex = (int) (openTick / minNoteLength.toTicks(beatsPerMinute));
-					int startBeatIndex = columnStartIndex / beat.getTopNumber();
-					int endBeatIndex = ((columnStartIndex + (int) ((tick - openTick)
-							/ minNoteLength.toTicks(beatsPerMinute))) - 1) / beat.getTopNumber();
+                    int columnStartIndex = (int) (openTick / minNoteLength.toTicks(beatsPerMinute));
+                    int startBeatIndex = columnStartIndex / beat.getTopNumber();
+                    int endBeatIndex = ((columnStartIndex + (int) ((tick - openTick)
+                            / minNoteLength.toTicks(beatsPerMinute))) - 1) / beat.getTopNumber();
 
-					GridRowPosition gridRowPosition = new GridRowPosition(columnStartIndex, length);
+                    GridRowPosition gridRowPosition = new GridRowPosition(columnStartIndex, length);
 
-					for (int i = startBeatIndex; i <= endBeatIndex; i++) {
-						if (null == gridRows.get(noteName).getGridRowPositions().get(i)) {
-							gridRows.get(noteName).getGridRowPositions().put(i, new ArrayList<GridRowPosition>());
-						}
+                    for (int i = startBeatIndex; i <= endBeatIndex; i++) {
+                        if (null == gridRows.get(noteName).getGridRowPositions().get(i)) {
+                            gridRows.get(noteName).getGridRowPositions().put(i, new ArrayList<GridRowPosition>());
+                        }
 
-						gridRows.get(noteName).getGridRowPositions().get(i).add(gridRowPosition);
-					}
-				}
-			}
-		}
+                        gridRows.get(noteName).getGridRowPositions().get(i).add(gridRowPosition);
+                    }
+                }
+            }
+        }
 
-		return new TrackGrid(track.getKey(), track.getInstrument(), beat, new ArrayList<>(gridRows.values()));
-	}
+        return new TrackGrid(track.getKey(), track.getInstrument(), beat, new ArrayList<>(gridRows.values()));
+    }
 }

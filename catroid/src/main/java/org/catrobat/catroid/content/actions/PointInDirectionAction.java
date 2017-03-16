@@ -32,24 +32,24 @@ import org.catrobat.catroid.formulaeditor.InterpretationException;
 
 public class PointInDirectionAction extends TemporalAction {
 
-	private Sprite sprite;
-	private Formula degrees;
+    private Sprite sprite;
+    private Formula degrees;
 
-	@Override
-	protected void update(float percent) {
-		try {
-			Float degreeInterpretation = degrees == null ? Float.valueOf(0f) : degrees.interpretFloat(sprite);
-			sprite.look.setDirectionInUserInterfaceDimensionUnit(degreeInterpretation);
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}
-	}
+    @Override
+    protected void update(float percent) {
+        try {
+            Float degreeInterpretation = degrees == null ? Float.valueOf(0f) : degrees.interpretFloat(sprite);
+            sprite.look.setDirectionInUserInterfaceDimensionUnit(degreeInterpretation);
+        } catch (InterpretationException interpretationException) {
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+        }
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setDegreesInUserInterfaceDimensionUnit(Formula degrees) {
-		this.degrees = degrees;
-	}
+    public void setDegreesInUserInterfaceDimensionUnit(Formula degrees) {
+        this.degrees = degrees;
+    }
 }

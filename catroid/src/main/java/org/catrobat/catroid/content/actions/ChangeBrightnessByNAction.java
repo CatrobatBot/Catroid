@@ -32,25 +32,25 @@ import org.catrobat.catroid.formulaeditor.InterpretationException;
 
 public class ChangeBrightnessByNAction extends TemporalAction {
 
-	private Sprite sprite;
-	private Formula changeBrightness;
+    private Sprite sprite;
+    private Formula changeBrightness;
 
-	@Override
-	protected void update(float percent) {
-		try {
-			Float newChangeBrightness = changeBrightness == null ? Float.valueOf(0f) : changeBrightness
-					.interpretFloat(sprite);
-			sprite.look.changeBrightnessInUserInterfaceDimensionUnit(newChangeBrightness);
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}
-	}
+    @Override
+    protected void update(float percent) {
+        try {
+            Float newChangeBrightness = changeBrightness == null ? Float.valueOf(0f) : changeBrightness
+                    .interpretFloat(sprite);
+            sprite.look.changeBrightnessInUserInterfaceDimensionUnit(newChangeBrightness);
+        } catch (InterpretationException interpretationException) {
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+        }
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setBrightness(Formula changeBrightness) {
-		this.changeBrightness = changeBrightness;
-	}
+    public void setBrightness(Formula changeBrightness) {
+        this.changeBrightness = changeBrightness;
+    }
 }

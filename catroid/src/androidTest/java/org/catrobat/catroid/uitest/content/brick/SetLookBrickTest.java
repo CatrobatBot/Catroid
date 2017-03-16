@@ -50,240 +50,240 @@ import java.io.File;
 import java.util.List;
 
 public class SetLookBrickTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
-	private static final int RESOURCE_LOOK = org.catrobat.catroid.test.R.raw.icon;
-	private static final int RESOURCE_LOOK2 = org.catrobat.catroid.test.R.raw.icon2;
+    private static final int RESOURCE_LOOK = org.catrobat.catroid.test.R.raw.icon;
+    private static final int RESOURCE_LOOK2 = org.catrobat.catroid.test.R.raw.icon2;
 
-	private String lookName = "testLook1";
-	private String lookName2 = "testLook2";
-	private File lookFile;
-	private File lookFile2;
-	private List<LookData> lookDataList;
-	private String testFile = "testFile";
+    private String lookName = "testLook1";
+    private String lookName2 = "testLook2";
+    private File lookFile;
+    private File lookFile2;
+    private List<LookData> lookDataList;
+    private String testFile = "testFile";
 
-	private File paintroidImageFile;
+    private File paintroidImageFile;
 
-	public SetLookBrickTest() {
-		super(MainMenuActivity.class);
-	}
+    public SetLookBrickTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
 
-		paintroidImageFile = UiTestUtils.createTestMediaFile(Constants.DEFAULT_ROOT + "/" + testFile + ".png",
-				org.catrobat.catroid.test.R.drawable.catroid_banzai, getInstrumentation().getContext());
+        paintroidImageFile = UiTestUtils.createTestMediaFile(Constants.DEFAULT_ROOT + "/" + testFile + ".png",
+                org.catrobat.catroid.test.R.drawable.catroid_banzai, getInstrumentation().getContext());
 
-		createProject();
+        createProject();
 
-		UiTestUtils.prepareStageForTest();
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
-	}
+        UiTestUtils.prepareStageForTest();
+        UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
+    }
 
-	@Override
-	public void tearDown() throws Exception {
-		if (lookFile.exists()) {
-			lookFile.delete();
-		}
-		if (lookFile2.exists()) {
-			lookFile2.delete();
-		}
-		paintroidImageFile.delete();
-		super.tearDown();
-	}
+    @Override
+    public void tearDown() throws Exception {
+        if (lookFile.exists()) {
+            lookFile.delete();
+        }
+        if (lookFile2.exists()) {
+            lookFile2.delete();
+        }
+        paintroidImageFile.delete();
+        super.tearDown();
+    }
 
-	public void testDismissNewLookDialog() {
-		solo.clickOnText(lookName);
-		solo.clickOnText(solo.getString(R.string.new_broadcast_message));
-		solo.waitForDialogToOpen();
-		solo.goBack();
-		solo.waitForDialogToClose();
+    public void testDismissNewLookDialog() {
+        solo.clickOnText(lookName);
+        solo.clickOnText(solo.getString(R.string.new_broadcast_message));
+        solo.waitForDialogToOpen();
+        solo.goBack();
+        solo.waitForDialogToClose();
 
-		assertEquals("Not in ScriptActivity", "ui.ScriptActivity", solo.getCurrentActivity().getLocalClassName());
-		assertTrue("Spinner not updated", solo.waitForText(lookName));
-	}
+        assertEquals("Not in ScriptActivity", "ui.ScriptActivity", solo.getCurrentActivity().getLocalClassName());
+        assertTrue("Spinner not updated", solo.waitForText(lookName));
+    }
 
-	public void testSelectLookAndPlay() {
-		assertTrue(lookName + " is not selected in Spinner", solo.isSpinnerTextSelected(lookName));
+    public void testSelectLookAndPlay() {
+        assertTrue(lookName + " is not selected in Spinner", solo.isSpinnerTextSelected(lookName));
 
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
 
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(1000);
-		Look look = ProjectManager.getInstance().getCurrentProject().getDefaultScene().getSpriteList().get(0).look;
-		assertEquals("look not set", look.getImagePath(), lookDataList.get(0).getAbsolutePath());
-		solo.goBack();
-		solo.goBack();
-		solo.waitForActivity(ScriptActivity.class.getSimpleName());
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(1000);
+        Look look = ProjectManager.getInstance().getCurrentProject().getDefaultScene().getSpriteList().get(0).look;
+        assertEquals("look not set", look.getImagePath(), lookDataList.get(0).getAbsolutePath());
+        solo.goBack();
+        solo.goBack();
+        solo.waitForActivity(ScriptActivity.class.getSimpleName());
 
-		solo.clickOnText(lookName);
-		solo.clickOnText(lookName2);
-		assertTrue(lookName2 + " is not selected in Spinner", solo.searchText(lookName2));
+        solo.clickOnText(lookName);
+        solo.clickOnText(lookName2);
+        assertTrue(lookName2 + " is not selected in Spinner", solo.searchText(lookName2));
 
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
 
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(1000);
-		look = ProjectManager.getInstance().getCurrentProject().getDefaultScene().getSpriteList().get(0).look;
-		assertEquals("look not set", look.getImagePath(), lookDataList.get(1).getAbsolutePath());
-	}
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(1000);
+        look = ProjectManager.getInstance().getCurrentProject().getDefaultScene().getSpriteList().get(0).look;
+        assertEquals("look not set", look.getImagePath(), lookDataList.get(1).getAbsolutePath());
+    }
 
-	public void testSpinnerUpdatesDelete() {
-		solo.clickOnText(lookName);
+    public void testSpinnerUpdatesDelete() {
+        solo.clickOnText(lookName);
 
-		assertTrue(lookName + " is not in Spinner", solo.searchText(lookName));
-		assertTrue(lookName2 + " is not in Spinner", solo.searchText(lookName2));
+        assertTrue(lookName + " is not in Spinner", solo.searchText(lookName));
+        assertTrue(lookName2 + " is not in Spinner", solo.searchText(lookName2));
 
-		solo.goBack();
-		solo.goBack();
-		solo.clickOnText(solo.getString(R.string.backgrounds));
+        solo.goBack();
+        solo.goBack();
+        solo.clickOnText(solo.getString(R.string.backgrounds));
 
-		clickOnContextMenuItem(lookName, solo.getString(R.string.delete));
-		solo.clickOnButton(solo.getString(R.string.yes));
+        clickOnContextMenuItem(lookName, solo.getString(R.string.delete));
+        solo.clickOnButton(solo.getString(R.string.yes));
 
-		UiTestUtils.switchToFragmentInScriptActivity(solo, UiTestUtils.SCRIPTS_INDEX);
+        UiTestUtils.switchToFragmentInScriptActivity(solo, UiTestUtils.SCRIPTS_INDEX);
 
-		solo.clickOnText(lookName2);
+        solo.clickOnText(lookName2);
 
-		assertFalse(lookName + " is still in Spinner", solo.searchText(lookName));
-		assertTrue(lookName2 + " is not in Spinner", solo.searchText(lookName2));
-	}
+        assertFalse(lookName + " is still in Spinner", solo.searchText(lookName));
+        assertTrue(lookName2 + " is not in Spinner", solo.searchText(lookName2));
+    }
 
-	public void testSpinnerUpdatesRename() {
-		String newName = "nameRenamed";
+    public void testSpinnerUpdatesRename() {
+        String newName = "nameRenamed";
 
-		solo.clickOnText(lookName);
+        solo.clickOnText(lookName);
 
-		assertTrue(lookName + " is not in Spinner", solo.searchText(lookName));
-		assertTrue(lookName2 + " is not in Spinner", solo.searchText(lookName2));
+        assertTrue(lookName + " is not in Spinner", solo.searchText(lookName));
+        assertTrue(lookName2 + " is not in Spinner", solo.searchText(lookName2));
 
-		solo.goBack();
-		solo.goBack();
+        solo.goBack();
+        solo.goBack();
 
-		solo.clickOnText(solo.getString(R.string.backgrounds));
+        solo.clickOnText(solo.getString(R.string.backgrounds));
 
-		clickOnContextMenuItem(lookName, solo.getString(R.string.rename));
+        clickOnContextMenuItem(lookName, solo.getString(R.string.rename));
 
-		solo.clearEditText(0);
-		solo.enterText(0, newName);
-		solo.clickOnButton(solo.getString(R.string.ok));
+        solo.clearEditText(0);
+        solo.enterText(0, newName);
+        solo.clickOnButton(solo.getString(R.string.ok));
 
-		UiTestUtils.switchToFragmentInScriptActivity(solo, UiTestUtils.SCRIPTS_INDEX);
+        UiTestUtils.switchToFragmentInScriptActivity(solo, UiTestUtils.SCRIPTS_INDEX);
 
-		solo.clickOnText(newName);
+        solo.clickOnText(newName);
 
-		assertTrue(newName + " is not in Spinner", solo.searchText(newName));
-		assertTrue(lookName2 + " is not in Spinner", solo.searchText(lookName2));
-	}
+        assertTrue(newName + " is not in Spinner", solo.searchText(newName));
+        assertTrue(lookName2 + " is not in Spinner", solo.searchText(lookName2));
+    }
 
-	public void testAdapterUpdateInScriptActivity() {
-		String look1ImagePath = lookDataList.get(0).getAbsolutePath();
-		String look2ImagePath = lookDataList.get(1).getAbsolutePath();
-		assertTrue(lookName + " is not selected in Spinner", solo.isSpinnerTextSelected(lookName));
+    public void testAdapterUpdateInScriptActivity() {
+        String look1ImagePath = lookDataList.get(0).getAbsolutePath();
+        String look2ImagePath = lookDataList.get(1).getAbsolutePath();
+        assertTrue(lookName + " is not selected in Spinner", solo.isSpinnerTextSelected(lookName));
 
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		String lookPath = ProjectManager.getInstance().getCurrentSprite().getLookDataList().get(0).getAbsolutePath();
-		assertEquals("Wrong image shown in stage --> Problem with Adapter update in Script", look1ImagePath, lookPath);
-		solo.goBack();
-		solo.goBack();
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        String lookPath = ProjectManager.getInstance().getCurrentSprite().getLookDataList().get(0).getAbsolutePath();
+        assertEquals("Wrong image shown in stage --> Problem with Adapter update in Script", look1ImagePath, lookPath);
+        solo.goBack();
+        solo.goBack();
 
-		for (int i = 0; i < 5; ++i) {
-			selectLook(lookName2, lookName, look2ImagePath);
-			selectLook(lookName, lookName2, look1ImagePath);
-		}
-	}
+        for (int i = 0; i < 5; ++i) {
+            selectLook(lookName2, lookName, look2ImagePath);
+            selectLook(lookName, lookName2, look1ImagePath);
+        }
+    }
 
-	public void testAddNewLook() {
-		String newText = solo.getString(R.string.new_broadcast_message);
+    public void testAddNewLook() {
+        String newText = solo.getString(R.string.new_broadcast_message);
 
-		Bundle bundleForGallery = new Bundle();
-		bundleForGallery.putString("filePath", paintroidImageFile.getAbsolutePath());
-		Intent intent = new Intent(getInstrumentation().getContext(),
-				org.catrobat.catroid.uitest.mockups.MockGalleryActivity.class);
-		intent.putExtras(bundleForGallery);
+        Bundle bundleForGallery = new Bundle();
+        bundleForGallery.putString("filePath", paintroidImageFile.getAbsolutePath());
+        Intent intent = new Intent(getInstrumentation().getContext(),
+                org.catrobat.catroid.uitest.mockups.MockGalleryActivity.class);
+        intent.putExtras(bundleForGallery);
 
-		UiTestUtils.switchToFragmentInScriptActivity(solo, UiTestUtils.LOOKS_INDEX);
-		UiTestUtils.switchToFragmentInScriptActivity(solo, UiTestUtils.SCRIPTS_INDEX);
+        UiTestUtils.switchToFragmentInScriptActivity(solo, UiTestUtils.LOOKS_INDEX);
+        UiTestUtils.switchToFragmentInScriptActivity(solo, UiTestUtils.SCRIPTS_INDEX);
 
-		solo.clickOnText(lookName);
-		solo.clickOnText(newText);
+        solo.clickOnText(lookName);
+        solo.clickOnText(newText);
 
-		ScriptActivity currentActivity = (ScriptActivity) solo.getCurrentActivity();
-		solo.waitForFragmentByTag(LookFragment.TAG);
+        ScriptActivity currentActivity = (ScriptActivity) solo.getCurrentActivity();
+        solo.waitForFragmentByTag(LookFragment.TAG);
 
-		LookFragment lookFragment = (LookFragment) currentActivity.getFragment(ScriptActivity.FRAGMENT_LOOKS);
-		lookFragment.startActivityForResult(intent, LookController.REQUEST_SELECT_OR_DRAW_IMAGE);
-		solo.waitForActivity(ScriptActivity.class.getSimpleName());
-		solo.goBack();
-		//This is needed, because the spinner is only updated, when you actually click on the dialog
-		//and not using the MockActivity. This functionality is tested in testDismissNewLookDialog()
-		solo.clickOnView(solo.getView(Spinner.class, 0));
+        LookFragment lookFragment = (LookFragment) currentActivity.getFragment(ScriptActivity.FRAGMENT_LOOKS);
+        lookFragment.startActivityForResult(intent, LookController.REQUEST_SELECT_OR_DRAW_IMAGE);
+        solo.waitForActivity(ScriptActivity.class.getSimpleName());
+        solo.goBack();
+        //This is needed, because the spinner is only updated, when you actually click on the dialog
+        //and not using the MockActivity. This functionality is tested in testDismissNewLookDialog()
+        solo.clickOnView(solo.getView(Spinner.class, 0));
 
-		assertTrue("Testfile not added from mockActivity", solo.searchText(testFile));
+        assertTrue("Testfile not added from mockActivity", solo.searchText(testFile));
 
-		solo.goBack();
-		solo.goBack();
+        solo.goBack();
+        solo.goBack();
 
-		solo.waitForActivity(ProgramMenuActivity.class.getSimpleName());
+        solo.waitForActivity(ProgramMenuActivity.class.getSimpleName());
 
-		String programMenuActivityClass = ProgramMenuActivity.class.getSimpleName();
-		assertTrue("Should be in " + programMenuActivityClass, solo.getCurrentActivity().getClass().getSimpleName()
-				.equals(programMenuActivityClass));
-	}
+        String programMenuActivityClass = ProgramMenuActivity.class.getSimpleName();
+        assertTrue("Should be in " + programMenuActivityClass, solo.getCurrentActivity().getClass().getSimpleName()
+                .equals(programMenuActivityClass));
+    }
 
-	public void selectLook(String newLook, String oldName, String lookImagePath) {
-		solo.clickOnText(oldName);
-		solo.clickOnText(newLook);
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.sleep(5000);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(2000);
-		String lookPath = ProjectManager.getInstance().getCurrentSprite().look.getImagePath();
-		assertEquals("Wrong image shown in stage --> Problem with Adapter update in Script", lookImagePath, lookPath);
-		solo.goBack();
-		solo.goBack();
-	}
+    public void selectLook(String newLook, String oldName, String lookImagePath) {
+        solo.clickOnText(oldName);
+        solo.clickOnText(newLook);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.sleep(5000);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(2000);
+        String lookPath = ProjectManager.getInstance().getCurrentSprite().look.getImagePath();
+        assertEquals("Wrong image shown in stage --> Problem with Adapter update in Script", lookImagePath, lookPath);
+        solo.goBack();
+        solo.goBack();
+    }
 
-	private void createProject() {
-		ProjectManager projectManager = ProjectManager.getInstance();
-		Project project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite firstSprite = new SingleSprite("cat");
-		Script testScript = new StartScript();
+    private void createProject() {
+        ProjectManager projectManager = ProjectManager.getInstance();
+        Project project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Sprite firstSprite = new SingleSprite("cat");
+        Script testScript = new StartScript();
 
-		SetLookBrick setLookBrick = new SetLookBrick();
-		testScript.addBrick(setLookBrick);
+        SetLookBrick setLookBrick = new SetLookBrick();
+        testScript.addBrick(setLookBrick);
 
-		firstSprite.addScript(testScript);
-		project.getDefaultScene().addSprite(firstSprite);
+        firstSprite.addScript(testScript);
+        project.getDefaultScene().addSprite(firstSprite);
 
-		projectManager.setProject(project);
-		projectManager.setCurrentSprite(firstSprite);
-		projectManager.setCurrentScript(testScript);
-		lookDataList = projectManager.getCurrentSprite().getLookDataList();
+        projectManager.setProject(project);
+        projectManager.setCurrentSprite(firstSprite);
+        projectManager.setCurrentScript(testScript);
+        lookDataList = projectManager.getCurrentSprite().getLookDataList();
 
-		lookFile = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, project.getDefaultScene().getName(), "image.png", RESOURCE_LOOK,
-				getInstrumentation().getContext(), UiTestUtils.FileTypes.IMAGE);
-		LookData lookData = new LookData();
-		lookData.setLookFilename(lookFile.getName());
-		lookData.setLookName(lookName);
+        lookFile = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, project.getDefaultScene().getName(), "image.png", RESOURCE_LOOK,
+                getInstrumentation().getContext(), UiTestUtils.FileTypes.IMAGE);
+        LookData lookData = new LookData();
+        lookData.setLookFilename(lookFile.getName());
+        lookData.setLookName(lookName);
 
-		lookFile2 = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, project.getDefaultScene().getName(), "image2.png", RESOURCE_LOOK2,
-				getInstrumentation().getContext(), UiTestUtils.FileTypes.IMAGE);
-		LookData lookData2 = new LookData();
-		lookData2.setLookFilename(lookFile2.getName());
-		lookData2.setLookName(lookName2);
+        lookFile2 = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, project.getDefaultScene().getName(), "image2.png", RESOURCE_LOOK2,
+                getInstrumentation().getContext(), UiTestUtils.FileTypes.IMAGE);
+        LookData lookData2 = new LookData();
+        lookData2.setLookFilename(lookFile2.getName());
+        lookData2.setLookName(lookName2);
 
-		lookDataList.add(lookData);
-		lookDataList.add(lookData2);
-		ProjectManager.getInstance().getFileChecksumContainer()
-				.addChecksum(lookData.getChecksum(), lookData.getAbsolutePath());
-		ProjectManager.getInstance().getFileChecksumContainer()
-				.addChecksum(lookData2.getChecksum(), lookData2.getAbsolutePath());
-	}
+        lookDataList.add(lookData);
+        lookDataList.add(lookData2);
+        ProjectManager.getInstance().getFileChecksumContainer()
+                .addChecksum(lookData.getChecksum(), lookData.getAbsolutePath());
+        ProjectManager.getInstance().getFileChecksumContainer()
+                .addChecksum(lookData2.getChecksum(), lookData2.getAbsolutePath());
+    }
 
-	private void clickOnContextMenuItem(String lookName, String menuItemName) {
-		solo.clickLongOnText(lookName);
-		solo.waitForText(menuItemName);
-		solo.clickOnText(menuItemName);
-	}
+    private void clickOnContextMenuItem(String lookName, String menuItemName) {
+        solo.clickLongOnText(lookName);
+        solo.waitForText(menuItemName);
+        solo.clickOnText(menuItemName);
+    }
 }

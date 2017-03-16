@@ -36,78 +36,78 @@ import org.catrobat.catroid.content.WhenTouchDownScript;
 import java.util.List;
 
 public class WhenTouchDownBrick extends BrickBaseType implements ScriptBrick {
-	protected WhenTouchDownScript whenTouchDownScript;
-	private transient View prototypeView;
-	private static final long serialVersionUID = 1L;
+    protected WhenTouchDownScript whenTouchDownScript;
+    private transient View prototypeView;
+    private static final long serialVersionUID = 1L;
 
-	public WhenTouchDownBrick() {
-		this.whenTouchDownScript = new WhenTouchDownScript();
-	}
+    public WhenTouchDownBrick() {
+        this.whenTouchDownScript = new WhenTouchDownScript();
+    }
 
-	public WhenTouchDownBrick(WhenTouchDownScript script) {
-		this.whenTouchDownScript = script;
+    public WhenTouchDownBrick(WhenTouchDownScript script) {
+        this.whenTouchDownScript = script;
 
-		if (script != null && script.isCommentedOut()) {
-			setCommentedOut(true);
-		}
-	}
+        if (script != null && script.isCommentedOut()) {
+            setCommentedOut(true);
+        }
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		WhenTouchDownBrick copyBrick = (WhenTouchDownBrick) clone();
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        WhenTouchDownBrick copyBrick = (WhenTouchDownBrick) clone();
 
-		copyBrick.whenTouchDownScript = whenTouchDownScript;
-		return copyBrick;
-	}
+        copyBrick.whenTouchDownScript = whenTouchDownScript;
+        return copyBrick;
+    }
 
-	@Override
-	public Script getScriptSafe() {
-		if (whenTouchDownScript == null) {
-			setWhenTouchDownScript(new WhenTouchDownScript());
-		}
-		return whenTouchDownScript;
-	}
+    @Override
+    public Script getScriptSafe() {
+        if (whenTouchDownScript == null) {
+            setWhenTouchDownScript(new WhenTouchDownScript());
+        }
+        return whenTouchDownScript;
+    }
 
-	@Override
-	public Brick clone() {
-		return new WhenTouchDownBrick(new WhenTouchDownScript());
-	}
+    @Override
+    public Brick clone() {
+        return new WhenTouchDownBrick(new WhenTouchDownScript());
+    }
 
-	@Override
-	public View getView(final Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(final Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_screen_touched, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
-		setCheckboxView(R.id.brick_when_screen_touched_checkbox);
+        view = View.inflate(context, R.layout.brick_screen_touched, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        setCheckboxView(R.id.brick_when_screen_touched_checkbox);
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_screen_touched, null);
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_screen_touched, null);
+        return prototypeView;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        return null;
+    }
 
-	public WhenTouchDownScript getWhenTouchDownScript() {
-		return whenTouchDownScript;
-	}
+    public WhenTouchDownScript getWhenTouchDownScript() {
+        return whenTouchDownScript;
+    }
 
-	public void setWhenTouchDownScript(WhenTouchDownScript whenTouchDownScript) {
-		this.whenTouchDownScript = whenTouchDownScript;
-	}
+    public void setWhenTouchDownScript(WhenTouchDownScript whenTouchDownScript) {
+        this.whenTouchDownScript = whenTouchDownScript;
+    }
 
-	@Override
-	public void setCommentedOut(boolean commentedOut) {
-		super.setCommentedOut(commentedOut);
-		getScriptSafe().setCommentedOut(commentedOut);
-	}
+    @Override
+    public void setCommentedOut(boolean commentedOut) {
+        super.setCommentedOut(commentedOut);
+        getScriptSafe().setCommentedOut(commentedOut);
+    }
 }

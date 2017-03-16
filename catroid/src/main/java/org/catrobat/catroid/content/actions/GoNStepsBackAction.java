@@ -36,67 +36,67 @@ import java.util.List;
 
 public class GoNStepsBackAction extends TemporalAction {
 
-	private Sprite sprite;
-	private Formula steps;
+    private Sprite sprite;
+    private Formula steps;
 
-	@Override
-	protected void update(float delta) {
-		Float stepsValue;
-		try {
-			stepsValue = steps == null ? Float.valueOf(0f) : steps.interpretFloat(sprite);
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-			return;
-		}
+    @Override
+    protected void update(float delta) {
+        Float stepsValue;
+        try {
+            stepsValue = steps == null ? Float.valueOf(0f) : steps.interpretFloat(sprite);
+        } catch (InterpretationException interpretationException) {
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+            return;
+        }
 
-		int zPosition = sprite.look.getZIndex();
-		if (stepsValue.intValue() > 0 && (zPosition - stepsValue.intValue()) < Constants.Z_INDEX_FIRST_SPRITE) {
-			sprite.look.setZIndex(Constants.Z_INDEX_FIRST_SPRITE);
-		} else if (stepsValue.intValue() < 0 && (zPosition - stepsValue.intValue()) < zPosition) {
-			toFront();
-		} else {
-			goNStepsBack(stepsValue.intValue());
-		}
-	}
+        int zPosition = sprite.look.getZIndex();
+        if (stepsValue.intValue() > 0 && (zPosition - stepsValue.intValue()) < Constants.Z_INDEX_FIRST_SPRITE) {
+            sprite.look.setZIndex(Constants.Z_INDEX_FIRST_SPRITE);
+        } else if (stepsValue.intValue() < 0 && (zPosition - stepsValue.intValue()) < zPosition) {
+            toFront();
+        } else {
+            goNStepsBack(stepsValue.intValue());
+        }
+    }
 
-	private void toFront() {
+    private void toFront() {
 
-		List<Sprite> spriteList = ProjectManager.getInstance().getCurrentProject().getSpriteListWithClones();
-		int actualSpriteZIndex = sprite.look.getZIndex();
+        List<Sprite> spriteList = ProjectManager.getInstance().getCurrentProject().getSpriteListWithClones();
+        int actualSpriteZIndex = sprite.look.getZIndex();
 
-		for (int i = 0; i < spriteList.size(); i++) {
-			if (spriteList.get(i).look.getZIndex() > actualSpriteZIndex) {
-				spriteList.get(i).look.setZIndex(spriteList.get(i).look.getZIndex() - 1);
-			}
-		}
-		sprite.look.setZIndex(spriteList.size() - 1);
-	}
+        for (int i = 0; i < spriteList.size(); i++) {
+            if (spriteList.get(i).look.getZIndex() > actualSpriteZIndex) {
+                spriteList.get(i).look.setZIndex(spriteList.get(i).look.getZIndex() - 1);
+            }
+        }
+        sprite.look.setZIndex(spriteList.size() - 1);
+    }
 
-	private void goNStepsBack(int steps) {
-		int zPosition = sprite.look.getZIndex();
-		int newSpriteZIndex = Math.max(zPosition - steps, Constants.Z_INDEX_FIRST_SPRITE);
+    private void goNStepsBack(int steps) {
+        int zPosition = sprite.look.getZIndex();
+        int newSpriteZIndex = Math.max(zPosition - steps, Constants.Z_INDEX_FIRST_SPRITE);
 
-		List<Sprite> spriteList = ProjectManager.getInstance().getCurrentProject().getSpriteListWithClones();
+        List<Sprite> spriteList = ProjectManager.getInstance().getCurrentProject().getSpriteListWithClones();
 
-		for (int i = 0; i < spriteList.size(); i++) {
-			if (steps > 0) {
-				if (spriteList.get(i).look.getZIndex() >= newSpriteZIndex && spriteList.get(i).look.getZIndex() < zPosition) {
-					spriteList.get(i).look.setZIndex(spriteList.get(i).look.getZIndex() + 1);
-				}
-			} else {
-				if (spriteList.get(i).look.getZIndex() <= newSpriteZIndex && spriteList.get(i).look.getZIndex() > zPosition) {
-					spriteList.get(i).look.setZIndex(spriteList.get(i).look.getZIndex() - 1);
-				}
-			}
-		}
-		sprite.look.setZIndex(newSpriteZIndex);
-	}
+        for (int i = 0; i < spriteList.size(); i++) {
+            if (steps > 0) {
+                if (spriteList.get(i).look.getZIndex() >= newSpriteZIndex && spriteList.get(i).look.getZIndex() < zPosition) {
+                    spriteList.get(i).look.setZIndex(spriteList.get(i).look.getZIndex() + 1);
+                }
+            } else {
+                if (spriteList.get(i).look.getZIndex() <= newSpriteZIndex && spriteList.get(i).look.getZIndex() > zPosition) {
+                    spriteList.get(i).look.setZIndex(spriteList.get(i).look.getZIndex() - 1);
+                }
+            }
+        }
+        sprite.look.setZIndex(newSpriteZIndex);
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setSteps(Formula steps) {
-		this.steps = steps;
-	}
+    public void setSteps(Formula steps) {
+        this.steps = steps;
+    }
 }

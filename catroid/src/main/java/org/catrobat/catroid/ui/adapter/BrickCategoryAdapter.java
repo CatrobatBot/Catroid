@@ -31,31 +31,31 @@ import android.widget.TextView;
 import java.util.List;
 
 public class BrickCategoryAdapter extends BaseAdapter {
-	private List<View> categories;
+    private List<View> categories;
 
-	public BrickCategoryAdapter(List<View> categories) {
-		this.categories = categories;
-	}
+    public BrickCategoryAdapter(List<View> categories) {
+        this.categories = categories;
+    }
 
-	@Override
-	public int getCount() {
-		return categories.size();
-	}
+    @Override
+    public int getCount() {
+        return categories.size();
+    }
 
-	@Override
-	public String getItem(int position) {
-		LinearLayout layout = (LinearLayout) (categories.get(position));
-		TextView textView = (TextView) layout.getChildAt(0);
-		return textView.getText().toString();
-	}
+    @Override
+    public String getItem(int position) {
+        LinearLayout layout = (LinearLayout) (categories.get(position));
+        TextView textView = (TextView) layout.getChildAt(0);
+        return textView.getText().toString();
+    }
 
-	@Override
-	public long getItemId(int position) {
-		return position;
-	}
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		return categories.get(position);
-	}
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        return categories.get(position);
+    }
 }

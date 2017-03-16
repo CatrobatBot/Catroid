@@ -50,113 +50,113 @@ import java.util.ArrayList;
 
 public class AskBrickTest extends ActivityInstrumentationTestCase2<StageActivity> {
 
-	private Instrumentation instrument;
-	private Project project;
-	private DataContainer dataContainer;
-	private Sprite sprite;
+    private Instrumentation instrument;
+    private Project project;
+    private DataContainer dataContainer;
+    private Sprite sprite;
 
-	public AskBrickTest() {
-		super(StageActivity.class);
-	}
+    public AskBrickTest() {
+        super(StageActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		ScreenValues.SCREEN_HEIGHT = 16;
-		ScreenValues.SCREEN_WIDTH = 16;
-		UiTestUtils.prepareStageForTest();
-		instrument = getInstrumentation();
-		createProject();
-	}
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        ScreenValues.SCREEN_HEIGHT = 16;
+        ScreenValues.SCREEN_WIDTH = 16;
+        UiTestUtils.prepareStageForTest();
+        instrument = getInstrumentation();
+        createProject();
+    }
 
-	@Override
-	public void tearDown() throws Exception {
-		dataContainer.deleteUserVariableByName("answer");
-		getActivity().finish();
-		UiTestUtils.clearAllUtilTestProjects();
-		super.tearDown();
-	}
+    @Override
+    public void tearDown() throws Exception {
+        dataContainer.deleteUserVariableByName("answer");
+        getActivity().finish();
+        UiTestUtils.clearAllUtilTestProjects();
+        super.tearDown();
+    }
 
-	@Device
-	public void testAskBrickWithSingleResult() {
-		Intent mockResultIntent = new Intent();
-		ArrayList<String> mockRecognizedWords = new ArrayList<String>();
-		mockRecognizedWords.add("fun");
-		mockRecognizedWords.add("sun");
-		mockRecognizedWords.add("run");
-		mockResultIntent.putStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS, mockRecognizedWords);
+    @Device
+    public void testAskBrickWithSingleResult() {
+        Intent mockResultIntent = new Intent();
+        ArrayList<String> mockRecognizedWords = new ArrayList<String>();
+        mockRecognizedWords.add("fun");
+        mockRecognizedWords.add("sun");
+        mockRecognizedWords.add("run");
+        mockResultIntent.putStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS, mockRecognizedWords);
 
-		ActivityResult mockResult = new ActivityResult(Activity.RESULT_OK, mockResultIntent);
-		IntentFilter recognizeFilter = new IntentFilter(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-		ActivityMonitor recognizeMonitor = instrument.addMonitor(recognizeFilter, mockResult, true);
+        ActivityResult mockResult = new ActivityResult(Activity.RESULT_OK, mockResultIntent);
+        IntentFilter recognizeFilter = new IntentFilter(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        ActivityMonitor recognizeMonitor = instrument.addMonitor(recognizeFilter, mockResult, true);
 
-		getActivity();
+        getActivity();
 
-		instrument.waitForIdleSync();
-		instrument.waitForMonitorWithTimeout(recognizeMonitor, 4000);
-		assertEquals("Recognize intent wasn't fired as expected (no internet?), monitor hit", 1, recognizeMonitor
-				.getHits());
+        instrument.waitForIdleSync();
+        instrument.waitForMonitorWithTimeout(recognizeMonitor, 4000);
+        assertEquals("Recognize intent wasn't fired as expected (no internet?), monitor hit", 1, recognizeMonitor
+                .getHits());
 
-		instrument.waitForIdleSync();
-		assertEquals("Last Answer was not stored as expected.", mockRecognizedWords.get(0),
-				dataContainer.getUserVariable("answer", sprite).getValue());
+        instrument.waitForIdleSync();
+        assertEquals("Last Answer was not stored as expected.", mockRecognizedWords.get(0),
+                dataContainer.getUserVariable("answer", sprite).getValue());
 
-		instrument.waitForIdleSync();
-		assertTrue("Stage didn't finish after AskAnswer returned.",
-				ProjectManager.getInstance().getCurrentSprite().look.getAllActionsAreFinished());
-	}
+        instrument.waitForIdleSync();
+        assertTrue("Stage didn't finish after AskAnswer returned.",
+                ProjectManager.getInstance().getCurrentSprite().look.getAllActionsAreFinished());
+    }
 
-	@Device
-	public void testCancelAndResetAskAnswer() {
+    @Device
+    public void testCancelAndResetAskAnswer() {
 
-		//Variable should be set to "" when user cancels
-		dataContainer.getUserVariable("answer", sprite).setValue("preset");
-		assertEquals("Uservariable was not saved via set", "preset",
-				dataContainer.getUserVariable("answer", sprite).getValue());
+        //Variable should be set to "" when user cancels
+        dataContainer.getUserVariable("answer", sprite).setValue("preset");
+        assertEquals("Uservariable was not saved via set", "preset",
+                dataContainer.getUserVariable("answer", sprite).getValue());
 
-		ArrayList<String> mockRecognizedWords = new ArrayList<String>();
-		mockRecognizedWords.add("mock");
+        ArrayList<String> mockRecognizedWords = new ArrayList<String>();
+        mockRecognizedWords.add("mock");
 
-		ActivityResult mockResultCanceled = new ActivityResult(Activity.RESULT_CANCELED, null);
-		ActivityMonitor recognizeMonitor2 = instrument.addMonitor(new IntentFilter(
-				RecognizerIntent.ACTION_RECOGNIZE_SPEECH), mockResultCanceled, true);
+        ActivityResult mockResultCanceled = new ActivityResult(Activity.RESULT_CANCELED, null);
+        ActivityMonitor recognizeMonitor2 = instrument.addMonitor(new IntentFilter(
+                RecognizerIntent.ACTION_RECOGNIZE_SPEECH), mockResultCanceled, true);
 
-		getActivity();
+        getActivity();
 
-		instrument.waitForIdleSync();
-		instrument.waitForMonitorWithTimeout(recognizeMonitor2, 4000);
+        instrument.waitForIdleSync();
+        instrument.waitForMonitorWithTimeout(recognizeMonitor2, 4000);
 
-		assertEquals("Recognize intent wasn't fired as expected (no internet?), monitor hit", 1, recognizeMonitor2.getHits());
+        assertEquals("Recognize intent wasn't fired as expected (no internet?), monitor hit", 1, recognizeMonitor2.getHits());
 
-		instrument.removeMonitor(recognizeMonitor2);
-		instrument.waitForIdleSync();
+        instrument.removeMonitor(recognizeMonitor2);
+        instrument.waitForIdleSync();
 
-		assertEquals("Canceld speech recognition did not reset variabel.", "",
-				dataContainer.getUserVariable("answer", sprite).getValue());
-		assertTrue("Stage didn't finish after AskBrick returned.",
-				ProjectManager.getInstance().getCurrentSprite().look.getAllActionsAreFinished());
-	}
+        assertEquals("Canceld speech recognition did not reset variabel.", "",
+                dataContainer.getUserVariable("answer", sprite).getValue());
+        assertTrue("Stage didn't finish after AskBrick returned.",
+                ProjectManager.getInstance().getCurrentSprite().look.getAllActionsAreFinished());
+    }
 
-	private void createProject() {
-		project = new Project(instrument.getTargetContext(), UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Scene startScene = new Scene(null, "SceneAskBrickTest", project);
-		project.addScene(startScene);
-		dataContainer = startScene.getDataContainer();
-		dataContainer.addProjectUserVariable("answer");
-		sprite = new Sprite("cat");
-		Script startscript = new StartScript();
-		AskSpeechBrick askBrick = new AskSpeechBrick("Wanna test?");
-		askBrick.setUserVariable(dataContainer.getUserVariable("answer", sprite));
-		Log.d("AskSpeechBrickTest", "setVariable to " + dataContainer.getUserVariable("answer", sprite).getValue());
-		WaitBrick waitBrick = new WaitBrick(2000);
+    private void createProject() {
+        project = new Project(instrument.getTargetContext(), UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Scene startScene = new Scene(null, "SceneAskBrickTest", project);
+        project.addScene(startScene);
+        dataContainer = startScene.getDataContainer();
+        dataContainer.addProjectUserVariable("answer");
+        sprite = new Sprite("cat");
+        Script startscript = new StartScript();
+        AskSpeechBrick askBrick = new AskSpeechBrick("Wanna test?");
+        askBrick.setUserVariable(dataContainer.getUserVariable("answer", sprite));
+        Log.d("AskSpeechBrickTest", "setVariable to " + dataContainer.getUserVariable("answer", sprite).getValue());
+        WaitBrick waitBrick = new WaitBrick(2000);
 
-		startscript.addBrick(askBrick);
-		startscript.addBrick(waitBrick);
-		sprite.addScript(startscript);
-		startScene.addSprite(sprite);
+        startscript.addBrick(askBrick);
+        startscript.addBrick(waitBrick);
+        sprite.addScript(startscript);
+        startScene.addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentScene(startScene);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentScene(startScene);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+    }
 }

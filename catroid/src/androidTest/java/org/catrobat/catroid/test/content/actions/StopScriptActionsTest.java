@@ -48,126 +48,126 @@ import java.util.List;
 
 public class StopScriptActionsTest extends InstrumentationTestCase {
 
-	private Project project;
+    private Project project;
 
-	@Override
-	protected void setUp() throws Exception {
-		TestUtils.deleteTestProjects();
-		this.createProject();
-	}
+    @Override
+    protected void setUp() throws Exception {
+        TestUtils.deleteTestProjects();
+        this.createProject();
+    }
 
-	@Override
-	protected void tearDown() throws Exception {
-		TestUtils.deleteTestProjects();
-		super.tearDown();
-	}
+    @Override
+    protected void tearDown() throws Exception {
+        TestUtils.deleteTestProjects();
+        super.tearDown();
+    }
 
-	public void testStopScript() {
-		Sprite sprite = new Sprite("sprite");
-		StartScript script = new StartScript();
+    public void testStopScript() {
+        Sprite sprite = new Sprite("sprite");
+        StartScript script = new StartScript();
 
-		sprite.look.setX(1);
+        sprite.look.setX(1);
 
-		script.addBrick(new SetXBrick(20));
-		script.addBrick(new StopScriptBrick(BrickValues.STOP_THIS_SCRIPT));
-		script.addBrick(new SetXBrick(50));
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
+        script.addBrick(new SetXBrick(20));
+        script.addBrick(new StopScriptBrick(BrickValues.STOP_THIS_SCRIPT));
+        script.addBrick(new SetXBrick(50));
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-		sprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+        sprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
 
-		for (int i = 0; i < 100; i++) {
-			sprite.look.act(1.0f);
-		}
+        for (int i = 0; i < 100; i++) {
+            sprite.look.act(1.0f);
+        }
 
-		assertEquals("Script didn't stop", 20.0f, sprite.look.getX());
-	}
+        assertEquals("Script didn't stop", 20.0f, sprite.look.getX());
+    }
 
-	public void testStopCurrentScript() {
-		String variableName = "testVariable";
-		project.getDefaultScene().getDataContainer().addProjectUserVariable(variableName);
-		UserVariable userVariable = project.getDefaultScene().getDataContainer().getUserVariable(variableName, null);
-		Sprite sprite = new Sprite("sprite");
+    public void testStopCurrentScript() {
+        String variableName = "testVariable";
+        project.getDefaultScene().getDataContainer().addProjectUserVariable(variableName);
+        UserVariable userVariable = project.getDefaultScene().getDataContainer().getUserVariable(variableName, null);
+        Sprite sprite = new Sprite("sprite");
 
-		Script script = new StartScript();
-		script.addBrick(new SetVariableBrick(new Formula(10), userVariable));
-		script.addBrick(new WaitBrick(500));
-		script.addBrick(new StopScriptBrick(BrickValues.STOP_THIS_SCRIPT));
-		script.addBrick(new SetVariableBrick(new Formula(20), userVariable));
+        Script script = new StartScript();
+        script.addBrick(new SetVariableBrick(new Formula(10), userVariable));
+        script.addBrick(new WaitBrick(500));
+        script.addBrick(new StopScriptBrick(BrickValues.STOP_THIS_SCRIPT));
+        script.addBrick(new SetVariableBrick(new Formula(20), userVariable));
 
-		ForeverBrick foreverBrick = new ForeverBrick();
-		LoopEndBrick endBrick = new LoopEndBrick(foreverBrick);
-		foreverBrick.setLoopEndBrick(endBrick);
+        ForeverBrick foreverBrick = new ForeverBrick();
+        LoopEndBrick endBrick = new LoopEndBrick(foreverBrick);
+        foreverBrick.setLoopEndBrick(endBrick);
 
-		Script script2 = new StartScript();
-		script2.addBrick(foreverBrick);
-		script2.addBrick(new SetVariableBrick(new Formula(50), userVariable));
-		script2.addBrick(endBrick);
+        Script script2 = new StartScript();
+        script2.addBrick(foreverBrick);
+        script2.addBrick(new SetVariableBrick(new Formula(50), userVariable));
+        script2.addBrick(endBrick);
 
-		sprite.addScript(script);
-		sprite.addScript(script2);
-		project.getDefaultScene().addSprite(sprite);
+        sprite.addScript(script);
+        sprite.addScript(script2);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script2);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script2);
 
-		sprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
+        sprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
 
-		for (int i = 0; i < 50; i++) {
-			sprite.look.act(10.0f);
-		}
+        for (int i = 0; i < 50; i++) {
+            sprite.look.act(10.0f);
+        }
 
-		userVariable = project.getDefaultScene().getDataContainer().getUserVariable(variableName, null);
+        userVariable = project.getDefaultScene().getDataContainer().getUserVariable(variableName, null);
 
-		assertEquals("Script didn't stop", 50.0, userVariable.getValue());
-	}
+        assertEquals("Script didn't stop", 50.0, userVariable.getValue());
+    }
 
-	public void testStopOtherScripts() {
-		String varName = "testVar";
-		project.getDefaultScene().getDataContainer().addProjectUserVariable(varName);
-		UserVariable userVar = project.getDefaultScene().getDataContainer().getUserVariable(varName, null);
+    public void testStopOtherScripts() {
+        String varName = "testVar";
+        project.getDefaultScene().getDataContainer().addProjectUserVariable(varName);
+        UserVariable userVar = project.getDefaultScene().getDataContainer().getUserVariable(varName, null);
 
-		Sprite sprite = new Sprite("sprite");
-		Script script = new StartScript();
+        Sprite sprite = new Sprite("sprite");
+        Script script = new StartScript();
 
-		script.addBrick(new SetVariableBrick(new Formula(1), userVar));
-		script.addBrick(new WaitBrick(1000));
-		script.addBrick(new StopScriptBrick(BrickValues.STOP_OTHER_SCRIPTS));
-		script.addBrick(new SetVariableBrick(new Formula(2), userVar));
+        script.addBrick(new SetVariableBrick(new Formula(1), userVar));
+        script.addBrick(new WaitBrick(1000));
+        script.addBrick(new StopScriptBrick(BrickValues.STOP_OTHER_SCRIPTS));
+        script.addBrick(new SetVariableBrick(new Formula(2), userVar));
 
-		ForeverBrick foreverBrick = new ForeverBrick();
-		LoopEndBrick endBrick = new LoopEndBrick(foreverBrick);
-		foreverBrick.setLoopEndBrick(endBrick);
+        ForeverBrick foreverBrick = new ForeverBrick();
+        LoopEndBrick endBrick = new LoopEndBrick(foreverBrick);
+        foreverBrick.setLoopEndBrick(endBrick);
 
-		Script script2 = new StartScript();
-		script2.addBrick(foreverBrick);
-		script2.addBrick(new SetVariableBrick(new Formula(50), userVar));
-		script2.addBrick(endBrick);
+        Script script2 = new StartScript();
+        script2.addBrick(foreverBrick);
+        script2.addBrick(new SetVariableBrick(new Formula(50), userVar));
+        script2.addBrick(endBrick);
 
-		sprite.addScript(script2);
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
+        sprite.addScript(script2);
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script2);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script2);
 
-		sprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
+        sprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
 
-		for (int i = 0; i < 100; i++) {
-			sprite.look.act(1.0f);
-		}
+        for (int i = 0; i < 100; i++) {
+            sprite.look.act(1.0f);
+        }
 
-		userVar = project.getDefaultScene().getDataContainer().getUserVariable(varName, null);
+        userVar = project.getDefaultScene().getDataContainer().getUserVariable(varName, null);
 
-		assertEquals("Script didn't stop", 2.0, userVar.getValue());
-	}
+        assertEquals("Script didn't stop", 2.0, userVar.getValue());
+    }
 
-	private void createProject() throws IOException {
-		this.project = new Project(getInstrumentation().getTargetContext(), TestUtils.DEFAULT_TEST_PROJECT_NAME);
+    private void createProject() throws IOException {
+        this.project = new Project(getInstrumentation().getTargetContext(), TestUtils.DEFAULT_TEST_PROJECT_NAME);
 
-		StorageHandler.getInstance().saveProject(project);
-		ProjectManager.getInstance().setProject(project);
-	}
+        StorageHandler.getInstance().saveProject(project);
+        ProjectManager.getInstance().setProject(project);
+    }
 }

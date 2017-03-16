@@ -37,50 +37,50 @@ import org.catrobat.catroid.formulaeditor.InterpretationException;
 
 public class LegoNxtPlayToneAction extends TemporalAction {
 
-	private Formula hertz;
-	private Formula durationInSeconds;
-	private Sprite sprite;
+    private Formula hertz;
+    private Formula durationInSeconds;
+    private Sprite sprite;
 
-	private BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
+    private BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
 
-	@Override
-	protected void update(float percent) {
-		int hertzInterpretation;
-		float durationInterpretation;
+    @Override
+    protected void update(float percent) {
+        int hertzInterpretation;
+        float durationInterpretation;
 
-		try {
-			hertzInterpretation = hertz.interpretInteger(sprite);
-		} catch (InterpretationException interpretationException) {
-			hertzInterpretation = 0;
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}
+        try {
+            hertzInterpretation = hertz.interpretInteger(sprite);
+        } catch (InterpretationException interpretationException) {
+            hertzInterpretation = 0;
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+        }
 
-		try {
-			durationInterpretation = durationInSeconds.interpretFloat(sprite);
-		} catch (InterpretationException interpretationException) {
-			durationInterpretation = 0;
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}
+        try {
+            durationInterpretation = durationInSeconds.interpretFloat(sprite);
+        } catch (InterpretationException interpretationException) {
+            durationInterpretation = 0;
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+        }
 
-		LegoNXT nxt = btService.getDevice(BluetoothDevice.LEGO_NXT);
-		if (nxt == null) {
-			return;
-		}
+        LegoNXT nxt = btService.getDevice(BluetoothDevice.LEGO_NXT);
+        if (nxt == null) {
+            return;
+        }
 
-		int durationInMs = (int) (durationInterpretation * 1000);
+        int durationInMs = (int) (durationInterpretation * 1000);
 
-		nxt.playTone(hertzInterpretation * 100, durationInMs);
-	}
+        nxt.playTone(hertzInterpretation * 100, durationInMs);
+    }
 
-	public void setHertz(Formula hertz) {
-		this.hertz = hertz;
-	}
+    public void setHertz(Formula hertz) {
+        this.hertz = hertz;
+    }
 
-	public void setDurationInSeconds(Formula durationInSeconds) {
-		this.durationInSeconds = durationInSeconds;
-	}
+    public void setDurationInSeconds(Formula durationInSeconds) {
+        this.durationInSeconds = durationInSeconds;
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 }

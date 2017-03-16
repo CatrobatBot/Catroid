@@ -26,16 +26,16 @@ import org.catrobat.catroid.devices.mindstorms.MindstormsConnection;
 
 public class NXTLightSensor extends NXTSensor {
 
-	public static final String TAG = NXTLightSensor.class.getSimpleName();
-	private static final int DEFAULT_VALUE = 50;
+    public static final String TAG = NXTLightSensor.class.getSimpleName();
+    private static final int DEFAULT_VALUE = 50;
 
-	public NXTLightSensor(int port, MindstormsConnection connection) {
-		super(port, NXTSensorType.LIGHT_INACTIVE, NXTSensorMode.Percent, connection);
-		lastValidValue = DEFAULT_VALUE;
-	}
+    public NXTLightSensor(int port, MindstormsConnection connection) {
+        super(port, NXTSensorType.LIGHT_INACTIVE, NXTSensorMode.Percent, connection);
+        lastValidValue = DEFAULT_VALUE;
+    }
 
-	@Override
-	public int getValue() {
-		return getScaledValue();
-	}
+    @Override
+    public int getValue() {
+        return getScaledValue();
+    }
 }

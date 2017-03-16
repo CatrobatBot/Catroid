@@ -33,24 +33,24 @@ import org.catrobat.catroid.utils.VibratorUtil;
 
 public class VibrateAction extends TemporalAction {
 
-	private Sprite sprite;
-	private Formula duration;
+    private Sprite sprite;
+    private Formula duration;
 
-	@Override
-	protected void update(float percent) {
-		try {
-			Double newDuration = duration == null ? Double.valueOf(0f) : duration.interpretFloat(sprite);
-			VibratorUtil.setTimeToVibrate(newDuration * 1000);
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}
-	}
+    @Override
+    protected void update(float percent) {
+        try {
+            Double newDuration = duration == null ? Double.valueOf(0f) : duration.interpretFloat(sprite);
+            VibratorUtil.setTimeToVibrate(newDuration * 1000);
+        } catch (InterpretationException interpretationException) {
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+        }
+    }
 
-	public void setDuration(Formula duration) {
-		this.duration = duration;
-	}
+    public void setDuration(Formula duration) {
+        this.duration = duration;
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 }

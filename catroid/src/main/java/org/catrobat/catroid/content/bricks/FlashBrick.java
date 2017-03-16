@@ -38,89 +38,89 @@ import java.util.List;
 
 public class FlashBrick extends BrickBaseType {
 
-	private static final int FLASH_OFF = 0;
-	private static final int FLASH_ON = 1;
+    private static final int FLASH_OFF = 0;
+    private static final int FLASH_ON = 1;
 
-	private transient View prototypeView;
+    private transient View prototypeView;
 
-	private int spinnerSelectionID;
+    private int spinnerSelectionID;
 
-	public FlashBrick() {
-		spinnerSelectionID = FLASH_ON;
-	}
+    public FlashBrick() {
+        spinnerSelectionID = FLASH_ON;
+    }
 
-	public FlashBrick(int onOrOff) {
-		spinnerSelectionID = onOrOff;
-	}
+    public FlashBrick(int onOrOff) {
+        spinnerSelectionID = onOrOff;
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		view = View.inflate(context, R.layout.brick_flash, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        view = View.inflate(context, R.layout.brick_flash, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_flash_checkbox);
-		Spinner flashSpinner = (Spinner) view.findViewById(R.id.brick_flash_spinner);
+        setCheckboxView(R.id.brick_flash_checkbox);
+        Spinner flashSpinner = (Spinner) view.findViewById(R.id.brick_flash_spinner);
 
-		ArrayAdapter<String> spinnerAdapter = createArrayAdapter(context);
+        ArrayAdapter<String> spinnerAdapter = createArrayAdapter(context);
 
-		flashSpinner.setAdapter(spinnerAdapter);
+        flashSpinner.setAdapter(spinnerAdapter);
 
-		flashSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        flashSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-			@Override
-			public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-				spinnerSelectionID = position;
-			}
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                spinnerSelectionID = position;
+            }
 
-			@Override
-			public void onNothingSelected(AdapterView<?> adapterView) {
-			}
-		});
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
 
-		flashSpinner.setSelection(spinnerSelectionID);
+        flashSpinner.setSelection(spinnerSelectionID);
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_flash, null);
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_flash, null);
 
-		Spinner setFlashSpinner = (Spinner) prototypeView.findViewById(R.id.brick_flash_spinner);
+        Spinner setFlashSpinner = (Spinner) prototypeView.findViewById(R.id.brick_flash_spinner);
 
-		ArrayAdapter<String> spinnerAdapter = createArrayAdapter(context);
-		setFlashSpinner.setAdapter(spinnerAdapter);
-		setFlashSpinner.setSelection(spinnerSelectionID);
+        ArrayAdapter<String> spinnerAdapter = createArrayAdapter(context);
+        setFlashSpinner.setAdapter(spinnerAdapter);
+        setFlashSpinner.setSelection(spinnerSelectionID);
 
-		return prototypeView;
-	}
+        return prototypeView;
+    }
 
-	private ArrayAdapter<String> createArrayAdapter(Context context) {
-		String[] spinnerValues = new String[2];
-		spinnerValues[FLASH_OFF] = context.getString(R.string.brick_flash_off);
-		spinnerValues[FLASH_ON] = context.getString(R.string.brick_flash_on);
+    private ArrayAdapter<String> createArrayAdapter(Context context) {
+        String[] spinnerValues = new String[2];
+        spinnerValues[FLASH_OFF] = context.getString(R.string.brick_flash_off);
+        spinnerValues[FLASH_ON] = context.getString(R.string.brick_flash_on);
 
-		ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, spinnerValues);
-		spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, spinnerValues);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-		return spinnerAdapter;
-	}
+        return spinnerAdapter;
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return CAMERA_FLASH;
-	}
+    @Override
+    public int getRequiredResources() {
+        return CAMERA_FLASH;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		if (spinnerSelectionID == FLASH_ON) {
-			sequence.addAction(sprite.getActionFactory().createTurnFlashOnAction());
-			return null;
-		}
-		sequence.addAction(sprite.getActionFactory().createTurnFlashOffAction());
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        if (spinnerSelectionID == FLASH_ON) {
+            sequence.addAction(sprite.getActionFactory().createTurnFlashOnAction());
+            return null;
+        }
+        sequence.addAction(sprite.getActionFactory().createTurnFlashOffAction());
+        return null;
+    }
 }

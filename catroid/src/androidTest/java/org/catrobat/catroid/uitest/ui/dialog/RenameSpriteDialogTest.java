@@ -40,73 +40,73 @@ import java.io.IOException;
 
 public class RenameSpriteDialogTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
-	private String testProject = UiTestUtils.PROJECTNAME1;
-	private String cat = "cat";
-	private String kat = "kat";
-	private String catMixedCase = "CaT";
+    private String testProject = UiTestUtils.PROJECTNAME1;
+    private String cat = "cat";
+    private String kat = "kat";
+    private String catMixedCase = "CaT";
 
-	public RenameSpriteDialogTest() {
-		super(MainMenuActivity.class);
-	}
+    public RenameSpriteDialogTest() {
+        super(MainMenuActivity.class);
+    }
 
-	public void testRenameSpriteDialog() throws NameNotFoundException, IOException {
-		createTestProject(testProject);
-		solo.waitForActivity("MainMenuActivity");
-		solo.clickOnButton(solo.getString(R.string.main_menu_programs));
-		solo.waitForActivity("MyProjectsActivity");
-		solo.assertCurrentActivity("Expected MyProjectsActivity activity", "MyProjectsActivity");
+    public void testRenameSpriteDialog() throws NameNotFoundException, IOException {
+        createTestProject(testProject);
+        solo.waitForActivity("MainMenuActivity");
+        solo.clickOnButton(solo.getString(R.string.main_menu_programs));
+        solo.waitForActivity("MyProjectsActivity");
+        solo.assertCurrentActivity("Expected MyProjectsActivity activity", "MyProjectsActivity");
 
-		assertTrue("Cannot find project", solo.searchText(testProject));
+        assertTrue("Cannot find project", solo.searchText(testProject));
 
-		solo.clickOnText(testProject);
+        solo.clickOnText(testProject);
 
-		solo.clickLongOnText(cat);
-		solo.clickOnText(solo.getString(R.string.rename));
-		solo.clearEditText(0);
-		solo.enterText(0, kat);
-		solo.sendKey(Solo.ENTER);
-		solo.sleep(200);
-		ListView spritesList = (ListView) solo.getCurrentActivity().findViewById(android.R.id.list);
-		String first = ((Sprite) spritesList.getItemAtPosition(1)).getName();
-		assertEquals("The first sprite is NOT rename!", first, kat);
-	}
+        solo.clickLongOnText(cat);
+        solo.clickOnText(solo.getString(R.string.rename));
+        solo.clearEditText(0);
+        solo.enterText(0, kat);
+        solo.sendKey(Solo.ENTER);
+        solo.sleep(200);
+        ListView spritesList = (ListView) solo.getCurrentActivity().findViewById(android.R.id.list);
+        String first = ((Sprite) spritesList.getItemAtPosition(1)).getName();
+        assertEquals("The first sprite is NOT rename!", first, kat);
+    }
 
-	public void testRenameSpriteDialogMixedCase() throws NameNotFoundException, IOException {
-		createTestProject(testProject);
-		solo.waitForActivity("MainMenuActivity");
-		solo.clickOnButton(solo.getString(R.string.main_menu_programs));
-		solo.waitForActivity("MyProjectsActivity");
-		solo.assertCurrentActivity("Expected MyProjectsActivity activity", "MyProjectsActivity");
+    public void testRenameSpriteDialogMixedCase() throws NameNotFoundException, IOException {
+        createTestProject(testProject);
+        solo.waitForActivity("MainMenuActivity");
+        solo.clickOnButton(solo.getString(R.string.main_menu_programs));
+        solo.waitForActivity("MyProjectsActivity");
+        solo.assertCurrentActivity("Expected MyProjectsActivity activity", "MyProjectsActivity");
 
-		assertTrue("Cannot find project", solo.searchText(testProject));
+        assertTrue("Cannot find project", solo.searchText(testProject));
 
-		solo.clickOnText(testProject);
+        solo.clickOnText(testProject);
 
-		solo.clickLongOnText(cat);
-		solo.clickOnText(solo.getString(R.string.rename));
-		solo.clearEditText(0);
-		solo.enterText(0, catMixedCase);
-		solo.sendKey(Solo.ENTER);
-		solo.sleep(200);
+        solo.clickLongOnText(cat);
+        solo.clickOnText(solo.getString(R.string.rename));
+        solo.clearEditText(0);
+        solo.enterText(0, catMixedCase);
+        solo.sendKey(Solo.ENTER);
+        solo.sleep(200);
 
-		ListView spriteList = (ListView) solo.getCurrentActivity().findViewById(android.R.id.list);
-		String first = ((Sprite) spriteList.getItemAtPosition(1)).getName();
-		assertEquals("The first sprite name was not renamed to Mixed Case", first, catMixedCase);
-	}
+        ListView spriteList = (ListView) solo.getCurrentActivity().findViewById(android.R.id.list);
+        String first = ((Sprite) spriteList.getItemAtPosition(1)).getName();
+        assertEquals("The first sprite name was not renamed to Mixed Case", first, catMixedCase);
+    }
 
-	public void createTestProject(String projectName) {
-		StorageHandler storageHandler = StorageHandler.getInstance();
-		Project project = new Project(getActivity(), projectName);
-		Sprite firstSprite = new SingleSprite("cat");
-		Sprite secondSprite = new SingleSprite("dog");
-		Sprite thirdSprite = new SingleSprite("horse");
-		Sprite fourthSprite = new SingleSprite("pig");
+    public void createTestProject(String projectName) {
+        StorageHandler storageHandler = StorageHandler.getInstance();
+        Project project = new Project(getActivity(), projectName);
+        Sprite firstSprite = new SingleSprite("cat");
+        Sprite secondSprite = new SingleSprite("dog");
+        Sprite thirdSprite = new SingleSprite("horse");
+        Sprite fourthSprite = new SingleSprite("pig");
 
-		project.getDefaultScene().addSprite(firstSprite);
-		project.getDefaultScene().addSprite(secondSprite);
-		project.getDefaultScene().addSprite(thirdSprite);
-		project.getDefaultScene().addSprite(fourthSprite);
+        project.getDefaultScene().addSprite(firstSprite);
+        project.getDefaultScene().addSprite(secondSprite);
+        project.getDefaultScene().addSprite(thirdSprite);
+        project.getDefaultScene().addSprite(fourthSprite);
 
-		storageHandler.saveProject(project);
-	}
+        storageHandler.saveProject(project);
+    }
 }

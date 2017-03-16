@@ -31,74 +31,74 @@ import java.util.concurrent.locks.Lock;
 
 public class ViewSwitchLockTest extends AndroidTestCase {
 
-	public void testViewSwitchLock() {
-		Lock viewSwitchLock = new ViewSwitchLock();
-		assertFalse("Wrong init value", (Boolean) Reflection.getPrivateField(viewSwitchLock, "locked"));
+    public void testViewSwitchLock() {
+        Lock viewSwitchLock = new ViewSwitchLock();
+        assertFalse("Wrong init value", (Boolean) Reflection.getPrivateField(viewSwitchLock, "locked"));
 
-		boolean returnValue = viewSwitchLock.tryLock();
-		assertTrue("ViewSwitch already locked", returnValue);
-		assertTrue("Wrong locked member value", (Boolean) Reflection.getPrivateField(viewSwitchLock, "locked"));
+        boolean returnValue = viewSwitchLock.tryLock();
+        assertTrue("ViewSwitch already locked", returnValue);
+        assertTrue("Wrong locked member value", (Boolean) Reflection.getPrivateField(viewSwitchLock, "locked"));
 
-		viewSwitchLock.unlock();
-		assertFalse("ViewSwitch hasn't been unlocked", (Boolean) Reflection.getPrivateField(viewSwitchLock, "locked"));
+        viewSwitchLock.unlock();
+        assertFalse("ViewSwitch hasn't been unlocked", (Boolean) Reflection.getPrivateField(viewSwitchLock, "locked"));
 
-		viewSwitchLock = new ViewSwitchLock();
-		returnValue = viewSwitchLock.tryLock();
-		assertTrue("ViewSwitch already locked", returnValue);
-		assertTrue("Wrong locked member value", (Boolean) Reflection.getPrivateField(viewSwitchLock, "locked"));
+        viewSwitchLock = new ViewSwitchLock();
+        returnValue = viewSwitchLock.tryLock();
+        assertTrue("ViewSwitch already locked", returnValue);
+        assertTrue("Wrong locked member value", (Boolean) Reflection.getPrivateField(viewSwitchLock, "locked"));
 
-		returnValue = viewSwitchLock.tryLock();
-		assertFalse("ViewSwitch has been relocked", returnValue);
-		assertTrue("Wrong locked member value", (Boolean) Reflection.getPrivateField(viewSwitchLock, "locked"));
+        returnValue = viewSwitchLock.tryLock();
+        assertFalse("ViewSwitch has been relocked", returnValue);
+        assertTrue("Wrong locked member value", (Boolean) Reflection.getPrivateField(viewSwitchLock, "locked"));
 
-		viewSwitchLock.unlock();
-		assertFalse("ViewSwitch hasn't been unlocked", (Boolean) Reflection.getPrivateField(viewSwitchLock, "locked"));
-	}
+        viewSwitchLock.unlock();
+        assertFalse("ViewSwitch hasn't been unlocked", (Boolean) Reflection.getPrivateField(viewSwitchLock, "locked"));
+    }
 
-	public void testViewSwitchAutoUnlock() throws InterruptedException {
-		Lock viewSwitchLock = new ViewSwitchLock();
-		long timeout = (Long) Reflection.getPrivateField(ViewSwitchLock.class, "UNLOCK_TIMEOUT");
+    public void testViewSwitchAutoUnlock() throws InterruptedException {
+        Lock viewSwitchLock = new ViewSwitchLock();
+        long timeout = (Long) Reflection.getPrivateField(ViewSwitchLock.class, "UNLOCK_TIMEOUT");
 
-		viewSwitchLock.tryLock();
-		assertTrue("ViewSwitch lock isn't locked", (Boolean) Reflection.getPrivateField(viewSwitchLock, "locked"));
-		Thread.sleep(timeout + 50);
-		assertFalse("ViewSwitch lock didn't unlock automatically",
-				(Boolean) Reflection.getPrivateField(viewSwitchLock, "locked"));
-	}
+        viewSwitchLock.tryLock();
+        assertTrue("ViewSwitch lock isn't locked", (Boolean) Reflection.getPrivateField(viewSwitchLock, "locked"));
+        Thread.sleep(timeout + 50);
+        assertFalse("ViewSwitch lock didn't unlock automatically",
+                (Boolean) Reflection.getPrivateField(viewSwitchLock, "locked"));
+    }
 
-	public void testDefaultSettings() {
-		assertEquals("Wrong default setting", 200L, Reflection.getPrivateField(ViewSwitchLock.class, "UNLOCK_TIMEOUT"));
-	}
+    public void testDefaultSettings() {
+        assertEquals("Wrong default setting", 200L, Reflection.getPrivateField(ViewSwitchLock.class, "UNLOCK_TIMEOUT"));
+    }
 
-	public void testUnsupportedMethods() {
-		Lock viewSwitchLock = new ViewSwitchLock();
+    public void testUnsupportedMethods() {
+        Lock viewSwitchLock = new ViewSwitchLock();
 
-		try {
-			viewSwitchLock.lock();
-			fail("Method is supported");
-		} catch (UnsupportedOperationException expected) {
-		}
+        try {
+            viewSwitchLock.lock();
+            fail("Method is supported");
+        } catch (UnsupportedOperationException expected) {
+        }
 
-		try {
-			viewSwitchLock.lockInterruptibly();
-			fail("Method is supported");
-		} catch (UnsupportedOperationException expected) {
-		} catch (Exception exception) {
-			fail("An unexcpected excpetion occured");
-		}
+        try {
+            viewSwitchLock.lockInterruptibly();
+            fail("Method is supported");
+        } catch (UnsupportedOperationException expected) {
+        } catch (Exception exception) {
+            fail("An unexcpected excpetion occured");
+        }
 
-		try {
-			viewSwitchLock.newCondition();
-			fail("Method is supported");
-		} catch (UnsupportedOperationException expected) {
-		}
+        try {
+            viewSwitchLock.newCondition();
+            fail("Method is supported");
+        } catch (UnsupportedOperationException expected) {
+        }
 
-		try {
-			viewSwitchLock.tryLock(1L, null);
-			fail("Method is supported");
-		} catch (UnsupportedOperationException expected) {
-		} catch (Exception exception) {
-			fail("An unexcpected excpetion occured");
-		}
-	}
+        try {
+            viewSwitchLock.tryLock(1L, null);
+            fail("Method is supported");
+        } catch (UnsupportedOperationException expected) {
+        } catch (Exception exception) {
+            fail("An unexcpected excpetion occured");
+        }
+    }
 }

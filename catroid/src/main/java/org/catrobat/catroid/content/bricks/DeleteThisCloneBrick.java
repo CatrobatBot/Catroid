@@ -35,47 +35,47 @@ import java.util.Collections;
 import java.util.List;
 
 public class DeleteThisCloneBrick extends BrickBaseType {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public DeleteThisCloneBrick() {
-	}
+    public DeleteThisCloneBrick() {
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return NO_RESOURCES;
-	}
+    @Override
+    public int getRequiredResources() {
+        return NO_RESOURCES;
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		view = View.inflate(context, R.layout.brick_delete_this_clone, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        view = View.inflate(context, R.layout.brick_delete_this_clone, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_delete_clone_checkbox);
-		return view;
-	}
+        setCheckboxView(R.id.brick_delete_clone_checkbox);
+        return view;
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		DeleteThisCloneBrick copyBrick = (DeleteThisCloneBrick) clone();
-		return copyBrick;
-	}
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        DeleteThisCloneBrick copyBrick = (DeleteThisCloneBrick) clone();
+        return copyBrick;
+    }
 
-	@Override
-	public Brick clone() {
-		return new DeleteThisCloneBrick();
-	}
+    @Override
+    public Brick clone() {
+        return new DeleteThisCloneBrick();
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		return View.inflate(context, R.layout.brick_delete_this_clone, null);
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        return View.inflate(context, R.layout.brick_delete_this_clone, null);
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createDeleteThisCloneAction(sprite));
-		return Collections.emptyList();
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createDeleteThisCloneAction(sprite));
+        return Collections.emptyList();
+    }
 }

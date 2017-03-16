@@ -36,70 +36,70 @@ import org.catrobat.catroid.test.utils.CollisionTestUtils;
 import org.catrobat.catroid.test.utils.TestUtils;
 
 public class TouchesEdgeTest extends InstrumentationTestCase {
-	protected Project project;
-	protected Sprite sprite1;
+    protected Project project;
+    protected Sprite sprite1;
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		TestUtils.deleteTestProjects();
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        TestUtils.deleteTestProjects();
 
-		project = new Project(getInstrumentation().getTargetContext(), TestUtils.DEFAULT_TEST_PROJECT_NAME);
-		sprite1 = new Sprite("TestSprite1");
-		project.getDefaultScene().addSprite(sprite1);
+        project = new Project(getInstrumentation().getTargetContext(), TestUtils.DEFAULT_TEST_PROJECT_NAME);
+        sprite1 = new Sprite("TestSprite1");
+        project.getDefaultScene().addSprite(sprite1);
 
-		StorageHandler.getInstance().saveProject(project);
-		ProjectManager.getInstance().setProject(project);
+        StorageHandler.getInstance().saveProject(project);
+        ProjectManager.getInstance().setProject(project);
 
-		CollisionTestUtils.initializeSprite(sprite1, org.catrobat.catroid.test.R.raw.collision_donut,
-				"collision_donut.png", getInstrumentation().getContext(), project);
-	}
+        CollisionTestUtils.initializeSprite(sprite1, org.catrobat.catroid.test.R.raw.collision_donut,
+                "collision_donut.png", getInstrumentation().getContext(), project);
+    }
 
-	public void testCollisionWithRightEdge() {
-		sprite1.look.setXInUserInterfaceDimensionUnit(0);
-		sprite1.look.setYInUserInterfaceDimensionUnit(0);
-		Assert.assertFalse("False detection as colliding with edge", CollisionDetection.collidesWithEdge(sprite1.look)
-				== 1d);
-		int virtualScreenWidth = ProjectManager.getInstance().getCurrentProject().getXmlHeader().virtualScreenWidth;
-		sprite1.look.setXInUserInterfaceDimensionUnit(sprite1.look.getXInUserInterfaceDimensionUnit()
-				+ virtualScreenWidth / 2);
-		Assert.assertTrue("No collision with edge detected", CollisionDetection.collidesWithEdge(sprite1.look)
-				== 1d);
-	}
+    public void testCollisionWithRightEdge() {
+        sprite1.look.setXInUserInterfaceDimensionUnit(0);
+        sprite1.look.setYInUserInterfaceDimensionUnit(0);
+        Assert.assertFalse("False detection as colliding with edge", CollisionDetection.collidesWithEdge(sprite1.look)
+                == 1d);
+        int virtualScreenWidth = ProjectManager.getInstance().getCurrentProject().getXmlHeader().virtualScreenWidth;
+        sprite1.look.setXInUserInterfaceDimensionUnit(sprite1.look.getXInUserInterfaceDimensionUnit()
+                + virtualScreenWidth / 2);
+        Assert.assertTrue("No collision with edge detected", CollisionDetection.collidesWithEdge(sprite1.look)
+                == 1d);
+    }
 
-	public void testCollisionWithLeftEdge() {
-		sprite1.look.setXInUserInterfaceDimensionUnit(0);
-		sprite1.look.setYInUserInterfaceDimensionUnit(0);
-		Assert.assertFalse("False detection as colliding with edge", CollisionDetection.collidesWithEdge(sprite1.look)
-				== 1d);
-		int virtualScreenWidth = ProjectManager.getInstance().getCurrentProject().getXmlHeader().virtualScreenWidth;
-		sprite1.look.setXInUserInterfaceDimensionUnit(sprite1.look.getXInUserInterfaceDimensionUnit()
-				- virtualScreenWidth / 2);
-		Assert.assertTrue("No collision with edge detected", CollisionDetection.collidesWithEdge(sprite1.look)
-				== 1d);
-	}
+    public void testCollisionWithLeftEdge() {
+        sprite1.look.setXInUserInterfaceDimensionUnit(0);
+        sprite1.look.setYInUserInterfaceDimensionUnit(0);
+        Assert.assertFalse("False detection as colliding with edge", CollisionDetection.collidesWithEdge(sprite1.look)
+                == 1d);
+        int virtualScreenWidth = ProjectManager.getInstance().getCurrentProject().getXmlHeader().virtualScreenWidth;
+        sprite1.look.setXInUserInterfaceDimensionUnit(sprite1.look.getXInUserInterfaceDimensionUnit()
+                - virtualScreenWidth / 2);
+        Assert.assertTrue("No collision with edge detected", CollisionDetection.collidesWithEdge(sprite1.look)
+                == 1d);
+    }
 
-	public void testCollisionWithUpperEdge() {
-		sprite1.look.setXInUserInterfaceDimensionUnit(0);
-		sprite1.look.setYInUserInterfaceDimensionUnit(0);
-		Assert.assertFalse("False detection as colliding with edge", CollisionDetection.collidesWithEdge(sprite1.look)
-				== 1d);
-		int virtualScreenHeight = ProjectManager.getInstance().getCurrentProject().getXmlHeader().virtualScreenHeight;
-		sprite1.look.setYInUserInterfaceDimensionUnit(sprite1.look.getXInUserInterfaceDimensionUnit()
-				+ virtualScreenHeight / 2);
-		Assert.assertTrue("No collision with edge detected", CollisionDetection.collidesWithEdge(sprite1.look)
-				== 1d);
-	}
+    public void testCollisionWithUpperEdge() {
+        sprite1.look.setXInUserInterfaceDimensionUnit(0);
+        sprite1.look.setYInUserInterfaceDimensionUnit(0);
+        Assert.assertFalse("False detection as colliding with edge", CollisionDetection.collidesWithEdge(sprite1.look)
+                == 1d);
+        int virtualScreenHeight = ProjectManager.getInstance().getCurrentProject().getXmlHeader().virtualScreenHeight;
+        sprite1.look.setYInUserInterfaceDimensionUnit(sprite1.look.getXInUserInterfaceDimensionUnit()
+                + virtualScreenHeight / 2);
+        Assert.assertTrue("No collision with edge detected", CollisionDetection.collidesWithEdge(sprite1.look)
+                == 1d);
+    }
 
-	public void testCollisionWithBottomEdge() {
-		sprite1.look.setXInUserInterfaceDimensionUnit(0);
-		sprite1.look.setYInUserInterfaceDimensionUnit(0);
-		Assert.assertFalse("False detection as colliding with edge", CollisionDetection.collidesWithEdge(sprite1.look)
-				== 1d);
-		int virtualScreenHeight = ProjectManager.getInstance().getCurrentProject().getXmlHeader().virtualScreenHeight;
-		sprite1.look.setYInUserInterfaceDimensionUnit(sprite1.look.getXInUserInterfaceDimensionUnit()
-				- virtualScreenHeight / 2);
-		Assert.assertTrue("No collision with edge detected", CollisionDetection.collidesWithEdge(sprite1.look)
-				== 1d);
-	}
+    public void testCollisionWithBottomEdge() {
+        sprite1.look.setXInUserInterfaceDimensionUnit(0);
+        sprite1.look.setYInUserInterfaceDimensionUnit(0);
+        Assert.assertFalse("False detection as colliding with edge", CollisionDetection.collidesWithEdge(sprite1.look)
+                == 1d);
+        int virtualScreenHeight = ProjectManager.getInstance().getCurrentProject().getXmlHeader().virtualScreenHeight;
+        sprite1.look.setYInUserInterfaceDimensionUnit(sprite1.look.getXInUserInterfaceDimensionUnit()
+                - virtualScreenHeight / 2);
+        Assert.assertTrue("No collision with edge detected", CollisionDetection.collidesWithEdge(sprite1.look)
+                == 1d);
+    }
 }

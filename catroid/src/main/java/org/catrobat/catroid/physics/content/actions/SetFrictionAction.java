@@ -33,29 +33,29 @@ import org.catrobat.catroid.physics.PhysicsObject;
 
 public class SetFrictionAction extends TemporalAction {
 
-	private Sprite sprite;
-	private PhysicsObject physicsObject;
-	private Formula friction;
+    private Sprite sprite;
+    private PhysicsObject physicsObject;
+    private Formula friction;
 
-	@Override
-	protected void update(float percent) {
-		try {
-			Float newFriction = friction == null ? Float.valueOf(0f) : friction.interpretFloat(sprite);
-			physicsObject.setFriction(newFriction / 100.0f);
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}
-	}
+    @Override
+    protected void update(float percent) {
+        try {
+            Float newFriction = friction == null ? Float.valueOf(0f) : friction.interpretFloat(sprite);
+            physicsObject.setFriction(newFriction / 100.0f);
+        } catch (InterpretationException interpretationException) {
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+        }
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setPhysicsObject(PhysicsObject physicsObject) {
-		this.physicsObject = physicsObject;
-	}
+    public void setPhysicsObject(PhysicsObject physicsObject) {
+        this.physicsObject = physicsObject;
+    }
 
-	public void setFriction(Formula friction) {
-		this.friction = friction;
-	}
+    public void setFriction(Formula friction) {
+        this.friction = friction;
+    }
 }

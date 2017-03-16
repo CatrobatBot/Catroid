@@ -31,32 +31,32 @@ import org.catrobat.catroid.R;
 
 public class LoopEndlessBrick extends LoopEndBrick implements DeadEndBrick {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public LoopEndlessBrick() {
-	}
+    public LoopEndlessBrick() {
+    }
 
-	public LoopEndlessBrick(LoopBeginBrick loopStartingBrick) {
-		super(loopStartingBrick);
-	}
+    public LoopEndlessBrick(LoopBeginBrick loopStartingBrick) {
+        super(loopStartingBrick);
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		if (view == null) {
-			view = View.inflate(context, R.layout.brick_loop_endless, null);
-			view = BrickViewProvider.setAlphaOnView(view, alphaValue);
-			checkbox = (CheckBox) view.findViewById(R.id.brick_loop_endless_checkbox);
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        if (view == null) {
+            view = View.inflate(context, R.layout.brick_loop_endless, null);
+            view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+            checkbox = (CheckBox) view.findViewById(R.id.brick_loop_endless_checkbox);
 
-			setCheckboxView(R.id.brick_loop_endless_checkbox);
-		}
-		return view;
-	}
+            setCheckboxView(R.id.brick_loop_endless_checkbox);
+        }
+        return view;
+    }
 
-	@Override
-	public Brick clone() {
-		return new LoopEndlessBrick(getLoopBeginBrick());
-	}
+    @Override
+    public Brick clone() {
+        return new LoopEndlessBrick(getLoopBeginBrick());
+    }
 }

@@ -33,82 +33,82 @@ import org.catrobat.catroid.formulaeditor.InterpretationException;
 
 public class IfLogicAction extends Action {
 
-	private Sprite sprite;
-	private Action ifAction;
-	private Action elseAction;
-	private Formula ifCondition;
-	private Boolean ifConditionValue;
-	private boolean isInitialized = false;
-	private boolean isInterpretedCorrectly;
+    private Sprite sprite;
+    private Action ifAction;
+    private Action elseAction;
+    private Formula ifCondition;
+    private Boolean ifConditionValue;
+    private boolean isInitialized = false;
+    private boolean isInterpretedCorrectly;
 
-	protected void begin() {
-		try {
-			if (ifCondition == null) {
-				isInterpretedCorrectly = false;
-				return;
-			}
-			Double interpretation = ifCondition.interpretDouble(sprite);
-			ifConditionValue = interpretation.intValue() != 0 ? true : false;
-			isInterpretedCorrectly = true;
-		} catch (InterpretationException interpretationException) {
-			isInterpretedCorrectly = false;
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}
-	}
+    protected void begin() {
+        try {
+            if (ifCondition == null) {
+                isInterpretedCorrectly = false;
+                return;
+            }
+            Double interpretation = ifCondition.interpretDouble(sprite);
+            ifConditionValue = interpretation.intValue() != 0 ? true : false;
+            isInterpretedCorrectly = true;
+        } catch (InterpretationException interpretationException) {
+            isInterpretedCorrectly = false;
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+        }
+    }
 
-	@Override
-	public boolean act(float delta) {
-		if (!isInitialized) {
-			begin();
-			isInitialized = true;
-		}
+    @Override
+    public boolean act(float delta) {
+        if (!isInitialized) {
+            begin();
+            isInitialized = true;
+        }
 
-		if (!isInterpretedCorrectly) {
-			return true;
-		}
+        if (!isInterpretedCorrectly) {
+            return true;
+        }
 
-		if (ifConditionValue) {
-			return ifAction.act(delta);
-		} else {
-			if (elseAction == null) {
-				return true;
-			}
-			return elseAction.act(delta);
-		}
-	}
+        if (ifConditionValue) {
+            return ifAction.act(delta);
+        } else {
+            if (elseAction == null) {
+                return true;
+            }
+            return elseAction.act(delta);
+        }
+    }
 
-	@Override
-	public void restart() {
-		ifAction.restart();
-		if (elseAction != null) {
-			elseAction.restart();
-		}
-		isInitialized = false;
-		super.restart();
-	}
+    @Override
+    public void restart() {
+        ifAction.restart();
+        if (elseAction != null) {
+            elseAction.restart();
+        }
+        isInitialized = false;
+        super.restart();
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setIfAction(Action ifAction) {
-		this.ifAction = ifAction;
-	}
+    public void setIfAction(Action ifAction) {
+        this.ifAction = ifAction;
+    }
 
-	public void setElseAction(Action elseAction) {
-		this.elseAction = elseAction;
-	}
+    public void setElseAction(Action elseAction) {
+        this.elseAction = elseAction;
+    }
 
-	public void setIfCondition(Formula ifCondition) {
-		this.ifCondition = ifCondition;
-	}
+    public void setIfCondition(Formula ifCondition) {
+        this.ifCondition = ifCondition;
+    }
 
-	@Override
-	public void setActor(Actor actor) {
-		super.setActor(actor);
-		ifAction.setActor(actor);
-		if (elseAction != null) {
-			elseAction.setActor(actor);
-		}
-	}
+    @Override
+    public void setActor(Actor actor) {
+        super.setActor(actor);
+        ifAction.setActor(actor);
+        if (elseAction != null) {
+            elseAction.setActor(actor);
+        }
+    }
 }

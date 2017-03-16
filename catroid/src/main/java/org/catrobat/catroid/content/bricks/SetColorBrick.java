@@ -40,68 +40,68 @@ import java.util.List;
 
 public class SetColorBrick extends FormulaBrick {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private transient View prototypeView;
+    private transient View prototypeView;
 
-	public SetColorBrick() {
-		addAllowedBrickField(BrickField.COLOR);
-	}
+    public SetColorBrick() {
+        addAllowedBrickField(BrickField.COLOR);
+    }
 
-	public SetColorBrick(Float color) {
-		initializeBrickField(new Formula(color));
-	}
+    public SetColorBrick(Float color) {
+        initializeBrickField(new Formula(color));
+    }
 
-	public SetColorBrick(Formula color) {
-		initializeBrickField(color);
-	}
+    public SetColorBrick(Formula color) {
+        initializeBrickField(color);
+    }
 
-	private void initializeBrickField(Formula color) {
-		addAllowedBrickField(BrickField.COLOR);
-		setFormulaWithBrickField(BrickField.COLOR, color);
-	}
+    private void initializeBrickField(Formula color) {
+        addAllowedBrickField(BrickField.COLOR);
+        setFormulaWithBrickField(BrickField.COLOR, color);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return getFormulaWithBrickField(BrickField.COLOR).getRequiredResources();
-	}
+    @Override
+    public int getRequiredResources() {
+        return getFormulaWithBrickField(BrickField.COLOR).getRequiredResources();
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_set_color_to, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_set_color_to, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_set_color_checkbox);
+        setCheckboxView(R.id.brick_set_color_checkbox);
 
-		TextView edit = (TextView) view.findViewById(R.id.brick_set_color_edit_text);
-		getFormulaWithBrickField(BrickField.COLOR).setTextFieldId(R.id.brick_set_color_edit_text);
-		getFormulaWithBrickField(BrickField.COLOR).refreshTextField(view);
+        TextView edit = (TextView) view.findViewById(R.id.brick_set_color_edit_text);
+        getFormulaWithBrickField(BrickField.COLOR).setTextFieldId(R.id.brick_set_color_edit_text);
+        getFormulaWithBrickField(BrickField.COLOR).refreshTextField(view);
 
-		edit.setOnClickListener(this);
-		return view;
-	}
+        edit.setOnClickListener(this);
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_set_color_to, null);
-		TextView textSetSizeTo = (TextView) prototypeView.findViewById(R.id.brick_set_color_edit_text);
-		textSetSizeTo.setText(String.valueOf(BrickValues.SET_COLOR_TO));
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_set_color_to, null);
+        TextView textSetSizeTo = (TextView) prototypeView.findViewById(R.id.brick_set_color_edit_text);
+        textSetSizeTo.setText(String.valueOf(BrickValues.SET_COLOR_TO));
+        return prototypeView;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createSetColorAction(sprite,
-				getFormulaWithBrickField(BrickField.COLOR)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createSetColorAction(sprite,
+                getFormulaWithBrickField(BrickField.COLOR)));
+        return null;
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		FormulaEditorFragment.showFragment(view, this, BrickField.COLOR);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        FormulaEditorFragment.showFragment(view, this, BrickField.COLOR);
+    }
 }

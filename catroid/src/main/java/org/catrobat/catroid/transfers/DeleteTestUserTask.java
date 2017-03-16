@@ -33,74 +33,74 @@ import org.catrobat.catroid.web.ServerCalls;
 import org.catrobat.catroid.web.WebconnectionException;
 
 public class DeleteTestUserTask extends AsyncTask<Void, Void, Boolean> {
-	private static final String TAG = DeleteTestUserTask.class.getSimpleName();
+    private static final String TAG = DeleteTestUserTask.class.getSimpleName();
 
-	private Context context;
+    private Context context;
 
-	private WebconnectionException exception;
+    private WebconnectionException exception;
 
-	private OnDeleteTestUserCompleteListener onDeleteTestUserCompleteListener;
+    private OnDeleteTestUserCompleteListener onDeleteTestUserCompleteListener;
 
-	public DeleteTestUserTask(Context context) {
-		this.context = context;
-	}
+    public DeleteTestUserTask(Context context) {
+        this.context = context;
+    }
 
-	public void setOnDeleteTestUserCompleteListener(OnDeleteTestUserCompleteListener listener) {
-		onDeleteTestUserCompleteListener = listener;
-	}
+    public void setOnDeleteTestUserCompleteListener(OnDeleteTestUserCompleteListener listener) {
+        onDeleteTestUserCompleteListener = listener;
+    }
 
-	@Override
-	protected void onPreExecute() {
-		super.onPreExecute();
-		if (context == null) {
-			return;
-		}
-	}
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        if (context == null) {
+            return;
+        }
+    }
 
-	@Override
-	protected Boolean doInBackground(Void... params) {
-		try {
-			if (!Utils.isNetworkAvailable(context)) {
-				exception = new WebconnectionException(WebconnectionException.ERROR_NETWORK, "Network not available!");
-				return false;
-			}
+    @Override
+    protected Boolean doInBackground(Void... params) {
+        try {
+            if (!Utils.isNetworkAvailable(context)) {
+                exception = new WebconnectionException(WebconnectionException.ERROR_NETWORK, "Network not available!");
+                return false;
+            }
 
-			return ServerCalls.getInstance().deleteTestUserAccountsOnServer();
-		} catch (WebconnectionException webconnectionException) {
-			Log.e(TAG, Log.getStackTraceString(webconnectionException));
-			exception = webconnectionException;
-		}
-		return false;
-	}
+            return ServerCalls.getInstance().deleteTestUserAccountsOnServer();
+        } catch (WebconnectionException webconnectionException) {
+            Log.e(TAG, Log.getStackTraceString(webconnectionException));
+            exception = webconnectionException;
+        }
+        return false;
+    }
 
-	@Override
-	protected void onPostExecute(Boolean deleted) {
-		super.onPostExecute(deleted);
+    @Override
+    protected void onPostExecute(Boolean deleted) {
+        super.onPostExecute(deleted);
 
-		if (Utils.checkForNetworkError(exception)) {
-			showDialog(R.string.error_internet_connection);
-			return;
-		}
+        if (Utils.checkForNetworkError(exception)) {
+            showDialog(R.string.error_internet_connection);
+            return;
+        }
 
-		if (onDeleteTestUserCompleteListener != null) {
-			onDeleteTestUserCompleteListener.onDeleteTestUserComplete(deleted);
-		}
-	}
+        if (onDeleteTestUserCompleteListener != null) {
+            onDeleteTestUserCompleteListener.onDeleteTestUserComplete(deleted);
+        }
+    }
 
-	private void showDialog(int messageId) {
-		if (context == null) {
-			return;
-		}
-		if (exception.getMessage() == null) {
-			new CustomAlertDialogBuilder(context).setMessage(messageId).setPositiveButton(R.string.ok, null)
-					.show();
-		} else {
-			new CustomAlertDialogBuilder(context).setMessage(exception.getMessage())
-					.setPositiveButton(R.string.ok, null).show();
-		}
-	}
+    private void showDialog(int messageId) {
+        if (context == null) {
+            return;
+        }
+        if (exception.getMessage() == null) {
+            new CustomAlertDialogBuilder(context).setMessage(messageId).setPositiveButton(R.string.ok, null)
+                    .show();
+        } else {
+            new CustomAlertDialogBuilder(context).setMessage(exception.getMessage())
+                    .setPositiveButton(R.string.ok, null).show();
+        }
+    }
 
-	public interface OnDeleteTestUserCompleteListener {
-		void onDeleteTestUserComplete(Boolean deleted);
-	}
+    public interface OnDeleteTestUserCompleteListener {
+        void onDeleteTestUserComplete(Boolean deleted);
+    }
 }

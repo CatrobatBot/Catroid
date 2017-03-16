@@ -32,17 +32,20 @@ import java.util.UUID;
 
 public interface BluetoothDevice extends StageResourceInterface {
 
-	Class<LegoNXT> LEGO_NXT = LegoNXT.class;
-	Class<LegoEV3> LEGO_EV3 = LegoEV3.class;
-	Class<Phiro> PHIRO = Phiro.class;
-	Class<Arduino> ARDUINO = Arduino.class;
+    Class<LegoNXT> LEGO_NXT = LegoNXT.class;
+    Class<LegoEV3> LEGO_EV3 = LegoEV3.class;
+    Class<Phiro> PHIRO = Phiro.class;
+    Class<Arduino> ARDUINO = Arduino.class;
 
-	String getName();
-	Class<? extends BluetoothDevice> getDeviceType();
-	void setConnection(BluetoothConnection connection);
-	void disconnect();
+    String getName();
 
-	boolean isAlive();
+    Class<? extends BluetoothDevice> getDeviceType();
 
-	UUID getBluetoothDeviceUUID();
+    void setConnection(BluetoothConnection connection);
+
+    void disconnect();
+
+    boolean isAlive();
+
+    UUID getBluetoothDeviceUUID();
 }

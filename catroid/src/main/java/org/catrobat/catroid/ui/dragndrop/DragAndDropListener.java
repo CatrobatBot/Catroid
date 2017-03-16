@@ -24,11 +24,11 @@ package org.catrobat.catroid.ui.dragndrop;
 
 public interface DragAndDropListener {
 
-	void drag(int from, int to);
+    void drag(int from, int to);
 
-	void drop();
+    void drop();
 
-	void remove(int index);
+    void remove(int index);
 
-	void setTouchedScript(int index);
+    void setTouchedScript(int index);
 }

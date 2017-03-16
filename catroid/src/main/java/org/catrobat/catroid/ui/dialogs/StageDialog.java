@@ -39,124 +39,124 @@ import org.catrobat.catroid.stage.StageListener;
 import org.catrobat.catroid.utils.ToastUtil;
 
 public class StageDialog extends Dialog implements View.OnClickListener {
-	private static final String TAG = StageDialog.class.getSimpleName();
-	private StageActivity stageActivity;
-	private StageListener stageListener;
+    private static final String TAG = StageDialog.class.getSimpleName();
+    private StageActivity stageActivity;
+    private StageListener stageListener;
 
-	public StageDialog(StageActivity stageActivity, StageListener stageListener, int theme) {
-		super(stageActivity, theme);
-		this.stageActivity = stageActivity;
-		this.stageListener = stageListener;
-	}
+    public StageDialog(StageActivity stageActivity, StageListener stageListener, int theme) {
+        super(stageActivity, theme);
+        this.stageActivity = stageActivity;
+        this.stageListener = stageListener;
+    }
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.dialog_stage);
-		getWindow().getAttributes();
+        setContentView(R.layout.dialog_stage);
+        getWindow().getAttributes();
 
-		getWindow().getAttributes();
+        getWindow().getAttributes();
 
-		int width = LayoutParams.MATCH_PARENT;
-		int height = LayoutParams.WRAP_CONTENT;
+        int width = LayoutParams.MATCH_PARENT;
+        int height = LayoutParams.WRAP_CONTENT;
 
-		getWindow().setLayout(width, height);
+        getWindow().setLayout(width, height);
 
-		getWindow().setBackgroundDrawableResource(R.color.transparent);
+        getWindow().setBackgroundDrawableResource(R.color.transparent);
 
-		((Button) findViewById(R.id.stage_dialog_button_back)).setOnClickListener(this);
-		((Button) findViewById(R.id.stage_dialog_button_continue)).setOnClickListener(this);
-		((Button) findViewById(R.id.stage_dialog_button_restart)).setOnClickListener(this);
-		((Button) findViewById(R.id.stage_dialog_button_toggle_axes)).setOnClickListener(this);
-		((Button) findViewById(R.id.stage_dialog_button_screenshot)).setOnClickListener(this);
-		if (stageActivity.getResizePossible()) {
-			((ImageButton) findViewById(R.id.stage_dialog_button_maximize)).setOnClickListener(this);
-		} else {
-			((ImageButton) findViewById(R.id.stage_dialog_button_maximize)).setVisibility(View.GONE);
-		}
-	}
+        ((Button) findViewById(R.id.stage_dialog_button_back)).setOnClickListener(this);
+        ((Button) findViewById(R.id.stage_dialog_button_continue)).setOnClickListener(this);
+        ((Button) findViewById(R.id.stage_dialog_button_restart)).setOnClickListener(this);
+        ((Button) findViewById(R.id.stage_dialog_button_toggle_axes)).setOnClickListener(this);
+        ((Button) findViewById(R.id.stage_dialog_button_screenshot)).setOnClickListener(this);
+        if (stageActivity.getResizePossible()) {
+            ((ImageButton) findViewById(R.id.stage_dialog_button_maximize)).setOnClickListener(this);
+        } else {
+            ((ImageButton) findViewById(R.id.stage_dialog_button_maximize)).setVisibility(View.GONE);
+        }
+    }
 
-	@Override
-	public void onClick(View view) {
-		switch (view.getId()) {
-			case R.id.stage_dialog_button_back:
-				onBackPressed();
-				break;
-			case R.id.stage_dialog_button_continue:
-				dismiss();
-				stageActivity.resume();
-				break;
-			case R.id.stage_dialog_button_restart:
-				clearBroadcastMaps();
-				dismiss();
-				restartProject();
-				break;
-			case R.id.stage_dialog_button_toggle_axes:
-				toggleAxes();
-				break;
-			case R.id.stage_dialog_button_maximize:
-				stageListener.toggleScreenMode();
-				break;
-			case R.id.stage_dialog_button_screenshot:
-				makeScreenshot();
-				break;
-			default:
-				Log.w(TAG, "Unimplemented button clicked! This shouldn't happen!");
-				break;
-		}
-	}
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.stage_dialog_button_back:
+                onBackPressed();
+                break;
+            case R.id.stage_dialog_button_continue:
+                dismiss();
+                stageActivity.resume();
+                break;
+            case R.id.stage_dialog_button_restart:
+                clearBroadcastMaps();
+                dismiss();
+                restartProject();
+                break;
+            case R.id.stage_dialog_button_toggle_axes:
+                toggleAxes();
+                break;
+            case R.id.stage_dialog_button_maximize:
+                stageListener.toggleScreenMode();
+                break;
+            case R.id.stage_dialog_button_screenshot:
+                makeScreenshot();
+                break;
+            default:
+                Log.w(TAG, "Unimplemented button clicked! This shouldn't happen!");
+                break;
+        }
+    }
 
-	@Override
-	public void onBackPressed() {
-		clearBroadcastMaps();
-		dismiss();
-		stageActivity.exit();
-		new FinishThreadAndDisposeTexturesTask().execute(null, null, null);
-	}
+    @Override
+    public void onBackPressed() {
+        clearBroadcastMaps();
+        dismiss();
+        stageActivity.exit();
+        new FinishThreadAndDisposeTexturesTask().execute(null, null, null);
+    }
 
-	private void makeScreenshot() {
-		if (stageListener.makeManualScreenshot()) {
-			ToastUtil.showSuccess(stageActivity, R.string.notification_screenshot_ok);
-		} else {
-			ToastUtil.showError(stageActivity, R.string.error_screenshot_failed);
-		}
-	}
+    private void makeScreenshot() {
+        if (stageListener.makeManualScreenshot()) {
+            ToastUtil.showSuccess(stageActivity, R.string.notification_screenshot_ok);
+        } else {
+            ToastUtil.showError(stageActivity, R.string.error_screenshot_failed);
+        }
+    }
 
-	private void restartProject() {
-		stageListener.reloadProject(this);
-		synchronized (this) {
-			try {
-				this.wait();
-			} catch (InterruptedException e) {
-				Log.e(TAG, "Thread activated too early!", e);
-			}
-		}
-		stageActivity.resume();
-	}
+    private void restartProject() {
+        stageListener.reloadProject(this);
+        synchronized (this) {
+            try {
+                this.wait();
+            } catch (InterruptedException e) {
+                Log.e(TAG, "Thread activated too early!", e);
+            }
+        }
+        stageActivity.resume();
+    }
 
-	private void toggleAxes() {
-		Button axesToggleButton = (Button) findViewById(R.id.stage_dialog_button_toggle_axes);
-		if (stageListener.axesOn) {
-			stageListener.axesOn = false;
-			axesToggleButton.setText(R.string.stage_dialog_axes_on);
-		} else {
-			stageListener.axesOn = true;
-			axesToggleButton.setText(R.string.stage_dialog_axes_off);
-		}
-	}
+    private void toggleAxes() {
+        Button axesToggleButton = (Button) findViewById(R.id.stage_dialog_button_toggle_axes);
+        if (stageListener.axesOn) {
+            stageListener.axesOn = false;
+            axesToggleButton.setText(R.string.stage_dialog_axes_on);
+        } else {
+            stageListener.axesOn = true;
+            axesToggleButton.setText(R.string.stage_dialog_axes_off);
+        }
+    }
 
-	private void clearBroadcastMaps() {
-		BroadcastSequenceMap.clear();
-		BroadcastWaitSequenceMap.clear();
-		BroadcastWaitSequenceMap.clearCurrentBroadcastEvent();
-	}
+    private void clearBroadcastMaps() {
+        BroadcastSequenceMap.clear();
+        BroadcastWaitSequenceMap.clear();
+        BroadcastWaitSequenceMap.clearCurrentBroadcastEvent();
+    }
 
-	private class FinishThreadAndDisposeTexturesTask extends AsyncTask<Void, Void, Void> {
-		@Override
-		protected Void doInBackground(Void... params) {
-			stageActivity.manageLoadAndFinish();
-			return null;
-		}
-	}
+    private class FinishThreadAndDisposeTexturesTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            stageActivity.manageLoadAndFinish();
+            return null;
+        }
+    }
 }

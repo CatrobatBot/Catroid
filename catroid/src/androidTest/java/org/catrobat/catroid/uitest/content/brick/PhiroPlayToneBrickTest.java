@@ -43,88 +43,88 @@ import org.catrobat.catroid.uitest.util.UiTestUtils;
 import java.util.ArrayList;
 
 public class PhiroPlayToneBrickTest extends BaseActivityInstrumentationTestCase<ScriptActivity> {
-	private static final int TONE_DURATION = 30;
-	private static final int TONE_DURATION_INITIALLY = -70;
+    private static final int TONE_DURATION = 30;
+    private static final int TONE_DURATION_INITIALLY = -70;
 
-	private Project project;
-	private PhiroPlayToneBrick toneBrick;
+    private Project project;
+    private PhiroPlayToneBrick toneBrick;
 
-	public PhiroPlayToneBrickTest() {
-		super(ScriptActivity.class);
-	}
+    public PhiroPlayToneBrickTest() {
+        super(ScriptActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		// normally super.setUp should be called first
-		// but kept the test failing due to view is null
-		// when starting in ScriptActivity
-		createProject();
-		super.setUp();
-	}
+    @Override
+    public void setUp() throws Exception {
+        // normally super.setUp should be called first
+        // but kept the test failing due to view is null
+        // when starting in ScriptActivity
+        createProject();
+        super.setUp();
+    }
 
-	public void testPhiroMotorActionBrick() {
-		ListView dragDropListView = UiTestUtils.getScriptListView(solo);
-		BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
+    public void testPhiroMotorActionBrick() {
+        ListView dragDropListView = UiTestUtils.getScriptListView(solo);
+        BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
 
-		int childrenCount = adapter.getChildCountFromLastGroup();
-		int groupCount = adapter.getScriptCount();
+        int childrenCount = adapter.getChildCountFromLastGroup();
+        int groupCount = adapter.getScriptCount();
 
-		assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
-		assertEquals("Incorrect number of bricks.", 1, childrenCount);
+        assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
+        assertEquals("Incorrect number of bricks.", 1, childrenCount);
 
-		ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
-		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
+        ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
+        assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
-		assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.phiro_play_tone)));
-		assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.phiro_tone_duration)));
+        assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
+        assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.phiro_play_tone)));
+        assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.phiro_tone_duration)));
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
-				R.id.brick_phiro_play_tone_duration_edit_text, TONE_DURATION, Brick.BrickField.PHIRO_DURATION_IN_SECONDS, toneBrick);
+        UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
+                R.id.brick_phiro_play_tone_duration_edit_text, TONE_DURATION, Brick.BrickField.PHIRO_DURATION_IN_SECONDS, toneBrick);
 
-		String[] tones = getActivity().getResources().getStringArray(R.array.brick_phiro_select_tone_spinner);
-		assertTrue("Spinner items list too short!", tones.length == 7);
+        String[] tones = getActivity().getResources().getStringArray(R.array.brick_phiro_select_tone_spinner);
+        assertTrue("Spinner items list too short!", tones.length == 7);
 
-		int phiroSpinnerIndex = 0;
+        int phiroSpinnerIndex = 0;
 
-		Spinner currentSpinner = solo.getCurrentViews(Spinner.class).get(phiroSpinnerIndex);
-		solo.pressSpinnerItem(phiroSpinnerIndex, 7);
-		solo.waitForActivity(ScriptActivity.class.getSimpleName());
-		assertEquals("Wrong item in spinner!", tones[6], currentSpinner.getSelectedItem());
-		solo.pressSpinnerItem(phiroSpinnerIndex, -1);
-		solo.waitForActivity(ScriptActivity.class.getSimpleName());
-		assertEquals("Wrong item in spinner!", tones[5], currentSpinner.getSelectedItem());
-		solo.pressSpinnerItem(phiroSpinnerIndex, -1);
-		solo.waitForActivity(ScriptActivity.class.getSimpleName());
-		assertEquals("Wrong item in spinner!", tones[4], currentSpinner.getSelectedItem());
-		solo.pressSpinnerItem(phiroSpinnerIndex, -1);
-		solo.waitForActivity(ScriptActivity.class.getSimpleName());
-		assertEquals("Wrong item in spinner!", tones[3], currentSpinner.getSelectedItem());
-		solo.pressSpinnerItem(phiroSpinnerIndex, -1);
-		solo.waitForActivity(ScriptActivity.class.getSimpleName());
-		assertEquals("Wrong item in spinner!", tones[2], currentSpinner.getSelectedItem());
-		solo.pressSpinnerItem(phiroSpinnerIndex, -1);
-		solo.waitForActivity(ScriptActivity.class.getSimpleName());
-		assertEquals("Wrong item in spinner!", tones[1], currentSpinner.getSelectedItem());
-		solo.pressSpinnerItem(phiroSpinnerIndex, -1);
-		solo.waitForActivity(ScriptActivity.class.getSimpleName());
-		assertEquals("Wrong item in spinner!", tones[0], currentSpinner.getSelectedItem());
-	}
+        Spinner currentSpinner = solo.getCurrentViews(Spinner.class).get(phiroSpinnerIndex);
+        solo.pressSpinnerItem(phiroSpinnerIndex, 7);
+        solo.waitForActivity(ScriptActivity.class.getSimpleName());
+        assertEquals("Wrong item in spinner!", tones[6], currentSpinner.getSelectedItem());
+        solo.pressSpinnerItem(phiroSpinnerIndex, -1);
+        solo.waitForActivity(ScriptActivity.class.getSimpleName());
+        assertEquals("Wrong item in spinner!", tones[5], currentSpinner.getSelectedItem());
+        solo.pressSpinnerItem(phiroSpinnerIndex, -1);
+        solo.waitForActivity(ScriptActivity.class.getSimpleName());
+        assertEquals("Wrong item in spinner!", tones[4], currentSpinner.getSelectedItem());
+        solo.pressSpinnerItem(phiroSpinnerIndex, -1);
+        solo.waitForActivity(ScriptActivity.class.getSimpleName());
+        assertEquals("Wrong item in spinner!", tones[3], currentSpinner.getSelectedItem());
+        solo.pressSpinnerItem(phiroSpinnerIndex, -1);
+        solo.waitForActivity(ScriptActivity.class.getSimpleName());
+        assertEquals("Wrong item in spinner!", tones[2], currentSpinner.getSelectedItem());
+        solo.pressSpinnerItem(phiroSpinnerIndex, -1);
+        solo.waitForActivity(ScriptActivity.class.getSimpleName());
+        assertEquals("Wrong item in spinner!", tones[1], currentSpinner.getSelectedItem());
+        solo.pressSpinnerItem(phiroSpinnerIndex, -1);
+        solo.waitForActivity(ScriptActivity.class.getSimpleName());
+        assertEquals("Wrong item in spinner!", tones[0], currentSpinner.getSelectedItem());
+    }
 
-	private void createProject() {
-		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite sprite = new SingleSprite("cat");
-		Script script = new StartScript();
+    private void createProject() {
+        project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Sprite sprite = new SingleSprite("cat");
+        Script script = new StartScript();
 
-		toneBrick = new PhiroPlayToneBrick(PhiroPlayToneBrick.Tone.DO, TONE_DURATION_INITIALLY);
+        toneBrick = new PhiroPlayToneBrick(PhiroPlayToneBrick.Tone.DO, TONE_DURATION_INITIALLY);
 
-		script.addBrick(toneBrick);
+        script.addBrick(toneBrick);
 
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 }

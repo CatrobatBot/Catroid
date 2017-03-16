@@ -48,143 +48,143 @@ import org.catrobat.catroid.utils.ToastUtil;
 import org.catrobat.catroid.utils.Utils;
 
 public class OverwriteRenameDialog extends DialogFragment implements OnClickListener {
-	private static final String TAG = OverwriteRenameDialog.class.getSimpleName();
+    private static final String TAG = OverwriteRenameDialog.class.getSimpleName();
 
-	protected RadioButton replaceButton;
-	protected RadioButton renameButton;
-	protected String programName;
-	protected String url;
-	protected Context context;
-	protected EditText projectText;
-	protected TextView projectTextView;
-	protected View projectTextLine;
+    protected RadioButton replaceButton;
+    protected RadioButton renameButton;
+    protected String programName;
+    protected String url;
+    protected Context context;
+    protected EditText projectText;
+    protected TextView projectTextView;
+    protected View projectTextLine;
 
-	public static final String DIALOG_FRAGMENT_TAG = "overwrite_rename_look";
+    public static final String DIALOG_FRAGMENT_TAG = "overwrite_rename_look";
 
-	public OverwriteRenameDialog() {
-		super();
-	}
+    public OverwriteRenameDialog() {
+        super();
+    }
 
-	public void setProgramName(String programName) {
-		this.programName = programName;
-	}
+    public void setProgramName(String programName) {
+        this.programName = programName;
+    }
 
-	public void setURL(String url) {
-		this.url = url;
-	}
+    public void setURL(String url) {
+        this.url = url;
+    }
 
-	public void setContext(Context context) {
-		this.context = context;
-	}
+    public void setContext(Context context) {
+        this.context = context;
+    }
 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_overwrite_project, null);
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_overwrite_project, null);
 
-		replaceButton = (RadioButton) dialogView.findViewById(R.id.dialog_overwrite_project_radio_replace);
-		replaceButton.setOnClickListener(this);
-		renameButton = (RadioButton) dialogView.findViewById(R.id.dialog_overwrite_project_radio_rename);
-		renameButton.setOnClickListener(this);
-		projectText = (EditText) dialogView.findViewById(R.id.dialog_overwrite_project_edit);
-		projectText.setText(programName);
-		projectTextView = (TextView) dialogView.findViewById(R.id.dialog_overwrite_project_edit_text);
-		projectTextLine = dialogView.findViewById(R.id.dialog_overwrite_project_edit_line);
+        replaceButton = (RadioButton) dialogView.findViewById(R.id.dialog_overwrite_project_radio_replace);
+        replaceButton.setOnClickListener(this);
+        renameButton = (RadioButton) dialogView.findViewById(R.id.dialog_overwrite_project_radio_rename);
+        renameButton.setOnClickListener(this);
+        projectText = (EditText) dialogView.findViewById(R.id.dialog_overwrite_project_edit);
+        projectText.setText(programName);
+        projectTextView = (TextView) dialogView.findViewById(R.id.dialog_overwrite_project_edit_text);
+        projectTextLine = dialogView.findViewById(R.id.dialog_overwrite_project_edit_line);
 
-		Dialog dialog = new AlertDialog.Builder(getActivity()).setView(dialogView).setTitle(R.string.overwrite_text)
-				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						Log.d(TAG, "User canceled dialog by pressing Cancel-button");
-						ToastUtil.showError(context, R.string.notification_download_project_cancel);
-						DownloadUtil.getInstance().downloadCanceled(url);
-					}
-				}).create();
+        Dialog dialog = new AlertDialog.Builder(getActivity()).setView(dialogView).setTitle(R.string.overwrite_text)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d(TAG, "User canceled dialog by pressing Cancel-button");
+                        ToastUtil.showError(context, R.string.notification_download_project_cancel);
+                        DownloadUtil.getInstance().downloadCanceled(url);
+                    }
+                }).create();
 
-		dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-		dialog.setOnShowListener(new OnShowListener() {
-			@Override
-			public void onShow(DialogInterface dialog) {
-				Button positiveButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-				positiveButton.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						handleOkButton();
-					}
-				});
-			}
-		});
+        dialog.setOnShowListener(new OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button positiveButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                positiveButton.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        handleOkButton();
+                    }
+                });
+            }
+        });
 
-		dialog.setOnKeyListener(new OnKeyListener() {
-			@Override
-			public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-				if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-					boolean okButtonResult = handleOkButton();
-					if (okButtonResult) {
-						dismiss();
-					}
-					return okButtonResult;
-				} else if (keyCode == KeyEvent.KEYCODE_BACK) {
-					Log.d(TAG, "User canceled dialog by pressing Back-button");
-					ToastUtil.showError(context, R.string.notification_download_project_cancel);
-					DownloadUtil.getInstance().downloadCanceled(url);
-					dismiss();
-					return true;
-				}
+        dialog.setOnKeyListener(new OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                    boolean okButtonResult = handleOkButton();
+                    if (okButtonResult) {
+                        dismiss();
+                    }
+                    return okButtonResult;
+                } else if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    Log.d(TAG, "User canceled dialog by pressing Back-button");
+                    ToastUtil.showError(context, R.string.notification_download_project_cancel);
+                    DownloadUtil.getInstance().downloadCanceled(url);
+                    dismiss();
+                    return true;
+                }
 
-				return false;
-			}
-		});
+                return false;
+            }
+        });
 
-		return dialog;
-	}
+        return dialog;
+    }
 
-	@Override
-	public void onClick(View view) {
-		switch (view.getId()) {
-			case R.id.dialog_overwrite_project_radio_replace:
-				projectTextView.setVisibility(TextView.GONE);
-				projectTextLine.setVisibility(View.GONE);
-				projectText.setVisibility(EditText.GONE);
-				break;
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.dialog_overwrite_project_radio_replace:
+                projectTextView.setVisibility(TextView.GONE);
+                projectTextLine.setVisibility(View.GONE);
+                projectText.setVisibility(EditText.GONE);
+                break;
 
-			case R.id.dialog_overwrite_project_radio_rename:
-				projectTextView.setVisibility(TextView.VISIBLE);
-				projectTextLine.setVisibility(View.VISIBLE);
-				projectText.setVisibility(EditText.VISIBLE);
-				break;
+            case R.id.dialog_overwrite_project_radio_rename:
+                projectTextView.setVisibility(TextView.VISIBLE);
+                projectTextLine.setVisibility(View.VISIBLE);
+                projectText.setVisibility(EditText.VISIBLE);
+                break;
 
-			default:
-				break;
-		}
-	}
+            default:
+                break;
+        }
+    }
 
-	@Override
-	public void onCancel(DialogInterface dialog) {
-		super.onCancel(dialog);
-		Log.d(TAG, "User canceled dialog by clicking outside of the Dialog fragment");
-		ToastUtil.showError(context, R.string.notification_download_project_cancel);
-		DownloadUtil.getInstance().downloadCanceled(url);
-	}
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
+        Log.d(TAG, "User canceled dialog by clicking outside of the Dialog fragment");
+        ToastUtil.showError(context, R.string.notification_download_project_cancel);
+        DownloadUtil.getInstance().downloadCanceled(url);
+    }
 
-	private boolean handleOkButton() {
-		if (replaceButton.isChecked()) {
-			ProjectManager.getInstance().setProject(null);
-			DownloadUtil.getInstance().startDownload(context, url, programName, false);
-		} else if (renameButton.isChecked()) {
-			String newProgramName = projectText.getText().toString();
-			if (Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase(newProgramName)) {
-				return false;
-			}
+    private boolean handleOkButton() {
+        if (replaceButton.isChecked()) {
+            ProjectManager.getInstance().setProject(null);
+            DownloadUtil.getInstance().startDownload(context, url, programName, false);
+        } else if (renameButton.isChecked()) {
+            String newProgramName = projectText.getText().toString();
+            if (Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase(newProgramName)) {
+                return false;
+            }
 
-			DownloadUtil.getInstance().startDownload(context, url, newProgramName, true);
-		}
-		dismiss();
+            DownloadUtil.getInstance().startDownload(context, url, newProgramName, true);
+        }
+        dismiss();
 
-		return true;
-	}
+        return true;
+    }
 }

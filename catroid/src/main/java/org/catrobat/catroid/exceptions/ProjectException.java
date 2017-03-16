@@ -24,21 +24,21 @@ package org.catrobat.catroid.exceptions;
 
 public abstract class ProjectException extends Exception {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private final String uiErrorMessage;
+    private final String uiErrorMessage;
 
-	public ProjectException() {
-		super();
-		uiErrorMessage = "";
-	}
+    public ProjectException() {
+        super();
+        uiErrorMessage = "";
+    }
 
-	public ProjectException(String message) {
-		super(message);
-		uiErrorMessage = message;
-	}
+    public ProjectException(String message) {
+        super(message);
+        uiErrorMessage = message;
+    }
 
-	public String getUiErrorMessage() {
-		return uiErrorMessage;
-	}
+    public String getUiErrorMessage() {
+        return uiErrorMessage;
+    }
 }

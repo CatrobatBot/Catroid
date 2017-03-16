@@ -41,109 +41,109 @@ import java.util.ArrayList;
 
 public class ScriptDeleteTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
-	private ArrayList<Brick> brickListToCheck;
+    private ArrayList<Brick> brickListToCheck;
 
-	public ScriptDeleteTest() {
-		super(MainMenuActivity.class);
-	}
+    public ScriptDeleteTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		createTestProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
-	}
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        createTestProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
+    }
 
-	public void testAddLooksCategoryBrick() {
-		String brickSetLookText = solo.getString(R.string.brick_set_look);
-		UiTestUtils.addNewBrick(solo, R.string.brick_set_look);
+    public void testAddLooksCategoryBrick() {
+        String brickSetLookText = solo.getString(R.string.brick_set_look);
+        UiTestUtils.addNewBrick(solo, R.string.brick_set_look);
 
-		solo.sleep(500);
-		UiTestUtils.dragFloatingBrickDownwards(solo);
-		solo.sleep(500);
+        solo.sleep(500);
+        UiTestUtils.dragFloatingBrickDownwards(solo);
+        solo.sleep(500);
 
-		assertTrue("Set look brick was not added", solo.searchText(brickSetLookText));
+        assertTrue("Set look brick was not added", solo.searchText(brickSetLookText));
 
-		UiTestUtils.addNewBrick(solo, R.string.brick_set_size_to);
+        UiTestUtils.addNewBrick(solo, R.string.brick_set_size_to);
 
-		solo.sleep(500);
-		UiTestUtils.dragFloatingBrickDownwards(solo);
-		solo.sleep(500);
+        solo.sleep(500);
+        UiTestUtils.dragFloatingBrickDownwards(solo);
+        solo.sleep(500);
 
-		assertTrue("Set size to brick was not added", solo.searchText(solo.getString(R.string.brick_set_size_to)));
-	}
+        assertTrue("Set size to brick was not added", solo.searchText(solo.getString(R.string.brick_set_size_to)));
+    }
 
-	public void testDeleteScript() {
-		UiTestUtils.addNewBrick(solo, R.string.brick_broadcast_receive);
+    public void testDeleteScript() {
+        UiTestUtils.addNewBrick(solo, R.string.brick_broadcast_receive);
 
-		solo.sleep(500);
-		UiTestUtils.dragFloatingBrick(solo, 0);
-		solo.sleep(500);
+        solo.sleep(500);
+        UiTestUtils.dragFloatingBrick(solo, 0);
+        solo.sleep(500);
 
-		int numberOfScripts = ProjectManager.getInstance().getCurrentSprite().getNumberOfScripts();
-		assertEquals("Incorrect number of scripts in list", 2, numberOfScripts);
+        int numberOfScripts = ProjectManager.getInstance().getCurrentSprite().getNumberOfScripts();
+        assertEquals("Incorrect number of scripts in list", 2, numberOfScripts);
 
-		solo.waitForText(solo.getString(R.string.brick_when_started));
-		solo.clickOnText(solo.getString(R.string.brick_when_started));
-		solo.waitForText(solo.getString(R.string.brick_context_dialog_delete_script));
-		solo.clickOnText(solo.getString(R.string.brick_context_dialog_delete_script));
+        solo.waitForText(solo.getString(R.string.brick_when_started));
+        solo.clickOnText(solo.getString(R.string.brick_when_started));
+        solo.waitForText(solo.getString(R.string.brick_context_dialog_delete_script));
+        solo.clickOnText(solo.getString(R.string.brick_context_dialog_delete_script));
 
-		solo.waitForText(solo.getString(R.string.yes));
-		solo.clickOnButton(solo.getString(R.string.yes));
-		solo.waitForText(solo.getString(R.string.brick_broadcast_receive));
+        solo.waitForText(solo.getString(R.string.yes));
+        solo.clickOnButton(solo.getString(R.string.yes));
+        solo.waitForText(solo.getString(R.string.brick_broadcast_receive));
 
-		numberOfScripts = ProjectManager.getInstance().getCurrentSprite().getNumberOfScripts();
-		assertEquals("Incorrect number of scripts in scriptList", 1, numberOfScripts);
-		assertEquals("Incorrect number of elements in listView", 3, UiTestUtils.getScriptListView(solo).getChildCount());
+        numberOfScripts = ProjectManager.getInstance().getCurrentSprite().getNumberOfScripts();
+        assertEquals("Incorrect number of scripts in scriptList", 1, numberOfScripts);
+        assertEquals("Incorrect number of elements in listView", 3, UiTestUtils.getScriptListView(solo).getChildCount());
 
-		solo.waitForText(solo.getString(R.string.brick_broadcast_receive));
-		solo.clickOnText(solo.getString(R.string.brick_broadcast_receive));
-		solo.waitForText(solo.getString(R.string.brick_context_dialog_delete_script));
-		solo.clickOnText(solo.getString(R.string.brick_context_dialog_delete_script));
-		solo.waitForText(solo.getString(R.string.yes));
-		solo.clickOnButton(solo.getString(R.string.yes));
-		solo.waitForText(solo.getString(R.string.brick_when_started));
+        solo.waitForText(solo.getString(R.string.brick_broadcast_receive));
+        solo.clickOnText(solo.getString(R.string.brick_broadcast_receive));
+        solo.waitForText(solo.getString(R.string.brick_context_dialog_delete_script));
+        solo.clickOnText(solo.getString(R.string.brick_context_dialog_delete_script));
+        solo.waitForText(solo.getString(R.string.yes));
+        solo.clickOnButton(solo.getString(R.string.yes));
+        solo.waitForText(solo.getString(R.string.brick_when_started));
 
-		numberOfScripts = ProjectManager.getInstance().getCurrentSprite().getNumberOfScripts();
-		assertEquals("Incorrect number of scripts in list", 0, numberOfScripts);
-		assertEquals("Incorrect number of elements in listView", 0, UiTestUtils.getScriptListView(solo).getChildCount());
+        numberOfScripts = ProjectManager.getInstance().getCurrentSprite().getNumberOfScripts();
+        assertEquals("Incorrect number of scripts in list", 0, numberOfScripts);
+        assertEquals("Incorrect number of elements in listView", 0, UiTestUtils.getScriptListView(solo).getChildCount());
 
-		UiTestUtils.addNewBrick(solo, R.string.brick_hide);
+        UiTestUtils.addNewBrick(solo, R.string.brick_hide);
 
-		solo.sleep(500);
-		UiTestUtils.dragFloatingBrickDownwards(solo);
-		solo.sleep(500);
+        solo.sleep(500);
+        UiTestUtils.dragFloatingBrickDownwards(solo);
+        solo.sleep(500);
 
-		solo.waitForText(solo.getString(R.string.brick_when_started));
+        solo.waitForText(solo.getString(R.string.brick_when_started));
 
-		numberOfScripts = ProjectManager.getInstance().getCurrentSprite().getNumberOfScripts();
-		assertEquals("Incorrect number of scripts in scriptList", 1, numberOfScripts);
-		assertEquals("Incorrect number of elements in listView", 2, UiTestUtils.getScriptListView(solo).getChildCount());
-	}
+        numberOfScripts = ProjectManager.getInstance().getCurrentSprite().getNumberOfScripts();
+        assertEquals("Incorrect number of scripts in scriptList", 1, numberOfScripts);
+        assertEquals("Incorrect number of elements in listView", 2, UiTestUtils.getScriptListView(solo).getChildCount());
+    }
 
-	private void createTestProject(String projectName) {
-		double size = 0.8;
+    private void createTestProject(String projectName) {
+        double size = 0.8;
 
-		Project project = new Project(null, projectName);
-		Sprite firstSprite = new SingleSprite("cat");
+        Project project = new Project(null, projectName);
+        Sprite firstSprite = new SingleSprite("cat");
 
-		Script testScript = new StartScript();
+        Script testScript = new StartScript();
 
-		brickListToCheck = new ArrayList<Brick>();
-		brickListToCheck.add(new HideBrick());
-		brickListToCheck.add(new ShowBrick());
-		brickListToCheck.add(new SetSizeToBrick(size));
+        brickListToCheck = new ArrayList<Brick>();
+        brickListToCheck.add(new HideBrick());
+        brickListToCheck.add(new ShowBrick());
+        brickListToCheck.add(new SetSizeToBrick(size));
 
-		for (Brick brick : brickListToCheck) {
-			testScript.addBrick(brick);
-		}
+        for (Brick brick : brickListToCheck) {
+            testScript.addBrick(brick);
+        }
 
-		firstSprite.addScript(testScript);
+        firstSprite.addScript(testScript);
 
-		project.getDefaultScene().addSprite(firstSprite);
+        project.getDefaultScene().addSprite(firstSprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(firstSprite);
-		ProjectManager.getInstance().setCurrentScript(testScript);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(firstSprite);
+        ProjectManager.getInstance().setCurrentScript(testScript);
+    }
 }

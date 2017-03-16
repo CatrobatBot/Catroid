@@ -52,160 +52,160 @@ import java.util.List;
 
 public class AskSpeechBrick extends UserVariableBrick {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private transient String defaultPrototypeToken = null;
+    private transient String defaultPrototypeToken = null;
 
-	public AskSpeechBrick(Formula questionFormula, UserVariable answerVariable) {
-		this.userVariable = answerVariable;
-		initializeBrickFields(questionFormula);
-	}
+    public AskSpeechBrick(Formula questionFormula, UserVariable answerVariable) {
+        this.userVariable = answerVariable;
+        initializeBrickFields(questionFormula);
+    }
 
-	public AskSpeechBrick(String questionText) {
-		this.userVariable = null;
-		initializeBrickFields(new Formula(questionText));
-	}
+    public AskSpeechBrick(String questionText) {
+        this.userVariable = null;
+        initializeBrickFields(new Formula(questionText));
+    }
 
-	private void initializeBrickFields(Formula questionFormula) {
-		addAllowedBrickField(BrickField.ASK_SPEECH_QUESTION);
-		setFormulaWithBrickField(BrickField.ASK_SPEECH_QUESTION, questionFormula);
-	}
+    private void initializeBrickFields(Formula questionFormula) {
+        addAllowedBrickField(BrickField.ASK_SPEECH_QUESTION);
+        setFormulaWithBrickField(BrickField.ASK_SPEECH_QUESTION, questionFormula);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return getFormulaWithBrickField(BrickField.ASK_SPEECH_QUESTION).getRequiredResources()
-				| Brick.NETWORK_CONNECTION;
-	}
+    @Override
+    public int getRequiredResources() {
+        return getFormulaWithBrickField(BrickField.ASK_SPEECH_QUESTION).getRequiredResources()
+                | Brick.NETWORK_CONNECTION;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createAskSpeechAction(sprite,
-				getFormulaWithBrickField(BrickField.ASK_SPEECH_QUESTION), userVariable));
-		return Collections.emptyList();
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createAskSpeechAction(sprite,
+                getFormulaWithBrickField(BrickField.ASK_SPEECH_QUESTION), userVariable));
+        return Collections.emptyList();
+    }
 
-	@Override
-	public View getView(final Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(final Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_ask_speech, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
-		setCheckboxView(R.id.brick_ask_speech_checkbox);
+        view = View.inflate(context, R.layout.brick_ask_speech, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        setCheckboxView(R.id.brick_ask_speech_checkbox);
 
-		TextView textField = (TextView) view.findViewById(R.id.brick_ask_speech_question_edit_text);
+        TextView textField = (TextView) view.findViewById(R.id.brick_ask_speech_question_edit_text);
 
-		getFormulaWithBrickField(BrickField.ASK_SPEECH_QUESTION).setTextFieldId(R.id.brick_ask_speech_question_edit_text);
-		getFormulaWithBrickField(BrickField.ASK_SPEECH_QUESTION).refreshTextField(view);
-		textField.setOnClickListener(this);
+        getFormulaWithBrickField(BrickField.ASK_SPEECH_QUESTION).setTextFieldId(R.id.brick_ask_speech_question_edit_text);
+        getFormulaWithBrickField(BrickField.ASK_SPEECH_QUESTION).refreshTextField(view);
+        textField.setOnClickListener(this);
 
-		Spinner variableSpinner = (Spinner) view.findViewById(R.id.brick_ask_speech_spinner);
+        Spinner variableSpinner = (Spinner) view.findViewById(R.id.brick_ask_speech_spinner);
 
-		UserBrick currentBrick = ProjectManager.getInstance().getCurrentUserBrick();
+        UserBrick currentBrick = ProjectManager.getInstance().getCurrentUserBrick();
 
-		DataAdapter dataAdapter = ProjectManager.getInstance().getSceneToPlay().getDataContainer()
-				.createDataAdapter(context, currentBrick, ProjectManager.getInstance().getCurrentSprite());
-		UserVariableAdapterWrapper userVariableAdapterWrapper = new UserVariableAdapterWrapper(context,
-				dataAdapter);
-		userVariableAdapterWrapper.setItemLayout(android.R.layout.simple_spinner_item, android.R.id.text1);
+        DataAdapter dataAdapter = ProjectManager.getInstance().getSceneToPlay().getDataContainer()
+                .createDataAdapter(context, currentBrick, ProjectManager.getInstance().getCurrentSprite());
+        UserVariableAdapterWrapper userVariableAdapterWrapper = new UserVariableAdapterWrapper(context,
+                dataAdapter);
+        userVariableAdapterWrapper.setItemLayout(android.R.layout.simple_spinner_item, android.R.id.text1);
 
-		variableSpinner.setAdapter(userVariableAdapterWrapper);
+        variableSpinner.setAdapter(userVariableAdapterWrapper);
 
-		setSpinnerSelection(variableSpinner, null);
+        setSpinnerSelection(variableSpinner, null);
 
-		variableSpinner.setOnTouchListener(new OnTouchListener() {
+        variableSpinner.setOnTouchListener(new OnTouchListener() {
 
-			@Override
-			public boolean onTouch(View view, MotionEvent event) {
-				if (event.getAction() == MotionEvent.ACTION_DOWN
-						&& (((Spinner) view).getSelectedItemPosition() == 0
-						&& ((Spinner) view).getAdapter().getCount() == 1)) {
-					NewDataDialog dialog = new NewDataDialog((Spinner) view, NewDataDialog.DialogType.USER_VARIABLE);
-					dialog.addVariableDialogListener(AskSpeechBrick.this);
-					dialog.show(((Activity) view.getContext()).getFragmentManager(),
-							NewDataDialog.DIALOG_FRAGMENT_TAG);
-					return true;
-				}
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN
+                        && (((Spinner) view).getSelectedItemPosition() == 0
+                        && ((Spinner) view).getAdapter().getCount() == 1)) {
+                    NewDataDialog dialog = new NewDataDialog((Spinner) view, NewDataDialog.DialogType.USER_VARIABLE);
+                    dialog.addVariableDialogListener(AskSpeechBrick.this);
+                    dialog.show(((Activity) view.getContext()).getFragmentManager(),
+                            NewDataDialog.DIALOG_FRAGMENT_TAG);
+                    return true;
+                }
 
-				return false;
-			}
-		});
-		variableSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				if (position == 0 && ((UserVariableAdapterWrapper) parent.getAdapter()).isTouchInDropDownView()) {
-					NewDataDialog dialog = new NewDataDialog((Spinner) parent, NewDataDialog.DialogType.USER_VARIABLE);
-					dialog.addVariableDialogListener(AskSpeechBrick.this);
-					int spinnerPos = ((UserVariableAdapterWrapper) parent.getAdapter())
-							.getPositionOfItem(userVariable);
-					dialog.setUserVariableIfCancel(spinnerPos);
-					dialog.show(((Activity) view.getContext()).getFragmentManager(),
-							NewDataDialog.DIALOG_FRAGMENT_TAG);
-				}
-				((UserVariableAdapterWrapper) parent.getAdapter()).resetIsTouchInDropDownView();
-				userVariable = (UserVariable) parent.getItemAtPosition(position);
-			}
+                return false;
+            }
+        });
+        variableSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0 && ((UserVariableAdapterWrapper) parent.getAdapter()).isTouchInDropDownView()) {
+                    NewDataDialog dialog = new NewDataDialog((Spinner) parent, NewDataDialog.DialogType.USER_VARIABLE);
+                    dialog.addVariableDialogListener(AskSpeechBrick.this);
+                    int spinnerPos = ((UserVariableAdapterWrapper) parent.getAdapter())
+                            .getPositionOfItem(userVariable);
+                    dialog.setUserVariableIfCancel(spinnerPos);
+                    dialog.show(((Activity) view.getContext()).getFragmentManager(),
+                            NewDataDialog.DIALOG_FRAGMENT_TAG);
+                }
+                ((UserVariableAdapterWrapper) parent.getAdapter()).resetIsTouchInDropDownView();
+                userVariable = (UserVariable) parent.getItemAtPosition(position);
+            }
 
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-				userVariable = null;
-			}
-		});
-		return view;
-	}
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                userVariable = null;
+            }
+        });
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		View prototypeView = View.inflate(context, R.layout.brick_ask_speech, null);
-		Spinner variableSpinner = (Spinner) prototypeView.findViewById(R.id.brick_ask_speech_spinner);
-		UserBrick currentBrick = ProjectManager.getInstance().getCurrentUserBrick();
+    @Override
+    public View getPrototypeView(Context context) {
+        View prototypeView = View.inflate(context, R.layout.brick_ask_speech, null);
+        Spinner variableSpinner = (Spinner) prototypeView.findViewById(R.id.brick_ask_speech_spinner);
+        UserBrick currentBrick = ProjectManager.getInstance().getCurrentUserBrick();
 
-		DataAdapter dataAdapter = ProjectManager.getInstance().getSceneToPlay().getDataContainer()
-				.createDataAdapter(context, currentBrick, ProjectManager.getInstance().getCurrentSprite());
+        DataAdapter dataAdapter = ProjectManager.getInstance().getSceneToPlay().getDataContainer()
+                .createDataAdapter(context, currentBrick, ProjectManager.getInstance().getCurrentSprite());
 
-		UserVariableAdapterWrapper userVariableAdapterWrapper = new UserVariableAdapterWrapper(context,
-				dataAdapter);
+        UserVariableAdapterWrapper userVariableAdapterWrapper = new UserVariableAdapterWrapper(context,
+                dataAdapter);
 
-		userVariableAdapterWrapper.setItemLayout(android.R.layout.simple_spinner_item, android.R.id.text1);
-		variableSpinner.setAdapter(userVariableAdapterWrapper);
-		setSpinnerSelection(variableSpinner, null);
+        userVariableAdapterWrapper.setItemLayout(android.R.layout.simple_spinner_item, android.R.id.text1);
+        variableSpinner.setAdapter(userVariableAdapterWrapper);
+        setSpinnerSelection(variableSpinner, null);
 
-		TextView textSetVariable = (TextView) prototypeView.findViewById(R.id.brick_ask_speech_question_edit_text);
+        TextView textSetVariable = (TextView) prototypeView.findViewById(R.id.brick_ask_speech_question_edit_text);
 
-		if (defaultPrototypeToken != null) {
-			int defaultValueId = InternToExternGenerator.getMappedString(defaultPrototypeToken);
-			textSetVariable.setText(context.getText(defaultValueId));
-		} else {
-			textSetVariable.setText(context.getString(R.string.brick_ask_speech_default_question));
-		}
-		return prototypeView;
-	}
+        if (defaultPrototypeToken != null) {
+            int defaultValueId = InternToExternGenerator.getMappedString(defaultPrototypeToken);
+            textSetVariable.setText(context.getText(defaultValueId));
+        } else {
+            textSetVariable.setText(context.getString(R.string.brick_ask_speech_default_question));
+        }
+        return prototypeView;
+    }
 
-	@Override
-	public AskSpeechBrick copyBrickForSprite(Sprite sprite) {
-		AskSpeechBrick copyBrick = clone();
-		if (userVariable != null) {
-			copyBrick.userVariable = userVariable;
-		}
+    @Override
+    public AskSpeechBrick copyBrickForSprite(Sprite sprite) {
+        AskSpeechBrick copyBrick = clone();
+        if (userVariable != null) {
+            copyBrick.userVariable = userVariable;
+        }
 
-		return copyBrick;
-	}
+        return copyBrick;
+    }
 
-	@Override
-	public AskSpeechBrick clone() {
-		AskSpeechBrick clonedBrick = new AskSpeechBrick(getFormulaWithBrickField(BrickField.ASK_SPEECH_QUESTION)
-				.clone(), userVariable);
-		clonedBrick.setBackPackedData(backPackedData);
-		return clonedBrick;
-	}
+    @Override
+    public AskSpeechBrick clone() {
+        AskSpeechBrick clonedBrick = new AskSpeechBrick(getFormulaWithBrickField(BrickField.ASK_SPEECH_QUESTION)
+                .clone(), userVariable);
+        clonedBrick.setBackPackedData(backPackedData);
+        return clonedBrick;
+    }
 
-	public void showFormulaEditorToEditFormula(View view) {
-		FormulaEditorFragment.showFragment(view, this, BrickField.ASK_SPEECH_QUESTION);
-	}
+    public void showFormulaEditorToEditFormula(View view) {
+        FormulaEditorFragment.showFragment(view, this, BrickField.ASK_SPEECH_QUESTION);
+    }
 
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-		updateUserVariableReference(into, from);
-	}
+    @Override
+    public void updateReferenceAfterMerge(Scene into, Scene from) {
+        updateUserVariableReference(into, from);
+    }
 }

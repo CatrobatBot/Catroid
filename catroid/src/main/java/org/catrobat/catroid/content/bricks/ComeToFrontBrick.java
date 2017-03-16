@@ -34,48 +34,48 @@ import org.catrobat.catroid.content.Sprite;
 import java.util.List;
 
 public class ComeToFrontBrick extends BrickBaseType {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public ComeToFrontBrick() {
-	}
+    public ComeToFrontBrick() {
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return NO_RESOURCES;
-	}
+    @Override
+    public int getRequiredResources() {
+        return NO_RESOURCES;
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_go_to_front, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_go_to_front, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_go_to_front_checkbox);
-		return view;
-	}
+        setCheckboxView(R.id.brick_go_to_front_checkbox);
+        return view;
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		ComeToFrontBrick copyBrick = (ComeToFrontBrick) clone();
-		return copyBrick;
-	}
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        ComeToFrontBrick copyBrick = (ComeToFrontBrick) clone();
+        return copyBrick;
+    }
 
-	@Override
-	public Brick clone() {
-		return new ComeToFrontBrick();
-	}
+    @Override
+    public Brick clone() {
+        return new ComeToFrontBrick();
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		return View.inflate(context, R.layout.brick_go_to_front, null);
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        return View.inflate(context, R.layout.brick_go_to_front, null);
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createComeToFrontAction(sprite));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createComeToFrontAction(sprite));
+        return null;
+    }
 }

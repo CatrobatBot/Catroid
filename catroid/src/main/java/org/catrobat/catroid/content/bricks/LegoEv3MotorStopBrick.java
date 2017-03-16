@@ -38,104 +38,104 @@ import org.catrobat.catroid.content.Sprite;
 import java.util.List;
 
 public class LegoEv3MotorStopBrick extends BrickBaseType implements OnItemSelectedListener {
-	private static final long serialVersionUID = 1L;
-	private transient Motor motorEnum;
-	private String motor;
+    private static final long serialVersionUID = 1L;
+    private transient Motor motorEnum;
+    private String motor;
 
-	public static enum Motor {
-		MOTOR_A, MOTOR_B, MOTOR_C, MOTOR_D, MOTOR_B_C, ALL_MOTORS
-	}
+    public static enum Motor {
+        MOTOR_A, MOTOR_B, MOTOR_C, MOTOR_D, MOTOR_B_C, ALL_MOTORS
+    }
 
-	public LegoEv3MotorStopBrick(Motor motor) {
-		this.motorEnum = motor;
-		this.motor = motorEnum.name();
-	}
+    public LegoEv3MotorStopBrick(Motor motor) {
+        this.motorEnum = motor;
+        this.motor = motorEnum.name();
+    }
 
-	protected Object readResolve() {
-		if (motor != null) {
-			motorEnum = Motor.valueOf(motor);
-		}
-		return this;
-	}
+    protected Object readResolve() {
+        if (motor != null) {
+            motorEnum = Motor.valueOf(motor);
+        }
+        return this;
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return BLUETOOTH_LEGO_EV3;
-	}
+    @Override
+    public int getRequiredResources() {
+        return BLUETOOTH_LEGO_EV3;
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		LegoEv3MotorStopBrick copyBrick = (LegoEv3MotorStopBrick) clone();
-		return copyBrick;
-	}
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        LegoEv3MotorStopBrick copyBrick = (LegoEv3MotorStopBrick) clone();
+        return copyBrick;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		View prototypeView = View.inflate(context, R.layout.brick_ev3_motor_stop, null);
-		Spinner legoSpinner = (Spinner) prototypeView.findViewById(R.id.ev3_stop_motor_spinner);
-		legoSpinner.setFocusableInTouchMode(false);
-		legoSpinner.setFocusable(false);
+    @Override
+    public View getPrototypeView(Context context) {
+        View prototypeView = View.inflate(context, R.layout.brick_ev3_motor_stop, null);
+        Spinner legoSpinner = (Spinner) prototypeView.findViewById(R.id.ev3_stop_motor_spinner);
+        legoSpinner.setFocusableInTouchMode(false);
+        legoSpinner.setFocusable(false);
 
-		ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter.createFromResource(context,
-				R.array.ev3_stop_motor_chooser, android.R.layout.simple_spinner_item);
-		motorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter.createFromResource(context,
+                R.array.ev3_stop_motor_chooser, android.R.layout.simple_spinner_item);
+        motorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-		legoSpinner.setAdapter(motorAdapter);
-		legoSpinner.setSelection(motorEnum.ordinal());
-		return prototypeView;
-	}
+        legoSpinner.setAdapter(motorAdapter);
+        legoSpinner.setSelection(motorEnum.ordinal());
+        return prototypeView;
+    }
 
-	@Override
-	public Brick clone() {
-		return new LegoEv3MotorStopBrick(motorEnum);
-	}
+    @Override
+    public Brick clone() {
+        return new LegoEv3MotorStopBrick(motorEnum);
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		if (view == null) {
-			alphaValue = 255;
-		}
-		view = View.inflate(context, R.layout.brick_ev3_motor_stop, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        if (view == null) {
+            alphaValue = 255;
+        }
+        view = View.inflate(context, R.layout.brick_ev3_motor_stop, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_ev3_motor_stop_checkbox);
+        setCheckboxView(R.id.brick_ev3_motor_stop_checkbox);
 
-		ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter.createFromResource(context,
-				R.array.ev3_stop_motor_chooser, android.R.layout.simple_spinner_item);
-		motorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter.createFromResource(context,
+                R.array.ev3_stop_motor_chooser, android.R.layout.simple_spinner_item);
+        motorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-		Spinner motorSpinner = (Spinner) view.findViewById(R.id.ev3_stop_motor_spinner);
-		motorSpinner.setOnItemSelectedListener(this);
+        Spinner motorSpinner = (Spinner) view.findViewById(R.id.ev3_stop_motor_spinner);
+        motorSpinner.setOnItemSelectedListener(this);
 
-		if (!(checkbox.getVisibility() == View.VISIBLE)) {
-			motorSpinner.setClickable(true);
-			motorSpinner.setEnabled(true);
-		} else {
-			motorSpinner.setClickable(false);
-			motorSpinner.setEnabled(false);
-		}
+        if (!(checkbox.getVisibility() == View.VISIBLE)) {
+            motorSpinner.setClickable(true);
+            motorSpinner.setEnabled(true);
+        } else {
+            motorSpinner.setClickable(false);
+            motorSpinner.setEnabled(false);
+        }
 
-		motorSpinner.setAdapter(motorAdapter);
-		motorSpinner.setSelection(motorEnum.ordinal());
-		return view;
-	}
+        motorSpinner.setAdapter(motorAdapter);
+        motorSpinner.setSelection(motorEnum.ordinal());
+        return view;
+    }
 
-	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-		motorEnum = Motor.values()[position];
-		motor = motorEnum.name();
-	}
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        motorEnum = Motor.values()[position];
+        motor = motorEnum.name();
+    }
 
-	@Override
-	public void onNothingSelected(AdapterView<?> arg0) {
-	}
+    @Override
+    public void onNothingSelected(AdapterView<?> arg0) {
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createLegoEv3MotorStopAction(motorEnum));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createLegoEv3MotorStopAction(motorEnum));
+        return null;
+    }
 }

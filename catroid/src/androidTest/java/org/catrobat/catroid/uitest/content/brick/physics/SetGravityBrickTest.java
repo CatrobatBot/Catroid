@@ -45,71 +45,71 @@ import org.catrobat.catroid.uitest.util.UiTestUtils;
 import java.util.ArrayList;
 
 public class SetGravityBrickTest extends ActivityInstrumentationTestCase2<ScriptActivity> {
-	private Solo solo;
-	private Project project;
-	private SetGravityBrick setGravityBrick;
+    private Solo solo;
+    private Project project;
+    private SetGravityBrick setGravityBrick;
 
-	public SetGravityBrickTest() {
-		super(ScriptActivity.class);
-	}
+    public SetGravityBrickTest() {
+        super(ScriptActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		createProject();
-		solo = new Solo(getInstrumentation(), getActivity());
-	}
+    @Override
+    public void setUp() throws Exception {
+        createProject();
+        solo = new Solo(getInstrumentation(), getActivity());
+    }
 
-	@Override
-	public void tearDown() throws Exception {
-		UiTestUtils.goBackToHome(getInstrumentation());
-		solo.finishOpenedActivities();
-		UiTestUtils.clearAllUtilTestProjects();
-		super.tearDown();
-		solo = null;
-	}
+    @Override
+    public void tearDown() throws Exception {
+        UiTestUtils.goBackToHome(getInstrumentation());
+        solo.finishOpenedActivities();
+        UiTestUtils.clearAllUtilTestProjects();
+        super.tearDown();
+        solo = null;
+    }
 
-	@Smoke
-	public void testSetGravityByBrick() {
-		ListView dragDropListView = UiTestUtils.getScriptListView(solo);
-		BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
+    @Smoke
+    public void testSetGravityByBrick() {
+        ListView dragDropListView = UiTestUtils.getScriptListView(solo);
+        BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
 
-		int childrenCount = adapter.getChildCountFromLastGroup();
-		int groupCount = adapter.getScriptCount();
+        int childrenCount = adapter.getChildCountFromLastGroup();
+        int groupCount = adapter.getScriptCount();
 
-		assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
-		assertEquals("Incorrect number of bricks.", 1, childrenCount);
+        assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
+        assertEquals("Incorrect number of bricks.", 1, childrenCount);
 
-		ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
-		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
+        ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
+        assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
-		String textSetGravity = solo.getString(R.string.brick_set_gravity_to);
-		assertNotNull("TextView does not exist.", solo.getText(textSetGravity));
+        assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
+        String textSetGravity = solo.getString(R.string.brick_set_gravity_to);
+        assertNotNull("TextView does not exist.", solo.getText(textSetGravity));
 
-		Vector2 gravity = new Vector2(1f, -3f);
+        Vector2 gravity = new Vector2(1f, -3f);
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
-				R.id.brick_set_gravity_edit_text_x, gravity.x, Brick.BrickField.PHYSICS_GRAVITY_X,
-				setGravityBrick);
-		solo.sleep(200);
+        UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
+                R.id.brick_set_gravity_edit_text_x, gravity.x, Brick.BrickField.PHYSICS_GRAVITY_X,
+                setGravityBrick);
+        solo.sleep(200);
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
-				R.id.brick_set_gravity_edit_text_y, gravity.y, Brick.BrickField.PHYSICS_GRAVITY_Y,
-				setGravityBrick);
-	}
+        UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
+                R.id.brick_set_gravity_edit_text_y, gravity.y, Brick.BrickField.PHYSICS_GRAVITY_Y,
+                setGravityBrick);
+    }
 
-	private void createProject() {
-		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite sprite = new SingleSprite("cat");
-		Script script = new StartScript();
-		setGravityBrick = new SetGravityBrick(new Vector2(0, 10.0f));
-		script.addBrick(setGravityBrick);
+    private void createProject() {
+        project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Sprite sprite = new SingleSprite("cat");
+        Script script = new StartScript();
+        setGravityBrick = new SetGravityBrick(new Vector2(0, 10.0f));
+        script.addBrick(setGravityBrick);
 
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 }

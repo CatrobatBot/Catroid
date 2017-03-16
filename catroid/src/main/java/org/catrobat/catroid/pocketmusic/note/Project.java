@@ -29,133 +29,133 @@ import java.util.Set;
 
 public class Project implements Serializable {
 
-	public static final int DEFAULT_BEATS_PER_MINUTE = 60;
-	public static final MusicalBeat DEFAULT_BEAT = MusicalBeat.BEAT_4_4;
-	private static final long serialVersionUID = 7396763540934053008L;
+    public static final int DEFAULT_BEATS_PER_MINUTE = 60;
+    public static final MusicalBeat DEFAULT_BEAT = MusicalBeat.BEAT_4_4;
+    private static final long serialVersionUID = 7396763540934053008L;
 
-	private String name;
-	private int beatsPerMinute;
-	private MusicalBeat beat;
-	private Map<String, Track> tracks;
-	private String fileName;
+    private String name;
+    private int beatsPerMinute;
+    private MusicalBeat beat;
+    private Map<String, Track> tracks;
+    private String fileName;
 
-	public Project(String name, MusicalBeat beat, int beatsPerMinute) {
-		this.name = name;
-		this.beatsPerMinute = beatsPerMinute;
-		this.beat = beat;
-		this.tracks = new HashMap<>();
-	}
+    public Project(String name, MusicalBeat beat, int beatsPerMinute) {
+        this.name = name;
+        this.beatsPerMinute = beatsPerMinute;
+        this.beat = beat;
+        this.tracks = new HashMap<>();
+    }
 
-	public Project(Project project) {
-		name = project.getName();
-		beatsPerMinute = project.getBeatsPerMinute();
-		beat = project.getBeat();
-		tracks = new HashMap<>();
+    public Project(Project project) {
+        name = project.getName();
+        beatsPerMinute = project.getBeatsPerMinute();
+        beat = project.getBeat();
+        tracks = new HashMap<>();
 
-		for (String name : project.tracks.keySet()) {
-			tracks.put(name, new Track(project.tracks.get(name)));
-		}
-	}
+        for (String name : project.tracks.keySet()) {
+            tracks.put(name, new Track(project.tracks.get(name)));
+        }
+    }
 
-	public Project(Project project, String name) {
-		this(project);
-		this.name = name;
-	}
+    public Project(Project project, String name) {
+        this(project);
+        this.name = name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public int getBeatsPerMinute() {
-		return beatsPerMinute;
-	}
+    public int getBeatsPerMinute() {
+        return beatsPerMinute;
+    }
 
-	public MusicalBeat getBeat() {
-		return beat;
-	}
+    public MusicalBeat getBeat() {
+        return beat;
+    }
 
-	public void putTrack(String trackName, Track track) {
-		tracks.put(trackName, track);
-	}
+    public void putTrack(String trackName, Track track) {
+        tracks.put(trackName, track);
+    }
 
-	public Set<String> getTrackNames() {
-		return tracks.keySet();
-	}
+    public Set<String> getTrackNames() {
+        return tracks.keySet();
+    }
 
-	public Track getTrack(String trackName) {
-		return tracks.get(trackName);
-	}
+    public Track getTrack(String trackName) {
+        return tracks.get(trackName);
+    }
 
-	public long getTotalTimeInMilliseconds() {
-		long totalTime = 0;
+    public long getTotalTimeInMilliseconds() {
+        long totalTime = 0;
 
-		for (Track track : tracks.values()) {
-			long trackTime = track.getTotalTimeInMilliseconds();
+        for (Track track : tracks.values()) {
+            long trackTime = track.getTotalTimeInMilliseconds();
 
-			if (trackTime > totalTime) {
-				totalTime = trackTime;
-			}
-		}
+            if (trackTime > totalTime) {
+                totalTime = trackTime;
+            }
+        }
 
-		return totalTime;
-	}
+        return totalTime;
+    }
 
-	public int size() {
-		return tracks.size();
-	}
+    public int size() {
+        return tracks.size();
+    }
 
-	@Override
-	public int hashCode() {
-		int hashCode = 16;
-		int primeWithGoodCollisionPrevention = 31;
-		hashCode = primeWithGoodCollisionPrevention * hashCode + name.hashCode();
-		hashCode = primeWithGoodCollisionPrevention * hashCode + beatsPerMinute;
-		hashCode = primeWithGoodCollisionPrevention * hashCode + beat.hashCode();
-		hashCode = primeWithGoodCollisionPrevention * hashCode + tracks.hashCode();
-		return hashCode;
-	}
+    @Override
+    public int hashCode() {
+        int hashCode = 16;
+        int primeWithGoodCollisionPrevention = 31;
+        hashCode = primeWithGoodCollisionPrevention * hashCode + name.hashCode();
+        hashCode = primeWithGoodCollisionPrevention * hashCode + beatsPerMinute;
+        hashCode = primeWithGoodCollisionPrevention * hashCode + beat.hashCode();
+        hashCode = primeWithGoodCollisionPrevention * hashCode + tracks.hashCode();
+        return hashCode;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if ((obj == null) || !(obj instanceof Project)) {
-			return false;
-		}
+    @Override
+    public boolean equals(Object obj) {
+        if ((obj == null) || !(obj instanceof Project)) {
+            return false;
+        }
 
-		Project project = (Project) obj;
+        Project project = (Project) obj;
 
-		if (!getName().equals(project.getName())) {
-			return false;
-		}
+        if (!getName().equals(project.getName())) {
+            return false;
+        }
 
-		if (getBeatsPerMinute() != project.getBeatsPerMinute()) {
-			return false;
-		}
+        if (getBeatsPerMinute() != project.getBeatsPerMinute()) {
+            return false;
+        }
 
-		if (getBeat() != project.getBeat()) {
-			return false;
-		}
+        if (getBeat() != project.getBeat()) {
+            return false;
+        }
 
-		if (tracks.equals(project.tracks)) {
-			return true;
-		}
+        if (tracks.equals(project.tracks)) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public String getFileName() {
-		return fileName;
-	}
+    public String getFileName() {
+        return fileName;
+    }
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
-	@Override
-	public String toString() {
-		return "[Project] name=" + name + " beatsPerMinute=" + beatsPerMinute + " trackCount=" + size();
-	}
+    @Override
+    public String toString() {
+        return "[Project] name=" + name + " beatsPerMinute=" + beatsPerMinute + " trackCount=" + size();
+    }
 }

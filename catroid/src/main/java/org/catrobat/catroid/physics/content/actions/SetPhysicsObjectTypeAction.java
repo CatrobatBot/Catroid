@@ -29,19 +29,19 @@ import org.catrobat.catroid.physics.PhysicsObject.Type;
 
 public class SetPhysicsObjectTypeAction extends TemporalAction {
 
-	private PhysicsObject physicsObject;
-	private Type type = PhysicsObject.Type.NONE;
+    private PhysicsObject physicsObject;
+    private Type type = PhysicsObject.Type.NONE;
 
-	@Override
-	protected void update(float percent) {
-		physicsObject.setType(type);
-	}
+    @Override
+    protected void update(float percent) {
+        physicsObject.setType(type);
+    }
 
-	public void setPhysicsObject(PhysicsObject physicsObject) {
-		this.physicsObject = physicsObject;
-	}
+    public void setPhysicsObject(PhysicsObject physicsObject) {
+        this.physicsObject = physicsObject;
+    }
 
-	public void setType(Type type) {
-		this.type = type;
-	}
+    public void setType(Type type) {
+        this.type = type;
+    }
 }

@@ -51,98 +51,98 @@ import java.util.List;
 @SuppressLint("SetJavaScriptEnabled")
 public class MarketingActivity extends Activity {
 
-	private static final String TAG = MarketingActivity.class.getSimpleName();
+    private static final String TAG = MarketingActivity.class.getSimpleName();
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		setContentView(R.layout
-				.activity_standalone_advertising);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout
+                .activity_standalone_advertising);
 
-		TextView appName = (TextView) findViewById(R.id.title);
-		appName.setText(ProjectManager.getInstance().getCurrentProject().getName());
+        TextView appName = (TextView) findViewById(R.id.title);
+        appName.setText(ProjectManager.getInstance().getCurrentProject().getName());
 
-		Bitmap bitmap = scaleDrawable2Bitmap();
+        Bitmap bitmap = scaleDrawable2Bitmap();
 
-		ImageButton imageView = (ImageButton) findViewById(R.id.pocket_code_image);
-		imageView.setImageBitmap(bitmap);
-		imageView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Uri uri = Uri.parse("market://details?id=org.catrobat.catroid");
-				Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
-				try {
-					startActivity(myAppLinkToMarket);
-				} catch (ActivityNotFoundException e) {
-					ToastUtil.showError(MarketingActivity.this, R.string.main_menu_play_store_not_installed);
-				}
-			}
-		});
+        ImageButton imageView = (ImageButton) findViewById(R.id.pocket_code_image);
+        imageView.setImageBitmap(bitmap);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse("market://details?id=org.catrobat.catroid");
+                Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                try {
+                    startActivity(myAppLinkToMarket);
+                } catch (ActivityNotFoundException e) {
+                    ToastUtil.showError(MarketingActivity.this, R.string.main_menu_play_store_not_installed);
+                }
+            }
+        });
 
-		TextView website = (TextView) findViewById(R.id.website_link);
-		TextView playstore = (TextView) findViewById(R.id.playStore_link);
+        TextView website = (TextView) findViewById(R.id.website_link);
+        TextView playstore = (TextView) findViewById(R.id.playStore_link);
 
-		website.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				String urlsString = ProjectManager.getInstance().getCurrentProject().getXmlHeader().getRemixParentsUrlString();
-				if (urlsString == null || urlsString.length() == 0) {
-					Log.w(TAG, "Header of program contains not even one valid detail url!");
-					return;
-				}
+        website.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String urlsString = ProjectManager.getInstance().getCurrentProject().getXmlHeader().getRemixParentsUrlString();
+                if (urlsString == null || urlsString.length() == 0) {
+                    Log.w(TAG, "Header of program contains not even one valid detail url!");
+                    return;
+                }
 
-				List<String> extractedUrls = Utils.extractRemixUrlsFromString(urlsString);
-				if (extractedUrls.size() == 0) {
-					Log.w(TAG, "Header of program contains not even one valid detail url!");
-					return;
-				}
+                List<String> extractedUrls = Utils.extractRemixUrlsFromString(urlsString);
+                if (extractedUrls.size() == 0) {
+                    Log.w(TAG, "Header of program contains not even one valid detail url!");
+                    return;
+                }
 
-				String url = extractedUrls.get(0);
-				if (!urlsString.trim().startsWith("http")) {
-					url = Constants.MAIN_URL_HTTPS + urlsString;
-				}
-				Log.d(TAG, "Program detail url: " + url);
-				startWebViewActivity(url);
-			}
-		});
+                String url = extractedUrls.get(0);
+                if (!urlsString.trim().startsWith("http")) {
+                    url = Constants.MAIN_URL_HTTPS + urlsString;
+                }
+                Log.d(TAG, "Program detail url: " + url);
+                startWebViewActivity(url);
+            }
+        });
 
-		playstore.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Uri uri = Uri.parse("market://search?q=Catrobat");
-				Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
-				try {
-					startActivity(myAppLinkToMarket);
-				} catch (ActivityNotFoundException e) {
-					ToastUtil.showError(MarketingActivity.this, R.string.main_menu_play_store_not_installed);
-				}
-			}
-		});
-	}
+        playstore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse("market://search?q=Catrobat");
+                Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                try {
+                    startActivity(myAppLinkToMarket);
+                } catch (ActivityNotFoundException e) {
+                    ToastUtil.showError(MarketingActivity.this, R.string.main_menu_play_store_not_installed);
+                }
+            }
+        });
+    }
 
-	private Bitmap scaleDrawable2Bitmap() {
-		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.pocket_code);
+    private Bitmap scaleDrawable2Bitmap() {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.pocket_code);
 
-		int width = ScreenValues.SCREEN_WIDTH;
-		double factor = ((float) width / (float) bitmap.getWidth());
-		int height = (int) ((float) bitmap.getHeight() * factor);
-		Log.d("GSOC", "width: " + width + "  height: " + height + "   scaleFactor: " + (int) ((float) width / (float) bitmap.getWidth()));
-		Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
-		return scaledBitmap;
-	}
+        int width = ScreenValues.SCREEN_WIDTH;
+        double factor = ((float) width / (float) bitmap.getWidth());
+        int height = (int) ((float) bitmap.getHeight() * factor);
+        Log.d("GSOC", "width: " + width + "  height: " + height + "   scaleFactor: " + (int) ((float) width / (float) bitmap.getWidth()));
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+        return scaledBitmap;
+    }
 
-	private void startWebViewActivity(String url) {
-		// TODO just a quick fix for not properly working webview on old devices
-		if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1) {
-			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.BASE_URL_HTTPS));
-			startActivity(browserIntent);
-		} else {
-			Intent intent = new Intent(MarketingActivity.this, WebViewActivity.class);
-			intent.putExtra(WebViewActivity.INTENT_PARAMETER_URL, url);
-			startActivity(intent);
-		}
-	}
+    private void startWebViewActivity(String url) {
+        // TODO just a quick fix for not properly working webview on old devices
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.BASE_URL_HTTPS));
+            startActivity(browserIntent);
+        } else {
+            Intent intent = new Intent(MarketingActivity.this, WebViewActivity.class);
+            intent.putExtra(WebViewActivity.INTENT_PARAMETER_URL, url);
+            startActivity(intent);
+        }
+    }
 }

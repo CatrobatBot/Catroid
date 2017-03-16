@@ -35,190 +35,190 @@ import java.util.concurrent.TimeUnit;
 
 public final class ConnectionDataLogger {
 
-	private BlockingQueue<byte[]> sentMessages = new LinkedBlockingQueue<byte[]>();
-	private BlockingQueue<byte[]> receivedMessages = new LinkedBlockingQueue<byte[]>();
+    private BlockingQueue<byte[]> sentMessages = new LinkedBlockingQueue<byte[]>();
+    private BlockingQueue<byte[]> receivedMessages = new LinkedBlockingQueue<byte[]>();
 
-	private static final int TIMEOUT_SECONDS = 15;
+    private static final int TIMEOUT_SECONDS = 15;
 
-	public byte[] getNextSentMessage() {
-		return getNextSentMessage(0, 0);
-	}
+    public byte[] getNextSentMessage() {
+        return getNextSentMessage(0, 0);
+    }
 
-	public byte[] getNextSentMessage(int messageOffset) {
-		return getNextSentMessage(messageOffset, 0);
-	}
+    public byte[] getNextSentMessage(int messageOffset) {
+        return getNextSentMessage(messageOffset, 0);
+    }
 
-	public byte[] getNextSentMessage(int messageOffset, int messageByteOffset) {
-		return getNextMessage(sentMessages, messageOffset, messageByteOffset);
-	}
+    public byte[] getNextSentMessage(int messageOffset, int messageByteOffset) {
+        return getNextMessage(sentMessages, messageOffset, messageByteOffset);
+    }
 
-	public ArrayList<byte[]> getSentMessages(int messageCountToWaitFor) {
-		return getSentMessages(0, messageCountToWaitFor);
-	}
+    public ArrayList<byte[]> getSentMessages(int messageCountToWaitFor) {
+        return getSentMessages(0, messageCountToWaitFor);
+    }
 
-	public ArrayList<byte[]> getSentMessages(int messageByteOffset, int messageCountToWaitFor) {
-		return getMessages(sentMessages, messageByteOffset, messageCountToWaitFor);
-	}
+    public ArrayList<byte[]> getSentMessages(int messageByteOffset, int messageCountToWaitFor) {
+        return getMessages(sentMessages, messageByteOffset, messageCountToWaitFor);
+    }
 
-	public byte[] getNextReceivedMessage() {
-		return getNextReceivedMessage(0, 0);
-	}
+    public byte[] getNextReceivedMessage() {
+        return getNextReceivedMessage(0, 0);
+    }
 
-	public byte[] getNextReceivedMessage(int messageOffset) {
-		return getNextReceivedMessage(messageOffset, 0);
-	}
+    public byte[] getNextReceivedMessage(int messageOffset) {
+        return getNextReceivedMessage(messageOffset, 0);
+    }
 
-	public byte[] getNextReceivedMessage(int messageOffset, int messageByteOffset) {
-		return getNextMessage(receivedMessages, messageOffset, messageByteOffset);
-	}
+    public byte[] getNextReceivedMessage(int messageOffset, int messageByteOffset) {
+        return getNextMessage(receivedMessages, messageOffset, messageByteOffset);
+    }
 
-	public ArrayList<byte[]> getReceivedMessages(int messageCountToWaitFor) {
-		return getReceivedMessages(0, messageCountToWaitFor);
-	}
+    public ArrayList<byte[]> getReceivedMessages(int messageCountToWaitFor) {
+        return getReceivedMessages(0, messageCountToWaitFor);
+    }
 
-	public ArrayList<byte[]> getReceivedMessages(int messageByteOffset, int messageCountToWaitFor) {
-		return getMessages(receivedMessages, messageByteOffset, messageCountToWaitFor);
-	}
+    public ArrayList<byte[]> getReceivedMessages(int messageByteOffset, int messageCountToWaitFor) {
+        return getMessages(receivedMessages, messageByteOffset, messageCountToWaitFor);
+    }
 
-	private static byte[] getNextMessage(BlockingQueue<byte[]> messages, int messageOffset, int messageByteOffset) {
+    private static byte[] getNextMessage(BlockingQueue<byte[]> messages, int messageOffset, int messageByteOffset) {
 
-		Stopwatch stopWatch = Stopwatch.createStarted();
+        Stopwatch stopWatch = Stopwatch.createStarted();
 
-		for (int i = 0; i < messageOffset; i++) {
-			byte[] message = pollMessage(messages, TIMEOUT_SECONDS - (int) stopWatch.elapsed(TimeUnit.SECONDS));
-			if (message == null) {
-				return null;
-			}
-		}
+        for (int i = 0; i < messageOffset; i++) {
+            byte[] message = pollMessage(messages, TIMEOUT_SECONDS - (int) stopWatch.elapsed(TimeUnit.SECONDS));
+            if (message == null) {
+                return null;
+            }
+        }
 
-		byte[] message = pollMessage(messages, TIMEOUT_SECONDS - (int) stopWatch.elapsed(TimeUnit.SECONDS));
-		if (message == null) {
-			return null;
-		}
+        byte[] message = pollMessage(messages, TIMEOUT_SECONDS - (int) stopWatch.elapsed(TimeUnit.SECONDS));
+        if (message == null) {
+            return null;
+        }
 
-		return BluetoothTestUtils.getSubArray(message, messageByteOffset);
-	}
+        return BluetoothTestUtils.getSubArray(message, messageByteOffset);
+    }
 
-	private static ArrayList<byte[]> getMessages(BlockingQueue<byte[]> messages, int messageByteOffset, int messageCountToWaitFor) {
+    private static ArrayList<byte[]> getMessages(BlockingQueue<byte[]> messages, int messageByteOffset, int messageCountToWaitFor) {
 
-		if (messageCountToWaitFor == 0) {
-			return getMessages(messages, messageByteOffset);
-		}
+        if (messageCountToWaitFor == 0) {
+            return getMessages(messages, messageByteOffset);
+        }
 
-		return waitForMessages(messages, messageByteOffset, messageCountToWaitFor);
-	}
+        return waitForMessages(messages, messageByteOffset, messageCountToWaitFor);
+    }
 
-	private static ArrayList<byte[]> waitForMessages(BlockingQueue<byte[]> messages, int messageByteOffset, int messageCountToWaitFor) {
+    private static ArrayList<byte[]> waitForMessages(BlockingQueue<byte[]> messages, int messageByteOffset, int messageCountToWaitFor) {
 
-		ArrayList<byte[]> m = new ArrayList<byte[]>();
-		Stopwatch stopWatch = Stopwatch.createStarted();
+        ArrayList<byte[]> m = new ArrayList<byte[]>();
+        Stopwatch stopWatch = Stopwatch.createStarted();
 
-		do {
-			byte[] message = pollMessage(messages, TIMEOUT_SECONDS - (int) stopWatch.elapsed(TimeUnit.SECONDS));
-			if (message == null) {
-				return m;
-			}
-			m.add(BluetoothTestUtils.getSubArray(message, messageByteOffset));
-		} while (m.size() < messageCountToWaitFor && stopWatch.elapsed(TimeUnit.SECONDS) < TIMEOUT_SECONDS);
+        do {
+            byte[] message = pollMessage(messages, TIMEOUT_SECONDS - (int) stopWatch.elapsed(TimeUnit.SECONDS));
+            if (message == null) {
+                return m;
+            }
+            m.add(BluetoothTestUtils.getSubArray(message, messageByteOffset));
+        } while (m.size() < messageCountToWaitFor && stopWatch.elapsed(TimeUnit.SECONDS) < TIMEOUT_SECONDS);
 
-		return m;
-	}
+        return m;
+    }
 
-	private static ArrayList<byte[]> getMessages(BlockingQueue<byte[]> messages, int messageByteOffset) {
+    private static ArrayList<byte[]> getMessages(BlockingQueue<byte[]> messages, int messageByteOffset) {
 
-		ArrayList<byte[]> m = new ArrayList<byte[]>();
+        ArrayList<byte[]> m = new ArrayList<byte[]>();
 
-		byte[] message = null;
-		while ((message = messages.poll()) != null) {
-			m.add(BluetoothTestUtils.getSubArray(message, messageByteOffset));
-		}
+        byte[] message = null;
+        while ((message = messages.poll()) != null) {
+            m.add(BluetoothTestUtils.getSubArray(message, messageByteOffset));
+        }
 
-		return m;
-	}
+        return m;
+    }
 
-	private static byte[] pollMessage(BlockingQueue<byte[]> messages, int timeoutSeconds) {
+    private static byte[] pollMessage(BlockingQueue<byte[]> messages, int timeoutSeconds) {
 
-		try {
-			return messages.poll(timeoutSeconds, TimeUnit.SECONDS);
-		} catch (InterruptedException e) {
-			return null;
-		}
-	}
+        try {
+            return messages.poll(timeoutSeconds, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            return null;
+        }
+    }
 
-	private BluetoothConnection connectionProxy;
+    private BluetoothConnection connectionProxy;
 
-	private BluetoothLogger logger = new BluetoothLogger() {
+    private BluetoothLogger logger = new BluetoothLogger() {
 
-		@Override
-		public void logSentData(byte[] b) {
-			sentMessages.add(b);
-		}
+        @Override
+        public void logSentData(byte[] b) {
+            sentMessages.add(b);
+        }
 
-		@Override
-		public void logReceivedData(byte[] b) {
-			receivedMessages.add(b);
-		}
+        @Override
+        public void logReceivedData(byte[] b) {
+            receivedMessages.add(b);
+        }
 
-		@Override
-		public void loggerAttached(BluetoothConnection proxy) {
-			connectionProxy = proxy;
-		}
-	};
+        @Override
+        public void loggerAttached(BluetoothConnection proxy) {
+            connectionProxy = proxy;
+        }
+    };
 
-	private ConnectionDataLogger(boolean local) {
-		if (local) {
-			connectionProxy = new LocalConnectionProxy(logger);
-			BluetoothTestUtils.hookInConnection(connectionProxy);
-		} else {
-			BluetoothTestUtils.hookInConnectionFactoryWithBluetoothConnectionProxy(logger);
-		}
-	}
+    private ConnectionDataLogger(boolean local) {
+        if (local) {
+            connectionProxy = new LocalConnectionProxy(logger);
+            BluetoothTestUtils.hookInConnection(connectionProxy);
+        } else {
+            BluetoothTestUtils.hookInConnectionFactoryWithBluetoothConnectionProxy(logger);
+        }
+    }
 
-	private ConnectionDataLogger(DeviceModel deviceModel) {
-		connectionProxy = new LocalConnectionProxy(logger, deviceModel);
-		BluetoothTestUtils.hookInConnection(connectionProxy);
-	}
+    private ConnectionDataLogger(DeviceModel deviceModel) {
+        connectionProxy = new LocalConnectionProxy(logger, deviceModel);
+        BluetoothTestUtils.hookInConnection(connectionProxy);
+    }
 
-	public static ConnectionDataLogger createLocalConnectionLogger() {
-		return new ConnectionDataLogger(true);
-	}
+    public static ConnectionDataLogger createLocalConnectionLogger() {
+        return new ConnectionDataLogger(true);
+    }
 
-	public static ConnectionDataLogger createLocalConnectionLoggerWithTestDevice(BluetoothDevice testDevice) {
-		BluetoothTestUtils.hookInTestDevice(testDevice);
-		return new ConnectionDataLogger(true);
-	}
+    public static ConnectionDataLogger createLocalConnectionLoggerWithTestDevice(BluetoothDevice testDevice) {
+        BluetoothTestUtils.hookInTestDevice(testDevice);
+        return new ConnectionDataLogger(true);
+    }
 
-	public static ConnectionDataLogger createLocalConnectionLoggerWithDeviceModel(DeviceModel deviceModel) {
-		return new ConnectionDataLogger(deviceModel);
-	}
+    public static ConnectionDataLogger createLocalConnectionLoggerWithDeviceModel(DeviceModel deviceModel) {
+        return new ConnectionDataLogger(deviceModel);
+    }
 
-	public static ConnectionDataLogger createLocalConnectionLoggerWithDeviceModelAndTestDevice(DeviceModel deviceModel, BluetoothDevice testDevice) {
-		BluetoothTestUtils.hookInTestDevice(testDevice);
-		return new ConnectionDataLogger(deviceModel);
-	}
+    public static ConnectionDataLogger createLocalConnectionLoggerWithDeviceModelAndTestDevice(DeviceModel deviceModel, BluetoothDevice testDevice) {
+        BluetoothTestUtils.hookInTestDevice(testDevice);
+        return new ConnectionDataLogger(deviceModel);
+    }
 
-	public static ConnectionDataLogger createBluetoothConnectionLogger() {
-		return new ConnectionDataLogger(false);
-	}
+    public static ConnectionDataLogger createBluetoothConnectionLogger() {
+        return new ConnectionDataLogger(false);
+    }
 
-	public static ConnectionDataLogger createBluetoothConnectionLoggerWithTestDevice(BluetoothDevice testDevice) {
-		BluetoothTestUtils.hookInTestDevice(testDevice);
-		return new ConnectionDataLogger(false);
-	}
+    public static ConnectionDataLogger createBluetoothConnectionLoggerWithTestDevice(BluetoothDevice testDevice) {
+        BluetoothTestUtils.hookInTestDevice(testDevice);
+        return new ConnectionDataLogger(false);
+    }
 
-	public void disconnectAndDestroy() {
-		if (connectionProxy != null) {
-			connectionProxy.disconnect();
-		}
+    public void disconnectAndDestroy() {
+        if (connectionProxy != null) {
+            connectionProxy.disconnect();
+        }
 
-		BluetoothTestUtils.resetConnectionHooks();
-	}
+        BluetoothTestUtils.resetConnectionHooks();
+    }
 
-	public BluetoothConnection getConnectionProxy() {
-		return connectionProxy;
-	}
+    public BluetoothConnection getConnectionProxy() {
+        return connectionProxy;
+    }
 
-	BluetoothLogger getLogger() {
-		return logger;
-	}
+    BluetoothLogger getLogger() {
+        return logger;
+    }
 }

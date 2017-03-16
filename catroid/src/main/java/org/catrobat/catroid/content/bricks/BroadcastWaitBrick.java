@@ -40,73 +40,73 @@ import org.catrobat.catroid.content.Sprite;
 import java.util.List;
 
 public class BroadcastWaitBrick extends BroadcastBrick implements BroadcastMessage {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public BroadcastWaitBrick(String broadcastMessage) {
-		super(broadcastMessage);
-	}
+    public BroadcastWaitBrick(String broadcastMessage) {
+        super(broadcastMessage);
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		BroadcastWaitBrick copyBrick = (BroadcastWaitBrick) clone();
-		return copyBrick;
-	}
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        BroadcastWaitBrick copyBrick = (BroadcastWaitBrick) clone();
+        return copyBrick;
+    }
 
-	@Override
-	public Brick clone() {
-		return new BroadcastWaitBrick(broadcastMessage);
-	}
+    @Override
+    public Brick clone() {
+        return new BroadcastWaitBrick(broadcastMessage);
+    }
 
-	@Override
-	public View getView(final Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		if (view == null) {
-			alphaValue = 255;
-		}
-		view = View.inflate(context, R.layout.brick_broadcast_wait, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
-		setCheckboxView(R.id.brick_broadcast_wait_checkbox);
+    @Override
+    public View getView(final Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        if (view == null) {
+            alphaValue = 255;
+        }
+        view = View.inflate(context, R.layout.brick_broadcast_wait, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        setCheckboxView(R.id.brick_broadcast_wait_checkbox);
 
-		final Spinner broadcastSpinner = (Spinner) view.findViewById(R.id.brick_broadcast_wait_spinner);
+        final Spinner broadcastSpinner = (Spinner) view.findViewById(R.id.brick_broadcast_wait_spinner);
 
-		broadcastSpinner.setAdapter(MessageContainer.getMessageAdapter(context));
-		broadcastSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+        broadcastSpinner.setAdapter(MessageContainer.getMessageAdapter(context));
+        broadcastSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				String selectedMessage = broadcastSpinner.getSelectedItem().toString();
-				if (selectedMessage.equals(context.getString(R.string.new_broadcast_message))) {
-					showNewMessageDialog(broadcastSpinner);
-				} else {
-					broadcastMessage = selectedMessage;
-				}
-			}
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedMessage = broadcastSpinner.getSelectedItem().toString();
+                if (selectedMessage.equals(context.getString(R.string.new_broadcast_message))) {
+                    showNewMessageDialog(broadcastSpinner);
+                } else {
+                    broadcastMessage = selectedMessage;
+                }
+            }
 
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
 
-		setSpinnerSelection(broadcastSpinner);
-		return view;
-	}
+        setSpinnerSelection(broadcastSpinner);
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		View prototypeView = View.inflate(context, R.layout.brick_broadcast_wait, null);
-		Spinner broadcastWaitSpinner = (Spinner) prototypeView.findViewById(R.id.brick_broadcast_wait_spinner);
+    @Override
+    public View getPrototypeView(Context context) {
+        View prototypeView = View.inflate(context, R.layout.brick_broadcast_wait, null);
+        Spinner broadcastWaitSpinner = (Spinner) prototypeView.findViewById(R.id.brick_broadcast_wait_spinner);
 
-		SpinnerAdapter broadcastWaitSpinnerAdapter = MessageContainer.getMessageAdapter(context);
-		broadcastWaitSpinner.setAdapter(broadcastWaitSpinnerAdapter);
-		setSpinnerSelection(broadcastWaitSpinner);
-		return prototypeView;
-	}
+        SpinnerAdapter broadcastWaitSpinnerAdapter = MessageContainer.getMessageAdapter(context);
+        broadcastWaitSpinner.setAdapter(broadcastWaitSpinnerAdapter);
+        setSpinnerSelection(broadcastWaitSpinner);
+        return prototypeView;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createBroadcastActionFromWaiter(sprite, broadcastMessage));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createBroadcastActionFromWaiter(sprite, broadcastMessage));
+        return null;
+    }
 }

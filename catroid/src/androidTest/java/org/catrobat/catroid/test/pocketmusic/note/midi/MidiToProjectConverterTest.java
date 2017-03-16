@@ -35,27 +35,27 @@ import java.io.IOException;
 
 public class MidiToProjectConverterTest extends AndroidTestCase {
 
-	private Project project;
-	private File file;
+    private Project project;
+    private File file;
 
-	@Override
-	protected void setUp() {
-		project = ProjectTestDataFactory.createProjectWithSemiComplexTracks();
-		file = new File(ProjectToMidiConverter.MIDI_FOLDER + File.separator + project.getName() + ProjectToMidiConverter.MIDI_FILE_EXTENSION);
-	}
+    @Override
+    protected void setUp() {
+        project = ProjectTestDataFactory.createProjectWithSemiComplexTracks();
+        file = new File(ProjectToMidiConverter.MIDI_FOLDER + File.separator + project.getName() + ProjectToMidiConverter.MIDI_FILE_EXTENSION);
+    }
 
-	@Override
-	protected void tearDown() {
-		file.delete();
-	}
+    @Override
+    protected void tearDown() {
+        file.delete();
+    }
 
-	public void testConvertToMidiToProject() throws MidiException, IOException {
-		ProjectToMidiConverter projectConverter = new ProjectToMidiConverter();
-		MidiToProjectConverter midiConverter = new MidiToProjectConverter();
+    public void testConvertToMidiToProject() throws MidiException, IOException {
+        ProjectToMidiConverter projectConverter = new ProjectToMidiConverter();
+        MidiToProjectConverter midiConverter = new MidiToProjectConverter();
 
-		projectConverter.writeProjectAsMidi(project);
-		Project actualProject = midiConverter.convertMidiFileToProject(file);
+        projectConverter.writeProjectAsMidi(project);
+        Project actualProject = midiConverter.convertMidiFileToProject(file);
 
-		assertEquals("Failed to convert midi to project", project, actualProject);
-	}
+        assertEquals("Failed to convert midi to project", project, actualProject);
+    }
 }

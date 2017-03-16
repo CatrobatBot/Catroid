@@ -36,87 +36,87 @@ import org.catrobat.catroid.R;
 import java.util.ArrayList;
 
 public abstract class DroneSpinnerBrick extends BrickBaseType {
-	private static final String TAG = DroneSpinnerBrick.class.getSimpleName();
+    private static final String TAG = DroneSpinnerBrick.class.getSimpleName();
 
-	protected transient AdapterView<?> adapterView;
-	protected String selectedMessage;
-	protected int spinnerPosition = 0;
+    protected transient AdapterView<?> adapterView;
+    protected String selectedMessage;
+    protected int spinnerPosition = 0;
 
-	@Override
-	public View getView(final Context context, int brickId, BaseAdapter baseAdapter) {
+    @Override
+    public View getView(final Context context, int brickId, BaseAdapter baseAdapter) {
 
-		if (animationState) {
-			return view;
-		}
-		if (view == null) {
-			alphaValue = 255;
-		}
+        if (animationState) {
+            return view;
+        }
+        if (view == null) {
+            alphaValue = 255;
+        }
 
-		view = View.inflate(context, R.layout.brick_drone_spinner, null);
-		setCheckboxView(R.id.brick_drone_spinner_checkbox);
+        view = View.inflate(context, R.layout.brick_drone_spinner, null);
+        setCheckboxView(R.id.brick_drone_spinner_checkbox);
 
-		Spinner spinner = (Spinner) view.findViewById(R.id.brick_drone_spinner_ID);
-		spinner.setFocusableInTouchMode(false);
-		spinner.setFocusable(false);
+        Spinner spinner = (Spinner) view.findViewById(R.id.brick_drone_spinner_ID);
+        spinner.setFocusableInTouchMode(false);
+        spinner.setFocusable(false);
 
-		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(view.getContext(),
-				android.R.layout.simple_spinner_item, getSpinnerItems(view));
-		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(view.getContext(),
+                android.R.layout.simple_spinner_item, getSpinnerItems(view));
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-		spinner.setAdapter(arrayAdapter);
+        spinner.setAdapter(arrayAdapter);
 
-		spinner.setAdapter(arrayAdapter);
-		spinner.setSelection(spinnerPosition);
+        spinner.setAdapter(arrayAdapter);
+        spinner.setSelection(spinnerPosition);
 
-		spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				selectedMessage = parent.getItemAtPosition(position).toString();
-				spinnerPosition = position;
-				Log.d(TAG, "selected message = "
-						+ selectedMessage + " on position: " + spinnerPosition);
-			}
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedMessage = parent.getItemAtPosition(position).toString();
+                spinnerPosition = position;
+                Log.d(TAG, "selected message = "
+                        + selectedMessage + " on position: " + spinnerPosition);
+            }
 
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
 
-		TextView label = (TextView) view.findViewById(R.id.brick_drone_spinner_label);
-		label.setText(getBrickLabel(view));
+        TextView label = (TextView) view.findViewById(R.id.brick_drone_spinner_label);
+        label.setText(getBrickLabel(view));
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		View prototypeView = View.inflate(context, R.layout.brick_drone_spinner, null);
+    @Override
+    public View getPrototypeView(Context context) {
+        View prototypeView = View.inflate(context, R.layout.brick_drone_spinner, null);
 
-		Spinner spinner = (Spinner) prototypeView.findViewById(R.id.brick_drone_spinner_ID);
+        Spinner spinner = (Spinner) prototypeView.findViewById(R.id.brick_drone_spinner_ID);
 
-		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(prototypeView.getContext(),
-				android.R.layout.simple_spinner_item, getSpinnerItems(prototypeView));
-		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(prototypeView.getContext(),
+                android.R.layout.simple_spinner_item, getSpinnerItems(prototypeView));
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-		spinner.setAdapter(arrayAdapter);
-		spinner.setSelection(spinnerPosition);
+        spinner.setAdapter(arrayAdapter);
+        spinner.setSelection(spinnerPosition);
 
-		TextView label = (TextView) prototypeView.findViewById(R.id.brick_drone_spinner_label);
-		label.setText(getBrickLabel(prototypeView));
+        TextView label = (TextView) prototypeView.findViewById(R.id.brick_drone_spinner_label);
+        label.setText(getBrickLabel(prototypeView));
 
-		return prototypeView;
-	}
+        return prototypeView;
+    }
 
-	public void setSpinnerPosition(int spinnerPosition) {
-		this.spinnerPosition = spinnerPosition;
-	}
+    public void setSpinnerPosition(int spinnerPosition) {
+        this.spinnerPosition = spinnerPosition;
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return ARDRONE_SUPPORT;
-	}
+    @Override
+    public int getRequiredResources() {
+        return ARDRONE_SUPPORT;
+    }
 
-	protected abstract String getBrickLabel(View view);
+    protected abstract String getBrickLabel(View view);
 
-	protected abstract ArrayList<String> getSpinnerItems(View view);
+    protected abstract ArrayList<String> getSpinnerItems(View view);
 }

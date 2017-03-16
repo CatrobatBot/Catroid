@@ -33,31 +33,31 @@ import org.catrobat.catroid.physics.PhysicsObject;
 
 public class TurnRightSpeedAction extends TemporalAction {
 
-	private Sprite sprite;
-	private PhysicsObject physicsObject;
-	private Formula speed;
+    private Sprite sprite;
+    private PhysicsObject physicsObject;
+    private Formula speed;
 
-	@Override
-	protected void update(float percent) {
-		Float newSpeed;
-		try {
-			newSpeed = speed == null ? Float.valueOf(0f) : speed.interpretFloat(sprite);
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-			return;
-		}
-		physicsObject.setRotationSpeed(-newSpeed);
-	}
+    @Override
+    protected void update(float percent) {
+        Float newSpeed;
+        try {
+            newSpeed = speed == null ? Float.valueOf(0f) : speed.interpretFloat(sprite);
+        } catch (InterpretationException interpretationException) {
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+            return;
+        }
+        physicsObject.setRotationSpeed(-newSpeed);
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setPhysicsObject(PhysicsObject physicsObject) {
-		this.physicsObject = physicsObject;
-	}
+    public void setPhysicsObject(PhysicsObject physicsObject) {
+        this.physicsObject = physicsObject;
+    }
 
-	public void setSpeed(Formula speed) {
-		this.speed = speed;
-	}
+    public void setSpeed(Formula speed) {
+        this.speed = speed;
+    }
 }

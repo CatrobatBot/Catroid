@@ -34,46 +34,46 @@ import java.io.IOException;
 
 public class ProjectToMidiConverterTest extends AndroidTestCase {
 
-	private static final String FILE_NAME = "ProjectToMidiConverterTest.midi";
-	private File file;
+    private static final String FILE_NAME = "ProjectToMidiConverterTest.midi";
+    private File file;
 
-	@Override
-	protected void setUp() {
-		file = new File(getContext().getCacheDir(), FILE_NAME);
-	}
+    @Override
+    protected void setUp() {
+        file = new File(getContext().getCacheDir(), FILE_NAME);
+    }
 
-	@Override
-	protected void tearDown() {
-		file.delete();
-	}
+    @Override
+    protected void tearDown() {
+        file.delete();
+    }
 
-	public void testWriteProjectAsMidi() throws IOException, MidiException {
-		Project project = ProjectTestDataFactory.createProject();
-		ProjectToMidiConverter converter = new ProjectToMidiConverter();
+    public void testWriteProjectAsMidi() throws IOException, MidiException {
+        Project project = ProjectTestDataFactory.createProject();
+        ProjectToMidiConverter converter = new ProjectToMidiConverter();
 
-		converter.writeProjectAsMidi(project, file);
+        converter.writeProjectAsMidi(project, file);
 
-		assertTrue("File not successfully written", file.exists());
-	}
+        assertTrue("File not successfully written", file.exists());
+    }
 
-	public void testGetMidiFileFromProjectName() throws IOException, MidiException {
-		Project project = ProjectTestDataFactory.createProject();
-		ProjectToMidiConverter converter = new ProjectToMidiConverter();
+    public void testGetMidiFileFromProjectName() throws IOException, MidiException {
+        Project project = ProjectTestDataFactory.createProject();
+        ProjectToMidiConverter converter = new ProjectToMidiConverter();
 
-		converter.writeProjectAsMidi(project, file);
-		File newFile = ProjectToMidiConverter.getMidiFileFromProjectName(ProjectToMidiConverter.removeMidiExtensionFromString(file.getName()));
+        converter.writeProjectAsMidi(project, file);
+        File newFile = ProjectToMidiConverter.getMidiFileFromProjectName(ProjectToMidiConverter.removeMidiExtensionFromString(file.getName()));
 
-		assertEquals("Error while reading midi file from project name", file.getName(), newFile.getName());
-	}
+        assertEquals("Error while reading midi file from project name", file.getName(), newFile.getName());
+    }
 
-	public void testDeleteMidiByName() throws IOException, MidiException {
-		Project project = ProjectTestDataFactory.createProject();
-		ProjectToMidiConverter converter = new ProjectToMidiConverter();
-		converter.writeProjectAsMidi(project);
-		if (converter.deleteMidiByName(ProjectToMidiConverter.removeMidiExtensionFromString(project.getName()))) {
-			assertFalse("Midi is in storage", ProjectTestDataFactory.checkIfProjectInStorage(project.getName()));
-		} else {
-			assertTrue("Midi is in storage", ProjectTestDataFactory.checkIfProjectInStorage(project.getName()));
-		}
-	}
+    public void testDeleteMidiByName() throws IOException, MidiException {
+        Project project = ProjectTestDataFactory.createProject();
+        ProjectToMidiConverter converter = new ProjectToMidiConverter();
+        converter.writeProjectAsMidi(project);
+        if (converter.deleteMidiByName(ProjectToMidiConverter.removeMidiExtensionFromString(project.getName()))) {
+            assertFalse("Midi is in storage", ProjectTestDataFactory.checkIfProjectInStorage(project.getName()));
+        } else {
+            assertTrue("Midi is in storage", ProjectTestDataFactory.checkIfProjectInStorage(project.getName()));
+        }
+    }
 }

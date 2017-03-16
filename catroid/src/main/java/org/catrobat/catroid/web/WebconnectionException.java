@@ -25,34 +25,34 @@ package org.catrobat.catroid.web;
 import android.util.Log;
 
 public class WebconnectionException extends Exception {
-	private static final String TAG = WebconnectionException.class.getSimpleName();
+    private static final String TAG = WebconnectionException.class.getSimpleName();
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public static final int ERROR_JSON = 1001;
-	public static final int ERROR_NETWORK = 1002;
+    public static final int ERROR_JSON = 1001;
+    public static final int ERROR_NETWORK = 1002;
 
-	private final int statusCode;
-	private final String message;
+    private final int statusCode;
+    private final String message;
 
-	public WebconnectionException(int statusCode, String message) {
-		super(message);
-		if (message == null) {
-			message = "Unknown Error, no exception message given.";
-		}
+    public WebconnectionException(int statusCode, String message) {
+        super(message);
+        if (message == null) {
+            message = "Unknown Error, no exception message given.";
+        }
 
-		this.statusCode = statusCode;
-		this.message = message;
-	}
+        this.statusCode = statusCode;
+        this.message = message;
+    }
 
-	public int getStatusCode() {
-		return statusCode;
-	}
+    public int getStatusCode() {
+        return statusCode;
+    }
 
-	@Override
-	public String getMessage() {
+    @Override
+    public String getMessage() {
 
-		Log.d(TAG, "Error #" + statusCode + ": " + message);
-		return message;
-	}
+        Log.d(TAG, "Error #" + statusCode + ": " + message);
+        return message;
+    }
 }

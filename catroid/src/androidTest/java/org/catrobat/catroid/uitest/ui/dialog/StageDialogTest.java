@@ -55,418 +55,418 @@ import java.util.List;
 
 public class StageDialogTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
-	private String testProject = UiTestUtils.PROJECTNAME1;
+    private String testProject = UiTestUtils.PROJECTNAME1;
 
-	public StageDialogTest() {
-		super(MainMenuActivity.class);
-	}
+    public StageDialogTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		UiTestUtils.prepareStageForTest();
-	}
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        UiTestUtils.prepareStageForTest();
+    }
 
-	public void testBackButtonPressedTwice() {
-		Project project = createTestProject(testProject);
-		ProjectManager.getInstance().setProject(project);
+    public void testBackButtonPressedTwice() {
+        Project project = createTestProject(testProject);
+        ProjectManager.getInstance().setProject(project);
 
-		solo.clickOnText(solo.getString(R.string.main_menu_continue));
-		solo.waitForActivity(ProjectActivity.class.getSimpleName());
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(1000);
-		solo.goBack();
+        solo.clickOnText(solo.getString(R.string.main_menu_continue));
+        solo.waitForActivity(ProjectActivity.class.getSimpleName());
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(1000);
+        solo.goBack();
 
-		solo.goBack();
-		solo.waitForActivity(ProjectActivity.class.getSimpleName());
-		solo.assertCurrentActivity("Program is not in stage activity", ProjectActivity.class);
-	}
+        solo.goBack();
+        solo.waitForActivity(ProjectActivity.class.getSimpleName());
+        solo.assertCurrentActivity("Program is not in stage activity", ProjectActivity.class);
+    }
 
-	public void testBackToPreviousActivity() {
-		createAndSaveTestProject(testProject);
-		solo.clickOnButton(solo.getString(R.string.main_menu_programs));
-		solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
-		solo.waitForFragmentById(R.id.fragment_container);
-		assertTrue("Cannot click project.", UiTestUtils.clickOnTextInList(solo, testProject));
-		solo.waitForActivity(ProjectActivity.class.getSimpleName());
+    public void testBackToPreviousActivity() {
+        createAndSaveTestProject(testProject);
+        solo.clickOnButton(solo.getString(R.string.main_menu_programs));
+        solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
+        solo.waitForFragmentById(R.id.fragment_container);
+        assertTrue("Cannot click project.", UiTestUtils.clickOnTextInList(solo, testProject));
+        solo.waitForActivity(ProjectActivity.class.getSimpleName());
 
-		Activity previousActivity = getActivity();
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
+        Activity previousActivity = getActivity();
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
 
-		solo.goBack();
-		solo.clickOnButton(solo.getString(R.string.stage_dialog_back));
+        solo.goBack();
+        solo.clickOnButton(solo.getString(R.string.stage_dialog_back));
 
-		solo.waitForActivity(ProjectActivity.class.getSimpleName());
-		assertEquals("Not equal Activities", previousActivity, getActivity());
-	}
+        solo.waitForActivity(ProjectActivity.class.getSimpleName());
+        assertEquals("Not equal Activities", previousActivity, getActivity());
+    }
 
-	public void testPauseOnBackButton() {
-		float defaultScale = 100.0f;
-		float newScale = 50.0f;
+    public void testPauseOnBackButton() {
+        float defaultScale = 100.0f;
+        float newScale = 50.0f;
 
-		Project project = new Project(getActivity(), testProject);
-		Sprite sprite = new SingleSprite("testSprite");
-		Script script = new StartScript();
-		WaitBrick waitBrick = new WaitBrick(5000);
-		SetSizeToBrick scaleLookBrick = new SetSizeToBrick(newScale);
+        Project project = new Project(getActivity(), testProject);
+        Sprite sprite = new SingleSprite("testSprite");
+        Script script = new StartScript();
+        WaitBrick waitBrick = new WaitBrick(5000);
+        SetSizeToBrick scaleLookBrick = new SetSizeToBrick(newScale);
 
-		script.addBrick(waitBrick);
-		script.addBrick(scaleLookBrick);
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
+        script.addBrick(waitBrick);
+        script.addBrick(scaleLookBrick);
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
 
-		StorageHandler.getInstance().saveProject(project);
-		ProjectManager.getInstance().setProject(project);
+        StorageHandler.getInstance().saveProject(project);
+        ProjectManager.getInstance().setProject(project);
 
-		solo.clickOnText(solo.getString(R.string.main_menu_continue));
-		solo.waitForActivity(ProjectActivity.class.getSimpleName());
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(1000);
-		assertEquals("Unexpected look size", defaultScale, sprite.look.getSizeInUserInterfaceDimensionUnit());
+        solo.clickOnText(solo.getString(R.string.main_menu_continue));
+        solo.waitForActivity(ProjectActivity.class.getSimpleName());
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(1000);
+        assertEquals("Unexpected look size", defaultScale, sprite.look.getSizeInUserInterfaceDimensionUnit());
 
-		solo.goBack();
-		solo.sleep(6000);
-		assertEquals("Unexpected look size", defaultScale, sprite.look.getSizeInUserInterfaceDimensionUnit());
+        solo.goBack();
+        solo.sleep(6000);
+        assertEquals("Unexpected look size", defaultScale, sprite.look.getSizeInUserInterfaceDimensionUnit());
 
-		solo.clickOnButton(solo.getString(R.string.stage_dialog_resume));
-		solo.sleep(6000);
-		assertEquals("Unexpected look size", newScale, sprite.look.getSizeInUserInterfaceDimensionUnit());
-	}
+        solo.clickOnButton(solo.getString(R.string.stage_dialog_resume));
+        solo.sleep(6000);
+        assertEquals("Unexpected look size", newScale, sprite.look.getSizeInUserInterfaceDimensionUnit());
+    }
 
-	public void testRestartButtonActivityChain() {
-		createAndSaveTestProject(testProject);
-		solo.clickOnButton(solo.getString(R.string.main_menu_programs));
-		solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
-		solo.waitForFragmentById(R.id.fragment_container);
-		assertTrue("Cannot click project.", UiTestUtils.clickOnTextInList(solo, testProject));
-		solo.waitForActivity(ProjectActivity.class.getSimpleName());
+    public void testRestartButtonActivityChain() {
+        createAndSaveTestProject(testProject);
+        solo.clickOnButton(solo.getString(R.string.main_menu_programs));
+        solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
+        solo.waitForFragmentById(R.id.fragment_container);
+        assertTrue("Cannot click project.", UiTestUtils.clickOnTextInList(solo, testProject));
+        solo.waitForActivity(ProjectActivity.class.getSimpleName());
 
-		Activity currentActivity = solo.getCurrentActivity();
+        Activity currentActivity = solo.getCurrentActivity();
 
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.goBack();
-		solo.sleep(400);
-		solo.clickOnButton(solo.getString(R.string.stage_dialog_restart));
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.assertCurrentActivity("Program is not in stage activity", StageActivity.class);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.goBack();
+        solo.sleep(400);
+        solo.clickOnButton(solo.getString(R.string.stage_dialog_restart));
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.assertCurrentActivity("Program is not in stage activity", StageActivity.class);
 
-		solo.sleep(500);
-		solo.goBack();
-		solo.sleep(100);
-		solo.clickOnButton(solo.getString(R.string.stage_dialog_back));
-		solo.waitForActivity(ProjectActivity.class.getSimpleName());
-		assertEquals("Returned to wrong Activity", currentActivity, solo.getCurrentActivity());
-	}
+        solo.sleep(500);
+        solo.goBack();
+        solo.sleep(100);
+        solo.clickOnButton(solo.getString(R.string.stage_dialog_back));
+        solo.waitForActivity(ProjectActivity.class.getSimpleName());
+        assertEquals("Returned to wrong Activity", currentActivity, solo.getCurrentActivity());
+    }
 
-	public void testRestartButtonScriptPosition() {
-		createAndSaveTestProject(testProject);
-		ArrayList<Script> scriptStart = new ArrayList<Script>();
-		ArrayList<Script> scriptRestart = new ArrayList<Script>();
-		scriptStart.clear();
-		scriptRestart.clear();
+    public void testRestartButtonScriptPosition() {
+        createAndSaveTestProject(testProject);
+        ArrayList<Script> scriptStart = new ArrayList<Script>();
+        ArrayList<Script> scriptRestart = new ArrayList<Script>();
+        scriptStart.clear();
+        scriptRestart.clear();
 
-		solo.clickOnButton(solo.getString(R.string.main_menu_programs));
-		solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
-		solo.waitForFragmentById(R.id.fragment_container);
-		assertTrue("Cannot click project.", UiTestUtils.clickOnTextInList(solo, testProject));
-		solo.waitForActivity(ProjectActivity.class.getSimpleName());
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(1000);
+        solo.clickOnButton(solo.getString(R.string.main_menu_programs));
+        solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
+        solo.waitForFragmentById(R.id.fragment_container);
+        assertTrue("Cannot click project.", UiTestUtils.clickOnTextInList(solo, testProject));
+        solo.waitForActivity(ProjectActivity.class.getSimpleName());
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(1000);
 
-		ProjectManager projectManager = ProjectManager.getInstance();
-		Project projectStart = projectManager.getCurrentProject();
+        ProjectManager projectManager = ProjectManager.getInstance();
+        Project projectStart = projectManager.getCurrentProject();
 
-		String projectNameStart = projectStart.getName();
+        String projectNameStart = projectStart.getName();
 
-		//scriptPositions at start
-		List<Sprite> spriteList = projectStart.getDefaultScene().getSpriteList();
-		for (int i = 0; i < spriteList.size(); i++) {
-			Sprite sprite = spriteList.get(i);
-			int size = sprite.getNumberOfScripts();
-			for (int j = 0; j < size; j++) {
-				scriptRestart.add(sprite.getScript(j));
-			}
-		}
-		spriteList.clear();
+        //scriptPositions at start
+        List<Sprite> spriteList = projectStart.getDefaultScene().getSpriteList();
+        for (int i = 0; i < spriteList.size(); i++) {
+            Sprite sprite = spriteList.get(i);
+            int size = sprite.getNumberOfScripts();
+            for (int j = 0; j < size; j++) {
+                scriptRestart.add(sprite.getScript(j));
+            }
+        }
+        spriteList.clear();
 
-		solo.clickOnScreen(ScreenValues.SCREEN_WIDTH / 2, ScreenValues.SCREEN_HEIGHT / 2);
-		solo.sleep(200);
-		solo.goBack();
-		solo.sleep(100);
-		solo.clickOnButton(solo.getString(R.string.stage_dialog_restart));
-		solo.sleep(300);
+        solo.clickOnScreen(ScreenValues.SCREEN_WIDTH / 2, ScreenValues.SCREEN_HEIGHT / 2);
+        solo.sleep(200);
+        solo.goBack();
+        solo.sleep(100);
+        solo.clickOnButton(solo.getString(R.string.stage_dialog_restart));
+        solo.sleep(300);
 
-		//scriptPositions in between
-		Project projectRestart = ProjectManager.getInstance().getCurrentProject();
-		String projectNameRestart = projectRestart.getName();
+        //scriptPositions in between
+        Project projectRestart = ProjectManager.getInstance().getCurrentProject();
+        String projectNameRestart = projectRestart.getName();
 
-		assertEquals("Wrong project after restart", projectNameStart, projectNameRestart);
+        assertEquals("Wrong project after restart", projectNameStart, projectNameRestart);
 
-		spriteList = projectRestart.getDefaultScene().getSpriteList();
-		for (int i = 0; i < spriteList.size(); i++) {
-			Sprite sprite = spriteList.get(i);
-			int size = sprite.getNumberOfScripts();
-			for (int j = 0; j < size; j++) {
-				scriptStart.add(sprite.getScript(j));
-			}
-		}
+        spriteList = projectRestart.getDefaultScene().getSpriteList();
+        for (int i = 0; i < spriteList.size(); i++) {
+            Sprite sprite = spriteList.get(i);
+            int size = sprite.getNumberOfScripts();
+            for (int j = 0; j < size; j++) {
+                scriptStart.add(sprite.getScript(j));
+            }
+        }
 
-		for (int i = 0; i < scriptStart.size(); i++) {
-			assertEquals("Script is not at starting position!", scriptRestart.get(i).getClass(), scriptStart.get(i)
-					.getClass());
-		}
-	}
+        for (int i = 0; i < scriptStart.size(); i++) {
+            assertEquals("Script is not at starting position!", scriptRestart.get(i).getClass(), scriptStart.get(i)
+                    .getClass());
+        }
+    }
 
-	public void testRestartProjectWithSound() {
-		String projectName = UiTestUtils.PROJECTNAME1;
-		//creating sprites for project:
-		Sprite firstSprite = new SingleSprite("sprite1");
-		Script startScript = new StartScript();
+    public void testRestartProjectWithSound() {
+        String projectName = UiTestUtils.PROJECTNAME1;
+        //creating sprites for project:
+        Sprite firstSprite = new SingleSprite("sprite1");
+        Script startScript = new StartScript();
 
-		PlaySoundBrick playSoundBrick = new PlaySoundBrick();
+        PlaySoundBrick playSoundBrick = new PlaySoundBrick();
 
-		startScript.addBrick(playSoundBrick);
+        startScript.addBrick(playSoundBrick);
 
-		firstSprite.addScript(startScript);
+        firstSprite.addScript(startScript);
 
-		ArrayList<Sprite> spriteList = new ArrayList<Sprite>();
-		spriteList.add(firstSprite);
-		Project project = UiTestUtils.createProject(projectName, spriteList, getActivity());
+        ArrayList<Sprite> spriteList = new ArrayList<Sprite>();
+        spriteList.add(firstSprite);
+        Project project = UiTestUtils.createProject(projectName, spriteList, getActivity());
 
-		File soundFile = UiTestUtils.saveFileToProject(projectName, project.getDefaultScene().getName(), "soundfile.mp3",
-				org.catrobat.catroid.test.R.raw.longsound, getInstrumentation().getContext(),
-				UiTestUtils.FileTypes.SOUND);
+        File soundFile = UiTestUtils.saveFileToProject(projectName, project.getDefaultScene().getName(), "soundfile.mp3",
+                org.catrobat.catroid.test.R.raw.longsound, getInstrumentation().getContext(),
+                UiTestUtils.FileTypes.SOUND);
 
-		SoundInfo soundInfo = new SoundInfo();
-		soundInfo.setSoundFileName(soundFile.getName());
-		soundInfo.setTitle(soundFile.getName());
-		playSoundBrick.setSoundInfo(soundInfo);
+        SoundInfo soundInfo = new SoundInfo();
+        soundInfo.setSoundFileName(soundFile.getName());
+        soundInfo.setTitle(soundFile.getName());
+        playSoundBrick.setSoundInfo(soundInfo);
 
-		firstSprite.getSoundList().add(soundInfo);
+        firstSprite.getSoundList().add(soundInfo);
 
-		StorageHandler.getInstance().saveProject(project);
+        StorageHandler.getInstance().saveProject(project);
 
-		solo.clickOnText(solo.getString(R.string.main_menu_continue));
-		solo.waitForActivity(ProjectActivity.class.getSimpleName());
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(4000);
+        solo.clickOnText(solo.getString(R.string.main_menu_continue));
+        solo.waitForActivity(ProjectActivity.class.getSimpleName());
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(4000);
 
-		MediaPlayer mediaPlayer = getMediaPlayers().get(0);
-		assertTrue("Sound not playing.", mediaPlayer.isPlaying());
-		int positionBeforeRestart = mediaPlayer.getCurrentPosition();
-		solo.goBack();
-		solo.sleep(500);
-		assertFalse("Sound playing but should be paused.", mediaPlayer.isPlaying());
-		solo.clickOnButton(solo.getString(R.string.stage_dialog_restart));
-		solo.sleep(2000);
+        MediaPlayer mediaPlayer = getMediaPlayers().get(0);
+        assertTrue("Sound not playing.", mediaPlayer.isPlaying());
+        int positionBeforeRestart = mediaPlayer.getCurrentPosition();
+        solo.goBack();
+        solo.sleep(500);
+        assertFalse("Sound playing but should be paused.", mediaPlayer.isPlaying());
+        solo.clickOnButton(solo.getString(R.string.stage_dialog_restart));
+        solo.sleep(2000);
 
-		mediaPlayer = getMediaPlayers().get(0);
-		int positionAfterRestart = mediaPlayer.getCurrentPosition();
-		assertTrue("Sound not playing after stage restart.", mediaPlayer.isPlaying());
-		assertTrue("Sound did not play from start!", positionBeforeRestart > positionAfterRestart);
-	}
+        mediaPlayer = getMediaPlayers().get(0);
+        int positionAfterRestart = mediaPlayer.getCurrentPosition();
+        assertTrue("Sound not playing after stage restart.", mediaPlayer.isPlaying());
+        assertTrue("Sound did not play from start!", positionBeforeRestart > positionAfterRestart);
+    }
 
-	public void testAxesOnOff() {
-		createAndSaveTestProject(testProject);
-		solo.clickOnButton(solo.getString(R.string.main_menu_programs));
-		solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
-		solo.waitForFragmentById(R.id.fragment_container);
-		assertTrue("Cannot click project.", UiTestUtils.clickOnTextInList(solo, testProject));
-		solo.waitForActivity(ProjectActivity.class.getSimpleName());
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.goBack();
-		solo.sleep(600);
-		solo.clickOnButton(solo.getString(R.string.stage_dialog_axes_on));
-		solo.clickOnButton(solo.getString(R.string.stage_dialog_resume));
-		solo.sleep(100);
-		byte[] redPixel = { (byte) 255, 0, 0, (byte) 255 };
-		byte[] stagePixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH / 2,
-				ScreenValues.SCREEN_HEIGHT / 2, 1, 1);
-		UiTestUtils.compareByteArrays(redPixel, stagePixel);
-		stagePixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH / 2, 0, 1, 1);
-		UiTestUtils.compareByteArrays(redPixel, stagePixel);
-		stagePixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH - 1,
-				ScreenValues.SCREEN_HEIGHT / 2, 1, 1);
-		UiTestUtils.compareByteArrays(redPixel, stagePixel);
-		stagePixel = StageActivity.stageListener.getPixels(0, ScreenValues.SCREEN_HEIGHT / 2, 1, 1);
-		UiTestUtils.compareByteArrays(redPixel, stagePixel);
-		stagePixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH / 2,
-				ScreenValues.SCREEN_HEIGHT - 1, 1, 1);
-		UiTestUtils.compareByteArrays(redPixel, stagePixel);
-		solo.goBack();
-		solo.clickOnButton(solo.getString(R.string.stage_dialog_axes_off));
-		solo.clickOnButton(solo.getString(R.string.stage_dialog_resume));
-		solo.sleep(100);
-		byte[] whitePixel = { (byte) 255, (byte) 255, (byte) 255, (byte) 255 };
-		stagePixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH / 2,
-				ScreenValues.SCREEN_HEIGHT / 2, 1, 1);
-		UiTestUtils.compareByteArrays(whitePixel, stagePixel);
-		stagePixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH / 2, 0, 1, 1);
-		UiTestUtils.compareByteArrays(whitePixel, stagePixel);
-		stagePixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH - 1,
-				ScreenValues.SCREEN_HEIGHT / 2, 1, 1);
-		UiTestUtils.compareByteArrays(whitePixel, stagePixel);
-		stagePixel = StageActivity.stageListener.getPixels(0, ScreenValues.SCREEN_HEIGHT / 2, 1, 1);
-		UiTestUtils.compareByteArrays(whitePixel, stagePixel);
-		stagePixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH / 2,
-				ScreenValues.SCREEN_HEIGHT - 1, 1, 1);
-		UiTestUtils.compareByteArrays(whitePixel, stagePixel);
-	}
+    public void testAxesOnOff() {
+        createAndSaveTestProject(testProject);
+        solo.clickOnButton(solo.getString(R.string.main_menu_programs));
+        solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
+        solo.waitForFragmentById(R.id.fragment_container);
+        assertTrue("Cannot click project.", UiTestUtils.clickOnTextInList(solo, testProject));
+        solo.waitForActivity(ProjectActivity.class.getSimpleName());
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.goBack();
+        solo.sleep(600);
+        solo.clickOnButton(solo.getString(R.string.stage_dialog_axes_on));
+        solo.clickOnButton(solo.getString(R.string.stage_dialog_resume));
+        solo.sleep(100);
+        byte[] redPixel = {(byte) 255, 0, 0, (byte) 255};
+        byte[] stagePixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH / 2,
+                ScreenValues.SCREEN_HEIGHT / 2, 1, 1);
+        UiTestUtils.compareByteArrays(redPixel, stagePixel);
+        stagePixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH / 2, 0, 1, 1);
+        UiTestUtils.compareByteArrays(redPixel, stagePixel);
+        stagePixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH - 1,
+                ScreenValues.SCREEN_HEIGHT / 2, 1, 1);
+        UiTestUtils.compareByteArrays(redPixel, stagePixel);
+        stagePixel = StageActivity.stageListener.getPixels(0, ScreenValues.SCREEN_HEIGHT / 2, 1, 1);
+        UiTestUtils.compareByteArrays(redPixel, stagePixel);
+        stagePixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH / 2,
+                ScreenValues.SCREEN_HEIGHT - 1, 1, 1);
+        UiTestUtils.compareByteArrays(redPixel, stagePixel);
+        solo.goBack();
+        solo.clickOnButton(solo.getString(R.string.stage_dialog_axes_off));
+        solo.clickOnButton(solo.getString(R.string.stage_dialog_resume));
+        solo.sleep(100);
+        byte[] whitePixel = {(byte) 255, (byte) 255, (byte) 255, (byte) 255};
+        stagePixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH / 2,
+                ScreenValues.SCREEN_HEIGHT / 2, 1, 1);
+        UiTestUtils.compareByteArrays(whitePixel, stagePixel);
+        stagePixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH / 2, 0, 1, 1);
+        UiTestUtils.compareByteArrays(whitePixel, stagePixel);
+        stagePixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH - 1,
+                ScreenValues.SCREEN_HEIGHT / 2, 1, 1);
+        UiTestUtils.compareByteArrays(whitePixel, stagePixel);
+        stagePixel = StageActivity.stageListener.getPixels(0, ScreenValues.SCREEN_HEIGHT / 2, 1, 1);
+        UiTestUtils.compareByteArrays(whitePixel, stagePixel);
+        stagePixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH / 2,
+                ScreenValues.SCREEN_HEIGHT - 1, 1, 1);
+        UiTestUtils.compareByteArrays(whitePixel, stagePixel);
+    }
 
-	public void testMaximizeStretch() {
-		Project project = createTestProject(testProject);
-		project.getXmlHeader().virtualScreenWidth = 480;
-		project.getXmlHeader().virtualScreenHeight = 700;
-		project.setDeviceData(getActivity());
-		StorageHandler.getInstance().saveProject(project);
-		solo.clickOnButton(solo.getString(R.string.main_menu_programs));
-		solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
-		solo.waitForFragmentById(R.id.fragment_container);
-		assertTrue("Cannot click project.", UiTestUtils.clickOnTextInList(solo, testProject));
-		solo.waitForActivity(ProjectActivity.class.getSimpleName());
+    public void testMaximizeStretch() {
+        Project project = createTestProject(testProject);
+        project.getXmlHeader().virtualScreenWidth = 480;
+        project.getXmlHeader().virtualScreenHeight = 700;
+        project.setDeviceData(getActivity());
+        StorageHandler.getInstance().saveProject(project);
+        solo.clickOnButton(solo.getString(R.string.main_menu_programs));
+        solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
+        solo.waitForFragmentById(R.id.fragment_container);
+        assertTrue("Cannot click project.", UiTestUtils.clickOnTextInList(solo, testProject));
+        solo.waitForActivity(ProjectActivity.class.getSimpleName());
 
-		UtilUi.updateScreenWidthAndHeight(getActivity());
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		assertTrue("Stage not resizeable.", ((StageActivity) solo.getCurrentActivity()).getResizePossible());
-		byte[] whitePixel = { (byte) 255, (byte) 255, (byte) 255, (byte) 255 };
-		byte[] screenPixel = StageActivity.stageListener.getPixels(0, 0, 1, 1);
-		UiTestUtils.compareByteArrays(whitePixel, screenPixel);
-		screenPixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH - 1,
-				ScreenValues.SCREEN_HEIGHT - 1, 1, 1);
-		UiTestUtils.compareByteArrays(whitePixel, screenPixel);
-		screenPixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH - 1, 0, 1, 1);
-		UiTestUtils.compareByteArrays(whitePixel, screenPixel);
-		screenPixel = StageActivity.stageListener.getPixels(0, ScreenValues.SCREEN_HEIGHT - 1, 1, 1);
-		UiTestUtils.compareByteArrays(whitePixel, screenPixel);
-		solo.goBack();
-		solo.clickOnView(solo.getView(R.id.stage_dialog_button_maximize));
-		solo.clickOnView(solo.getView(R.id.stage_dialog_button_continue));
-		solo.sleep(100);
-		byte[] blackPixel = { 0, 0, 0, (byte) 255 };
-		screenPixel = StageActivity.stageListener.getPixels(0, 0, 1, 1);
-		UiTestUtils.compareByteArrays(blackPixel, screenPixel);
-		screenPixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH - 1,
-				ScreenValues.SCREEN_HEIGHT - 1, 1, 1);
-		UiTestUtils.compareByteArrays(blackPixel, screenPixel);
-		screenPixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH - 1, 0, 1, 1);
-		UiTestUtils.compareByteArrays(blackPixel, screenPixel);
-		screenPixel = StageActivity.stageListener.getPixels(0, ScreenValues.SCREEN_HEIGHT - 1, 1, 1);
-		UiTestUtils.compareByteArrays(blackPixel, screenPixel);
+        UtilUi.updateScreenWidthAndHeight(getActivity());
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        assertTrue("Stage not resizeable.", ((StageActivity) solo.getCurrentActivity()).getResizePossible());
+        byte[] whitePixel = {(byte) 255, (byte) 255, (byte) 255, (byte) 255};
+        byte[] screenPixel = StageActivity.stageListener.getPixels(0, 0, 1, 1);
+        UiTestUtils.compareByteArrays(whitePixel, screenPixel);
+        screenPixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH - 1,
+                ScreenValues.SCREEN_HEIGHT - 1, 1, 1);
+        UiTestUtils.compareByteArrays(whitePixel, screenPixel);
+        screenPixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH - 1, 0, 1, 1);
+        UiTestUtils.compareByteArrays(whitePixel, screenPixel);
+        screenPixel = StageActivity.stageListener.getPixels(0, ScreenValues.SCREEN_HEIGHT - 1, 1, 1);
+        UiTestUtils.compareByteArrays(whitePixel, screenPixel);
+        solo.goBack();
+        solo.clickOnView(solo.getView(R.id.stage_dialog_button_maximize));
+        solo.clickOnView(solo.getView(R.id.stage_dialog_button_continue));
+        solo.sleep(100);
+        byte[] blackPixel = {0, 0, 0, (byte) 255};
+        screenPixel = StageActivity.stageListener.getPixels(0, 0, 1, 1);
+        UiTestUtils.compareByteArrays(blackPixel, screenPixel);
+        screenPixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH - 1,
+                ScreenValues.SCREEN_HEIGHT - 1, 1, 1);
+        UiTestUtils.compareByteArrays(blackPixel, screenPixel);
+        screenPixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH - 1, 0, 1, 1);
+        UiTestUtils.compareByteArrays(blackPixel, screenPixel);
+        screenPixel = StageActivity.stageListener.getPixels(0, ScreenValues.SCREEN_HEIGHT - 1, 1, 1);
+        UiTestUtils.compareByteArrays(blackPixel, screenPixel);
 
-		screenPixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH / 2,
-				ScreenValues.SCREEN_HEIGHT / 2, 1, 1);
-		UiTestUtils.compareByteArrays(whitePixel, screenPixel);
+        screenPixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH / 2,
+                ScreenValues.SCREEN_HEIGHT / 2, 1, 1);
+        UiTestUtils.compareByteArrays(whitePixel, screenPixel);
 
-		solo.goBack();
-		solo.clickOnView(solo.getView(R.id.stage_dialog_button_maximize));
-		solo.clickOnView(solo.getView(R.id.stage_dialog_button_continue));
-		solo.sleep(100);
-		screenPixel = StageActivity.stageListener.getPixels(0, 0, 1, 1);
-		UiTestUtils.compareByteArrays(whitePixel, screenPixel);
-		screenPixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH - 1,
-				ScreenValues.SCREEN_HEIGHT - 1, 1, 1);
-		UiTestUtils.compareByteArrays(whitePixel, screenPixel);
-		screenPixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH - 1, 0, 1, 1);
-		UiTestUtils.compareByteArrays(whitePixel, screenPixel);
-		screenPixel = StageActivity.stageListener.getPixels(0, ScreenValues.SCREEN_HEIGHT - 1, 1, 1);
-		UiTestUtils.compareByteArrays(whitePixel, screenPixel);
+        solo.goBack();
+        solo.clickOnView(solo.getView(R.id.stage_dialog_button_maximize));
+        solo.clickOnView(solo.getView(R.id.stage_dialog_button_continue));
+        solo.sleep(100);
+        screenPixel = StageActivity.stageListener.getPixels(0, 0, 1, 1);
+        UiTestUtils.compareByteArrays(whitePixel, screenPixel);
+        screenPixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH - 1,
+                ScreenValues.SCREEN_HEIGHT - 1, 1, 1);
+        UiTestUtils.compareByteArrays(whitePixel, screenPixel);
+        screenPixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH - 1, 0, 1, 1);
+        UiTestUtils.compareByteArrays(whitePixel, screenPixel);
+        screenPixel = StageActivity.stageListener.getPixels(0, ScreenValues.SCREEN_HEIGHT - 1, 1, 1);
+        UiTestUtils.compareByteArrays(whitePixel, screenPixel);
 
-		solo.goBack();
-		solo.clickOnView(solo.getView(R.id.stage_dialog_button_maximize));
-		solo.goBack();
+        solo.goBack();
+        solo.clickOnView(solo.getView(R.id.stage_dialog_button_maximize));
+        solo.goBack();
 
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		assertTrue("Stage not resizeable.", ((StageActivity) solo.getCurrentActivity()).getResizePossible());
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        assertTrue("Stage not resizeable.", ((StageActivity) solo.getCurrentActivity()).getResizePossible());
 
-		screenPixel = StageActivity.stageListener.getPixels(0, 0, 1, 1);
-		UiTestUtils.compareByteArrays(blackPixel, screenPixel);
-		screenPixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH - 1,
-				ScreenValues.SCREEN_HEIGHT - 1, 1, 1);
-		UiTestUtils.compareByteArrays(blackPixel, screenPixel);
-		screenPixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH - 1, 0, 1, 1);
-		UiTestUtils.compareByteArrays(blackPixel, screenPixel);
-		screenPixel = StageActivity.stageListener.getPixels(0, ScreenValues.SCREEN_HEIGHT - 1, 1, 1);
-		UiTestUtils.compareByteArrays(blackPixel, screenPixel);
+        screenPixel = StageActivity.stageListener.getPixels(0, 0, 1, 1);
+        UiTestUtils.compareByteArrays(blackPixel, screenPixel);
+        screenPixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH - 1,
+                ScreenValues.SCREEN_HEIGHT - 1, 1, 1);
+        UiTestUtils.compareByteArrays(blackPixel, screenPixel);
+        screenPixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH - 1, 0, 1, 1);
+        UiTestUtils.compareByteArrays(blackPixel, screenPixel);
+        screenPixel = StageActivity.stageListener.getPixels(0, ScreenValues.SCREEN_HEIGHT - 1, 1, 1);
+        UiTestUtils.compareByteArrays(blackPixel, screenPixel);
 
-		screenPixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH / 2,
-				ScreenValues.SCREEN_HEIGHT / 2, 1, 1);
-		UiTestUtils.compareByteArrays(whitePixel, screenPixel);
-	}
+        screenPixel = StageActivity.stageListener.getPixels(ScreenValues.SCREEN_WIDTH / 2,
+                ScreenValues.SCREEN_HEIGHT / 2, 1, 1);
+        UiTestUtils.compareByteArrays(whitePixel, screenPixel);
+    }
 
-	public void testMaximizeStretchRememeberSetting() {
-		Project project = createTestProject(testProject);
-		project.getXmlHeader().virtualScreenWidth = 480;
-		project.getXmlHeader().virtualScreenHeight = 700;
-		project.setDeviceData(getActivity());
-		StorageHandler.getInstance().saveProject(project);
-		solo.clickOnButton(solo.getString(R.string.main_menu_programs));
-		solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
-		solo.waitForFragmentById(R.id.fragment_container);
-		assertTrue("Cannot click project.", UiTestUtils.clickOnTextInList(solo, testProject));
-		solo.waitForActivity(ProjectActivity.class.getSimpleName());
+    public void testMaximizeStretchRememeberSetting() {
+        Project project = createTestProject(testProject);
+        project.getXmlHeader().virtualScreenWidth = 480;
+        project.getXmlHeader().virtualScreenHeight = 700;
+        project.setDeviceData(getActivity());
+        StorageHandler.getInstance().saveProject(project);
+        solo.clickOnButton(solo.getString(R.string.main_menu_programs));
+        solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
+        solo.waitForFragmentById(R.id.fragment_container);
+        assertTrue("Cannot click project.", UiTestUtils.clickOnTextInList(solo, testProject));
+        solo.waitForActivity(ProjectActivity.class.getSimpleName());
 
-		UtilUi.updateScreenWidthAndHeight(getActivity());
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		assertTrue("Stage not resizeable.", ((StageActivity) solo.getCurrentActivity()).getResizePossible());
+        UtilUi.updateScreenWidthAndHeight(getActivity());
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        assertTrue("Stage not resizeable.", ((StageActivity) solo.getCurrentActivity()).getResizePossible());
 
-		solo.sleep(200);
-		solo.goBack();
-		solo.clickOnView(solo.getView(R.id.stage_dialog_button_continue));
-		solo.sleep(200);
-		solo.goBack();
-		solo.goBack();
-		StorageHandler.getInstance().saveProject(project);
-		solo.sleep(200);
+        solo.sleep(200);
+        solo.goBack();
+        solo.clickOnView(solo.getView(R.id.stage_dialog_button_continue));
+        solo.sleep(200);
+        solo.goBack();
+        solo.goBack();
+        StorageHandler.getInstance().saveProject(project);
+        solo.sleep(200);
 
-		assertTrue("Wrong screenMode in xml-file.",
-				ProjectManager.getInstance().getCurrentProject().getScreenMode() == ScreenModes.STRETCH);
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(200);
-		solo.goBack();
-		solo.clickOnView(solo.getView(R.id.stage_dialog_button_maximize));
-		solo.clickOnView(solo.getView(R.id.stage_dialog_button_continue));
-		solo.sleep(200);
-		solo.goBack();
-		solo.goBack();
+        assertTrue("Wrong screenMode in xml-file.",
+                ProjectManager.getInstance().getCurrentProject().getScreenMode() == ScreenModes.STRETCH);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(200);
+        solo.goBack();
+        solo.clickOnView(solo.getView(R.id.stage_dialog_button_maximize));
+        solo.clickOnView(solo.getView(R.id.stage_dialog_button_continue));
+        solo.sleep(200);
+        solo.goBack();
+        solo.goBack();
 
-		assertTrue("Wrong screenMode in xml-file.",
-				ProjectManager.getInstance().getCurrentProject().getScreenMode() == ScreenModes.MAXIMIZE);
-	}
+        assertTrue("Wrong screenMode in xml-file.",
+                ProjectManager.getInstance().getCurrentProject().getScreenMode() == ScreenModes.MAXIMIZE);
+    }
 
-	private Project createTestProject(String projectName) {
-		Project project = new Project(getActivity(), projectName);
-		Sprite firstSprite = new SingleSprite("cat");
-		Sprite secondSprite = new SingleSprite("dog");
-		Sprite thirdSprite = new SingleSprite("horse");
-		Sprite fourthSprite = new SingleSprite("pig");
+    private Project createTestProject(String projectName) {
+        Project project = new Project(getActivity(), projectName);
+        Sprite firstSprite = new SingleSprite("cat");
+        Sprite secondSprite = new SingleSprite("dog");
+        Sprite thirdSprite = new SingleSprite("horse");
+        Sprite fourthSprite = new SingleSprite("pig");
 
-		project.getDefaultScene().addSprite(firstSprite);
-		project.getDefaultScene().addSprite(secondSprite);
-		project.getDefaultScene().addSprite(thirdSprite);
-		project.getDefaultScene().addSprite(fourthSprite);
+        project.getDefaultScene().addSprite(firstSprite);
+        project.getDefaultScene().addSprite(secondSprite);
+        project.getDefaultScene().addSprite(thirdSprite);
+        project.getDefaultScene().addSprite(fourthSprite);
 
-		return project;
-	}
+        return project;
+    }
 
-	private Project createAndSaveTestProject(String projectName) {
-		Project project = createTestProject(projectName);
-		StorageHandler.getInstance().saveProject(project);
-		return project;
-	}
+    private Project createAndSaveTestProject(String projectName) {
+        Project project = createTestProject(projectName);
+        StorageHandler.getInstance().saveProject(project);
+        return project;
+    }
 
-	@SuppressWarnings("unchecked")
-	private List<MediaPlayer> getMediaPlayers() {
-		return (List<MediaPlayer>) Reflection.getPrivateField(SoundManager.getInstance(), "mediaPlayers");
-	}
+    @SuppressWarnings("unchecked")
+    private List<MediaPlayer> getMediaPlayers() {
+        return (List<MediaPlayer>) Reflection.getPrivateField(SoundManager.getInstance(), "mediaPlayers");
+    }
 }

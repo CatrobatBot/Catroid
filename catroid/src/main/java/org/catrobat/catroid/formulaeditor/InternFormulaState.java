@@ -27,88 +27,88 @@ import java.util.List;
 
 public class InternFormulaState {
 
-	private List<InternToken> internTokenFormulaList;
-	private InternFormulaTokenSelection tokenSelection;
-	private int externCursorPosition;
+    private List<InternToken> internTokenFormulaList;
+    private InternFormulaTokenSelection tokenSelection;
+    private int externCursorPosition;
 
-	public InternFormulaState(List<InternToken> internTokenFormulaList, InternFormulaTokenSelection tokenSelection,
-			int externCursorPosition) {
-		this.internTokenFormulaList = internTokenFormulaList;
-		this.tokenSelection = tokenSelection;
-		this.externCursorPosition = externCursorPosition;
-	}
+    public InternFormulaState(List<InternToken> internTokenFormulaList, InternFormulaTokenSelection tokenSelection,
+                              int externCursorPosition) {
+        this.internTokenFormulaList = internTokenFormulaList;
+        this.tokenSelection = tokenSelection;
+        this.externCursorPosition = externCursorPosition;
+    }
 
-	@Override
-	public int hashCode() {
-		int result = 37;
-		int prime = 41;
+    @Override
+    public int hashCode() {
+        int result = 37;
+        int prime = 41;
 
-		result = prime * result + externCursorPosition;
-		if (tokenSelection != null) {
-			result = prime * result + tokenSelection.hashCode();
-		}
+        result = prime * result + externCursorPosition;
+        if (tokenSelection != null) {
+            result = prime * result + tokenSelection.hashCode();
+        }
 
-		if (internTokenFormulaList != null) {
-			result = prime * result + internTokenFormulaList.size();
+        if (internTokenFormulaList != null) {
+            result = prime * result + internTokenFormulaList.size();
 
-			for (int index = 0; index < internTokenFormulaList.size(); index++) {
-				InternToken token = internTokenFormulaList.get(index);
-				result = prime * result + token.getInternTokenType().hashCode();
-				result = prime * result + token.getTokenStringValue().hashCode();
-			}
-		}
-		return result;
-	}
+            for (int index = 0; index < internTokenFormulaList.size(); index++) {
+                InternToken token = internTokenFormulaList.get(index);
+                result = prime * result + token.getInternTokenType().hashCode();
+                result = prime * result + token.getTokenStringValue().hashCode();
+            }
+        }
+        return result;
+    }
 
-	@Override
-	public boolean equals(Object objectToCompare) {
+    @Override
+    public boolean equals(Object objectToCompare) {
 
-		if (objectToCompare instanceof InternFormulaState) {
-			InternFormulaState stateToCompare = (InternFormulaState) objectToCompare;
-			if (externCursorPosition != stateToCompare.externCursorPosition
-					|| (tokenSelection == null && stateToCompare.tokenSelection != null)
-					|| (tokenSelection != null && !tokenSelection.equals(stateToCompare.tokenSelection) || (internTokenFormulaList
-					.size() != stateToCompare.internTokenFormulaList.size()))) {
-				return false;
-			}
+        if (objectToCompare instanceof InternFormulaState) {
+            InternFormulaState stateToCompare = (InternFormulaState) objectToCompare;
+            if (externCursorPosition != stateToCompare.externCursorPosition
+                    || (tokenSelection == null && stateToCompare.tokenSelection != null)
+                    || (tokenSelection != null && !tokenSelection.equals(stateToCompare.tokenSelection) || (internTokenFormulaList
+                    .size() != stateToCompare.internTokenFormulaList.size()))) {
+                return false;
+            }
 
-			for (int index = 0; index < internTokenFormulaList.size(); index++) {
-				InternToken original = internTokenFormulaList.get(index);
-				InternToken internTokenToCompare = stateToCompare.internTokenFormulaList.get(index);
+            for (int index = 0; index < internTokenFormulaList.size(); index++) {
+                InternToken original = internTokenFormulaList.get(index);
+                InternToken internTokenToCompare = stateToCompare.internTokenFormulaList.get(index);
 
-				if (original.getInternTokenType() != internTokenToCompare.getInternTokenType()
-						|| !original.getTokenStringValue().equals(internTokenToCompare.getTokenStringValue())) {
-					return false;
-				}
-			}
+                if (original.getInternTokenType() != internTokenToCompare.getInternTokenType()
+                        || !original.getTokenStringValue().equals(internTokenToCompare.getTokenStringValue())) {
+                    return false;
+                }
+            }
 
-			return true;
-		}
+            return true;
+        }
 
-		return super.equals(objectToCompare);
-	}
+        return super.equals(objectToCompare);
+    }
 
-	public void setSelection(InternFormulaTokenSelection internFormulaTokenSelection) {
-		this.tokenSelection = internFormulaTokenSelection;
-	}
+    public void setSelection(InternFormulaTokenSelection internFormulaTokenSelection) {
+        this.tokenSelection = internFormulaTokenSelection;
+    }
 
-	public void setExternCursorPosition(int externCursorPosition) {
-		this.externCursorPosition = externCursorPosition;
-	}
+    public void setExternCursorPosition(int externCursorPosition) {
+        this.externCursorPosition = externCursorPosition;
+    }
 
-	public InternFormula createInternFormulaFromState() {
-		List<InternToken> deepCopyOfInternTokenFormula = new LinkedList<InternToken>();
-		InternFormulaTokenSelection deepCopyOfInternFormulaTokenSelection = null;
+    public InternFormula createInternFormulaFromState() {
+        List<InternToken> deepCopyOfInternTokenFormula = new LinkedList<InternToken>();
+        InternFormulaTokenSelection deepCopyOfInternFormulaTokenSelection = null;
 
-		for (InternToken tokenToCopy : internTokenFormulaList) {
-			deepCopyOfInternTokenFormula.add(tokenToCopy.deepCopy());
-		}
+        for (InternToken tokenToCopy : internTokenFormulaList) {
+            deepCopyOfInternTokenFormula.add(tokenToCopy.deepCopy());
+        }
 
-		if (tokenSelection != null) {
-			deepCopyOfInternFormulaTokenSelection = tokenSelection.deepCopy();
-		}
+        if (tokenSelection != null) {
+            deepCopyOfInternFormulaTokenSelection = tokenSelection.deepCopy();
+        }
 
-		return new InternFormula(deepCopyOfInternTokenFormula, deepCopyOfInternFormulaTokenSelection,
-				externCursorPosition);
-	}
+        return new InternFormula(deepCopyOfInternTokenFormula, deepCopyOfInternFormulaTokenSelection,
+                externCursorPosition);
+    }
 }

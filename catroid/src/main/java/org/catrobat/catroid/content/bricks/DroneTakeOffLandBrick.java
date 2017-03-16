@@ -32,16 +32,16 @@ import org.catrobat.catroid.content.Sprite;
 import java.util.List;
 
 public class DroneTakeOffLandBrick extends DroneBasicBrick {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Override
-	protected String getBrickLabel(View view) {
-		return view.getResources().getString(R.string.brick_drone_takeoff_land);
-	}
+    @Override
+    protected String getBrickLabel(View view) {
+        return view.getResources().getString(R.string.brick_drone_takeoff_land);
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createDroneTakeOffAndLandAction());
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createDroneTakeOffAndLandAction());
+        return null;
+    }
 }

@@ -31,28 +31,28 @@ import java.io.IOException;
 
 public abstract class DefaultProjectCreator {
 
-	protected static double backgroundImageScaleFactor = 1;
+    protected static double backgroundImageScaleFactor = 1;
 
-	protected int standardProjectNameID;
+    protected int standardProjectNameID;
 
-	protected static int calculateValueRelativeToScaledBackground(int value) {
-		int returnValue = (int) (value * backgroundImageScaleFactor);
-		int differenceToNextFive = returnValue % 5;
-		return returnValue - differenceToNextFive;
-	}
+    protected static int calculateValueRelativeToScaledBackground(int value) {
+        int returnValue = (int) (value * backgroundImageScaleFactor);
+        int differenceToNextFive = returnValue % 5;
+        return returnValue - differenceToNextFive;
+    }
 
-	public Project createDefaultProject(String projectName, Context context) throws
-			IOException,
-			IllegalArgumentException {
-		return createDefaultProject(projectName, context, false);
-	}
+    public Project createDefaultProject(String projectName, Context context) throws
+            IOException,
+            IllegalArgumentException {
+        return createDefaultProject(projectName, context, false);
+    }
 
-	public abstract Project createDefaultProject(String projectName, Context context, boolean
-			landscapeMode) throws
-			IOException,
-			IllegalArgumentException;
+    public abstract Project createDefaultProject(String projectName, Context context, boolean
+            landscapeMode) throws
+            IOException,
+            IllegalArgumentException;
 
-	public int getDefaultProjectNameID() {
-		return standardProjectNameID;
-	}
+    public int getDefaultProjectNameID() {
+        return standardProjectNameID;
+    }
 }

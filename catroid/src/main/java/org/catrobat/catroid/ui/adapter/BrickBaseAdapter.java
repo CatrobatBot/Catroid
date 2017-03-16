@@ -52,114 +52,114 @@ import java.util.List;
 
 public abstract class BrickBaseAdapter extends BaseAdapter {
 
-	protected Context context;
-	protected ScriptFragment scriptFragment;
-	protected AddBrickFragment addBrickFragment;
-	protected Button okButtonDelete;
-	protected List<Brick> checkedBricks = new ArrayList<>();
-	protected List<Brick> brickList;
+    protected Context context;
+    protected ScriptFragment scriptFragment;
+    protected AddBrickFragment addBrickFragment;
+    protected Button okButtonDelete;
+    protected List<Brick> checkedBricks = new ArrayList<>();
+    protected List<Brick> brickList;
 
-	protected void showNewGroupBackPackDialog(final List<String> backPackedItems, final boolean backPackUserBricks) {
-		AlertDialog.Builder builder = new CustomAlertDialogBuilder(context);
-		builder.setTitle(R.string.new_group);
-		View view = View.inflate(context, R.layout.new_group_dialog, null);
-		builder.setView(view);
-		final EditText groupNameEditText = (EditText) view.findViewById(R.id.new_group_dialog_group_name);
+    protected void showNewGroupBackPackDialog(final List<String> backPackedItems, final boolean backPackUserBricks) {
+        AlertDialog.Builder builder = new CustomAlertDialogBuilder(context);
+        builder.setTitle(R.string.new_group);
+        View view = View.inflate(context, R.layout.new_group_dialog, null);
+        builder.setView(view);
+        final EditText groupNameEditText = (EditText) view.findViewById(R.id.new_group_dialog_group_name);
 
-		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int id) {
-				String groupName = groupNameEditText.getText().toString().trim();
-				if (backPackedItems.contains(groupName)) {
-					showScriptGroupNameAlreadyGivenDialog(backPackedItems, backPackUserBricks);
-				} else {
-					backPackScript(groupName);
-				}
-			}
-		});
-		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int id) {
-				dialog.cancel();
-				scriptFragment.clearCheckedBricksAndEnableButtons();
-			}
-		});
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                String groupName = groupNameEditText.getText().toString().trim();
+                if (backPackedItems.contains(groupName)) {
+                    showScriptGroupNameAlreadyGivenDialog(backPackedItems, backPackUserBricks);
+                } else {
+                    backPackScript(groupName);
+                }
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+                scriptFragment.clearCheckedBricksAndEnableButtons();
+            }
+        });
 
-		AlertDialog alertDialog = builder.create();
+        AlertDialog alertDialog = builder.create();
 
-		groupNameEditText.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			}
+        groupNameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
-			@Override
-			public void onTextChanged(CharSequence groupName, int start, int before, int count) {
-				if (groupName.toString().trim().isEmpty()) {
-					okButtonDelete.setEnabled(false);
-				} else {
-					okButtonDelete.setEnabled(true);
-				}
-			}
+            @Override
+            public void onTextChanged(CharSequence groupName, int start, int before, int count) {
+                if (groupName.toString().trim().isEmpty()) {
+                    okButtonDelete.setEnabled(false);
+                } else {
+                    okButtonDelete.setEnabled(true);
+                }
+            }
 
-			@Override
-			public void afterTextChanged(Editable s) {
-			}
-		});
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
 
-		alertDialog.setCanceledOnTouchOutside(false);
-		alertDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-		alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-		alertDialog.show();
-		okButtonDelete = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-		okButtonDelete.setEnabled(false);
-	}
+        alertDialog.show();
+        okButtonDelete = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        okButtonDelete.setEnabled(false);
+    }
 
-	private void showScriptGroupNameAlreadyGivenDialog(final List<String> backPackedItems, final boolean backPackUserBricks) {
-		AlertDialog.Builder builder = new CustomAlertDialogBuilder(context);
-		builder.setTitle(R.string.new_group);
-		View view = View.inflate(context, R.layout.new_group_name_given_dialog, null);
-		builder.setView(view);
+    private void showScriptGroupNameAlreadyGivenDialog(final List<String> backPackedItems, final boolean backPackUserBricks) {
+        AlertDialog.Builder builder = new CustomAlertDialogBuilder(context);
+        builder.setTitle(R.string.new_group);
+        View view = View.inflate(context, R.layout.new_group_name_given_dialog, null);
+        builder.setView(view);
 
-		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int id) {
-				dialog.cancel();
-				showNewGroupBackPackDialog(backPackedItems, backPackUserBricks);
-			}
-		});
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+                showNewGroupBackPackDialog(backPackedItems, backPackUserBricks);
+            }
+        });
 
-		AlertDialog alertDialog = builder.create();
+        AlertDialog alertDialog = builder.create();
 
-		alertDialog.setCanceledOnTouchOutside(true);
-		alertDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        alertDialog.setCanceledOnTouchOutside(true);
+        alertDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-		alertDialog.show();
-	}
+        alertDialog.show();
+    }
 
-	private void backPackScript(String groupName) {
-		if (!checkedBricks.isEmpty()) {
-			Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
-			int scriptsBackPacked = BackPackScriptController.getInstance().backpack(
-					groupName, checkedBricks, false, currentSprite).size();
-			scriptFragment.clearCheckedBricksAndEnableButtons();
-			showToast(scriptsBackPacked, R.plurals.scripts_plural);
+    private void backPackScript(String groupName) {
+        if (!checkedBricks.isEmpty()) {
+            Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
+            int scriptsBackPacked = BackPackScriptController.getInstance().backpack(
+                    groupName, checkedBricks, false, currentSprite).size();
+            scriptFragment.clearCheckedBricksAndEnableButtons();
+            showToast(scriptsBackPacked, R.plurals.scripts_plural);
 
-			startBackPackActivity(ScriptActivity.FRAGMENT_SCRIPTS);
-		}
-	}
+            startBackPackActivity(ScriptActivity.FRAGMENT_SCRIPTS);
+        }
+    }
 
-	private void showToast(int numberOfBackPackedItems, int groupsPlural) {
-		String textForBackpacking = context.getResources().getQuantityString(
-				R.plurals.packing_items_plural, numberOfBackPackedItems);
-		String textForScripts = context.getResources().getQuantityString(groupsPlural, numberOfBackPackedItems);
-		ToastUtil.showSuccess(context, numberOfBackPackedItems + " " + textForScripts + " "
-				+ textForBackpacking);
-	}
+    private void showToast(int numberOfBackPackedItems, int groupsPlural) {
+        String textForBackpacking = context.getResources().getQuantityString(
+                R.plurals.packing_items_plural, numberOfBackPackedItems);
+        String textForScripts = context.getResources().getQuantityString(groupsPlural, numberOfBackPackedItems);
+        ToastUtil.showSuccess(context, numberOfBackPackedItems + " " + textForScripts + " "
+                + textForBackpacking);
+    }
 
-	private void startBackPackActivity(int fragment) {
-		Intent intent = new Intent(context, BackPackActivity.class);
-		intent.putExtra(BackPackActivity.EXTRA_FRAGMENT_POSITION, fragment);
-		context.startActivity(intent);
-	}
+    private void startBackPackActivity(int fragment) {
+        Intent intent = new Intent(context, BackPackActivity.class);
+        intent.putExtra(BackPackActivity.EXTRA_FRAGMENT_POSITION, fragment);
+        context.startActivity(intent);
+    }
 }

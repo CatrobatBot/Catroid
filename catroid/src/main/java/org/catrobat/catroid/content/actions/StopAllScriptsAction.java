@@ -32,13 +32,13 @@ import org.catrobat.catroid.stage.StageActivity;
 
 public class StopAllScriptsAction extends TemporalAction {
 
-	@Override
-	protected void update(float percent) {
-		Array<Actor> stageActors = StageActivity.stageListener.getStage().getActors();
-		for (Actor actor : stageActors) {
-			for (Action action : actor.getActions()) {
-				action.reset();
-			}
-		}
-	}
+    @Override
+    protected void update(float percent) {
+        Array<Actor> stageActors = StageActivity.stageListener.getStage().getActors();
+        for (Actor actor : stageActors) {
+            for (Action action : actor.getActions()) {
+                action.reset();
+            }
+        }
+    }
 }

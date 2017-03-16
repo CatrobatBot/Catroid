@@ -41,160 +41,160 @@ import org.catrobat.catroid.content.Sprite;
 import java.util.List;
 
 public class SetRotationStyleBrick extends BrickBaseType {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private transient View prototypeView;
-	private transient Spinner spinner;
-	private int selection;
+    private transient View prototypeView;
+    private transient Spinner spinner;
+    private int selection;
 
-	public SetRotationStyleBrick() {
-	}
+    public SetRotationStyleBrick() {
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return NO_RESOURCES;
-	}
+    @Override
+    public int getRequiredResources() {
+        return NO_RESOURCES;
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		view = View.inflate(context, R.layout.brick_set_rotation_style, null);
-		BrickViewProvider.setAlphaOnView(view, alphaValue);
-		setCheckboxView(R.id.brick_set_rotation_style_normal_checkbox);
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        view = View.inflate(context, R.layout.brick_set_rotation_style, null);
+        BrickViewProvider.setAlphaOnView(view, alphaValue);
+        setCheckboxView(R.id.brick_set_rotation_style_normal_checkbox);
 
-		spinner = (Spinner) view.findViewById(R.id.brick_set_rotation_style_spinner);
+        spinner = (Spinner) view.findViewById(R.id.brick_set_rotation_style_spinner);
 
-		final ArrayAdapter<String> spinnerAdapter = createSpinnerAdapter(context);
-		SpinnerAdapterWrapper spinnerAdapterWrapper = new SpinnerAdapterWrapper(context, spinnerAdapter);
-		spinner.setAdapter(spinnerAdapterWrapper);
-		spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        final ArrayAdapter<String> spinnerAdapter = createSpinnerAdapter(context);
+        SpinnerAdapterWrapper spinnerAdapterWrapper = new SpinnerAdapterWrapper(context, spinnerAdapter);
+        spinner.setAdapter(spinnerAdapterWrapper);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				selection = position;
-			}
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selection = position;
+            }
 
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
-		spinner.setSelection(selection, true);
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
+        spinner.setSelection(selection, true);
 
-		return view;
-	}
+        return view;
+    }
 
-	private ArrayAdapter<String> createSpinnerAdapter(Context context) {
-		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item);
-		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		arrayAdapter.add(context.getString(R.string.brick_set_rotation_style_lr));
-		arrayAdapter.add(context.getString(R.string.brick_set_rotation_style_normal));
-		arrayAdapter.add(context.getString(R.string.brick_set_rotation_style_no));
-		return arrayAdapter;
-	}
+    private ArrayAdapter<String> createSpinnerAdapter(Context context) {
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        arrayAdapter.add(context.getString(R.string.brick_set_rotation_style_lr));
+        arrayAdapter.add(context.getString(R.string.brick_set_rotation_style_normal));
+        arrayAdapter.add(context.getString(R.string.brick_set_rotation_style_no));
+        return arrayAdapter;
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		SetRotationStyleBrick copyBrick = (SetRotationStyleBrick) clone();
-		return copyBrick;
-	}
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        SetRotationStyleBrick copyBrick = (SetRotationStyleBrick) clone();
+        return copyBrick;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_set_rotation_style, null);
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_set_rotation_style, null);
 
-		spinner = (Spinner) prototypeView.findViewById(R.id.brick_set_rotation_style_spinner);
+        spinner = (Spinner) prototypeView.findViewById(R.id.brick_set_rotation_style_spinner);
 
-		SpinnerAdapter setLookSpinnerAdapter = createSpinnerAdapter(context);
-		spinner.setAdapter(setLookSpinnerAdapter);
-		spinner.setSelection(selection, true);
-		return prototypeView;
-	}
+        SpinnerAdapter setLookSpinnerAdapter = createSpinnerAdapter(context);
+        spinner.setAdapter(setLookSpinnerAdapter);
+        spinner.setSelection(selection, true);
+        return prototypeView;
+    }
 
-	@Override
-	public Brick clone() {
-		return new SetRotationStyleBrick();
-	}
+    @Override
+    public Brick clone() {
+        return new SetRotationStyleBrick();
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createSetRotationStyleAction(sprite, selection));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createSetRotationStyleAction(sprite, selection));
+        return null;
+    }
 
-	private class SpinnerAdapterWrapper implements SpinnerAdapter {
+    private class SpinnerAdapterWrapper implements SpinnerAdapter {
 
-		protected Context context;
-		protected ArrayAdapter<String> spinnerAdapter;
+        protected Context context;
+        protected ArrayAdapter<String> spinnerAdapter;
 
-		public SpinnerAdapterWrapper(Context context, ArrayAdapter<String> spinnerAdapter) {
-			this.context = context;
-			this.spinnerAdapter = spinnerAdapter;
-		}
+        public SpinnerAdapterWrapper(Context context, ArrayAdapter<String> spinnerAdapter) {
+            this.context = context;
+            this.spinnerAdapter = spinnerAdapter;
+        }
 
-		@Override
-		public void registerDataSetObserver(DataSetObserver paramDataSetObserver) {
-			spinnerAdapter.registerDataSetObserver(paramDataSetObserver);
-		}
+        @Override
+        public void registerDataSetObserver(DataSetObserver paramDataSetObserver) {
+            spinnerAdapter.registerDataSetObserver(paramDataSetObserver);
+        }
 
-		@Override
-		public void unregisterDataSetObserver(DataSetObserver paramDataSetObserver) {
-			spinnerAdapter.unregisterDataSetObserver(paramDataSetObserver);
-		}
+        @Override
+        public void unregisterDataSetObserver(DataSetObserver paramDataSetObserver) {
+            spinnerAdapter.unregisterDataSetObserver(paramDataSetObserver);
+        }
 
-		@Override
-		public int getCount() {
-			return spinnerAdapter.getCount();
-		}
+        @Override
+        public int getCount() {
+            return spinnerAdapter.getCount();
+        }
 
-		@Override
-		public Object getItem(int paramInt) {
-			return spinnerAdapter.getItem(paramInt);
-		}
+        @Override
+        public Object getItem(int paramInt) {
+            return spinnerAdapter.getItem(paramInt);
+        }
 
-		@Override
-		public long getItemId(int paramInt) {
-			return spinnerAdapter.getItemId(paramInt);
-		}
+        @Override
+        public long getItemId(int paramInt) {
+            return spinnerAdapter.getItemId(paramInt);
+        }
 
-		@Override
-		public boolean hasStableIds() {
-			return spinnerAdapter.hasStableIds();
-		}
+        @Override
+        public boolean hasStableIds() {
+            return spinnerAdapter.hasStableIds();
+        }
 
-		@Override
-		public View getView(int paramInt, View paramView, ViewGroup paramViewGroup) {
-			return spinnerAdapter.getView(paramInt, paramView, paramViewGroup);
-		}
+        @Override
+        public View getView(int paramInt, View paramView, ViewGroup paramViewGroup) {
+            return spinnerAdapter.getView(paramInt, paramView, paramViewGroup);
+        }
 
-		@Override
-		public int getItemViewType(int paramInt) {
-			return spinnerAdapter.getItemViewType(paramInt);
-		}
+        @Override
+        public int getItemViewType(int paramInt) {
+            return spinnerAdapter.getItemViewType(paramInt);
+        }
 
-		@Override
-		public int getViewTypeCount() {
-			return spinnerAdapter.getViewTypeCount();
-		}
+        @Override
+        public int getViewTypeCount() {
+            return spinnerAdapter.getViewTypeCount();
+        }
 
-		@Override
-		public boolean isEmpty() {
-			return spinnerAdapter.isEmpty();
-		}
+        @Override
+        public boolean isEmpty() {
+            return spinnerAdapter.isEmpty();
+        }
 
-		@Override
-		public View getDropDownView(int paramInt, View paramView, ViewGroup paramViewGroup) {
-			View dropDownView = spinnerAdapter.getDropDownView(paramInt, paramView, paramViewGroup);
+        @Override
+        public View getDropDownView(int paramInt, View paramView, ViewGroup paramViewGroup) {
+            View dropDownView = spinnerAdapter.getDropDownView(paramInt, paramView, paramViewGroup);
 
-			dropDownView.setOnTouchListener(new View.OnTouchListener() {
-				@Override
-				public boolean onTouch(View paramView, MotionEvent paramMotionEvent) {
-					return false;
-				}
-			});
-			return dropDownView;
-		}
-	}
+            dropDownView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View paramView, MotionEvent paramMotionEvent) {
+                    return false;
+                }
+            });
+            return dropDownView;
+        }
+    }
 }
 

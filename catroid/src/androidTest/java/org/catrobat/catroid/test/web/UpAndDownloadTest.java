@@ -30,62 +30,62 @@ import org.catrobat.catroid.utils.Utils;
 
 public class UpAndDownloadTest extends AndroidTestCase {
 
-	//private File projectZipOnMockServer;
+    //private File projectZipOnMockServer;
 
-	public UpAndDownloadTest() {
-		super();
-	}
+    public UpAndDownloadTest() {
+        super();
+    }
 
-	@Override
-	protected void tearDown() throws Exception {
-		TestUtils.clearProject("uploadtestProject");
-		super.tearDown();
-	}
+    @Override
+    protected void tearDown() throws Exception {
+        TestUtils.clearProject("uploadtestProject");
+        super.tearDown();
+    }
 
-	public void testDownloadUtil() {
-		try {
-			DownloadUtil.getInstance().startDownload(null, null, "projectSave", false);
-		} catch (Exception expected) {
-			// Exception thrown because intent could not be started - we won't test the intent here
-		}
-		assertTrue("Program should be in download queue",
-				Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase("projectSave"));
-		assertTrue("Program should be in download queue",
-				Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase("PrOJEcTsAVE"));
-		DownloadUtil.getInstance().downloadFinished("projectSave", null);
-		assertFalse("Program shouldn't be in download queue anymore",
-				Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase("projectSave"));
-		assertFalse("Program shouldn't be in download queue anymore",
-				Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase("PrOJEcTsAVE"));
-	}
+    public void testDownloadUtil() {
+        try {
+            DownloadUtil.getInstance().startDownload(null, null, "projectSave", false);
+        } catch (Exception expected) {
+            // Exception thrown because intent could not be started - we won't test the intent here
+        }
+        assertTrue("Program should be in download queue",
+                Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase("projectSave"));
+        assertTrue("Program should be in download queue",
+                Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase("PrOJEcTsAVE"));
+        DownloadUtil.getInstance().downloadFinished("projectSave", null);
+        assertFalse("Program shouldn't be in download queue anymore",
+                Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase("projectSave"));
+        assertFalse("Program shouldn't be in download queue anymore",
+                Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase("PrOJEcTsAVE"));
+    }
 
-	public void testUpAndDownloadWithService() throws Throwable {
-		// service not ready now
+    public void testUpAndDownloadWithService() throws Throwable {
+        // service not ready now
 
-		//		String testProjectName = "UpAndDownloadTest" + System.currentTimeMillis();
-		//		String pathToDefaultProject = Constants.DEFAULT_ROOT + "/uploadtestProject";
-		//		new File(pathToDefaultProject).mkdirs();
-		//		String projectFilename = "test" + Constants.PROJECT_EXTENTION;
-		//		new File(pathToDefaultProject + "/" + projectFilename).createNewFile();
-		//		String projectDescription = "this is just a testproject";
-		//
-		//		ServerCalls.getInstance().setConnectionToUse(new MockConnection());
-		//
-		//		assertTrue("The default Project does not exist.", new File(pathToDefaultProject).exists());
-		//
-		//		TransferService service = new TransferService();
-		//		boolean bindOk = service.bindToMarketBillingService();
-		//		assertTrue("service binding failed. ", bindOk);
-		//
-		//		service.uploadRequest(testProjectName, projectDescription, pathToDefaultProject, "0");
-		//
-		//		Thread.sleep(5000);
-		//
-		//		//assertTrue("upload call failed", service.getLastCallOk);
-	}
+        //		String testProjectName = "UpAndDownloadTest" + System.currentTimeMillis();
+        //		String pathToDefaultProject = Constants.DEFAULT_ROOT + "/uploadtestProject";
+        //		new File(pathToDefaultProject).mkdirs();
+        //		String projectFilename = "test" + Constants.PROJECT_EXTENTION;
+        //		new File(pathToDefaultProject + "/" + projectFilename).createNewFile();
+        //		String projectDescription = "this is just a testproject";
+        //
+        //		ServerCalls.getInstance().setConnectionToUse(new MockConnection());
+        //
+        //		assertTrue("The default Project does not exist.", new File(pathToDefaultProject).exists());
+        //
+        //		TransferService service = new TransferService();
+        //		boolean bindOk = service.bindToMarketBillingService();
+        //		assertTrue("service binding failed. ", bindOk);
+        //
+        //		service.uploadRequest(testProjectName, projectDescription, pathToDefaultProject, "0");
+        //
+        //		Thread.sleep(5000);
+        //
+        //		//assertTrue("upload call failed", service.getLastCallOk);
+    }
 
-	public void testUpAndDownload() throws Throwable {
-		//must be rewritten to test using the services
+    public void testUpAndDownload() throws Throwable {
+        //must be rewritten to test using the services
 		/*
 		 * String testProjectName = "UpAndDownloadTest" + System.currentTimeMillis();
 		 * String pathToDefaultProject = Constants.DEFAULT_ROOT + "/uploadtestProject";
@@ -114,9 +114,9 @@ public class UpAndDownloadTest extends AndroidTestCase {
 		 * UtilFile.deleteDirectory(downloadProjectRoot);
 		 * UtilFile.deleteDirectory(new File(pathToDefaultProject));
 		 */
-	}
+    }
 
-	//not used yet
+    //not used yet
 	/*
 	 * private class MockConnection extends ConnectionWrapper {
 	 * 

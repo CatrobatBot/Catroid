@@ -42,200 +42,200 @@ import org.catrobat.catroid.utils.Utils;
 import java.util.List;
 
 public final class BackPackSpriteController {
-	private static final BackPackSpriteController INSTANCE = new BackPackSpriteController();
+    private static final BackPackSpriteController INSTANCE = new BackPackSpriteController();
 
-	private OnBackpackSpriteCompleteListener onBackpackSpriteCompleteListener;
+    private OnBackpackSpriteCompleteListener onBackpackSpriteCompleteListener;
 
-	private BackPackSpriteController() {
-	}
+    private BackPackSpriteController() {
+    }
 
-	public static BackPackSpriteController getInstance() {
-		return INSTANCE;
-	}
+    public static BackPackSpriteController getInstance() {
+        return INSTANCE;
+    }
 
-	public boolean checkSpriteReplaceInBackpack(List<Sprite> currentSpriteList) {
-		for (Sprite sprite : currentSpriteList) {
-			if (checkSpriteReplaceInBackpack(sprite)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    public boolean checkSpriteReplaceInBackpack(List<Sprite> currentSpriteList) {
+        for (Sprite sprite : currentSpriteList) {
+            if (checkSpriteReplaceInBackpack(sprite)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	private boolean checkSpriteReplaceInBackpack(Sprite currentSprite) {
-		return BackPackListManager.getInstance().backPackedSpritesContains(currentSprite, true);
-	}
+    private boolean checkSpriteReplaceInBackpack(Sprite currentSprite) {
+        return BackPackListManager.getInstance().backPackedSpritesContains(currentSprite, true);
+    }
 
-	public void showBackPackReplaceDialog(final List<Sprite> currentSpriteList, final Context context) {
-		Resources resources = context.getResources();
-		String replaceLookMessage = resources.getString(R.string.backpack_replace_object_multiple);
+    public void showBackPackReplaceDialog(final List<Sprite> currentSpriteList, final Context context) {
+        Resources resources = context.getResources();
+        String replaceLookMessage = resources.getString(R.string.backpack_replace_object_multiple);
 
-		AlertDialog dialog = new CustomAlertDialogBuilder(context)
-				.setTitle(R.string.backpack)
-				.setMessage(replaceLookMessage)
-				.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						for (Sprite currentSprite : currentSpriteList) {
-							backpackVisibleSprite(currentSprite);
-						}
-						onBackpackSpriteCompleteListener.onBackpackSpriteComplete(true);
-						dialog.dismiss();
-					}
-				}).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						onBackpackSpriteCompleteListener.onBackpackSpriteComplete(false);
-						dialog.dismiss();
-					}
-				}).create();
-		dialog.setCanceledOnTouchOutside(true);
-		dialog.show();
-	}
+        AlertDialog dialog = new CustomAlertDialogBuilder(context)
+                .setTitle(R.string.backpack)
+                .setMessage(replaceLookMessage)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        for (Sprite currentSprite : currentSpriteList) {
+                            backpackVisibleSprite(currentSprite);
+                        }
+                        onBackpackSpriteCompleteListener.onBackpackSpriteComplete(true);
+                        dialog.dismiss();
+                    }
+                }).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        onBackpackSpriteCompleteListener.onBackpackSpriteComplete(false);
+                        dialog.dismiss();
+                    }
+                }).create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
 
-	public void showBackPackReplaceDialog(final Sprite currentSprite, final Context context) {
-		Resources resources = context.getResources();
-		String replaceLookMessage = resources.getString(R.string.backpack_replace_object, currentSprite.getName());
+    public void showBackPackReplaceDialog(final Sprite currentSprite, final Context context) {
+        Resources resources = context.getResources();
+        String replaceLookMessage = resources.getString(R.string.backpack_replace_object, currentSprite.getName());
 
-		AlertDialog dialog = new CustomAlertDialogBuilder(context)
-				.setTitle(R.string.backpack)
-				.setMessage(replaceLookMessage)
-				.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						backpackVisibleSprite(currentSprite);
-						onBackpackSpriteCompleteListener.onBackpackSpriteComplete(true);
-						dialog.dismiss();
-					}
-				}).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				}).create();
-		dialog.setCanceledOnTouchOutside(true);
-		dialog.show();
-	}
+        AlertDialog dialog = new CustomAlertDialogBuilder(context)
+                .setTitle(R.string.backpack)
+                .setMessage(replaceLookMessage)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        backpackVisibleSprite(currentSprite);
+                        onBackpackSpriteCompleteListener.onBackpackSpriteComplete(true);
+                        dialog.dismiss();
+                    }
+                }).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
 
-	public void backpackVisibleSprite(Sprite spriteToEdit) {
-		String spriteName = spriteToEdit.getName();
-		BackPackListManager.getInstance().removeItemFromSpriteBackPackByName(spriteName);
+    public void backpackVisibleSprite(Sprite spriteToEdit) {
+        String spriteName = spriteToEdit.getName();
+        BackPackListManager.getInstance().removeItemFromSpriteBackPackByName(spriteName);
 
-		Sprite backPackSprite = backpack(spriteToEdit);
-		BackPackListManager.getInstance().addSpriteToBackPack(backPackSprite);
-	}
+        Sprite backPackSprite = backpack(spriteToEdit);
+        BackPackListManager.getInstance().addSpriteToBackPack(backPackSprite);
+    }
 
-	public Sprite backpackHiddenSprite(Sprite spriteToEdit) {
-		if (BackPackListManager.getInstance().backPackedSpritesContains(spriteToEdit, false)) {
-			return spriteToEdit;
-		}
-		Sprite backPackSprite = backpack(spriteToEdit);
-		BackPackListManager.getInstance().addSpriteToHiddenBackpack(backPackSprite);
-		return backPackSprite;
-	}
+    public Sprite backpackHiddenSprite(Sprite spriteToEdit) {
+        if (BackPackListManager.getInstance().backPackedSpritesContains(spriteToEdit, false)) {
+            return spriteToEdit;
+        }
+        Sprite backPackSprite = backpack(spriteToEdit);
+        BackPackListManager.getInstance().addSpriteToHiddenBackpack(backPackSprite);
+        return backPackSprite;
+    }
 
-	public Sprite backpack(Sprite spriteToEdit) {
-		ProjectManager.getInstance().setCurrentSprite(spriteToEdit);
+    public Sprite backpack(Sprite spriteToEdit) {
+        ProjectManager.getInstance().setCurrentSprite(spriteToEdit);
 
-		Sprite backPackSprite = spriteToEdit.cloneForBackPack();
+        Sprite backPackSprite = spriteToEdit.cloneForBackPack();
 
-		String newSpriteName = Utils.getUniqueSpriteName(spriteToEdit);
-		backPackSprite.setName(newSpriteName);
-		backPackSprite.isBackpackObject = true;
+        String newSpriteName = Utils.getUniqueSpriteName(spriteToEdit);
+        backPackSprite.setName(newSpriteName);
+        backPackSprite.isBackpackObject = true;
 
-		for (LookData lookData : spriteToEdit.getLookDataList()) {
-			if (!lookDataIsUsedInScript(lookData, ProjectManager.getInstance().getCurrentSprite())) {
-				backPackSprite.getLookDataList().add(LookController.getInstance().backPackHiddenLook(lookData));
-			}
-		}
-		for (SoundInfo soundInfo : spriteToEdit.getSoundList()) {
-			if (!soundInfoIsUsedInScript(soundInfo, ProjectManager.getInstance().getCurrentSprite())) {
-				backPackSprite.getSoundList().add(SoundController.getInstance().backPackHiddenSound(soundInfo));
-			}
-		}
-		List<Script> backPackedScripts = BackPackScriptController.getInstance().backpack(backPackSprite.getName(),
-				spriteToEdit.getListWithAllBricks(), true, spriteToEdit);
+        for (LookData lookData : spriteToEdit.getLookDataList()) {
+            if (!lookDataIsUsedInScript(lookData, ProjectManager.getInstance().getCurrentSprite())) {
+                backPackSprite.getLookDataList().add(LookController.getInstance().backPackHiddenLook(lookData));
+            }
+        }
+        for (SoundInfo soundInfo : spriteToEdit.getSoundList()) {
+            if (!soundInfoIsUsedInScript(soundInfo, ProjectManager.getInstance().getCurrentSprite())) {
+                backPackSprite.getSoundList().add(SoundController.getInstance().backPackHiddenSound(soundInfo));
+            }
+        }
+        List<Script> backPackedScripts = BackPackScriptController.getInstance().backpack(backPackSprite.getName(),
+                spriteToEdit.getListWithAllBricks(), true, spriteToEdit);
 
-		if (backPackedScripts != null && !backPackedScripts.isEmpty()) {
-			backPackSprite.getScriptList().addAll(backPackedScripts);
-		}
-		return backPackSprite;
-	}
+        if (backPackedScripts != null && !backPackedScripts.isEmpty()) {
+            backPackSprite.getScriptList().addAll(backPackedScripts);
+        }
+        return backPackSprite;
+    }
 
-	public Sprite unpack(Sprite selectedSprite, boolean delete, boolean keepCurrentSprite, boolean
-			fromHiddenBackPack, boolean asBackground) {
+    public Sprite unpack(Sprite selectedSprite, boolean delete, boolean keepCurrentSprite, boolean
+            fromHiddenBackPack, boolean asBackground) {
 
-		if (fromHiddenBackPack && ProjectManager.getInstance().getCurrentScene().containsSprite(selectedSprite)) {
-			return selectedSprite;
-		}
+        if (fromHiddenBackPack && ProjectManager.getInstance().getCurrentScene().containsSprite(selectedSprite)) {
+            return selectedSprite;
+        }
 
-		Sprite unpackedSprite = selectedSprite.cloneForBackPack();
-		String newSpriteName = Utils.getUniqueSpriteName(selectedSprite);
-		unpackedSprite.setName(newSpriteName);
+        Sprite unpackedSprite = selectedSprite.cloneForBackPack();
+        String newSpriteName = Utils.getUniqueSpriteName(selectedSprite);
+        unpackedSprite.setName(newSpriteName);
 
-		Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
+        Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
 
-		ProjectManager.getInstance().setCurrentSprite(unpackedSprite);
+        ProjectManager.getInstance().setCurrentSprite(unpackedSprite);
 
-		for (LookData lookData : selectedSprite.getLookDataList()) {
-			if (!lookDataIsUsedInScript(lookData, selectedSprite)) {
-				LookController.getInstance().unpack(lookData, delete, true);
-			}
-		}
-		for (SoundInfo soundInfo : selectedSprite.getSoundList()) {
-			if (!soundInfoIsUsedInScript(soundInfo, selectedSprite)) {
-				SoundController.getInstance().unpack(soundInfo, delete, true);
-			}
-		}
+        for (LookData lookData : selectedSprite.getLookDataList()) {
+            if (!lookDataIsUsedInScript(lookData, selectedSprite)) {
+                LookController.getInstance().unpack(lookData, delete, true);
+            }
+        }
+        for (SoundInfo soundInfo : selectedSprite.getSoundList()) {
+            if (!soundInfoIsUsedInScript(soundInfo, selectedSprite)) {
+                SoundController.getInstance().unpack(soundInfo, delete, true);
+            }
+        }
 
-		BackPackScriptController.getInstance().unpack(selectedSprite.getName(), delete, false, null, true);
-		selectedSprite.setUserAndVariableBrickReferences(unpackedSprite, unpackedSprite.getUserBrickList());
+        BackPackScriptController.getInstance().unpack(selectedSprite.getName(), delete, false, null, true);
+        selectedSprite.setUserAndVariableBrickReferences(unpackedSprite, unpackedSprite.getUserBrickList());
 
-		if (asBackground) {
-			ProjectManager.getInstance().getCurrentScene().replaceBackgroundSprite(unpackedSprite);
-		} else {
-			ProjectManager.getInstance().addSprite(unpackedSprite);
-		}
+        if (asBackground) {
+            ProjectManager.getInstance().getCurrentScene().replaceBackgroundSprite(unpackedSprite);
+        } else {
+            ProjectManager.getInstance().addSprite(unpackedSprite);
+        }
 
-		if (keepCurrentSprite) {
-			ProjectManager.getInstance().setCurrentSprite(currentSprite);
-		} else {
-			ProjectManager.getInstance().setCurrentSprite(unpackedSprite);
-		}
+        if (keepCurrentSprite) {
+            ProjectManager.getInstance().setCurrentSprite(currentSprite);
+        } else {
+            ProjectManager.getInstance().setCurrentSprite(unpackedSprite);
+        }
 
-		if (delete) {
-			if (fromHiddenBackPack) {
-				BackPackListManager.getInstance().removeItemFromSpriteHiddenBackpack(selectedSprite);
-			} else {
-				BackPackListManager.getInstance().removeItemFromSpriteBackPack(selectedSprite);
-			}
-		}
-		return unpackedSprite;
-	}
+        if (delete) {
+            if (fromHiddenBackPack) {
+                BackPackListManager.getInstance().removeItemFromSpriteHiddenBackpack(selectedSprite);
+            } else {
+                BackPackListManager.getInstance().removeItemFromSpriteBackPack(selectedSprite);
+            }
+        }
+        return unpackedSprite;
+    }
 
-	private boolean lookDataIsUsedInScript(LookData lookData, Sprite sprite) {
-		for (Brick brick : sprite.getListWithAllBricks()) {
-			if (brick instanceof SetLookBrick && ((SetLookBrick) brick).getLook().equals(lookData)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    private boolean lookDataIsUsedInScript(LookData lookData, Sprite sprite) {
+        for (Brick brick : sprite.getListWithAllBricks()) {
+            if (brick instanceof SetLookBrick && ((SetLookBrick) brick).getLook().equals(lookData)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	private boolean soundInfoIsUsedInScript(SoundInfo soundInfo, Sprite sprite) {
-		for (Brick brick : sprite.getListWithAllBricks()) {
-			if (brick instanceof PlaySoundBrick && ((PlaySoundBrick) brick).getSound().equals(soundInfo)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    private boolean soundInfoIsUsedInScript(SoundInfo soundInfo, Sprite sprite) {
+        for (Brick brick : sprite.getListWithAllBricks()) {
+            if (brick instanceof PlaySoundBrick && ((PlaySoundBrick) brick).getSound().equals(soundInfo)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	public void setOnBackpackSpriteCompleteListener(OnBackpackSpriteCompleteListener listener) {
-		onBackpackSpriteCompleteListener = listener;
-	}
+    public void setOnBackpackSpriteCompleteListener(OnBackpackSpriteCompleteListener listener) {
+        onBackpackSpriteCompleteListener = listener;
+    }
 
-	public interface OnBackpackSpriteCompleteListener {
-		void onBackpackSpriteComplete(boolean startBackpackActivity);
-	}
+    public interface OnBackpackSpriteCompleteListener {
+        void onBackpackSpriteComplete(boolean startBackpackActivity);
+    }
 }

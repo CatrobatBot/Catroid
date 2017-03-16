@@ -25,47 +25,47 @@ package org.catrobat.catroid.common;
 import java.io.Serializable;
 
 public class NfcTagData implements Serializable, Comparable<NfcTagData>, Cloneable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private String name;
-	private String uid;
+    private String name;
+    private String uid;
 
-	@Override
-	public NfcTagData clone() {
-		NfcTagData cloneNfcTagData = new NfcTagData();
+    @Override
+    public NfcTagData clone() {
+        NfcTagData cloneNfcTagData = new NfcTagData();
 
-		cloneNfcTagData.name = this.name;
-		cloneNfcTagData.uid = this.uid;
+        cloneNfcTagData.name = this.name;
+        cloneNfcTagData.uid = this.uid;
 
-		return cloneNfcTagData;
-	}
+        return cloneNfcTagData;
+    }
 
-	public NfcTagData() {
-	}
+    public NfcTagData() {
+    }
 
-	public String getNfcTagName() {
-		return name;
-	}
+    public String getNfcTagName() {
+        return name;
+    }
 
-	public void setNfcTagName(String name) {
-		this.name = name;
-	}
+    public void setNfcTagName(String name) {
+        this.name = name;
+    }
 
-	public void setNfcTagUid(String uid) {
-		this.uid = uid;
-	}
+    public void setNfcTagUid(String uid) {
+        this.uid = uid;
+    }
 
-	public String getNfcTagUid() {
-		return uid;
-	}
+    public String getNfcTagUid() {
+        return uid;
+    }
 
-	@Override
-	public int compareTo(NfcTagData nfcTagData) {
-		return uid.compareTo(nfcTagData.uid);
-	}
+    @Override
+    public int compareTo(NfcTagData nfcTagData) {
+        return uid.compareTo(nfcTagData.uid);
+    }
 
-	@Override
-	public String toString() {
-		return name;
-	}
+    @Override
+    public String toString() {
+        return name;
+    }
 }

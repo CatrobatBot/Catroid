@@ -38,63 +38,63 @@ import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.XmlHeader;
 
 public class PenActor extends Actor {
-	private FrameBuffer buffer;
+    private FrameBuffer buffer;
 
-	public PenActor() {
-		XmlHeader header = ProjectManager.getInstance().getCurrentProject().getXmlHeader();
-		buffer = new FrameBuffer(Pixmap.Format.RGBA8888, header.virtualScreenWidth, header.virtualScreenHeight, false);
-	}
+    public PenActor() {
+        XmlHeader header = ProjectManager.getInstance().getCurrentProject().getXmlHeader();
+        buffer = new FrameBuffer(Pixmap.Format.RGBA8888, header.virtualScreenWidth, header.virtualScreenHeight, false);
+    }
 
-	@Override
-	public void draw(Batch batch, float parentAlpha) {
-		buffer.begin();
-		for (Sprite sprite : ProjectManager.getInstance().getSceneToPlay().getSpriteList()) {
-			drawLinesAndStampsForSprite(sprite, batch, parentAlpha);
-		}
-		buffer.end();
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        buffer.begin();
+        for (Sprite sprite : ProjectManager.getInstance().getSceneToPlay().getSpriteList()) {
+            drawLinesAndStampsForSprite(sprite, batch, parentAlpha);
+        }
+        buffer.end();
 
-		batch.end();
-		TextureRegion region = new TextureRegion(buffer.getColorBufferTexture());
-		region.flip(false, true);
-		Image image = new Image(region);
-		image.setPosition(-buffer.getWidth() / 2, -buffer.getHeight() / 2);
-		batch.begin();
-		image.draw(batch, parentAlpha);
-	}
+        batch.end();
+        TextureRegion region = new TextureRegion(buffer.getColorBufferTexture());
+        region.flip(false, true);
+        Image image = new Image(region);
+        image.setPosition(-buffer.getWidth() / 2, -buffer.getHeight() / 2);
+        batch.begin();
+        image.draw(batch, parentAlpha);
+    }
 
-	public void reset() {
-		XmlHeader header = ProjectManager.getInstance().getCurrentProject().getXmlHeader();
-		buffer.dispose();
-		buffer = new FrameBuffer(Pixmap.Format.RGBA8888, header.virtualScreenWidth, header.virtualScreenHeight, false);
-	}
+    public void reset() {
+        XmlHeader header = ProjectManager.getInstance().getCurrentProject().getXmlHeader();
+        buffer.dispose();
+        buffer = new FrameBuffer(Pixmap.Format.RGBA8888, header.virtualScreenWidth, header.virtualScreenHeight, false);
+    }
 
-	private void drawLinesAndStampsForSprite(Sprite sprite, Batch batch, float parentAlpha) {
-		float x = sprite.look.getXInUserInterfaceDimensionUnit();
-		float y = sprite.look.getYInUserInterfaceDimensionUnit();
-		Sprite.PenConfiguration pen = sprite.penConfiguration;
+    private void drawLinesAndStampsForSprite(Sprite sprite, Batch batch, float parentAlpha) {
+        float x = sprite.look.getXInUserInterfaceDimensionUnit();
+        float y = sprite.look.getYInUserInterfaceDimensionUnit();
+        Sprite.PenConfiguration pen = sprite.penConfiguration;
 
-		if (pen.previousPoint == null) {
-			pen.previousPoint = new PointF(x, y);
-			return;
-		}
+        if (pen.previousPoint == null) {
+            pen.previousPoint = new PointF(x, y);
+            return;
+        }
 
-		ShapeRenderer renderer = StageActivity.stageListener.shapeRenderer;
-		renderer.setColor(pen.penColor);
-		renderer.begin(ShapeRenderer.ShapeType.Filled);
+        ShapeRenderer renderer = StageActivity.stageListener.shapeRenderer;
+        renderer.setColor(pen.penColor);
+        renderer.begin(ShapeRenderer.ShapeType.Filled);
 
-		if (pen.penDown && (pen.previousPoint.x != sprite.look.getX() || pen.previousPoint.y != sprite.look.getY())) {
-			renderer.circle(pen.previousPoint.x, pen.previousPoint.y, pen.penSize / 2);
-			renderer.rectLine(pen.previousPoint.x, pen.previousPoint.y, x, y, pen.penSize);
-			renderer.circle(x, y, pen.penSize / 2);
-		}
+        if (pen.penDown && (pen.previousPoint.x != sprite.look.getX() || pen.previousPoint.y != sprite.look.getY())) {
+            renderer.circle(pen.previousPoint.x, pen.previousPoint.y, pen.penSize / 2);
+            renderer.rectLine(pen.previousPoint.x, pen.previousPoint.y, x, y, pen.penSize);
+            renderer.circle(x, y, pen.penSize / 2);
+        }
 
-		if (pen.stamp) {
-			sprite.look.draw(batch, parentAlpha);
-			pen.stamp = false;
-		}
+        if (pen.stamp) {
+            sprite.look.draw(batch, parentAlpha);
+            pen.stamp = false;
+        }
 
-		renderer.end();
-		pen.previousPoint.x = x;
-		pen.previousPoint.y = y;
-	}
+        renderer.end();
+        pen.previousPoint.x = x;
+        pen.previousPoint.y = y;
+    }
 }

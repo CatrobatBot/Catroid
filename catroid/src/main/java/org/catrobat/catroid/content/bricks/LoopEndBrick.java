@@ -38,104 +38,104 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class LoopEndBrick extends BrickBaseType implements NestingBrick, AllowedAfterDeadEndBrick {
-	static final int FOREVER = -1;
+    static final int FOREVER = -1;
 
-	private static final long serialVersionUID = 1L;
-	private static final String TAG = LoopEndBrick.class.getSimpleName();
-	private transient LoopBeginBrick loopBeginBrick;
+    private static final long serialVersionUID = 1L;
+    private static final String TAG = LoopEndBrick.class.getSimpleName();
+    private transient LoopBeginBrick loopBeginBrick;
 
-	public LoopEndBrick(LoopBeginBrick loopStartingBrick) {
-		this.loopBeginBrick = loopStartingBrick;
-		if (loopStartingBrick != null) {
-			loopStartingBrick.setLoopEndBrick(this);
-		}
-	}
+    public LoopEndBrick(LoopBeginBrick loopStartingBrick) {
+        this.loopBeginBrick = loopStartingBrick;
+        if (loopStartingBrick != null) {
+            loopStartingBrick.setLoopEndBrick(this);
+        }
+    }
 
-	public LoopEndBrick() {
-	}
+    public LoopEndBrick() {
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return NO_RESOURCES;
-	}
+    @Override
+    public int getRequiredResources() {
+        return NO_RESOURCES;
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		LoopEndBrick copyBrick = (LoopEndBrick) clone();
-		if (loopBeginBrick != null) {
-			loopBeginBrick.setLoopEndBrick(this);
-		}
-		return copyBrick;
-	}
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        LoopEndBrick copyBrick = (LoopEndBrick) clone();
+        if (loopBeginBrick != null) {
+            loopBeginBrick.setLoopEndBrick(this);
+        }
+        return copyBrick;
+    }
 
-	public LoopBeginBrick getLoopBeginBrick() {
-		return loopBeginBrick;
-	}
+    public LoopBeginBrick getLoopBeginBrick() {
+        return loopBeginBrick;
+    }
 
-	public void setLoopBeginBrick(LoopBeginBrick loopBeginBrick) {
-		this.loopBeginBrick = loopBeginBrick;
-	}
+    public void setLoopBeginBrick(LoopBeginBrick loopBeginBrick) {
+        this.loopBeginBrick = loopBeginBrick;
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		if (view == null) {
-			view = View.inflate(context, R.layout.brick_loop_end, null);
-			view = BrickViewProvider.setAlphaOnView(view, alphaValue);
-			checkbox = (CheckBox) view.findViewById(R.id.brick_loop_end_checkbox);
+        if (view == null) {
+            view = View.inflate(context, R.layout.brick_loop_end, null);
+            view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+            checkbox = (CheckBox) view.findViewById(R.id.brick_loop_end_checkbox);
 
-			setCheckboxView(R.id.brick_loop_end_checkbox);
-		}
+            setCheckboxView(R.id.brick_loop_end_checkbox);
+        }
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public Brick clone() {
-		return new LoopEndBrick(getLoopBeginBrick());
-	}
+    @Override
+    public Brick clone() {
+        return new LoopEndBrick(getLoopBeginBrick());
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		return View.inflate(context, R.layout.brick_loop_end, null);
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        return View.inflate(context, R.layout.brick_loop_end, null);
+    }
 
-	@Override
-	public boolean isDraggableOver(Brick brick) {
-		return (loopBeginBrick != null);
-	}
+    @Override
+    public boolean isDraggableOver(Brick brick) {
+        return (loopBeginBrick != null);
+    }
 
-	@Override
-	public boolean isInitialized() {
-		return (loopBeginBrick != null);
-	}
+    @Override
+    public boolean isInitialized() {
+        return (loopBeginBrick != null);
+    }
 
-	@Override
-	public void initialize() {
-		loopBeginBrick = new ForeverBrick();
-		Log.w(TAG, "Not supposed to create the LoopBeginBrick!");
-	}
+    @Override
+    public void initialize() {
+        loopBeginBrick = new ForeverBrick();
+        Log.w(TAG, "Not supposed to create the LoopBeginBrick!");
+    }
 
-	@Override
-	public List<NestingBrick> getAllNestingBrickParts(boolean sorted) {
-		List<NestingBrick> nestingBrickList = new ArrayList<>();
-		if (sorted) {
-			nestingBrickList.add(loopBeginBrick);
-			nestingBrickList.add(this);
-		} else {
-			nestingBrickList.add(this);
-			nestingBrickList.add(loopBeginBrick);
-		}
-		return nestingBrickList;
-	}
+    @Override
+    public List<NestingBrick> getAllNestingBrickParts(boolean sorted) {
+        List<NestingBrick> nestingBrickList = new ArrayList<>();
+        if (sorted) {
+            nestingBrickList.add(loopBeginBrick);
+            nestingBrickList.add(this);
+        } else {
+            nestingBrickList.add(this);
+            nestingBrickList.add(loopBeginBrick);
+        }
+        return nestingBrickList;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		LinkedList<SequenceAction> returnActionList = new LinkedList<SequenceAction>();
-		returnActionList.add(sequence);
-		return returnActionList;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        LinkedList<SequenceAction> returnActionList = new LinkedList<SequenceAction>();
+        returnActionList.add(sequence);
+        return returnActionList;
+    }
 }

@@ -28,16 +28,16 @@ import org.catrobat.catroid.formulaeditor.UserList;
 import java.io.Serializable;
 
 public class BackPackedListData implements Serializable {
-	public UserList userList;
-	public Integer userListType;
+    public UserList userList;
+    public Integer userListType;
 
-	BackPackedListData() {
-	}
+    BackPackedListData() {
+    }
 
-	BackPackedListData(BackPackedListData backPackedData) {
-		if (backPackedData != null) {
-			this.userList = backPackedData.userList;
-			this.userListType = backPackedData.userListType;
-		}
-	}
+    BackPackedListData(BackPackedListData backPackedData) {
+        if (backPackedData != null) {
+            this.userList = backPackedData.userList;
+            this.userListType = backPackedData.userListType;
+        }
+    }
 }

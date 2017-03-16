@@ -34,95 +34,95 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class OnUtteranceCompletedListenerContainerTest extends AndroidTestCase {
 
-	private List<String> onUtteranceCompletedIds;
-	private OnUtteranceCompletedListenerContainer container;
+    private List<String> onUtteranceCompletedIds;
+    private OnUtteranceCompletedListenerContainer container;
 
-	private final File existingFile = new FileMock(true);
-	private final File nonExistingFile = new FileMock(false);
+    private final File existingFile = new FileMock(true);
+    private final File nonExistingFile = new FileMock(false);
 
-	private final String utteranceId1 = "hash1";
-	private final String utteranceId2 = "hash2";
+    private final String utteranceId1 = "hash1";
+    private final String utteranceId2 = "hash2";
 
-	@Override
-	protected void setUp() throws Exception {
-		container = new OnUtteranceCompletedListenerContainer();
-		onUtteranceCompletedIds = new ArrayList<String>();
-	}
+    @Override
+    protected void setUp() throws Exception {
+        container = new OnUtteranceCompletedListenerContainer();
+        onUtteranceCompletedIds = new ArrayList<String>();
+    }
 
-	public void testExistingSpeechFile() {
-		final OnUtteranceCompletedListener listener = new OnUtteranceCompletedListenerMock();
+    public void testExistingSpeechFile() {
+        final OnUtteranceCompletedListener listener = new OnUtteranceCompletedListenerMock();
 
-		boolean returnValue = container.addOnUtteranceCompletedListener(existingFile, listener, utteranceId1);
-		assertFalse("Wrong return value", returnValue);
-		assertTrue("Wrong return value", onUtteranceCompletedIds.contains(utteranceId1));
-	}
+        boolean returnValue = container.addOnUtteranceCompletedListener(existingFile, listener, utteranceId1);
+        assertFalse("Wrong return value", returnValue);
+        assertTrue("Wrong return value", onUtteranceCompletedIds.contains(utteranceId1));
+    }
 
-	public void testNonExistingSpeechFile() {
-		final OnUtteranceCompletedListener listener = new OnUtteranceCompletedListenerMock();
+    public void testNonExistingSpeechFile() {
+        final OnUtteranceCompletedListener listener = new OnUtteranceCompletedListenerMock();
 
-		boolean returnValue = container.addOnUtteranceCompletedListener(nonExistingFile, listener, utteranceId1);
-		assertTrue("Wrong return value", returnValue);
+        boolean returnValue = container.addOnUtteranceCompletedListener(nonExistingFile, listener, utteranceId1);
+        assertTrue("Wrong return value", returnValue);
 
-		container.onUtteranceCompleted(utteranceId1);
-		assertTrue("Wrong return value", onUtteranceCompletedIds.contains(utteranceId1));
-	}
+        container.onUtteranceCompleted(utteranceId1);
+        assertTrue("Wrong return value", onUtteranceCompletedIds.contains(utteranceId1));
+    }
 
-	public void testSpeechFilesWithSameHashValue() {
-		final OnUtteranceCompletedListener listener1 = new OnUtteranceCompletedListenerMock();
+    public void testSpeechFilesWithSameHashValue() {
+        final OnUtteranceCompletedListener listener1 = new OnUtteranceCompletedListenerMock();
 
-		boolean returnValue = container.addOnUtteranceCompletedListener(nonExistingFile, listener1, utteranceId1);
-		assertTrue("Wrong return value", returnValue);
+        boolean returnValue = container.addOnUtteranceCompletedListener(nonExistingFile, listener1, utteranceId1);
+        assertTrue("Wrong return value", returnValue);
 
-		final OnUtteranceCompletedListener listener2 = new OnUtteranceCompletedListenerMock();
-		returnValue = container.addOnUtteranceCompletedListener(nonExistingFile, listener2, utteranceId1);
-		assertFalse("Wrong return value", returnValue);
+        final OnUtteranceCompletedListener listener2 = new OnUtteranceCompletedListenerMock();
+        returnValue = container.addOnUtteranceCompletedListener(nonExistingFile, listener2, utteranceId1);
+        assertFalse("Wrong return value", returnValue);
 
-		container.onUtteranceCompleted(utteranceId1);
+        container.onUtteranceCompleted(utteranceId1);
 
-		assertTrue("Wrong return value", onUtteranceCompletedIds.contains(utteranceId1));
-		assertEquals("Wrong number of Ids in List", 2, onUtteranceCompletedIds.size());
-	}
+        assertTrue("Wrong return value", onUtteranceCompletedIds.contains(utteranceId1));
+        assertEquals("Wrong number of Ids in List", 2, onUtteranceCompletedIds.size());
+    }
 
-	public void testNormalBehavior() {
-		final OnUtteranceCompletedListener listener1 = new OnUtteranceCompletedListenerMock();
-		final OnUtteranceCompletedListener listener2 = new OnUtteranceCompletedListenerMock();
-		final OnUtteranceCompletedListener listener3 = new OnUtteranceCompletedListenerMock();
+    public void testNormalBehavior() {
+        final OnUtteranceCompletedListener listener1 = new OnUtteranceCompletedListenerMock();
+        final OnUtteranceCompletedListener listener2 = new OnUtteranceCompletedListenerMock();
+        final OnUtteranceCompletedListener listener3 = new OnUtteranceCompletedListenerMock();
 
-		boolean returnValue = container.addOnUtteranceCompletedListener(nonExistingFile, listener1, utteranceId1);
-		assertTrue("Wrong return value", returnValue);
+        boolean returnValue = container.addOnUtteranceCompletedListener(nonExistingFile, listener1, utteranceId1);
+        assertTrue("Wrong return value", returnValue);
 
-		returnValue = container.addOnUtteranceCompletedListener(nonExistingFile, listener2, utteranceId2);
-		assertTrue("Wrong return value", returnValue);
+        returnValue = container.addOnUtteranceCompletedListener(nonExistingFile, listener2, utteranceId2);
+        assertTrue("Wrong return value", returnValue);
 
-		container.onUtteranceCompleted(utteranceId1);
-		assertTrue("Wrong return value", onUtteranceCompletedIds.contains(utteranceId1));
+        container.onUtteranceCompleted(utteranceId1);
+        assertTrue("Wrong return value", onUtteranceCompletedIds.contains(utteranceId1));
 
-		returnValue = container.addOnUtteranceCompletedListener(existingFile, listener3, utteranceId1);
-		assertFalse("Wrong return value", returnValue);
-		assertEquals("Wrong number of Ids in List", onUtteranceCompletedIds.get(1), utteranceId1);
+        returnValue = container.addOnUtteranceCompletedListener(existingFile, listener3, utteranceId1);
+        assertFalse("Wrong return value", returnValue);
+        assertEquals("Wrong number of Ids in List", onUtteranceCompletedIds.get(1), utteranceId1);
 
-		container.onUtteranceCompleted(utteranceId2);
-		assertTrue("Wrong return value", onUtteranceCompletedIds.contains(utteranceId2));
-	}
+        container.onUtteranceCompleted(utteranceId2);
+        assertTrue("Wrong return value", onUtteranceCompletedIds.contains(utteranceId2));
+    }
 
-	private class OnUtteranceCompletedListenerMock implements OnUtteranceCompletedListener {
-		public void onUtteranceCompleted(String utteranceId) {
-			onUtteranceCompletedIds.add(utteranceId);
-		}
-	}
+    private class OnUtteranceCompletedListenerMock implements OnUtteranceCompletedListener {
+        public void onUtteranceCompleted(String utteranceId) {
+            onUtteranceCompletedIds.add(utteranceId);
+        }
+    }
 
-	private class FileMock extends File {
-		private static final long serialVersionUID = 1L;
-		private boolean exists;
+    private class FileMock extends File {
+        private static final long serialVersionUID = 1L;
+        private boolean exists;
 
-		public FileMock(boolean exists) {
-			super("");
-			this.exists = exists;
-		}
+        public FileMock(boolean exists) {
+            super("");
+            this.exists = exists;
+        }
 
-		@Override
-		public boolean exists() {
-			return exists;
-		}
-	}
+        @Override
+        public boolean exists() {
+            return exists;
+        }
+    }
 }

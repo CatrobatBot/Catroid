@@ -28,27 +28,29 @@ import java.util.Map;
 
 public abstract class Message {
 
-	public enum CategoryType {
-		BASE(0),
-		JOB(1);
+    public enum CategoryType {
+        BASE(0),
+        JOB(1);
 
-		private int categoryID;
-		private static Map<Integer, CategoryType> map = new HashMap<>();
-		static {
-			for (CategoryType legEnum : CategoryType.values()) {
-				map.put(legEnum.categoryID, legEnum);
-			}
-		}
-		CategoryType(final int categoryID) {
-			this.categoryID = categoryID;
-		}
+        private int categoryID;
+        private static Map<Integer, CategoryType> map = new HashMap<>();
 
-		public static CategoryType valueOf(int categoryID) {
-			return map.get(categoryID);
-		}
+        static {
+            for (CategoryType legEnum : CategoryType.values()) {
+                map.put(legEnum.categoryID, legEnum);
+            }
+        }
 
-		public int getCategoryID() {
-			return categoryID;
-		}
-	}
+        CategoryType(final int categoryID) {
+            this.categoryID = categoryID;
+        }
+
+        public static CategoryType valueOf(int categoryID) {
+            return map.get(categoryID);
+        }
+
+        public int getCategoryID() {
+            return categoryID;
+        }
+    }
 }

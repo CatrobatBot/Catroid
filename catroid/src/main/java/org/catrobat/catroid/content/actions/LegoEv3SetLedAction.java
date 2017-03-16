@@ -33,56 +33,56 @@ import org.catrobat.catroid.devices.mindstorms.ev3.LegoEV3;
 
 public class LegoEv3SetLedAction extends TemporalAction {
 
-	private LedStatus ledStatusEnum;
-	private BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
+    private LedStatus ledStatusEnum;
+    private BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
 
-	@Override
-	protected void update(float percent) {
+    @Override
+    protected void update(float percent) {
 
-		LegoEV3 ev3 = btService.getDevice(BluetoothDevice.LEGO_EV3);
-		if (ev3 == null) {
-			return;
-		}
+        LegoEV3 ev3 = btService.getDevice(BluetoothDevice.LEGO_EV3);
+        if (ev3 == null) {
+            return;
+        }
 
-		int ledStatus = 0x00;
+        int ledStatus = 0x00;
 
-		switch (ledStatusEnum) {
-			case LED_OFF:
-				ledStatus = 0x00;
-				break;
-			case LED_GREEN:
-				ledStatus = 0x01;
-				break;
-			case LED_RED:
-				ledStatus = 0x02;
-				break;
-			case LED_ORANGE:
-				ledStatus = 0x03;
-				break;
-			case LED_GREEN_FLASHING:
-				ledStatus = 0x04;
-				break;
-			case LED_RED_FLASHING:
-				ledStatus = 0x05;
-				break;
-			case LED_ORANGE_FLASHING:
-				ledStatus = 0x06;
-				break;
-			case LED_GREEN_PULSE:
-				ledStatus = 0x07;
-				break;
-			case LED_RED_PULSE:
-				ledStatus = 0x08;
-				break;
-			case LED_ORANGE_PULSE:
-				ledStatus = 0x09;
-				break;
-		}
+        switch (ledStatusEnum) {
+            case LED_OFF:
+                ledStatus = 0x00;
+                break;
+            case LED_GREEN:
+                ledStatus = 0x01;
+                break;
+            case LED_RED:
+                ledStatus = 0x02;
+                break;
+            case LED_ORANGE:
+                ledStatus = 0x03;
+                break;
+            case LED_GREEN_FLASHING:
+                ledStatus = 0x04;
+                break;
+            case LED_RED_FLASHING:
+                ledStatus = 0x05;
+                break;
+            case LED_ORANGE_FLASHING:
+                ledStatus = 0x06;
+                break;
+            case LED_GREEN_PULSE:
+                ledStatus = 0x07;
+                break;
+            case LED_RED_PULSE:
+                ledStatus = 0x08;
+                break;
+            case LED_ORANGE_PULSE:
+                ledStatus = 0x09;
+                break;
+        }
 
-		ev3.setLed(ledStatus);
-	}
+        ev3.setLed(ledStatus);
+    }
 
-	public void setLedStatusEnum(LedStatus ledStatusEnum) {
-		this.ledStatusEnum = ledStatusEnum;
-	}
+    public void setLedStatusEnum(LedStatus ledStatusEnum) {
+        this.ledStatusEnum = ledStatusEnum;
+    }
 }

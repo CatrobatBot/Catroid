@@ -40,74 +40,74 @@ import okio.Source;
 
 public class ProgressResponseBody extends ResponseBody {
 
-	public static final String TAG_PROGRESS = "currentDownloadProgress";
-	public static final String TAG_ENDOFFILE = "endOfFileReached";
-	public static final String TAG_NOTIFICATION_ID = "notificationId";
-	public static final String TAG_PROGRAM_NAME = "programName";
-	public static final String TAG_REQUEST_URL = "requestUrl";
+    public static final String TAG_PROGRESS = "currentDownloadProgress";
+    public static final String TAG_ENDOFFILE = "endOfFileReached";
+    public static final String TAG_NOTIFICATION_ID = "notificationId";
+    public static final String TAG_PROGRAM_NAME = "programName";
+    public static final String TAG_REQUEST_URL = "requestUrl";
 
-	private final ResponseBody responseBody;
-	private final ResultReceiver receiver;
-	private final int notificationId;
-	private final String programName;
-	private final String requestUrl;
+    private final ResponseBody responseBody;
+    private final ResultReceiver receiver;
+    private final int notificationId;
+    private final String programName;
+    private final String requestUrl;
 
-	private BufferedSource bufferedSource;
+    private BufferedSource bufferedSource;
 
-	public ProgressResponseBody(ResponseBody responseBody, ResultReceiver receiver, int notificationId,
-			String programName, String requestUrl) throws IOException {
-		this.responseBody = responseBody;
-		this.receiver = receiver;
-		this.notificationId = notificationId;
-		this.programName = programName;
-		this.requestUrl = requestUrl;
-	}
+    public ProgressResponseBody(ResponseBody responseBody, ResultReceiver receiver, int notificationId,
+                                String programName, String requestUrl) throws IOException {
+        this.responseBody = responseBody;
+        this.receiver = receiver;
+        this.notificationId = notificationId;
+        this.programName = programName;
+        this.requestUrl = requestUrl;
+    }
 
-	@Override
-	public MediaType contentType() {
-		return responseBody.contentType();
-	}
+    @Override
+    public MediaType contentType() {
+        return responseBody.contentType();
+    }
 
-	@Override
-	public long contentLength() throws IOException {
-		return responseBody.contentLength();
-	}
+    @Override
+    public long contentLength() throws IOException {
+        return responseBody.contentLength();
+    }
 
-	@Override
-	public BufferedSource source() throws IOException {
-		if (bufferedSource == null) {
-			bufferedSource = Okio.buffer(source(responseBody.source()));
-		}
-		return bufferedSource;
-	}
+    @Override
+    public BufferedSource source() throws IOException {
+        if (bufferedSource == null) {
+            bufferedSource = Okio.buffer(source(responseBody.source()));
+        }
+        return bufferedSource;
+    }
 
-	private Source source(Source source) {
-		return new ForwardingSource(source) {
-			long totalBytesRead = 0L;
-			long lastProgress = -1L;
+    private Source source(Source source) {
+        return new ForwardingSource(source) {
+            long totalBytesRead = 0L;
+            long lastProgress = -1L;
 
-			@Override
-			public long read(Buffer sink, long byteCount) throws IOException {
-				long bytesRead = super.read(sink, byteCount);
-				totalBytesRead += bytesRead != -1 ? bytesRead : 0;
-				long progress = (100 * totalBytesRead) / contentLength();
-				boolean endOfFile = bytesRead == -1;
-				if (progress > lastProgress || endOfFile) {
-					sendUpdateIntent(progress, endOfFile);
-					lastProgress = progress;
-				}
-				return bytesRead;
-			}
-		};
-	}
+            @Override
+            public long read(Buffer sink, long byteCount) throws IOException {
+                long bytesRead = super.read(sink, byteCount);
+                totalBytesRead += bytesRead != -1 ? bytesRead : 0;
+                long progress = (100 * totalBytesRead) / contentLength();
+                boolean endOfFile = bytesRead == -1;
+                if (progress > lastProgress || endOfFile) {
+                    sendUpdateIntent(progress, endOfFile);
+                    lastProgress = progress;
+                }
+                return bytesRead;
+            }
+        };
+    }
 
-	private void sendUpdateIntent(long progress, boolean endOfFileReached) {
-		Bundle progressBundle = new Bundle();
-		progressBundle.putLong(TAG_PROGRESS, progress);
-		progressBundle.putBoolean(TAG_ENDOFFILE, endOfFileReached);
-		progressBundle.putInt(TAG_NOTIFICATION_ID, notificationId);
-		progressBundle.putString(TAG_PROGRAM_NAME, programName);
-		progressBundle.putString(TAG_REQUEST_URL, requestUrl);
-		receiver.send(Constants.UPDATE_DOWNLOAD_PROGRESS, progressBundle);
-	}
+    private void sendUpdateIntent(long progress, boolean endOfFileReached) {
+        Bundle progressBundle = new Bundle();
+        progressBundle.putLong(TAG_PROGRESS, progress);
+        progressBundle.putBoolean(TAG_ENDOFFILE, endOfFileReached);
+        progressBundle.putInt(TAG_NOTIFICATION_ID, notificationId);
+        progressBundle.putString(TAG_PROGRAM_NAME, programName);
+        progressBundle.putString(TAG_REQUEST_URL, requestUrl);
+        receiver.send(Constants.UPDATE_DOWNLOAD_PROGRESS, progressBundle);
+    }
 }

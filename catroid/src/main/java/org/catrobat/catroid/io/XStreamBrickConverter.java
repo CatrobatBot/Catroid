@@ -36,40 +36,40 @@ import org.catrobat.catroid.content.bricks.Brick;
 
 public class XStreamBrickConverter extends ReflectionConverter {
 
-	private static final String TAG = XStreamBrickConverter.class.getSimpleName();
-	private static final String[] BRICKS_PACKAGE_NAMES = { "org.catrobat.catroid.content.bricks",
-			"org.catrobat.catroid.physics.content.bricks" };
-	private static final String TYPE = "type";
+    private static final String TAG = XStreamBrickConverter.class.getSimpleName();
+    private static final String[] BRICKS_PACKAGE_NAMES = {"org.catrobat.catroid.content.bricks",
+            "org.catrobat.catroid.physics.content.bricks"};
+    private static final String TYPE = "type";
 
-	public XStreamBrickConverter(Mapper mapper, ReflectionProvider reflectionProvider) {
-		super(mapper, reflectionProvider);
-	}
+    public XStreamBrickConverter(Mapper mapper, ReflectionProvider reflectionProvider) {
+        super(mapper, reflectionProvider);
+    }
 
-	@Override
-	public boolean canConvert(Class type) {
-		return Brick.class.isAssignableFrom(type);
-	}
+    @Override
+    public boolean canConvert(Class type) {
+        return Brick.class.isAssignableFrom(type);
+    }
 
-	@Override
-	protected void doMarshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
-		writer.addAttribute(TYPE, source.getClass().getSimpleName());
-		super.doMarshal(source, writer, context);
-	}
+    @Override
+    protected void doMarshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
+        writer.addAttribute(TYPE, source.getClass().getSimpleName());
+        super.doMarshal(source, writer, context);
+    }
 
-	@Override
-	public Object doUnmarshal(Object result, HierarchicalStreamReader reader, UnmarshallingContext context) {
+    @Override
+    public Object doUnmarshal(Object result, HierarchicalStreamReader reader, UnmarshallingContext context) {
 
-		String type = reader.getAttribute(TYPE);
-		for (int index = 0; index < BRICKS_PACKAGE_NAMES.length; index++) {
-			try {
-				Class cls = Class.forName(BRICKS_PACKAGE_NAMES[index] + "." + type);
-				Brick brick = (Brick) reflectionProvider.newInstance(cls);
-				return super.doUnmarshal(brick, reader, context);
-			} catch (ClassNotFoundException exception) {
-				Log.d(TAG, "Brick " + type + " not found in " + BRICKS_PACKAGE_NAMES[index]);
-			}
-		}
-		Log.i(TAG, "Brick " + type + " not found in packages");
-		return super.doUnmarshal(result, reader, context);
-	}
+        String type = reader.getAttribute(TYPE);
+        for (int index = 0; index < BRICKS_PACKAGE_NAMES.length; index++) {
+            try {
+                Class cls = Class.forName(BRICKS_PACKAGE_NAMES[index] + "." + type);
+                Brick brick = (Brick) reflectionProvider.newInstance(cls);
+                return super.doUnmarshal(brick, reader, context);
+            } catch (ClassNotFoundException exception) {
+                Log.d(TAG, "Brick " + type + " not found in " + BRICKS_PACKAGE_NAMES[index]);
+            }
+        }
+        Log.i(TAG, "Brick " + type + " not found in packages");
+        return super.doUnmarshal(result, reader, context);
+    }
 }

@@ -32,28 +32,28 @@ import org.catrobat.catroid.formulaeditor.InterpretationException;
 
 public class WaitAction extends TemporalAction {
 
-	protected Sprite sprite;
-	private Formula duration;
+    protected Sprite sprite;
+    private Formula duration;
 
-	@Override
-	protected void begin() {
-		try {
-			Float newDuration = duration == null ? Float.valueOf(0f) : duration.interpretFloat(sprite);
-			super.setDuration(newDuration);
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}
-	}
+    @Override
+    protected void begin() {
+        try {
+            Float newDuration = duration == null ? Float.valueOf(0f) : duration.interpretFloat(sprite);
+            super.setDuration(newDuration);
+        } catch (InterpretationException interpretationException) {
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+        }
+    }
 
-	public void setDelay(Formula delay) {
-		this.duration = delay;
-	}
+    public void setDelay(Formula delay) {
+        this.duration = delay;
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	@Override
-	protected void update(float percent) {
-	}
+    @Override
+    protected void update(float percent) {
+    }
 }

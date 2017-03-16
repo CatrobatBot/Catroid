@@ -50,63 +50,63 @@ import java.util.List;
 
 public class DynamicListView extends ListView {
 
-	UtilDynamicListView utilDynamicListView = new UtilDynamicListView(this);
+    UtilDynamicListView utilDynamicListView = new UtilDynamicListView(this);
 
-	public DynamicListView(Context context) {
-		super(context);
-		utilDynamicListView.init(context);
-	}
+    public DynamicListView(Context context) {
+        super(context);
+        utilDynamicListView.init(context);
+    }
 
-	public DynamicListView(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-		utilDynamicListView.init(context);
-	}
+    public DynamicListView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        utilDynamicListView.init(context);
+    }
 
-	public DynamicListView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		utilDynamicListView.init(context);
-	}
+    public DynamicListView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        utilDynamicListView.init(context);
+    }
 
-	@Override
-	protected void dispatchDraw(Canvas canvas) {
-		super.dispatchDraw(canvas);
-		utilDynamicListView.dispatchDraw(canvas);
-	}
+    @Override
+    protected void dispatchDraw(Canvas canvas) {
+        super.dispatchDraw(canvas);
+        utilDynamicListView.dispatchDraw(canvas);
+    }
 
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		if (!utilDynamicListView.onTouchEvent(event)) {
-			return false;
-		}
-		return super.onTouchEvent(event);
-	}
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (!utilDynamicListView.onTouchEvent(event)) {
+            return false;
+        }
+        return super.onTouchEvent(event);
+    }
 
-	int getComputeVerticalScrollOffset() {
-		return computeVerticalScrollOffset();
-	}
+    int getComputeVerticalScrollOffset() {
+        return computeVerticalScrollOffset();
+    }
 
-	int getComputeVerticalScrollExtent() {
-		return computeVerticalScrollExtent();
-	}
+    int getComputeVerticalScrollExtent() {
+        return computeVerticalScrollExtent();
+    }
 
-	int getComputeVerticalScrollRange() {
-		return computeVerticalScrollRange();
-	}
+    int getComputeVerticalScrollRange() {
+        return computeVerticalScrollRange();
+    }
 
-	public void setDataList(List dataList) {
-		utilDynamicListView.setDataList(dataList);
-	}
+    public void setDataList(List dataList) {
+        utilDynamicListView.setDataList(dataList);
+    }
 
-	public void notifyListItemTouchActionUp() {
-		utilDynamicListView.notifyListItemTouchActionUp();
-	}
+    public void notifyListItemTouchActionUp() {
+        utilDynamicListView.notifyListItemTouchActionUp();
+    }
 
-	@Override
-	public ListAdapter getAdapter() {
-		ListAdapter adapter = super.getAdapter();
-		if (adapter instanceof HeaderViewListAdapter) {
-			return ((HeaderViewListAdapter) adapter).getWrappedAdapter();
-		}
-		return adapter;
-	}
+    @Override
+    public ListAdapter getAdapter() {
+        ListAdapter adapter = super.getAdapter();
+        if (adapter instanceof HeaderViewListAdapter) {
+            return ((HeaderViewListAdapter) adapter).getWrappedAdapter();
+        }
+        return adapter;
+    }
 }

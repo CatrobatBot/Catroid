@@ -24,20 +24,20 @@ package org.catrobat.catroid.content.actions;
 
 public class DroneTurnLeftWithMagnetometerAction extends DroneMoveAction {
 
-	@Override
-	protected void begin() {
-		super.begin();
-		super.setCommandAndYawEnabled(true);
-	}
+    @Override
+    protected void begin() {
+        super.begin();
+        super.setCommandAndYawEnabled(true);
+    }
 
-	@Override
-	protected void move() {
-		int value = (int) (super.getPowerNormalized() * 100);
-		super.getDroneService().setDeviceOrientation(0, value);
-	}
+    @Override
+    protected void move() {
+        int value = (int) (super.getPowerNormalized() * 100);
+        super.getDroneService().setDeviceOrientation(0, value);
+    }
 
-	@Override
-	protected void moveEnd() {
-		super.setCommandAndYawEnabled(false);
-	}
+    @Override
+    protected void moveEnd() {
+        super.setCommandAndYawEnabled(false);
+    }
 }

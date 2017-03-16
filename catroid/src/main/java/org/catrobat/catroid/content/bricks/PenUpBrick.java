@@ -35,44 +35,44 @@ import java.util.List;
 
 public class PenUpBrick extends BrickBaseType {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public PenUpBrick() {
-	}
+    public PenUpBrick() {
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		PenUpBrick copyBrick = (PenUpBrick) clone();
-		return copyBrick;
-	}
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        PenUpBrick copyBrick = (PenUpBrick) clone();
+        return copyBrick;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		View view = View.inflate(context, R.layout.brick_pen_up, null);
+    @Override
+    public View getPrototypeView(Context context) {
+        View view = View.inflate(context, R.layout.brick_pen_up, null);
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public Brick clone() {
-		return new PenUpBrick();
-	}
+    @Override
+    public Brick clone() {
+        return new PenUpBrick();
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		view = View.inflate(context, R.layout.brick_pen_up, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        view = View.inflate(context, R.layout.brick_pen_up, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_pen_up_checkbox);
-		return view;
-	}
+        setCheckboxView(R.id.brick_pen_up_checkbox);
+        return view;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createPenUpAction(sprite));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createPenUpAction(sprite));
+        return null;
+    }
 }

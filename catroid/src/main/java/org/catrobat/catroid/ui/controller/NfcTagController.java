@@ -48,162 +48,162 @@ import java.util.List;
 import java.util.SortedSet;
 
 public final class NfcTagController {
-	public static final String BUNDLE_ARGUMENTS_SELECTED_NFCTAG = "selected_nfctag";
-	public static final String SHARED_PREFERENCE_NAME = "showDetailsNfcTags";
+    public static final String BUNDLE_ARGUMENTS_SELECTED_NFCTAG = "selected_nfctag";
+    public static final String SHARED_PREFERENCE_NAME = "showDetailsNfcTags";
 
-	private static final NfcTagController INSTANCE = new NfcTagController();
+    private static final NfcTagController INSTANCE = new NfcTagController();
 
-	private NfcTagController() {
-	}
+    private NfcTagController() {
+    }
 
-	public static NfcTagController getInstance() {
-		return INSTANCE;
-	}
+    public static NfcTagController getInstance() {
+        return INSTANCE;
+    }
 
-	public void updateNfcTagLogic(final int position, final NfcTagViewHolder holder,
-			final NfcTagBaseAdapter nfcTagAdapter) {
-		final NfcTagData nfcTagData = nfcTagAdapter.getNfcTagDataItems().get(position);
+    public void updateNfcTagLogic(final int position, final NfcTagViewHolder holder,
+                                  final NfcTagBaseAdapter nfcTagAdapter) {
+        final NfcTagData nfcTagData = nfcTagAdapter.getNfcTagDataItems().get(position);
 
-		if (nfcTagData == null) {
-			return;
-		}
-		holder.scanNewTagButton.setTag(position);
-		holder.titleTextView.setText(nfcTagData.getNfcTagName());
+        if (nfcTagData == null) {
+            return;
+        }
+        holder.scanNewTagButton.setTag(position);
+        holder.titleTextView.setText(nfcTagData.getNfcTagName());
 
-		handleCheckboxes(position, holder, nfcTagAdapter);
-		handleDetails(nfcTagAdapter, holder, nfcTagData);
-		setClickListener(nfcTagAdapter, holder);
-	}
+        handleCheckboxes(position, holder, nfcTagAdapter);
+        handleDetails(nfcTagAdapter, holder, nfcTagData);
+        setClickListener(nfcTagAdapter, holder);
+    }
 
-	private void setClickListener(final NfcTagBaseAdapter nfcTagAdapter, final NfcTagViewHolder holder) {
-		OnClickListener listItemOnClickListener = new OnClickListener() {
+    private void setClickListener(final NfcTagBaseAdapter nfcTagAdapter, final NfcTagViewHolder holder) {
+        OnClickListener listItemOnClickListener = new OnClickListener() {
 
-			@Override
-			public void onClick(View view) {
-				if (nfcTagAdapter.getSelectMode() != ListView.CHOICE_MODE_NONE) {
-					holder.checkbox.setChecked(!holder.checkbox.isChecked());
-				}
-			}
-		};
+            @Override
+            public void onClick(View view) {
+                if (nfcTagAdapter.getSelectMode() != ListView.CHOICE_MODE_NONE) {
+                    holder.checkbox.setChecked(!holder.checkbox.isChecked());
+                }
+            }
+        };
 
-		holder.nfcTagFragmentButtonLayout.setOnClickListener(listItemOnClickListener);
+        holder.nfcTagFragmentButtonLayout.setOnClickListener(listItemOnClickListener);
 
-		holder.nfcTagFragmentButtonLayout.setOnTouchListener(new View.OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (event.getAction() == MotionEvent.ACTION_UP) {
-					Intent intent = new Intent(ScriptActivity.ACTION_NFC_TOUCH_ACTION_UP);
-					nfcTagAdapter.getContext().sendBroadcast(intent);
-				}
-				return false;
-			}
-		});
-	}
+        holder.nfcTagFragmentButtonLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    Intent intent = new Intent(ScriptActivity.ACTION_NFC_TOUCH_ACTION_UP);
+                    nfcTagAdapter.getContext().sendBroadcast(intent);
+                }
+                return false;
+            }
+        });
+    }
 
-	private void handleDetails(NfcTagBaseAdapter nfcTagAdapter, NfcTagViewHolder holder, NfcTagData nfcTagData) {
-		if (nfcTagAdapter.getShowDetails()) {
-			holder.nfcTagUidTextView.setText(nfcTagData.getNfcTagUid());
-			holder.nfcTagDetailsLinearLayout.setVisibility(TextView.VISIBLE);
-		} else {
-			holder.nfcTagDetailsLinearLayout.setVisibility(TextView.GONE);
-		}
-	}
+    private void handleDetails(NfcTagBaseAdapter nfcTagAdapter, NfcTagViewHolder holder, NfcTagData nfcTagData) {
+        if (nfcTagAdapter.getShowDetails()) {
+            holder.nfcTagUidTextView.setText(nfcTagData.getNfcTagUid());
+            holder.nfcTagDetailsLinearLayout.setVisibility(TextView.VISIBLE);
+        } else {
+            holder.nfcTagDetailsLinearLayout.setVisibility(TextView.GONE);
+        }
+    }
 
-	private void handleCheckboxes(final int position, NfcTagViewHolder holder, final NfcTagBaseAdapter nfcTagAdapter) {
-		holder.checkbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if (isChecked) {
-					if (nfcTagAdapter.getSelectMode() == ListView.CHOICE_MODE_SINGLE) {
-						nfcTagAdapter.clearCheckedItems();
-					}
-					nfcTagAdapter.getCheckedItems().add(position);
-				} else {
-					nfcTagAdapter.getCheckedItems().remove(position);
-				}
-				nfcTagAdapter.notifyDataSetChanged();
+    private void handleCheckboxes(final int position, NfcTagViewHolder holder, final NfcTagBaseAdapter nfcTagAdapter) {
+        holder.checkbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    if (nfcTagAdapter.getSelectMode() == ListView.CHOICE_MODE_SINGLE) {
+                        nfcTagAdapter.clearCheckedItems();
+                    }
+                    nfcTagAdapter.getCheckedItems().add(position);
+                } else {
+                    nfcTagAdapter.getCheckedItems().remove(position);
+                }
+                nfcTagAdapter.notifyDataSetChanged();
 
-				if (nfcTagAdapter.getOnNfcTagEditListener() != null) {
-					nfcTagAdapter.getOnNfcTagEditListener().onNfcTagChecked();
-				}
-			}
-		});
+                if (nfcTagAdapter.getOnNfcTagEditListener() != null) {
+                    nfcTagAdapter.getOnNfcTagEditListener().onNfcTagChecked();
+                }
+            }
+        });
 
-		if (nfcTagAdapter.getSelectMode() != ListView.CHOICE_MODE_NONE) {
-			holder.checkbox.setVisibility(View.VISIBLE);
-			holder.checkbox.setVisibility(View.VISIBLE);
-			holder.nfcTagFragmentButtonLayout.setBackgroundResource(R.drawable.button_background_shadowed);
-		} else {
-			holder.checkbox.setVisibility(View.GONE);
-			holder.checkbox.setVisibility(View.GONE);
-			holder.nfcTagFragmentButtonLayout.setBackgroundResource(R.drawable.button_background_selector);
-			holder.checkbox.setChecked(false);
-			nfcTagAdapter.clearCheckedItems();
-		}
+        if (nfcTagAdapter.getSelectMode() != ListView.CHOICE_MODE_NONE) {
+            holder.checkbox.setVisibility(View.VISIBLE);
+            holder.checkbox.setVisibility(View.VISIBLE);
+            holder.nfcTagFragmentButtonLayout.setBackgroundResource(R.drawable.button_background_shadowed);
+        } else {
+            holder.checkbox.setVisibility(View.GONE);
+            holder.checkbox.setVisibility(View.GONE);
+            holder.nfcTagFragmentButtonLayout.setBackgroundResource(R.drawable.button_background_selector);
+            holder.checkbox.setChecked(false);
+            nfcTagAdapter.clearCheckedItems();
+        }
 
-		if (nfcTagAdapter.getCheckedItems().contains(position)) {
-			holder.checkbox.setChecked(true);
-		} else {
-			holder.checkbox.setChecked(false);
-		}
-	}
+        if (nfcTagAdapter.getCheckedItems().contains(position)) {
+            holder.checkbox.setChecked(true);
+        } else {
+            holder.checkbox.setChecked(false);
+        }
+    }
 
-	public NfcTagData copyNfcTag(NfcTagData selectedNfcTagData, List<NfcTagData> nfcTagDataList, NfcTagBaseAdapter adapter) {
-		return updateNfcTagAdapter(selectedNfcTagData.getNfcTagName(), selectedNfcTagData.getNfcTagUid(), nfcTagDataList,
-				adapter);
-	}
+    public NfcTagData copyNfcTag(NfcTagData selectedNfcTagData, List<NfcTagData> nfcTagDataList, NfcTagBaseAdapter adapter) {
+        return updateNfcTagAdapter(selectedNfcTagData.getNfcTagName(), selectedNfcTagData.getNfcTagUid(), nfcTagDataList,
+                adapter);
+    }
 
-	public NfcTagData copyNfcTag(int position, List<NfcTagData> nfcTagDataList, NfcTagBaseAdapter adapter) {
-		NfcTagData nfcTagData = nfcTagDataList.get(position);
-		return NfcTagController.getInstance().updateNfcTagAdapter(nfcTagData.getNfcTagName(), nfcTagData.getNfcTagUid(),
-				nfcTagDataList, adapter);
-	}
+    public NfcTagData copyNfcTag(int position, List<NfcTagData> nfcTagDataList, NfcTagBaseAdapter adapter) {
+        NfcTagData nfcTagData = nfcTagDataList.get(position);
+        return NfcTagController.getInstance().updateNfcTagAdapter(nfcTagData.getNfcTagName(), nfcTagData.getNfcTagUid(),
+                nfcTagDataList, adapter);
+    }
 
-	private void deleteNfcTag(int position, List<NfcTagData> nfcTagDataList, Activity activity) {
-		nfcTagDataList.remove(position);
-		ProjectManager.getInstance().getCurrentSprite().setNfcTagList(nfcTagDataList);
-		activity.sendBroadcast(new Intent(ScriptActivity.ACTION_NFCTAG_DELETED));
-	}
+    private void deleteNfcTag(int position, List<NfcTagData> nfcTagDataList, Activity activity) {
+        nfcTagDataList.remove(position);
+        ProjectManager.getInstance().getCurrentSprite().setNfcTagList(nfcTagDataList);
+        activity.sendBroadcast(new Intent(ScriptActivity.ACTION_NFCTAG_DELETED));
+    }
 
-	public void deleteCheckedNfcTags(Activity activity, NfcTagBaseAdapter adapter, List<NfcTagData> nfcTagDataList) {
-		SortedSet<Integer> checkedNfcTags = adapter.getCheckedItems();
-		Iterator<Integer> iterator = checkedNfcTags.iterator();
-		NfcTagController.getInstance().stopScanAndUpdateList(nfcTagDataList, adapter);
-		int numberDeleted = 0;
-		while (iterator.hasNext()) {
-			int position = iterator.next();
-			deleteNfcTag(position - numberDeleted, nfcTagDataList, activity);
-			++numberDeleted;
-		}
-	}
+    public void deleteCheckedNfcTags(Activity activity, NfcTagBaseAdapter adapter, List<NfcTagData> nfcTagDataList) {
+        SortedSet<Integer> checkedNfcTags = adapter.getCheckedItems();
+        Iterator<Integer> iterator = checkedNfcTags.iterator();
+        NfcTagController.getInstance().stopScanAndUpdateList(nfcTagDataList, adapter);
+        int numberDeleted = 0;
+        while (iterator.hasNext()) {
+            int position = iterator.next();
+            deleteNfcTag(position - numberDeleted, nfcTagDataList, activity);
+            ++numberDeleted;
+        }
+    }
 
-	public NfcTagData updateNfcTagAdapter(String name, String uid, List<NfcTagData> nfcTagDataList, NfcTagBaseAdapter adapter) {
-		name = Utils.getUniqueNfcTagName(name);
+    public NfcTagData updateNfcTagAdapter(String name, String uid, List<NfcTagData> nfcTagDataList, NfcTagBaseAdapter adapter) {
+        name = Utils.getUniqueNfcTagName(name);
 
-		NfcTagData newNfcTagData = new NfcTagData();
-		newNfcTagData.setNfcTagName(name);
-		newNfcTagData.setNfcTagUid(uid);
-		nfcTagDataList.add(newNfcTagData);
+        NfcTagData newNfcTagData = new NfcTagData();
+        newNfcTagData.setNfcTagName(name);
+        newNfcTagData.setNfcTagUid(uid);
+        nfcTagDataList.add(newNfcTagData);
 
-		adapter.notifyDataSetChanged();
-		return newNfcTagData;
-	}
+        adapter.notifyDataSetChanged();
+        return newNfcTagData;
+    }
 
-	public void stopScanAndUpdateList(List<NfcTagData> nfcTagDataList,
-			NfcTagBaseAdapter adapter) {
-		adapter.notifyDataSetChanged();
-	}
+    public void stopScanAndUpdateList(List<NfcTagData> nfcTagDataList,
+                                      NfcTagBaseAdapter adapter) {
+        adapter.notifyDataSetChanged();
+    }
 
-	public void switchToScriptFragment(NfcTagFragment nfcTagFragment) {
-		ScriptActivity scriptActivity = (ScriptActivity) nfcTagFragment.getActivity();
-		scriptActivity.setCurrentFragment(ScriptActivity.FRAGMENT_SCRIPTS);
+    public void switchToScriptFragment(NfcTagFragment nfcTagFragment) {
+        ScriptActivity scriptActivity = (ScriptActivity) nfcTagFragment.getActivity();
+        scriptActivity.setCurrentFragment(ScriptActivity.FRAGMENT_SCRIPTS);
 
-		FragmentTransaction fragmentTransaction = scriptActivity.getFragmentManager().beginTransaction();
-		fragmentTransaction.hide(nfcTagFragment);
-		fragmentTransaction.show(scriptActivity.getFragmentManager().findFragmentByTag(ScriptFragment.TAG));
-		fragmentTransaction.commit();
+        FragmentTransaction fragmentTransaction = scriptActivity.getFragmentManager().beginTransaction();
+        fragmentTransaction.hide(nfcTagFragment);
+        fragmentTransaction.show(scriptActivity.getFragmentManager().findFragmentByTag(ScriptFragment.TAG));
+        fragmentTransaction.commit();
 
-		scriptActivity.setIsNfcTagFragmentFromWhenNfcBrickNewFalse();
-		scriptActivity.setIsNfcTagFragmentHandleAddButtonHandled(false);
-	}
+        scriptActivity.setIsNfcTagFragmentFromWhenNfcBrickNewFalse();
+        scriptActivity.setIsNfcTagFragmentHandleAddButtonHandled(false);
+    }
 }

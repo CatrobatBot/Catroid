@@ -45,134 +45,134 @@ import java.util.List;
 
 public class ProjectToMidiConverter {
 
-	public static final String MIDI_FILE_EXTENSION = ".midi";
-	public static final String MIDI_FILE_IDENTIFIER = "Musicdroid Midi File";
-	public static final File MIDI_FOLDER = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "musicdroid");
+    public static final String MIDI_FILE_EXTENSION = ".midi";
+    public static final String MIDI_FILE_IDENTIFIER = "Musicdroid Midi File";
+    public static final File MIDI_FOLDER = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "musicdroid");
 
-	private static final int MAX_CHANNEL = 16;
+    private static final int MAX_CHANNEL = 16;
 
-	private NoteEventToMidiEventConverter eventConverter;
-	private int nextChannel;
+    private NoteEventToMidiEventConverter eventConverter;
+    private int nextChannel;
 
-	public ProjectToMidiConverter() {
-		eventConverter = new NoteEventToMidiEventConverter();
-		nextChannel = 0;
-	}
+    public ProjectToMidiConverter() {
+        eventConverter = new NoteEventToMidiEventConverter();
+        nextChannel = 0;
+    }
 
-	public boolean deleteMidiByName(String name) {
-		File file = new File(ProjectToMidiConverter.MIDI_FOLDER, name + ProjectToMidiConverter.MIDI_FILE_EXTENSION);
+    public boolean deleteMidiByName(String name) {
+        File file = new File(ProjectToMidiConverter.MIDI_FOLDER, name + ProjectToMidiConverter.MIDI_FILE_EXTENSION);
 
-		if (file.delete()) {
-			return true;
-		}
+        if (file.delete()) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public void writeProjectAsMidi(Project project) throws IOException, MidiException {
-		MidiFile midiFile = convertProject(project);
+    public void writeProjectAsMidi(Project project) throws IOException, MidiException {
+        MidiFile midiFile = convertProject(project);
 
-		checkMidiFolder();
+        checkMidiFolder();
 
-		midiFile.writeToFile(getMidiFileFromProjectName(project.getName()));
-	}
+        midiFile.writeToFile(getMidiFileFromProjectName(project.getName()));
+    }
 
-	private static void checkMidiFolder() throws IOException {
-		if (!MIDI_FOLDER.exists()) {
-			boolean success = MIDI_FOLDER.mkdir();
+    private static void checkMidiFolder() throws IOException {
+        if (!MIDI_FOLDER.exists()) {
+            boolean success = MIDI_FOLDER.mkdir();
 
-			if (!success) {
-				throw new IOException("Could not create folder: " + MIDI_FOLDER);
-			}
-		}
-	}
+            if (!success) {
+                throw new IOException("Could not create folder: " + MIDI_FOLDER);
+            }
+        }
+    }
 
-	public static File getMidiFileFromProjectName(String name) throws IOException {
-		checkMidiFolder();
+    public static File getMidiFileFromProjectName(String name) throws IOException {
+        checkMidiFolder();
 
-		return new File(MIDI_FOLDER + File.separator + name + MIDI_FILE_EXTENSION);
-	}
+        return new File(MIDI_FOLDER + File.separator + name + MIDI_FILE_EXTENSION);
+    }
 
-	public static String removeMidiExtensionFromString(String input) {
-		return input.split(MIDI_FILE_EXTENSION)[0];
-	}
+    public static String removeMidiExtensionFromString(String input) {
+        return input.split(MIDI_FILE_EXTENSION)[0];
+    }
 
-	public void writeProjectAsMidi(Project project, File file) throws IOException, MidiException {
-		MidiFile midi = convertProject(project);
+    public void writeProjectAsMidi(Project project, File file) throws IOException, MidiException {
+        MidiFile midi = convertProject(project);
 
-		midi.writeToFile(file);
-	}
+        midi.writeToFile(file);
+    }
 
-	private MidiFile convertProject(Project project) throws MidiException {
-		for (String trackName : project.getTrackNames()) {
-			Track track = project.getTrack(trackName);
+    private MidiFile convertProject(Project project) throws MidiException {
+        for (String trackName : project.getTrackNames()) {
+            Track track = project.getTrack(trackName);
 
-			if (0 == track.size()) {
-				throw new MidiException("Cannot save a project with an empty track!");
-			}
-		}
+            if (0 == track.size()) {
+                throw new MidiException("Cannot save a project with an empty track!");
+            }
+        }
 
-		ArrayList<MidiTrack> tracks = new ArrayList<MidiTrack>();
+        ArrayList<MidiTrack> tracks = new ArrayList<MidiTrack>();
 
-		MidiTrack tempoTrack = createTempoTrackWithMetaInfo(project.getBeat(), project.getBeatsPerMinute());
-		tracks.add(tempoTrack);
+        MidiTrack tempoTrack = createTempoTrackWithMetaInfo(project.getBeat(), project.getBeatsPerMinute());
+        tracks.add(tempoTrack);
 
-		for (String trackName : project.getTrackNames()) {
-			Track track = project.getTrack(trackName);
-			int channel = getNextChannel();
+        for (String trackName : project.getTrackNames()) {
+            Track track = project.getTrack(trackName);
+            int channel = getNextChannel();
 
-			MidiTrack noteTrack = createNoteTrack(trackName, track, channel);
+            MidiTrack noteTrack = createNoteTrack(trackName, track, channel);
 
-			tracks.add(noteTrack);
-		}
+            tracks.add(noteTrack);
+        }
 
-		return new MidiFile(MidiFile.DEFAULT_RESOLUTION, tracks);
-	}
+        return new MidiFile(MidiFile.DEFAULT_RESOLUTION, tracks);
+    }
 
-	private int getNextChannel() throws MidiException {
-		if (nextChannel >= MAX_CHANNEL) {
-			throw new MidiException("You cannot have more than " + MAX_CHANNEL + " channels!");
-		}
+    private int getNextChannel() throws MidiException {
+        if (nextChannel >= MAX_CHANNEL) {
+            throw new MidiException("You cannot have more than " + MAX_CHANNEL + " channels!");
+        }
 
-		return nextChannel++;
-	}
+        return nextChannel++;
+    }
 
-	private MidiTrack createTempoTrackWithMetaInfo(MusicalBeat beat, int beatsPerMinute) {
-		MidiTrack tempoTrack = new MidiTrack();
+    private MidiTrack createTempoTrackWithMetaInfo(MusicalBeat beat, int beatsPerMinute) {
+        MidiTrack tempoTrack = new MidiTrack();
 
-		Text text = new Text(0, 0, MIDI_FILE_IDENTIFIER);
-		tempoTrack.insertEvent(text);
+        Text text = new Text(0, 0, MIDI_FILE_IDENTIFIER);
+        tempoTrack.insertEvent(text);
 
-		Tempo tempo = new Tempo();
-		tempo.setBpm(beatsPerMinute);
-		tempoTrack.insertEvent(tempo);
+        Tempo tempo = new Tempo();
+        tempo.setBpm(beatsPerMinute);
+        tempoTrack.insertEvent(tempo);
 
-		TimeSignature timeSignature = new TimeSignature();
-		timeSignature.setTimeSignature(beat.getTopNumber(), beat.getBottomNumber(), TimeSignature.DEFAULT_METER,
-				TimeSignature
-						.DEFAULT_DIVISION);
-		tempoTrack.insertEvent(timeSignature);
+        TimeSignature timeSignature = new TimeSignature();
+        timeSignature.setTimeSignature(beat.getTopNumber(), beat.getBottomNumber(), TimeSignature.DEFAULT_METER,
+                TimeSignature
+                        .DEFAULT_DIVISION);
+        tempoTrack.insertEvent(timeSignature);
 
-		return tempoTrack;
-	}
+        return tempoTrack;
+    }
 
-	private MidiTrack createNoteTrack(String trackName, Track track, int channel) throws MidiException {
-		MidiTrack noteTrack = new MidiTrack();
+    private MidiTrack createNoteTrack(String trackName, Track track, int channel) throws MidiException {
+        MidiTrack noteTrack = new MidiTrack();
 
-		TrackName trackNameEvent = new TrackName(0, channel, trackName);
-		noteTrack.insertEvent(trackNameEvent);
-		ProgramChange program = new ProgramChange(0, channel, track.getInstrument().getProgram());
-		noteTrack.insertEvent(program);
+        TrackName trackNameEvent = new TrackName(0, channel, trackName);
+        noteTrack.insertEvent(trackNameEvent);
+        ProgramChange program = new ProgramChange(0, channel, track.getInstrument().getProgram());
+        noteTrack.insertEvent(program);
 
-		for (long tick : track.getSortedTicks()) {
-			List<NoteEvent> noteEventList = track.getNoteEventsForTick(tick);
+        for (long tick : track.getSortedTicks()) {
+            List<NoteEvent> noteEventList = track.getNoteEventsForTick(tick);
 
-			for (NoteEvent noteEvent : noteEventList) {
-				ChannelEvent channelEvent = eventConverter.convertNoteEvent(tick, noteEvent, channel);
-				noteTrack.insertEvent(channelEvent);
-			}
-		}
+            for (NoteEvent noteEvent : noteEventList) {
+                ChannelEvent channelEvent = eventConverter.convertNoteEvent(tick, noteEvent, channel);
+                noteTrack.insertEvent(channelEvent);
+            }
+        }
 
-		return noteTrack;
-	}
+        return noteTrack;
+    }
 }

@@ -37,70 +37,70 @@ import java.util.ArrayList;
 
 public class InternFormulaTokenSelectionTest extends InstrumentationTestCase {
 
-	private InternFormula internFormula;
+    private InternFormula internFormula;
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
 
-		ArrayList<InternToken> internTokens = new ArrayList<InternToken>();
-		internTokens.add(new InternToken(InternTokenType.FUNCTION_NAME, Functions.SIN.name()));
-		internTokens.add(new InternToken(InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN));
-		internTokens.add(new InternToken(InternTokenType.NUMBER, "42.42"));
-		internTokens.add(new InternToken(InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE));
+        ArrayList<InternToken> internTokens = new ArrayList<InternToken>();
+        internTokens.add(new InternToken(InternTokenType.FUNCTION_NAME, Functions.SIN.name()));
+        internTokens.add(new InternToken(InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN));
+        internTokens.add(new InternToken(InternTokenType.NUMBER, "42.42"));
+        internTokens.add(new InternToken(InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE));
 
-		internFormula = new InternFormula(internTokens);
-		internFormula.generateExternFormulaStringAndInternExternMapping(getInstrumentation().getTargetContext());
-		int doubleClickIndex = internFormula.getExternFormulaString().length();
-		internFormula.setCursorAndSelection(doubleClickIndex, true);
-	}
+        internFormula = new InternFormula(internTokens);
+        internFormula.generateExternFormulaStringAndInternExternMapping(getInstrumentation().getTargetContext());
+        int doubleClickIndex = internFormula.getExternFormulaString().length();
+        internFormula.setCursorAndSelection(doubleClickIndex, true);
+    }
 
-	public void testReplaceFunctionByToken() {
-		assertEquals("Selection start index not as expected", 0, internFormula.getSelection().getStartIndex());
-		assertEquals("Selection end index not as expected", 3, internFormula.getSelection().getEndIndex());
+    public void testReplaceFunctionByToken() {
+        assertEquals("Selection start index not as expected", 0, internFormula.getSelection().getStartIndex());
+        assertEquals("Selection end index not as expected", 3, internFormula.getSelection().getEndIndex());
 
-		InternFormulaTokenSelection tokenSelection = internFormula.getSelection();
-		InternFormulaTokenSelection tokenSelectionDeepCopy = tokenSelection.deepCopy();
+        InternFormulaTokenSelection tokenSelection = internFormula.getSelection();
+        InternFormulaTokenSelection tokenSelectionDeepCopy = tokenSelection.deepCopy();
 
-		assertTrue("Deep copy of InternFormulaTokenSelection failed", tokenSelection.equals(tokenSelectionDeepCopy));
+        assertTrue("Deep copy of InternFormulaTokenSelection failed", tokenSelection.equals(tokenSelectionDeepCopy));
 
-		Reflection.setPrivateField(tokenSelectionDeepCopy, "tokenSelectionType",
-				TokenSelectionType.PARSER_ERROR_SELECTION);
-		assertFalse("Equal error in InternFormulaTokenSelection", tokenSelectionDeepCopy.equals(tokenSelection));
+        Reflection.setPrivateField(tokenSelectionDeepCopy, "tokenSelectionType",
+                TokenSelectionType.PARSER_ERROR_SELECTION);
+        assertFalse("Equal error in InternFormulaTokenSelection", tokenSelectionDeepCopy.equals(tokenSelection));
 
-		tokenSelectionDeepCopy = tokenSelection.deepCopy();
-		Reflection.setPrivateField(tokenSelectionDeepCopy, "internTokenSelectionStart", -1);
-		assertFalse("Equal error in InternFormulaTokenSelection", tokenSelectionDeepCopy.equals(tokenSelection));
+        tokenSelectionDeepCopy = tokenSelection.deepCopy();
+        Reflection.setPrivateField(tokenSelectionDeepCopy, "internTokenSelectionStart", -1);
+        assertFalse("Equal error in InternFormulaTokenSelection", tokenSelectionDeepCopy.equals(tokenSelection));
 
-		tokenSelectionDeepCopy = tokenSelection.deepCopy();
-		Reflection.setPrivateField(tokenSelectionDeepCopy, "internTokenSelectionEnd", -1);
-		assertFalse("Equal error in InternFormulaTokenSelection", tokenSelectionDeepCopy.equals(tokenSelection));
+        tokenSelectionDeepCopy = tokenSelection.deepCopy();
+        Reflection.setPrivateField(tokenSelectionDeepCopy, "internTokenSelectionEnd", -1);
+        assertFalse("Equal error in InternFormulaTokenSelection", tokenSelectionDeepCopy.equals(tokenSelection));
 
-		assertFalse("Equal error in InternFormulaTokenSelection", tokenSelectionDeepCopy.equals(1));
-	}
+        assertFalse("Equal error in InternFormulaTokenSelection", tokenSelectionDeepCopy.equals(1));
+    }
 
-	public void testHashCodeFunction() {
-		InternFormulaTokenSelection tokenSelection = internFormula.getSelection();
-		InternFormulaTokenSelection tokenSelectionDeepCopy = tokenSelection.deepCopy();
+    public void testHashCodeFunction() {
+        InternFormulaTokenSelection tokenSelection = internFormula.getSelection();
+        InternFormulaTokenSelection tokenSelectionDeepCopy = tokenSelection.deepCopy();
 
-		assertTrue("HashCode function not correct implemented",
-				tokenSelection.hashCode() == tokenSelectionDeepCopy.hashCode());
+        assertTrue("HashCode function not correct implemented",
+                tokenSelection.hashCode() == tokenSelectionDeepCopy.hashCode());
 
-		Reflection.setPrivateField(tokenSelectionDeepCopy, "tokenSelectionType",
-				TokenSelectionType.PARSER_ERROR_SELECTION);
-		assertFalse("HashCode function not correct implemented",
-				tokenSelectionDeepCopy.hashCode() == tokenSelection.hashCode());
+        Reflection.setPrivateField(tokenSelectionDeepCopy, "tokenSelectionType",
+                TokenSelectionType.PARSER_ERROR_SELECTION);
+        assertFalse("HashCode function not correct implemented",
+                tokenSelectionDeepCopy.hashCode() == tokenSelection.hashCode());
 
-		tokenSelectionDeepCopy = tokenSelection.deepCopy();
-		Reflection.setPrivateField(tokenSelectionDeepCopy, "internTokenSelectionStart", -1);
-		assertFalse("HashCode function not correct implemented",
-				tokenSelectionDeepCopy.hashCode() == tokenSelection.hashCode());
+        tokenSelectionDeepCopy = tokenSelection.deepCopy();
+        Reflection.setPrivateField(tokenSelectionDeepCopy, "internTokenSelectionStart", -1);
+        assertFalse("HashCode function not correct implemented",
+                tokenSelectionDeepCopy.hashCode() == tokenSelection.hashCode());
 
-		tokenSelectionDeepCopy = tokenSelection.deepCopy();
-		Reflection.setPrivateField(tokenSelectionDeepCopy, "internTokenSelectionEnd", -1);
-		assertFalse("HashCode function not correct implemented",
-				tokenSelectionDeepCopy.hashCode() == tokenSelection.hashCode());
+        tokenSelectionDeepCopy = tokenSelection.deepCopy();
+        Reflection.setPrivateField(tokenSelectionDeepCopy, "internTokenSelectionEnd", -1);
+        assertFalse("HashCode function not correct implemented",
+                tokenSelectionDeepCopy.hashCode() == tokenSelection.hashCode());
 
-		assertFalse("HashCode function not correct implemented", tokenSelectionDeepCopy.hashCode() == 1);
-	}
+        assertFalse("HashCode function not correct implemented", tokenSelectionDeepCopy.hashCode() == 1);
+    }
 }

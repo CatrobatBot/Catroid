@@ -27,17 +27,17 @@ import org.catrobat.catroid.devices.mindstorms.MindstormsConnection;
 
 public class EV3InfraredSensor extends EV3Sensor {
 
-	public static final String TAG = EV3InfraredSensor.class.getSimpleName();
-	private static final int DEFAULT_VALUE = 50;
+    public static final String TAG = EV3InfraredSensor.class.getSimpleName();
+    private static final int DEFAULT_VALUE = 50;
 
-	public EV3InfraredSensor(int port, MindstormsConnection connection) {
-		// IR MODE0 is the proximity-mode
-		super(port, EV3SensorType.EV3_INFRARED, EV3SensorMode.MODE0, connection);
-		lastValidValue = DEFAULT_VALUE;
-	}
+    public EV3InfraredSensor(int port, MindstormsConnection connection) {
+        // IR MODE0 is the proximity-mode
+        super(port, EV3SensorType.EV3_INFRARED, EV3SensorMode.MODE0, connection);
+        lastValidValue = DEFAULT_VALUE;
+    }
 
-	@Override
-	public int getValue() {
-		return getPercentValue();
-	}
+    @Override
+    public int getValue() {
+        return getPercentValue();
+    }
 }

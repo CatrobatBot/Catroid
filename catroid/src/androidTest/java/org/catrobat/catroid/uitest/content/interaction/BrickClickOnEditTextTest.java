@@ -43,105 +43,105 @@ import java.util.List;
 
 public class BrickClickOnEditTextTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
-	public BrickClickOnEditTextTest() {
-		super(MainMenuActivity.class);
-	}
+    public BrickClickOnEditTextTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		getIntoActivity();
-	}
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        getIntoActivity();
+    }
 
-	@Override
-	protected void tearDown() throws Exception {
-		// workaround to disable mindstorms settings
-		// should be disabled no matter if test failed or succeeded
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+    @Override
+    protected void tearDown() throws Exception {
+        // workaround to disable mindstorms settings
+        // should be disabled no matter if test failed or succeeded
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-		// disable mindstorms bricks, if enabled at start
-		if (sharedPreferences.getBoolean(SettingsActivity.SETTINGS_MINDSTORMS_NXT_BRICKS_ENABLED, false)) {
-			sharedPreferences.edit().putBoolean(SettingsActivity.SETTINGS_MINDSTORMS_NXT_BRICKS_ENABLED, false).commit();
-		}
-		super.tearDown();
-	}
+        // disable mindstorms bricks, if enabled at start
+        if (sharedPreferences.getBoolean(SettingsActivity.SETTINGS_MINDSTORMS_NXT_BRICKS_ENABLED, false)) {
+            sharedPreferences.edit().putBoolean(SettingsActivity.SETTINGS_MINDSTORMS_NXT_BRICKS_ENABLED, false).commit();
+        }
+        super.tearDown();
+    }
 
-	public void testIfEditTextAreVisibleAndClickOnTextSetXandYInAddBrickDialog() {
+    public void testIfEditTextAreVisibleAndClickOnTextSetXandYInAddBrickDialog() {
 
-		UiTestUtils.addNewBrick(solo, R.string.brick_set_x);
-		solo.sleep(500);
-		UiTestUtils.dragFloatingBrickDownwards(solo);
-		solo.sleep(500);
-		List<Brick> brickListToCheck = ProjectManager.getInstance().getCurrentScript().getBrickList();
-		assertEquals("One Brick should be in bricklist", 1, brickListToCheck.size());
-		assertTrue("Set brick should be instance of SetXBrick", brickListToCheck.get(0) instanceof SetXBrick);
+        UiTestUtils.addNewBrick(solo, R.string.brick_set_x);
+        solo.sleep(500);
+        UiTestUtils.dragFloatingBrickDownwards(solo);
+        solo.sleep(500);
+        List<Brick> brickListToCheck = ProjectManager.getInstance().getCurrentScript().getBrickList();
+        assertEquals("One Brick should be in bricklist", 1, brickListToCheck.size());
+        assertTrue("Set brick should be instance of SetXBrick", brickListToCheck.get(0) instanceof SetXBrick);
 
-		UiTestUtils.addNewBrick(solo, R.string.brick_set_y);
-		solo.sleep(500);
-		UiTestUtils.dragFloatingBrickUpwards(solo);
-		solo.sleep(500);
+        UiTestUtils.addNewBrick(solo, R.string.brick_set_y);
+        solo.sleep(500);
+        UiTestUtils.dragFloatingBrickUpwards(solo);
+        solo.sleep(500);
 
-		brickListToCheck = ProjectManager.getInstance().getCurrentScript().getBrickList();
-		assertEquals("Two Bricks should be in bricklist", 2, brickListToCheck.size());
-		assertTrue("Set brick should be instance of SetYBrick", brickListToCheck.get(0) instanceof SetYBrick);
-		assertTrue("Set brick should be instance of SetXBrick", brickListToCheck.get(1) instanceof SetXBrick);
+        brickListToCheck = ProjectManager.getInstance().getCurrentScript().getBrickList();
+        assertEquals("Two Bricks should be in bricklist", 2, brickListToCheck.size());
+        assertTrue("Set brick should be instance of SetYBrick", brickListToCheck.get(0) instanceof SetYBrick);
+        assertTrue("Set brick should be instance of SetXBrick", brickListToCheck.get(1) instanceof SetXBrick);
 
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_add);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_add);
 
-		editTextFieldVisibility(solo.getString(R.string.category_control));
-		editTextFieldVisibility(solo.getString(R.string.category_motion));
-		editTextFieldVisibility(solo.getString(R.string.category_sound));
-		editTextFieldVisibility(solo.getString(R.string.category_looks));
+        editTextFieldVisibility(solo.getString(R.string.category_control));
+        editTextFieldVisibility(solo.getString(R.string.category_motion));
+        editTextFieldVisibility(solo.getString(R.string.category_sound));
+        editTextFieldVisibility(solo.getString(R.string.category_looks));
 
-		solo.drag(40, 40, 300, 40, UiTestUtils.DRAG_FRAMES);
-		editTextFieldVisibility(solo.getString(R.string.category_data));
-		ListView fragmentListView = solo.getCurrentViews(ListView.class).get(
-				solo.getCurrentViews(ListView.class).size() - 1);
-		solo.scrollDownList(fragmentListView);
-		editTextFieldVisibility(solo.getString(R.string.category_lego_nxt));
-	}
+        solo.drag(40, 40, 300, 40, UiTestUtils.DRAG_FRAMES);
+        editTextFieldVisibility(solo.getString(R.string.category_data));
+        ListView fragmentListView = solo.getCurrentViews(ListView.class).get(
+                solo.getCurrentViews(ListView.class).size() - 1);
+        solo.scrollDownList(fragmentListView);
+        editTextFieldVisibility(solo.getString(R.string.category_lego_nxt));
+    }
 
-	private void getIntoActivity() {
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+    private void getIntoActivity() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-		// enable mindstorms bricks, if disabled at start
-		if (!sharedPreferences.getBoolean(SettingsActivity.SETTINGS_MINDSTORMS_NXT_BRICKS_ENABLED, false)) {
-			sharedPreferences.edit().putBoolean(SettingsActivity.SETTINGS_MINDSTORMS_NXT_BRICKS_ENABLED, true).commit();
-		}
+        // enable mindstorms bricks, if disabled at start
+        if (!sharedPreferences.getBoolean(SettingsActivity.SETTINGS_MINDSTORMS_NXT_BRICKS_ENABLED, false)) {
+            sharedPreferences.edit().putBoolean(SettingsActivity.SETTINGS_MINDSTORMS_NXT_BRICKS_ENABLED, true).commit();
+        }
 
-		UiTestUtils.createEmptyProject();
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
-	}
+        UiTestUtils.createEmptyProject();
+        UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
+    }
 
-	private void editTextFieldVisibility(String category) {
+    private void editTextFieldVisibility(String category) {
 
-		solo.clickOnText(category);
+        solo.clickOnText(category);
 
-		solo.searchText(category);
-		int ignoreFirstTwo = 0;
+        solo.searchText(category);
+        int ignoreFirstTwo = 0;
 
-		ArrayList<EditText> editTextList = solo.getCurrentViews(EditText.class);
-		for (EditText text : editTextList) {
-			if (text.getVisibility() == View.VISIBLE && ignoreFirstTwo > 2) {
-				fail("EditTexts should be invisible in AddBrickFragment! Check other brick xmls for more information");
-			}
-			ignoreFirstTwo++;
-		}
+        ArrayList<EditText> editTextList = solo.getCurrentViews(EditText.class);
+        for (EditText text : editTextList) {
+            if (text.getVisibility() == View.VISIBLE && ignoreFirstTwo > 2) {
+                fail("EditTexts should be invisible in AddBrickFragment! Check other brick xmls for more information");
+            }
+            ignoreFirstTwo++;
+        }
 
-		ListView fragmentListView = solo.getCurrentViews(ListView.class).get(
-				solo.getCurrentViews(ListView.class).size() - 1);
-		solo.scrollDownList(fragmentListView);
+        ListView fragmentListView = solo.getCurrentViews(ListView.class).get(
+                solo.getCurrentViews(ListView.class).size() - 1);
+        solo.scrollDownList(fragmentListView);
 
-		ignoreFirstTwo = 0;
-		editTextList = solo.getCurrentViews(EditText.class);
-		for (EditText text : editTextList) {
-			if (text.getVisibility() == View.VISIBLE && ignoreFirstTwo > 2) {
-				fail("EditTexts should be invisible in AddBrickDialog! Check other brick xmls for more information");
-			}
-			ignoreFirstTwo++;
-		}
+        ignoreFirstTwo = 0;
+        editTextList = solo.getCurrentViews(EditText.class);
+        for (EditText text : editTextList) {
+            if (text.getVisibility() == View.VISIBLE && ignoreFirstTwo > 2) {
+                fail("EditTexts should be invisible in AddBrickDialog! Check other brick xmls for more information");
+            }
+            ignoreFirstTwo++;
+        }
 
-		solo.scrollUpList(fragmentListView);
-		solo.goBack();
-	}
+        solo.scrollUpList(fragmentListView);
+        solo.goBack();
+    }
 }

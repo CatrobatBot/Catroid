@@ -40,60 +40,60 @@ import java.io.File;
 
 public class PhysicsBaseTest extends InstrumentationTestCase {
 
-	protected Sprite sprite;
-	protected PhysicsWorld physicsWorld;
+    protected Sprite sprite;
+    protected PhysicsWorld physicsWorld;
 
-	protected Project project;
-	private String rectangle125x125FileName;
-	protected File rectangle125x125File;
-	private static final int RECTANGLE125X125_RES_ID = R.raw.rectangle_125x125;
+    protected Project project;
+    private String rectangle125x125FileName;
+    protected File rectangle125x125File;
+    private static final int RECTANGLE125X125_RES_ID = R.raw.rectangle_125x125;
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		TestUtils.deleteTestProjects();
-		rectangle125x125FileName = PhysicsTestUtils.getInternalImageFilenameFromFilename("rectangle_125x125.png");
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        TestUtils.deleteTestProjects();
+        rectangle125x125FileName = PhysicsTestUtils.getInternalImageFilenameFromFilename("rectangle_125x125.png");
 
-		project = new Project(getInstrumentation().getTargetContext(), TestUtils.DEFAULT_TEST_PROJECT_NAME);
+        project = new Project(getInstrumentation().getTargetContext(), TestUtils.DEFAULT_TEST_PROJECT_NAME);
 
-		physicsWorld = project.getDefaultScene().getPhysicsWorld();
-		sprite = new Sprite("TestSprite");
-		sprite.look = new PhysicsLook(sprite, physicsWorld);
+        physicsWorld = project.getDefaultScene().getPhysicsWorld();
+        sprite = new Sprite("TestSprite");
+        sprite.look = new PhysicsLook(sprite, physicsWorld);
 
-		project.getDefaultScene().addSprite(sprite);
+        project.getDefaultScene().addSprite(sprite);
 
-		StorageHandler.getInstance().saveProject(project);
-		ProjectManager.getInstance().setProject(project);
+        StorageHandler.getInstance().saveProject(project);
+        ProjectManager.getInstance().setProject(project);
 
-		rectangle125x125File = TestUtils.saveFileToProject(TestUtils.DEFAULT_TEST_PROJECT_NAME, project.getDefaultScene().getName(),
-				rectangle125x125FileName, RECTANGLE125X125_RES_ID, getInstrumentation().getContext(),
-				TestUtils.TYPE_IMAGE_FILE);
+        rectangle125x125File = TestUtils.saveFileToProject(TestUtils.DEFAULT_TEST_PROJECT_NAME, project.getDefaultScene().getName(),
+                rectangle125x125FileName, RECTANGLE125X125_RES_ID, getInstrumentation().getContext(),
+                TestUtils.TYPE_IMAGE_FILE);
 
-		LookData lookdata = PhysicsTestUtils.generateLookData(rectangle125x125File);
-		sprite.look.setLookData(lookdata);
-		sprite.setActionFactory(new ActionPhysicsFactory());
+        LookData lookdata = PhysicsTestUtils.generateLookData(rectangle125x125File);
+        sprite.look.setLookData(lookdata);
+        sprite.setActionFactory(new ActionPhysicsFactory());
 
-		assertTrue("getLookData is null", sprite.look.getLookData() != null);
+        assertTrue("getLookData is null", sprite.look.getLookData() != null);
 
-		stabilizePhysicsWorld(physicsWorld);
-	}
+        stabilizePhysicsWorld(physicsWorld);
+    }
 
-	@Override
-	protected void tearDown() throws Exception {
-		sprite = null;
-		physicsWorld = null;
+    @Override
+    protected void tearDown() throws Exception {
+        sprite = null;
+        physicsWorld = null;
 
-		project = null;
-		rectangle125x125FileName = null;
-		rectangle125x125File = null;
+        project = null;
+        rectangle125x125FileName = null;
+        rectangle125x125File = null;
 
-		TestUtils.deleteTestProjects();
-		super.tearDown();
-	}
+        TestUtils.deleteTestProjects();
+        super.tearDown();
+    }
 
-	public static void stabilizePhysicsWorld(PhysicsWorld physicsWorld) {
-		for (int index = 0; index < PhysicsWorld.STABILIZING_STEPS; index++) {
-			physicsWorld.step(0.0f);
-		}
-	}
+    public static void stabilizePhysicsWorld(PhysicsWorld physicsWorld) {
+        for (int index = 0; index < PhysicsWorld.STABILIZING_STEPS; index++) {
+            physicsWorld.step(0.0f);
+        }
+    }
 }

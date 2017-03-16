@@ -35,44 +35,44 @@ import java.util.List;
 
 public class StampBrick extends BrickBaseType {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public StampBrick() {
-	}
+    public StampBrick() {
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		StampBrick copyBrick = (StampBrick) clone();
-		return copyBrick;
-	}
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        StampBrick copyBrick = (StampBrick) clone();
+        return copyBrick;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		View view = View.inflate(context, R.layout.brick_stamp, null);
+    @Override
+    public View getPrototypeView(Context context) {
+        View view = View.inflate(context, R.layout.brick_stamp, null);
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public Brick clone() {
-		return new StampBrick();
-	}
+    @Override
+    public Brick clone() {
+        return new StampBrick();
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		view = View.inflate(context, R.layout.brick_stamp, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        view = View.inflate(context, R.layout.brick_stamp, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_stamp_checkbox);
-		return view;
-	}
+        setCheckboxView(R.id.brick_stamp_checkbox);
+        return view;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createStampAction(sprite));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createStampAction(sprite));
+        return null;
+    }
 }

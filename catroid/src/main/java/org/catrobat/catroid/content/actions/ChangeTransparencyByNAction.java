@@ -32,25 +32,25 @@ import org.catrobat.catroid.formulaeditor.InterpretationException;
 
 public class ChangeTransparencyByNAction extends TemporalAction {
 
-	private Sprite sprite;
-	private Formula changeTransparency;
+    private Sprite sprite;
+    private Formula changeTransparency;
 
-	@Override
-	protected void update(float delta) {
-		try {
-			Float newChangeTransparency = changeTransparency == null ? Float.valueOf(0f) : changeTransparency
-					.interpretFloat(sprite);
-			sprite.look.changeTransparencyInUserInterfaceDimensionUnit(newChangeTransparency);
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}
-	}
+    @Override
+    protected void update(float delta) {
+        try {
+            Float newChangeTransparency = changeTransparency == null ? Float.valueOf(0f) : changeTransparency
+                    .interpretFloat(sprite);
+            sprite.look.changeTransparencyInUserInterfaceDimensionUnit(newChangeTransparency);
+        } catch (InterpretationException interpretationException) {
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+        }
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setTransparency(Formula value) {
-		this.changeTransparency = value;
-	}
+    public void setTransparency(Formula value) {
+        this.changeTransparency = value;
+    }
 }

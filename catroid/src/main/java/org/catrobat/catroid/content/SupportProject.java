@@ -32,14 +32,14 @@ import java.util.List;
 
 @XStreamAlias("program")
 public class SupportProject implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@XStreamAlias("header")
-	XmlHeader xmlHeader = new XmlHeader();
-	@XStreamAlias("objectList")
-	public List<Sprite> spriteList = new ArrayList<>();
-	@XStreamAlias("data")
-	public SupportDataContainer dataContainer = null;
-	@XStreamAlias("settings")
-	public List<Setting> settings = new ArrayList<>();
+    @XStreamAlias("header")
+    XmlHeader xmlHeader = new XmlHeader();
+    @XStreamAlias("objectList")
+    public List<Sprite> spriteList = new ArrayList<>();
+    @XStreamAlias("data")
+    public SupportDataContainer dataContainer = null;
+    @XStreamAlias("settings")
+    public List<Setting> settings = new ArrayList<>();
 }

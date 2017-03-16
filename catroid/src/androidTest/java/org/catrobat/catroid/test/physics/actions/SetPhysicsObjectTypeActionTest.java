@@ -29,30 +29,30 @@ import org.catrobat.catroid.test.physics.PhysicsBaseTest;
 
 public class SetPhysicsObjectTypeActionTest extends PhysicsBaseTest {
 
-	public void testPhysicsTypeNone() {
-		PhysicsObject.Type type = PhysicsObject.Type.NONE;
-		initPhysicsTypeValue(type);
-		assertEquals("Unexpected physics object type", type, physicsWorld.getPhysicsObject(sprite).getType());
-	}
+    public void testPhysicsTypeNone() {
+        PhysicsObject.Type type = PhysicsObject.Type.NONE;
+        initPhysicsTypeValue(type);
+        assertEquals("Unexpected physics object type", type, physicsWorld.getPhysicsObject(sprite).getType());
+    }
 
-	public void testPhysicsTypeDynamic() {
-		PhysicsObject.Type type = PhysicsObject.Type.DYNAMIC;
-		initPhysicsTypeValue(type);
-		assertEquals("Unexpected physics object type", type, physicsWorld.getPhysicsObject(sprite).getType());
-	}
+    public void testPhysicsTypeDynamic() {
+        PhysicsObject.Type type = PhysicsObject.Type.DYNAMIC;
+        initPhysicsTypeValue(type);
+        assertEquals("Unexpected physics object type", type, physicsWorld.getPhysicsObject(sprite).getType());
+    }
 
-	public void testPhysicsTypeFixed() {
-		PhysicsObject.Type type = PhysicsObject.Type.FIXED;
-		initPhysicsTypeValue(type);
-		assertEquals("Unexpected physics object type", type, physicsWorld.getPhysicsObject(sprite).getType());
-	}
+    public void testPhysicsTypeFixed() {
+        PhysicsObject.Type type = PhysicsObject.Type.FIXED;
+        initPhysicsTypeValue(type);
+        assertEquals("Unexpected physics object type", type, physicsWorld.getPhysicsObject(sprite).getType());
+    }
 
-	private void initPhysicsTypeValue(PhysicsObject.Type type) {
-		PhysicsObject physicsObject = physicsWorld.getPhysicsObject(sprite);
-		Action action = sprite.getActionFactory().createSetPhysicsObjectTypeAction(sprite, type);
+    private void initPhysicsTypeValue(PhysicsObject.Type type) {
+        PhysicsObject physicsObject = physicsWorld.getPhysicsObject(sprite);
+        Action action = sprite.getActionFactory().createSetPhysicsObjectTypeAction(sprite, type);
 
-		assertEquals("Unexpected physics object type", PhysicsObject.Type.NONE, physicsObject.getType());
+        assertEquals("Unexpected physics object type", PhysicsObject.Type.NONE, physicsObject.getType());
 
-		action.act(1.0f);
-	}
+        action.act(1.0f);
+    }
 }

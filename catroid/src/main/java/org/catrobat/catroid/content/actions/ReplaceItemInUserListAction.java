@@ -33,49 +33,49 @@ import java.util.ArrayList;
 
 public class ReplaceItemInUserListAction extends TemporalAction {
 
-	private Sprite sprite;
-	private Formula formulaIndexToReplace;
-	private Formula formulaItemToInsert;
+    private Sprite sprite;
+    private Formula formulaIndexToReplace;
+    private Formula formulaItemToInsert;
 
-	private UserList userList;
+    private UserList userList;
 
-	@Override
-	protected void update(float percent) {
-		if (userList == null) {
-			return;
-		}
+    @Override
+    protected void update(float percent) {
+        if (userList == null) {
+            return;
+        }
 
-		Object value = formulaItemToInsert == null ? Double.valueOf(0d) : formulaItemToInsert.interpretObject(sprite);
-		int indexToReplace;
+        Object value = formulaItemToInsert == null ? Double.valueOf(0d) : formulaItemToInsert.interpretObject(sprite);
+        int indexToReplace;
 
-		try {
-			indexToReplace = formulaIndexToReplace == null ? 1 : formulaIndexToReplace.interpretInteger(sprite);
-		} catch (InterpretationException interpretationException) {
-			indexToReplace = 1;
-		}
+        try {
+            indexToReplace = formulaIndexToReplace == null ? 1 : formulaIndexToReplace.interpretInteger(sprite);
+        } catch (InterpretationException interpretationException) {
+            indexToReplace = 1;
+        }
 
-		indexToReplace--;
+        indexToReplace--;
 
-		if (indexToReplace >= userList.getList().size() || indexToReplace < 0) {
-			return;
-		}
+        if (indexToReplace >= userList.getList().size() || indexToReplace < 0) {
+            return;
+        }
 
-		((ArrayList<Object>) userList.getList()).set(indexToReplace, value);
-	}
+        ((ArrayList<Object>) userList.getList()).set(indexToReplace, value);
+    }
 
-	public void setUserList(UserList userVariable) {
-		this.userList = userVariable;
-	}
+    public void setUserList(UserList userVariable) {
+        this.userList = userVariable;
+    }
 
-	public void setFormulaIndexToReplace(Formula formulaIndexToReplace) {
-		this.formulaIndexToReplace = formulaIndexToReplace;
-	}
+    public void setFormulaIndexToReplace(Formula formulaIndexToReplace) {
+        this.formulaIndexToReplace = formulaIndexToReplace;
+    }
 
-	public void setFormulaItemToInsert(Formula formulaItemToInsert) {
-		this.formulaItemToInsert = formulaItemToInsert;
-	}
+    public void setFormulaItemToInsert(Formula formulaItemToInsert) {
+        this.formulaItemToInsert = formulaItemToInsert;
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 }

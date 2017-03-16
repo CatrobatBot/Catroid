@@ -31,60 +31,60 @@ import java.util.ArrayList;
 
 public class WhenNfcScript extends Script {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private NfcTagData nfcTag;
-	private boolean matchAll = true;
+    private NfcTagData nfcTag;
+    private boolean matchAll = true;
 
-	public WhenNfcScript() {
-		super();
-		nfcTag = null;
-	}
+    public WhenNfcScript() {
+        super();
+        nfcTag = null;
+    }
 
-	@Override
-	public Script copyScriptForSprite(Sprite copySprite) {
-		WhenNfcScript cloneScript = new WhenNfcScript(nfcTag);
-		doCopy(copySprite, cloneScript);
-		return cloneScript;
-	}
+    @Override
+    public Script copyScriptForSprite(Sprite copySprite) {
+        WhenNfcScript cloneScript = new WhenNfcScript(nfcTag);
+        doCopy(copySprite, cloneScript);
+        return cloneScript;
+    }
 
-	public WhenNfcScript(NfcTagData nfcTag) {
-		super();
-		this.nfcTag = nfcTag;
-	}
+    public WhenNfcScript(NfcTagData nfcTag) {
+        super();
+        this.nfcTag = nfcTag;
+    }
 
-	@Override
-	public ScriptBrick getScriptBrick() {
-		if (brick == null) {
-			brick = new WhenNfcBrick(this);
-		}
-		return brick;
-	}
+    @Override
+    public ScriptBrick getScriptBrick() {
+        if (brick == null) {
+            brick = new WhenNfcBrick(this);
+        }
+        return brick;
+    }
 
-	@Override
-	public int getRequiredResources() {
-		int resources = Brick.NO_RESOURCES;
-		resources |= getScriptBrick().getRequiredResources();
-		ArrayList<Brick> brickList = getBrickList();
-		for (Brick brick : brickList) {
-			resources |= brick.getRequiredResources();
-		}
-		return resources;
-	}
+    @Override
+    public int getRequiredResources() {
+        int resources = Brick.NO_RESOURCES;
+        resources |= getScriptBrick().getRequiredResources();
+        ArrayList<Brick> brickList = getBrickList();
+        for (Brick brick : brickList) {
+            resources |= brick.getRequiredResources();
+        }
+        return resources;
+    }
 
-	public void setMatchAll(boolean matchAll) {
-		this.matchAll = matchAll;
-	}
+    public void setMatchAll(boolean matchAll) {
+        this.matchAll = matchAll;
+    }
 
-	public boolean isMatchAll() {
-		return matchAll;
-	}
+    public boolean isMatchAll() {
+        return matchAll;
+    }
 
-	public NfcTagData getNfcTag() {
-		return nfcTag;
-	}
+    public NfcTagData getNfcTag() {
+        return nfcTag;
+    }
 
-	public void setNfcTag(NfcTagData nfcTag) {
-		this.nfcTag = nfcTag;
-	}
+    public void setNfcTag(NfcTagData nfcTag) {
+        this.nfcTag = nfcTag;
+    }
 }

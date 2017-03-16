@@ -27,66 +27,66 @@ import java.awt.event.AdjustmentListener;
 
 public class GUI extends javax.swing.JFrame {
 
-	private static final long serialVersionUID = 1L;
-	private static GUI instance = null;
-	static JTextArea textArea;
+    private static final long serialVersionUID = 1L;
+    private static GUI instance = null;
+    static JTextArea textArea;
 
-	public static void startGUI() {
+    public static void startGUI() {
 
-		instance = new GUI();
+        instance = new GUI();
 
-		JFrame frame = new JFrame("Bluetooth connection console");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		Container content = frame.getContentPane();
+        JFrame frame = new JFrame("Bluetooth connection console");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Container content = frame.getContentPane();
 
-		textArea = new JTextArea();
-		JScrollPane scrollPane = new JScrollPane(textArea);
+        textArea = new JTextArea();
+        JScrollPane scrollPane = new JScrollPane(textArea);
 
-		scrollPane.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
-			public void adjustmentValueChanged(AdjustmentEvent e) {
-				e.getAdjustable().setValue(e.getAdjustable().getMaximum());
-			}
-		});
+        scrollPane.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
+            public void adjustmentValueChanged(AdjustmentEvent e) {
+                e.getAdjustable().setValue(e.getAdjustable().getMaximum());
+            }
+        });
 
-		content.add(scrollPane, BorderLayout.CENTER);
+        content.add(scrollPane, BorderLayout.CENTER);
 
-		JPanel panel = new JPanel();
-		content.add(panel, BorderLayout.SOUTH);
+        JPanel panel = new JPanel();
+        content.add(panel, BorderLayout.SOUTH);
 
-		JButton button1 = new JButton("clear");
-		button1.setText("Clear log");
-		button1.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				textArea.setText("");
-			}
-		});
-		panel.add(button1);
+        JButton button1 = new JButton("clear");
+        button1.setText("Clear log");
+        button1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                textArea.setText("");
+            }
+        });
+        panel.add(button1);
 
-		JButton button3 = new JButton("exit");
-		button3.setText("Exit");
-		button3.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				System.exit(0);
-			}
-		});
-		panel.add(button3);
+        JButton button3 = new JButton("exit");
+        button3.setText("Exit");
+        button3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                System.exit(0);
+            }
+        });
+        panel.add(button3);
 
-		frame.setSize(700, 400);
-		frame.setVisible(true);
-	}
+        frame.setSize(700, 400);
+        frame.setVisible(true);
+    }
 
-	public static void writeMessage(String message) {
-		textArea.append(message);
-	}
+    public static void writeMessage(String message) {
+        textArea.append(message);
+    }
 
-	/**
-	 *  Standard constructor
-	 */
-	public GUI() {
-		super();
-	}
+    /**
+     * Standard constructor
+     */
+    public GUI() {
+        super();
+    }
 
-	public static GUI getGui() {
-		return instance;
-	}
+    public static GUI getGui() {
+        return instance;
+    }
 }

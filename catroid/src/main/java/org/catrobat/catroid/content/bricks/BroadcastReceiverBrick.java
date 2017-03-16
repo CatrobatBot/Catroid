@@ -46,158 +46,158 @@ import org.catrobat.catroid.ui.dialogs.BrickTextDialog;
 import java.util.List;
 
 public class BroadcastReceiverBrick extends BrickBaseType implements ScriptBrick, BroadcastMessage {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private BroadcastScript receiveScript;
-	private transient String broadcastMessage;
+    private BroadcastScript receiveScript;
+    private transient String broadcastMessage;
 
-	public BroadcastReceiverBrick(String broadcastMessage) {
-		this.broadcastMessage = broadcastMessage;
-	}
+    public BroadcastReceiverBrick(String broadcastMessage) {
+        this.broadcastMessage = broadcastMessage;
+    }
 
-	public BroadcastReceiverBrick(BroadcastScript receiveScript) {
-		this.receiveScript = receiveScript;
+    public BroadcastReceiverBrick(BroadcastScript receiveScript) {
+        this.receiveScript = receiveScript;
 
-		if (receiveScript != null && receiveScript.isCommentedOut()) {
-			setCommentedOut(true);
-		}
-	}
+        if (receiveScript != null && receiveScript.isCommentedOut()) {
+            setCommentedOut(true);
+        }
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		BroadcastReceiverBrick copyBrick = (BroadcastReceiverBrick) clone();
-		copyBrick.receiveScript = receiveScript;
-		return copyBrick;
-	}
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        BroadcastReceiverBrick copyBrick = (BroadcastReceiverBrick) clone();
+        copyBrick.receiveScript = receiveScript;
+        return copyBrick;
+    }
 
-	@Override
-	public Brick clone() {
-		BroadcastScript broadcastScript = new BroadcastScript(getBroadcastMessage());
-		if (receiveScript != null) {
-			broadcastScript.setCommentedOut(receiveScript.isCommentedOut());
-		}
-		return new BroadcastReceiverBrick(broadcastScript);
-	}
+    @Override
+    public Brick clone() {
+        BroadcastScript broadcastScript = new BroadcastScript(getBroadcastMessage());
+        if (receiveScript != null) {
+            broadcastScript.setCommentedOut(receiveScript.isCommentedOut());
+        }
+        return new BroadcastReceiverBrick(broadcastScript);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return NO_RESOURCES;
-	}
+    @Override
+    public int getRequiredResources() {
+        return NO_RESOURCES;
+    }
 
-	@Override
-	public String getBroadcastMessage() {
-		if (receiveScript == null) {
-			return broadcastMessage;
-		}
-		return receiveScript.getBroadcastMessage();
-	}
+    @Override
+    public String getBroadcastMessage() {
+        if (receiveScript == null) {
+            return broadcastMessage;
+        }
+        return receiveScript.getBroadcastMessage();
+    }
 
-	@Override
-	public View getView(final Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		if (view == null) {
-			alphaValue = 255;
-		}
-		if (receiveScript == null) {
-			receiveScript = new BroadcastScript(broadcastMessage);
-			MessageContainer.addMessage(getBroadcastMessage());
-		}
+    @Override
+    public View getView(final Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        if (view == null) {
+            alphaValue = 255;
+        }
+        if (receiveScript == null) {
+            receiveScript = new BroadcastScript(broadcastMessage);
+            MessageContainer.addMessage(getBroadcastMessage());
+        }
 
-		view = View.inflate(context, R.layout.brick_broadcast_receive, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
-		setCheckboxView(R.id.brick_broadcast_receive_checkbox);
-		final Spinner broadcastSpinner = (Spinner) view.findViewById(R.id.brick_broadcast_receive_spinner);
+        view = View.inflate(context, R.layout.brick_broadcast_receive, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        setCheckboxView(R.id.brick_broadcast_receive_checkbox);
+        final Spinner broadcastSpinner = (Spinner) view.findViewById(R.id.brick_broadcast_receive_spinner);
 
-		broadcastSpinner.setAdapter(MessageContainer.getMessageAdapter(context));
-		broadcastSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+        broadcastSpinner.setAdapter(MessageContainer.getMessageAdapter(context));
+        broadcastSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				String selectedMessage = broadcastSpinner.getSelectedItem().toString();
-				if (selectedMessage.equals(context.getString(R.string.new_broadcast_message))) {
-					showNewMessageDialog(broadcastSpinner);
-				} else {
-					receiveScript.setBroadcastMessage(selectedMessage);
-					broadcastMessage = selectedMessage;
-				}
-			}
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedMessage = broadcastSpinner.getSelectedItem().toString();
+                if (selectedMessage.equals(context.getString(R.string.new_broadcast_message))) {
+                    showNewMessageDialog(broadcastSpinner);
+                } else {
+                    receiveScript.setBroadcastMessage(selectedMessage);
+                    broadcastMessage = selectedMessage;
+                }
+            }
 
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
 
-		setSpinnerSelection(broadcastSpinner);
-		return view;
-	}
+        setSpinnerSelection(broadcastSpinner);
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		View prototypeView = View.inflate(context, R.layout.brick_broadcast_receive, null);
-		Spinner broadcastReceiverSpinner = (Spinner) prototypeView.findViewById(R.id.brick_broadcast_receive_spinner);
+    @Override
+    public View getPrototypeView(Context context) {
+        View prototypeView = View.inflate(context, R.layout.brick_broadcast_receive, null);
+        Spinner broadcastReceiverSpinner = (Spinner) prototypeView.findViewById(R.id.brick_broadcast_receive_spinner);
 
-		SpinnerAdapter broadcastReceiverSpinnerAdapter = MessageContainer.getMessageAdapter(context);
-		broadcastReceiverSpinner.setAdapter(broadcastReceiverSpinnerAdapter);
-		setSpinnerSelection(broadcastReceiverSpinner);
-		return prototypeView;
-	}
+        SpinnerAdapter broadcastReceiverSpinnerAdapter = MessageContainer.getMessageAdapter(context);
+        broadcastReceiverSpinner.setAdapter(broadcastReceiverSpinnerAdapter);
+        setSpinnerSelection(broadcastReceiverSpinner);
+        return prototypeView;
+    }
 
-	@Override
-	public Script getScriptSafe() {
-		return receiveScript;
-	}
+    @Override
+    public Script getScriptSafe() {
+        return receiveScript;
+    }
 
-	private void setSpinnerSelection(Spinner spinner) {
-		int position = MessageContainer.getPositionOfMessageInAdapter(spinner.getContext(), getBroadcastMessage());
-		spinner.setSelection(position, true);
-	}
+    private void setSpinnerSelection(Spinner spinner) {
+        int position = MessageContainer.getPositionOfMessageInAdapter(spinner.getContext(), getBroadcastMessage());
+        spinner.setSelection(position, true);
+    }
 
-	// TODO: BroadcastBrick and BroadcastReceiverBrick contain this identical method.
-	private void showNewMessageDialog(final Spinner spinner) {
-		final Context context = spinner.getContext();
-		BrickTextDialog editDialog = new BrickTextDialog(R.string.dialog_new_broadcast_message_title, R.string
-				.dialog_new_broadcast_message_name, context.getString(R.string.new_broadcast_message)) {
+    // TODO: BroadcastBrick and BroadcastReceiverBrick contain this identical method.
+    private void showNewMessageDialog(final Spinner spinner) {
+        final Context context = spinner.getContext();
+        BrickTextDialog editDialog = new BrickTextDialog(R.string.dialog_new_broadcast_message_title, R.string
+                .dialog_new_broadcast_message_name, context.getString(R.string.new_broadcast_message)) {
 
-			@Override
-			protected boolean handlePositiveButtonClick() {
-				String newMessage = input.getText().toString().trim();
-				if (newMessage.equals(context.getString(R.string.new_broadcast_message))) {
-					dismiss();
-					return false;
-				}
+            @Override
+            protected boolean handlePositiveButtonClick() {
+                String newMessage = input.getText().toString().trim();
+                if (newMessage.equals(context.getString(R.string.new_broadcast_message))) {
+                    dismiss();
+                    return false;
+                }
 
-				if (newMessage.contains(PhysicsCollision.COLLISION_MESSAGE_CONNECTOR)) {
-					input.setError(getString(R.string.brick_broadcast_invalid_symbol));
-					return false;
-				}
+                if (newMessage.contains(PhysicsCollision.COLLISION_MESSAGE_CONNECTOR)) {
+                    input.setError(getString(R.string.brick_broadcast_invalid_symbol));
+                    return false;
+                }
 
-				receiveScript.setBroadcastMessage(newMessage);
-				broadcastMessage = newMessage;
-				MessageContainer.addMessage(newMessage);
-				setSpinnerSelection(spinner);
-				return true;
-			}
+                receiveScript.setBroadcastMessage(newMessage);
+                broadcastMessage = newMessage;
+                MessageContainer.addMessage(newMessage);
+                setSpinnerSelection(spinner);
+                return true;
+            }
 
-			@Override
-			public void onDismiss(DialogInterface dialog) {
-				setSpinnerSelection(spinner);
-				super.onDismiss(dialog);
-			}
-		};
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                setSpinnerSelection(spinner);
+                super.onDismiss(dialog);
+            }
+        };
 
-		editDialog.show(((Activity) context).getFragmentManager(), "dialog_broadcast_brick");
-	}
+        editDialog.show(((Activity) context).getFragmentManager(), "dialog_broadcast_brick");
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        return null;
+    }
 
-	@Override
-	public void setCommentedOut(boolean commentedOut) {
-		super.setCommentedOut(commentedOut);
-		getScriptSafe().setCommentedOut(commentedOut);
-	}
+    @Override
+    public void setCommentedOut(boolean commentedOut) {
+        super.setCommentedOut(commentedOut);
+        getScriptSafe().setCommentedOut(commentedOut);
+    }
 }

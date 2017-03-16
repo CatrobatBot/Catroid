@@ -33,164 +33,164 @@ import java.util.Set;
 
 public final class RaspberryPiService {
 
-	private static final String TAG = RaspberryPiService.class.getSimpleName();
+    private static final String TAG = RaspberryPiService.class.getSimpleName();
 
-	public RPiSocketConnection connection = null;
+    public RPiSocketConnection connection = null;
 
-	private static RaspberryPiService instance;
+    private static RaspberryPiService instance;
 
-	private enum GpioVersionType {
-		SMALL_GPIO, BIG_GPIO, COMPUTE_MODULE
-	}
+    private enum GpioVersionType {
+        SMALL_GPIO, BIG_GPIO, COMPUTE_MODULE
+    }
 
-	private Map<String, GpioVersionType> gpioVersionMap = new HashMap<>();
+    private Map<String, GpioVersionType> gpioVersionMap = new HashMap<>();
 
-	private Set<Integer> pinInterrupts = null;
+    private Set<Integer> pinInterrupts = null;
 
-	public static RaspberryPiService getInstance() {
-		if (instance == null) {
-			instance = new RaspberryPiService();
-		}
-		return instance;
-	}
+    public static RaspberryPiService getInstance() {
+        if (instance == null) {
+            instance = new RaspberryPiService();
+        }
+        return instance;
+    }
 
-	private RaspberryPiService() {
-		initGpioVersionMap();
-		pinInterrupts = new HashSet<Integer>();
-	}
+    private RaspberryPiService() {
+        initGpioVersionMap();
+        pinInterrupts = new HashSet<Integer>();
+    }
 
-	public void addPinInterrupt(int pin) {
-		pinInterrupts.add(pin);
-	}
+    public void addPinInterrupt(int pin) {
+        pinInterrupts.add(pin);
+    }
 
-	public boolean connect(String host, int port) {
-		AsyncRPiTaskRunner rpi;
-		try {
-			rpi = new AsyncRPiTaskRunner();
-			rpi.connect(host, port);
-			connection = rpi.getConnection();
-		} catch (Exception e) {
-			Log.e(TAG, "connecting to " + host + ":" + port + " failed" + e);
-			return false;
-		}
+    public boolean connect(String host, int port) {
+        AsyncRPiTaskRunner rpi;
+        try {
+            rpi = new AsyncRPiTaskRunner();
+            rpi.connect(host, port);
+            connection = rpi.getConnection();
+        } catch (Exception e) {
+            Log.e(TAG, "connecting to " + host + ":" + port + " failed" + e);
+            return false;
+        }
 
-		if (rpi.getConnection().isConnected()) {
-			return true;
-		}
+        if (rpi.getConnection().isConnected()) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public void disconnect() {
-		if (connection != null) {
+    public void disconnect() {
+        if (connection != null) {
 
-			try {
-				connection.disconnect();
-				connection = null;
-			} catch (IOException e) {
-				Log.e(TAG, "Exception during disconnect: " + e);
-			}
-		}
-		pinInterrupts.clear();
-	}
+            try {
+                connection.disconnect();
+                connection = null;
+            } catch (IOException e) {
+                Log.e(TAG, "Exception during disconnect: " + e);
+            }
+        }
+        pinInterrupts.clear();
+    }
 
-	public ArrayList<Integer> getGpioList(String revision) {
-		GpioVersionType version = gpioVersionMap.get(revision);
-		ArrayList<Integer> availableGPIOs = new ArrayList<>();
-		if (version == GpioVersionType.SMALL_GPIO) {
-			availableGPIOs.add(3);
-			availableGPIOs.add(5);
-			availableGPIOs.add(7);
-			availableGPIOs.add(8);
-			availableGPIOs.add(10);
-			availableGPIOs.add(11);
-			availableGPIOs.add(12);
-			availableGPIOs.add(13);
-			availableGPIOs.add(15);
-			availableGPIOs.add(16);
-			availableGPIOs.add(18);
-			availableGPIOs.add(19);
-			availableGPIOs.add(21);
-			availableGPIOs.add(22);
-			availableGPIOs.add(23);
-			availableGPIOs.add(24);
-			availableGPIOs.add(26);
-		} else if (version == GpioVersionType.BIG_GPIO) {
-			availableGPIOs.add(3);
-			availableGPIOs.add(5);
-			availableGPIOs.add(7);
-			availableGPIOs.add(8);
-			availableGPIOs.add(10);
-			availableGPIOs.add(11);
-			availableGPIOs.add(12);
-			availableGPIOs.add(13);
-			availableGPIOs.add(15);
-			availableGPIOs.add(16);
-			availableGPIOs.add(18);
-			availableGPIOs.add(19);
-			availableGPIOs.add(21);
-			availableGPIOs.add(22);
-			availableGPIOs.add(23);
-			availableGPIOs.add(24);
-			availableGPIOs.add(26);
-			availableGPIOs.add(29);
-			availableGPIOs.add(31);
-			availableGPIOs.add(32);
-			availableGPIOs.add(33);
-			availableGPIOs.add(35);
-			availableGPIOs.add(36);
-			availableGPIOs.add(37);
-			availableGPIOs.add(38);
-			availableGPIOs.add(40);
-		} else { // legacy mode, try to support if we don't know the version
-			availableGPIOs.add(3);
-			availableGPIOs.add(5);
-			availableGPIOs.add(7);
-			availableGPIOs.add(8);
-			availableGPIOs.add(10);
-			availableGPIOs.add(11);
-			availableGPIOs.add(12);
-			availableGPIOs.add(13);
-			availableGPIOs.add(15);
-			availableGPIOs.add(16);
-			availableGPIOs.add(18);
-			availableGPIOs.add(19);
-			availableGPIOs.add(21);
-			availableGPIOs.add(22);
-			availableGPIOs.add(23);
-			availableGPIOs.add(24);
-			availableGPIOs.add(26);
-		}
+    public ArrayList<Integer> getGpioList(String revision) {
+        GpioVersionType version = gpioVersionMap.get(revision);
+        ArrayList<Integer> availableGPIOs = new ArrayList<>();
+        if (version == GpioVersionType.SMALL_GPIO) {
+            availableGPIOs.add(3);
+            availableGPIOs.add(5);
+            availableGPIOs.add(7);
+            availableGPIOs.add(8);
+            availableGPIOs.add(10);
+            availableGPIOs.add(11);
+            availableGPIOs.add(12);
+            availableGPIOs.add(13);
+            availableGPIOs.add(15);
+            availableGPIOs.add(16);
+            availableGPIOs.add(18);
+            availableGPIOs.add(19);
+            availableGPIOs.add(21);
+            availableGPIOs.add(22);
+            availableGPIOs.add(23);
+            availableGPIOs.add(24);
+            availableGPIOs.add(26);
+        } else if (version == GpioVersionType.BIG_GPIO) {
+            availableGPIOs.add(3);
+            availableGPIOs.add(5);
+            availableGPIOs.add(7);
+            availableGPIOs.add(8);
+            availableGPIOs.add(10);
+            availableGPIOs.add(11);
+            availableGPIOs.add(12);
+            availableGPIOs.add(13);
+            availableGPIOs.add(15);
+            availableGPIOs.add(16);
+            availableGPIOs.add(18);
+            availableGPIOs.add(19);
+            availableGPIOs.add(21);
+            availableGPIOs.add(22);
+            availableGPIOs.add(23);
+            availableGPIOs.add(24);
+            availableGPIOs.add(26);
+            availableGPIOs.add(29);
+            availableGPIOs.add(31);
+            availableGPIOs.add(32);
+            availableGPIOs.add(33);
+            availableGPIOs.add(35);
+            availableGPIOs.add(36);
+            availableGPIOs.add(37);
+            availableGPIOs.add(38);
+            availableGPIOs.add(40);
+        } else { // legacy mode, try to support if we don't know the version
+            availableGPIOs.add(3);
+            availableGPIOs.add(5);
+            availableGPIOs.add(7);
+            availableGPIOs.add(8);
+            availableGPIOs.add(10);
+            availableGPIOs.add(11);
+            availableGPIOs.add(12);
+            availableGPIOs.add(13);
+            availableGPIOs.add(15);
+            availableGPIOs.add(16);
+            availableGPIOs.add(18);
+            availableGPIOs.add(19);
+            availableGPIOs.add(21);
+            availableGPIOs.add(22);
+            availableGPIOs.add(23);
+            availableGPIOs.add(24);
+            availableGPIOs.add(26);
+        }
 
-		return availableGPIOs;
-	}
+        return availableGPIOs;
+    }
 
-	private void initGpioVersionMap() {
-		gpioVersionMap.put("a01041", GpioVersionType.BIG_GPIO);
-		gpioVersionMap.put("a21041", GpioVersionType.BIG_GPIO);
-		gpioVersionMap.put("0013", GpioVersionType.BIG_GPIO);
-		gpioVersionMap.put("0012", GpioVersionType.BIG_GPIO);
-		gpioVersionMap.put("0011", GpioVersionType.COMPUTE_MODULE);
-		gpioVersionMap.put("0010", GpioVersionType.BIG_GPIO);
-		gpioVersionMap.put("000f", GpioVersionType.SMALL_GPIO);
-		gpioVersionMap.put("000e", GpioVersionType.SMALL_GPIO);
-		gpioVersionMap.put("000d", GpioVersionType.SMALL_GPIO);
-		gpioVersionMap.put("0009", GpioVersionType.SMALL_GPIO);
-		gpioVersionMap.put("0008", GpioVersionType.SMALL_GPIO);
-		gpioVersionMap.put("0007", GpioVersionType.SMALL_GPIO);
-		gpioVersionMap.put("0006", GpioVersionType.SMALL_GPIO);
-		gpioVersionMap.put("0005", GpioVersionType.SMALL_GPIO);
-		gpioVersionMap.put("0004", GpioVersionType.SMALL_GPIO);
-		gpioVersionMap.put("0003", GpioVersionType.SMALL_GPIO);
-		gpioVersionMap.put("0002", GpioVersionType.SMALL_GPIO);
-		gpioVersionMap.put("Beta", GpioVersionType.SMALL_GPIO);
-	}
+    private void initGpioVersionMap() {
+        gpioVersionMap.put("a01041", GpioVersionType.BIG_GPIO);
+        gpioVersionMap.put("a21041", GpioVersionType.BIG_GPIO);
+        gpioVersionMap.put("0013", GpioVersionType.BIG_GPIO);
+        gpioVersionMap.put("0012", GpioVersionType.BIG_GPIO);
+        gpioVersionMap.put("0011", GpioVersionType.COMPUTE_MODULE);
+        gpioVersionMap.put("0010", GpioVersionType.BIG_GPIO);
+        gpioVersionMap.put("000f", GpioVersionType.SMALL_GPIO);
+        gpioVersionMap.put("000e", GpioVersionType.SMALL_GPIO);
+        gpioVersionMap.put("000d", GpioVersionType.SMALL_GPIO);
+        gpioVersionMap.put("0009", GpioVersionType.SMALL_GPIO);
+        gpioVersionMap.put("0008", GpioVersionType.SMALL_GPIO);
+        gpioVersionMap.put("0007", GpioVersionType.SMALL_GPIO);
+        gpioVersionMap.put("0006", GpioVersionType.SMALL_GPIO);
+        gpioVersionMap.put("0005", GpioVersionType.SMALL_GPIO);
+        gpioVersionMap.put("0004", GpioVersionType.SMALL_GPIO);
+        gpioVersionMap.put("0003", GpioVersionType.SMALL_GPIO);
+        gpioVersionMap.put("0002", GpioVersionType.SMALL_GPIO);
+        gpioVersionMap.put("Beta", GpioVersionType.SMALL_GPIO);
+    }
 
-	public boolean isValidPin(String revision, int pinNumber) {
-		return getGpioList(revision).contains(pinNumber);
-	}
+    public boolean isValidPin(String revision, int pinNumber) {
+        return getGpioList(revision).contains(pinNumber);
+    }
 
-	public Set<Integer> getPinInterrupts() {
-		return pinInterrupts;
-	}
+    public Set<Integer> getPinInterrupts() {
+        return pinInterrupts;
+    }
 }

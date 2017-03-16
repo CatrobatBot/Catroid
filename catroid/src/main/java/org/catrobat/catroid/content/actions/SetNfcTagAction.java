@@ -34,35 +34,35 @@ import org.catrobat.catroid.stage.StageActivity;
 
 public class SetNfcTagAction extends TemporalAction {
 
-	private Sprite sprite;
-	private Formula nfcNdefMessage;
-	private int nfcTagNdefSpinnerSelection;
-	private static final String TAG = SetNfcTagAction.class.getSimpleName();
+    private Sprite sprite;
+    private Formula nfcNdefMessage;
+    private int nfcTagNdefSpinnerSelection;
+    private static final String TAG = SetNfcTagAction.class.getSimpleName();
 
-	@Override
-	protected void update(float percent) {
-		if (nfcNdefMessage == null) {
-			return;
-		}
+    @Override
+    protected void update(float percent) {
+        if (nfcNdefMessage == null) {
+            return;
+        }
 
-		try {
-			NdefMessage message = NfcHandler.createMessage(nfcNdefMessage.interpretString(sprite),
-					nfcTagNdefSpinnerSelection);
-			StageActivity.addNfcTagMessageToDeque(message);
-		} catch (Exception e) {
-			Log.d(TAG, "No new message was added to the Deque", e);
-		}
-	}
+        try {
+            NdefMessage message = NfcHandler.createMessage(nfcNdefMessage.interpretString(sprite),
+                    nfcTagNdefSpinnerSelection);
+            StageActivity.addNfcTagMessageToDeque(message);
+        } catch (Exception e) {
+            Log.d(TAG, "No new message was added to the Deque", e);
+        }
+    }
 
-	public void setNfcTagNdefSpinnerSelection(int spinnerSelection) {
-		this.nfcTagNdefSpinnerSelection = spinnerSelection;
-	}
+    public void setNfcTagNdefSpinnerSelection(int spinnerSelection) {
+        this.nfcTagNdefSpinnerSelection = spinnerSelection;
+    }
 
-	public void setNfcNdefMessage(Formula nfcNdefMessage) {
-		this.nfcNdefMessage = nfcNdefMessage;
-	}
+    public void setNfcNdefMessage(Formula nfcNdefMessage) {
+        this.nfcNdefMessage = nfcNdefMessage;
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 }

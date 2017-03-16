@@ -29,11 +29,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class LookViewHolder {
-	public ImageView lookImageView;
-	public CheckBox checkbox;
-	public TextView lookNameTextView;
-	public LinearLayout lookDetailsLinearLayout;
-	public TextView lookFileSizeTextView;
-	public TextView lookMeasureTextView;
-	public RelativeLayout lookElement;
+    public ImageView lookImageView;
+    public CheckBox checkbox;
+    public TextView lookNameTextView;
+    public LinearLayout lookDetailsLinearLayout;
+    public TextView lookFileSizeTextView;
+    public TextView lookMeasureTextView;
+    public RelativeLayout lookElement;
 }

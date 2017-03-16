@@ -30,16 +30,16 @@ import org.catrobat.catroid.utils.TouchUtil;
 
 public class GoToTouchPositionAction extends TemporalAction {
 
-	private Sprite sprite;
+    private Sprite sprite;
 
-	@Override
-	protected void update(float percent) {
-		int touchIndex = TouchUtil.getLastTouchIndex();
-		sprite.look.setXInUserInterfaceDimensionUnit(TouchUtil.getX(touchIndex));
-		sprite.look.setYInUserInterfaceDimensionUnit(TouchUtil.getY(touchIndex));
-	}
+    @Override
+    protected void update(float percent) {
+        int touchIndex = TouchUtil.getLastTouchIndex();
+        sprite.look.setXInUserInterfaceDimensionUnit(TouchUtil.getX(touchIndex));
+        sprite.look.setYInUserInterfaceDimensionUnit(TouchUtil.getY(touchIndex));
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 }

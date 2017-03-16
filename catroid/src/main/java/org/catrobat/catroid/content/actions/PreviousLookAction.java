@@ -31,24 +31,24 @@ import java.util.List;
 
 public class PreviousLookAction extends TemporalAction {
 
-	private Sprite sprite;
+    private Sprite sprite;
 
-	@Override
-	protected void update(float delta) {
-		final List<LookData> lookDataList = sprite.getLookDataList();
-		int lookDataListSize = lookDataList.size();
+    @Override
+    protected void update(float delta) {
+        final List<LookData> lookDataList = sprite.getLookDataList();
+        int lookDataListSize = lookDataList.size();
 
-		if (lookDataListSize > 0 && sprite.look.getLookData() != null) {
-			LookData currentLookData = sprite.look.getLookData();
+        if (lookDataListSize > 0 && sprite.look.getLookData() != null) {
+            LookData currentLookData = sprite.look.getLookData();
 
-			int newIndex = (lookDataList.indexOf(currentLookData) - 1);
-			newIndex = (newIndex < 0) ? lookDataListSize - 1 : newIndex;
+            int newIndex = (lookDataList.indexOf(currentLookData) - 1);
+            newIndex = (newIndex < 0) ? lookDataListSize - 1 : newIndex;
 
-			sprite.look.setLookData(lookDataList.get(newIndex));
-		}
-	}
+            sprite.look.setLookData(lookDataList.get(newIndex));
+        }
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 }

@@ -42,171 +42,171 @@ import java.util.concurrent.Executors;
 
 public class ProjectAndSceneScreenshotLoader {
 
-	private class ScreenshotData {
-		public String projectName;
-		public String sceneName;
-		public boolean isBackpackScene;
-		public ImageView imageView;
+    private class ScreenshotData {
+        public String projectName;
+        public String sceneName;
+        public boolean isBackpackScene;
+        public ImageView imageView;
 
-		public ScreenshotData(String projectName, String sceneName, boolean isBackpackScene, ImageView imageView) {
-			this.projectName = projectName;
-			this.sceneName = sceneName;
-			this.isBackpackScene = isBackpackScene;
-			this.imageView = imageView;
-		}
-	}
+        public ScreenshotData(String projectName, String sceneName, boolean isBackpackScene, ImageView imageView) {
+            this.projectName = projectName;
+            this.sceneName = sceneName;
+            this.isBackpackScene = isBackpackScene;
+            this.imageView = imageView;
+        }
+    }
 
-	private static final int POOL_SIZE = 5;
-	private static final int CACHE_MAX_SIZE = 25;
-	private static final float LOAD_FACTOR = .75f;
-	private static final int INITIAL_VALUE = 13; // (N / LOAD_FACTOR) + 1
+    private static final int POOL_SIZE = 5;
+    private static final int CACHE_MAX_SIZE = 25;
+    private static final float LOAD_FACTOR = .75f;
+    private static final int INITIAL_VALUE = 13; // (N / LOAD_FACTOR) + 1
 
-	private Map<ImageView, String> imageViews = Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
-	private ExecutorService executorService;
-	private Context context;
+    private Map<ImageView, String> imageViews = Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
+    private ExecutorService executorService;
+    private Context context;
 
-	private Map<String, Bitmap> imageCache = Collections.synchronizedMap(new LinkedHashMap<String, Bitmap>(
-			INITIAL_VALUE, LOAD_FACTOR, true) {
+    private Map<String, Bitmap> imageCache = Collections.synchronizedMap(new LinkedHashMap<String, Bitmap>(
+            INITIAL_VALUE, LOAD_FACTOR, true) {
 
-		private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
 
-		@Override
-		protected boolean removeEldestEntry(Map.Entry<String, Bitmap> eldest) {
-			return size() > CACHE_MAX_SIZE;
-		}
-	});
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<String, Bitmap> eldest) {
+            return size() > CACHE_MAX_SIZE;
+        }
+    });
 
-	public ProjectAndSceneScreenshotLoader(Context context) {
-		executorService = Executors.newFixedThreadPool(POOL_SIZE);
-		this.context = context;
-	}
+    public ProjectAndSceneScreenshotLoader(Context context) {
+        executorService = Executors.newFixedThreadPool(POOL_SIZE);
+        this.context = context;
+    }
 
-	public void loadAndShowScreenshot(String projectName, String sceneName, boolean isBackpackScene, ImageView
-			imageView) {
+    public void loadAndShowScreenshot(String projectName, String sceneName, boolean isBackpackScene, ImageView
+            imageView) {
 
-		String screenShotName = "";
-		if (projectName != null) {
-			screenShotName = projectName;
-		}
-		if (sceneName != null) {
-			screenShotName = screenShotName.concat(sceneName);
-		}
+        String screenShotName = "";
+        if (projectName != null) {
+            screenShotName = projectName;
+        }
+        if (sceneName != null) {
+            screenShotName = screenShotName.concat(sceneName);
+        }
 
-		imageViews.put(imageView, screenShotName);
-		Bitmap bitmap = imageCache.get(screenShotName);
-		if (bitmap != null) {
-			imageView.setImageBitmap(bitmap);
-		} else {
-			//set a dummy or null in the meantime
-			imageView.setImageBitmap(null);
-			//queue the loading and showing process
-			ScreenshotData screenshotData = new ScreenshotData(projectName, sceneName, isBackpackScene, imageView);
-			executorService.submit(new ScreenshotLoader(screenshotData));
-		}
-	}
+        imageViews.put(imageView, screenShotName);
+        Bitmap bitmap = imageCache.get(screenShotName);
+        if (bitmap != null) {
+            imageView.setImageBitmap(bitmap);
+        } else {
+            //set a dummy or null in the meantime
+            imageView.setImageBitmap(null);
+            //queue the loading and showing process
+            ScreenshotData screenshotData = new ScreenshotData(projectName, sceneName, isBackpackScene, imageView);
+            executorService.submit(new ScreenshotLoader(screenshotData));
+        }
+    }
 
-	class ScreenshotLoader implements Runnable {
-		ScreenshotData projectAndSceneScreenshotData;
+    class ScreenshotLoader implements Runnable {
+        ScreenshotData projectAndSceneScreenshotData;
 
-		ScreenshotLoader(ScreenshotData screenshotData) {
-			this.projectAndSceneScreenshotData = screenshotData;
-		}
+        ScreenshotLoader(ScreenshotData screenshotData) {
+            this.projectAndSceneScreenshotData = screenshotData;
+        }
 
-		@Override
-		public void run() {
-			if (imageViewReused(projectAndSceneScreenshotData)) {
-				return;
-			}
+        @Override
+        public void run() {
+            if (imageViewReused(projectAndSceneScreenshotData)) {
+                return;
+            }
 
-			Activity uiActivity = (Activity) projectAndSceneScreenshotData.imageView.getContext();
-			String pathOfScreenshot;
-			if (projectAndSceneScreenshotData.sceneName != null) {
-				if (projectAndSceneScreenshotData.isBackpackScene) {
-					pathOfScreenshot = Utils.buildPath(Utils.buildBackpackScenePath(projectAndSceneScreenshotData.sceneName),
-							StageListener.SCREENSHOT_MANUAL_FILE_NAME);
-				} else {
-					pathOfScreenshot = Utils.buildPath(Utils.buildScenePath(projectAndSceneScreenshotData
-									.projectName, projectAndSceneScreenshotData.sceneName),
-							StageListener.SCREENSHOT_MANUAL_FILE_NAME);
-				}
-			} else {
-				pathOfScreenshot = Utils.buildPath(Utils.buildProjectPath(projectAndSceneScreenshotData.projectName),
-						StageListener.SCREENSHOT_MANUAL_FILE_NAME);
-			}
+            Activity uiActivity = (Activity) projectAndSceneScreenshotData.imageView.getContext();
+            String pathOfScreenshot;
+            if (projectAndSceneScreenshotData.sceneName != null) {
+                if (projectAndSceneScreenshotData.isBackpackScene) {
+                    pathOfScreenshot = Utils.buildPath(Utils.buildBackpackScenePath(projectAndSceneScreenshotData.sceneName),
+                            StageListener.SCREENSHOT_MANUAL_FILE_NAME);
+                } else {
+                    pathOfScreenshot = Utils.buildPath(Utils.buildScenePath(projectAndSceneScreenshotData
+                                    .projectName, projectAndSceneScreenshotData.sceneName),
+                            StageListener.SCREENSHOT_MANUAL_FILE_NAME);
+                }
+            } else {
+                pathOfScreenshot = Utils.buildPath(Utils.buildProjectPath(projectAndSceneScreenshotData.projectName),
+                        StageListener.SCREENSHOT_MANUAL_FILE_NAME);
+            }
 
-			File projectAndSceneImageFile = new File(pathOfScreenshot);
+            File projectAndSceneImageFile = new File(pathOfScreenshot);
 
-			if (!(projectAndSceneImageFile.exists() && projectAndSceneImageFile.length() > 0)) {
-				projectAndSceneImageFile.delete();
-				if (projectAndSceneScreenshotData.sceneName != null) {
-					if (projectAndSceneScreenshotData.isBackpackScene) {
-						pathOfScreenshot = Utils.buildPath(Utils.buildBackpackScenePath(projectAndSceneScreenshotData.sceneName),
-								StageListener.SCREENSHOT_AUTOMATIC_FILE_NAME);
-					} else {
-						pathOfScreenshot = Utils.buildPath(Utils.buildScenePath(projectAndSceneScreenshotData
-										.projectName, projectAndSceneScreenshotData.sceneName),
-								StageListener.SCREENSHOT_AUTOMATIC_FILE_NAME);
-					}
-				} else {
-					pathOfScreenshot = Utils.buildPath(Utils.buildProjectPath(projectAndSceneScreenshotData.projectName),
-							StageListener.SCREENSHOT_AUTOMATIC_FILE_NAME);
-				}
-				projectAndSceneImageFile = new File(pathOfScreenshot);
-			}
+            if (!(projectAndSceneImageFile.exists() && projectAndSceneImageFile.length() > 0)) {
+                projectAndSceneImageFile.delete();
+                if (projectAndSceneScreenshotData.sceneName != null) {
+                    if (projectAndSceneScreenshotData.isBackpackScene) {
+                        pathOfScreenshot = Utils.buildPath(Utils.buildBackpackScenePath(projectAndSceneScreenshotData.sceneName),
+                                StageListener.SCREENSHOT_AUTOMATIC_FILE_NAME);
+                    } else {
+                        pathOfScreenshot = Utils.buildPath(Utils.buildScenePath(projectAndSceneScreenshotData
+                                        .projectName, projectAndSceneScreenshotData.sceneName),
+                                StageListener.SCREENSHOT_AUTOMATIC_FILE_NAME);
+                    }
+                } else {
+                    pathOfScreenshot = Utils.buildPath(Utils.buildProjectPath(projectAndSceneScreenshotData.projectName),
+                            StageListener.SCREENSHOT_AUTOMATIC_FILE_NAME);
+                }
+                projectAndSceneImageFile = new File(pathOfScreenshot);
+            }
 
-			final Bitmap projectAndSceneImage;
-			if (!projectAndSceneImageFile.exists() || ImageEditing.getImageDimensions(pathOfScreenshot)[0] < 0) {
-				projectAndSceneImage = null;
-			} else {
-				int width = context.getResources().getDimensionPixelSize(R.dimen.project_thumbnail_width);
-				int height = context.getResources().getDimensionPixelSize(R.dimen.project_thumbnail_height);
-				projectAndSceneImage = ImageEditing.getScaledBitmapFromPath(pathOfScreenshot, width, height,
-						ImageEditing.ResizeType.STAY_IN_RECTANGLE_WITH_SAME_ASPECT_RATIO, true);
-			}
+            final Bitmap projectAndSceneImage;
+            if (!projectAndSceneImageFile.exists() || ImageEditing.getImageDimensions(pathOfScreenshot)[0] < 0) {
+                projectAndSceneImage = null;
+            } else {
+                int width = context.getResources().getDimensionPixelSize(R.dimen.project_thumbnail_width);
+                int height = context.getResources().getDimensionPixelSize(R.dimen.project_thumbnail_height);
+                projectAndSceneImage = ImageEditing.getScaledBitmapFromPath(pathOfScreenshot, width, height,
+                        ImageEditing.ResizeType.STAY_IN_RECTANGLE_WITH_SAME_ASPECT_RATIO, true);
+            }
 
-			String screenshotName = "";
-			if (projectAndSceneScreenshotData.projectName != null) {
-				screenshotName = projectAndSceneScreenshotData
-						.projectName;
-			}
-			if (projectAndSceneScreenshotData.sceneName != null) {
-				screenshotName = screenshotName.concat(projectAndSceneScreenshotData.sceneName);
-			}
+            String screenshotName = "";
+            if (projectAndSceneScreenshotData.projectName != null) {
+                screenshotName = projectAndSceneScreenshotData
+                        .projectName;
+            }
+            if (projectAndSceneScreenshotData.sceneName != null) {
+                screenshotName = screenshotName.concat(projectAndSceneScreenshotData.sceneName);
+            }
 
-			imageCache.put(screenshotName, projectAndSceneImage);
-			if (imageViewReused(projectAndSceneScreenshotData)) {
-				return;
-			}
+            imageCache.put(screenshotName, projectAndSceneImage);
+            if (imageViewReused(projectAndSceneScreenshotData)) {
+                return;
+            }
 
-			uiActivity.runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					if (imageViewReused(projectAndSceneScreenshotData)) {
-						return;
-					}
-					if (projectAndSceneImage != null) {
-						projectAndSceneScreenshotData.imageView.setImageBitmap(projectAndSceneImage);
-					} else {
-						projectAndSceneScreenshotData.imageView.setImageBitmap(null);
-					}
-				}
-			});
-		}
-	}
+            uiActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (imageViewReused(projectAndSceneScreenshotData)) {
+                        return;
+                    }
+                    if (projectAndSceneImage != null) {
+                        projectAndSceneScreenshotData.imageView.setImageBitmap(projectAndSceneImage);
+                    } else {
+                        projectAndSceneScreenshotData.imageView.setImageBitmap(null);
+                    }
+                }
+            });
+        }
+    }
 
-	boolean imageViewReused(ScreenshotData projectScreenshotData) {
-		String tag = imageViews.get(projectScreenshotData.imageView);
-		String screenshotName = "";
-		if (projectScreenshotData.projectName != null) {
-			screenshotName = projectScreenshotData.projectName;
-		}
-		if (projectScreenshotData.sceneName != null) {
-			screenshotName = screenshotName.concat(projectScreenshotData.sceneName);
-		}
+    boolean imageViewReused(ScreenshotData projectScreenshotData) {
+        String tag = imageViews.get(projectScreenshotData.imageView);
+        String screenshotName = "";
+        if (projectScreenshotData.projectName != null) {
+            screenshotName = projectScreenshotData.projectName;
+        }
+        if (projectScreenshotData.sceneName != null) {
+            screenshotName = screenshotName.concat(projectScreenshotData.sceneName);
+        }
 
-		if (tag == null || !tag.equals(screenshotName)) {
-			return true;
-		}
-		return false;
-	}
+        if (tag == null || !tag.equals(screenshotName)) {
+            return true;
+        }
+        return false;
+    }
 }

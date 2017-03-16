@@ -40,239 +40,239 @@ import java.util.Iterator;
 import java.util.List;
 
 public class SimulatedSensorManager implements SensorManagerInterface {
-	private static final String TAG = SimulatedSensorManager.class.getSimpleName();
+    private static final String TAG = SimulatedSensorManager.class.getSimpleName();
 
-	public class Pair<L, R> {
-		private L firstEntry;
-		private R secondEntry;
+    public class Pair<L, R> {
+        private L firstEntry;
+        private R secondEntry;
 
-		public Pair(L l, R r) {
-			this.firstEntry = l;
-			this.secondEntry = r;
-		}
+        public Pair(L l, R r) {
+            this.firstEntry = l;
+            this.secondEntry = r;
+        }
 
-		public L getL() {
-			return firstEntry;
-		}
+        public L getL() {
+            return firstEntry;
+        }
 
-		public R getR() {
-			return secondEntry;
-		}
-	}
+        public R getR() {
+            return secondEntry;
+        }
+    }
 
-	List<Pair<SensorEventListener, Sensor>> listeners;
-	List<Pair<SensorCustomEventListener, Sensors>> customListeners;
-	Thread simulationThread;
-	boolean simulationThreadRunning;
-	int timeOutInMilliSeconds = 100;
+    List<Pair<SensorEventListener, Sensor>> listeners;
+    List<Pair<SensorCustomEventListener, Sensors>> customListeners;
+    Thread simulationThread;
+    boolean simulationThreadRunning;
+    int timeOutInMilliSeconds = 100;
 
-	// units of m/s^2
-	float linearAccelationMinimumX = -10;
-	float linearAccelerationMaximumX = 10;
+    // units of m/s^2
+    float linearAccelationMinimumX = -10;
+    float linearAccelerationMaximumX = 10;
 
-	float linearAccelationMinimumY = -10;
-	float linearAccelerationMaximumY = 10;
+    float linearAccelationMinimumY = -10;
+    float linearAccelerationMaximumY = 10;
 
-	float linearAccelationMinimumZ = -10;
-	float linearAccelerationMaximumZ = 10;
+    float linearAccelationMinimumZ = -10;
+    float linearAccelerationMaximumZ = 10;
 
-	float rotationMinimumX = (float) -Math.PI * 0.5f;
-	float rotationMaximumX = (float) Math.PI * 0.5f;
+    float rotationMinimumX = (float) -Math.PI * 0.5f;
+    float rotationMaximumX = (float) Math.PI * 0.5f;
 
-	float rotationMinimumY = (float) -Math.PI * 0.5f;
-	float rotationMaximumY = (float) Math.PI * 0.5f;
+    float rotationMinimumY = (float) -Math.PI * 0.5f;
+    float rotationMaximumY = (float) Math.PI * 0.5f;
 
-	float rotationMinimumZ = (float) -Math.PI * 0.5f;
-	float rotationMaximumZ = (float) Math.PI * 0.5f;
+    float rotationMinimumZ = (float) -Math.PI * 0.5f;
+    float rotationMaximumZ = (float) Math.PI * 0.5f;
 
-	float rotationAngleMinimum = 0;
-	float rotationAngleMaximum = (float) (2 * Math.PI);
+    float rotationAngleMinimum = 0;
+    float rotationAngleMaximum = (float) (2 * Math.PI);
 
-	private List<SensorEvent> sentSensorEvents;
-	private List<SensorCustomEvent> sentSensorCustomEvents;
+    private List<SensorEvent> sentSensorEvents;
+    private List<SensorCustomEvent> sentSensorCustomEvents;
 
-	private long lastExecution = 0;
+    private long lastExecution = 0;
 
-	public SimulatedSensorManager() {
-		sentSensorEvents = new ArrayList<SensorEvent>();
-		sentSensorCustomEvents = new ArrayList<SensorCustomEvent>();
-		listeners = new ArrayList<Pair<SensorEventListener, Sensor>>();
-		customListeners = new ArrayList<Pair<SensorCustomEventListener, Sensors>>();
-		createSimulationThread();
-	}
+    public SimulatedSensorManager() {
+        sentSensorEvents = new ArrayList<SensorEvent>();
+        sentSensorCustomEvents = new ArrayList<SensorCustomEvent>();
+        listeners = new ArrayList<Pair<SensorEventListener, Sensor>>();
+        customListeners = new ArrayList<Pair<SensorCustomEventListener, Sensors>>();
+        createSimulationThread();
+    }
 
-	private void createSimulationThread() {
-		simulationThread = new Thread(new Runnable() {
-			public void run() {
-				while (simulationThreadRunning) {
-					lastExecution = System.currentTimeMillis();
-					while (System.currentTimeMillis() < lastExecution + timeOutInMilliSeconds) {
-						Thread.yield();
-					}
+    private void createSimulationThread() {
+        simulationThread = new Thread(new Runnable() {
+            public void run() {
+                while (simulationThreadRunning) {
+                    lastExecution = System.currentTimeMillis();
+                    while (System.currentTimeMillis() < lastExecution + timeOutInMilliSeconds) {
+                        Thread.yield();
+                    }
 
-					sendGeneratedSensorValues();
-				}
-			}
-		});
-		simulationThreadRunning = false;
-	}
+                    sendGeneratedSensorValues();
+                }
+            }
+        });
+        simulationThreadRunning = false;
+    }
 
-	public synchronized void startSimulation() {
-		if (!simulationThreadRunning && !simulationThread.isAlive()) {
-			simulationThreadRunning = true;
-			simulationThread.start();
-		}
-	}
+    public synchronized void startSimulation() {
+        if (!simulationThreadRunning && !simulationThread.isAlive()) {
+            simulationThreadRunning = true;
+            simulationThread.start();
+        }
+    }
 
-	public synchronized void stopSimulation() {
-		simulationThreadRunning = false;
-	}
+    public synchronized void stopSimulation() {
+        simulationThreadRunning = false;
+    }
 
-	public synchronized void unregisterListener(SensorEventListener listener) {
-		listeners.remove(listener);
+    public synchronized void unregisterListener(SensorEventListener listener) {
+        listeners.remove(listener);
 
-		Iterator<Pair<SensorEventListener, Sensor>> iterator = listeners.iterator();
+        Iterator<Pair<SensorEventListener, Sensor>> iterator = listeners.iterator();
 
-		while (iterator.hasNext()) {
-			Pair<SensorEventListener, Sensor> pair = iterator.next();
-			if (pair.getL() == listener) {
-				iterator.remove();
-			}
-		}
-	}
+        while (iterator.hasNext()) {
+            Pair<SensorEventListener, Sensor> pair = iterator.next();
+            if (pair.getL() == listener) {
+                iterator.remove();
+            }
+        }
+    }
 
-	public synchronized boolean registerListener(SensorEventListener listener, Sensor sensor, int rate) {
-		listeners.add(new Pair<SensorEventListener, Sensor>(listener, sensor));
-		return false;
-	}
+    public synchronized boolean registerListener(SensorEventListener listener, Sensor sensor, int rate) {
+        listeners.add(new Pair<SensorEventListener, Sensor>(listener, sensor));
+        return false;
+    }
 
-	public synchronized void unregisterListener(SensorCustomEventListener listener) {
-		customListeners.remove(listener);
+    public synchronized void unregisterListener(SensorCustomEventListener listener) {
+        customListeners.remove(listener);
 
-		Iterator<Pair<SensorCustomEventListener, Sensors>> iterator = customListeners.iterator();
+        Iterator<Pair<SensorCustomEventListener, Sensors>> iterator = customListeners.iterator();
 
-		while (iterator.hasNext()) {
-			Pair<SensorCustomEventListener, Sensors> pair = iterator.next();
-			if (pair.getL() == listener) {
-				iterator.remove();
-			}
-		}
-	}
+        while (iterator.hasNext()) {
+            Pair<SensorCustomEventListener, Sensors> pair = iterator.next();
+            if (pair.getL() == listener) {
+                iterator.remove();
+            }
+        }
+    }
 
-	public synchronized boolean registerListener(SensorCustomEventListener listener, Sensors sensor) {
-		customListeners.add(new Pair<SensorCustomEventListener, Sensors>(listener, sensor));
-		return false;
-	}
+    public synchronized boolean registerListener(SensorCustomEventListener listener, Sensors sensor) {
+        customListeners.add(new Pair<SensorCustomEventListener, Sensors>(listener, sensor));
+        return false;
+    }
 
-	public synchronized void sendGeneratedSensorValues() {
-		for (Pair<SensorEventListener, Sensor> pair : listeners) {
-			SensorEventListener sensorEventListener = pair.getL();
-			Sensor sensor = pair.getR();
+    public synchronized void sendGeneratedSensorValues() {
+        for (Pair<SensorEventListener, Sensor> pair : listeners) {
+            SensorEventListener sensorEventListener = pair.getL();
+            Sensor sensor = pair.getR();
 
-			SensorEvent sensorEvent = null;
-			try {
-				Constructor<SensorEvent> constructor = SensorEvent.class.getDeclaredConstructor(int.class);
-				constructor.setAccessible(true);
-				sensorEvent = constructor.newInstance(3);
-			} catch (NoSuchMethodException | IllegalArgumentException | InstantiationException
-					| IllegalAccessException | InvocationTargetException ex) {
-				Log.e(TAG, "Sleep was interrupted.", ex);
-			}
+            SensorEvent sensorEvent = null;
+            try {
+                Constructor<SensorEvent> constructor = SensorEvent.class.getDeclaredConstructor(int.class);
+                constructor.setAccessible(true);
+                sensorEvent = constructor.newInstance(3);
+            } catch (NoSuchMethodException | IllegalArgumentException | InstantiationException
+                    | IllegalAccessException | InvocationTargetException ex) {
+                Log.e(TAG, "Sleep was interrupted.", ex);
+            }
 
-			if (sensorEvent == null) {
-				return;
-			}
+            if (sensorEvent == null) {
+                return;
+            }
 
-			switch (sensor.getType()) {
-				case Sensor.TYPE_LINEAR_ACCELERATION:
-					sensorEvent.sensor = sensor;
+            switch (sensor.getType()) {
+                case Sensor.TYPE_LINEAR_ACCELERATION:
+                    sensorEvent.sensor = sensor;
 
-					float[] sensorValues = new float[3];
+                    float[] sensorValues = new float[3];
 
-					sensorValues[0] = (float) (linearAccelationMinimumX + Math.random()
-							* (linearAccelerationMaximumX - linearAccelationMinimumX));
-					sensorValues[1] = (float) (linearAccelationMinimumY + Math.random()
-							* (linearAccelerationMaximumY - linearAccelationMinimumY));
-					sensorValues[2] = (float) (linearAccelationMinimumZ + Math.random()
-							* (linearAccelerationMaximumZ - linearAccelationMinimumZ));
+                    sensorValues[0] = (float) (linearAccelationMinimumX + Math.random()
+                            * (linearAccelerationMaximumX - linearAccelationMinimumX));
+                    sensorValues[1] = (float) (linearAccelationMinimumY + Math.random()
+                            * (linearAccelerationMaximumY - linearAccelationMinimumY));
+                    sensorValues[2] = (float) (linearAccelationMinimumZ + Math.random()
+                            * (linearAccelerationMaximumZ - linearAccelationMinimumZ));
 
-					Reflection.setPrivateField(SensorEvent.class, sensorEvent, "values", sensorValues);
+                    Reflection.setPrivateField(SensorEvent.class, sensorEvent, "values", sensorValues);
 
-					sentSensorEvents.add(0, sensorEvent);
-					sentSensorEvents = sentSensorEvents.subList(0,
-							sentSensorEvents.size() < 50 ? sentSensorEvents.size() : 50);
-					sensorEventListener.onSensorChanged(sensorEvent);
-					break;
-				case Sensor.TYPE_ROTATION_VECTOR:
-					sensorEvent.sensor = sensor;
+                    sentSensorEvents.add(0, sensorEvent);
+                    sentSensorEvents = sentSensorEvents.subList(0,
+                            sentSensorEvents.size() < 50 ? sentSensorEvents.size() : 50);
+                    sensorEventListener.onSensorChanged(sensorEvent);
+                    break;
+                case Sensor.TYPE_ROTATION_VECTOR:
+                    sensorEvent.sensor = sensor;
 
-					sensorValues = new float[3];
-					sensorValues[0] = (float) (rotationMinimumX + Math.random() * (rotationMaximumX - rotationMinimumX));
-					sensorValues[1] = (float) (rotationMinimumY + Math.random() * (rotationMaximumY - rotationMinimumY));
-					sensorValues[2] = (float) (rotationMinimumZ + Math.random() * (rotationMaximumZ - rotationMinimumZ));
+                    sensorValues = new float[3];
+                    sensorValues[0] = (float) (rotationMinimumX + Math.random() * (rotationMaximumX - rotationMinimumX));
+                    sensorValues[1] = (float) (rotationMinimumY + Math.random() * (rotationMaximumY - rotationMinimumY));
+                    sensorValues[2] = (float) (rotationMinimumZ + Math.random() * (rotationMaximumZ - rotationMinimumZ));
 
-					sensorValues[0] *= Math.sin((rotationAngleMinimum + Math.random()
-							* (rotationAngleMaximum - rotationAngleMinimum)) * 0.5f);
-					sensorValues[1] *= Math.sin((rotationAngleMinimum + Math.random()
-							* (rotationAngleMaximum - rotationAngleMinimum)) * 0.5f);
-					sensorValues[2] *= Math.sin((rotationAngleMinimum + Math.random()
-							* (rotationAngleMaximum - rotationAngleMinimum)) * 0.5f);
+                    sensorValues[0] *= Math.sin((rotationAngleMinimum + Math.random()
+                            * (rotationAngleMaximum - rotationAngleMinimum)) * 0.5f);
+                    sensorValues[1] *= Math.sin((rotationAngleMinimum + Math.random()
+                            * (rotationAngleMaximum - rotationAngleMinimum)) * 0.5f);
+                    sensorValues[2] *= Math.sin((rotationAngleMinimum + Math.random()
+                            * (rotationAngleMaximum - rotationAngleMinimum)) * 0.5f);
 
-					Reflection.setPrivateField(SensorEvent.class, sensorEvent, "values", sensorValues);
-					sentSensorEvents.add(0, sensorEvent);
-					sentSensorEvents = sentSensorEvents.subList(0,
-							sentSensorEvents.size() < 50 ? sentSensorEvents.size() : 50);
-					sensorEventListener.onSensorChanged(sensorEvent);
-					break;
-			}
-		}
-		for (Pair<SensorCustomEventListener, Sensors> pair : customListeners) {
-			SensorCustomEventListener sensorEventListener = pair.getL();
-			Sensors sensor = pair.getR();
-			float[] values = new float[1];
+                    Reflection.setPrivateField(SensorEvent.class, sensorEvent, "values", sensorValues);
+                    sentSensorEvents.add(0, sensorEvent);
+                    sentSensorEvents = sentSensorEvents.subList(0,
+                            sentSensorEvents.size() < 50 ? sentSensorEvents.size() : 50);
+                    sensorEventListener.onSensorChanged(sensorEvent);
+                    break;
+            }
+        }
+        for (Pair<SensorCustomEventListener, Sensors> pair : customListeners) {
+            SensorCustomEventListener sensorEventListener = pair.getL();
+            Sensors sensor = pair.getR();
+            float[] values = new float[1];
 
-			switch (sensor) {
-				case LOUDNESS:
-					values[0] = (float) Math.random() * 100;
-					break;
-				default:
-					break;
-			}
+            switch (sensor) {
+                case LOUDNESS:
+                    values[0] = (float) Math.random() * 100;
+                    break;
+                default:
+                    break;
+            }
 
-			SensorCustomEvent sensorEvent = new SensorCustomEvent(sensor, values);
+            SensorCustomEvent sensorEvent = new SensorCustomEvent(sensor, values);
 
-			sentSensorCustomEvents.add(0, sensorEvent);
-			sentSensorCustomEvents = sentSensorCustomEvents.subList(0,
-					sentSensorCustomEvents.size() < 50 ? sentSensorCustomEvents.size() : 50);
-			sensorEventListener.onCustomSensorChanged(sensorEvent);
-		}
-	}
+            sentSensorCustomEvents.add(0, sensorEvent);
+            sentSensorCustomEvents = sentSensorCustomEvents.subList(0,
+                    sentSensorCustomEvents.size() < 50 ? sentSensorCustomEvents.size() : 50);
+            sensorEventListener.onCustomSensorChanged(sensorEvent);
+        }
+    }
 
-	public Sensor getDefaultSensor(int typeLinearAcceleration) {
-		return null;
-	}
+    public Sensor getDefaultSensor(int typeLinearAcceleration) {
+        return null;
+    }
 
-	public synchronized SensorEvent getLatestSensorEvent(Sensor sensor) {
-		Iterator<SensorEvent> iterator = sentSensorEvents.iterator();
+    public synchronized SensorEvent getLatestSensorEvent(Sensor sensor) {
+        Iterator<SensorEvent> iterator = sentSensorEvents.iterator();
 
-		while (iterator.hasNext()) {
-			SensorEvent sensorEvent = iterator.next();
-			if (sensorEvent.sensor == sensor) {
-				return sensorEvent;
-			}
-		}
-		return null;
-	}
+        while (iterator.hasNext()) {
+            SensorEvent sensorEvent = iterator.next();
+            if (sensorEvent.sensor == sensor) {
+                return sensorEvent;
+            }
+        }
+        return null;
+    }
 
-	public synchronized SensorCustomEvent getLatestCustomSensorEvent(Sensors sensor) {
-		Iterator<SensorCustomEvent> iterator = sentSensorCustomEvents.iterator();
+    public synchronized SensorCustomEvent getLatestCustomSensorEvent(Sensors sensor) {
+        Iterator<SensorCustomEvent> iterator = sentSensorCustomEvents.iterator();
 
-		while (iterator.hasNext()) {
-			SensorCustomEvent sensorEvent = iterator.next();
-			if (sensorEvent.sensor == sensor) {
-				return sensorEvent;
-			}
-		}
-		return null;
-	}
+        while (iterator.hasNext()) {
+            SensorCustomEvent sensorEvent = iterator.next();
+            if (sensorEvent.sensor == sensor) {
+                return sensorEvent;
+            }
+        }
+        return null;
+    }
 }

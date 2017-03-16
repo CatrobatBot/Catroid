@@ -38,92 +38,92 @@ import java.util.List;
 
 public final class TrackGridTestDataFactory {
 
-	private static final int ASSUMED_NOTE_COUNT_PER_TACT = 4;
+    private static final int ASSUMED_NOTE_COUNT_PER_TACT = 4;
 
-	private TrackGridTestDataFactory() {
-	}
+    private TrackGridTestDataFactory() {
+    }
 
-	private static SparseArray<List<GridRowPosition>> createGridRowPositionsGridRow(int[] columnStartIndices) {
+    private static SparseArray<List<GridRowPosition>> createGridRowPositionsGridRow(int[] columnStartIndices) {
 
-		SparseArray<List<GridRowPosition>> gridRowContent = new SparseArray<>();
+        SparseArray<List<GridRowPosition>> gridRowContent = new SparseArray<>();
 
-		for (int columnStartIndex : columnStartIndices) {
-			int sparseArrayIndex = columnStartIndex / ASSUMED_NOTE_COUNT_PER_TACT;
+        for (int columnStartIndex : columnStartIndices) {
+            int sparseArrayIndex = columnStartIndex / ASSUMED_NOTE_COUNT_PER_TACT;
 
-			List<GridRowPosition> gridRowPositions = gridRowContent.get(sparseArrayIndex);
-			if (gridRowPositions == null) {
-				gridRowPositions = new ArrayList<>();
-				gridRowContent.put(sparseArrayIndex, gridRowPositions);
-			}
+            List<GridRowPosition> gridRowPositions = gridRowContent.get(sparseArrayIndex);
+            if (gridRowPositions == null) {
+                gridRowPositions = new ArrayList<>();
+                gridRowContent.put(sparseArrayIndex, gridRowPositions);
+            }
 
-			gridRowPositions.add(new GridRowPosition(columnStartIndex, NoteLength.QUARTER));
-			gridRowContent.put(sparseArrayIndex, gridRowPositions);
-		}
+            gridRowPositions.add(new GridRowPosition(columnStartIndex, NoteLength.QUARTER));
+            gridRowContent.put(sparseArrayIndex, gridRowPositions);
+        }
 
-		return gridRowContent;
-	}
+        return gridRowContent;
+    }
 
-	public static TrackGrid createFirstOctaveOnlyTrackGrid() {
+    public static TrackGrid createFirstOctaveOnlyTrackGrid() {
 
-		List<GridRow> gridRows = new ArrayList<GridRow>();
+        List<GridRow> gridRows = new ArrayList<GridRow>();
 
-		SparseArray<List<GridRowPosition>> gridRowPositionC1 = new SparseArray<List<GridRowPosition>>();
+        SparseArray<List<GridRowPosition>> gridRowPositionC1 = new SparseArray<List<GridRowPosition>>();
 
-		List<GridRowPosition> gridRowPositionListC1 = new ArrayList<GridRowPosition>();
-		gridRowPositionListC1.add(new GridRowPosition(0, NoteLength.QUARTER));
-		gridRowPositionListC1.add(new GridRowPosition(1, NoteLength.QUARTER));
-		gridRowPositionListC1.add(new GridRowPosition(2, NoteLength.QUARTER));
-		gridRowPositionListC1.add(new GridRowPosition(3, NoteLength.QUARTER));
+        List<GridRowPosition> gridRowPositionListC1 = new ArrayList<GridRowPosition>();
+        gridRowPositionListC1.add(new GridRowPosition(0, NoteLength.QUARTER));
+        gridRowPositionListC1.add(new GridRowPosition(1, NoteLength.QUARTER));
+        gridRowPositionListC1.add(new GridRowPosition(2, NoteLength.QUARTER));
+        gridRowPositionListC1.add(new GridRowPosition(3, NoteLength.QUARTER));
 
-		gridRowPositionC1.put(0, gridRowPositionListC1);
+        gridRowPositionC1.put(0, gridRowPositionListC1);
 
-		gridRows.add(new GridRow(NoteName.C1, gridRowPositionC1));
+        gridRows.add(new GridRow(NoteName.C1, gridRowPositionC1));
 
-		return new TrackGrid(MusicalKey.VIOLIN, MusicalInstrument.ACOUSTIC_GRAND_PIANO, MusicalBeat
-				.BEAT_4_4, gridRows);
-	}
+        return new TrackGrid(MusicalKey.VIOLIN, MusicalInstrument.ACOUSTIC_GRAND_PIANO, MusicalBeat
+                .BEAT_4_4, gridRows);
+    }
 
-	public static TrackGrid createSimpleTrackGrid() {
+    public static TrackGrid createSimpleTrackGrid() {
 
-		List<GridRow> gridRows = new ArrayList<GridRow>();
+        List<GridRow> gridRows = new ArrayList<GridRow>();
 
-		gridRows.add(new GridRow(NoteName.C4, createGridRowPositionsGridRow(new int[] { 0, 3 })));
-		gridRows.add(new GridRow(NoteName.E4, createGridRowPositionsGridRow(new int[] { 1 })));
-		gridRows.add(new GridRow(NoteName.F4, createGridRowPositionsGridRow(new int[] { 2 })));
-		gridRows.add(new GridRow(NoteName.C5, createGridRowPositionsGridRow(new int[] { 4 })));
+        gridRows.add(new GridRow(NoteName.C4, createGridRowPositionsGridRow(new int[]{0, 3})));
+        gridRows.add(new GridRow(NoteName.E4, createGridRowPositionsGridRow(new int[]{1})));
+        gridRows.add(new GridRow(NoteName.F4, createGridRowPositionsGridRow(new int[]{2})));
+        gridRows.add(new GridRow(NoteName.C5, createGridRowPositionsGridRow(new int[]{4})));
 
-		return new TrackGrid(MusicalKey.VIOLIN, MusicalInstrument.ACOUSTIC_GRAND_PIANO, MusicalBeat
-				.BEAT_4_4, gridRows);
-	}
+        return new TrackGrid(MusicalKey.VIOLIN, MusicalInstrument.ACOUSTIC_GRAND_PIANO, MusicalBeat
+                .BEAT_4_4, gridRows);
+    }
 
-	public static TrackGrid createTrackGridWithSeveralBreaks() {
+    public static TrackGrid createTrackGridWithSeveralBreaks() {
 
-		List<GridRow> gridRows = new ArrayList<GridRow>();
+        List<GridRow> gridRows = new ArrayList<GridRow>();
 
-		gridRows.add(new GridRow(NoteName.C4, createGridRowPositionsGridRow(new int[] { 3 })));
+        gridRows.add(new GridRow(NoteName.C4, createGridRowPositionsGridRow(new int[]{3})));
 
-		return new TrackGrid(MusicalKey.VIOLIN, MusicalInstrument.ACOUSTIC_GRAND_PIANO, MusicalBeat
-				.BEAT_4_4, gridRows);
-	}
+        return new TrackGrid(MusicalKey.VIOLIN, MusicalInstrument.ACOUSTIC_GRAND_PIANO, MusicalBeat
+                .BEAT_4_4, gridRows);
+    }
 
-	public static TrackGrid createSemiComplexTrackGrid() {
+    public static TrackGrid createSemiComplexTrackGrid() {
 
-		List<GridRow> gridRows = new ArrayList<GridRow>();
+        List<GridRow> gridRows = new ArrayList<GridRow>();
 
-		gridRows.add(new GridRow(NoteName.C5, createGridRowPositionsGridRow(new int[] { 0 })));
-		gridRows.add(new GridRow(NoteName.C4, createGridRowPositionsGridRow(new int[] { 1, 2 })));
-		gridRows.add(new GridRow(NoteName.D4, createGridRowPositionsGridRow(new int[] { 1, 2 })));
-		gridRows.add(new GridRow(NoteName.E4, createGridRowPositionsGridRow(new int[] { 3 })));
-		gridRows.add(new GridRow(NoteName.F4, createGridRowPositionsGridRow(new int[] { 3 })));
+        gridRows.add(new GridRow(NoteName.C5, createGridRowPositionsGridRow(new int[]{0})));
+        gridRows.add(new GridRow(NoteName.C4, createGridRowPositionsGridRow(new int[]{1, 2})));
+        gridRows.add(new GridRow(NoteName.D4, createGridRowPositionsGridRow(new int[]{1, 2})));
+        gridRows.add(new GridRow(NoteName.E4, createGridRowPositionsGridRow(new int[]{3})));
+        gridRows.add(new GridRow(NoteName.F4, createGridRowPositionsGridRow(new int[]{3})));
 
-		return new TrackGrid(MusicalKey.VIOLIN, MusicalInstrument.ACOUSTIC_GRAND_PIANO, MusicalBeat
-				.BEAT_4_4, gridRows);
-	}
+        return new TrackGrid(MusicalKey.VIOLIN, MusicalInstrument.ACOUSTIC_GRAND_PIANO, MusicalBeat
+                .BEAT_4_4, gridRows);
+    }
 
-	public static TrackGrid createEmptyTrackGrid() {
+    public static TrackGrid createEmptyTrackGrid() {
 
-		List<GridRow> gridRows = new ArrayList<GridRow>();
-		return new TrackGrid(MusicalKey.VIOLIN, MusicalInstrument.ACOUSTIC_GRAND_PIANO, MusicalBeat
-				.BEAT_4_4, gridRows);
-	}
+        List<GridRow> gridRows = new ArrayList<GridRow>();
+        return new TrackGrid(MusicalKey.VIOLIN, MusicalInstrument.ACOUSTIC_GRAND_PIANO, MusicalBeat
+                .BEAT_4_4, gridRows);
+    }
 }

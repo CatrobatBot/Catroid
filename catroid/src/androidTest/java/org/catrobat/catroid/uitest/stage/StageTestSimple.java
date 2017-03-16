@@ -33,36 +33,36 @@ import org.catrobat.catroid.uitest.util.UiTestUtils;
 
 public class StageTestSimple extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
-	public StageTestSimple() {
-		super(MainMenuActivity.class);
-	}
+    public StageTestSimple() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		UiTestUtils.createEmptyProject();
-		ScreenValues.SCREEN_HEIGHT = 20;
-		ScreenValues.SCREEN_WIDTH = 20;
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        UiTestUtils.createEmptyProject();
+        ScreenValues.SCREEN_HEIGHT = 20;
+        ScreenValues.SCREEN_WIDTH = 20;
 
-		UiTestUtils.getIntoSpritesFromMainMenu(solo);
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-	}
+        UiTestUtils.getIntoSpritesFromMainMenu(solo);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+    }
 
-	public void testSimple() {
-		byte[] whitePixel = { (byte) 255, (byte) 255, (byte) 255, (byte) 255 };
+    public void testSimple() {
+        byte[] whitePixel = {(byte) 255, (byte) 255, (byte) 255, (byte) 255};
 
-		byte[] result = StageActivity.stageListener.getPixels(0, 0, 1, 1);
-		UiTestUtils.compareByteArrays(whitePixel, result);
+        byte[] result = StageActivity.stageListener.getPixels(0, 0, 1, 1);
+        UiTestUtils.compareByteArrays(whitePixel, result);
 
-		result = StageActivity.stageListener.getPixels(19, 19, 1, 1);
-		UiTestUtils.compareByteArrays(whitePixel, result);
-	}
+        result = StageActivity.stageListener.getPixels(19, 19, 1, 1);
+        UiTestUtils.compareByteArrays(whitePixel, result);
+    }
 
-	public void testScreenAlwaysOn() {
-		final int windowFlags = solo.getCurrentActivity().getWindow().getAttributes().flags;
+    public void testScreenAlwaysOn() {
+        final int windowFlags = solo.getCurrentActivity().getWindow().getAttributes().flags;
 
-		assertTrue("Window flags do not contain FLAG_KEEP_SCREEN_ON!",
-				(windowFlags & WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) != 0);
-	}
+        assertTrue("Window flags do not contain FLAG_KEEP_SCREEN_ON!",
+                (windowFlags & WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) != 0);
+    }
 }

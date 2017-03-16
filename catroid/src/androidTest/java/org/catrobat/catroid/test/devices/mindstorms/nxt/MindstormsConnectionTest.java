@@ -37,70 +37,70 @@ import java.io.DataInputStream;
 
 public class MindstormsConnectionTest extends AndroidTestCase {
 
-	public static final int HEADER_SIZE = 2;
+    public static final int HEADER_SIZE = 2;
 
-	public void testSend() {
-		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+    public void testSend() {
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 
-		MindstormsConnectionImpl connection = new MindstormsConnectionImpl(null);
-		Reflection.setPrivateField(connection, "legoOutputStream", outStream);
+        MindstormsConnectionImpl connection = new MindstormsConnectionImpl(null);
+        Reflection.setPrivateField(connection, "legoOutputStream", outStream);
 
-		Command command = new Command(CommandType.DIRECT_COMMAND, CommandByte.SET_OUTPUT_STATE, false);
-		command.append((byte) 0x1);
-		command.append((byte) 0x2);
-		command.append((byte) 0x3);
+        Command command = new Command(CommandType.DIRECT_COMMAND, CommandByte.SET_OUTPUT_STATE, false);
+        command.append((byte) 0x1);
+        command.append((byte) 0x2);
+        command.append((byte) 0x3);
 
-		connection.send(command);
+        connection.send(command);
 
-		byte[] sentBytes = outStream.toByteArray();
+        byte[] sentBytes = outStream.toByteArray();
 
-		byte[] expectedMessage = command.getRawCommand();
+        byte[] expectedMessage = command.getRawCommand();
 
-		assertEquals("Wrong message length. Before there should be a header with 2 bytes defining the message length",
-				expectedMessage.length + HEADER_SIZE, sentBytes.length);
-		assertEquals("Header should be the size of the message.", (byte) expectedMessage.length, sentBytes[0]);
-		assertEquals("Header should be the size of the message.", (byte) (expectedMessage.length >> 8), sentBytes[1]);
+        assertEquals("Wrong message length. Before there should be a header with 2 bytes defining the message length",
+                expectedMessage.length + HEADER_SIZE, sentBytes.length);
+        assertEquals("Header should be the size of the message.", (byte) expectedMessage.length, sentBytes[0]);
+        assertEquals("Header should be the size of the message.", (byte) (expectedMessage.length >> 8), sentBytes[1]);
 
-		for (int i = 0; i < expectedMessage.length; i++) {
-			assertEquals("Byte " + i + " is different", expectedMessage[i], sentBytes[i + HEADER_SIZE]);
-		}
-	}
+        for (int i = 0; i < expectedMessage.length; i++) {
+            assertEquals("Byte " + i + " is different", expectedMessage[i], sentBytes[i + HEADER_SIZE]);
+        }
+    }
 
-	public void testSendAndReceive() {
+    public void testSendAndReceive() {
 
-		byte[] inputBuffer = new byte[] { 4, 0, 3, 4, 5, 7 };
-		ByteArrayInputStream inStream = new ByteArrayInputStream(inputBuffer);
-		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        byte[] inputBuffer = new byte[]{4, 0, 3, 4, 5, 7};
+        ByteArrayInputStream inStream = new ByteArrayInputStream(inputBuffer);
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 
-		MindstormsConnectionImpl connection = new MindstormsConnectionImpl(null);
-		Reflection.setPrivateField(connection, "legoOutputStream", outStream);
-		Reflection.setPrivateField(connection, "legoInputStream", new DataInputStream(inStream));
+        MindstormsConnectionImpl connection = new MindstormsConnectionImpl(null);
+        Reflection.setPrivateField(connection, "legoOutputStream", outStream);
+        Reflection.setPrivateField(connection, "legoInputStream", new DataInputStream(inStream));
 
-		Command command = new Command(CommandType.DIRECT_COMMAND, CommandByte.SET_OUTPUT_STATE, false);
-		command.append((byte) 0x1);
-		command.append((byte) 0x2);
-		command.append((byte) 0x3);
+        Command command = new Command(CommandType.DIRECT_COMMAND, CommandByte.SET_OUTPUT_STATE, false);
+        command.append((byte) 0x1);
+        command.append((byte) 0x2);
+        command.append((byte) 0x3);
 
-		byte[] receivedBytes = connection.sendAndReceive(command);
+        byte[] receivedBytes = connection.sendAndReceive(command);
 
-		byte[] sentBytes = outStream.toByteArray();
+        byte[] sentBytes = outStream.toByteArray();
 
-		byte[] expectedMessage = command.getRawCommand();
+        byte[] expectedMessage = command.getRawCommand();
 
-		assertEquals("Wrong message length. Before there should be a header with 2 bytes defining the message length",
-				expectedMessage.length + HEADER_SIZE, sentBytes.length);
-		assertEquals("Header should be the size of the message.", expectedMessage.length, sentBytes[0]);
-		assertEquals("Header should be the size of the message.", (byte) (expectedMessage.length >> 8), sentBytes[1]);
+        assertEquals("Wrong message length. Before there should be a header with 2 bytes defining the message length",
+                expectedMessage.length + HEADER_SIZE, sentBytes.length);
+        assertEquals("Header should be the size of the message.", expectedMessage.length, sentBytes[0]);
+        assertEquals("Header should be the size of the message.", (byte) (expectedMessage.length >> 8), sentBytes[1]);
 
-		for (int i = 0; i < expectedMessage.length; i++) {
-			assertEquals("Byte " + i + " is different", expectedMessage[i], sentBytes[i + HEADER_SIZE]);
-		}
+        for (int i = 0; i < expectedMessage.length; i++) {
+            assertEquals("Byte " + i + " is different", expectedMessage[i], sentBytes[i + HEADER_SIZE]);
+        }
 
-		assertEquals("Wrong message length. Before there should be a header with 2 bytes defining the message length",
-				inputBuffer.length - HEADER_SIZE, receivedBytes.length);
+        assertEquals("Wrong message length. Before there should be a header with 2 bytes defining the message length",
+                inputBuffer.length - HEADER_SIZE, receivedBytes.length);
 
-		for (int i = 0; i < receivedBytes.length; i++) {
-			assertEquals("Byte " + i + " is different", inputBuffer[i + HEADER_SIZE], receivedBytes[i]);
-		}
-	}
+        for (int i = 0; i < receivedBytes.length; i++) {
+            assertEquals("Byte " + i + " is different", inputBuffer[i + HEADER_SIZE], receivedBytes[i]);
+        }
+    }
 }

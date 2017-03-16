@@ -28,22 +28,22 @@ import org.catrobat.catroid.content.BroadcastEvent;
 
 public class BroadcastNotifyAction extends Action {
 
-	private BroadcastEvent event;
+    private BroadcastEvent event;
 
-	@Override
-	public boolean act(float delta) {
-		event.raiseNumberOfFinishedReceivers();
-		if (event.allReceiversHaveFinished()) {
-			event.resetEventAndResumeScript();
-		}
-		return true;
-	}
+    @Override
+    public boolean act(float delta) {
+        event.raiseNumberOfFinishedReceivers();
+        if (event.allReceiversHaveFinished()) {
+            event.resetEventAndResumeScript();
+        }
+        return true;
+    }
 
-	public void setEvent(BroadcastEvent event) {
-		this.event = event;
-	}
+    public void setEvent(BroadcastEvent event) {
+        this.event = event;
+    }
 
-	public BroadcastEvent getEvent() {
-		return event;
-	}
+    public BroadcastEvent getEvent() {
+        return event;
+    }
 }

@@ -32,21 +32,21 @@ import org.catrobat.catroid.uitest.util.BaseActivityInstrumentationTestCase;
 
 public class FlashBrickTest extends BaseActivityInstrumentationTestCase<ScriptActivity> {
 
-	private static final String TAG = FlashBrickTest.class.getSimpleName();
+    private static final String TAG = FlashBrickTest.class.getSimpleName();
 
-	//private static final int LED_DELAY_MS = 8000;
-	//private static final int WLAN_DELAY_MS = 700;
+    //private static final int LED_DELAY_MS = 8000;
+    //private static final int WLAN_DELAY_MS = 700;
 
-	//private FlashOffBrick ledOffBrick;
-	//private FlashOnBrick ledOnBrick;
-	//private Project project;
+    //private FlashOffBrick ledOffBrick;
+    //private FlashOnBrick ledOnBrick;
+    //private Project project;
 
-	public FlashBrickTest() {
-		super(ScriptActivity.class);
-	}
+    public FlashBrickTest() {
+        super(ScriptActivity.class);
+    }
 
-	@Override
-	protected void setUp() throws Exception {
+    @Override
+    protected void setUp() throws Exception {
 	/*	createProject();
 		if (hasLedSystemFeature()) {
 		super.setUp();
@@ -56,20 +56,20 @@ public class FlashBrickTest extends BaseActivityInstrumentationTestCase<ScriptAc
 		} else {
 			Log.d(TAG, " setUp() - no flash led available");
 		}*/
-	}
+    }
 
-	@Override
-	protected void tearDown() throws Exception {
+    @Override
+    protected void tearDown() throws Exception {
 	/*	SensorTestServerConnection.closeConnection();
 		setActivityInitialTouchMode(true);
 		super.tearDown();*/
-	}
+    }
 
-	@Device
-	public void testFlashBricks() {
+    @Device
+    public void testFlashBricks() {
 
-		Assert.assertTrue("fix this test", true);
-		//TODO: fix this test
+        Assert.assertTrue("fix this test", true);
+        //TODO: fix this test
 		/*
 		ListView dragDropListView = UiTestUtils.getScriptListView(solo);
 		BrickAdapter adapter = (BrickAdapter) dragDropListView.getSoundAdapter();
@@ -138,8 +138,8 @@ public class FlashBrickTest extends BaseActivityInstrumentationTestCase<ScriptAc
 		solo.sleep(WLAN_DELAY_MS);
 		*/
 
-		Log.d(TAG, "testFlashBrick() finished");
-	}
+        Log.d(TAG, "testFlashBrick() finished");
+    }
 
 	/*private void createProject() {
 		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);

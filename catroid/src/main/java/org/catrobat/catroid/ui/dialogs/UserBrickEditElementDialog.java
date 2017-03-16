@@ -49,151 +49,151 @@ import java.util.List;
 
 public class UserBrickEditElementDialog extends DialogFragment {
 
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_new_text_catroid";
+    public static final String DIALOG_FRAGMENT_TAG = "dialog_new_text_catroid";
 
-	private static CharSequence text;
-	private static boolean editMode;
-	private static int stringResourceOfTitle;
-	private static int stringResourceOfHintText;
-	private static ArrayList<String> takenVariables;
-	private View fragmentView;
-	private UserBrickElementEditorFragment userBrickElementEditorFragment;
+    private static CharSequence text;
+    private static boolean editMode;
+    private static int stringResourceOfTitle;
+    private static int stringResourceOfHintText;
+    private static ArrayList<String> takenVariables;
+    private View fragmentView;
+    private UserBrickElementEditorFragment userBrickElementEditorFragment;
 
-	public UserBrickEditElementDialog(View fragmentView) {
-		super();
-		this.fragmentView = fragmentView;
-	}
+    public UserBrickEditElementDialog(View fragmentView) {
+        super();
+        this.fragmentView = fragmentView;
+    }
 
-	public interface DialogListener {
-		void onFinishDialog(CharSequence text, boolean editMode);
-	}
+    public interface DialogListener {
+        void onFinishDialog(CharSequence text, boolean editMode);
+    }
 
-	private List<DialogListener> listenerList = new ArrayList<UserBrickEditElementDialog.DialogListener>();
+    private List<DialogListener> listenerList = new ArrayList<UserBrickEditElementDialog.DialogListener>();
 
-	public static void setTitle(int stringResource) {
-		stringResourceOfTitle = stringResource;
-	}
+    public static void setTitle(int stringResource) {
+        stringResourceOfTitle = stringResource;
+    }
 
-	public static void setText(CharSequence sequence) {
-		text = sequence;
-	}
+    public static void setText(CharSequence sequence) {
+        text = sequence;
+    }
 
-	public static void setHintText(int stringResource) {
-		stringResourceOfHintText = stringResource;
-	}
+    public static void setHintText(int stringResource) {
+        stringResourceOfHintText = stringResource;
+    }
 
-	public static void setTakenVariables(ArrayList<String> variables) {
-		takenVariables = variables;
-	}
+    public static void setTakenVariables(ArrayList<String> variables) {
+        takenVariables = variables;
+    }
 
-	public static void setEditMode(boolean mode) {
-		editMode = mode;
-	}
+    public static void setEditMode(boolean mode) {
+        editMode = mode;
+    }
 
-	public void setUserBrickElementEditorFragment(UserBrickElementEditorFragment userBrickElementEditorFragment) {
-		this.userBrickElementEditorFragment = userBrickElementEditorFragment;
-	}
+    public void setUserBrickElementEditorFragment(UserBrickElementEditorFragment userBrickElementEditorFragment) {
+        this.userBrickElementEditorFragment = userBrickElementEditorFragment;
+    }
 
-	@Override
-	public void onCancel(DialogInterface dialog) {
-		super.onCancel(dialog);
-		if (stringResourceOfTitle == R.string.add_variable) {
-			int numberOfElements = ProjectManager.getInstance().getCurrentUserBrick().getDefinitionBrick().getUserScriptDefinitionBrickElements().size();
-			ProjectManager.getInstance().getCurrentUserBrick().getDefinitionBrick().removeDataAt(numberOfElements - 1, getActivity().getApplicationContext());
-			userBrickElementEditorFragment.decreaseIndexOfCurrentlyEditedElement();
-		}
-		finishDialog(null);
-	}
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
+        if (stringResourceOfTitle == R.string.add_variable) {
+            int numberOfElements = ProjectManager.getInstance().getCurrentUserBrick().getDefinitionBrick().getUserScriptDefinitionBrickElements().size();
+            ProjectManager.getInstance().getCurrentUserBrick().getDefinitionBrick().removeDataAt(numberOfElements - 1, getActivity().getApplicationContext());
+            userBrickElementEditorFragment.decreaseIndexOfCurrentlyEditedElement();
+        }
+        finishDialog(null);
+    }
 
-	@Override
-	public Dialog onCreateDialog(Bundle bundle) {
-		final View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_brick_editor_edit_element,
-				(ViewGroup) fragmentView, false);
+    @Override
+    public Dialog onCreateDialog(Bundle bundle) {
+        final View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_brick_editor_edit_element,
+                (ViewGroup) fragmentView, false);
 
-		EditText textField = (EditText) dialogView.findViewById(R.id.dialog_brick_editor_edit_element_edit_text);
-		textField.setText(text);
-		textField.setSelection(text.length());
+        EditText textField = (EditText) dialogView.findViewById(R.id.dialog_brick_editor_edit_element_edit_text);
+        textField.setText(text);
+        textField.setSelection(text.length());
 
-		final Dialog dialogNewVariable = new AlertDialog.Builder(getActivity()).setView(dialogView)
-				.setTitle(stringResourceOfTitle).setNegativeButton(R.string.cancel, new OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.cancel();
-					}
-				}).setPositiveButton(R.string.ok, new OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						handleOkButton(dialogView);
-					}
-				}).create();
+        final Dialog dialogNewVariable = new AlertDialog.Builder(getActivity()).setView(dialogView)
+                .setTitle(stringResourceOfTitle).setNegativeButton(R.string.cancel, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                }).setPositiveButton(R.string.ok, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        handleOkButton(dialogView);
+                    }
+                }).create();
 
-		dialogNewVariable.setCanceledOnTouchOutside(true);
+        dialogNewVariable.setCanceledOnTouchOutside(true);
 
-		dialogNewVariable.setOnShowListener(new OnShowListener() {
-			@Override
-			public void onShow(DialogInterface dialog) {
-				handleOnShow(dialogNewVariable);
-			}
-		});
+        dialogNewVariable.setOnShowListener(new OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                handleOnShow(dialogNewVariable);
+            }
+        });
 
-		return dialogNewVariable;
-	}
+        return dialogNewVariable;
+    }
 
-	public void addDialogListener(DialogListener newVariableDialogListener) {
-		listenerList.add(newVariableDialogListener);
-	}
+    public void addDialogListener(DialogListener newVariableDialogListener) {
+        listenerList.add(newVariableDialogListener);
+    }
 
-	private void finishDialog(CharSequence text) {
-		for (DialogListener newVariableDialogListener : listenerList) {
-			newVariableDialogListener.onFinishDialog(text, editMode);
-		}
-	}
+    private void finishDialog(CharSequence text) {
+        for (DialogListener newVariableDialogListener : listenerList) {
+            newVariableDialogListener.onFinishDialog(text, editMode);
+        }
+    }
 
-	private void handleOkButton(View dialogView) {
-		EditText elementTextEditText = (EditText) dialogView
-				.findViewById(R.id.dialog_brick_editor_edit_element_edit_text);
+    private void handleOkButton(View dialogView) {
+        EditText elementTextEditText = (EditText) dialogView
+                .findViewById(R.id.dialog_brick_editor_edit_element_edit_text);
 
-		CharSequence elementText = elementTextEditText.getText();
-		finishDialog(elementText);
-	}
+        CharSequence elementText = elementTextEditText.getText();
+        finishDialog(elementText);
+    }
 
-	private void handleOnShow(final Dialog dialogNewVariable) {
-		final Button positiveButton = ((AlertDialog) dialogNewVariable).getButton(AlertDialog.BUTTON_POSITIVE);
+    private void handleOnShow(final Dialog dialogNewVariable) {
+        final Button positiveButton = ((AlertDialog) dialogNewVariable).getButton(AlertDialog.BUTTON_POSITIVE);
 
-		EditText dialogEditText = (EditText) dialogNewVariable
-				.findViewById(R.id.dialog_brick_editor_edit_element_edit_text);
+        EditText dialogEditText = (EditText) dialogNewVariable
+                .findViewById(R.id.dialog_brick_editor_edit_element_edit_text);
 
-		dialogEditText.selectAll();
-		dialogEditText.setHint(stringResourceOfHintText);
+        dialogEditText.selectAll();
+        dialogEditText.setHint(stringResourceOfHintText);
 
-		InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(
-				Context.INPUT_METHOD_SERVICE);
-		inputMethodManager.showSoftInput(dialogEditText, InputMethodManager.SHOW_IMPLICIT);
+        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInput(dialogEditText, InputMethodManager.SHOW_IMPLICIT);
 
-		dialogEditText.addTextChangedListener(new TextWatcher() {
+        dialogEditText.addTextChangedListener(new TextWatcher() {
 
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-			}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			}
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
-			@Override
-			public void afterTextChanged(Editable editable) {
-				positiveButton.setEnabled(true);
-				if (editable.length() == 0) {
-					positiveButton.setEnabled(false);
-				}
-				for (String takenName : takenVariables) {
-					if (editable.toString().equals(takenName)) {
-						positiveButton.setEnabled(false);
-						ToastUtil.showError(getActivity(), R.string.formula_editor_existing_variable);
-						break;
-					}
-				}
-			}
-		});
-	}
+            @Override
+            public void afterTextChanged(Editable editable) {
+                positiveButton.setEnabled(true);
+                if (editable.length() == 0) {
+                    positiveButton.setEnabled(false);
+                }
+                for (String takenName : takenVariables) {
+                    if (editable.toString().equals(takenName)) {
+                        positiveButton.setEnabled(false);
+                        ToastUtil.showError(getActivity(), R.string.formula_editor_existing_variable);
+                        break;
+                    }
+                }
+            }
+        });
+    }
 }

@@ -39,51 +39,51 @@ import org.catrobat.catroid.common.ScreenValues;
 
 public final class UtilUi {
 
-	// Suppress default constructor for noninstantiability
-	private UtilUi() {
-		throw new AssertionError();
-	}
+    // Suppress default constructor for noninstantiability
+    private UtilUi() {
+        throw new AssertionError();
+    }
 
-	public static void updateScreenWidthAndHeight(Context context) {
-		if (context != null) {
-			WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-			DisplayMetrics displayMetrics = new DisplayMetrics();
-			windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-			ScreenValues.SCREEN_WIDTH = displayMetrics.widthPixels;
-			ScreenValues.SCREEN_HEIGHT = displayMetrics.heightPixels;
-		} else {
-			//a null-context should never be passed. However, an educated guess is needed in that case.
-			ScreenValues.setToDefaultSreenSize();
-		}
-	}
+    public static void updateScreenWidthAndHeight(Context context) {
+        if (context != null) {
+            WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+            ScreenValues.SCREEN_WIDTH = displayMetrics.widthPixels;
+            ScreenValues.SCREEN_HEIGHT = displayMetrics.heightPixels;
+        } else {
+            //a null-context should never be passed. However, an educated guess is needed in that case.
+            ScreenValues.setToDefaultSreenSize();
+        }
+    }
 
-	public static View addSelectAllActionModeButton(LayoutInflater inflater, ActionMode mode, Menu menu) {
-		mode.getMenuInflater().inflate(R.menu.menu_actionmode, menu);
-		MenuItem item = menu.findItem(R.id.select_all);
-		View view = item.getActionView();
-		if (view.getId() == R.id.select_all) {
-			View selectAllView = View.inflate(inflater.getContext(), R.layout.action_mode_select_all, null);
-			item.setActionView(selectAllView);
-			return selectAllView;
-		}
-		return null;
-	}
+    public static View addSelectAllActionModeButton(LayoutInflater inflater, ActionMode mode, Menu menu) {
+        mode.getMenuInflater().inflate(R.menu.menu_actionmode, menu);
+        MenuItem item = menu.findItem(R.id.select_all);
+        View view = item.getActionView();
+        if (view.getId() == R.id.select_all) {
+            View selectAllView = View.inflate(inflater.getContext(), R.layout.action_mode_select_all, null);
+            item.setActionView(selectAllView);
+            return selectAllView;
+        }
+        return null;
+    }
 
-	public static void setSelectAllActionModeButtonVisibility(View selectAllActionModeButton, boolean setVisible) {
-		if (selectAllActionModeButton == null) {
-			return;
-		}
+    public static void setSelectAllActionModeButtonVisibility(View selectAllActionModeButton, boolean setVisible) {
+        if (selectAllActionModeButton == null) {
+            return;
+        }
 
-		if (setVisible) {
-			selectAllActionModeButton.setVisibility(View.VISIBLE);
-		} else {
-			selectAllActionModeButton.setVisibility(View.GONE);
-		}
-	}
+        if (setVisible) {
+            selectAllActionModeButton.setVisibility(View.VISIBLE);
+        } else {
+            selectAllActionModeButton.setVisibility(View.GONE);
+        }
+    }
 
-	public static void positionCursorForEditText(EditText groupNameEditText) {
-		int position = groupNameEditText.length();
-		Editable text = groupNameEditText.getText();
-		Selection.setSelection(text, position);
-	}
+    public static void positionCursorForEditText(EditText groupNameEditText) {
+        int position = groupNameEditText.length();
+        Editable text = groupNameEditText.getText();
+        Selection.setSelection(text, position);
+    }
 }

@@ -43,90 +43,90 @@ import java.util.List;
 
 public class MoveNStepsBrick extends FormulaBrick {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private transient View prototypeView;
+    private transient View prototypeView;
 
-	public MoveNStepsBrick() {
-		addAllowedBrickField(BrickField.STEPS);
-	}
+    public MoveNStepsBrick() {
+        addAllowedBrickField(BrickField.STEPS);
+    }
 
-	public MoveNStepsBrick(double stepsValue) {
-		initializeBrickFields(new Formula(stepsValue));
-	}
+    public MoveNStepsBrick(double stepsValue) {
+        initializeBrickFields(new Formula(stepsValue));
+    }
 
-	public MoveNStepsBrick(Formula steps) {
-		initializeBrickFields(steps);
-	}
+    public MoveNStepsBrick(Formula steps) {
+        initializeBrickFields(steps);
+    }
 
-	private void initializeBrickFields(Formula steps) {
-		addAllowedBrickField(BrickField.STEPS);
-		setFormulaWithBrickField(BrickField.STEPS, steps);
-	}
+    private void initializeBrickFields(Formula steps) {
+        addAllowedBrickField(BrickField.STEPS);
+        setFormulaWithBrickField(BrickField.STEPS, steps);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return getFormulaWithBrickField(BrickField.STEPS).getRequiredResources();
-	}
+    @Override
+    public int getRequiredResources() {
+        return getFormulaWithBrickField(BrickField.STEPS).getRequiredResources();
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		view = View.inflate(context, R.layout.brick_move_n_steps, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        view = View.inflate(context, R.layout.brick_move_n_steps, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_move_n_steps_checkbox);
-		TextView edit = (TextView) view.findViewById(R.id.brick_move_n_steps_edit_text);
+        setCheckboxView(R.id.brick_move_n_steps_checkbox);
+        TextView edit = (TextView) view.findViewById(R.id.brick_move_n_steps_edit_text);
 
-		getFormulaWithBrickField(BrickField.STEPS).setTextFieldId(R.id.brick_move_n_steps_edit_text);
-		getFormulaWithBrickField(BrickField.STEPS).refreshTextField(view);
+        getFormulaWithBrickField(BrickField.STEPS).setTextFieldId(R.id.brick_move_n_steps_edit_text);
+        getFormulaWithBrickField(BrickField.STEPS).refreshTextField(view);
 
-		TextView times = (TextView) view.findViewById(R.id.brick_move_n_steps_step_text_view);
+        TextView times = (TextView) view.findViewById(R.id.brick_move_n_steps_step_text_view);
 
-		if (getFormulaWithBrickField(BrickField.STEPS).isSingleNumberFormula()) {
-			try {
-				times.setText(view.getResources().getQuantityString(
-						R.plurals.brick_move_n_step_plural,
-						Utils.convertDoubleToPluralInteger(getFormulaWithBrickField(BrickField.STEPS).interpretDouble(
-								ProjectManager.getInstance().getCurrentSprite()))
-				));
-			} catch (InterpretationException interpretationException) {
-				Log.d(getClass().getSimpleName(), "Couldn't interpret Formula.", interpretationException);
-			}
-		} else {
+        if (getFormulaWithBrickField(BrickField.STEPS).isSingleNumberFormula()) {
+            try {
+                times.setText(view.getResources().getQuantityString(
+                        R.plurals.brick_move_n_step_plural,
+                        Utils.convertDoubleToPluralInteger(getFormulaWithBrickField(BrickField.STEPS).interpretDouble(
+                                ProjectManager.getInstance().getCurrentSprite()))
+                ));
+            } catch (InterpretationException interpretationException) {
+                Log.d(getClass().getSimpleName(), "Couldn't interpret Formula.", interpretationException);
+            }
+        } else {
 
-			// Random Number to get into the "other" keyword for values like 0.99 or 2.001 seconds or degrees
-			// in hopefully all possible languages
-			times.setText(view.getResources().getQuantityString(R.plurals.brick_move_n_step_plural,
-					Utils.TRANSLATION_PLURAL_OTHER_INTEGER));
-		}
+            // Random Number to get into the "other" keyword for values like 0.99 or 2.001 seconds or degrees
+            // in hopefully all possible languages
+            times.setText(view.getResources().getQuantityString(R.plurals.brick_move_n_step_plural,
+                    Utils.TRANSLATION_PLURAL_OTHER_INTEGER));
+        }
 
-		edit.setOnClickListener(this);
-		return view;
-	}
+        edit.setOnClickListener(this);
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_move_n_steps, null);
-		TextView textSteps = (TextView) prototypeView.findViewById(R.id.brick_move_n_steps_edit_text);
-		textSteps.setText(Utils.getNumberStringForBricks(BrickValues.MOVE_STEPS));
-		TextView times = (TextView) prototypeView.findViewById(R.id.brick_move_n_steps_step_text_view);
-		times.setText(context.getResources().getQuantityString(R.plurals.brick_move_n_step_plural,
-				Utils.convertDoubleToPluralInteger(BrickValues.MOVE_STEPS)));
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_move_n_steps, null);
+        TextView textSteps = (TextView) prototypeView.findViewById(R.id.brick_move_n_steps_edit_text);
+        textSteps.setText(Utils.getNumberStringForBricks(BrickValues.MOVE_STEPS));
+        TextView times = (TextView) prototypeView.findViewById(R.id.brick_move_n_steps_step_text_view);
+        times.setText(context.getResources().getQuantityString(R.plurals.brick_move_n_step_plural,
+                Utils.convertDoubleToPluralInteger(BrickValues.MOVE_STEPS)));
+        return prototypeView;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createMoveNStepsAction(sprite,
-				getFormulaWithBrickField(BrickField.STEPS)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createMoveNStepsAction(sprite,
+                getFormulaWithBrickField(BrickField.STEPS)));
+        return null;
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		FormulaEditorFragment.showFragment(view, this, BrickField.STEPS);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        FormulaEditorFragment.showFragment(view, this, BrickField.STEPS);
+    }
 }

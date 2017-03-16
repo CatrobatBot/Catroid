@@ -32,42 +32,42 @@ import org.catrobat.catroid.physics.PhysicsWorld;
 
 public class PhysicsCollisionTestListener extends PhysicsCollision {
 
-	private PhysicsCollisionTestReceiver receiver;
+    private PhysicsCollisionTestReceiver receiver;
 
-	public PhysicsCollisionTestListener(PhysicsCollisionTestReceiver receiver, PhysicsWorld physicsWorld) {
-		super(physicsWorld);
-		this.receiver = receiver;
-	}
+    public PhysicsCollisionTestListener(PhysicsCollisionTestReceiver receiver, PhysicsWorld physicsWorld) {
+        super(physicsWorld);
+        this.receiver = receiver;
+    }
 
-	@Override
-	public void beginContact(Contact contact) {
-		super.beginContact(contact);
-		if (receiver != null) {
-			receiver.beginContactCallback(contact);
-		}
-	}
+    @Override
+    public void beginContact(Contact contact) {
+        super.beginContact(contact);
+        if (receiver != null) {
+            receiver.beginContactCallback(contact);
+        }
+    }
 
-	@Override
-	public void endContact(Contact contact) {
-		super.endContact(contact);
-		if (receiver != null) {
-			receiver.endContactCallback(contact);
-		}
-	}
+    @Override
+    public void endContact(Contact contact) {
+        super.endContact(contact);
+        if (receiver != null) {
+            receiver.endContactCallback(contact);
+        }
+    }
 
-	@Override
-	public void preSolve(Contact contact, Manifold oldManifold) {
-		super.preSolve(contact, oldManifold);
-		if (receiver != null) {
-			receiver.preSolveCallback(contact, oldManifold);
-		}
-	}
+    @Override
+    public void preSolve(Contact contact, Manifold oldManifold) {
+        super.preSolve(contact, oldManifold);
+        if (receiver != null) {
+            receiver.preSolveCallback(contact, oldManifold);
+        }
+    }
 
-	@Override
-	public void postSolve(Contact contact, ContactImpulse impulse) {
-		super.postSolve(contact, impulse);
-		if (receiver != null) {
-			receiver.postSolveCallback(contact, impulse);
-		}
-	}
+    @Override
+    public void postSolve(Contact contact, ContactImpulse impulse) {
+        super.postSolve(contact, impulse);
+        if (receiver != null) {
+            receiver.postSolveCallback(contact, impulse);
+        }
+    }
 }

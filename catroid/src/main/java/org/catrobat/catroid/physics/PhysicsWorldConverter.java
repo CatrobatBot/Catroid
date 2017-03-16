@@ -26,31 +26,31 @@ import com.badlogic.gdx.math.Vector2;
 
 public final class PhysicsWorldConverter {
 
-	private PhysicsWorldConverter() {
-	}
+    private PhysicsWorldConverter() {
+    }
 
-	public static float convertBox2dToNormalAngle(float box2dAngle) {
-		return (float) Math.toDegrees(box2dAngle);
-	}
+    public static float convertBox2dToNormalAngle(float box2dAngle) {
+        return (float) Math.toDegrees(box2dAngle);
+    }
 
-	public static float convertNormalToBox2dAngle(float catroidAngle) {
-		return (float) Math.toRadians(catroidAngle);
-	}
+    public static float convertNormalToBox2dAngle(float catroidAngle) {
+        return (float) Math.toRadians(catroidAngle);
+    }
 
-	public static float convertBox2dToNormalCoordinate(float box2dCoordinate) {
-		return box2dCoordinate * PhysicsWorld.RATIO;
-	}
+    public static float convertBox2dToNormalCoordinate(float box2dCoordinate) {
+        return box2dCoordinate * PhysicsWorld.RATIO;
+    }
 
-	public static float convertNormalToBox2dCoordinate(float catroidCoordinate) {
-		return catroidCoordinate / PhysicsWorld.RATIO;
-	}
+    public static float convertNormalToBox2dCoordinate(float catroidCoordinate) {
+        return catroidCoordinate / PhysicsWorld.RATIO;
+    }
 
-	public static Vector2 convertBox2dToNormalVector(Vector2 box2DVector) {
-		return new Vector2(convertBox2dToNormalCoordinate(box2DVector.x), convertBox2dToNormalCoordinate(box2DVector.y));
-	}
+    public static Vector2 convertBox2dToNormalVector(Vector2 box2DVector) {
+        return new Vector2(convertBox2dToNormalCoordinate(box2DVector.x), convertBox2dToNormalCoordinate(box2DVector.y));
+    }
 
-	public static Vector2 convertCatroidToBox2dVector(Vector2 catroidVector) {
-		return new Vector2(convertNormalToBox2dCoordinate(catroidVector.x),
-				convertNormalToBox2dCoordinate(catroidVector.y));
-	}
+    public static Vector2 convertCatroidToBox2dVector(Vector2 catroidVector) {
+        return new Vector2(convertNormalToBox2dCoordinate(catroidVector.x),
+                convertNormalToBox2dCoordinate(catroidVector.y));
+    }
 }

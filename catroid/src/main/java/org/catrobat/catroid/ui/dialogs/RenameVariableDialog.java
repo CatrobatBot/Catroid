@@ -49,177 +49,177 @@ import java.util.List;
 
 public class RenameVariableDialog extends DialogFragment {
 
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_rename_variable_catroid";
-	private UserVariable userVariable;
-	private UserList userList;
-	private EditText nameEditText;
-	private DataAdapter adapter;
-	private DialogType type;
+    public static final String DIALOG_FRAGMENT_TAG = "dialog_rename_variable_catroid";
+    private UserVariable userVariable;
+    private UserList userList;
+    private EditText nameEditText;
+    private DataAdapter adapter;
+    private DialogType type;
 
-	public static enum DialogType {
-		USER_LIST, USER_VARIABLE
-	}
+    public static enum DialogType {
+        USER_LIST, USER_VARIABLE
+    }
 
-	public RenameVariableDialog() {
-		super();
-	}
+    public RenameVariableDialog() {
+        super();
+    }
 
-	public RenameVariableDialog(UserVariable userVariable, DataAdapter adapter, DialogType type) {
-		super();
-		this.userVariable = userVariable;
-		this.adapter = adapter;
-		this.type = type;
-	}
+    public RenameVariableDialog(UserVariable userVariable, DataAdapter adapter, DialogType type) {
+        super();
+        this.userVariable = userVariable;
+        this.adapter = adapter;
+        this.type = type;
+    }
 
-	public RenameVariableDialog(UserList userList, DataAdapter adapter, DialogType type) {
-		super();
-		this.userList = userList;
-		this.adapter = adapter;
-		this.type = type;
-	}
+    public RenameVariableDialog(UserList userList, DataAdapter adapter, DialogType type) {
+        super();
+        this.userList = userList;
+        this.adapter = adapter;
+        this.type = type;
+    }
 
-	@Override
-	public Dialog onCreateDialog(Bundle bundle) {
-		final View dialogView = LayoutInflater.from(getActivity()).inflate(
-				R.layout.dialog_formula_rename_data_name, null);
+    @Override
+    public Dialog onCreateDialog(Bundle bundle) {
+        final View dialogView = LayoutInflater.from(getActivity()).inflate(
+                R.layout.dialog_formula_rename_data_name, null);
 
-		nameEditText = (EditText) dialogView.findViewById(R.id.dialog_formula_rename_variable_name_edit_text);
+        nameEditText = (EditText) dialogView.findViewById(R.id.dialog_formula_rename_variable_name_edit_text);
 
-		switch (type) {
-			case USER_LIST:
-				nameEditText.setText(userList.getName());
-				break;
-			case USER_VARIABLE:
-				nameEditText.setText(userVariable.getName());
-				break;
-			default:
-				break;
-		}
+        switch (type) {
+            case USER_LIST:
+                nameEditText.setText(userList.getName());
+                break;
+            case USER_VARIABLE:
+                nameEditText.setText(userVariable.getName());
+                break;
+            default:
+                break;
+        }
 
-		nameEditText.setSelectAllOnFocus(true);
+        nameEditText.setSelectAllOnFocus(true);
 
-		final Dialog dialogRenameVariable = new AlertDialog.Builder(getActivity()).setView(dialogView)
-				.setTitle(R.string.formula_editor_rename_variable_dialog_title)
-				.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.cancel();
-					}
-				}).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						handleOkButton();
-					}
-				}).create();
+        final Dialog dialogRenameVariable = new AlertDialog.Builder(getActivity()).setView(dialogView)
+                .setTitle(R.string.formula_editor_rename_variable_dialog_title)
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                }).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        handleOkButton();
+                    }
+                }).create();
 
-		dialogRenameVariable.setCanceledOnTouchOutside(true);
-		dialogRenameVariable.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        dialogRenameVariable.setCanceledOnTouchOutside(true);
+        dialogRenameVariable.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-		dialogRenameVariable.setOnShowListener(new DialogInterface.OnShowListener() {
-			@Override
-			public void onShow(DialogInterface dialog) {
-				handleOnShow(dialogRenameVariable);
-			}
-		});
+        dialogRenameVariable.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                handleOnShow(dialogRenameVariable);
+            }
+        });
 
-		return dialogRenameVariable;
-	}
+        return dialogRenameVariable;
+    }
 
-	private void handleOkButton() {
-		String name = nameEditText.getText().toString();
+    private void handleOkButton() {
+        String name = nameEditText.getText().toString();
 
-		switch (type) {
-			case USER_LIST:
-				renameUserList(name);
-				break;
-			case USER_VARIABLE:
-				renameUserVariable(name);
-				break;
-			default:
-				break;
-		}
-	}
+        switch (type) {
+            case USER_LIST:
+                renameUserList(name);
+                break;
+            case USER_VARIABLE:
+                renameUserVariable(name);
+                break;
+            default:
+                break;
+        }
+    }
 
-	private void renameUserList(String newName) {
-		if (ProjectManager.getInstance().getCurrentScene().getDataContainer().existProjectList(userList)) {
-			if (!isVariableNameValid(newName)) {
-				ToastUtil.showError(getActivity(), R.string.formula_editor_existing_variable);
-			} else {
-				ProjectManager.getInstance().getCurrentScene().getDataContainer()
-						.renameProjectUserList(newName, userList.getName());
-			}
-		} else if (ProjectManager.getInstance().getCurrentScene().getDataContainer().existSpriteList(
-				userList, ProjectManager.getInstance().getCurrentSprite())) {
-			ProjectManager.getInstance().getCurrentScene().getDataContainer()
-					.renameSpriteUserList(newName, userList.getName());
-		}
-		updateSpinner();
-	}
+    private void renameUserList(String newName) {
+        if (ProjectManager.getInstance().getCurrentScene().getDataContainer().existProjectList(userList)) {
+            if (!isVariableNameValid(newName)) {
+                ToastUtil.showError(getActivity(), R.string.formula_editor_existing_variable);
+            } else {
+                ProjectManager.getInstance().getCurrentScene().getDataContainer()
+                        .renameProjectUserList(newName, userList.getName());
+            }
+        } else if (ProjectManager.getInstance().getCurrentScene().getDataContainer().existSpriteList(
+                userList, ProjectManager.getInstance().getCurrentSprite())) {
+            ProjectManager.getInstance().getCurrentScene().getDataContainer()
+                    .renameSpriteUserList(newName, userList.getName());
+        }
+        updateSpinner();
+    }
 
-	private void renameUserVariable(String newName) {
-		if (ProjectManager.getInstance().getCurrentScene().getDataContainer().existProjectVariable(userVariable)) {
-			if (!isVariableNameValid(newName)) {
-				ToastUtil.showError(getActivity(), R.string.formula_editor_existing_variable);
-			} else {
-				ProjectManager.getInstance().getCurrentScene().getDataContainer()
-						.renameProjectUserVariable(newName, userVariable.getName());
-			}
-		} else if (ProjectManager.getInstance().getCurrentScene().getDataContainer().existSpriteVariable(
-				userVariable, ProjectManager.getInstance().getCurrentSprite())) {
-			ProjectManager.getInstance().getCurrentScene().getDataContainer()
-					.renameSpriteUserVariable(newName, userVariable.getName());
-		}
-		updateSpinner();
-	}
+    private void renameUserVariable(String newName) {
+        if (ProjectManager.getInstance().getCurrentScene().getDataContainer().existProjectVariable(userVariable)) {
+            if (!isVariableNameValid(newName)) {
+                ToastUtil.showError(getActivity(), R.string.formula_editor_existing_variable);
+            } else {
+                ProjectManager.getInstance().getCurrentScene().getDataContainer()
+                        .renameProjectUserVariable(newName, userVariable.getName());
+            }
+        } else if (ProjectManager.getInstance().getCurrentScene().getDataContainer().existSpriteVariable(
+                userVariable, ProjectManager.getInstance().getCurrentSprite())) {
+            ProjectManager.getInstance().getCurrentScene().getDataContainer()
+                    .renameSpriteUserVariable(newName, userVariable.getName());
+        }
+        updateSpinner();
+    }
 
-	private void handleOnShow(final Dialog dialogRenameVariable) {
-		final Button positiveButton = ((AlertDialog) dialogRenameVariable).getButton(AlertDialog.BUTTON_POSITIVE);
-		positiveButton.setEnabled(true);
+    private void handleOnShow(final Dialog dialogRenameVariable) {
+        final Button positiveButton = ((AlertDialog) dialogRenameVariable).getButton(AlertDialog.BUTTON_POSITIVE);
+        positiveButton.setEnabled(true);
 
-		nameEditText.addTextChangedListener(new TextWatcher() {
+        nameEditText.addTextChangedListener(new TextWatcher() {
 
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-			}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			}
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
-			@Override
-			public void afterTextChanged(Editable editable) {
-				String name = editable.toString();
-				checkName(name, positiveButton);
-			}
-		});
-	}
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String name = editable.toString();
+                checkName(name, positiveButton);
+            }
+        });
+    }
 
-	private void checkName(String name, Button positiveButton) {
-		if (isVariableNameValid(name)) {
-			positiveButton.setEnabled(true);
-		} else {
-			ToastUtil.showError(getActivity(), R.string.formula_editor_existing_variable);
-			positiveButton.setEnabled(false);
-		}
+    private void checkName(String name, Button positiveButton) {
+        if (isVariableNameValid(name)) {
+            positiveButton.setEnabled(true);
+        } else {
+            ToastUtil.showError(getActivity(), R.string.formula_editor_existing_variable);
+            positiveButton.setEnabled(false);
+        }
 
-		if (name.length() == 0) {
-			positiveButton.setEnabled(false);
-		}
-	}
+        if (name.length() == 0) {
+            positiveButton.setEnabled(false);
+        }
+    }
 
-	private boolean isVariableNameValid(String name) {
-		DataContainer currentData = ProjectManager.getInstance().getCurrentScene().getDataContainer();
+    private boolean isVariableNameValid(String name) {
+        DataContainer currentData = ProjectManager.getInstance().getCurrentScene().getDataContainer();
 
-		if (currentData.existProjectVariable(userVariable)) {
-			List<Sprite> sprites = ProjectManager.getInstance().getCurrentScene().getSpriteList();
-			return !currentData.existVariableInAnySprite(name, sprites) && !currentData.existProjectVariableWithName(name);
-		} else {
-			Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
-			return !currentData.existProjectVariableWithName(name) && !currentData.existSpriteVariableByName(name, currentSprite);
-		}
-	}
+        if (currentData.existProjectVariable(userVariable)) {
+            List<Sprite> sprites = ProjectManager.getInstance().getCurrentScene().getSpriteList();
+            return !currentData.existVariableInAnySprite(name, sprites) && !currentData.existProjectVariableWithName(name);
+        } else {
+            Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
+            return !currentData.existProjectVariableWithName(name) && !currentData.existSpriteVariableByName(name, currentSprite);
+        }
+    }
 
-	private void updateSpinner() {
-		adapter.notifyDataSetChanged();
-	}
+    private void updateSpinner() {
+        adapter.notifyDataSetChanged();
+    }
 }

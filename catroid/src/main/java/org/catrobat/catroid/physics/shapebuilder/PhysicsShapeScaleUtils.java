@@ -32,50 +32,50 @@ import java.util.List;
 
 public final class PhysicsShapeScaleUtils {
 
-	public static final float COORDINATE_SCALING_DECIMAL_ACCURACY = 100.0f;
+    public static final float COORDINATE_SCALING_DECIMAL_ACCURACY = 100.0f;
 
-	private PhysicsShapeScaleUtils() {
-	}
+    private PhysicsShapeScaleUtils() {
+    }
 
-	public static Shape[] scaleShapes(Shape[] shapes, float targetScale) {
-		return scaleShapes(shapes, targetScale, 1.0f);
-	}
+    public static Shape[] scaleShapes(Shape[] shapes, float targetScale) {
+        return scaleShapes(shapes, targetScale, 1.0f);
+    }
 
-	public static Shape[] scaleShapes(Shape[] shapes, float targetScale, float originScale) {
-		if (shapes == null || shapes.length == 0 || targetScale == 0.0f || originScale == 0.0f) {
-			return null;
-		}
-		if (targetScale == originScale) {
-			return shapes;
-		}
-		float scale = targetScale / originScale;
-		List<Shape> scaledShapes = new LinkedList<>();
-		if (shapes != null) {
-			for (Shape shape : shapes) {
-				List<Vector2> vertices = new LinkedList<>();
-				PolygonShape polygon = (PolygonShape) shape;
-				for (int index = 0; index < polygon.getVertexCount(); index++) {
-					Vector2 vertex = new Vector2();
-					polygon.getVertex(index, vertex);
-					vertex = scaleCoordinate(vertex, scale);
-					vertices.add(vertex);
-				}
-				PolygonShape polygonShape = new PolygonShape();
-				polygonShape.set(vertices.toArray(new Vector2[vertices.size()]));
-				scaledShapes.add(polygonShape);
-			}
-		}
-		return scaledShapes.toArray(new Shape[scaledShapes.size()]);
-	}
+    public static Shape[] scaleShapes(Shape[] shapes, float targetScale, float originScale) {
+        if (shapes == null || shapes.length == 0 || targetScale == 0.0f || originScale == 0.0f) {
+            return null;
+        }
+        if (targetScale == originScale) {
+            return shapes;
+        }
+        float scale = targetScale / originScale;
+        List<Shape> scaledShapes = new LinkedList<>();
+        if (shapes != null) {
+            for (Shape shape : shapes) {
+                List<Vector2> vertices = new LinkedList<>();
+                PolygonShape polygon = (PolygonShape) shape;
+                for (int index = 0; index < polygon.getVertexCount(); index++) {
+                    Vector2 vertex = new Vector2();
+                    polygon.getVertex(index, vertex);
+                    vertex = scaleCoordinate(vertex, scale);
+                    vertices.add(vertex);
+                }
+                PolygonShape polygonShape = new PolygonShape();
+                polygonShape.set(vertices.toArray(new Vector2[vertices.size()]));
+                scaledShapes.add(polygonShape);
+            }
+        }
+        return scaledShapes.toArray(new Shape[scaledShapes.size()]);
+    }
 
-	private static Vector2 scaleCoordinate(Vector2 vertex, float scaleFactor) {
-		Vector2 v = new Vector2(vertex);
-		v.x = scaleCoordinate(v.x, scaleFactor);
-		v.y = scaleCoordinate(v.y, scaleFactor);
-		return v;
-	}
+    private static Vector2 scaleCoordinate(Vector2 vertex, float scaleFactor) {
+        Vector2 v = new Vector2(vertex);
+        v.x = scaleCoordinate(v.x, scaleFactor);
+        v.y = scaleCoordinate(v.y, scaleFactor);
+        return v;
+    }
 
-	private static float scaleCoordinate(float coordinates, float scaleFactor) {
-		return Math.round(coordinates * scaleFactor * COORDINATE_SCALING_DECIMAL_ACCURACY) / COORDINATE_SCALING_DECIMAL_ACCURACY;
-	}
+    private static float scaleCoordinate(float coordinates, float scaleFactor) {
+        return Math.round(coordinates * scaleFactor * COORDINATE_SCALING_DECIMAL_ACCURACY) / COORDINATE_SCALING_DECIMAL_ACCURACY;
+    }
 }

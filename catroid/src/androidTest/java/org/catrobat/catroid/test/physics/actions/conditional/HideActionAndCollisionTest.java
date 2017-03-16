@@ -30,43 +30,43 @@ import org.catrobat.catroid.physics.PhysicsObject;
 import org.catrobat.catroid.test.physics.PhysicsCollisionBaseTest;
 
 public class HideActionAndCollisionTest extends PhysicsCollisionBaseTest {
-	public HideActionAndCollisionTest() {
-		spritePosition = new Vector2(0.0f, 100.0f);
-		sprite2Position = new Vector2(0.0f, -200.0f);
-		physicsObject1Type = PhysicsObject.Type.DYNAMIC;
-		physicsObject2Type = PhysicsObject.Type.FIXED;
-	}
+    public HideActionAndCollisionTest() {
+        spritePosition = new Vector2(0.0f, 100.0f);
+        sprite2Position = new Vector2(0.0f, -200.0f);
+        physicsObject1Type = PhysicsObject.Type.DYNAMIC;
+        physicsObject2Type = PhysicsObject.Type.FIXED;
+    }
 
-	public void testNoCollisionAfterHide() {
-		Action action = sprite.getActionFactory().createHideAction(sprite);
-		action.act(1.0f);
-		simulateFullCollision();
-		assertFalse("PhysicObjects shouldn't collide because sprite2 is invisible", collisionDetected());
-	}
+    public void testNoCollisionAfterHide() {
+        Action action = sprite.getActionFactory().createHideAction(sprite);
+        action.act(1.0f);
+        simulateFullCollision();
+        assertFalse("PhysicObjects shouldn't collide because sprite2 is invisible", collisionDetected());
+    }
 
-	public void testCollisionAfterHide() {
-		Action action = sprite.getActionFactory().createHideAction(sprite);
-		action.act(1.0f);
-		action = sprite.getActionFactory().createShowAction(sprite);
-		action.act(1.0f);
-		simulateFullCollision();
-		assertTrue("PhysicObjects should collide because sprite2 is visible", collisionDetected());
-	}
+    public void testCollisionAfterHide() {
+        Action action = sprite.getActionFactory().createHideAction(sprite);
+        action.act(1.0f);
+        action = sprite.getActionFactory().createShowAction(sprite);
+        action.act(1.0f);
+        simulateFullCollision();
+        assertTrue("PhysicObjects should collide because sprite2 is visible", collisionDetected());
+    }
 
-	public void testHide() {
-		Action action = sprite.getActionFactory().createHideAction(sprite);
-		action.act(1.0f);
-		assertFalse("Sprite is still visible after HideBrick executed", sprite.look.isLookVisible());
-	}
+    public void testHide() {
+        Action action = sprite.getActionFactory().createHideAction(sprite);
+        action.act(1.0f);
+        assertFalse("Sprite is still visible after HideBrick executed", sprite.look.isLookVisible());
+    }
 
-	public void testNullSprite() {
-		ActionFactory factory = new ActionFactory();
-		Action action = factory.createHideAction(null);
-		try {
-			action.act(1.0f);
-			fail("Execution of HideBrick with null Sprite did not cause a NullPointerException to be thrown");
-		} catch (NullPointerException expected) {
-			assertTrue("Exception thrown successful", true);
-		}
-	}
+    public void testNullSprite() {
+        ActionFactory factory = new ActionFactory();
+        Action action = factory.createHideAction(null);
+        try {
+            action.act(1.0f);
+            fail("Execution of HideBrick with null Sprite did not cause a NullPointerException to be thrown");
+        } catch (NullPointerException expected) {
+            assertTrue("Exception thrown successful", true);
+        }
+    }
 }

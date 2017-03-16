@@ -32,24 +32,24 @@ import org.catrobat.catroid.formulaeditor.InterpretationException;
 
 public class SetXAction extends TemporalAction {
 
-	private Sprite sprite;
-	private Formula xPosition;
+    private Sprite sprite;
+    private Formula xPosition;
 
-	@Override
-	protected void update(float delta) {
-		try {
-			Float newX = xPosition == null ? Float.valueOf(0f) : xPosition.interpretFloat(sprite);
-			sprite.look.setXInUserInterfaceDimensionUnit(newX);
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}
-	}
+    @Override
+    protected void update(float delta) {
+        try {
+            Float newX = xPosition == null ? Float.valueOf(0f) : xPosition.interpretFloat(sprite);
+            sprite.look.setXInUserInterfaceDimensionUnit(newX);
+        } catch (InterpretationException interpretationException) {
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+        }
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setX(Formula x) {
-		this.xPosition = x;
-	}
+    public void setX(Formula x) {
+        this.xPosition = x;
+    }
 }

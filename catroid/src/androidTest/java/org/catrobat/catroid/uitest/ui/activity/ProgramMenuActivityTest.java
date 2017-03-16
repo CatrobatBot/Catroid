@@ -57,216 +57,216 @@ import java.util.List;
 
 public class ProgramMenuActivityTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
-	private String backgroundName = "BackgroundSprite";
-	private String objectName = "ObjectSprite";
-	private File lookFile;
+    private String backgroundName = "BackgroundSprite";
+    private String objectName = "ObjectSprite";
+    private File lookFile;
 
-	public ProgramMenuActivityTest() {
-		super(MainMenuActivity.class);
-	}
+    public ProgramMenuActivityTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		createProject();
-		UiTestUtils.prepareStageForTest();
-		lookFile = UiTestUtils.setUpLookFile(solo, getActivity());
-	}
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        createProject();
+        UiTestUtils.prepareStageForTest();
+        lookFile = UiTestUtils.setUpLookFile(solo, getActivity());
+    }
 
-	@Override
-	public void tearDown() throws Exception {
-		lookFile.delete();
-		super.tearDown();
-	}
+    @Override
+    public void tearDown() throws Exception {
+        lookFile.delete();
+        super.tearDown();
+    }
 
-	public void testOrientation() throws NameNotFoundException {
-		/// Method 1: Assert it is currently in portrait mode.
-		solo.clickOnText(solo.getString(R.string.main_menu_continue));
-		solo.clickOnText(backgroundName);
-		solo.waitForActivity(ProgramMenuActivity.class.getSimpleName());
-		assertEquals("ProgramMenuActivity not in Portrait mode!", Configuration.ORIENTATION_PORTRAIT, solo
-				.getCurrentActivity().getResources().getConfiguration().orientation);
+    public void testOrientation() throws NameNotFoundException {
+        /// Method 1: Assert it is currently in portrait mode.
+        solo.clickOnText(solo.getString(R.string.main_menu_continue));
+        solo.clickOnText(backgroundName);
+        solo.waitForActivity(ProgramMenuActivity.class.getSimpleName());
+        assertEquals("ProgramMenuActivity not in Portrait mode!", Configuration.ORIENTATION_PORTRAIT, solo
+                .getCurrentActivity().getResources().getConfiguration().orientation);
 
-		/// Method 2: Retrieve info about Activity as collected from AndroidManifest.xml
-		// https://developer.android.com/reference/android/content/pm/ActivityInfo.html
-		PackageManager packageManager = solo.getCurrentActivity().getPackageManager();
-		ActivityInfo activityInfo = packageManager.getActivityInfo(solo.getCurrentActivity().getComponentName(),
-				PackageManager.GET_META_DATA);
+        /// Method 2: Retrieve info about Activity as collected from AndroidManifest.xml
+        // https://developer.android.com/reference/android/content/pm/ActivityInfo.html
+        PackageManager packageManager = solo.getCurrentActivity().getPackageManager();
+        ActivityInfo activityInfo = packageManager.getActivityInfo(solo.getCurrentActivity().getComponentName(),
+                PackageManager.GET_META_DATA);
 
-		// Note that the activity is _indeed_ rotated on your device/emulator!
-		// Robotium can _force_ the activity to be in landscapeMode mode (and so could we, programmatically)
-		solo.setActivityOrientation(Solo.LANDSCAPE);
-		solo.sleep(200);
+        // Note that the activity is _indeed_ rotated on your device/emulator!
+        // Robotium can _force_ the activity to be in landscapeMode mode (and so could we, programmatically)
+        solo.setActivityOrientation(Solo.LANDSCAPE);
+        solo.sleep(200);
 
-		assertEquals(ProgramMenuActivity.class.getSimpleName()
-						+ " not set to be in portrait mode in AndroidManifest.xml!", ActivityInfo.SCREEN_ORIENTATION_PORTRAIT,
-				activityInfo.screenOrientation);
-	}
+        assertEquals(ProgramMenuActivity.class.getSimpleName()
+                        + " not set to be in portrait mode in AndroidManifest.xml!", ActivityInfo.SCREEN_ORIENTATION_PORTRAIT,
+                activityInfo.screenOrientation);
+    }
 
-	public void testTitle() {
-		solo.clickOnText(solo.getString(R.string.main_menu_continue));
-		solo.waitForActivity(ProjectActivity.class.getSimpleName());
-		solo.waitForFragmentById(R.id.fragment_container);
+    public void testTitle() {
+        solo.clickOnText(solo.getString(R.string.main_menu_continue));
+        solo.waitForActivity(ProjectActivity.class.getSimpleName());
+        solo.waitForFragmentById(R.id.fragment_container);
 
-		String spriteName = "sprite1";
+        String spriteName = "sprite1";
 
-		UiTestUtils.addNewSprite(solo, spriteName, lookFile, null);
-		solo.clickOnText(backgroundName);
-		solo.waitForActivity(ProgramMenuActivity.class.getSimpleName());
+        UiTestUtils.addNewSprite(solo, spriteName, lookFile, null);
+        solo.clickOnText(backgroundName);
+        solo.waitForActivity(ProgramMenuActivity.class.getSimpleName());
 
-		String currentSpriteName = ProjectManager.getInstance().getCurrentSprite().getName();
+        String currentSpriteName = ProjectManager.getInstance().getCurrentSprite().getName();
 
-		assertEquals("Current sprite is not " + backgroundName, backgroundName, currentSpriteName);
-		assertTrue("Title doesn't match " + backgroundName, solo.waitForText(currentSpriteName, 0, 200, false, true));
+        assertEquals("Current sprite is not " + backgroundName, backgroundName, currentSpriteName);
+        assertTrue("Title doesn't match " + backgroundName, solo.waitForText(currentSpriteName, 0, 200, false, true));
 
-		solo.goBack();
-		solo.waitForActivity(ProjectActivity.class.getSimpleName());
-		solo.waitForFragmentById(R.id.fragment_container);
-		solo.waitForText(spriteName);
-		solo.clickOnText(spriteName);
-		solo.waitForActivity(ProgramMenuActivity.class.getSimpleName());
+        solo.goBack();
+        solo.waitForActivity(ProjectActivity.class.getSimpleName());
+        solo.waitForFragmentById(R.id.fragment_container);
+        solo.waitForText(spriteName);
+        solo.clickOnText(spriteName);
+        solo.waitForActivity(ProgramMenuActivity.class.getSimpleName());
 
-		currentSpriteName = ProjectManager.getInstance().getCurrentSprite().getName();
+        currentSpriteName = ProjectManager.getInstance().getCurrentSprite().getName();
 
-		assertEquals("Current sprite is not " + spriteName, spriteName, currentSpriteName);
-		assertTrue("Title doesn't match " + spriteName, solo.waitForText(currentSpriteName, 0, 200, false, true));
-	}
+        assertEquals("Current sprite is not " + spriteName, spriteName, currentSpriteName);
+        assertTrue("Title doesn't match " + spriteName, solo.waitForText(currentSpriteName, 0, 200, false, true));
+    }
 
-	public void testLookButtonTextChange() {
-		String spriteName = "sprite1";
-		solo.clickOnText(solo.getString(R.string.main_menu_continue));
-		solo.waitForActivity(ProjectActivity.class.getSimpleName());
-		UiTestUtils.addNewSprite(solo, spriteName, lookFile, null);
-		solo.clickOnText(spriteName);
-		solo.waitForActivity(ProgramMenuActivity.class.getSimpleName());
-		assertTrue("Text on look button is not 'Looks'", solo.searchText(solo.getString(R.string.looks)));
-		solo.goBack();
-		solo.goBack();
-		solo.waitForText(solo.getString(R.string.main_menu_continue));
-		solo.clickOnText(solo.getString(R.string.main_menu_continue));
-		solo.clickOnText(backgroundName);
-		solo.waitForText(solo.getString(R.string.backgrounds));
-		assertTrue("Text on look button is not 'Backgrounds'", solo.searchText(solo.getString(R.string.backgrounds)));
-	}
+    public void testLookButtonTextChange() {
+        String spriteName = "sprite1";
+        solo.clickOnText(solo.getString(R.string.main_menu_continue));
+        solo.waitForActivity(ProjectActivity.class.getSimpleName());
+        UiTestUtils.addNewSprite(solo, spriteName, lookFile, null);
+        solo.clickOnText(spriteName);
+        solo.waitForActivity(ProgramMenuActivity.class.getSimpleName());
+        assertTrue("Text on look button is not 'Looks'", solo.searchText(solo.getString(R.string.looks)));
+        solo.goBack();
+        solo.goBack();
+        solo.waitForText(solo.getString(R.string.main_menu_continue));
+        solo.clickOnText(solo.getString(R.string.main_menu_continue));
+        solo.clickOnText(backgroundName);
+        solo.waitForText(solo.getString(R.string.backgrounds));
+        assertTrue("Text on look button is not 'Backgrounds'", solo.searchText(solo.getString(R.string.backgrounds)));
+    }
 
-	public void testPlayButton() {
-		solo.assertMemoryNotLow();
-		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
-		UiTestUtils.getIntoProgramMenuFromMainMenu(solo, 0);
+    public void testPlayButton() {
+        solo.assertMemoryNotLow();
+        solo.waitForActivity(MainMenuActivity.class.getSimpleName());
+        UiTestUtils.getIntoProgramMenuFromMainMenu(solo, 0);
 
-		assertTrue("Bottombar is not visible", solo.getView(R.id.button_play).getVisibility() == View.VISIBLE);
-		assertTrue("Play button is not visible", solo.getView(R.id.button_play).getVisibility() == View.VISIBLE);
-		assertTrue("Add button is not visible", solo.getView(R.id.button_add).getVisibility() == View.GONE);
-		assertTrue("Bottombar separator is not visible",
-				solo.getView(R.id.bottom_bar_separator).getVisibility() == View.GONE);
+        assertTrue("Bottombar is not visible", solo.getView(R.id.button_play).getVisibility() == View.VISIBLE);
+        assertTrue("Play button is not visible", solo.getView(R.id.button_play).getVisibility() == View.VISIBLE);
+        assertTrue("Add button is not visible", solo.getView(R.id.button_add).getVisibility() == View.GONE);
+        assertTrue("Bottombar separator is not visible",
+                solo.getView(R.id.bottom_bar_separator).getVisibility() == View.GONE);
 
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.assertCurrentActivity("Not in StageActivity", StageActivity.class);
-		solo.goBack();
-		solo.goBack();
-		solo.waitForActivity(ProgramMenuActivity.class.getSimpleName());
-		solo.assertCurrentActivity("Not in ProgramMenuActivity", ProgramMenuActivity.class);
-	}
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.assertCurrentActivity("Not in StageActivity", StageActivity.class);
+        solo.goBack();
+        solo.goBack();
+        solo.waitForActivity(ProgramMenuActivity.class.getSimpleName());
+        solo.assertCurrentActivity("Not in ProgramMenuActivity", ProgramMenuActivity.class);
+    }
 
-	public void testMainMenuItemsNotVisible() {
-		solo.clickOnText(solo.getString(R.string.main_menu_continue));
-		solo.sendKey(Solo.MENU);
+    public void testMainMenuItemsNotVisible() {
+        solo.clickOnText(solo.getString(R.string.main_menu_continue));
+        solo.sendKey(Solo.MENU);
 
-		assertFalse("rate us is visible", solo.waitForText(solo.getString(R.string.main_menu_rate_app), 1, 5000, false));
-		assertFalse("terms of use is visible", solo.waitForText(solo.getString(R.string.main_menu_terms_of_use), 1, 1000, false));
-		assertFalse("about pocket-code is visible", solo.waitForText(solo.getString(R.string.main_menu_about_pocketcode), 1, 1000, false));
-		assertFalse("about pocket-code is visible", solo.waitForText(solo.getString(R.string.main_menu_login), 1,
-				1000, false));
-		assertFalse("about pocket-code is visible", solo.waitForText(solo.getString(R.string.main_menu_logout), 1, 1000, false));
-		assertFalse("about pocket-code is visible", solo.waitForText(solo.getString(R.string.settings), 1,
-				1000, false));
-	}
+        assertFalse("rate us is visible", solo.waitForText(solo.getString(R.string.main_menu_rate_app), 1, 5000, false));
+        assertFalse("terms of use is visible", solo.waitForText(solo.getString(R.string.main_menu_terms_of_use), 1, 1000, false));
+        assertFalse("about pocket-code is visible", solo.waitForText(solo.getString(R.string.main_menu_about_pocketcode), 1, 1000, false));
+        assertFalse("about pocket-code is visible", solo.waitForText(solo.getString(R.string.main_menu_login), 1,
+                1000, false));
+        assertFalse("about pocket-code is visible", solo.waitForText(solo.getString(R.string.main_menu_logout), 1, 1000, false));
+        assertFalse("about pocket-code is visible", solo.waitForText(solo.getString(R.string.settings), 1,
+                1000, false));
+    }
 
-	public void testMainMenuItemsNotVisibleInProgramActivity() {
-		UiTestUtils.getIntoProgramMenuFromMainMenu(solo, 0);
+    public void testMainMenuItemsNotVisibleInProgramActivity() {
+        UiTestUtils.getIntoProgramMenuFromMainMenu(solo, 0);
 
-		solo.sendKey(Solo.MENU);
+        solo.sendKey(Solo.MENU);
 
-		assertFalse("rate us is visible", solo.waitForText(solo.getString(R.string.main_menu_rate_app), 1, 5000, false));
-		assertFalse("terms of use is visible", solo.waitForText(solo.getString(R.string.main_menu_terms_of_use), 1, 1000, false));
-		assertFalse("about pocket-code is visible", solo.waitForText(solo.getString(R.string.main_menu_about_pocketcode), 1, 1000, false));
-		assertFalse("about pocket-code is visible", solo.waitForText(solo.getString(R.string.main_menu_login), 1,
-				1000, false));
-		assertFalse("about pocket-code is visible", solo.waitForText(solo.getString(R.string.main_menu_logout), 1, 1000, false));
-		assertFalse("about pocket-code is visible", solo.waitForText(solo.getString(R.string.settings), 1,
-				1000, false));
-	}
+        assertFalse("rate us is visible", solo.waitForText(solo.getString(R.string.main_menu_rate_app), 1, 5000, false));
+        assertFalse("terms of use is visible", solo.waitForText(solo.getString(R.string.main_menu_terms_of_use), 1, 1000, false));
+        assertFalse("about pocket-code is visible", solo.waitForText(solo.getString(R.string.main_menu_about_pocketcode), 1, 1000, false));
+        assertFalse("about pocket-code is visible", solo.waitForText(solo.getString(R.string.main_menu_login), 1,
+                1000, false));
+        assertFalse("about pocket-code is visible", solo.waitForText(solo.getString(R.string.main_menu_logout), 1, 1000, false));
+        assertFalse("about pocket-code is visible", solo.waitForText(solo.getString(R.string.settings), 1,
+                1000, false));
+    }
 
-	public void testMenuItemSettings() {
-		solo.clickOnText(solo.getString(R.string.main_menu_continue));
-		solo.waitForActivity(ProjectActivity.class.getSimpleName());
-		solo.clickOnText(backgroundName);
-		solo.clickOnMenuItem(solo.getString(R.string.settings));
-		solo.assertCurrentActivity("Not in SettingsActivity", SettingsActivity.class);
-	}
+    public void testMenuItemSettings() {
+        solo.clickOnText(solo.getString(R.string.main_menu_continue));
+        solo.waitForActivity(ProjectActivity.class.getSimpleName());
+        solo.clickOnText(backgroundName);
+        solo.clickOnMenuItem(solo.getString(R.string.settings));
+        solo.assertCurrentActivity("Not in SettingsActivity", SettingsActivity.class);
+    }
 
-	public void testRename() {
-		String rename = solo.getString(R.string.rename);
-		String newName = "new object name";
+    public void testRename() {
+        String rename = solo.getString(R.string.rename);
+        String newName = "new object name";
 
-		solo.clickOnText(solo.getString(R.string.main_menu_continue));
-		solo.waitForActivity(ProjectActivity.class.getSimpleName());
-		solo.clickOnText(objectName);
+        solo.clickOnText(solo.getString(R.string.main_menu_continue));
+        solo.waitForActivity(ProjectActivity.class.getSimpleName());
+        solo.clickOnText(objectName);
 
-		UiTestUtils.openActionMode(solo, rename, R.id.rename);
-		solo.waitForDialogToOpen();
-		solo.clearEditText(0);
-		solo.enterText(0, newName);
-		solo.clickOnButton(solo.getString(R.string.ok));
-		solo.waitForDialogToClose();
-		assertTrue("Group was not renamed", solo.searchText(newName, 0, false, true));
-	}
+        UiTestUtils.openActionMode(solo, rename, R.id.rename);
+        solo.waitForDialogToOpen();
+        solo.clearEditText(0);
+        solo.enterText(0, newName);
+        solo.clickOnButton(solo.getString(R.string.ok));
+        solo.waitForDialogToClose();
+        assertTrue("Group was not renamed", solo.searchText(newName, 0, false, true));
+    }
 
-	private void createProject() {
-		Project project = new Project(null, UiTestUtils.PROJECTNAME1);
+    private void createProject() {
+        Project project = new Project(null, UiTestUtils.PROJECTNAME1);
 
-		Sprite spriteCat = new SingleSprite(backgroundName);
-		Sprite secondSprite = new SingleSprite(objectName);
-		Script startScriptCat = new StartScript();
-		Script scriptTappedCat = new WhenScript();
-		Brick setXBrick = new SetXBrick(50);
-		Brick setYBrick = new SetYBrick(50);
-		Brick changeXBrick = new ChangeXByNBrick(50);
-		startScriptCat.addBrick(setYBrick);
-		startScriptCat.addBrick(setXBrick);
-		scriptTappedCat.addBrick(changeXBrick);
+        Sprite spriteCat = new SingleSprite(backgroundName);
+        Sprite secondSprite = new SingleSprite(objectName);
+        Script startScriptCat = new StartScript();
+        Script scriptTappedCat = new WhenScript();
+        Brick setXBrick = new SetXBrick(50);
+        Brick setYBrick = new SetYBrick(50);
+        Brick changeXBrick = new ChangeXByNBrick(50);
+        startScriptCat.addBrick(setYBrick);
+        startScriptCat.addBrick(setXBrick);
+        scriptTappedCat.addBrick(changeXBrick);
 
-		spriteCat.addScript(startScriptCat);
-		spriteCat.addScript(scriptTappedCat);
-		project.getDefaultScene().addSprite(spriteCat);
-		project.getDefaultScene().addSprite(secondSprite);
+        spriteCat.addScript(startScriptCat);
+        spriteCat.addScript(scriptTappedCat);
+        project.getDefaultScene().addSprite(spriteCat);
+        project.getDefaultScene().addSprite(secondSprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(spriteCat);
-		ProjectManager.getInstance().setCurrentScript(startScriptCat);
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(spriteCat);
+        ProjectManager.getInstance().setCurrentScript(startScriptCat);
 
-		File imageFile = UiTestUtils.saveFileToProject(project.getName(), project.getDefaultScene().getName(), "catroid_sunglasses.png",
-				org.catrobat.catroid.test.R.drawable.catroid_sunglasses, getInstrumentation().getContext(), UiTestUtils.FileTypes.IMAGE);
+        File imageFile = UiTestUtils.saveFileToProject(project.getName(), project.getDefaultScene().getName(), "catroid_sunglasses.png",
+                org.catrobat.catroid.test.R.drawable.catroid_sunglasses, getInstrumentation().getContext(), UiTestUtils.FileTypes.IMAGE);
 
-		ProjectManager projectManager = ProjectManager.getInstance();
-		List<LookData> lookDataList = projectManager.getCurrentSprite().getLookDataList();
-		LookData lookData = new LookData();
-		lookData.setLookFilename(imageFile.getName());
-		lookData.setLookName("Catroid sun");
-		lookDataList.add(lookData);
-		projectManager.getFileChecksumContainer().addChecksum(lookData.getChecksum(), lookData.getAbsolutePath());
+        ProjectManager projectManager = ProjectManager.getInstance();
+        List<LookData> lookDataList = projectManager.getCurrentSprite().getLookDataList();
+        LookData lookData = new LookData();
+        lookData.setLookFilename(imageFile.getName());
+        lookData.setLookName("Catroid sun");
+        lookDataList.add(lookData);
+        projectManager.getFileChecksumContainer().addChecksum(lookData.getChecksum(), lookData.getAbsolutePath());
 
-		File soundFile = UiTestUtils.saveFileToProject(project.getName(), project.getDefaultScene().getName(), "longsound.mp3",
-				org.catrobat.catroid.test.R.raw.longsound, getInstrumentation().getContext(),
-				UiTestUtils.FileTypes.SOUND);
-		SoundInfo soundInfo = new SoundInfo();
-		soundInfo.setSoundFileName(soundFile.getName());
-		soundInfo.setTitle("longsound");
+        File soundFile = UiTestUtils.saveFileToProject(project.getName(), project.getDefaultScene().getName(), "longsound.mp3",
+                org.catrobat.catroid.test.R.raw.longsound, getInstrumentation().getContext(),
+                UiTestUtils.FileTypes.SOUND);
+        SoundInfo soundInfo = new SoundInfo();
+        soundInfo.setSoundFileName(soundFile.getName());
+        soundInfo.setTitle("longsound");
 
-		List<SoundInfo> soundInfoList = ProjectManager.getInstance().getCurrentSprite().getSoundList();
-		soundInfoList.add(soundInfo);
-		ProjectManager.getInstance().getFileChecksumContainer()
-				.addChecksum(soundInfo.getChecksum(), soundInfo.getAbsolutePath());
-	}
+        List<SoundInfo> soundInfoList = ProjectManager.getInstance().getCurrentSprite().getSoundList();
+        soundInfoList.add(soundInfo);
+        ProjectManager.getInstance().getFileChecksumContainer()
+                .addChecksum(soundInfo.getChecksum(), soundInfo.getAbsolutePath());
+    }
 }

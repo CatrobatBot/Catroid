@@ -40,73 +40,73 @@ import org.catrobat.catroid.ui.fragment.FormulaEditorFragment;
 import java.util.List;
 
 public class TurnRightSpeedBrick extends FormulaBrick {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private transient View prototypeView;
+    private transient View prototypeView;
 
-	public TurnRightSpeedBrick() {
-		addAllowedBrickField(BrickField.PHYSICS_TURN_RIGHT_SPEED);
-	}
+    public TurnRightSpeedBrick() {
+        addAllowedBrickField(BrickField.PHYSICS_TURN_RIGHT_SPEED);
+    }
 
-	public TurnRightSpeedBrick(float degreesPerSecond) {
-		initializeBrickFields(new Formula(degreesPerSecond));
-	}
+    public TurnRightSpeedBrick(float degreesPerSecond) {
+        initializeBrickFields(new Formula(degreesPerSecond));
+    }
 
-	public TurnRightSpeedBrick(Formula degreesPerSecond) {
-		initializeBrickFields(degreesPerSecond);
-	}
+    public TurnRightSpeedBrick(Formula degreesPerSecond) {
+        initializeBrickFields(degreesPerSecond);
+    }
 
-	private void initializeBrickFields(Formula degreesPerSecond) {
-		addAllowedBrickField(BrickField.PHYSICS_TURN_RIGHT_SPEED);
-		setFormulaWithBrickField(BrickField.PHYSICS_TURN_RIGHT_SPEED, degreesPerSecond);
-	}
+    private void initializeBrickFields(Formula degreesPerSecond) {
+        addAllowedBrickField(BrickField.PHYSICS_TURN_RIGHT_SPEED);
+        setFormulaWithBrickField(BrickField.PHYSICS_TURN_RIGHT_SPEED, degreesPerSecond);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return PHYSICS;
-	}
+    @Override
+    public int getRequiredResources() {
+        return PHYSICS;
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_physics_turn_right_speed, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_physics_turn_right_speed, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_turn_right_speed_checkbox);
+        setCheckboxView(R.id.brick_turn_right_speed_checkbox);
 
-		TextView edit = (TextView) view.findViewById(R.id.brick_turn_right_speed_edit_text);
+        TextView edit = (TextView) view.findViewById(R.id.brick_turn_right_speed_edit_text);
 
-		getFormulaWithBrickField(BrickField.PHYSICS_TURN_RIGHT_SPEED).setTextFieldId(R.id.brick_turn_right_speed_edit_text);
-		getFormulaWithBrickField(BrickField.PHYSICS_TURN_RIGHT_SPEED).refreshTextField(view);
+        getFormulaWithBrickField(BrickField.PHYSICS_TURN_RIGHT_SPEED).setTextFieldId(R.id.brick_turn_right_speed_edit_text);
+        getFormulaWithBrickField(BrickField.PHYSICS_TURN_RIGHT_SPEED).refreshTextField(view);
 
-		edit.setOnClickListener(this);
+        edit.setOnClickListener(this);
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_physics_turn_right_speed, null);
-		TextView textTurnRightSpeed = (TextView) prototypeView.findViewById(R.id.brick_turn_right_speed_edit_text);
-		textTurnRightSpeed.setText(String.valueOf(BrickValues.PHYSIC_TURN_DEGREES));
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_physics_turn_right_speed, null);
+        TextView textTurnRightSpeed = (TextView) prototypeView.findViewById(R.id.brick_turn_right_speed_edit_text);
+        textTurnRightSpeed.setText(String.valueOf(BrickValues.PHYSIC_TURN_DEGREES));
+        return prototypeView;
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		if (checkbox.getVisibility() == View.VISIBLE) {
-			return;
-		}
-		FormulaEditorFragment.showFragment(view, this, BrickField.PHYSICS_TURN_RIGHT_SPEED);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        if (checkbox.getVisibility() == View.VISIBLE) {
+            return;
+        }
+        FormulaEditorFragment.showFragment(view, this, BrickField.PHYSICS_TURN_RIGHT_SPEED);
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createTurnRightSpeedAction(sprite,
-				getFormulaWithBrickField(BrickField.PHYSICS_TURN_RIGHT_SPEED)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createTurnRightSpeedAction(sprite,
+                getFormulaWithBrickField(BrickField.PHYSICS_TURN_RIGHT_SPEED)));
+        return null;
+    }
 }

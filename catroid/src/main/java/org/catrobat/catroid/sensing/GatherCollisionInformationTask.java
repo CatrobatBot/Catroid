@@ -32,51 +32,51 @@ import org.catrobat.catroid.content.Sprite;
 
 public class GatherCollisionInformationTask extends AsyncTask<Void, Void, Boolean> {
 
-	private static final String TAG = GatherCollisionInformationTask.class.getSimpleName();
-	private OnPolygonLoadedListener listener;
+    private static final String TAG = GatherCollisionInformationTask.class.getSimpleName();
+    private OnPolygonLoadedListener listener;
 
-	public GatherCollisionInformationTask(OnPolygonLoadedListener listener) {
-		this.listener = listener;
-	}
+    public GatherCollisionInformationTask(OnPolygonLoadedListener listener) {
+        this.listener = listener;
+    }
 
-	@Override
-	protected Boolean doInBackground(Void... arg0) {
-		getCollisionInformation();
-		return true;
-	}
+    @Override
+    protected Boolean doInBackground(Void... arg0) {
+        getCollisionInformation();
+        return true;
+    }
 
-	@Override
-	protected void onPostExecute(Boolean success) {
-		super.onPostExecute(success);
-		Log.i(TAG, "Finished task");
-		listener.onFinished();
-	}
+    @Override
+    protected void onPostExecute(Boolean success) {
+        super.onPostExecute(success);
+        Log.i(TAG, "Finished task");
+        listener.onFinished();
+    }
 
-	private void getCollisionInformation() {
-		Log.i(TAG, "Waiting for all calculation threads to finish...");
-		for (Sprite s : ProjectManager.getInstance().getCurrentScene().getSpriteList()) {
-			for (LookData lookData : s.getLookDataList()) {
-				if (lookData.getCollisionInformation().collisionPolygonCalculationThread == null) {
-					continue;
-				}
-				try {
-					lookData.getCollisionInformation().collisionPolygonCalculationThread.join();
-				} catch (InterruptedException e) {
-					Log.i(TAG, "Thread got interupted");
-				}
-			}
-		}
+    private void getCollisionInformation() {
+        Log.i(TAG, "Waiting for all calculation threads to finish...");
+        for (Sprite s : ProjectManager.getInstance().getCurrentScene().getSpriteList()) {
+            for (LookData lookData : s.getLookDataList()) {
+                if (lookData.getCollisionInformation().collisionPolygonCalculationThread == null) {
+                    continue;
+                }
+                try {
+                    lookData.getCollisionInformation().collisionPolygonCalculationThread.join();
+                } catch (InterruptedException e) {
+                    Log.i(TAG, "Thread got interupted");
+                }
+            }
+        }
 
-		for (Sprite s : ProjectManager.getInstance().getCurrentScene().getSpriteList()) {
-			if (s.hasCollision()) {
-				for (LookData l : s.getLookDataList()) {
-					l.getCollisionInformation().loadOrCreateCollisionPolygon();
-				}
-			}
-		}
-	}
+        for (Sprite s : ProjectManager.getInstance().getCurrentScene().getSpriteList()) {
+            if (s.hasCollision()) {
+                for (LookData l : s.getLookDataList()) {
+                    l.getCollisionInformation().loadOrCreateCollisionPolygon();
+                }
+            }
+        }
+    }
 
-	public interface OnPolygonLoadedListener {
-		void onFinished();
-	}
+    public interface OnPolygonLoadedListener {
+        void onFinished();
+    }
 }

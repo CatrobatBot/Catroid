@@ -26,5 +26,5 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.physics.box2d.Shape;
 
 public interface PhysicsShapeBuilderStrategy {
-	Shape[] build(Pixmap pixmap, float scale);
+    Shape[] build(Pixmap pixmap, float scale);
 }

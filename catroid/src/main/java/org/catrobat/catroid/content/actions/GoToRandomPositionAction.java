@@ -30,30 +30,30 @@ import org.catrobat.catroid.content.Sprite;
 
 public class GoToRandomPositionAction extends TemporalAction {
 
-	private Sprite sprite;
-	private float randomXPosition;
-	private float randomYPosition;
+    private Sprite sprite;
+    private float randomXPosition;
+    private float randomYPosition;
 
-	@Override
-	protected void update(float percent) {
-		randomXPosition = (float) Math.random()
-				* (ScreenValues.SCREEN_WIDTH + 1) - (ScreenValues.SCREEN_WIDTH / 2);
-		randomYPosition = (float) Math.random()
-				* (ScreenValues.SCREEN_HEIGHT + 1) - (ScreenValues.SCREEN_HEIGHT / 2);
+    @Override
+    protected void update(float percent) {
+        randomXPosition = (float) Math.random()
+                * (ScreenValues.SCREEN_WIDTH + 1) - (ScreenValues.SCREEN_WIDTH / 2);
+        randomYPosition = (float) Math.random()
+                * (ScreenValues.SCREEN_HEIGHT + 1) - (ScreenValues.SCREEN_HEIGHT / 2);
 
-		sprite.look.setXInUserInterfaceDimensionUnit(randomXPosition);
-		sprite.look.setYInUserInterfaceDimensionUnit(randomYPosition);
-	}
+        sprite.look.setXInUserInterfaceDimensionUnit(randomXPosition);
+        sprite.look.setYInUserInterfaceDimensionUnit(randomYPosition);
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public float getRandomXPosition() {
-		return this.randomXPosition;
-	}
+    public float getRandomXPosition() {
+        return this.randomXPosition;
+    }
 
-	public float getRandomYPosition() {
-		return this.randomYPosition;
-	}
+    public float getRandomYPosition() {
+        return this.randomYPosition;
+    }
 }

@@ -29,15 +29,15 @@ import org.catrobat.catroid.content.bricks.UserBrick;
 
 public class UserBrickAction extends DelegateAction {
 
-	private UserBrick userBrick;
+    private UserBrick userBrick;
 
-	@Override
-	public boolean delegate(float delta) {
-		ProjectManager.getInstance().setCurrentUserBrick(userBrick);
-		return action.act(delta);
-	}
+    @Override
+    public boolean delegate(float delta) {
+        ProjectManager.getInstance().setCurrentUserBrick(userBrick);
+        return action.act(delta);
+    }
 
-	public void setUserBrick(UserBrick userBrick) {
-		this.userBrick = userBrick;
-	}
+    public void setUserBrick(UserBrick userBrick) {
+        this.userBrick = userBrick;
+    }
 }

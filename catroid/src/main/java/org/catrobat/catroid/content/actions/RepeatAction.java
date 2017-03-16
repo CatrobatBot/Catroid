@@ -30,74 +30,74 @@ import org.catrobat.catroid.formulaeditor.InterpretationException;
 
 public class RepeatAction extends com.badlogic.gdx.scenes.scene2d.actions.RepeatAction {
 
-	private int executedCount;
-	private Formula repeatCount;
-	private Sprite sprite;
-	private boolean isCurrentLoopInitialized = false;
-	private boolean isRepeatActionInitialized = false;
-	private int repeatCountValue;
-	private static final float LOOP_DELAY = 0.02f;
-	private float currentTime = 0f;
-	private boolean isForeverRepeat = false;
+    private int executedCount;
+    private Formula repeatCount;
+    private Sprite sprite;
+    private boolean isCurrentLoopInitialized = false;
+    private boolean isRepeatActionInitialized = false;
+    private int repeatCountValue;
+    private static final float LOOP_DELAY = 0.02f;
+    private float currentTime = 0f;
+    private boolean isForeverRepeat = false;
 
-	@Override
-	public boolean delegate(float delta) {
+    @Override
+    public boolean delegate(float delta) {
 
-		if (!isRepeatActionInitialized) {
-			isRepeatActionInitialized = true;
-			try {
-				Double interpretation = repeatCount == null ? Double.valueOf(0d) : repeatCount.interpretDouble(sprite);
-				repeatCountValue = interpretation.intValue();
-			} catch (InterpretationException interpretationException) {
-				repeatCountValue = 0;
-				Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-			}
-		}
+        if (!isRepeatActionInitialized) {
+            isRepeatActionInitialized = true;
+            try {
+                Double interpretation = repeatCount == null ? Double.valueOf(0d) : repeatCount.interpretDouble(sprite);
+                repeatCountValue = interpretation.intValue();
+            } catch (InterpretationException interpretationException) {
+                repeatCountValue = 0;
+                Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+            }
+        }
 
-		if (!isCurrentLoopInitialized) {
-			currentTime = 0f;
-			isCurrentLoopInitialized = true;
-		}
+        if (!isCurrentLoopInitialized) {
+            currentTime = 0f;
+            isCurrentLoopInitialized = true;
+        }
 
-		currentTime += delta;
+        currentTime += delta;
 
-		if (repeatCountValue < 0) {
-			repeatCountValue = 0;
-		}
-		if (executedCount >= repeatCountValue && !isForeverRepeat) {
-			return true;
-		}
-		if (action.act(delta) && currentTime >= LOOP_DELAY) {
+        if (repeatCountValue < 0) {
+            repeatCountValue = 0;
+        }
+        if (executedCount >= repeatCountValue && !isForeverRepeat) {
+            return true;
+        }
+        if (action.act(delta) && currentTime >= LOOP_DELAY) {
 
-			executedCount++;
-			if (executedCount >= repeatCountValue && !isForeverRepeat) {
-				return true;
-			}
-			isCurrentLoopInitialized = false;
-			if (action != null) {
-				action.restart();
-			}
-		}
-		return false;
-	}
+            executedCount++;
+            if (executedCount >= repeatCountValue && !isForeverRepeat) {
+                return true;
+            }
+            isCurrentLoopInitialized = false;
+            if (action != null) {
+                action.restart();
+            }
+        }
+        return false;
+    }
 
-	@Override
-	public void restart() {
-		isCurrentLoopInitialized = false;
-		isRepeatActionInitialized = false;
-		executedCount = 0;
-		super.restart();
-	}
+    @Override
+    public void restart() {
+        isCurrentLoopInitialized = false;
+        isRepeatActionInitialized = false;
+        executedCount = 0;
+        super.restart();
+    }
 
-	public void setRepeatCount(Formula repeatCount) {
-		this.repeatCount = repeatCount;
-	}
+    public void setRepeatCount(Formula repeatCount) {
+        this.repeatCount = repeatCount;
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setIsForeverRepeat(boolean isForeverRepeat) {
-		this.isForeverRepeat = isForeverRepeat;
-	}
+    public void setIsForeverRepeat(boolean isForeverRepeat) {
+        this.isForeverRepeat = isForeverRepeat;
+    }
 }

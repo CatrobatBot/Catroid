@@ -39,121 +39,121 @@ import java.util.List;
 
 public class WhenConditionBecomesTrueActionTest extends AndroidTestCase {
 
-	private Sprite testSprite;
-	private Project project;
+    private Sprite testSprite;
+    private Project project;
 
-	private static final String COUNTER_VARIABLE_NAME = "counterVariable";
-	private static final String CONDITION_VARIABLE_NAME = "conditionVariable";
+    private static final String COUNTER_VARIABLE_NAME = "counterVariable";
+    private static final String CONDITION_VARIABLE_NAME = "conditionVariable";
 
-	private static final double FALSE_CONSTANT = 0.0;
-	private static final double TRUE_CONSTANT = 1.0;
+    private static final double FALSE_CONSTANT = 0.0;
+    private static final double TRUE_CONSTANT = 1.0;
 
-	private WhenConditionScript whenConditionScript;
-	private UserVariable counterVariable;
-	private UserVariable conditionVariable;
+    private WhenConditionScript whenConditionScript;
+    private UserVariable counterVariable;
+    private UserVariable conditionVariable;
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		testSprite = new Sprite("testSprite");
-		project = new Project(null, "testProject");
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        testSprite = new Sprite("testSprite");
+        project = new Project(null, "testProject");
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(new Sprite("testSprite1"));
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(new Sprite("testSprite1"));
 
-		ProjectManager.getInstance().getCurrentScene().getDataContainer().deleteUserVariableByName(COUNTER_VARIABLE_NAME);
-		ProjectManager.getInstance().getCurrentScene().getDataContainer().addProjectUserVariable(COUNTER_VARIABLE_NAME);
-		counterVariable = ProjectManager.getInstance().getCurrentScene().getDataContainer()
-				.getUserVariable(COUNTER_VARIABLE_NAME, null);
+        ProjectManager.getInstance().getCurrentScene().getDataContainer().deleteUserVariableByName(COUNTER_VARIABLE_NAME);
+        ProjectManager.getInstance().getCurrentScene().getDataContainer().addProjectUserVariable(COUNTER_VARIABLE_NAME);
+        counterVariable = ProjectManager.getInstance().getCurrentScene().getDataContainer()
+                .getUserVariable(COUNTER_VARIABLE_NAME, null);
 
-		ProjectManager.getInstance().getCurrentScene().getDataContainer().deleteUserVariableByName(CONDITION_VARIABLE_NAME);
-		ProjectManager.getInstance().getCurrentScene().getDataContainer().addProjectUserVariable(CONDITION_VARIABLE_NAME);
-		conditionVariable = ProjectManager.getInstance().getCurrentScene().getDataContainer()
-				.getUserVariable(CONDITION_VARIABLE_NAME, null);
-	}
+        ProjectManager.getInstance().getCurrentScene().getDataContainer().deleteUserVariableByName(CONDITION_VARIABLE_NAME);
+        ProjectManager.getInstance().getCurrentScene().getDataContainer().addProjectUserVariable(CONDITION_VARIABLE_NAME);
+        conditionVariable = ProjectManager.getInstance().getCurrentScene().getDataContainer()
+                .getUserVariable(CONDITION_VARIABLE_NAME, null);
+    }
 
-	@Override
-	protected void tearDown() throws Exception {
-		ProjectManager.getInstance().getCurrentScene().getDataContainer().deleteUserVariableByName(COUNTER_VARIABLE_NAME);
-		ProjectManager.getInstance().getCurrentScene().getDataContainer().deleteUserVariableByName(CONDITION_VARIABLE_NAME);
-	}
+    @Override
+    protected void tearDown() throws Exception {
+        ProjectManager.getInstance().getCurrentScene().getDataContainer().deleteUserVariableByName(COUNTER_VARIABLE_NAME);
+        ProjectManager.getInstance().getCurrentScene().getDataContainer().deleteUserVariableByName(CONDITION_VARIABLE_NAME);
+    }
 
-	public void testConditionBecomesTrueOnce() {
+    public void testConditionBecomesTrueOnce() {
 
-		FormulaElement conditionFormulaElement = new FormulaElement(FormulaElement.ElementType.USER_VARIABLE,
-				CONDITION_VARIABLE_NAME, null);
-		Formula conditionFormula = new Formula(conditionFormulaElement);
+        FormulaElement conditionFormulaElement = new FormulaElement(FormulaElement.ElementType.USER_VARIABLE,
+                CONDITION_VARIABLE_NAME, null);
+        Formula conditionFormula = new Formula(conditionFormulaElement);
 
-		addWhenConditionScriptToSprite(conditionFormula);
+        addWhenConditionScriptToSprite(conditionFormula);
 
-		int timesToTrigger = 1;
-		runScriptAndTriggerCondition(timesToTrigger);
+        int timesToTrigger = 1;
+        runScriptAndTriggerCondition(timesToTrigger);
 
-		assertEquals("script should be executed once", Double.valueOf(timesToTrigger), counterVariable.getValue());
-	}
+        assertEquals("script should be executed once", Double.valueOf(timesToTrigger), counterVariable.getValue());
+    }
 
-	public void testConditionBecomesTrueMultipleTimes() {
+    public void testConditionBecomesTrueMultipleTimes() {
 
-		FormulaElement conditionFormulaElement = new FormulaElement(FormulaElement.ElementType.USER_VARIABLE,
-				CONDITION_VARIABLE_NAME, null);
-		Formula conditionFormula = new Formula(conditionFormulaElement);
+        FormulaElement conditionFormulaElement = new FormulaElement(FormulaElement.ElementType.USER_VARIABLE,
+                CONDITION_VARIABLE_NAME, null);
+        Formula conditionFormula = new Formula(conditionFormulaElement);
 
-		addWhenConditionScriptToSprite(conditionFormula);
+        addWhenConditionScriptToSprite(conditionFormula);
 
-		int timesToTrigger = 5;
-		runScriptAndTriggerCondition(timesToTrigger);
+        int timesToTrigger = 5;
+        runScriptAndTriggerCondition(timesToTrigger);
 
-		assertEquals("script should be executed 5 times", Double.valueOf(timesToTrigger), counterVariable.getValue());
-	}
+        assertEquals("script should be executed 5 times", Double.valueOf(timesToTrigger), counterVariable.getValue());
+    }
 
-	public void testConditionConstantTrue() {
+    public void testConditionConstantTrue() {
 
-		Formula conditionFormula = new Formula(TRUE_CONSTANT);
-		addWhenConditionScriptToSprite(conditionFormula);
+        Formula conditionFormula = new Formula(TRUE_CONSTANT);
+        addWhenConditionScriptToSprite(conditionFormula);
 
-		int timesToTrigger = 3;
-		runScriptAndTriggerCondition(timesToTrigger);
+        int timesToTrigger = 3;
+        runScriptAndTriggerCondition(timesToTrigger);
 
-		assertEquals("script should be executed once", 1.0, counterVariable.getValue());
-	}
+        assertEquals("script should be executed once", 1.0, counterVariable.getValue());
+    }
 
-	public void testConditionConstantFalse() {
+    public void testConditionConstantFalse() {
 
-		Formula conditionFormula = new Formula(FALSE_CONSTANT);
-		addWhenConditionScriptToSprite(conditionFormula);
+        Formula conditionFormula = new Formula(FALSE_CONSTANT);
+        addWhenConditionScriptToSprite(conditionFormula);
 
-		int timesToTrigger = 3;
-		runScriptAndTriggerCondition(timesToTrigger);
+        int timesToTrigger = 3;
+        runScriptAndTriggerCondition(timesToTrigger);
 
-		assertEquals("script should not be executed", 0.0, counterVariable.getValue());
-	}
+        assertEquals("script should not be executed", 0.0, counterVariable.getValue());
+    }
 
-	private void addWhenConditionScriptToSprite(Formula conditionFormula) {
+    private void addWhenConditionScriptToSprite(Formula conditionFormula) {
 
-		WhenConditionBrick whenBrick = new WhenConditionBrick(conditionFormula);
-		whenConditionScript = (WhenConditionScript) whenBrick.getScriptSafe();
+        WhenConditionBrick whenBrick = new WhenConditionBrick(conditionFormula);
+        whenConditionScript = (WhenConditionScript) whenBrick.getScriptSafe();
 
-		ChangeVariableBrick changeVariableBrick = new ChangeVariableBrick(new Formula(1.0));
-		changeVariableBrick.setUserVariable(counterVariable);
-		whenConditionScript.addBrick(changeVariableBrick);
+        ChangeVariableBrick changeVariableBrick = new ChangeVariableBrick(new Formula(1.0));
+        changeVariableBrick.setUserVariable(counterVariable);
+        whenConditionScript.addBrick(changeVariableBrick);
 
-		testSprite.addScript(whenConditionScript);
+        testSprite.addScript(whenConditionScript);
 
-		project.getDefaultScene().addSprite(testSprite);
-		ProjectManager.getInstance().setCurrentSprite(testSprite);
-		ProjectManager.getInstance().setCurrentScript(whenConditionScript);
-		testSprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
-	}
+        project.getDefaultScene().addSprite(testSprite);
+        ProjectManager.getInstance().setCurrentSprite(testSprite);
+        ProjectManager.getInstance().setCurrentScript(whenConditionScript);
+        testSprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
+    }
 
-	private void runScriptAndTriggerCondition(int timesToTrigger) {
+    private void runScriptAndTriggerCondition(int timesToTrigger) {
 
-		for (int i = 0; i < timesToTrigger; i++) {
-			testSprite.getActionFactory().createSetVariableAction(testSprite, new Formula(FALSE_CONSTANT), conditionVariable).act(100f);
-			testSprite.look.act(100f);
-			testSprite.look.act(100f);
-			testSprite.getActionFactory().createSetVariableAction(testSprite, new Formula(TRUE_CONSTANT), conditionVariable).act(100f);
-			testSprite.look.act(100f);
-			testSprite.look.act(100f);
-		}
-	}
+        for (int i = 0; i < timesToTrigger; i++) {
+            testSprite.getActionFactory().createSetVariableAction(testSprite, new Formula(FALSE_CONSTANT), conditionVariable).act(100f);
+            testSprite.look.act(100f);
+            testSprite.look.act(100f);
+            testSprite.getActionFactory().createSetVariableAction(testSprite, new Formula(TRUE_CONSTANT), conditionVariable).act(100f);
+            testSprite.look.act(100f);
+            testSprite.look.act(100f);
+        }
+    }
 }

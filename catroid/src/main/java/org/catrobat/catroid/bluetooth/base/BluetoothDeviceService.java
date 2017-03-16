@@ -30,19 +30,20 @@ import org.catrobat.catroid.stage.StageResourceInterface;
 
 public interface BluetoothDeviceService extends CatroidService, StageResourceInterface {
 
-	enum ConnectDeviceResult {
-		ALREADY_CONNECTED,
-		CONNECTION_REQUESTED
-	}
+    enum ConnectDeviceResult {
+        ALREADY_CONNECTED,
+        CONNECTION_REQUESTED
+    }
 
-	ConnectDeviceResult connectDevice(Class<? extends BluetoothDevice> deviceType,
-			Activity activity, int requestCode);
+    ConnectDeviceResult connectDevice(Class<? extends BluetoothDevice> deviceType,
+                                      Activity activity, int requestCode);
 
-	ConnectDeviceResult connectDevice(Class<? extends BluetoothDevice> deviceToConnect,
-			Context context);
+    ConnectDeviceResult connectDevice(Class<? extends BluetoothDevice> deviceToConnect,
+                                      Context context);
 
-	void deviceConnected(BluetoothDevice device);
-	void disconnectDevices();
+    void deviceConnected(BluetoothDevice device);
 
-	<T extends BluetoothDevice> T getDevice(Class<T> btDevice);
+    void disconnectDevices();
+
+    <T extends BluetoothDevice> T getDevice(Class<T> btDevice);
 }

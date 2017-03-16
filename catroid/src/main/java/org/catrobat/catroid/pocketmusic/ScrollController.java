@@ -37,95 +37,95 @@ import org.catrobat.catroid.pocketmusic.ui.TrackView;
 
 public class ScrollController {
 
-	private static final int LAST_NOTE_IN_TRACK_VIEW = 4;
+    private static final int LAST_NOTE_IN_TRACK_VIEW = 4;
 
-	private ObjectAnimator playLineAnimator;
-	private final View playLine;
-	private final ImageButton playButton;
-	private final TrackView trackView;
-	private final int beatsPerMinute;
-	private int currentPlayLineIndex = 0;
+    private ObjectAnimator playLineAnimator;
+    private final View playLine;
+    private final ImageButton playButton;
+    private final TrackView trackView;
+    private final int beatsPerMinute;
+    private int currentPlayLineIndex = 0;
 
-	public ScrollController(ViewGroup pocketmusicMainLayout, int beatsPerMinute) {
-		this.beatsPerMinute = beatsPerMinute;
-		this.playLine = pocketmusicMainLayout.findViewById(R.id.pocketmusic_play_line);
-		this.playButton = (ImageButton) pocketmusicMainLayout.findViewById(R.id.pocketmusic_play_button);
-		this.trackView = (TrackView) pocketmusicMainLayout.findViewById(R.id.musicdroid_note_grid);
-		init();
-	}
+    public ScrollController(ViewGroup pocketmusicMainLayout, int beatsPerMinute) {
+        this.beatsPerMinute = beatsPerMinute;
+        this.playLine = pocketmusicMainLayout.findViewById(R.id.pocketmusic_play_line);
+        this.playButton = (ImageButton) pocketmusicMainLayout.findViewById(R.id.pocketmusic_play_button);
+        this.trackView = (TrackView) pocketmusicMainLayout.findViewById(R.id.musicdroid_note_grid);
+        init();
+    }
 
-	private void init() {
-		initializePlayLine();
-		initializeAnimator();
-	}
+    private void init() {
+        initializePlayLine();
+        initializeAnimator();
+    }
 
-	@SuppressWarnings("unused")
-	private void setGlobalPlayPosition(float xPosition) {
-		int buttonWidth = trackView.getWidth() / LAST_NOTE_IN_TRACK_VIEW;
-		int newPlayLineIndex = (int) (xPosition / buttonWidth);
+    @SuppressWarnings("unused")
+    private void setGlobalPlayPosition(float xPosition) {
+        int buttonWidth = trackView.getWidth() / LAST_NOTE_IN_TRACK_VIEW;
+        int newPlayLineIndex = (int) (xPosition / buttonWidth);
 
-		playLine.setX(xPosition);
+        playLine.setX(xPosition);
 
-		if (newPlayLineIndex == 0 || newPlayLineIndex > currentPlayLineIndex) {
-			currentPlayLineIndex = newPlayLineIndex;
-			onNoteLengthOutRun(newPlayLineIndex);
-		}
-	}
+        if (newPlayLineIndex == 0 || newPlayLineIndex > currentPlayLineIndex) {
+            currentPlayLineIndex = newPlayLineIndex;
+            onNoteLengthOutRun(newPlayLineIndex);
+        }
+    }
 
-	private void initializeAnimator() {
-		final long singleButtonDuration = NoteLength.QUARTER.toMilliseconds(beatsPerMinute);
-		playLineAnimator = ObjectAnimator.ofFloat(this, "globalPlayPosition", 0, trackView.getWidth());
-		playLineAnimator.setDuration(singleButtonDuration * LAST_NOTE_IN_TRACK_VIEW);
-		playLineAnimator.setInterpolator(new LinearInterpolator());
+    private void initializeAnimator() {
+        final long singleButtonDuration = NoteLength.QUARTER.toMilliseconds(beatsPerMinute);
+        playLineAnimator = ObjectAnimator.ofFloat(this, "globalPlayPosition", 0, trackView.getWidth());
+        playLineAnimator.setDuration(singleButtonDuration * LAST_NOTE_IN_TRACK_VIEW);
+        playLineAnimator.setInterpolator(new LinearInterpolator());
 
-		playLineAnimator.addListener(new AnimatorListenerAdapter() {
-			@Override
-			public void onAnimationStart(Animator animation) {
-				playButton.setImageResource(R.drawable.ic_stop_24dp);
-				playLine.setVisibility(View.VISIBLE);
-				trackView.setClickable(false);
-			}
+        playLineAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                playButton.setImageResource(R.drawable.ic_stop_24dp);
+                playLine.setVisibility(View.VISIBLE);
+                trackView.setClickable(false);
+            }
 
-			@Override
-			public void onAnimationEnd(Animator animation) {
-				playButton.setImageResource(R.drawable.ic_play);
-				playLine.setVisibility(View.GONE);
-				trackView.clearColorGridColumn(currentPlayLineIndex);
-				trackView.setClickable(true);
-				currentPlayLineIndex = 0;
-			}
-		});
-	}
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                playButton.setImageResource(R.drawable.ic_play);
+                playLine.setVisibility(View.GONE);
+                trackView.clearColorGridColumn(currentPlayLineIndex);
+                trackView.setClickable(true);
+                currentPlayLineIndex = 0;
+            }
+        });
+    }
 
-	private void initializePlayLine() {
+    private void initializePlayLine() {
 
-		trackView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-			@Override
-			public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-				initializeAnimator();
-				trackView.removeOnLayoutChangeListener(this);
-			}
-		});
+        trackView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                initializeAnimator();
+                trackView.removeOnLayoutChangeListener(this);
+            }
+        });
 
-		playButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (playLineAnimator.isRunning()) {
-					playLineAnimator.cancel();
-					playLineAnimator.setupStartValues();
-				} else {
-					playLineAnimator.start();
-				}
-			}
-		});
-	}
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (playLineAnimator.isRunning()) {
+                    playLineAnimator.cancel();
+                    playLineAnimator.setupStartValues();
+                } else {
+                    playLineAnimator.start();
+                }
+            }
+        });
+    }
 
-	private void onNoteLengthOutRun(int index) {
-		if (index >= 0 & index < LAST_NOTE_IN_TRACK_VIEW) {
-			trackView.colorGridColumn(index);
-		}
-		if (index > 0 && index <= LAST_NOTE_IN_TRACK_VIEW) {
-			trackView.clearColorGridColumn(index - 1);
-		}
-	}
+    private void onNoteLengthOutRun(int index) {
+        if (index >= 0 & index < LAST_NOTE_IN_TRACK_VIEW) {
+            trackView.colorGridColumn(index);
+        }
+        if (index > 0 && index <= LAST_NOTE_IN_TRACK_VIEW) {
+            trackView.clearColorGridColumn(index - 1);
+        }
+    }
 }

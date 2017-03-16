@@ -35,30 +35,30 @@ import java.util.List;
 
 public class PreferencesSensorMappingTest extends AndroidTestCase {
 
-	public void testNXTSensorToTextMapping() {
-		Context context = this.getContext().getApplicationContext();
+    public void testNXTSensorToTextMapping() {
+        Context context = this.getContext().getApplicationContext();
 
-		final List<Pair<Integer, NXTSensor.Sensor>> correctMapping = new ArrayList<Pair<Integer, NXTSensor.Sensor>>();
+        final List<Pair<Integer, NXTSensor.Sensor>> correctMapping = new ArrayList<Pair<Integer, NXTSensor.Sensor>>();
 
-		correctMapping.add(new Pair(R.string.nxt_no_sensor, NXTSensor.Sensor.NO_SENSOR));
-		correctMapping.add(new Pair(R.string.nxt_sensor_touch, NXTSensor.Sensor.TOUCH));
-		correctMapping.add(new Pair(R.string.nxt_sensor_sound, NXTSensor.Sensor.SOUND));
-		correctMapping.add(new Pair(R.string.nxt_sensor_light, NXTSensor.Sensor.LIGHT_INACTIVE));
-		correctMapping.add(new Pair(R.string.nxt_sensor_light_active, NXTSensor.Sensor.LIGHT_ACTIVE));
-		correctMapping.add(new Pair(R.string.nxt_sensor_ultrasonic, NXTSensor.Sensor.ULTRASONIC));
+        correctMapping.add(new Pair(R.string.nxt_no_sensor, NXTSensor.Sensor.NO_SENSOR));
+        correctMapping.add(new Pair(R.string.nxt_sensor_touch, NXTSensor.Sensor.TOUCH));
+        correctMapping.add(new Pair(R.string.nxt_sensor_sound, NXTSensor.Sensor.SOUND));
+        correctMapping.add(new Pair(R.string.nxt_sensor_light, NXTSensor.Sensor.LIGHT_INACTIVE));
+        correctMapping.add(new Pair(R.string.nxt_sensor_light_active, NXTSensor.Sensor.LIGHT_ACTIVE));
+        correctMapping.add(new Pair(R.string.nxt_sensor_ultrasonic, NXTSensor.Sensor.ULTRASONIC));
 
-		String[] sensorNames = context.getResources().getStringArray(R.array.nxt_sensor_chooser);
-		String[] sensorPreferencesCodes = NXTSensor.Sensor.getSensorCodes();
+        String[] sensorNames = context.getResources().getStringArray(R.array.nxt_sensor_chooser);
+        String[] sensorPreferencesCodes = NXTSensor.Sensor.getSensorCodes();
 
-		assertEquals("Wrong sensor name count", correctMapping.size(), sensorNames.length);
-		assertEquals("Wrong sensor preferences codes count", correctMapping.size(), sensorPreferencesCodes.length);
+        assertEquals("Wrong sensor name count", correctMapping.size(), sensorNames.length);
+        assertEquals("Wrong sensor preferences codes count", correctMapping.size(), sensorPreferencesCodes.length);
 
-		for (int i = 0; i < correctMapping.size(); ++i) {
-			assertEquals("Wrong mapping of nxt sensor names, maybe the order is wrong",
-					context.getString(correctMapping.get(i).first), sensorNames[i]);
+        for (int i = 0; i < correctMapping.size(); ++i) {
+            assertEquals("Wrong mapping of nxt sensor names, maybe the order is wrong",
+                    context.getString(correctMapping.get(i).first), sensorNames[i]);
 
-			assertEquals("Wrong mapping of nxt sensor preferences codes, maybe the order is wrong",
-					correctMapping.get(i).second.getSensorCode(), sensorPreferencesCodes[i]);
-		}
-	}
+            assertEquals("Wrong mapping of nxt sensor preferences codes, maybe the order is wrong",
+                    correctMapping.get(i).second.getSensorCode(), sensorPreferencesCodes[i]);
+        }
+    }
 }

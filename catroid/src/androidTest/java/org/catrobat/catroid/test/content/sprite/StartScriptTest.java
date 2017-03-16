@@ -36,25 +36,25 @@ import java.util.List;
 
 public class StartScriptTest extends AndroidTestCase {
 
-	public void testStartScript() throws InterruptedException {
-		double size = 300;
-		Sprite testSprite = new SingleSprite("testSprite");
-		Script testScript = new StartScript();
-		HideBrick hideBrick = new HideBrick();
-		SetSizeToBrick setSizeToBrick = new SetSizeToBrick(size);
+    public void testStartScript() throws InterruptedException {
+        double size = 300;
+        Sprite testSprite = new SingleSprite("testSprite");
+        Script testScript = new StartScript();
+        HideBrick hideBrick = new HideBrick();
+        SetSizeToBrick setSizeToBrick = new SetSizeToBrick(size);
 
-		testScript.addBrick(hideBrick);
-		testScript.addBrick(setSizeToBrick);
-		testSprite.addScript(testScript);
+        testScript.addBrick(hideBrick);
+        testScript.addBrick(setSizeToBrick);
+        testSprite.addScript(testScript);
 
-		testSprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
+        testSprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
 
-		while (!testSprite.look.getAllActionsAreFinished()) {
-			testSprite.look.act(1.0f);
-		}
+        while (!testSprite.look.getAllActionsAreFinished()) {
+            testSprite.look.act(1.0f);
+        }
 
-		assertFalse("Look is not hidden", testSprite.look.isLookVisible());
-		assertEquals("the size is not as expected", (float) size / 100, testSprite.look.getScaleX());
-		assertEquals("the size is not as expected", (float) size / 100, testSprite.look.getScaleY());
-	}
+        assertFalse("Look is not hidden", testSprite.look.isLookVisible());
+        assertEquals("the size is not as expected", (float) size / 100, testSprite.look.getScaleX());
+        assertEquals("the size is not as expected", (float) size / 100, testSprite.look.getScaleY());
+    }
 }

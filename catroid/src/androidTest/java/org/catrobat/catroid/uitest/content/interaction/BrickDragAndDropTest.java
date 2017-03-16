@@ -43,103 +43,103 @@ import java.util.List;
 
 public class BrickDragAndDropTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
-	public BrickDragAndDropTest() {
-		super(MainMenuActivity.class);
-	}
+    public BrickDragAndDropTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		UiTestUtils.createEmptyProject();
-		solo.waitForActivity(MainMenuActivity.class);
-		solo.sleep(300);
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
-	}
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        UiTestUtils.createEmptyProject();
+        solo.waitForActivity(MainMenuActivity.class);
+        solo.sleep(300);
+        UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
+    }
 
-	public void testClickOnEmptySpace() {
-		solo.clickOnScreen(20, ScreenValues.SCREEN_HEIGHT - 150);
-		solo.sleep(2000);
-		assertFalse("Brickcategories should not be shown", solo.searchText(solo.getString(R.string.categories)));
-	}
+    public void testClickOnEmptySpace() {
+        solo.clickOnScreen(20, ScreenValues.SCREEN_HEIGHT - 150);
+        solo.sleep(2000);
+        assertFalse("Brickcategories should not be shown", solo.searchText(solo.getString(R.string.categories)));
+    }
 
-	public void testPutHoveringBrickDown() {
-		// clicks on spriteName needed to get focus on listview for solo without adding hovering brick
+    public void testPutHoveringBrickDown() {
+        // clicks on spriteName needed to get focus on listview for solo without adding hovering brick
 
-		ListView view = UiTestUtils.getScriptListView(solo);
-		solo.waitForFragmentByTag(ScriptFragment.TAG);
-		solo.sleep(300);
-		BrickAdapter adapter = (BrickAdapter) view.getAdapter();
+        ListView view = UiTestUtils.getScriptListView(solo);
+        solo.waitForFragmentByTag(ScriptFragment.TAG);
+        solo.sleep(300);
+        BrickAdapter adapter = (BrickAdapter) view.getAdapter();
 
-		UiTestUtils.addNewBrick(solo, R.string.brick_set_x);
-		assertEquals("Wrong number of Bricks", 2, adapter.getCount());
+        UiTestUtils.addNewBrick(solo, R.string.brick_set_x);
+        assertEquals("Wrong number of Bricks", 2, adapter.getCount());
 
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_add);
-		solo.sleep(500);
-		assertFalse("Categories shouldn't be shown", solo.searchText(solo.getString(R.string.categories)));
-		UiTestUtils.dragFloatingBrickDownwards(solo);
-		solo.sleep(500);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_add);
+        solo.sleep(500);
+        assertFalse("Categories shouldn't be shown", solo.searchText(solo.getString(R.string.categories)));
+        UiTestUtils.dragFloatingBrickDownwards(solo);
+        solo.sleep(500);
 
-		UiTestUtils.addNewBrick(solo, R.string.brick_stop_all_sounds);
+        UiTestUtils.addNewBrick(solo, R.string.brick_stop_all_sounds);
 
-		List<Brick> brickListToCheck = ProjectManager.getInstance().getCurrentScript().getBrickList();
-		assertEquals("One Brick should be in bricklist, one hovering and therefore not in project yet", 1,
-				brickListToCheck.size());
-		assertEquals("Both bricks (plus ScriptBrick) should be present in the adapter", 3, adapter.getCount());
-		assertTrue("Set brick should be instance of SetXBrick", brickListToCheck.get(0) instanceof SetXBrick);
-		assertTrue("Set brick should be instance of SetXBrick", adapter.getItem(2) instanceof SetXBrick);
-		assertTrue("Hovering brick should be instance of StopAllSoundsBrick",
-				adapter.getItem(1) instanceof StopAllSoundsBrick);
+        List<Brick> brickListToCheck = ProjectManager.getInstance().getCurrentScript().getBrickList();
+        assertEquals("One Brick should be in bricklist, one hovering and therefore not in project yet", 1,
+                brickListToCheck.size());
+        assertEquals("Both bricks (plus ScriptBrick) should be present in the adapter", 3, adapter.getCount());
+        assertTrue("Set brick should be instance of SetXBrick", brickListToCheck.get(0) instanceof SetXBrick);
+        assertTrue("Set brick should be instance of SetXBrick", adapter.getItem(2) instanceof SetXBrick);
+        assertTrue("Hovering brick should be instance of StopAllSoundsBrick",
+                adapter.getItem(1) instanceof StopAllSoundsBrick);
 
-		solo.sleep(500);
-		UiTestUtils.dragFloatingBrickDownwards(solo);
-		solo.sleep(500);
-		assertEquals("Two Bricks should be in bricklist/project", 2, brickListToCheck.size());
-		assertTrue("First brick should be instance of SetXBrick", brickListToCheck.get(0) instanceof SetXBrick);
-		assertTrue("Second brick should be instance of StopAllSoundsBrick",
-				brickListToCheck.get(1) instanceof StopAllSoundsBrick);
+        solo.sleep(500);
+        UiTestUtils.dragFloatingBrickDownwards(solo);
+        solo.sleep(500);
+        assertEquals("Two Bricks should be in bricklist/project", 2, brickListToCheck.size());
+        assertTrue("First brick should be instance of SetXBrick", brickListToCheck.get(0) instanceof SetXBrick);
+        assertTrue("Second brick should be instance of StopAllSoundsBrick",
+                brickListToCheck.get(1) instanceof StopAllSoundsBrick);
 
-		UiTestUtils.addNewBrick(solo, R.string.brick_wait);
-		solo.sleep(500);
-		UiTestUtils.dragFloatingBrickUpwards(solo, 2);
-		solo.sleep(500);
+        UiTestUtils.addNewBrick(solo, R.string.brick_wait);
+        solo.sleep(500);
+        UiTestUtils.dragFloatingBrickUpwards(solo, 2);
+        solo.sleep(500);
 
-		if (solo.searchText(solo.getString(R.string.brick_context_dialog_move_brick), true)) {
-			solo.goBack();
-		}
+        if (solo.searchText(solo.getString(R.string.brick_context_dialog_move_brick), true)) {
+            solo.goBack();
+        }
 
-		ArrayList<Integer> yPositionList = UiTestUtils.getListItemYPositions(solo, 0);
+        ArrayList<Integer> yPositionList = UiTestUtils.getListItemYPositions(solo, 0);
 
-		//just to gain focus
-		solo.clickOnScreen(20, yPositionList.get(0));
-		solo.goBack();
+        //just to gain focus
+        solo.clickOnScreen(20, yPositionList.get(0));
+        solo.goBack();
 
-		solo.clickOnScreen(20, yPositionList.get(1));
-		solo.clickOnText(solo.getString(R.string.brick_context_dialog_move_brick));
+        solo.clickOnScreen(20, yPositionList.get(1));
+        solo.clickOnText(solo.getString(R.string.brick_context_dialog_move_brick));
 
-		UtilUi.updateScreenWidthAndHeight(solo.getCurrentActivity());
-		int height = ScreenValues.SCREEN_HEIGHT;
+        UtilUi.updateScreenWidthAndHeight(solo.getCurrentActivity());
+        int height = ScreenValues.SCREEN_HEIGHT;
 
-		solo.sleep(2000);
-		solo.drag(20, 20, 300, height - 20, 100);
+        solo.sleep(2000);
+        solo.drag(20, 20, 300, height - 20, 100);
 
-		solo.sleep(2000);
-		assertTrue("Last Brick should now be WaitBrick", adapter.getItem(3) instanceof WaitBrick);
-	}
+        solo.sleep(2000);
+        assertTrue("Last Brick should now be WaitBrick", adapter.getItem(3) instanceof WaitBrick);
+    }
 
-	public void testAddNewBrickFromAnotherCategory() {
-		int categoryStringId = UiTestUtils.getBrickCategory(solo, R.string.brick_set_x);
+    public void testAddNewBrickFromAnotherCategory() {
+        int categoryStringId = UiTestUtils.getBrickCategory(solo, R.string.brick_set_x);
 
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_add);
-		solo.clickOnText(solo.getString(categoryStringId));
-		solo.goBack();
-		categoryStringId = UiTestUtils.getBrickCategory(solo, R.string.brick_stop_all_sounds);
-		solo.clickOnText(solo.getString(categoryStringId));
-		solo.clickOnText(solo.getString(R.string.brick_stop_all_sounds));
-		solo.sleep(500);
-		UiTestUtils.dragFloatingBrickDownwards(solo);
-		solo.sleep(500);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_add);
+        solo.clickOnText(solo.getString(categoryStringId));
+        solo.goBack();
+        categoryStringId = UiTestUtils.getBrickCategory(solo, R.string.brick_stop_all_sounds);
+        solo.clickOnText(solo.getString(categoryStringId));
+        solo.clickOnText(solo.getString(R.string.brick_stop_all_sounds));
+        solo.sleep(500);
+        UiTestUtils.dragFloatingBrickDownwards(solo);
+        solo.sleep(500);
 
-		BrickAdapter adapter = (BrickAdapter) UiTestUtils.getScriptListView(solo).getAdapter();
-		assertEquals("Brick was not added.", 2, adapter.getCount());
-	}
+        BrickAdapter adapter = (BrickAdapter) UiTestUtils.getScriptListView(solo).getAdapter();
+        assertEquals("Brick was not added.", 2, adapter.getCount());
+    }
 }

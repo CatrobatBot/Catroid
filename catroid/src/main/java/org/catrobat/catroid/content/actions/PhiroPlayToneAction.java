@@ -38,62 +38,62 @@ import org.catrobat.catroid.formulaeditor.InterpretationException;
 
 public class PhiroPlayToneAction extends TemporalAction {
 
-	private Tone toneEnum;
-	private Formula durationInSeconds;
-	private Sprite sprite;
+    private Tone toneEnum;
+    private Formula durationInSeconds;
+    private Sprite sprite;
 
-	private BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
+    private BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
 
-	@Override
-	protected void update(float percent) {
-		int durationInterpretation;
+    @Override
+    protected void update(float percent) {
+        int durationInterpretation;
 
-		try {
-			durationInterpretation = durationInSeconds.interpretInteger(sprite);
-		} catch (InterpretationException interpretationException) {
-			durationInterpretation = 0;
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}
+        try {
+            durationInterpretation = durationInSeconds.interpretInteger(sprite);
+        } catch (InterpretationException interpretationException) {
+            durationInterpretation = 0;
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+        }
 
-		Phiro phiro = btService.getDevice(BluetoothDevice.PHIRO);
-		if (phiro == null) {
-			return;
-		}
+        Phiro phiro = btService.getDevice(BluetoothDevice.PHIRO);
+        if (phiro == null) {
+            return;
+        }
 
-		switch (toneEnum) {
-			case DO:
-				phiro.playTone(262, durationInterpretation);
-				break;
-			case RE:
-				phiro.playTone(294, durationInterpretation);
-				break;
-			case MI:
-				phiro.playTone(330, durationInterpretation);
-				break;
-			case FA:
-				phiro.playTone(349, durationInterpretation);
-				break;
-			case SO:
-				phiro.playTone(392, durationInterpretation);
-				break;
-			case LA:
-				phiro.playTone(440, durationInterpretation);
-				break;
-			case TI:
-				phiro.playTone(494, durationInterpretation);
-				break;
-		}
-	}
+        switch (toneEnum) {
+            case DO:
+                phiro.playTone(262, durationInterpretation);
+                break;
+            case RE:
+                phiro.playTone(294, durationInterpretation);
+                break;
+            case MI:
+                phiro.playTone(330, durationInterpretation);
+                break;
+            case FA:
+                phiro.playTone(349, durationInterpretation);
+                break;
+            case SO:
+                phiro.playTone(392, durationInterpretation);
+                break;
+            case LA:
+                phiro.playTone(440, durationInterpretation);
+                break;
+            case TI:
+                phiro.playTone(494, durationInterpretation);
+                break;
+        }
+    }
 
-	public void setSelectedTone(Tone toneEnum) {
-		this.toneEnum = toneEnum;
-	}
+    public void setSelectedTone(Tone toneEnum) {
+        this.toneEnum = toneEnum;
+    }
 
-	public void setDurationInSeconds(Formula durationInSeconds) {
-		this.durationInSeconds = durationInSeconds;
-	}
+    public void setDurationInSeconds(Formula durationInSeconds) {
+        this.durationInSeconds = durationInSeconds;
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 }

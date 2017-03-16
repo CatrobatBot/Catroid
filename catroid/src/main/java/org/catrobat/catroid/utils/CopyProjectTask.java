@@ -34,63 +34,63 @@ import java.io.File;
 import java.io.IOException;
 
 public class CopyProjectTask extends AsyncTask<String, Long, Boolean> {
-	private static final String TAG = CopyProjectTask.class.getSimpleName();
+    private static final String TAG = CopyProjectTask.class.getSimpleName();
 
-	private ProjectListFragment parentFragment;
-	private String newName;
+    private ProjectListFragment parentFragment;
+    private String newName;
 
-	public CopyProjectTask(ProjectListFragment parentActivity) {
-		this.parentFragment = parentActivity;
-	}
+    public CopyProjectTask(ProjectListFragment parentActivity) {
+        this.parentFragment = parentActivity;
+    }
 
-	@Override
-	protected Boolean doInBackground(String... projectNameArray) {
-		String newProjectName = projectNameArray[0];
-		newName = newProjectName;
-		int notificationId = StatusBarNotificationManager.getInstance().createCopyNotification(
-				parentFragment.getActivity(), newProjectName);
-		String oldProjectName = projectNameArray[1];
+    @Override
+    protected Boolean doInBackground(String... projectNameArray) {
+        String newProjectName = projectNameArray[0];
+        newName = newProjectName;
+        int notificationId = StatusBarNotificationManager.getInstance().createCopyNotification(
+                parentFragment.getActivity(), newProjectName);
+        String oldProjectName = projectNameArray[1];
 
-		try {
-			File oldProjectRootDirectory = new File(Utils.buildProjectPath(oldProjectName));
-			File newProjectRootDirectory = new File(Utils.buildProjectPath(newProjectName));
+        try {
+            File oldProjectRootDirectory = new File(Utils.buildProjectPath(oldProjectName));
+            File newProjectRootDirectory = new File(Utils.buildProjectPath(newProjectName));
 
-			StorageHandler.copyDirectory(newProjectRootDirectory, oldProjectRootDirectory);
+            StorageHandler.copyDirectory(newProjectRootDirectory, oldProjectRootDirectory);
 
-			Project copiedProject = StorageHandler.getInstance().loadProject(newProjectName, parentFragment.getActivity());
-			copiedProject.setName(newProjectName);
-			StorageHandler.getInstance().saveProject(copiedProject);
-		} catch (IOException exception) {
-			UtilFile.deleteDirectory(new File(Utils.buildProjectPath(newProjectName)));
-			Log.e(TAG, "Error while copying project, destroy newly created directories.", exception);
-			StatusBarNotificationManager.getInstance().cancelNotification(notificationId);
+            Project copiedProject = StorageHandler.getInstance().loadProject(newProjectName, parentFragment.getActivity());
+            copiedProject.setName(newProjectName);
+            StorageHandler.getInstance().saveProject(copiedProject);
+        } catch (IOException exception) {
+            UtilFile.deleteDirectory(new File(Utils.buildProjectPath(newProjectName)));
+            Log.e(TAG, "Error while copying project, destroy newly created directories.", exception);
+            StatusBarNotificationManager.getInstance().cancelNotification(notificationId);
 
-			return false;
-		}
-		StatusBarNotificationManager.getInstance().showOrUpdateNotification(notificationId, 100);
-		return true;
-	}
+            return false;
+        }
+        StatusBarNotificationManager.getInstance().showOrUpdateNotification(notificationId, 100);
+        return true;
+    }
 
-	@Override
-	protected void onPostExecute(Boolean result) {
-		super.onPostExecute(result);
+    @Override
+    protected void onPostExecute(Boolean result) {
+        super.onPostExecute(result);
 
-		//quickfix: if fragment is not attached an instrumentation fault occurs
-		//return if fragment is detached
-		if (!parentFragment.isAdded()) {
-			return;
-			//parentFragment.onAttach(parentActivity);
-		}
+        //quickfix: if fragment is not attached an instrumentation fault occurs
+        //return if fragment is detached
+        if (!parentFragment.isAdded()) {
+            return;
+            //parentFragment.onAttach(parentActivity);
+        }
 
-		if (!result) {
-			Utils.showErrorDialog(parentFragment.getActivity(), R.string.error_copy_project);
-			return;
-		}
+        if (!result) {
+            Utils.showErrorDialog(parentFragment.getActivity(), R.string.error_copy_project);
+            return;
+        }
 
-		ToastUtil.showSuccess(parentFragment.getActivity(),
-				parentFragment.getString(R.string.project_name) + " " + newName + " "
-						+ parentFragment.getString(R.string.copy_project_finished));
-		parentFragment.clearCheckedItems();
-		parentFragment.initializeList();
-	}
+        ToastUtil.showSuccess(parentFragment.getActivity(),
+                parentFragment.getString(R.string.project_name) + " " + newName + " "
+                        + parentFragment.getString(R.string.copy_project_finished));
+        parentFragment.clearCheckedItems();
+        parentFragment.initializeList();
+    }
 }

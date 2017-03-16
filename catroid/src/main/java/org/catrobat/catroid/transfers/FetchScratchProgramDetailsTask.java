@@ -42,116 +42,117 @@ import java.io.InterruptedIOException;
 
 public class FetchScratchProgramDetailsTask extends AsyncTask<Long, Void, ScratchProgramData> {
 
-	public interface ScratchProgramListTaskDelegate {
-		void onPreExecute();
-		void onPostExecute(ScratchProgramData programData);
-	}
+    public interface ScratchProgramListTaskDelegate {
+        void onPreExecute();
 
-	private static final String TAG = FetchScratchProgramDetailsTask.class.getSimpleName();
+        void onPostExecute(ScratchProgramData programData);
+    }
 
-	private Context context;
-	private Handler handler;
-	private ScratchProgramListTaskDelegate delegate = null;
-	private ScratchDataFetcher fetcher = null;
+    private static final String TAG = FetchScratchProgramDetailsTask.class.getSimpleName();
 
-	public FetchScratchProgramDetailsTask setContext(final Context context) {
-		this.context = context;
-		this.handler = new Handler(context.getMainLooper());
-		return this;
-	}
+    private Context context;
+    private Handler handler;
+    private ScratchProgramListTaskDelegate delegate = null;
+    private ScratchDataFetcher fetcher = null;
 
-	public FetchScratchProgramDetailsTask setDelegate(ScratchProgramListTaskDelegate delegate) {
-		this.delegate = delegate;
-		return this;
-	}
+    public FetchScratchProgramDetailsTask setContext(final Context context) {
+        this.context = context;
+        this.handler = new Handler(context.getMainLooper());
+        return this;
+    }
 
-	public FetchScratchProgramDetailsTask setFetcher(ScratchDataFetcher fetcher) {
-		this.fetcher = fetcher;
-		return this;
-	}
+    public FetchScratchProgramDetailsTask setDelegate(ScratchProgramListTaskDelegate delegate) {
+        this.delegate = delegate;
+        return this;
+    }
 
-	@Override
-	protected void onPreExecute() {
-		super.onPreExecute();
-		if (delegate != null) {
-			delegate.onPreExecute();
-		}
-	}
+    public FetchScratchProgramDetailsTask setFetcher(ScratchDataFetcher fetcher) {
+        this.fetcher = fetcher;
+        return this;
+    }
 
-	@Override
-	protected ScratchProgramData doInBackground(Long... params) {
-		Preconditions.checkArgument(params.length == 1, "No project ID given!");
-		final long projectID = params[0];
-		Preconditions.checkArgument(projectID > 0, "Invalid project ID given!");
-		try {
-			return fetchProjectData(projectID);
-		} catch (InterruptedIOException exception) {
-			Log.i(TAG, "Task has been cancelled in the meanwhile!");
-			return null;
-		}
-	}
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        if (delegate != null) {
+            delegate.onPreExecute();
+        }
+    }
 
-	public ScratchProgramData fetchProjectData(final long projectID) throws InterruptedIOException {
-		// exponential backoff
-		final int minTimeout = Constants.SCRATCH_HTTP_REQUEST_MIN_TIMEOUT;
-		final int maxNumRetries = Constants.SCRATCH_HTTP_REQUEST_MAX_NUM_OF_RETRIES;
+    @Override
+    protected ScratchProgramData doInBackground(Long... params) {
+        Preconditions.checkArgument(params.length == 1, "No project ID given!");
+        final long projectID = params[0];
+        Preconditions.checkArgument(projectID > 0, "Invalid project ID given!");
+        try {
+            return fetchProjectData(projectID);
+        } catch (InterruptedIOException exception) {
+            Log.i(TAG, "Task has been cancelled in the meanwhile!");
+            return null;
+        }
+    }
 
-		int delay;
+    public ScratchProgramData fetchProjectData(final long projectID) throws InterruptedIOException {
+        // exponential backoff
+        final int minTimeout = Constants.SCRATCH_HTTP_REQUEST_MIN_TIMEOUT;
+        final int maxNumRetries = Constants.SCRATCH_HTTP_REQUEST_MAX_NUM_OF_RETRIES;
 
-		for (int attempt = 0; attempt <= maxNumRetries; attempt++) {
-			if (isCancelled()) {
-				Log.i(TAG, "Task has been cancelled in the meanwhile!");
-				return null;
-			}
+        int delay;
 
-			try {
-				return fetcher.fetchScratchProgramDetails(projectID);
-			} catch (WebScratchProgramException e) {
-				String userErrorMessage = context.getString(R.string.error_scratch_program_not_accessible_any_more);
-				if (e.getStatusCode() == WebScratchProgramException.ERROR_PROGRAM_NOT_ACCESSIBLE) {
-					userErrorMessage = context.getString(R.string.error_scratch_program_not_accessible_any_more);
-				}
+        for (int attempt = 0; attempt <= maxNumRetries; attempt++) {
+            if (isCancelled()) {
+                Log.i(TAG, "Task has been cancelled in the meanwhile!");
+                return null;
+            }
 
-				final String finalUserErrorMessage = userErrorMessage;
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						ToastUtil.showError(context, finalUserErrorMessage);
-					}
-				});
+            try {
+                return fetcher.fetchScratchProgramDetails(projectID);
+            } catch (WebScratchProgramException e) {
+                String userErrorMessage = context.getString(R.string.error_scratch_program_not_accessible_any_more);
+                if (e.getStatusCode() == WebScratchProgramException.ERROR_PROGRAM_NOT_ACCESSIBLE) {
+                    userErrorMessage = context.getString(R.string.error_scratch_program_not_accessible_any_more);
+                }
 
-				return null;
-			} catch (WebconnectionException e) {
-				Log.e(TAG, e.getMessage() + "\n" + e.getStackTrace());
-				delay = minTimeout + (int) (minTimeout * Math.random() * (attempt + 1));
-				Log.i(TAG, "Retry #" + (attempt + 1) + " to fetch scratch project list scheduled in "
-						+ delay + " ms due to " + e.getLocalizedMessage());
-				try {
-					Thread.sleep(delay);
-				} catch (InterruptedException ex) {
-					Log.e(TAG, ex.getMessage());
-				}
-			}
-		}
-		Log.w(TAG, "Maximum number of " + (maxNumRetries + 1) + " attempts exceeded! Server not reachable?!");
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				ToastUtil.showError(context, context.getString(R.string.error_request_timeout));
-			}
-		});
-		return null;
-	}
+                final String finalUserErrorMessage = userErrorMessage;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ToastUtil.showError(context, finalUserErrorMessage);
+                    }
+                });
 
-	@Override
-	protected void onPostExecute(ScratchProgramData programData) {
-		super.onPostExecute(programData);
-		if (delegate != null && !isCancelled()) {
-			delegate.onPostExecute(programData);
-		}
-	}
+                return null;
+            } catch (WebconnectionException e) {
+                Log.e(TAG, e.getMessage() + "\n" + e.getStackTrace());
+                delay = minTimeout + (int) (minTimeout * Math.random() * (attempt + 1));
+                Log.i(TAG, "Retry #" + (attempt + 1) + " to fetch scratch project list scheduled in "
+                        + delay + " ms due to " + e.getLocalizedMessage());
+                try {
+                    Thread.sleep(delay);
+                } catch (InterruptedException ex) {
+                    Log.e(TAG, ex.getMessage());
+                }
+            }
+        }
+        Log.w(TAG, "Maximum number of " + (maxNumRetries + 1) + " attempts exceeded! Server not reachable?!");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ToastUtil.showError(context, context.getString(R.string.error_request_timeout));
+            }
+        });
+        return null;
+    }
 
-	private void runOnUiThread(Runnable r) {
-		handler.post(r);
-	}
+    @Override
+    protected void onPostExecute(ScratchProgramData programData) {
+        super.onPostExecute(programData);
+        if (delegate != null && !isCancelled()) {
+            delegate.onPostExecute(programData);
+        }
+    }
+
+    private void runOnUiThread(Runnable r) {
+        handler.post(r);
+    }
 }

@@ -30,18 +30,18 @@ import org.catrobat.catroid.stage.StageActivity;
 
 public class DeleteThisCloneAction extends TemporalAction {
 
-	private Sprite sprite;
+    private Sprite sprite;
 
-	@Override
-	protected void update(float percent) {
-		if (sprite == null) {
-			return;
-		}
+    @Override
+    protected void update(float percent) {
+        if (sprite == null) {
+            return;
+        }
 
-		StageActivity.stageListener.removeClonedSpriteFromStage(sprite);
-	}
+        StageActivity.stageListener.removeClonedSpriteFromStage(sprite);
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 }

@@ -30,63 +30,63 @@ import java.util.List;
 
 public class GridRow {
 
-	private final NoteName noteName;
-	private final SparseArray<List<GridRowPosition>> gridRowPositions;
+    private final NoteName noteName;
+    private final SparseArray<List<GridRowPosition>> gridRowPositions;
 
-	public GridRow(NoteName noteName, SparseArray<List<GridRowPosition>> gridRowPositions) {
-		this.noteName = noteName;
-		this.gridRowPositions = gridRowPositions;
-	}
+    public GridRow(NoteName noteName, SparseArray<List<GridRowPosition>> gridRowPositions) {
+        this.noteName = noteName;
+        this.gridRowPositions = gridRowPositions;
+    }
 
-	public NoteName getNoteName() {
-		return noteName;
-	}
+    public NoteName getNoteName() {
+        return noteName;
+    }
 
-	public SparseArray<List<GridRowPosition>> getGridRowPositions() {
-		return gridRowPositions;
-	}
+    public SparseArray<List<GridRowPosition>> getGridRowPositions() {
+        return gridRowPositions;
+    }
 
-	@Override
-	public int hashCode() {
-		int hashCode = 21;
-		int primeWithGoodCollisionPrevention = 31;
-		hashCode = primeWithGoodCollisionPrevention * hashCode + noteName.hashCode();
+    @Override
+    public int hashCode() {
+        int hashCode = 21;
+        int primeWithGoodCollisionPrevention = 31;
+        hashCode = primeWithGoodCollisionPrevention * hashCode + noteName.hashCode();
 
-		for (int i = 0; i < getGridRowPositions().size(); i++) {
-			hashCode = hashCode + primeWithGoodCollisionPrevention * getGridRowPositions().valueAt(i).hashCode();
-		}
+        for (int i = 0; i < getGridRowPositions().size(); i++) {
+            hashCode = hashCode + primeWithGoodCollisionPrevention * getGridRowPositions().valueAt(i).hashCode();
+        }
 
-		return hashCode;
-	}
+        return hashCode;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (!(o instanceof GridRow)) {
-			return false;
-		}
-		GridRow reference = (GridRow) o;
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof GridRow)) {
+            return false;
+        }
+        GridRow reference = (GridRow) o;
 
-		if (!reference.noteName.equals(noteName)) {
-			return false;
-		}
+        if (!reference.noteName.equals(noteName)) {
+            return false;
+        }
 
-		if (reference.getGridRowPositions().size() != getGridRowPositions().size()) {
-			return false;
-		}
-		for (int i = 0; i < reference.getGridRowPositions().size(); i++) {
-			if (reference.getGridRowPositions().keyAt(i) != getGridRowPositions().keyAt(i)) {
-				return false;
-			}
-			if (reference.getGridRowPositions().valueAt(i).size() != getGridRowPositions().valueAt(i).size()) {
-				return false;
-			}
-			if (!reference.getGridRowPositions().valueAt(i).containsAll(getGridRowPositions().valueAt(i))) {
-				return false;
-			}
-			if (!getGridRowPositions().valueAt(i).containsAll(reference.getGridRowPositions().valueAt(i))) {
-				return false;
-			}
-		}
-		return true;
-	}
+        if (reference.getGridRowPositions().size() != getGridRowPositions().size()) {
+            return false;
+        }
+        for (int i = 0; i < reference.getGridRowPositions().size(); i++) {
+            if (reference.getGridRowPositions().keyAt(i) != getGridRowPositions().keyAt(i)) {
+                return false;
+            }
+            if (reference.getGridRowPositions().valueAt(i).size() != getGridRowPositions().valueAt(i).size()) {
+                return false;
+            }
+            if (!reference.getGridRowPositions().valueAt(i).containsAll(getGridRowPositions().valueAt(i))) {
+                return false;
+            }
+            if (!getGridRowPositions().valueAt(i).containsAll(reference.getGridRowPositions().valueAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

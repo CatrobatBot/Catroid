@@ -32,24 +32,24 @@ import org.catrobat.catroid.formulaeditor.InterpretationException;
 
 public class SetPenSizeAction extends TemporalAction {
 
-	private Sprite sprite;
-	private Formula penSize;
+    private Sprite sprite;
+    private Formula penSize;
 
-	@Override
-	protected void update(float delta) {
-		try {
-			Float newSize = penSize == null ? Float.valueOf(0f) : penSize.interpretFloat(sprite);
-			sprite.penConfiguration.penSize = newSize;
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}
-	}
+    @Override
+    protected void update(float delta) {
+        try {
+            Float newSize = penSize == null ? Float.valueOf(0f) : penSize.interpretFloat(sprite);
+            sprite.penConfiguration.penSize = newSize;
+        } catch (InterpretationException interpretationException) {
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+        }
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setPenSize(Formula size) {
-		this.penSize = size;
-	}
+    public void setPenSize(Formula size) {
+        this.penSize = size;
+    }
 }

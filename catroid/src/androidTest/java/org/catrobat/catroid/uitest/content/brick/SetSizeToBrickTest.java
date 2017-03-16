@@ -52,121 +52,121 @@ import org.catrobat.catroid.utils.UtilFile;
 import java.io.File;
 
 public class SetSizeToBrickTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
-	private static final int SCREEN_WIDTH = 480;
-	private static final int SCREEN_HEIGHT = 800;
+    private static final int SCREEN_WIDTH = 480;
+    private static final int SCREEN_HEIGHT = 800;
 
-	private static final String TAG = SetSizeToBrickTest.class.getSimpleName();
+    private static final String TAG = SetSizeToBrickTest.class.getSimpleName();
 
-	private String projectName = "SetSizeToBrickTestProject";
-	private Project project;
-	private SetSizeToBrick setSizeToBrick;
-	private SetLookBrick setLookBrick;
-	private int imageRawId = org.catrobat.catroid.test.R.raw.red_quad;
+    private String projectName = "SetSizeToBrickTestProject";
+    private Project project;
+    private SetSizeToBrick setSizeToBrick;
+    private SetLookBrick setLookBrick;
+    private int imageRawId = org.catrobat.catroid.test.R.raw.red_quad;
 
-	public SetSizeToBrickTest() {
-		super(MainMenuActivity.class);
-	}
+    public SetSizeToBrickTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		createProject();
-		UiTestUtils.prepareStageForTest();
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo, 2);
-	}
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        createProject();
+        UiTestUtils.prepareStageForTest();
+        UiTestUtils.getIntoScriptActivityFromMainMenu(solo, 2);
+    }
 
-	@Override
-	public void tearDown() throws Exception {
-		File directory = new File(Constants.DEFAULT_ROOT + "/" + projectName);
-		if (directory.exists()) {
-			UtilFile.deleteDirectory(directory);
-		}
-		super.tearDown();
-	}
+    @Override
+    public void tearDown() throws Exception {
+        File directory = new File(Constants.DEFAULT_ROOT + "/" + projectName);
+        if (directory.exists()) {
+            UtilFile.deleteDirectory(directory);
+        }
+        super.tearDown();
+    }
 
-	public void testSetSizeToBrick() {
-		double newSize = 200;
+    public void testSetSizeToBrick() {
+        double newSize = 200;
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
-				R.id.brick_set_size_to_edit_text, newSize, Brick.BrickField.SIZE, setSizeToBrick);
+        UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
+                R.id.brick_set_size_to_edit_text, newSize, Brick.BrickField.SIZE, setSizeToBrick);
 
-		DisplayMetrics displayMetrics = new DisplayMetrics();
-		getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-		ScreenValues.SCREEN_WIDTH = displayMetrics.widthPixels;
-		ScreenValues.SCREEN_HEIGHT = displayMetrics.heightPixels;
+        ScreenValues.SCREEN_WIDTH = displayMetrics.widthPixels;
+        ScreenValues.SCREEN_HEIGHT = displayMetrics.heightPixels;
 
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
 
-		solo.assertCurrentActivity("Not in stage", StageActivity.class);
+        solo.assertCurrentActivity("Not in stage", StageActivity.class);
 
-		solo.sleep(400);
+        solo.sleep(400);
 
-		solo.goBack();
-		solo.clickOnText(solo.getString(R.string.stage_dialog_screenshot));
+        solo.goBack();
+        solo.clickOnText(solo.getString(R.string.stage_dialog_screenshot));
 
-		assertTrue("Successful screenshot Toast not found!",
-				solo.searchText(solo.getString(R.string.notification_screenshot_ok)));
+        assertTrue("Successful screenshot Toast not found!",
+                solo.searchText(solo.getString(R.string.notification_screenshot_ok)));
 
-		solo.clickOnText(solo.getString(R.string.stage_dialog_resume));
+        solo.clickOnText(solo.getString(R.string.stage_dialog_resume));
 
-		// -------------------------------------------------------------------------------------------------------------
-		Bitmap screenshot = BitmapFactory.decodeFile(Constants.DEFAULT_ROOT + "/" + projectName + "/"
-				+ StageListener.SCREENSHOT_MANUAL_FILE_NAME);
+        // -------------------------------------------------------------------------------------------------------------
+        Bitmap screenshot = BitmapFactory.decodeFile(Constants.DEFAULT_ROOT + "/" + projectName + "/"
+                + StageListener.SCREENSHOT_MANUAL_FILE_NAME);
 
-		BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inJustDecodeBounds = true;
-		Bitmap blackQuad = BitmapFactory.decodeFile(setLookBrick.getImagePath());
-		int blackQuadHeight = blackQuad.getHeight();
-		int blackQuadWidth = blackQuad.getWidth();
-		Log.v(TAG, "black_quad.png x: " + blackQuadHeight + " y: " + blackQuadWidth);
-		Log.v(TAG, "Screenshot height: " + ScreenValues.SCREEN_WIDTH + " width: " + ScreenValues.SCREEN_WIDTH);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        Bitmap blackQuad = BitmapFactory.decodeFile(setLookBrick.getImagePath());
+        int blackQuadHeight = blackQuad.getHeight();
+        int blackQuadWidth = blackQuad.getWidth();
+        Log.v(TAG, "black_quad.png x: " + blackQuadHeight + " y: " + blackQuadWidth);
+        Log.v(TAG, "Screenshot height: " + ScreenValues.SCREEN_WIDTH + " width: " + ScreenValues.SCREEN_WIDTH);
 
-		Log.v(TAG, (ScreenValues.SCREEN_WIDTH / 2) + (blackQuadHeight / 2) + 5 + "");
+        Log.v(TAG, (ScreenValues.SCREEN_WIDTH / 2) + (blackQuadHeight / 2) + 5 + "");
 
-		//Two times width, because of the quadratically screenshots
-		int colorInsideSizedQuad = screenshot.getPixel((ScreenValues.SCREEN_WIDTH / 2) + (blackQuadWidth / 2) + 5,
-				(ScreenValues.SCREEN_WIDTH / 2) + (blackQuadHeight / 2) + 5);
-		int colorOutsideSizedQuad = screenshot.getPixel(ScreenValues.SCREEN_WIDTH / 2 + blackQuadWidth + 10,
-				ScreenValues.SCREEN_WIDTH / 2 + blackQuadHeight + 10);
+        //Two times width, because of the quadratically screenshots
+        int colorInsideSizedQuad = screenshot.getPixel((ScreenValues.SCREEN_WIDTH / 2) + (blackQuadWidth / 2) + 5,
+                (ScreenValues.SCREEN_WIDTH / 2) + (blackQuadHeight / 2) + 5);
+        int colorOutsideSizedQuad = screenshot.getPixel(ScreenValues.SCREEN_WIDTH / 2 + blackQuadWidth + 10,
+                ScreenValues.SCREEN_WIDTH / 2 + blackQuadHeight + 10);
 
-		assertEquals("Image was not scaled up even though SetSizeTo was exectuted before!", Color.RED,
-				colorInsideSizedQuad);
-		assertEquals("Wrong stage background color!", Color.WHITE, colorOutsideSizedQuad);
-	}
+        assertEquals("Image was not scaled up even though SetSizeTo was exectuted before!", Color.RED,
+                colorInsideSizedQuad);
+        assertEquals("Wrong stage background color!", Color.WHITE, colorOutsideSizedQuad);
+    }
 
-	private void createProject() {
-		ScreenValues.SCREEN_HEIGHT = SCREEN_HEIGHT;
-		ScreenValues.SCREEN_WIDTH = SCREEN_WIDTH;
+    private void createProject() {
+        ScreenValues.SCREEN_HEIGHT = SCREEN_HEIGHT;
+        ScreenValues.SCREEN_WIDTH = SCREEN_WIDTH;
 
-		project = new Project(getActivity(), projectName);
-		Sprite sprite = new SingleSprite("cat");
-		Script script = new StartScript();
-		setSizeToBrick = new SetSizeToBrick(100);
-		setLookBrick = new SetLookBrick();
+        project = new Project(getActivity(), projectName);
+        Sprite sprite = new SingleSprite("cat");
+        Script script = new StartScript();
+        setSizeToBrick = new SetSizeToBrick(100);
+        setLookBrick = new SetLookBrick();
 
-		script.addBrick(setSizeToBrick);
-		script.addBrick(setLookBrick);
+        script.addBrick(setSizeToBrick);
+        script.addBrick(setLookBrick);
 
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-		StorageHandler.getInstance().saveProject(project);
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+        StorageHandler.getInstance().saveProject(project);
 
-		File image = UiTestUtils.saveFileToProject(projectName, project.getDefaultScene().getName(), "black_quad.png", imageRawId, getInstrumentation()
-				.getContext(), UiTestUtils.FileTypes.IMAGE);
-		Log.v(TAG, image.getName());
-		LookData lookData = new LookData();
-		lookData.setLookFilename(image.getName());
-		lookData.setLookName("image");
-		setLookBrick.setLook(lookData);
-		sprite.getLookDataList().add(lookData);
-		ProjectManager.getInstance().getFileChecksumContainer()
-				.addChecksum(lookData.getChecksum(), image.getAbsolutePath());
-		StorageHandler.getInstance().saveProject(project);
-	}
+        File image = UiTestUtils.saveFileToProject(projectName, project.getDefaultScene().getName(), "black_quad.png", imageRawId, getInstrumentation()
+                .getContext(), UiTestUtils.FileTypes.IMAGE);
+        Log.v(TAG, image.getName());
+        LookData lookData = new LookData();
+        lookData.setLookFilename(image.getName());
+        lookData.setLookName("image");
+        setLookBrick.setLook(lookData);
+        sprite.getLookDataList().add(lookData);
+        ProjectManager.getInstance().getFileChecksumContainer()
+                .addChecksum(lookData.getChecksum(), image.getAbsolutePath());
+        StorageHandler.getInstance().saveProject(project);
+    }
 }

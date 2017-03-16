@@ -53,216 +53,216 @@ import org.catrobat.catroid.utils.ToastUtil;
 import org.catrobat.catroid.utils.Utils;
 
 public class OverwriteRenameMediaDialog extends DialogFragment implements OnClickListener {
-	protected RadioButton replaceButton;
-	protected RadioButton renameButton;
-	protected String mediaName;
-	protected String url;
-	protected String mediaType;
-	protected String filePath;
-	protected String callingActivity;
-	protected Context context;
-	protected WebViewActivity webViewActivity;
-	protected EditText mediaText;
-	protected TextView mediaTextView;
-	protected View mediaTextLine;
+    protected RadioButton replaceButton;
+    protected RadioButton renameButton;
+    protected String mediaName;
+    protected String url;
+    protected String mediaType;
+    protected String filePath;
+    protected String callingActivity;
+    protected Context context;
+    protected WebViewActivity webViewActivity;
+    protected EditText mediaText;
+    protected TextView mediaTextView;
+    protected View mediaTextLine;
 
-	public static final String DIALOG_FRAGMENT_TAG = "overwrite_rename_media";
+    public static final String DIALOG_FRAGMENT_TAG = "overwrite_rename_media";
 
-	public OverwriteRenameMediaDialog() {
-		super();
-	}
+    public OverwriteRenameMediaDialog() {
+        super();
+    }
 
-	public void setMediaName(String mediaName) {
-		this.mediaName = mediaName;
-	}
+    public void setMediaName(String mediaName) {
+        this.mediaName = mediaName;
+    }
 
-	public void setURL(String url) {
-		this.url = url;
-	}
+    public void setURL(String url) {
+        this.url = url;
+    }
 
-	public void setMediaType(String type) {
-		this.mediaType = type;
-	}
+    public void setMediaType(String type) {
+        this.mediaType = type;
+    }
 
-	public void setFilePath(String path) {
-		this.filePath = path;
-	}
+    public void setFilePath(String path) {
+        this.filePath = path;
+    }
 
-	public void setCallingActivity(String activity) {
-		this.callingActivity = activity;
-	}
+    public void setCallingActivity(String activity) {
+        this.callingActivity = activity;
+    }
 
-	public void setContext(Context context) {
-		this.context = context;
-	}
+    public void setContext(Context context) {
+        this.context = context;
+    }
 
-	public void setWebViewActivity(WebViewActivity activity) {
-		this.webViewActivity = activity;
-	}
+    public void setWebViewActivity(WebViewActivity activity) {
+        this.webViewActivity = activity;
+    }
 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_overwrite_media, null);
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_overwrite_media, null);
 
-		replaceButton = (RadioButton) dialogView.findViewById(R.id.dialog_overwrite_media_radio_replace);
-		replaceButton.setOnClickListener(this);
-		renameButton = (RadioButton) dialogView.findViewById(R.id.dialog_overwrite_media_radio_rename);
-		renameButton.setOnClickListener(this);
-		mediaText = (EditText) dialogView.findViewById(R.id.dialog_overwrite_media_edit);
-		mediaText.setText(mediaName);
-		mediaTextView = (TextView) dialogView.findViewById(R.id.dialog_overwrite_media_edit_text);
-		mediaTextLine = dialogView.findViewById(R.id.dialog_overwrite_media_edit_line);
+        replaceButton = (RadioButton) dialogView.findViewById(R.id.dialog_overwrite_media_radio_replace);
+        replaceButton.setOnClickListener(this);
+        renameButton = (RadioButton) dialogView.findViewById(R.id.dialog_overwrite_media_radio_rename);
+        renameButton.setOnClickListener(this);
+        mediaText = (EditText) dialogView.findViewById(R.id.dialog_overwrite_media_edit);
+        mediaText.setText(mediaName);
+        mediaTextView = (TextView) dialogView.findViewById(R.id.dialog_overwrite_media_edit_text);
+        mediaTextLine = dialogView.findViewById(R.id.dialog_overwrite_media_edit_line);
 
-		final int header;
-		final int replaceText;
-		final int renameText;
-		final int renameHeaderText;
-		switch (mediaType) {
-			case Constants.MEDIA_TYPE_LOOK:
-				header = R.string.look_rename_overwrite;
-				replaceText = R.string.overwrite_replace_look;
-				renameText = R.string.overwrite_rename_look;
-				renameHeaderText = R.string.new_look_name;
-				break;
-			case Constants.MEDIA_TYPE_SOUND:
-				header = R.string.rename_sound_overwrite;
-				replaceText = R.string.overwrite_replace_sound;
-				renameText = R.string.overwrite_rename_sound;
-				renameHeaderText = R.string.new_sound_name;
-				break;
-			default:
-				header = R.string.rename_sprite_dialog;
-				replaceText = R.string.overwrite_replace_default;
-				renameText = R.string.overwrite_rename_default;
-				renameHeaderText = R.string.new_sound_name;
-		}
+        final int header;
+        final int replaceText;
+        final int renameText;
+        final int renameHeaderText;
+        switch (mediaType) {
+            case Constants.MEDIA_TYPE_LOOK:
+                header = R.string.look_rename_overwrite;
+                replaceText = R.string.overwrite_replace_look;
+                renameText = R.string.overwrite_rename_look;
+                renameHeaderText = R.string.new_look_name;
+                break;
+            case Constants.MEDIA_TYPE_SOUND:
+                header = R.string.rename_sound_overwrite;
+                replaceText = R.string.overwrite_replace_sound;
+                renameText = R.string.overwrite_rename_sound;
+                renameHeaderText = R.string.new_sound_name;
+                break;
+            default:
+                header = R.string.rename_sprite_dialog;
+                replaceText = R.string.overwrite_replace_default;
+                renameText = R.string.overwrite_rename_default;
+                renameHeaderText = R.string.new_sound_name;
+        }
 
-		replaceButton.setText(replaceText);
-		renameButton.setText(renameText);
-		mediaTextView.setText(renameHeaderText);
+        replaceButton.setText(replaceText);
+        renameButton.setText(renameText);
+        mediaTextView.setText(renameHeaderText);
 
-		Dialog dialog = new AlertDialog.Builder(getActivity()).setView(dialogView).setTitle(header)
-				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dismiss();
-					}
-				}).create();
+        Dialog dialog = new AlertDialog.Builder(getActivity()).setView(dialogView).setTitle(header)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dismiss();
+                    }
+                }).create();
 
-		dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-		dialog.setOnShowListener(new OnShowListener() {
-			@Override
-			public void onShow(final DialogInterface dialog) {
-				Button positiveButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-				positiveButton.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						handleOkButton();
-					}
-				});
-			}
-		});
+        dialog.setOnShowListener(new OnShowListener() {
+            @Override
+            public void onShow(final DialogInterface dialog) {
+                Button positiveButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                positiveButton.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        handleOkButton();
+                    }
+                });
+            }
+        });
 
-		dialog.setOnKeyListener(new OnKeyListener() {
-			@Override
-			public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-				if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-					boolean okButtonResult = handleOkButton();
-					if (!okButtonResult) {
-						return false;
-					} else {
-						dismiss();
-					}
-					return okButtonResult;
-				} else if (keyCode == KeyEvent.KEYCODE_BACK) {
-					dismiss();
-					return true;
-				}
-				return false;
-			}
-		});
+        dialog.setOnKeyListener(new OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                    boolean okButtonResult = handleOkButton();
+                    if (!okButtonResult) {
+                        return false;
+                    } else {
+                        dismiss();
+                    }
+                    return okButtonResult;
+                } else if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    dismiss();
+                    return true;
+                }
+                return false;
+            }
+        });
 
-		return dialog;
-	}
+        return dialog;
+    }
 
-	@Override
-	public void onClick(View view) {
-		switch (view.getId()) {
-			case R.id.dialog_overwrite_media_radio_replace:
-				mediaTextView.setVisibility(TextView.GONE);
-				mediaTextLine.setVisibility(View.GONE);
-				mediaText.setVisibility(EditText.GONE);
-				break;
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.dialog_overwrite_media_radio_replace:
+                mediaTextView.setVisibility(TextView.GONE);
+                mediaTextLine.setVisibility(View.GONE);
+                mediaText.setVisibility(EditText.GONE);
+                break;
 
-			case R.id.dialog_overwrite_media_radio_rename:
-				mediaTextView.setVisibility(TextView.VISIBLE);
-				mediaTextLine.setVisibility(View.VISIBLE);
-				mediaText.setVisibility(EditText.VISIBLE);
-				break;
+            case R.id.dialog_overwrite_media_radio_rename:
+                mediaTextView.setVisibility(TextView.VISIBLE);
+                mediaTextLine.setVisibility(View.VISIBLE);
+                mediaText.setVisibility(EditText.VISIBLE);
+                break;
 
-			default:
-				break;
-		}
-	}
+            default:
+                break;
+        }
+    }
 
-	private boolean handleOkButton() {
-		if (replaceButton.isChecked()) {
-			switch (mediaType) {
-				case Constants.MEDIA_TYPE_LOOK:
-					LookData lookToRemove = null;
-					for (LookData lookData : ProjectManager.getInstance().getCurrentSprite().getLookDataList()) {
-						if (lookData.getLookName().compareTo(mediaName) == 0) {
-							lookToRemove = lookData;
-							ProjectManager.getInstance().getCurrentSprite().getLookDataList().remove(lookToRemove);
-							StorageHandler.getInstance().deleteFile(lookToRemove.getAbsolutePath(), false);
-							break;
-						}
-					}
-					break;
-				case Constants.MEDIA_TYPE_SOUND:
-					SoundInfo soundToRemove = null;
-					for (SoundInfo soundInfo : ProjectManager.getInstance().getCurrentSprite().getSoundList()) {
-						if (soundInfo.getTitle().compareTo(mediaName) == 0) {
-							soundToRemove = soundInfo;
-							ProjectManager.getInstance().getCurrentSprite().getSoundList().remove(soundToRemove);
-							StorageHandler.getInstance().deleteFile(soundToRemove.getAbsolutePath(), false);
-							break;
-						}
-					}
-					break;
-			}
-			DownloadUtil.getInstance().startMediaDownload(context, url, mediaName, filePath);
-		} else if (renameButton.isChecked()) {
-			String newMediaName = mediaText.getText().toString();
-			switch (mediaType) {
-				case Constants.MEDIA_TYPE_LOOK:
-					if (callingActivity.contains(LookFragment.TAG)) {
-						if (Utils.checkIfLookExists(newMediaName)) {
-							ToastUtil.showError(context, R.string.look_rename_overwrite);
-							return false;
-						}
-					} else {
-						return true;
-					}
-					break;
-				case Constants.MEDIA_TYPE_SOUND:
-					if (Utils.checkIfSoundExists(newMediaName)) {
-						ToastUtil.showError(context, R.string.rename_sound_overwrite);
-						return false;
-					}
-					break;
-			}
-			filePath = filePath.replace(mediaName, newMediaName);
+    private boolean handleOkButton() {
+        if (replaceButton.isChecked()) {
+            switch (mediaType) {
+                case Constants.MEDIA_TYPE_LOOK:
+                    LookData lookToRemove = null;
+                    for (LookData lookData : ProjectManager.getInstance().getCurrentSprite().getLookDataList()) {
+                        if (lookData.getLookName().compareTo(mediaName) == 0) {
+                            lookToRemove = lookData;
+                            ProjectManager.getInstance().getCurrentSprite().getLookDataList().remove(lookToRemove);
+                            StorageHandler.getInstance().deleteFile(lookToRemove.getAbsolutePath(), false);
+                            break;
+                        }
+                    }
+                    break;
+                case Constants.MEDIA_TYPE_SOUND:
+                    SoundInfo soundToRemove = null;
+                    for (SoundInfo soundInfo : ProjectManager.getInstance().getCurrentSprite().getSoundList()) {
+                        if (soundInfo.getTitle().compareTo(mediaName) == 0) {
+                            soundToRemove = soundInfo;
+                            ProjectManager.getInstance().getCurrentSprite().getSoundList().remove(soundToRemove);
+                            StorageHandler.getInstance().deleteFile(soundToRemove.getAbsolutePath(), false);
+                            break;
+                        }
+                    }
+                    break;
+            }
+            DownloadUtil.getInstance().startMediaDownload(context, url, mediaName, filePath);
+        } else if (renameButton.isChecked()) {
+            String newMediaName = mediaText.getText().toString();
+            switch (mediaType) {
+                case Constants.MEDIA_TYPE_LOOK:
+                    if (callingActivity.contains(LookFragment.TAG)) {
+                        if (Utils.checkIfLookExists(newMediaName)) {
+                            ToastUtil.showError(context, R.string.look_rename_overwrite);
+                            return false;
+                        }
+                    } else {
+                        return true;
+                    }
+                    break;
+                case Constants.MEDIA_TYPE_SOUND:
+                    if (Utils.checkIfSoundExists(newMediaName)) {
+                        ToastUtil.showError(context, R.string.rename_sound_overwrite);
+                        return false;
+                    }
+                    break;
+            }
+            filePath = filePath.replace(mediaName, newMediaName);
 
-			DownloadUtil.getInstance().startMediaDownload(context, url, newMediaName, filePath);
-		}
-		dismiss();
+            DownloadUtil.getInstance().startMediaDownload(context, url, newMediaName, filePath);
+        }
+        dismiss();
 
-		return true;
-	}
+        return true;
+    }
 }

@@ -32,22 +32,22 @@ import org.catrobat.catroid.content.Sprite;
 
 public class HideActionTest extends AndroidTestCase {
 
-	public void testHide() {
-		Sprite sprite = new SingleSprite("new SingleSprite");
-		assertTrue("Unexpected default visibility", sprite.look.isVisible());
-		ActionFactory factory = sprite.getActionFactory();
-		Action action = factory.createHideAction(sprite);
-		action.act(1.0f);
-		assertFalse("Sprite is still visible after HideBrick executed", sprite.look.isLookVisible());
-	}
+    public void testHide() {
+        Sprite sprite = new SingleSprite("new SingleSprite");
+        assertTrue("Unexpected default visibility", sprite.look.isVisible());
+        ActionFactory factory = sprite.getActionFactory();
+        Action action = factory.createHideAction(sprite);
+        action.act(1.0f);
+        assertFalse("Sprite is still visible after HideBrick executed", sprite.look.isLookVisible());
+    }
 
-	public void testNullSprite() {
-		ActionFactory factory = new ActionFactory();
-		Action action = factory.createHideAction(null);
-		try {
-			action.act(1.0f);
-			fail("Execution of HideBrick with null Sprite did not cause a NullPointerException to be thrown");
-		} catch (NullPointerException expected) {
-		}
-	}
+    public void testNullSprite() {
+        ActionFactory factory = new ActionFactory();
+        Action action = factory.createHideAction(null);
+        try {
+            action.act(1.0f);
+            fail("Execution of HideBrick with null Sprite did not cause a NullPointerException to be thrown");
+        } catch (NullPointerException expected) {
+        }
+    }
 }

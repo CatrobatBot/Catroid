@@ -28,6 +28,6 @@ import java.util.UUID;
 
 public interface BluetoothConnectionFactory {
 
-	<T extends BluetoothDevice> BluetoothConnection createBTConnectionForDevice(Class<T> bluetoothDeviceType,
-			String address, UUID deviceUUID, Context applicationContext);
+    <T extends BluetoothDevice> BluetoothConnection createBTConnectionForDevice(Class<T> bluetoothDeviceType,
+                                                                                String address, UUID deviceUUID, Context applicationContext);
 }

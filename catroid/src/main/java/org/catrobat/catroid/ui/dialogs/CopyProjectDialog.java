@@ -29,35 +29,35 @@ import org.catrobat.catroid.utils.Utils;
 
 public class CopyProjectDialog extends TextDialog {
 
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_copy_project";
+    public static final String DIALOG_FRAGMENT_TAG = "dialog_copy_project";
 
-	public CopyProjectDialog(int title, int inputLabel, String previousText) {
-		super(title, inputLabel, previousText, false);
-	}
+    public CopyProjectDialog(int title, int inputLabel, String previousText) {
+        super(title, inputLabel, previousText, false);
+    }
 
-	@Override
-	protected boolean handlePositiveButtonClick() {
-		String newProjectName = input.getText().toString().trim();
+    @Override
+    protected boolean handlePositiveButtonClick() {
+        String newProjectName = input.getText().toString().trim();
 
-		boolean newNameConsistsOfSpacesOnly = newProjectName.isEmpty();
+        boolean newNameConsistsOfSpacesOnly = newProjectName.isEmpty();
 
-		if (newNameConsistsOfSpacesOnly) {
-			input.setError(getString(R.string.name_consists_of_spaces_only));
-			return false;
-		}
+        if (newNameConsistsOfSpacesOnly) {
+            input.setError(getString(R.string.name_consists_of_spaces_only));
+            return false;
+        }
 
-		if (Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase(newProjectName)) {
-			input.setError(getString(R.string.error_project_exists));
-			return false;
-		}
+        if (Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase(newProjectName)) {
+            input.setError(getString(R.string.error_project_exists));
+            return false;
+        }
 
-		new CopyProjectTask((ProjectListFragment) getTargetFragment()).execute(newProjectName, previousText);
-		dismiss();
+        new CopyProjectTask((ProjectListFragment) getTargetFragment()).execute(newProjectName, previousText);
+        dismiss();
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	protected void handleNegativeButtonClick() {
-	}
+    @Override
+    protected void handleNegativeButtonClick() {
+    }
 }

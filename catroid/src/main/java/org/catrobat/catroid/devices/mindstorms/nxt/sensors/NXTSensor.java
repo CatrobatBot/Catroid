@@ -37,160 +37,160 @@ import java.util.Locale;
 
 public abstract class NXTSensor implements MindstormsSensor {
 
-	public enum Sensor {
-		NO_SENSOR,
-		TOUCH,
-		SOUND,
-		LIGHT_INACTIVE,
-		LIGHT_ACTIVE,
-		ULTRASONIC;
+    public enum Sensor {
+        NO_SENSOR,
+        TOUCH,
+        SOUND,
+        LIGHT_INACTIVE,
+        LIGHT_ACTIVE,
+        ULTRASONIC;
 
-		public static String[] getSensorCodes() {
-			String[] valueStrings = new String[values().length];
+        public static String[] getSensorCodes() {
+            String[] valueStrings = new String[values().length];
 
-			for (int i = 0; i < values().length; ++i) {
-				valueStrings[i] = values()[i].name();
-			}
+            for (int i = 0; i < values().length; ++i) {
+                valueStrings[i] = values()[i].name();
+            }
 
-			return valueStrings;
-		}
+            return valueStrings;
+        }
 
-		public String getSensorCode() {
-			return getSensorCode(this);
-		}
+        public String getSensorCode() {
+            return getSensorCode(this);
+        }
 
-		public static String getSensorCode(NXTSensor.Sensor sensor) {
-			return sensor.name();
-		}
+        public static String getSensorCode(NXTSensor.Sensor sensor) {
+            return sensor.name();
+        }
 
-		public static NXTSensor.Sensor getSensorFromSensorCode(String sensorCode) {
-			if (sensorCode == null) {
-				return Sensor.NO_SENSOR;
-			}
+        public static NXTSensor.Sensor getSensorFromSensorCode(String sensorCode) {
+            if (sensorCode == null) {
+                return Sensor.NO_SENSOR;
+            }
 
-			try {
-				return valueOf(sensorCode);
-			} catch (IllegalArgumentException e) {
-				return Sensor.NO_SENSOR;
-			}
-		}
-	}
+            try {
+                return valueOf(sensorCode);
+            } catch (IllegalArgumentException e) {
+                return Sensor.NO_SENSOR;
+            }
+        }
+    }
 
-	protected final int port;
-	protected final NXTSensorType sensorType;
-	protected final NXTSensorMode sensorMode;
-	protected final int updateInterval = 250;
+    protected final int port;
+    protected final NXTSensorType sensorType;
+    protected final NXTSensorMode sensorMode;
+    protected final int updateInterval = 250;
 
-	protected final MindstormsConnection connection;
+    protected final MindstormsConnection connection;
 
-	protected boolean hasInit;
-	protected int lastValidValue = 0;
+    protected boolean hasInit;
+    protected int lastValidValue = 0;
 
-	public static final String TAG = NXTSensor.class.getSimpleName();
+    public static final String TAG = NXTSensor.class.getSimpleName();
 
-	public NXTSensor(int port, NXTSensorType sensorType, NXTSensorMode sensorMode, MindstormsConnection connection) {
-		this.port = port;
-		this.sensorType = sensorType;
-		this.sensorMode = sensorMode;
+    public NXTSensor(int port, NXTSensorType sensorType, NXTSensorMode sensorMode, MindstormsConnection connection) {
+        this.port = port;
+        this.sensorType = sensorType;
+        this.sensorMode = sensorMode;
 
-		this.connection = connection;
-	}
+        this.connection = connection;
+    }
 
-	protected void updateTypeAndMode() {
+    protected void updateTypeAndMode() {
 
-		Command command = new Command(CommandType.DIRECT_COMMAND, CommandByte.SET_INPUT_MODE, true);
-		command.append((byte) port);
-		command.append(sensorType.getByte());
-		command.append(sensorMode.getByte());
+        Command command = new Command(CommandType.DIRECT_COMMAND, CommandByte.SET_INPUT_MODE, true);
+        command.append((byte) port);
+        command.append(sensorType.getByte());
+        command.append(sensorMode.getByte());
 
-		NXTReply reply = new NXTReply(connection.sendAndReceive(command));
-		NXTError.checkForError(reply, 3);
-	}
+        NXTReply reply = new NXTReply(connection.sendAndReceive(command));
+        NXTError.checkForError(reply, 3);
+    }
 
-	protected int getScaledValue() {
-		return getSensorReadings().scaled;
-	}
+    protected int getScaledValue() {
+        return getSensorReadings().scaled;
+    }
 
-	protected int getRawValue() {
-		return getSensorReadings().raw;
-	}
+    protected int getRawValue() {
+        return getSensorReadings().raw;
+    }
 
-	protected int getNormalizedValue() {
-		return getSensorReadings().normalized;
-	}
+    protected int getNormalizedValue() {
+        return getSensorReadings().normalized;
+    }
 
-	public SensorReadings getSensorReadings() {
-		if (!hasInit) {
-			initialize();
-		}
+    public SensorReadings getSensorReadings() {
+        if (!hasInit) {
+            initialize();
+        }
 
-		SensorReadings sensorReadings = new SensorReadings();
-		Command command = new Command(CommandType.DIRECT_COMMAND, CommandByte.GET_INPUT_VALUES, true);
-		command.append((byte) port);
-		NXTReply reply = new NXTReply(connection.sendAndReceive(command));
-		NXTError.checkForError(reply, 16);
+        SensorReadings sensorReadings = new SensorReadings();
+        Command command = new Command(CommandType.DIRECT_COMMAND, CommandByte.GET_INPUT_VALUES, true);
+        command.append((byte) port);
+        NXTReply reply = new NXTReply(connection.sendAndReceive(command));
+        NXTError.checkForError(reply, 16);
 
-		sensorReadings.raw = reply.getShort(8);
-		sensorReadings.normalized = reply.getShort(10);
-		sensorReadings.scaled = reply.getShort(12);
-		return sensorReadings;
-	}
+        sensorReadings.raw = reply.getShort(8);
+        sensorReadings.normalized = reply.getShort(10);
+        sensorReadings.scaled = reply.getShort(12);
+        return sensorReadings;
+    }
 
-	protected void initialize() {
-		if (connection != null && connection.isConnected()) {
-			updateTypeAndMode();
-			try {
-				Thread.sleep(100);
-				resetScaledValue();
-				Thread.sleep(100);
-				updateTypeAndMode();
-				hasInit = true;
-			} catch (InterruptedException e) {
-				hasInit = false;
-			}
-		} else {
-			hasInit = false;
-		}
-	}
+    protected void initialize() {
+        if (connection != null && connection.isConnected()) {
+            updateTypeAndMode();
+            try {
+                Thread.sleep(100);
+                resetScaledValue();
+                Thread.sleep(100);
+                updateTypeAndMode();
+                hasInit = true;
+            } catch (InterruptedException e) {
+                hasInit = false;
+            }
+        } else {
+            hasInit = false;
+        }
+    }
 
-	protected void resetScaledValue() {
-		Command command = new Command(CommandType.DIRECT_COMMAND, CommandByte.RESET_INPUT_SCALED_VALUE, false);
-		command.append((byte) port);
-		connection.send(command);
-	}
+    protected void resetScaledValue() {
+        Command command = new Command(CommandType.DIRECT_COMMAND, CommandByte.RESET_INPUT_SCALED_VALUE, false);
+        command.append((byte) port);
+        connection.send(command);
+    }
 
-	private static class SensorReadings {
-		public int raw;
-		public int normalized;
-		public int scaled;
-	}
+    private static class SensorReadings {
+        public int raw;
+        public int normalized;
+        public int scaled;
+    }
 
-	@Override
-	public int getUpdateInterval() {
-		return updateInterval;
-	}
+    @Override
+    public int getUpdateInterval() {
+        return updateInterval;
+    }
 
-	@Override
-	public void updateLastSensorValue() {
-		try {
-			lastValidValue = getValue();
-		} catch (MindstormsException e) {
-			Log.e(TAG, e.getMessage());
-		}
-	}
+    @Override
+    public void updateLastSensorValue() {
+        try {
+            lastValidValue = getValue();
+        } catch (MindstormsException e) {
+            Log.e(TAG, e.getMessage());
+        }
+    }
 
-	@Override
-	public int getLastSensorValue() {
-		return lastValidValue;
-	}
+    @Override
+    public int getLastSensorValue() {
+        return lastValidValue;
+    }
 
-	@Override
-	public String getName() {
-		return String.format(Locale.getDefault(), "%s_%s_%d", TAG, sensorType.name(), port);
-	}
+    @Override
+    public String getName() {
+        return String.format(Locale.getDefault(), "%s_%s_%d", TAG, sensorType.name(), port);
+    }
 
-	@Override
-	public int getConnectedPort() {
-		return port;
-	}
+    @Override
+    public int getConnectedPort() {
+        return port;
+    }
 }

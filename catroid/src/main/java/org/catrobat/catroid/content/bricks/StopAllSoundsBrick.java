@@ -34,47 +34,47 @@ import org.catrobat.catroid.content.Sprite;
 import java.util.List;
 
 public class StopAllSoundsBrick extends BrickBaseType {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public StopAllSoundsBrick() {
-	}
+    public StopAllSoundsBrick() {
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return NO_RESOURCES;
-	}
+    @Override
+    public int getRequiredResources() {
+        return NO_RESOURCES;
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		view = View.inflate(context, R.layout.brick_stop_all_sounds, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
-		setCheckboxView(R.id.brick_stop_all_sounds_checkbox);
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        view = View.inflate(context, R.layout.brick_stop_all_sounds, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        setCheckboxView(R.id.brick_stop_all_sounds_checkbox);
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		StopAllSoundsBrick copyBrick = (StopAllSoundsBrick) clone();
-		return copyBrick;
-	}
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        StopAllSoundsBrick copyBrick = (StopAllSoundsBrick) clone();
+        return copyBrick;
+    }
 
-	@Override
-	public Brick clone() {
-		return new StopAllSoundsBrick();
-	}
+    @Override
+    public Brick clone() {
+        return new StopAllSoundsBrick();
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		return View.inflate(context, R.layout.brick_stop_all_sounds, null);
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        return View.inflate(context, R.layout.brick_stop_all_sounds, null);
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createStopAllSoundsAction());
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createStopAllSoundsAction());
+        return null;
+    }
 }

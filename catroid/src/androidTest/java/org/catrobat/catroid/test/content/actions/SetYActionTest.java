@@ -33,65 +33,65 @@ import org.catrobat.catroid.formulaeditor.Formula;
 
 public class SetYActionTest extends AndroidTestCase {
 
-	private static final float Y_POSITION = 73.3f;
-	private Formula yPosition = new Formula(Y_POSITION);
-	private static final String NOT_NUMERICAL_STRING = "NOT_NUMERICAL_STRING";
-	private Sprite sprite;
+    private static final float Y_POSITION = 73.3f;
+    private Formula yPosition = new Formula(Y_POSITION);
+    private static final String NOT_NUMERICAL_STRING = "NOT_NUMERICAL_STRING";
+    private Sprite sprite;
 
-	@Override
-	protected void setUp() throws Exception {
-		sprite = new SingleSprite("testSprite");
-		super.setUp();
-	}
+    @Override
+    protected void setUp() throws Exception {
+        sprite = new SingleSprite("testSprite");
+        super.setUp();
+    }
 
-	public void testNormalBehavior() {
-		assertEquals("Unexpected initial sprite x position", 0f, sprite.look.getXInUserInterfaceDimensionUnit());
-		assertEquals("Unexpected initial sprite y position", 0f, sprite.look.getYInUserInterfaceDimensionUnit());
+    public void testNormalBehavior() {
+        assertEquals("Unexpected initial sprite x position", 0f, sprite.look.getXInUserInterfaceDimensionUnit());
+        assertEquals("Unexpected initial sprite y position", 0f, sprite.look.getYInUserInterfaceDimensionUnit());
 
-		sprite.getActionFactory().createSetYAction(sprite, yPosition).act(1.0f);
-		assertEquals("Incorrect sprite y position after SetYBrick executed", Y_POSITION,
-				sprite.look.getYInUserInterfaceDimensionUnit());
-	}
+        sprite.getActionFactory().createSetYAction(sprite, yPosition).act(1.0f);
+        assertEquals("Incorrect sprite y position after SetYBrick executed", Y_POSITION,
+                sprite.look.getYInUserInterfaceDimensionUnit());
+    }
 
-	public void testNullSprite() {
-		ActionFactory factory = new ActionFactory();
-		Action action = factory.createSetYAction(null, yPosition);
-		try {
-			action.act(1.0f);
-			fail("Execution of SetYBrick with null Sprite did not cause a NullPointerException to be thrown");
-		} catch (NullPointerException expected) {
-		}
-	}
+    public void testNullSprite() {
+        ActionFactory factory = new ActionFactory();
+        Action action = factory.createSetYAction(null, yPosition);
+        try {
+            action.act(1.0f);
+            fail("Execution of SetYBrick with null Sprite did not cause a NullPointerException to be thrown");
+        } catch (NullPointerException expected) {
+        }
+    }
 
-	public void testBoundaryPositions() {
-		sprite.getActionFactory().createSetYAction(sprite, new Formula(Integer.MAX_VALUE)).act(1.0f);
-		assertEquals("SetYBrick failed to place Sprite at maximum y integer value", Integer.MAX_VALUE,
-				(int) sprite.look.getYInUserInterfaceDimensionUnit());
+    public void testBoundaryPositions() {
+        sprite.getActionFactory().createSetYAction(sprite, new Formula(Integer.MAX_VALUE)).act(1.0f);
+        assertEquals("SetYBrick failed to place Sprite at maximum y integer value", Integer.MAX_VALUE,
+                (int) sprite.look.getYInUserInterfaceDimensionUnit());
 
-		sprite.getActionFactory().createSetYAction(sprite, new Formula(Integer.MIN_VALUE)).act(1.0f);
-		assertEquals("SetYBrick failed to place Sprite at minimum y integer value", Integer.MIN_VALUE,
-				(int) sprite.look.getYInUserInterfaceDimensionUnit());
-	}
+        sprite.getActionFactory().createSetYAction(sprite, new Formula(Integer.MIN_VALUE)).act(1.0f);
+        assertEquals("SetYBrick failed to place Sprite at minimum y integer value", Integer.MIN_VALUE,
+                (int) sprite.look.getYInUserInterfaceDimensionUnit());
+    }
 
-	public void testBrickWithStringFormula() {
-		sprite.getActionFactory().createSetYAction(sprite, new Formula(String.valueOf(Y_POSITION))).act(1.0f);
-		assertEquals("Incorrect sprite y position after SetYBrick executed", Y_POSITION,
-				sprite.look.getYInUserInterfaceDimensionUnit());
+    public void testBrickWithStringFormula() {
+        sprite.getActionFactory().createSetYAction(sprite, new Formula(String.valueOf(Y_POSITION))).act(1.0f);
+        assertEquals("Incorrect sprite y position after SetYBrick executed", Y_POSITION,
+                sprite.look.getYInUserInterfaceDimensionUnit());
 
-		sprite.getActionFactory().createSetYAction(sprite, new Formula(String.valueOf(NOT_NUMERICAL_STRING))).act(1.0f);
-		assertEquals("Incorrect sprite y position after SetYBrick executed", Y_POSITION,
-				sprite.look.getYInUserInterfaceDimensionUnit());
-	}
+        sprite.getActionFactory().createSetYAction(sprite, new Formula(String.valueOf(NOT_NUMERICAL_STRING))).act(1.0f);
+        assertEquals("Incorrect sprite y position after SetYBrick executed", Y_POSITION,
+                sprite.look.getYInUserInterfaceDimensionUnit());
+    }
 
-	public void testNullFormula() {
-		sprite.getActionFactory().createSetYAction(sprite, null).act(1.0f);
-		assertEquals("Incorrect sprite y position after SetYBrick executed", 0f,
-				sprite.look.getYInUserInterfaceDimensionUnit());
-	}
+    public void testNullFormula() {
+        sprite.getActionFactory().createSetYAction(sprite, null).act(1.0f);
+        assertEquals("Incorrect sprite y position after SetYBrick executed", 0f,
+                sprite.look.getYInUserInterfaceDimensionUnit());
+    }
 
-	public void testNotANumberFormula() {
-		sprite.getActionFactory().createSetYAction(sprite, new Formula(Double.NaN)).act(1.0f);
-		assertEquals("Incorrect sprite y position after SetYBrick executed", 0f,
-				sprite.look.getYInUserInterfaceDimensionUnit());
-	}
+    public void testNotANumberFormula() {
+        sprite.getActionFactory().createSetYAction(sprite, new Formula(Double.NaN)).act(1.0f);
+        assertEquals("Incorrect sprite y position after SetYBrick executed", 0f,
+                sprite.look.getYInUserInterfaceDimensionUnit());
+    }
 }

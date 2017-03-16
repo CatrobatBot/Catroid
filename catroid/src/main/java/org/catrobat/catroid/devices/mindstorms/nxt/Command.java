@@ -28,39 +28,39 @@ import java.io.ByteArrayOutputStream;
 
 public class Command implements MindstormsCommand {
 
-	private ByteArrayOutputStream commandData = new ByteArrayOutputStream();
+    private ByteArrayOutputStream commandData = new ByteArrayOutputStream();
 
-	public Command(CommandType commandType, CommandByte commandByte, boolean reply) {
+    public Command(CommandType commandType, CommandByte commandByte, boolean reply) {
 
-		if (reply) {
-			commandData.write(commandType.getByte());
-		} else {
-			commandData.write((byte) (commandType.getByte() | 0x80));
-		}
-		commandData.write(commandByte.getByte());
-	}
+        if (reply) {
+            commandData.write(commandType.getByte());
+        } else {
+            commandData.write((byte) (commandType.getByte() | 0x80));
+        }
+        commandData.write(commandByte.getByte());
+    }
 
-	public void append(byte data) {
-		commandData.write(data);
-	}
+    public void append(byte data) {
+        commandData.write(data);
+    }
 
-	public void append(byte[] data) {
-		commandData.write(data, 0, data.length);
-	}
+    public void append(byte[] data) {
+        commandData.write(data, 0, data.length);
+    }
 
-	public void append(int data) {
-		append((byte) (0xFF & data));
-		append((byte) (0xFF & (data >> 8)));
-		append((byte) (0xFF & (data >> 16)));
-		append((byte) (0xFF & (data >> 24)));
-	}
+    public void append(int data) {
+        append((byte) (0xFF & data));
+        append((byte) (0xFF & (data >> 8)));
+        append((byte) (0xFF & (data >> 16)));
+        append((byte) (0xFF & (data >> 24)));
+    }
 
-	@Override
-	public int getLength() {
-		return commandData.size();
-	}
+    @Override
+    public int getLength() {
+        return commandData.size();
+    }
 
-	public byte[] getRawCommand() {
-		return commandData.toByteArray();
-	}
+    public byte[] getRawCommand() {
+        return commandData.toByteArray();
+    }
 }

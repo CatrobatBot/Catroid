@@ -34,19 +34,33 @@ import org.catrobat.catroid.ui.scratchconverter.BaseInfoViewListener;
 import org.catrobat.catroid.ui.scratchconverter.JobViewListener;
 
 public interface ConversionManager extends ConnectAuthCallback, ConvertCallback, DownloadCallback {
-	void setCurrentActivity(Activity activity);
-	void connectAndAuthenticate();
-	void shutdown();
-	void convertProgram(final long jobID, final String title, final WebImage image, final boolean force);
-	void addBaseInfoViewListener(BaseInfoViewListener baseInfoViewListener);
-	boolean removeBaseInfoViewListener(BaseInfoViewListener baseInfoViewListener);
-	void addGlobalJobViewListener(JobViewListener jobViewListener);
-	boolean removeGlobalJobViewListener(JobViewListener jobViewListener);
-	void addJobViewListener(long jobID, JobViewListener jobViewListener);
-	boolean removeJobViewListener(long jobID, JobViewListener jobViewListener);
-	void addGlobalDownloadCallback(DownloadCallback callback);
-	boolean removeGlobalDownloadCallback(Client.DownloadCallback callback);
-	boolean isJobInProgress(long jobID);
-	boolean isJobDownloading(long jobID);
-	int getNumberOfJobsInProgress();
+    void setCurrentActivity(Activity activity);
+
+    void connectAndAuthenticate();
+
+    void shutdown();
+
+    void convertProgram(final long jobID, final String title, final WebImage image, final boolean force);
+
+    void addBaseInfoViewListener(BaseInfoViewListener baseInfoViewListener);
+
+    boolean removeBaseInfoViewListener(BaseInfoViewListener baseInfoViewListener);
+
+    void addGlobalJobViewListener(JobViewListener jobViewListener);
+
+    boolean removeGlobalJobViewListener(JobViewListener jobViewListener);
+
+    void addJobViewListener(long jobID, JobViewListener jobViewListener);
+
+    boolean removeJobViewListener(long jobID, JobViewListener jobViewListener);
+
+    void addGlobalDownloadCallback(DownloadCallback callback);
+
+    boolean removeGlobalDownloadCallback(Client.DownloadCallback callback);
+
+    boolean isJobInProgress(long jobID);
+
+    boolean isJobDownloading(long jobID);
+
+    int getNumberOfJobsInProgress();
 }

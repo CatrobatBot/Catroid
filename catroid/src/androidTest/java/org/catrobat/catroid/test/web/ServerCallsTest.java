@@ -37,282 +37,282 @@ import org.catrobat.catroid.web.WebconnectionException;
  * These tests need an internet connection
  */
 public class ServerCallsTest extends InstrumentationTestCase implements DeleteTestUserTask.OnDeleteTestUserCompleteListener {
-	private static final String TAG = ServerCalls.class.getSimpleName();
-	public static final int STATUS_CODE_USER_PASSWORD_TOO_SHORT = 753;
-	public static final int STATUS_CODE_USER_ADD_EMAIL_EXISTS = 757;
-	public static final int STATUS_CODE_USER_EMAIL_INVALID = 765;
-	public static final int STATUS_CODE_AUTHENTICATION_FAILED = 601;
-	public static final int STATUS_CODE_USER_NOT_EXISTING = 764;
+    private static final String TAG = ServerCalls.class.getSimpleName();
+    public static final int STATUS_CODE_USER_PASSWORD_TOO_SHORT = 753;
+    public static final int STATUS_CODE_USER_ADD_EMAIL_EXISTS = 757;
+    public static final int STATUS_CODE_USER_EMAIL_INVALID = 765;
+    public static final int STATUS_CODE_AUTHENTICATION_FAILED = 601;
+    public static final int STATUS_CODE_USER_NOT_EXISTING = 764;
 
-	public ServerCallsTest() {
-		super();
-	}
+    public ServerCallsTest() {
+        super();
+    }
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		ServerCalls.useTestUrl = true;
-	}
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        ServerCalls.useTestUrl = true;
+    }
 
-	@Override
-	protected void tearDown() throws Exception {
-		TestUtils.deleteTestProjects("uploadtestProject");
-		ServerCalls.useTestUrl = false;
-		super.tearDown();
-	}
+    @Override
+    protected void tearDown() throws Exception {
+        TestUtils.deleteTestProjects("uploadtestProject");
+        ServerCalls.useTestUrl = false;
+        super.tearDown();
+    }
 
-	public void testRegistrationOk() {
-		try {
-			String testUser = "testUser" + System.currentTimeMillis();
-			String testPassword = "pwspws";
-			String testEmail = testUser + "@gmail.com";
-			String token = Constants.NO_TOKEN;
+    public void testRegistrationOk() {
+        try {
+            String testUser = "testUser" + System.currentTimeMillis();
+            String testPassword = "pwspws";
+            String testEmail = testUser + "@gmail.com";
+            String token = Constants.NO_TOKEN;
 
-			boolean userRegistered = ServerCalls.getInstance().register(testUser, testPassword, testEmail,
-					"de", "at", token, getInstrumentation().getTargetContext());
+            boolean userRegistered = ServerCalls.getInstance().register(testUser, testPassword, testEmail,
+                    "de", "at", token, getInstrumentation().getTargetContext());
 
-			assertTrue("Should be a new user, but server response indicates that this user already exists",
-					userRegistered);
+            assertTrue("Should be a new user, but server response indicates that this user already exists",
+                    userRegistered);
 
-			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getInstrumentation().getTargetContext());
-			token = sharedPreferences.getString(Constants.TOKEN, Constants.NO_TOKEN);
-			boolean tokenOk = ServerCalls.getInstance().checkToken(token, testUser);
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getInstrumentation().getTargetContext());
+            token = sharedPreferences.getString(Constants.TOKEN, Constants.NO_TOKEN);
+            boolean tokenOk = ServerCalls.getInstance().checkToken(token, testUser);
 
-			Log.i(TAG, "tokenOk: " + tokenOk);
-			assertTrue("token should be ok", tokenOk);
-		} catch (WebconnectionException e) {
-			Log.e(TAG, "Webconnection error", e);
-			fail("WebconnectionException: the token should be valid \nstatus code:" + e.getStatusCode()
-					+ "\nmessage: " + e.getMessage());
-		}
-	}
+            Log.i(TAG, "tokenOk: " + tokenOk);
+            assertTrue("token should be ok", tokenOk);
+        } catch (WebconnectionException e) {
+            Log.e(TAG, "Webconnection error", e);
+            fail("WebconnectionException: the token should be valid \nstatus code:" + e.getStatusCode()
+                    + "\nmessage: " + e.getMessage());
+        }
+    }
 
-	public void testRegisterWithExistingUser() {
-		try {
-			String testUser = "testUser" + System.currentTimeMillis();
-			String testPassword = "pwspws";
-			String testEmail = testUser + "@gmail.com";
+    public void testRegisterWithExistingUser() {
+        try {
+            String testUser = "testUser" + System.currentTimeMillis();
+            String testPassword = "pwspws";
+            String testEmail = testUser + "@gmail.com";
 
-			String token = Constants.NO_TOKEN;
-			boolean userRegistered = ServerCalls.getInstance().register(testUser, testPassword, testEmail,
-					"de", "at", token, getInstrumentation().getTargetContext());
+            String token = Constants.NO_TOKEN;
+            boolean userRegistered = ServerCalls.getInstance().register(testUser, testPassword, testEmail,
+                    "de", "at", token, getInstrumentation().getTargetContext());
 
-			Log.i(TAG, "user registered: " + userRegistered);
-			assertTrue("Should be a new user, but server response indicates that this user already exists",
-					userRegistered);
+            Log.i(TAG, "user registered: " + userRegistered);
+            assertTrue("Should be a new user, but server response indicates that this user already exists",
+                    userRegistered);
 
-			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getInstrumentation().getTargetContext());
-			token = sharedPreferences.getString(Constants.TOKEN, Constants.NO_TOKEN);
-			ServerCalls.getInstance().register(testUser, testPassword, testEmail, "de",
-					"at", token, getInstrumentation().getTargetContext());
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getInstrumentation().getTargetContext());
+            token = sharedPreferences.getString(Constants.TOKEN, Constants.NO_TOKEN);
+            ServerCalls.getInstance().register(testUser, testPassword, testEmail, "de",
+                    "at", token, getInstrumentation().getTargetContext());
 
-			assertFalse("should never be reached because the user is already registered and can't be registered again",
-					true);
-		} catch (WebconnectionException e) {
-			Log.i(TAG, "Webconnection error (this is expected behaviour)", e);
-			assertTrue("an exception should be thrown because the user(-e-mail) is already registered", true);
-			assertEquals("wrong status code from server", STATUS_CODE_USER_ADD_EMAIL_EXISTS, e.getStatusCode());
-			assertNotNull("no error message available", e.getMessage());
-			assertTrue("no error message available", e.getMessage().length() > 0);
-		}
-	}
+            assertFalse("should never be reached because the user is already registered and can't be registered again",
+                    true);
+        } catch (WebconnectionException e) {
+            Log.i(TAG, "Webconnection error (this is expected behaviour)", e);
+            assertTrue("an exception should be thrown because the user(-e-mail) is already registered", true);
+            assertEquals("wrong status code from server", STATUS_CODE_USER_ADD_EMAIL_EXISTS, e.getStatusCode());
+            assertNotNull("no error message available", e.getMessage());
+            assertTrue("no error message available", e.getMessage().length() > 0);
+        }
+    }
 
-	public void testRegisterAndLogin() {
-		try {
-			String testUser = "testUser" + System.currentTimeMillis();
-			String testPassword = "pwspws";
-			String testEmail = testUser + "@gmail.com";
+    public void testRegisterAndLogin() {
+        try {
+            String testUser = "testUser" + System.currentTimeMillis();
+            String testPassword = "pwspws";
+            String testEmail = testUser + "@gmail.com";
 
-			String token = Constants.NO_TOKEN;
-			boolean userRegistered = ServerCalls.getInstance().register(testUser, testPassword, testEmail,
-					"de", "at", token, getInstrumentation().getTargetContext());
+            String token = Constants.NO_TOKEN;
+            boolean userRegistered = ServerCalls.getInstance().register(testUser, testPassword, testEmail,
+                    "de", "at", token, getInstrumentation().getTargetContext());
 
-			Log.i(TAG, "user registered: " + userRegistered);
-			assertTrue("Should be a new user, but server response indicates that this user already exists",
-					userRegistered);
+            Log.i(TAG, "user registered: " + userRegistered);
+            assertTrue("Should be a new user, but server response indicates that this user already exists",
+                    userRegistered);
 
-			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getInstrumentation().getTargetContext());
-			token = sharedPreferences.getString(Constants.TOKEN, Constants.NO_TOKEN);
-			boolean userLoggedIn = ServerCalls.getInstance().login(testUser, testPassword, token, getInstrumentation().getTargetContext());
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getInstrumentation().getTargetContext());
+            token = sharedPreferences.getString(Constants.TOKEN, Constants.NO_TOKEN);
+            boolean userLoggedIn = ServerCalls.getInstance().login(testUser, testPassword, token, getInstrumentation().getTargetContext());
 
-			Log.i(TAG, "user logged in: " + userLoggedIn);
-			assertTrue("User should be logged in, but server response indicates that he was not",
-					userLoggedIn);
-		} catch (WebconnectionException e) {
-			Log.e(TAG, "Webconnection error", e);
-			fail("an exception should not be thrown! \nstatus code:" + e.getStatusCode() + "\nmessage: "
-					+ e.getMessage());
-		}
-	}
+            Log.i(TAG, "user logged in: " + userLoggedIn);
+            assertTrue("User should be logged in, but server response indicates that he was not",
+                    userLoggedIn);
+        } catch (WebconnectionException e) {
+            Log.e(TAG, "Webconnection error", e);
+            fail("an exception should not be thrown! \nstatus code:" + e.getStatusCode() + "\nmessage: "
+                    + e.getMessage());
+        }
+    }
 
-	public void testLoginWithNotExistingUser() {
-		try {
-			String testUser = "testUser" + System.currentTimeMillis();
-			String testPassword = "pwspws";
-			String token = Constants.NO_TOKEN;
+    public void testLoginWithNotExistingUser() {
+        try {
+            String testUser = "testUser" + System.currentTimeMillis();
+            String testPassword = "pwspws";
+            String token = Constants.NO_TOKEN;
 
-			ServerCalls.getInstance().login(testUser, testPassword, token, getInstrumentation().getTargetContext());
+            ServerCalls.getInstance().login(testUser, testPassword, token, getInstrumentation().getTargetContext());
 
-			assertFalse("should never be reached because the user to be logged in is not existing",
-					true);
-		} catch (WebconnectionException e) {
-			Log.i(TAG, "Webconnection error (this is expected behaviour)", e);
-			assertTrue("an exception should be thrown because the user does not exist", true);
-			assertEquals("wrong status code from server", STATUS_CODE_USER_NOT_EXISTING, e.getStatusCode());
-			assertNotNull("no error message available", e.getMessage());
-			assertTrue("no error message available", e.getMessage().length() > 0);
-		}
-	}
+            assertFalse("should never be reached because the user to be logged in is not existing",
+                    true);
+        } catch (WebconnectionException e) {
+            Log.i(TAG, "Webconnection error (this is expected behaviour)", e);
+            assertTrue("an exception should be thrown because the user does not exist", true);
+            assertEquals("wrong status code from server", STATUS_CODE_USER_NOT_EXISTING, e.getStatusCode());
+            assertNotNull("no error message available", e.getMessage());
+            assertTrue("no error message available", e.getMessage().length() > 0);
+        }
+    }
 
-	public void testRegisterWithExistingUserAndLoginWithWrongPassword() {
-		try {
-			String testUser = "testUser" + System.currentTimeMillis();
-			String testPassword = "pwspws";
-			String testEmail = testUser + "@gmail.com";
+    public void testRegisterWithExistingUserAndLoginWithWrongPassword() {
+        try {
+            String testUser = "testUser" + System.currentTimeMillis();
+            String testPassword = "pwspws";
+            String testEmail = testUser + "@gmail.com";
 
-			String token = Constants.NO_TOKEN;
-			boolean userRegistered = ServerCalls.getInstance().register(testUser, testPassword, testEmail,
-					"de", "at", token, getInstrumentation().getTargetContext());
+            String token = Constants.NO_TOKEN;
+            boolean userRegistered = ServerCalls.getInstance().register(testUser, testPassword, testEmail,
+                    "de", "at", token, getInstrumentation().getTargetContext());
 
-			Log.i(TAG, "user registered: " + userRegistered);
-			assertTrue("Should be a new user, but server response indicates that this user already exists",
-					userRegistered);
+            Log.i(TAG, "user registered: " + userRegistered);
+            assertTrue("Should be a new user, but server response indicates that this user already exists",
+                    userRegistered);
 
-			String wrongPassword = "wrongpassword";
-			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getInstrumentation().getTargetContext());
-			token = sharedPreferences.getString(Constants.TOKEN, Constants.NO_TOKEN);
-			ServerCalls.getInstance().login(testUser, wrongPassword, token, getInstrumentation().getTargetContext());
+            String wrongPassword = "wrongpassword";
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getInstrumentation().getTargetContext());
+            token = sharedPreferences.getString(Constants.TOKEN, Constants.NO_TOKEN);
+            ServerCalls.getInstance().login(testUser, wrongPassword, token, getInstrumentation().getTargetContext());
 
-			assertFalse("should never be reached because the password is wrong", true);
-		} catch (WebconnectionException e) {
-			Log.i(TAG, "Webconnection error (this is expected behaviour)", e);
-			assertTrue("an exception should be thrown because the password is wrong", true);
-			assertEquals("wrong status code from server", STATUS_CODE_AUTHENTICATION_FAILED, e.getStatusCode());
-			assertNotNull("no error message available", e.getMessage());
-			assertTrue("no error message available", e.getMessage().length() > 0);
-		}
-	}
+            assertFalse("should never be reached because the password is wrong", true);
+        } catch (WebconnectionException e) {
+            Log.i(TAG, "Webconnection error (this is expected behaviour)", e);
+            assertTrue("an exception should be thrown because the password is wrong", true);
+            assertEquals("wrong status code from server", STATUS_CODE_AUTHENTICATION_FAILED, e.getStatusCode());
+            assertNotNull("no error message available", e.getMessage());
+            assertTrue("no error message available", e.getMessage().length() > 0);
+        }
+    }
 
-	public void testRegisterWithNewUserButExistingEmail() {
-		try {
-			String testUser = "testUser" + System.currentTimeMillis();
-			String testPassword = "pwspws";
-			String testEmail = testUser + "@gmail.com";
+    public void testRegisterWithNewUserButExistingEmail() {
+        try {
+            String testUser = "testUser" + System.currentTimeMillis();
+            String testPassword = "pwspws";
+            String testEmail = testUser + "@gmail.com";
 
-			String token = Constants.NO_TOKEN;
-			boolean userRegistered = ServerCalls.getInstance().register(testUser, testPassword, testEmail,
-					"de", "at", token, getInstrumentation().getTargetContext());
+            String token = Constants.NO_TOKEN;
+            boolean userRegistered = ServerCalls.getInstance().register(testUser, testPassword, testEmail,
+                    "de", "at", token, getInstrumentation().getTargetContext());
 
-			Log.i(TAG, "user registered: " + userRegistered);
-			assertTrue("Should be a new user, but server responce indicates that this user already exists",
-					userRegistered);
+            Log.i(TAG, "user registered: " + userRegistered);
+            assertTrue("Should be a new user, but server responce indicates that this user already exists",
+                    userRegistered);
 
-			String newUser = "testUser" + System.currentTimeMillis();
-			token = Constants.NO_TOKEN;
-			ServerCalls.getInstance().register(newUser, testPassword, testEmail, "de", "at", token,
-					getInstrumentation().getTargetContext());
+            String newUser = "testUser" + System.currentTimeMillis();
+            token = Constants.NO_TOKEN;
+            ServerCalls.getInstance().register(newUser, testPassword, testEmail, "de", "at", token,
+                    getInstrumentation().getTargetContext());
 
-			assertFalse(
-					"should never be reached because two registrations with the same email address are not allowed",
-					true);
-		} catch (WebconnectionException e) {
-			Log.i(TAG, "Webconnection error (this is expected behaviour)", e);
-			assertTrue("an exception should be thrown because the email already exists on the server", true);
-			assertEquals("wrong status code from server", STATUS_CODE_USER_ADD_EMAIL_EXISTS,
-					e.getStatusCode());
-			assertNotNull("no error message available", e.getMessage());
-			assertTrue("no error message available", e.getMessage().length() > 0);
-		}
-	}
+            assertFalse(
+                    "should never be reached because two registrations with the same email address are not allowed",
+                    true);
+        } catch (WebconnectionException e) {
+            Log.i(TAG, "Webconnection error (this is expected behaviour)", e);
+            assertTrue("an exception should be thrown because the email already exists on the server", true);
+            assertEquals("wrong status code from server", STATUS_CODE_USER_ADD_EMAIL_EXISTS,
+                    e.getStatusCode());
+            assertNotNull("no error message available", e.getMessage());
+            assertTrue("no error message available", e.getMessage().length() > 0);
+        }
+    }
 
-	public void testRegisterWithTooShortPassword() {
-		try {
-			String testUser = "testUser" + System.currentTimeMillis();
-			String testPassword = "short";
-			String testEmail = testUser + "@gmail.com";
+    public void testRegisterWithTooShortPassword() {
+        try {
+            String testUser = "testUser" + System.currentTimeMillis();
+            String testPassword = "short";
+            String testEmail = testUser + "@gmail.com";
 
-			String token = Constants.NO_TOKEN;
-			ServerCalls.getInstance().register(testUser, testPassword, testEmail, "de", "at", token,
-					getInstrumentation().getTargetContext());
+            String token = Constants.NO_TOKEN;
+            ServerCalls.getInstance().register(testUser, testPassword, testEmail, "de", "at", token,
+                    getInstrumentation().getTargetContext());
 
-			assertFalse("should never be reached because the password is too short", true);
-		} catch (WebconnectionException e) {
-			Log.i(TAG, "Webconnection error (this is expected behaviour)", e);
-			assertTrue("an exception should be thrown because the password is too short", true);
-			assertEquals("wrong status code from server", STATUS_CODE_USER_PASSWORD_TOO_SHORT,
-					e.getStatusCode());
-			assertNotNull("no error message available", e.getMessage());
-			assertTrue("no error message available", e.getMessage().length() > 0);
-		}
-	}
+            assertFalse("should never be reached because the password is too short", true);
+        } catch (WebconnectionException e) {
+            Log.i(TAG, "Webconnection error (this is expected behaviour)", e);
+            assertTrue("an exception should be thrown because the password is too short", true);
+            assertEquals("wrong status code from server", STATUS_CODE_USER_PASSWORD_TOO_SHORT,
+                    e.getStatusCode());
+            assertNotNull("no error message available", e.getMessage());
+            assertTrue("no error message available", e.getMessage().length() > 0);
+        }
+    }
 
-	public void testRegisterWithInvalidEmail() {
-		try {
-			String testUser = "testUser" + System.currentTimeMillis();
-			String testPassword = "pwspws";
-			String testEmail = "invalidEmail";
+    public void testRegisterWithInvalidEmail() {
+        try {
+            String testUser = "testUser" + System.currentTimeMillis();
+            String testPassword = "pwspws";
+            String testEmail = "invalidEmail";
 
-			String token = Constants.NO_TOKEN;
-			ServerCalls.getInstance().register(testUser, testPassword, testEmail, "de", "at", token,
-					getInstrumentation().getTargetContext());
+            String token = Constants.NO_TOKEN;
+            ServerCalls.getInstance().register(testUser, testPassword, testEmail, "de", "at", token,
+                    getInstrumentation().getTargetContext());
 
-			assertFalse("should never be reached because the email is not valid", true);
-		} catch (WebconnectionException e) {
-			Log.i(TAG, "Webconnection error (this is expected behaviour)", e);
-			assertTrue("an exception should be thrown because the email is not valid", true);
-			assertEquals("wrong status code from server", STATUS_CODE_USER_EMAIL_INVALID,
-					e.getStatusCode());
-			assertNotNull("no error message available", e.getMessage());
-			assertTrue("no error message available", e.getMessage().length() > 0);
-		}
-	}
+            assertFalse("should never be reached because the email is not valid", true);
+        } catch (WebconnectionException e) {
+            Log.i(TAG, "Webconnection error (this is expected behaviour)", e);
+            assertTrue("an exception should be thrown because the email is not valid", true);
+            assertEquals("wrong status code from server", STATUS_CODE_USER_EMAIL_INVALID,
+                    e.getStatusCode());
+            assertNotNull("no error message available", e.getMessage());
+            assertTrue("no error message available", e.getMessage().length() > 0);
+        }
+    }
 
-	public void testCheckTokenWrong() {
-		try {
-			String wrongToken = "blub";
-			String username = "badUser";
-			boolean tokenOk = ServerCalls.getInstance().checkToken(wrongToken, username);
+    public void testCheckTokenWrong() {
+        try {
+            String wrongToken = "blub";
+            String username = "badUser";
+            boolean tokenOk = ServerCalls.getInstance().checkToken(wrongToken, username);
 
-			Log.i(TAG, "tokenOk: " + tokenOk);
-			assertFalse("should not be reached, exception is thrown", tokenOk);
-		} catch (WebconnectionException e) {
-			Log.i(TAG, "Webconnection error (this is expected behaviour)", e);
-			assertTrue("exception is thrown if we pass a wrong token", true);
-			assertEquals("wrong status code from server", STATUS_CODE_AUTHENTICATION_FAILED, e.getStatusCode());
-			assertNotNull("no error message available", e.getMessage());
-			assertTrue("no error message available", e.getMessage().length() > 0);
-		}
-	}
+            Log.i(TAG, "tokenOk: " + tokenOk);
+            assertFalse("should not be reached, exception is thrown", tokenOk);
+        } catch (WebconnectionException e) {
+            Log.i(TAG, "Webconnection error (this is expected behaviour)", e);
+            assertTrue("exception is thrown if we pass a wrong token", true);
+            assertEquals("wrong status code from server", STATUS_CODE_AUTHENTICATION_FAILED, e.getStatusCode());
+            assertNotNull("no error message available", e.getMessage());
+            assertTrue("no error message available", e.getMessage().length() > 0);
+        }
+    }
 
-	public void testCheckTokenOk() {
-		try {
-			String testUser = "testUser" + System.currentTimeMillis();
-			String testPassword = "pwspws";
-			String testEmail = testUser + "@gmail.com";
+    public void testCheckTokenOk() {
+        try {
+            String testUser = "testUser" + System.currentTimeMillis();
+            String testPassword = "pwspws";
+            String testEmail = testUser + "@gmail.com";
 
-			String token = Constants.NO_TOKEN;
-			boolean userRegistered = ServerCalls.getInstance().register(testUser, testPassword, testEmail,
-					"de", "at", token, getInstrumentation().getTargetContext());
+            String token = Constants.NO_TOKEN;
+            boolean userRegistered = ServerCalls.getInstance().register(testUser, testPassword, testEmail,
+                    "de", "at", token, getInstrumentation().getTargetContext());
 
-			Log.i(TAG, "user registered: " + userRegistered);
-			assertTrue("Should be a new user, but server responce indicates that this user already exists",
-					userRegistered);
+            Log.i(TAG, "user registered: " + userRegistered);
+            assertTrue("Should be a new user, but server responce indicates that this user already exists",
+                    userRegistered);
 
-			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getInstrumentation().getTargetContext());
-			token = sharedPreferences.getString(Constants.TOKEN, Constants.NO_TOKEN);
-			boolean tokenOk = ServerCalls.getInstance().checkToken(token, testUser);
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getInstrumentation().getTargetContext());
+            token = sharedPreferences.getString(Constants.TOKEN, Constants.NO_TOKEN);
+            boolean tokenOk = ServerCalls.getInstance().checkToken(token, testUser);
 
-			Log.i(TAG, "tokenOk: " + tokenOk);
-			assertTrue("token should be ok", tokenOk);
-		} catch (WebconnectionException e) {
-			Log.e(TAG, "Webconnection error", e);
-			fail("WebconnectionException \nstatus code:" + e.getStatusCode() + "\nmessage: " + e.getMessage());
-		}
-	}
+            Log.i(TAG, "tokenOk: " + tokenOk);
+            assertTrue("token should be ok", tokenOk);
+        } catch (WebconnectionException e) {
+            Log.e(TAG, "Webconnection error", e);
+            fail("WebconnectionException \nstatus code:" + e.getStatusCode() + "\nmessage: " + e.getMessage());
+        }
+    }
 
-	@Override
-	public void onDeleteTestUserComplete(Boolean deleted) {
-		assertTrue("Test user accounts could not be deleted on server!", deleted);
-		Log.d(TAG, "testUserAccountsDeleted");
-	}
+    @Override
+    public void onDeleteTestUserComplete(Boolean deleted) {
+        assertTrue("Test user accounts could not be deleted on server!", deleted);
+        Log.d(TAG, "testUserAccountsDeleted");
+    }
 }

@@ -36,88 +36,88 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.core.AllOf.allOf;
 
 public final class CustomActions {
-	// Suppress default constructor for noninstantiability
-	private CustomActions() {
-		throw new AssertionError();
-	}
+    // Suppress default constructor for noninstantiability
+    private CustomActions() {
+        throw new AssertionError();
+    }
 
-	public static ViewAction wait(final int milliSeconds) {
-		return new ViewAction() {
-			@Override
-			public String getDescription() {
-				return "Wait for X milliseconds";
-			}
+    public static ViewAction wait(final int milliSeconds) {
+        return new ViewAction() {
+            @Override
+            public String getDescription() {
+                return "Wait for X milliseconds";
+            }
 
-			@Override
-			public Matcher<View> getConstraints() {
-				return isDisplayed();
-			}
+            @Override
+            public Matcher<View> getConstraints() {
+                return isDisplayed();
+            }
 
-			@Override
-			public void perform(UiController uiController, View view) {
-				uiController.loopMainThreadUntilIdle();
-				uiController.loopMainThreadForAtLeast(milliSeconds);
-			}
-		};
-	}
+            @Override
+            public void perform(UiController uiController, View view) {
+                uiController.loopMainThreadUntilIdle();
+                uiController.loopMainThreadForAtLeast(milliSeconds);
+            }
+        };
+    }
 
-	public static ViewAction typeInValue(final String value) {
-		return new ViewAction() {
-			@Override
-			public Matcher<View> getConstraints() {
-				return allOf(isDisplayed(), withId(R.id.formula_editor_edit_field));
-			}
+    public static ViewAction typeInValue(final String value) {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return allOf(isDisplayed(), withId(R.id.formula_editor_edit_field));
+            }
 
-			@Override
-			public String getDescription() {
-				return "type value in formula editor keyboard";
-			}
+            @Override
+            public String getDescription() {
+                return "type value in formula editor keyboard";
+            }
 
-			@Override
-			public void perform(UiController uiController, View view) {
-				FormulaEditorEditText formulaEditorEditText = (FormulaEditorEditText) view;
+            @Override
+            public void perform(UiController uiController, View view) {
+                FormulaEditorEditText formulaEditorEditText = (FormulaEditorEditText) view;
 
-				for (char item : value.toCharArray()) {
-					switch (item) {
-						case '-':
-							formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_minus, "");
-							break;
-						case '0':
-							formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_0, "");
-							break;
-						case '1':
-							formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_1, "");
-							break;
-						case '2':
-							formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_2, "");
-							break;
-						case '3':
-							formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_3, "");
-							break;
-						case '4':
-							formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_4, "");
-							break;
-						case '5':
-							formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_5, "");
-							break;
-						case '6':
-							formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_6, "");
-							break;
-						case '7':
-							formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_7, "");
-							break;
-						case '8':
-							formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_8, "");
-							break;
-						case '9':
-							formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_9, "");
-							break;
-						case '.':
-						case ',':
-							formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_decimal_mark, "");
-					}
-				}
-			}
-		};
-	}
+                for (char item : value.toCharArray()) {
+                    switch (item) {
+                        case '-':
+                            formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_minus, "");
+                            break;
+                        case '0':
+                            formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_0, "");
+                            break;
+                        case '1':
+                            formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_1, "");
+                            break;
+                        case '2':
+                            formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_2, "");
+                            break;
+                        case '3':
+                            formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_3, "");
+                            break;
+                        case '4':
+                            formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_4, "");
+                            break;
+                        case '5':
+                            formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_5, "");
+                            break;
+                        case '6':
+                            formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_6, "");
+                            break;
+                        case '7':
+                            formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_7, "");
+                            break;
+                        case '8':
+                            formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_8, "");
+                            break;
+                        case '9':
+                            formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_9, "");
+                            break;
+                        case '.':
+                        case ',':
+                            formulaEditorEditText.handleKeyEvent(R.id.formula_editor_keyboard_decimal_mark, "");
+                    }
+                }
+            }
+        };
+    }
 }

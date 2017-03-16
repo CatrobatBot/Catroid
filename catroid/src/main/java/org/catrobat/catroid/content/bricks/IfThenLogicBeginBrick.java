@@ -36,74 +36,74 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class IfThenLogicBeginBrick extends IfLogicBeginBrick implements NestingBrick {
-	private static final long serialVersionUID = 1L;
-	protected transient IfThenLogicEndBrick ifEndBrick;
+    private static final long serialVersionUID = 1L;
+    protected transient IfThenLogicEndBrick ifEndBrick;
 
-	public IfThenLogicBeginBrick(int condition) {
-		initializeBrickFields(new Formula(condition));
-	}
+    public IfThenLogicBeginBrick(int condition) {
+        initializeBrickFields(new Formula(condition));
+    }
 
-	public IfThenLogicBeginBrick(Formula condition) {
-		initializeBrickFields(condition);
-	}
+    public IfThenLogicBeginBrick(Formula condition) {
+        initializeBrickFields(condition);
+    }
 
-	public void setIfThenEndBrick(IfThenLogicEndBrick ifEndBrick) {
-		this.ifEndBrick = ifEndBrick;
-	}
+    public void setIfThenEndBrick(IfThenLogicEndBrick ifEndBrick) {
+        this.ifEndBrick = ifEndBrick;
+    }
 
-	@Override
-	public Brick clone() {
-		return new IfThenLogicBeginBrick(getFormulaWithBrickField(BrickField.IF_CONDITION).clone());
-	}
+    @Override
+    public Brick clone() {
+        return new IfThenLogicBeginBrick(getFormulaWithBrickField(BrickField.IF_CONDITION).clone());
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		View prototypeView = super.getPrototypeView(context);
-		removePrototypeElseTextViews(prototypeView);
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        View prototypeView = super.getPrototypeView(context);
+        removePrototypeElseTextViews(prototypeView);
+        return prototypeView;
+    }
 
-	@Override
-	public void initialize() {
-		ifEndBrick = new IfThenLogicEndBrick(this);
-	}
+    @Override
+    public void initialize() {
+        ifEndBrick = new IfThenLogicEndBrick(this);
+    }
 
-	@Override
-	public List<NestingBrick> getAllNestingBrickParts(boolean sorted) {
-		List<NestingBrick> nestingBrickList = new ArrayList<>();
-		nestingBrickList.add(this);
-		nestingBrickList.add(ifEndBrick);
-		return nestingBrickList;
-	}
+    @Override
+    public List<NestingBrick> getAllNestingBrickParts(boolean sorted) {
+        List<NestingBrick> nestingBrickList = new ArrayList<>();
+        nestingBrickList.add(this);
+        nestingBrickList.add(ifEndBrick);
+        return nestingBrickList;
+    }
 
-	@Override
-	public boolean isDraggableOver(Brick brick) {
-		return brick != ifEndBrick;
-	}
+    @Override
+    public boolean isDraggableOver(Brick brick) {
+        return brick != ifEndBrick;
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		IfThenLogicBeginBrick copyBrick = (IfThenLogicBeginBrick) clone();
-		copyBrick.ifEndBrick = null; // will be set in copyBrickForSprite method of IfThenLogicEndBrick
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        IfThenLogicBeginBrick copyBrick = (IfThenLogicBeginBrick) clone();
+        copyBrick.ifEndBrick = null; // will be set in copyBrickForSprite method of IfThenLogicEndBrick
 
-		this.copy = copyBrick;
-		return copyBrick;
-	}
+        this.copy = copyBrick;
+        return copyBrick;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		SequenceAction ifAction = (SequenceAction) sprite.getActionFactory().createSequence();
-		Action action = sprite.getActionFactory().createIfLogicAction(sprite,
-				getFormulaWithBrickField(BrickField.IF_CONDITION), ifAction, null);
-		sequence.addAction(action);
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        SequenceAction ifAction = (SequenceAction) sprite.getActionFactory().createSequence();
+        Action action = sprite.getActionFactory().createIfLogicAction(sprite,
+                getFormulaWithBrickField(BrickField.IF_CONDITION), ifAction, null);
+        sequence.addAction(action);
 
-		LinkedList<SequenceAction> returnActionList = new LinkedList<>();
-		returnActionList.add(ifAction);
+        LinkedList<SequenceAction> returnActionList = new LinkedList<>();
+        returnActionList.add(ifAction);
 
-		return returnActionList;
-	}
+        return returnActionList;
+    }
 
-	public IfThenLogicEndBrick getIfThenEndBrick() {
-		return ifEndBrick;
-	}
+    public IfThenLogicEndBrick getIfThenEndBrick() {
+        return ifEndBrick;
+    }
 }

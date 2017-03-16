@@ -37,167 +37,171 @@ import java.util.Map;
 
 public class Job {
 
-	public enum State {
-		UNSCHEDULED(-2),
-		SCHEDULED(-1),
-		READY(0),
-		RUNNING(1),
-		FINISHED(2),
-		FAILED(3);
+    public enum State {
+        UNSCHEDULED(-2),
+        SCHEDULED(-1),
+        READY(0),
+        RUNNING(1),
+        FINISHED(2),
+        FAILED(3);
 
-		private int state;
+        private int state;
 
-		private static Map<Integer, State> map = new HashMap<>();
-		static {
-			for (State legEnum : State.values()) {
-				map.put(legEnum.state, legEnum);
-			}
-		}
-		State(final int state) {
-			this.state = state;
-		}
+        private static Map<Integer, State> map = new HashMap<>();
 
-		public static State valueOf(int state) {
-			return map.get(state);
-		}
+        static {
+            for (State legEnum : State.values()) {
+                map.put(legEnum.state, legEnum);
+            }
+        }
 
-		public boolean isInProgress() {
-			return this == SCHEDULED || this == READY || this == RUNNING;
-		}
+        State(final int state) {
+            this.state = state;
+        }
 
-		public int getStateID() {
-			return state;
-		}
-	}
+        public static State valueOf(int state) {
+            return map.get(state);
+        }
 
-	public enum DownloadState {
-		NOT_READY(0),
-		READY(1),
-		DOWNLOADING(2),
-		DOWNLOADED(3),
-		CANCELED(4);
+        public boolean isInProgress() {
+            return this == SCHEDULED || this == READY || this == RUNNING;
+        }
 
-		private int downloadState;
+        public int getStateID() {
+            return state;
+        }
+    }
 
-		private static Map<Integer, DownloadState> map = new HashMap<>();
-		static {
-			for (DownloadState legEnum : DownloadState.values()) {
-				map.put(legEnum.downloadState, legEnum);
-			}
-		}
-		DownloadState(final int downloadState) {
-			this.downloadState = downloadState;
-		}
+    public enum DownloadState {
+        NOT_READY(0),
+        READY(1),
+        DOWNLOADING(2),
+        DOWNLOADED(3),
+        CANCELED(4);
 
-		public static DownloadState valueOf(int downloadState) {
-			return map.get(downloadState);
-		}
+        private int downloadState;
 
-		public int getDownloadStateID() {
-			return downloadState;
-		}
-	}
+        private static Map<Integer, DownloadState> map = new HashMap<>();
 
-	private State state;
-	private long jobID;
-	private String title;
-	private WebImage image;
-	private short progress;
-	private short downloadProgress;
-	private DownloadState downloadState;
-	private String downloadURL;
+        static {
+            for (DownloadState legEnum : DownloadState.values()) {
+                map.put(legEnum.downloadState, legEnum);
+            }
+        }
 
-	public Job(long jobID, String title, WebImage image) {
-		this.state = State.UNSCHEDULED;
-		this.jobID = jobID;
-		this.title = title;
-		this.image = image;
-		this.progress = 0;
-		this.downloadState = DownloadState.NOT_READY;
-		this.downloadURL = null;
-	}
+        DownloadState(final int downloadState) {
+            this.downloadState = downloadState;
+        }
 
-	public static Job fromJson(JSONObject data) throws JSONException {
-		final State state = State.valueOf(data.getInt(JsonJobDataKeys.STATE.toString()));
-		final long jobID = data.getLong(JsonJobDataKeys.JOB_ID.toString());
-		final String title = data.getString(JsonJobDataKeys.TITLE.toString());
-		final String imageURL = data.isNull(JsonJobDataKeys.IMAGE_URL.toString()) ? null
-				: data.getString(JsonJobDataKeys.IMAGE_URL.toString());
-		WebImage image = null;
-		if (imageURL != null) {
-			final int[] imageSize = new int[] { Constants.SCRATCH_IMAGE_DEFAULT_WIDTH, Constants.SCRATCH_IMAGE_DEFAULT_HEIGHT };
-			image = new WebImage(Uri.parse(imageURL), imageSize[0], imageSize[1]);
-		}
-		final short progress = (short) data.getInt(JsonJobDataKeys.PROGRESS.toString());
-		final String downloadURL = data.getString(JsonJobDataKeys.DOWNLOAD_URL.toString());
-		final Job job = new Job(jobID, title, image);
-		job.state = state;
-		job.progress = progress;
-		job.downloadURL = downloadURL;
-		return job;
-	}
+        public static DownloadState valueOf(int downloadState) {
+            return map.get(downloadState);
+        }
 
-	public State getState() {
-		return state;
-	}
+        public int getDownloadStateID() {
+            return downloadState;
+        }
+    }
 
-	public boolean isInProgress() {
-		return state.isInProgress();
-	}
+    private State state;
+    private long jobID;
+    private String title;
+    private WebImage image;
+    private short progress;
+    private short downloadProgress;
+    private DownloadState downloadState;
+    private String downloadURL;
 
-	public void setState(State state) {
-		this.state = state;
-	}
+    public Job(long jobID, String title, WebImage image) {
+        this.state = State.UNSCHEDULED;
+        this.jobID = jobID;
+        this.title = title;
+        this.image = image;
+        this.progress = 0;
+        this.downloadState = DownloadState.NOT_READY;
+        this.downloadURL = null;
+    }
 
-	public long getJobID() {
-		return jobID;
-	}
+    public static Job fromJson(JSONObject data) throws JSONException {
+        final State state = State.valueOf(data.getInt(JsonJobDataKeys.STATE.toString()));
+        final long jobID = data.getLong(JsonJobDataKeys.JOB_ID.toString());
+        final String title = data.getString(JsonJobDataKeys.TITLE.toString());
+        final String imageURL = data.isNull(JsonJobDataKeys.IMAGE_URL.toString()) ? null
+                : data.getString(JsonJobDataKeys.IMAGE_URL.toString());
+        WebImage image = null;
+        if (imageURL != null) {
+            final int[] imageSize = new int[]{Constants.SCRATCH_IMAGE_DEFAULT_WIDTH, Constants.SCRATCH_IMAGE_DEFAULT_HEIGHT};
+            image = new WebImage(Uri.parse(imageURL), imageSize[0], imageSize[1]);
+        }
+        final short progress = (short) data.getInt(JsonJobDataKeys.PROGRESS.toString());
+        final String downloadURL = data.getString(JsonJobDataKeys.DOWNLOAD_URL.toString());
+        final Job job = new Job(jobID, title, image);
+        job.state = state;
+        job.progress = progress;
+        job.downloadURL = downloadURL;
+        return job;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public State getState() {
+        return state;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public boolean isInProgress() {
+        return state.isInProgress();
+    }
 
-	public short getProgress() {
-		return progress;
-	}
+    public void setState(State state) {
+        this.state = state;
+    }
 
-	public void setProgress(short progress) {
-		this.progress = progress;
-	}
+    public long getJobID() {
+        return jobID;
+    }
 
-	public short getDownloadProgress() {
-		return downloadProgress;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setDownloadProgress(short downloadProgress) {
-		this.downloadProgress = downloadProgress;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public WebImage getImage() {
-		return image;
-	}
+    public short getProgress() {
+        return progress;
+    }
 
-	public void setImage(WebImage image) {
-		this.image = image;
-	}
+    public void setProgress(short progress) {
+        this.progress = progress;
+    }
 
-	public DownloadState getDownloadState() {
-		return downloadState;
-	}
+    public short getDownloadProgress() {
+        return downloadProgress;
+    }
 
-	public void setDownloadState(DownloadState downloadState) {
-		this.downloadState = downloadState;
-	}
+    public void setDownloadProgress(short downloadProgress) {
+        this.downloadProgress = downloadProgress;
+    }
 
-	public String getDownloadURL() {
-		return downloadURL;
-	}
+    public WebImage getImage() {
+        return image;
+    }
 
-	public void setDownloadURL(String downloadURL) {
-		this.downloadURL = downloadURL;
-	}
+    public void setImage(WebImage image) {
+        this.image = image;
+    }
+
+    public DownloadState getDownloadState() {
+        return downloadState;
+    }
+
+    public void setDownloadState(DownloadState downloadState) {
+        this.downloadState = downloadState;
+    }
+
+    public String getDownloadURL() {
+        return downloadURL;
+    }
+
+    public void setDownloadURL(String downloadURL) {
+        this.downloadURL = downloadURL;
+    }
 }

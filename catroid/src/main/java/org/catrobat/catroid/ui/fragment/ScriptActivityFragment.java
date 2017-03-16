@@ -27,39 +27,39 @@ import android.view.View;
 
 public abstract class ScriptActivityFragment extends ListFragment implements ListItemActionsInterface {
 
-	protected boolean actionModeActive = false;
+    protected boolean actionModeActive = false;
 
-	public boolean getActionModeActive() {
-		return actionModeActive;
-	}
+    public boolean getActionModeActive() {
+        return actionModeActive;
+    }
 
-	public void setActionModeActive(boolean actionModeActive) {
-		this.actionModeActive = actionModeActive;
-	}
+    public void setActionModeActive(boolean actionModeActive) {
+        this.actionModeActive = actionModeActive;
+    }
 
-	public abstract boolean getShowDetails();
+    public abstract boolean getShowDetails();
 
-	public abstract void setShowDetails(boolean showDetails);
+    public abstract void setShowDetails(boolean showDetails);
 
-	public abstract void setSelectMode(int selectMode);
+    public abstract void setSelectMode(int selectMode);
 
-	public abstract int getSelectMode();
+    public abstract int getSelectMode();
 
-	public abstract void startCopyActionMode();
+    public abstract void startCopyActionMode();
 
-	public abstract void startCommentOutActionMode();
+    public abstract void startCommentOutActionMode();
 
-	public abstract void startRenameActionMode();
+    public abstract void startRenameActionMode();
 
-	public abstract void startDeleteActionMode();
+    public abstract void startDeleteActionMode();
 
-	public abstract void startBackPackActionMode();
+    public abstract void startBackPackActionMode();
 
-	public abstract void handleAddButton();
+    public abstract void handleAddButton();
 
-	public abstract void handleCheckBoxClick(View view);
+    public abstract void handleCheckBoxClick(View view);
 
-	public abstract void showRenameDialog();
+    public abstract void showRenameDialog();
 
-	public abstract void showDeleteDialog();
+    public abstract void showDeleteDialog();
 }

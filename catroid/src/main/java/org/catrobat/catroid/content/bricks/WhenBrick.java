@@ -36,71 +36,71 @@ import org.catrobat.catroid.content.WhenScript;
 import java.util.List;
 
 public class WhenBrick extends BrickBaseType implements ScriptBrick {
-	protected WhenScript whenScript;
-	private static final long serialVersionUID = 1L;
+    protected WhenScript whenScript;
+    private static final long serialVersionUID = 1L;
 
-	public WhenBrick(WhenScript whenScript) {
-		this.whenScript = whenScript;
+    public WhenBrick(WhenScript whenScript) {
+        this.whenScript = whenScript;
 
-		if (whenScript != null && whenScript.isCommentedOut()) {
-			setCommentedOut(true);
-		}
-	}
+        if (whenScript != null && whenScript.isCommentedOut()) {
+            setCommentedOut(true);
+        }
+    }
 
-	public WhenBrick() {
-	}
+    public WhenBrick() {
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return NO_RESOURCES;
-	}
+    @Override
+    public int getRequiredResources() {
+        return NO_RESOURCES;
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		WhenBrick copyBrick = (WhenBrick) clone();
-		copyBrick.whenScript = whenScript;
-		return copyBrick;
-	}
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        WhenBrick copyBrick = (WhenBrick) clone();
+        copyBrick.whenScript = whenScript;
+        return copyBrick;
+    }
 
-	@Override
-	public View getView(final Context context, int brickId, final BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(final Context context, int brickId, final BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_when, null);
+        view = View.inflate(context, R.layout.brick_when, null);
 
-		setCheckboxView(R.id.brick_when_checkbox);
-		return view;
-	}
+        setCheckboxView(R.id.brick_when_checkbox);
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		return getView(context, 0, null);
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        return getView(context, 0, null);
+    }
 
-	@Override
-	public Brick clone() {
-		return new WhenBrick(null);
-	}
+    @Override
+    public Brick clone() {
+        return new WhenBrick(null);
+    }
 
-	@Override
-	public Script getScriptSafe() {
-		if (whenScript == null) {
-			whenScript = new WhenScript();
-		}
+    @Override
+    public Script getScriptSafe() {
+        if (whenScript == null) {
+            whenScript = new WhenScript();
+        }
 
-		return whenScript;
-	}
+        return whenScript;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        return null;
+    }
 
-	@Override
-	public void setCommentedOut(boolean commentedOut) {
-		super.setCommentedOut(commentedOut);
-		getScriptSafe().setCommentedOut(commentedOut);
-	}
+    @Override
+    public void setCommentedOut(boolean commentedOut) {
+        super.setCommentedOut(commentedOut);
+        getScriptSafe().setCommentedOut(commentedOut);
+    }
 }

@@ -31,5 +31,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface XStreamFieldKeyOrder {
-	String[] value();
+    String[] value();
 }

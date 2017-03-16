@@ -31,31 +31,31 @@ import java.io.OutputStream;
 
 public class CommonBluetoothTestClientHandler extends BTClientHandler {
 
-	@Override
-	public void handle(DataInputStream inStream, OutputStream outStream) throws IOException {
-		byte[] messageLengthBuffer = new byte[1];
+    @Override
+    public void handle(DataInputStream inStream, OutputStream outStream) throws IOException {
+        byte[] messageLengthBuffer = new byte[1];
 
-		while (true) {
-			inStream.readFully(messageLengthBuffer, 0, 1);
-			int expectedMessageLength = messageLengthBuffer[0];
-			handleClientMessage(expectedMessageLength, inStream, outStream);
-		}
-	}
+        while (true) {
+            inStream.readFully(messageLengthBuffer, 0, 1);
+            int expectedMessageLength = messageLengthBuffer[0];
+            handleClientMessage(expectedMessageLength, inStream, outStream);
+        }
+    }
 
-	private void handleClientMessage(int expectedMessageLength, DataInputStream inStream, OutputStream outStream) throws IOException {
+    private void handleClientMessage(int expectedMessageLength, DataInputStream inStream, OutputStream outStream) throws IOException {
 
-		BTServer.writeMessage("--> Incomming expected message length (byte): " + expectedMessageLength + "\n");
+        BTServer.writeMessage("--> Incomming expected message length (byte): " + expectedMessageLength + "\n");
 
-		byte[] payload = new byte[expectedMessageLength];
+        byte[] payload = new byte[expectedMessageLength];
 
-		inStream.readFully(payload, 0, expectedMessageLength);
-		BTServer.writeMessage("Received message, length (byte): " + expectedMessageLength + "\n");
+        inStream.readFully(payload, 0, expectedMessageLength);
+        BTServer.writeMessage("Received message, length (byte): " + expectedMessageLength + "\n");
 
-		byte[] testResult = payload;
+        byte[] testResult = payload;
 
-		BTServer.writeMessage("<-- Sending reply message \n");
-		outStream.write(new byte[] {(byte) (0xFF & testResult.length)});
-		outStream.write(testResult);
-		outStream.flush();
-	}
+        BTServer.writeMessage("<-- Sending reply message \n");
+        outStream.write(new byte[]{(byte) (0xFF & testResult.length)});
+        outStream.write(testResult);
+        outStream.flush();
+    }
 }

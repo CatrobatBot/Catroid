@@ -37,78 +37,78 @@ import org.catrobat.catroid.formulaeditor.Formula;
 import org.catrobat.catroid.formulaeditor.InterpretationException;
 
 public class LegoEv3MotorTurnAngleAction extends TemporalAction {
-	private static final int MAX_SPEED = 100;
-	private static final int POWER_DOWN_RAMP_DEGREES = 20;
+    private static final int MAX_SPEED = 100;
+    private static final int POWER_DOWN_RAMP_DEGREES = 20;
 
-	private LegoEv3MotorTurnAngleBrick.Motor motorEnum;
-	private Formula degrees;
-	private Sprite sprite;
+    private LegoEv3MotorTurnAngleBrick.Motor motorEnum;
+    private Formula degrees;
+    private Sprite sprite;
 
-	private BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
+    private BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
 
-	@Override
-	protected void update(float percent) {
-		int degreesValue;
-		try {
-			degreesValue = degrees.interpretInteger(sprite);
-		} catch (InterpretationException interpretationException) {
-			degreesValue = 0;
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}
+    @Override
+    protected void update(float percent) {
+        int degreesValue;
+        try {
+            degreesValue = degrees.interpretInteger(sprite);
+        } catch (InterpretationException interpretationException) {
+            degreesValue = 0;
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+        }
 
-		int tmpAngle = degreesValue;
-		int direction = 1;
-		if (degreesValue < 0) {
-			direction = -1;
-			tmpAngle = degreesValue + (-2 * degreesValue);
-		}
+        int tmpAngle = degreesValue;
+        int direction = 1;
+        if (degreesValue < 0) {
+            direction = -1;
+            tmpAngle = degreesValue + (-2 * degreesValue);
+        }
 
-		int step2Angle = 0;
-		int step3Angle = 0;
-		if (tmpAngle > POWER_DOWN_RAMP_DEGREES) {
-			step2Angle = tmpAngle - POWER_DOWN_RAMP_DEGREES;
-			step3Angle = POWER_DOWN_RAMP_DEGREES;
-		} else {
-			step2Angle = tmpAngle;
-		}
+        int step2Angle = 0;
+        int step3Angle = 0;
+        if (tmpAngle > POWER_DOWN_RAMP_DEGREES) {
+            step2Angle = tmpAngle - POWER_DOWN_RAMP_DEGREES;
+            step3Angle = POWER_DOWN_RAMP_DEGREES;
+        } else {
+            step2Angle = tmpAngle;
+        }
 
-		LegoEV3 ev3 = btService.getDevice(BluetoothDevice.LEGO_EV3);
-		if (ev3 == null) {
-			return;
-		}
+        LegoEV3 ev3 = btService.getDevice(BluetoothDevice.LEGO_EV3);
+        if (ev3 == null) {
+            return;
+        }
 
-		byte outputField = (byte) 0x00;
+        byte outputField = (byte) 0x00;
 
-		switch (motorEnum) {
-			case MOTOR_A:
-				outputField = (byte) 0x01;
-				break;
-			case MOTOR_B:
-				outputField = (byte) 0x02;
-				break;
-			case MOTOR_C:
-				outputField = (byte) 0x04;
-				break;
-			case MOTOR_D:
-				outputField = (byte) 0x08;
-				break;
-			case MOTOR_B_C:
-				outputField = (byte) 0x06;
-				break;
-		}
+        switch (motorEnum) {
+            case MOTOR_A:
+                outputField = (byte) 0x01;
+                break;
+            case MOTOR_B:
+                outputField = (byte) 0x02;
+                break;
+            case MOTOR_C:
+                outputField = (byte) 0x04;
+                break;
+            case MOTOR_D:
+                outputField = (byte) 0x08;
+                break;
+            case MOTOR_B_C:
+                outputField = (byte) 0x06;
+                break;
+        }
 
-		ev3.moveMotorStepsSpeed(outputField, 0, direction * MAX_SPEED, 0, step2Angle, step3Angle, true);
-	}
+        ev3.moveMotorStepsSpeed(outputField, 0, direction * MAX_SPEED, 0, step2Angle, step3Angle, true);
+    }
 
-	public void setMotorEnum(LegoEv3MotorTurnAngleBrick.Motor motorEnum) {
-		this.motorEnum = motorEnum;
-	}
+    public void setMotorEnum(LegoEv3MotorTurnAngleBrick.Motor motorEnum) {
+        this.motorEnum = motorEnum;
+    }
 
-	public void setDegrees(Formula degrees) {
-		this.degrees = degrees;
-	}
+    public void setDegrees(Formula degrees) {
+        this.degrees = degrees;
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 }

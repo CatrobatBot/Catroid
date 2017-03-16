@@ -34,44 +34,44 @@ import org.catrobat.catroid.utils.TouchUtil;
 
 public class GoToTouchPositionActionTest extends AndroidTestCase {
 
-	private static final float EXPECTED_X_POSITION = 20f;
-	private static final float EXPECTED_Y_POSITION = 25f;
-	private Sprite sprite;
-	private Sprite dummySprite;
-	private Action action;
+    private static final float EXPECTED_X_POSITION = 20f;
+    private static final float EXPECTED_Y_POSITION = 25f;
+    private Sprite sprite;
+    private Sprite dummySprite;
+    private Action action;
 
-	@Override
-	protected void setUp() throws Exception {
-		sprite = new Sprite("testSprite");
-		dummySprite = new Sprite("dummySprite");
-		action = sprite.getActionFactory().createGoToAction(sprite, dummySprite, BrickValues.GO_TO_TOUCH_POSITION);
-		super.setUp();
-	}
+    @Override
+    protected void setUp() throws Exception {
+        sprite = new Sprite("testSprite");
+        dummySprite = new Sprite("dummySprite");
+        action = sprite.getActionFactory().createGoToAction(sprite, dummySprite, BrickValues.GO_TO_TOUCH_POSITION);
+        super.setUp();
+    }
 
-	public void testGoToTouchPositionAction() throws InterruptedException {
-		sprite.look.setXInUserInterfaceDimensionUnit(0f);
-		sprite.look.setYInUserInterfaceDimensionUnit(0f);
+    public void testGoToTouchPositionAction() throws InterruptedException {
+        sprite.look.setXInUserInterfaceDimensionUnit(0f);
+        sprite.look.setYInUserInterfaceDimensionUnit(0f);
 
-		assertEquals("Unexpected initial sprite x position", 0f, sprite.look.getXInUserInterfaceDimensionUnit());
-		assertEquals("Unexpected initial sprite y position", 0f, sprite.look.getYInUserInterfaceDimensionUnit());
+        assertEquals("Unexpected initial sprite x position", 0f, sprite.look.getXInUserInterfaceDimensionUnit());
+        assertEquals("Unexpected initial sprite y position", 0f, sprite.look.getYInUserInterfaceDimensionUnit());
 
-		TouchUtil.setDummyTouchForTest(EXPECTED_X_POSITION, EXPECTED_Y_POSITION);
+        TouchUtil.setDummyTouchForTest(EXPECTED_X_POSITION, EXPECTED_Y_POSITION);
 
-		action.act(1f);
+        action.act(1f);
 
-		assertEquals("Incorrect sprite x position after GoToTouchPositionAction executed", EXPECTED_X_POSITION,
-				sprite.look.getXInUserInterfaceDimensionUnit());
-		assertEquals("Incorrect sprite y position after GoToTouchPositionAction executed", EXPECTED_Y_POSITION,
-				sprite.look.getYInUserInterfaceDimensionUnit());
-	}
+        assertEquals("Incorrect sprite x position after GoToTouchPositionAction executed", EXPECTED_X_POSITION,
+                sprite.look.getXInUserInterfaceDimensionUnit());
+        assertEquals("Incorrect sprite y position after GoToTouchPositionAction executed", EXPECTED_Y_POSITION,
+                sprite.look.getYInUserInterfaceDimensionUnit());
+    }
 
-	public void testNullActor() {
-		ActionFactory factory = new ActionFactory();
-		Action action = factory.createGoToAction(null, dummySprite, BrickValues.GO_TO_TOUCH_POSITION);
-		try {
-			action.act(1.0f);
-			fail("Execution of GoToBrick with null Sprite did not cause a " + "NullPointerException to be thrown");
-		} catch (NullPointerException expected) {
-		}
-	}
+    public void testNullActor() {
+        ActionFactory factory = new ActionFactory();
+        Action action = factory.createGoToAction(null, dummySprite, BrickValues.GO_TO_TOUCH_POSITION);
+        try {
+            action.act(1.0f);
+            fail("Execution of GoToBrick with null Sprite did not cause a " + "NullPointerException to be thrown");
+        } catch (NullPointerException expected) {
+        }
+    }
 }

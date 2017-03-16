@@ -31,39 +31,39 @@ import org.catrobat.catroid.utils.Utils;
 
 public class RenameLookDialog extends TextDialog {
 
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_rename_look";
-	public static final String EXTRA_NEW_LOOK_NAME = "new_look_name";
+    public static final String DIALOG_FRAGMENT_TAG = "dialog_rename_look";
+    public static final String EXTRA_NEW_LOOK_NAME = "new_look_name";
 
-	public RenameLookDialog(int title, int inputLabel, String previousText) {
-		super(title, inputLabel, previousText, false);
-	}
+    public RenameLookDialog(int title, int inputLabel, String previousText) {
+        super(title, inputLabel, previousText, false);
+    }
 
-	@Override
-	protected boolean handlePositiveButtonClick() {
-		String newLookName = input.getText().toString().trim();
+    @Override
+    protected boolean handlePositiveButtonClick() {
+        String newLookName = input.getText().toString().trim();
 
-		if (newLookName.equals(previousText)) {
-			return true;
-		}
+        if (newLookName.equals(previousText)) {
+            return true;
+        }
 
-		boolean newNameConsistsOfSpacesOnly = newLookName.isEmpty();
+        boolean newNameConsistsOfSpacesOnly = newLookName.isEmpty();
 
-		if (newNameConsistsOfSpacesOnly) {
-			input.setError(getString(R.string.name_consists_of_spaces_only));
-			return false;
-		}
+        if (newNameConsistsOfSpacesOnly) {
+            input.setError(getString(R.string.name_consists_of_spaces_only));
+            return false;
+        }
 
-		LookData lookData = new LookData();
-		lookData.setLookName(newLookName);
-		newLookName = Utils.getUniqueLookName(lookData, false);
+        LookData lookData = new LookData();
+        lookData.setLookName(newLookName);
+        newLookName = Utils.getUniqueLookName(lookData, false);
 
-		Intent intent = new Intent(ScriptActivity.ACTION_LOOK_RENAMED);
-		intent.putExtra(EXTRA_NEW_LOOK_NAME, newLookName);
-		getActivity().sendBroadcast(intent);
-		return true;
-	}
+        Intent intent = new Intent(ScriptActivity.ACTION_LOOK_RENAMED);
+        intent.putExtra(EXTRA_NEW_LOOK_NAME, newLookName);
+        getActivity().sendBroadcast(intent);
+        return true;
+    }
 
-	@Override
-	protected void handleNegativeButtonClick() {
-	}
+    @Override
+    protected void handleNegativeButtonClick() {
+    }
 }

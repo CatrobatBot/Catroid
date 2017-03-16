@@ -38,77 +38,77 @@ import java.io.FileNotFoundException;
 
 public class DroneVideoLookData extends LookData {
 
-	private static final String TAG = DroneVideoLookData.class.getSimpleName();
+    private static final String TAG = DroneVideoLookData.class.getSimpleName();
 
-	private transient boolean firstStart = true;
-	private transient GLBGVideoSprite videoTexture;
-	private transient int[] videoSize = { 0, 0 };
-	private transient int[] defaultVideoTextureSize;
+    private transient boolean firstStart = true;
+    private transient GLBGVideoSprite videoTexture;
+    private transient int[] videoSize = {0, 0};
+    private transient int[] defaultVideoTextureSize;
 
-	@Override
-	public DroneVideoLookData clone() {
-		DroneVideoLookData cloneVideoLookData = new DroneVideoLookData();
+    @Override
+    public DroneVideoLookData clone() {
+        DroneVideoLookData cloneVideoLookData = new DroneVideoLookData();
 
-		cloneVideoLookData.name = this.name;
-		cloneVideoLookData.fileName = this.fileName;
-		String filePath = getPathToImageDirectory() + "/" + fileName;
-		try {
-			ProjectManager.getInstance().getFileChecksumContainer().incrementUsage(filePath);
-		} catch (FileNotFoundException fileNotFoundexception) {
-			Log.e(TAG, Log.getStackTraceString(fileNotFoundexception));
-		}
+        cloneVideoLookData.name = this.name;
+        cloneVideoLookData.fileName = this.fileName;
+        String filePath = getPathToImageDirectory() + "/" + fileName;
+        try {
+            ProjectManager.getInstance().getFileChecksumContainer().incrementUsage(filePath);
+        } catch (FileNotFoundException fileNotFoundexception) {
+            Log.e(TAG, Log.getStackTraceString(fileNotFoundexception));
+        }
 
-		return cloneVideoLookData;
-	}
+        return cloneVideoLookData;
+    }
 
-	@Override
-	public int[] getMeasure() {
-		return defaultVideoTextureSize.clone();
-	}
+    @Override
+    public int[] getMeasure() {
+        return defaultVideoTextureSize.clone();
+    }
 
-	@Override
-	public Pixmap getPixmap() {
-		// BUG: Height() should be 1280, but it is 1184, so we need an scaling factor of 1.081081
-		int virtualScreenHeight = (int) Math.round(1.081081 * ScreenValues.SCREEN_HEIGHT);
+    @Override
+    public Pixmap getPixmap() {
+        // BUG: Height() should be 1280, but it is 1184, so we need an scaling factor of 1.081081
+        int virtualScreenHeight = (int) Math.round(1.081081 * ScreenValues.SCREEN_HEIGHT);
 
-		defaultVideoTextureSize = new int[] { virtualScreenHeight, ScreenValues.SCREEN_WIDTH };
+        defaultVideoTextureSize = new int[]{virtualScreenHeight, ScreenValues.SCREEN_WIDTH};
 
-		if (pixmap == null) {
-			pixmap = new Pixmap(virtualScreenHeight, ScreenValues.SCREEN_WIDTH, Pixmap.Format.RGB888);
-			pixmap.setColor(Color.BLUE);
-			pixmap.fill();
-			pixmap.setBlending(Pixmap.Blending.None);
-		}
-		return pixmap;
-	}
+        if (pixmap == null) {
+            pixmap = new Pixmap(virtualScreenHeight, ScreenValues.SCREEN_WIDTH, Pixmap.Format.RGB888);
+            pixmap.setColor(Color.BLUE);
+            pixmap.fill();
+            pixmap.setBlending(Pixmap.Blending.None);
+        }
+        return pixmap;
+    }
 
-	@Override
-	public void draw(Batch batch, float parentAlpha) {
-		if (firstStart) {
-			videoTexture = new GLBGVideoSprite();
-			onSurfaceChanged();
-			firstStart = false;
-		}
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        if (firstStart) {
+            videoTexture = new GLBGVideoSprite();
+            onSurfaceChanged();
+            firstStart = false;
+        }
 
-		if (videoSize[0] != videoTexture.imageWidth || videoSize[1] != videoTexture.imageHeight) {
-			onSurfaceChanged();
-		}
+        if (videoSize[0] != videoTexture.imageWidth || videoSize[1] != videoTexture.imageHeight) {
+            onSurfaceChanged();
+        }
 
-		Gdx.gl20.glBindTexture(GL20.GL_TEXTURE_2D, textureRegion.getTexture().getTextureObjectHandle());
-		videoTexture.onUpdateVideoTexture();
-	}
+        Gdx.gl20.glBindTexture(GL20.GL_TEXTURE_2D, textureRegion.getTexture().getTextureObjectHandle());
+        videoTexture.onUpdateVideoTexture();
+    }
 
-	private void onSurfaceChanged() {
+    private void onSurfaceChanged() {
 
-		videoSize[0] = videoTexture.imageWidth;
-		videoSize[1] = videoTexture.imageHeight;
-		videoTexture.onSurfaceChanged(videoSize[0], videoSize[1]);
+        videoSize[0] = videoTexture.imageWidth;
+        videoSize[1] = videoTexture.imageHeight;
+        videoTexture.onSurfaceChanged(videoSize[0], videoSize[1]);
 
-		//setSize(1f, 1f * Gdx.graphics.getHeight() / Gdx.graphics.getWidth());
-	}
+        //setSize(1f, 1f * Gdx.graphics.getHeight() / Gdx.graphics.getWidth());
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return Brick.ARDRONE_SUPPORT;
-	}
+    @Override
+    public int getRequiredResources() {
+        return Brick.ARDRONE_SUPPORT;
+    }
 }

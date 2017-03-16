@@ -46,50 +46,50 @@ import java.io.IOException;
 
 public class PhiroSettingsTest extends InstrumentationTestCase {
 
-	Context context = null;
+    Context context = null;
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
 
-		context = this.getInstrumentation().getTargetContext();
-		SettingsActivity.setPhiroSharedPreferenceEnabled(context, false);
-	}
+        context = this.getInstrumentation().getTargetContext();
+        SettingsActivity.setPhiroSharedPreferenceEnabled(context, false);
+    }
 
-	@Override
-	protected void tearDown() throws Exception {
-		SettingsActivity.setPhiroSharedPreferenceEnabled(context, false);
-		super.tearDown();
-	}
+    @Override
+    protected void tearDown() throws Exception {
+        SettingsActivity.setPhiroSharedPreferenceEnabled(context, false);
+        super.tearDown();
+    }
 
-	public void testIfPhiroBricksAreEnabledIfItItUsedInAProgram() throws IOException, CompatibilityProjectException, OutdatedVersionProjectException, LoadingProjectException {
+    public void testIfPhiroBricksAreEnabledIfItItUsedInAProgram() throws IOException, CompatibilityProjectException, OutdatedVersionProjectException, LoadingProjectException {
 
-		createProjectPhiro();
+        createProjectPhiro();
 
-		assertFalse("By default phiro should be disabled",
-				SettingsActivity.isPhiroSharedPreferenceEnabled(context));
+        assertFalse("By default phiro should be disabled",
+                SettingsActivity.isPhiroSharedPreferenceEnabled(context));
 
-		ProjectManager.getInstance().loadProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, context);
+        ProjectManager.getInstance().loadProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, context);
 
-		assertTrue("After loading a project which needs phiro it should be enabled",
-				SettingsActivity.isPhiroSharedPreferenceEnabled(context));
+        assertTrue("After loading a project which needs phiro it should be enabled",
+                SettingsActivity.isPhiroSharedPreferenceEnabled(context));
 
-		ProjectManager.getInstance().deleteProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, context);
-	}
+        ProjectManager.getInstance().deleteProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, context);
+    }
 
-	private void createProjectPhiro() {
-		Project projectPhiro = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite sprite = new SingleSprite("Phiro");
-		StartScript startScript = new StartScript();
-		SetSizeToBrick setSizeToBrick = new SetSizeToBrick(new Formula(new FormulaElement(FormulaElement.ElementType.SENSOR,
-				Sensors.PHIRO_BOTTOM_LEFT.name(), null)));
-		startScript.addBrick(setSizeToBrick);
-		sprite.addScript(startScript);
-		projectPhiro.getDefaultScene().addSprite(sprite);
+    private void createProjectPhiro() {
+        Project projectPhiro = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Sprite sprite = new SingleSprite("Phiro");
+        StartScript startScript = new StartScript();
+        SetSizeToBrick setSizeToBrick = new SetSizeToBrick(new Formula(new FormulaElement(FormulaElement.ElementType.SENSOR,
+                Sensors.PHIRO_BOTTOM_LEFT.name(), null)));
+        startScript.addBrick(setSizeToBrick);
+        sprite.addScript(startScript);
+        projectPhiro.getDefaultScene().addSprite(sprite);
 
-		Reflection.setPrivateField(ProjectManager.getInstance(), "asynchronousTask", false);
-		ProjectManager.getInstance().setProject(projectPhiro);
-		ProjectManager.getInstance().saveProject(context);
-		ProjectManager.getInstance().setProject(null);
-	}
+        Reflection.setPrivateField(ProjectManager.getInstance(), "asynchronousTask", false);
+        ProjectManager.getInstance().setProject(projectPhiro);
+        ProjectManager.getInstance().saveProject(context);
+        ProjectManager.getInstance().setProject(null);
+    }
 }

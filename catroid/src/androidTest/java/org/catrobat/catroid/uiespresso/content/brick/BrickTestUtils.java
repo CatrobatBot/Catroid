@@ -51,75 +51,75 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.Is.is;
 
 public final class BrickTestUtils {
-	private BrickTestUtils() {
-		throw new AssertionError();
-	}
+    private BrickTestUtils() {
+        throw new AssertionError();
+    }
 
-	public static DataInteraction onScriptList() {
-		return onData(instanceOf(Brick.class)).inAdapterView(ScriptListMatchers.isScriptListView());
-	}
+    public static DataInteraction onScriptList() {
+        return onData(instanceOf(Brick.class)).inAdapterView(ScriptListMatchers.isScriptListView());
+    }
 
-	public static void checkIfBrickAtPositionShowsString(int position, int stringResourceId) {
-		checkIfBrickAtPositionShowsString(position, UiTestUtils.getResourcesString(stringResourceId));
-	}
+    public static void checkIfBrickAtPositionShowsString(int position, int stringResourceId) {
+        checkIfBrickAtPositionShowsString(position, UiTestUtils.getResourcesString(stringResourceId));
+    }
 
-	public static void checkIfBrickAtPositionShowsString(int position, String string) {
-		onScriptList().atPosition(position).onChildView(withText(string))
-				.check(matches(isDisplayed()));
-	}
+    public static void checkIfBrickAtPositionShowsString(int position, String string) {
+        onScriptList().atPosition(position).onChildView(withText(string))
+                .check(matches(isDisplayed()));
+    }
 
-	public static void checkIfSpinnerOnBrickAtPositionShowsString(int spinnerResourceId, int position, int
-			stringResourceId) {
-		onScriptList().atPosition(position).onChildView(withId(spinnerResourceId))
-				.check(matches(withSpinnerText(stringResourceId)));
-	}
+    public static void checkIfSpinnerOnBrickAtPositionShowsString(int spinnerResourceId, int position, int
+            stringResourceId) {
+        onScriptList().atPosition(position).onChildView(withId(spinnerResourceId))
+                .check(matches(withSpinnerText(stringResourceId)));
+    }
 
-	public static void clickAndSelectFromSpinnerOnBrickAtPosition(int spinnerResourceId, int position, int
-			stringResourceId) {
-		onScriptList().atPosition(position).onChildView(withId(spinnerResourceId))
-				.perform(click());
+    public static void clickAndSelectFromSpinnerOnBrickAtPosition(int spinnerResourceId, int position, int
+            stringResourceId) {
+        onScriptList().atPosition(position).onChildView(withId(spinnerResourceId))
+                .perform(click());
 
-		onData(allOf(is(instanceOf(String.class)), is(UiTestUtils.getResourcesString(stringResourceId))))
-				.perform(click());
-	}
+        onData(allOf(is(instanceOf(String.class)), is(UiTestUtils.getResourcesString(stringResourceId))))
+                .perform(click());
+    }
 
-	public static Script createProjectAndGetStartScript(String projectName) {
-		Project project = new Project(null, projectName);
-		Sprite sprite = new Sprite("testSprite");
-		Script script = new StartScript();
+    public static Script createProjectAndGetStartScript(String projectName) {
+        Project project = new Project(null, projectName);
+        Sprite sprite = new Sprite("testSprite");
+        Script script = new StartScript();
 
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		return script;
-	}
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        return script;
+    }
 
-	public static void enterValueInFormulaTextFieldOnBrickAtPosition(int valueToBeEntered,
-			int editTextResourceId, int position) {
-		onScriptList().atPosition(position).onChildView(withId(editTextResourceId))
-				.perform(click());
-		onView(withId(R.id.formula_editor_edit_field))
-				.perform(CustomActions.typeInValue(Integer.toString(valueToBeEntered)));
-		onView(withId(R.id.formula_editor_keyboard_ok))
-				.perform(click());
-		onScriptList().atPosition(position).onChildView(withId(editTextResourceId))
-				.check(matches(withText(Integer.toString(valueToBeEntered) + " ")));
-	}
+    public static void enterValueInFormulaTextFieldOnBrickAtPosition(int valueToBeEntered,
+                                                                     int editTextResourceId, int position) {
+        onScriptList().atPosition(position).onChildView(withId(editTextResourceId))
+                .perform(click());
+        onView(withId(R.id.formula_editor_edit_field))
+                .perform(CustomActions.typeInValue(Integer.toString(valueToBeEntered)));
+        onView(withId(R.id.formula_editor_keyboard_ok))
+                .perform(click());
+        onScriptList().atPosition(position).onChildView(withId(editTextResourceId))
+                .check(matches(withText(Integer.toString(valueToBeEntered) + " ")));
+    }
 
-	public static void enterStringInFormulaTextFieldOnBrickAtPosition(String stringToBeEntered,
-			int editTextResourceId, int position) {
-		onScriptList().atPosition(position).onChildView(withId(editTextResourceId))
-				.perform(click());
-		onView(withId(R.id.formula_editor_keyboard_string))
-				.perform(click());
-		onView(withId(R.id.formula_editor_string_name_edit_text))
-				.perform(typeText(stringToBeEntered));
-		onView(withText(R.string.ok))
-				.perform(click());
-		onView(withId(R.id.formula_editor_keyboard_ok))
-				.perform(click());
-		onScriptList().atPosition(position).onChildView(withId(editTextResourceId))
-				.check(matches(withText("'" + stringToBeEntered + "' ")));
-	}
+    public static void enterStringInFormulaTextFieldOnBrickAtPosition(String stringToBeEntered,
+                                                                      int editTextResourceId, int position) {
+        onScriptList().atPosition(position).onChildView(withId(editTextResourceId))
+                .perform(click());
+        onView(withId(R.id.formula_editor_keyboard_string))
+                .perform(click());
+        onView(withId(R.id.formula_editor_string_name_edit_text))
+                .perform(typeText(stringToBeEntered));
+        onView(withText(R.string.ok))
+                .perform(click());
+        onView(withId(R.id.formula_editor_keyboard_ok))
+                .perform(click());
+        onScriptList().atPosition(position).onChildView(withId(editTextResourceId))
+                .check(matches(withText("'" + stringToBeEntered + "' ")));
+    }
 }

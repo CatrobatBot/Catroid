@@ -38,91 +38,91 @@ import org.catrobat.catroid.content.Sprite;
 import java.util.List;
 
 public class PhiroMotorStopBrick extends BrickBaseType implements OnItemSelectedListener {
-	private static final long serialVersionUID = 1L;
-	private transient Motor motorEnum;
-	private String motor;
+    private static final long serialVersionUID = 1L;
+    private transient Motor motorEnum;
+    private String motor;
 
-	public enum Motor {
-		MOTOR_LEFT, MOTOR_RIGHT, MOTOR_BOTH
-	}
+    public enum Motor {
+        MOTOR_LEFT, MOTOR_RIGHT, MOTOR_BOTH
+    }
 
-	public PhiroMotorStopBrick(Motor motor) {
-		this.motorEnum = motor;
-		this.motor = motorEnum.name();
-	}
+    public PhiroMotorStopBrick(Motor motor) {
+        this.motorEnum = motor;
+        this.motor = motorEnum.name();
+    }
 
-	protected Object readResolve() {
-		if (motor != null) {
-			motorEnum = Motor.valueOf(motor);
-		}
-		return this;
-	}
+    protected Object readResolve() {
+        if (motor != null) {
+            motorEnum = Motor.valueOf(motor);
+        }
+        return this;
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return BLUETOOTH_PHIRO;
-	}
+    @Override
+    public int getRequiredResources() {
+        return BLUETOOTH_PHIRO;
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		PhiroMotorStopBrick copyBrick = (PhiroMotorStopBrick) clone();
-		return copyBrick;
-	}
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        PhiroMotorStopBrick copyBrick = (PhiroMotorStopBrick) clone();
+        return copyBrick;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		View prototypeView = View.inflate(context, R.layout.brick_phiro_motor_stop, null);
-		Spinner phiroProSpinner = (Spinner) prototypeView.findViewById(R.id.brick_phiro_stop_motor_spinner);
+    @Override
+    public View getPrototypeView(Context context) {
+        View prototypeView = View.inflate(context, R.layout.brick_phiro_motor_stop, null);
+        Spinner phiroProSpinner = (Spinner) prototypeView.findViewById(R.id.brick_phiro_stop_motor_spinner);
 
-		ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter.createFromResource(context,
-				R.array.brick_phiro_stop_motor_spinner, android.R.layout.simple_spinner_item);
-		motorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter.createFromResource(context,
+                R.array.brick_phiro_stop_motor_spinner, android.R.layout.simple_spinner_item);
+        motorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-		phiroProSpinner.setAdapter(motorAdapter);
-		phiroProSpinner.setSelection(motorEnum.ordinal());
-		return prototypeView;
-	}
+        phiroProSpinner.setAdapter(motorAdapter);
+        phiroProSpinner.setSelection(motorEnum.ordinal());
+        return prototypeView;
+    }
 
-	@Override
-	public Brick clone() {
-		return new PhiroMotorStopBrick(motorEnum);
-	}
+    @Override
+    public Brick clone() {
+        return new PhiroMotorStopBrick(motorEnum);
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_phiro_motor_stop, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_phiro_motor_stop, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_phiro_motor_stop_checkbox);
-		ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter.createFromResource(context,
-				R.array.brick_phiro_stop_motor_spinner, android.R.layout.simple_spinner_item);
-		motorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        setCheckboxView(R.id.brick_phiro_motor_stop_checkbox);
+        ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter.createFromResource(context,
+                R.array.brick_phiro_stop_motor_spinner, android.R.layout.simple_spinner_item);
+        motorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-		Spinner motorSpinner = (Spinner) view.findViewById(R.id.brick_phiro_stop_motor_spinner);
-		motorSpinner.setOnItemSelectedListener(this);
+        Spinner motorSpinner = (Spinner) view.findViewById(R.id.brick_phiro_stop_motor_spinner);
+        motorSpinner.setOnItemSelectedListener(this);
 
-		motorSpinner.setAdapter(motorAdapter);
-		motorSpinner.setSelection(motorEnum.ordinal());
-		return view;
-	}
+        motorSpinner.setAdapter(motorAdapter);
+        motorSpinner.setSelection(motorEnum.ordinal());
+        return view;
+    }
 
-	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-		motorEnum = Motor.values()[position];
-		motor = motorEnum.name();
-	}
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        motorEnum = Motor.values()[position];
+        motor = motorEnum.name();
+    }
 
-	@Override
-	public void onNothingSelected(AdapterView<?> arg0) {
-	}
+    @Override
+    public void onNothingSelected(AdapterView<?> arg0) {
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createPhiroMotorStopActionAction(motorEnum));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createPhiroMotorStopActionAction(motorEnum));
+        return null;
+    }
 }

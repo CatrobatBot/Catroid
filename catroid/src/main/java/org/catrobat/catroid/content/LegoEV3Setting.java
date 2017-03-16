@@ -29,57 +29,57 @@ import java.io.Serializable;
 
 public class LegoEV3Setting implements Setting {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private EV3Port[] portSensorMapping = null;
+    private EV3Port[] portSensorMapping = null;
 
-	public LegoEV3Setting(EV3Sensor.Sensor[] sensorMapping) {
-		portSensorMapping = new EV3Port[4];
-		for (int i = 0; i < portSensorMapping.length; ++i) {
-			portSensorMapping[i] = new EV3Port(i, sensorMapping[i]);
-		}
-	}
+    public LegoEV3Setting(EV3Sensor.Sensor[] sensorMapping) {
+        portSensorMapping = new EV3Port[4];
+        for (int i = 0; i < portSensorMapping.length; ++i) {
+            portSensorMapping[i] = new EV3Port(i, sensorMapping[i]);
+        }
+    }
 
-	public void updateMapping(EV3Sensor.Sensor[] sensorMapping) {
-		for (int i = 0; i < portSensorMapping.length; ++i) {
-			portSensorMapping[i].setNumber(i);
-			portSensorMapping[i].setSensor(sensorMapping[i]);
-		}
-	}
+    public void updateMapping(EV3Sensor.Sensor[] sensorMapping) {
+        for (int i = 0; i < portSensorMapping.length; ++i) {
+            portSensorMapping[i].setNumber(i);
+            portSensorMapping[i].setSensor(sensorMapping[i]);
+        }
+    }
 
-	public EV3Sensor.Sensor[] getSensorMapping() {
-		EV3Sensor.Sensor[] sensorMapping = new EV3Sensor.Sensor[4];
-		for (int i = 0; i < portSensorMapping.length; ++i) {
-			sensorMapping[i] = portSensorMapping[i].getSensor();
-		}
+    public EV3Sensor.Sensor[] getSensorMapping() {
+        EV3Sensor.Sensor[] sensorMapping = new EV3Sensor.Sensor[4];
+        for (int i = 0; i < portSensorMapping.length; ++i) {
+            sensorMapping[i] = portSensorMapping[i].getSensor();
+        }
 
-		return sensorMapping;
-	}
+        return sensorMapping;
+    }
 
-	public static class EV3Port implements Serializable {
+    public static class EV3Port implements Serializable {
 
-		private int number;
-		private EV3Sensor.Sensor sensor;
+        private int number;
+        private EV3Sensor.Sensor sensor;
 
-		public EV3Port(int number, EV3Sensor.Sensor sensor) {
-			this.number = number;
-			this.sensor = sensor;
-		}
+        public EV3Port(int number, EV3Sensor.Sensor sensor) {
+            this.number = number;
+            this.sensor = sensor;
+        }
 
-		public EV3Sensor.Sensor getSensor() {
-			return sensor;
-		}
+        public EV3Sensor.Sensor getSensor() {
+            return sensor;
+        }
 
-		public void setSensor(EV3Sensor.Sensor sensor) {
-			this.sensor = sensor;
-		}
+        public void setSensor(EV3Sensor.Sensor sensor) {
+            this.sensor = sensor;
+        }
 
-		public int getNumber() {
-			return number;
-		}
+        public int getNumber() {
+            return number;
+        }
 
-		public void setNumber(int number) {
-			this.number = number;
-		}
-	}
+        public void setNumber(int number) {
+            this.number = number;
+        }
+    }
 }

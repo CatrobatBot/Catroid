@@ -49,98 +49,98 @@ import org.catrobat.catroid.utils.Utils;
 
 public class MergeNameDialog extends DialogFragment {
 
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_merge_name";
+    public static final String DIALOG_FRAGMENT_TAG = "dialog_merge_name";
 
-	private static final String TAG = MergeNameDialog.class.getSimpleName();
+    private static final String TAG = MergeNameDialog.class.getSimpleName();
 
-	private MergeTask task;
+    private MergeTask task;
 
-	private EditText nameEditText;
-	private Dialog newProjectDialog;
+    private EditText nameEditText;
+    private Dialog newProjectDialog;
 
-	public MergeNameDialog(MergeTask task) {
-		this.task = task;
-	}
+    public MergeNameDialog(MergeTask task) {
+        this.task = task;
+    }
 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_merge_name, null);
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_merge_name, null);
 
-		nameEditText = (EditText) dialogView.findViewById(R.id.project_name_edittext);
+        nameEditText = (EditText) dialogView.findViewById(R.id.project_name_edittext);
 
-		nameEditText.setText("");
+        nameEditText.setText("");
 
-		newProjectDialog = new AlertDialog.Builder(getActivity()).setView(dialogView)
-				.setTitle(R.string.new_project_dialog_title)
-				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				}).create();
+        newProjectDialog = new AlertDialog.Builder(getActivity()).setView(dialogView)
+                .setTitle(R.string.new_project_dialog_title)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).create();
 
-		newProjectDialog.setCanceledOnTouchOutside(true);
-		newProjectDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-		newProjectDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        newProjectDialog.setCanceledOnTouchOutside(true);
+        newProjectDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        newProjectDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-		newProjectDialog.setOnShowListener(new OnShowListener() {
-			@Override
-			public void onShow(DialogInterface dialog) {
-				if (getActivity() == null) {
-					Log.e(TAG, "onShow() Activity was null!");
-					return;
-				}
+        newProjectDialog.setOnShowListener(new OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                if (getActivity() == null) {
+                    Log.e(TAG, "onShow() Activity was null!");
+                    return;
+                }
 
-				InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
-						Context.INPUT_METHOD_SERVICE);
-				inputManager.showSoftInput(nameEditText, InputMethodManager.SHOW_IMPLICIT);
+                InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
+                        Context.INPUT_METHOD_SERVICE);
+                inputManager.showSoftInput(nameEditText, InputMethodManager.SHOW_IMPLICIT);
 
-				((AlertDialog) newProjectDialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
-				nameEditText.addTextChangedListener(new TextWatcher() {
+                ((AlertDialog) newProjectDialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
+                nameEditText.addTextChangedListener(new TextWatcher() {
 
-					@Override
-					public void onTextChanged(CharSequence s, int start, int before, int count) {
-					}
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
 
-					@Override
-					public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-					}
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
 
-					@Override
-					public void afterTextChanged(Editable s) {
-						if (nameEditText.length() == 0) {
-							((AlertDialog) newProjectDialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
-						} else {
-							((AlertDialog) newProjectDialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(true);
-						}
-					}
-				});
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        if (nameEditText.length() == 0) {
+                            ((AlertDialog) newProjectDialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
+                        } else {
+                            ((AlertDialog) newProjectDialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(true);
+                        }
+                    }
+                });
 
-				Button positiveButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-				positiveButton.setOnClickListener(new View.OnClickListener() {
+                Button positiveButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                positiveButton.setOnClickListener(new View.OnClickListener() {
 
-					@Override
-					public void onClick(View view) {
-						handleOkButtonClick();
-					}
-				});
-			}
-		});
-		return newProjectDialog;
-	}
+                    @Override
+                    public void onClick(View view) {
+                        handleOkButtonClick();
+                    }
+                });
+            }
+        });
+        return newProjectDialog;
+    }
 
-	protected void handleOkButtonClick() {
-		String mergeName = nameEditText.getText().toString();
-		if (StorageHandler.getInstance().projectExists(mergeName)) {
-			Utils.showErrorDialog(getActivity(), R.string.error_project_exists);
-		} else {
-			if (!task.mergeProjects(nameEditText.getText().toString())) {
-				ToastUtil.showError(getActivity(), R.string.error_merge);
-			}
-			this.dismiss();
-		}
-	}
+    protected void handleOkButtonClick() {
+        String mergeName = nameEditText.getText().toString();
+        if (StorageHandler.getInstance().projectExists(mergeName)) {
+            Utils.showErrorDialog(getActivity(), R.string.error_project_exists);
+        } else {
+            if (!task.mergeProjects(nameEditText.getText().toString())) {
+                ToastUtil.showError(getActivity(), R.string.error_merge);
+            }
+            this.dismiss();
+        }
+    }
 }

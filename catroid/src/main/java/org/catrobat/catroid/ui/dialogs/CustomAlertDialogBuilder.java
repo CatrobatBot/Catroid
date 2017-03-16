@@ -31,24 +31,24 @@ import org.catrobat.catroid.R;
 
 public class CustomAlertDialogBuilder extends AlertDialog.Builder {
 
-	private TextView textView;
+    private TextView textView;
 
-	public CustomAlertDialogBuilder(Context context) {
-		super(context);
-		View dialogView = View.inflate(context, R.layout.dialog_custom_alert_dialog, null);
-		textView = (TextView) dialogView.findViewById(R.id.dialog_text_text_view);
-		setView(dialogView);
-	}
+    public CustomAlertDialogBuilder(Context context) {
+        super(context);
+        View dialogView = View.inflate(context, R.layout.dialog_custom_alert_dialog, null);
+        textView = (TextView) dialogView.findViewById(R.id.dialog_text_text_view);
+        setView(dialogView);
+    }
 
-	@Override
-	public CustomAlertDialogBuilder setMessage(int messageId) {
-		textView.setText(messageId);
-		return this;
-	}
+    @Override
+    public CustomAlertDialogBuilder setMessage(int messageId) {
+        textView.setText(messageId);
+        return this;
+    }
 
-	@Override
-	public CustomAlertDialogBuilder setMessage(CharSequence message) {
-		textView.setText(message);
-		return this;
-	}
+    @Override
+    public CustomAlertDialogBuilder setMessage(CharSequence message) {
+        textView.setText(message);
+        return this;
+    }
 }

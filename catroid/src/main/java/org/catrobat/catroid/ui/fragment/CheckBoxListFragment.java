@@ -43,146 +43,146 @@ import org.catrobat.catroid.utils.UtilUi;
 
 public abstract class CheckBoxListFragment extends ListFragment implements CheckBoxListAdapter.ListItemCheckHandler {
 
-	public static final String TAG = CheckBoxListFragment.class.getSimpleName();
+    public static final String TAG = CheckBoxListFragment.class.getSimpleName();
 
-	protected CheckBoxListAdapter adapter;
+    protected CheckBoxListAdapter adapter;
 
-	protected ActionMode actionMode;
+    protected ActionMode actionMode;
 
-	protected String actionModeTitle;
-	protected String singleItemTitle;
-	protected String multipleItemsTitle;
+    protected String actionModeTitle;
+    protected String singleItemTitle;
+    protected String multipleItemsTitle;
 
-	protected boolean isRenameActionMode = false;
+    protected boolean isRenameActionMode = false;
 
-	protected CapitalizedTextView selectAllView;
+    protected CapitalizedTextView selectAllView;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setRetainInstance(true);
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		if (isActionModeActive()) {
-			actionMode.finish();
-			actionMode = null;
-		}
-	}
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isActionModeActive()) {
+            actionMode.finish();
+            actionMode = null;
+        }
+    }
 
-	@Override
-	public void setListAdapter(ListAdapter adapter) {
-		super.setListAdapter(adapter);
-		this.adapter = (CheckBoxListAdapter) adapter;
-	}
+    @Override
+    public void setListAdapter(ListAdapter adapter) {
+        super.setListAdapter(adapter);
+        this.adapter = (CheckBoxListAdapter) adapter;
+    }
 
-	protected boolean isActionModeActive() {
-		return actionMode != null;
-	}
+    protected boolean isActionModeActive() {
+        return actionMode != null;
+    }
 
-	public void setSelectMode(int selectMode) {
-		adapter.setSelectMode(selectMode);
-		adapter.notifyDataSetChanged();
-	}
+    public void setSelectMode(int selectMode) {
+        adapter.setSelectMode(selectMode);
+        adapter.notifyDataSetChanged();
+    }
 
-	public int getSelectMode() {
-		return adapter.getSelectMode();
-	}
+    public int getSelectMode() {
+        return adapter.getSelectMode();
+    }
 
-	public void setShowDetails(boolean showDetails) {
-		adapter.setShowDetails(showDetails);
-	}
+    public void setShowDetails(boolean showDetails) {
+        adapter.setShowDetails(showDetails);
+    }
 
-	public boolean getShowDetails() {
-		return adapter.getShowDetails();
-	}
+    public boolean getShowDetails() {
+        return adapter.getShowDetails();
+    }
 
-	public void clearCheckedItems() {
-		setSelectMode(ListView.CHOICE_MODE_NONE);
-		adapter.setAllItemsCheckedTo(false);
+    public void clearCheckedItems() {
+        setSelectMode(ListView.CHOICE_MODE_NONE);
+        adapter.setAllItemsCheckedTo(false);
 
-		actionMode = null;
-		BottomBar.showBottomBar(getActivity());
-	}
+        actionMode = null;
+        BottomBar.showBottomBar(getActivity());
+    }
 
-	@Override
-	public void onItemChecked() {
-		if (isRenameActionMode || actionMode == null) {
-			return;
-		}
-		updateActionModeTitle();
-		updateSelectAllView();
-	}
+    @Override
+    public void onItemChecked() {
+        if (isRenameActionMode || actionMode == null) {
+            return;
+        }
+        updateActionModeTitle();
+        updateSelectAllView();
+    }
 
-	protected void updateActionModeTitle() {
-		int numberOfSelectedItems = adapter.getCheckedItems().size();
+    protected void updateActionModeTitle() {
+        int numberOfSelectedItems = adapter.getCheckedItems().size();
 
-		if (numberOfSelectedItems == 0) {
-			actionMode.setTitle(actionModeTitle);
-			return;
-		}
+        if (numberOfSelectedItems == 0) {
+            actionMode.setTitle(actionModeTitle);
+            return;
+        }
 
-		String itemCount = Integer.toString(numberOfSelectedItems);
-		ForegroundColorSpan colorSpan = new ForegroundColorSpan(getResources().getColor(R.color.actionbar_title_color));
+        String itemCount = Integer.toString(numberOfSelectedItems);
+        ForegroundColorSpan colorSpan = new ForegroundColorSpan(getResources().getColor(R.color.actionbar_title_color));
 
-		String completeTitle = actionModeTitle + " " + itemCount + " ";
+        String completeTitle = actionModeTitle + " " + itemCount + " ";
 
-		if (numberOfSelectedItems == 1) {
-			completeTitle += singleItemTitle;
-		} else {
-			completeTitle += multipleItemsTitle;
-		}
+        if (numberOfSelectedItems == 1) {
+            completeTitle += singleItemTitle;
+        } else {
+            completeTitle += multipleItemsTitle;
+        }
 
-		Spannable completeSpannedTitle = new SpannableString(completeTitle);
-		completeSpannedTitle.setSpan(colorSpan, actionModeTitle.length() + 1,
-				actionModeTitle.length() + (1 + itemCount.length()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        Spannable completeSpannedTitle = new SpannableString(completeTitle);
+        completeSpannedTitle.setSpan(colorSpan, actionModeTitle.length() + 1,
+                actionModeTitle.length() + (1 + itemCount.length()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-		actionMode.setTitle(completeSpannedTitle);
-	}
+        actionMode.setTitle(completeSpannedTitle);
+    }
 
-	protected void addSelectAllActionModeButton(final ActionMode mode, Menu menu) {
-		final View selectAllActionModeButton = UtilUi.addSelectAllActionModeButton(getActivity().getLayoutInflater(),
-				mode, menu);
-		selectAllView = (CapitalizedTextView) selectAllActionModeButton.findViewById(R.id.select_all);
+    protected void addSelectAllActionModeButton(final ActionMode mode, Menu menu) {
+        final View selectAllActionModeButton = UtilUi.addSelectAllActionModeButton(getActivity().getLayoutInflater(),
+                mode, menu);
+        selectAllView = (CapitalizedTextView) selectAllActionModeButton.findViewById(R.id.select_all);
 
-		selectAllActionModeButton.setOnClickListener(new View.OnClickListener() {
+        selectAllActionModeButton.setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public void onClick(View view) {
-				if (areAllItemsChecked()) {
-					adapter.setAllItemsCheckedTo(false);
-				} else {
-					adapter.setAllItemsCheckedTo(true);
-				}
-				updateSelectAllView();
-			}
-		});
-	}
+            @Override
+            public void onClick(View view) {
+                if (areAllItemsChecked()) {
+                    adapter.setAllItemsCheckedTo(false);
+                } else {
+                    adapter.setAllItemsCheckedTo(true);
+                }
+                updateSelectAllView();
+            }
+        });
+    }
 
-	protected void updateSelectAllView() {
-		if (areAllItemsChecked()) {
-			selectAllView.setText(R.string.deselect_all);
-		} else {
-			selectAllView.setText(R.string.select_all);
-		}
-	}
+    protected void updateSelectAllView() {
+        if (areAllItemsChecked()) {
+            selectAllView.setText(R.string.deselect_all);
+        } else {
+            selectAllView.setText(R.string.select_all);
+        }
+    }
 
-	private boolean areAllItemsChecked() {
-		return adapter.getCheckedItems().size() == adapter.getCount();
-	}
+    private boolean areAllItemsChecked() {
+        return adapter.getCheckedItems().size() == adapter.getCount();
+    }
 
-	protected void showError(int messageId) {
-		new AlertDialog.Builder(getActivity())
-				.setTitle(R.string.error)
-				.setMessage(messageId)
-				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialogInterface, int id) {
-					}
-				})
-				.setCancelable(false)
-				.show();
-	}
+    protected void showError(int messageId) {
+        new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.error)
+                .setMessage(messageId)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int id) {
+                    }
+                })
+                .setCancelable(false)
+                .show();
+    }
 }

@@ -43,114 +43,114 @@ import org.catrobat.catroid.uitest.util.BaseActivityInstrumentationTestCase;
 import org.catrobat.catroid.uitest.util.UiTestUtils;
 
 public class VariableBricksTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
-	private Project project;
-	private DataContainer dataContainer;
-	private SetVariableBrick setVariableBrick;
-	private ChangeVariableBrick changeVariableBrick;
-	private Sprite sprite;
+    private Project project;
+    private DataContainer dataContainer;
+    private SetVariableBrick setVariableBrick;
+    private ChangeVariableBrick changeVariableBrick;
+    private Sprite sprite;
 
-	public VariableBricksTest() {
-		super(MainMenuActivity.class);
-	}
+    public VariableBricksTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		createProject();
-		UiTestUtils.prepareStageForTest();
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
-	}
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        createProject();
+        UiTestUtils.prepareStageForTest();
+        UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
+    }
 
-	@Override
-	public void tearDown() throws Exception {
-		dataContainer.deleteUserVariableByName("p1");
-		dataContainer.deleteUserVariableByName("p2");
-		dataContainer.deleteUserVariableByName("sprite_var1");
-		dataContainer.deleteUserVariableByName("sprite_var2");
-		super.tearDown();
-	}
+    @Override
+    public void tearDown() throws Exception {
+        dataContainer.deleteUserVariableByName("p1");
+        dataContainer.deleteUserVariableByName("p2");
+        dataContainer.deleteUserVariableByName("sprite_var1");
+        dataContainer.deleteUserVariableByName("sprite_var2");
+        super.tearDown();
+    }
 
-	public void testVariableBricks() {
-		Spinner setVariableSpinner = solo.getCurrentViews(Spinner.class).get(0);
-		Spinner changeVariableSpinner = solo.getCurrentViews(Spinner.class).get(1);
+    public void testVariableBricks() {
+        Spinner setVariableSpinner = solo.getCurrentViews(Spinner.class).get(0);
+        Spinner changeVariableSpinner = solo.getCurrentViews(Spinner.class).get(1);
 
-		solo.clickOnView(setVariableSpinner);
-		solo.clickOnText("p2");
-		solo.clickOnView(changeVariableSpinner);
-		solo.clickOnText("p2", 1);
+        solo.clickOnView(setVariableSpinner);
+        solo.clickOnText("p2");
+        solo.clickOnView(changeVariableSpinner);
+        solo.clickOnText("p2", 1);
 
-		//		UiTestUtils.testBrickWithFormulaEditor(solo, 0, 1, 50, "variable_formula", setVariableBrick);
-		solo.clickOnText("0");
-		UiTestUtils.insertIntegerIntoEditText(solo, 50);
-		solo.clickOnView(solo.getView(R.id.formula_editor_keyboard_ok));
+        //		UiTestUtils.testBrickWithFormulaEditor(solo, 0, 1, 50, "variable_formula", setVariableBrick);
+        solo.clickOnText("0");
+        UiTestUtils.insertIntegerIntoEditText(solo, 50);
+        solo.clickOnView(solo.getView(R.id.formula_editor_keyboard_ok));
 
-		//		UiTestUtils.testBrickWithFormulaEditor(solo, 0, 1, -8, "variable_formula", changeVariableBrick);
-		solo.clickOnText("1");
-		UiTestUtils.insertDoubleIntoEditText(solo, -8.0);
-		solo.clickOnView(solo.getView(R.id.formula_editor_keyboard_ok));
+        //		UiTestUtils.testBrickWithFormulaEditor(solo, 0, 1, -8, "variable_formula", changeVariableBrick);
+        solo.clickOnText("1");
+        UiTestUtils.insertDoubleIntoEditText(solo, -8.0);
+        solo.clickOnView(solo.getView(R.id.formula_editor_keyboard_ok));
 
-		solo.waitForView(solo.getView(R.id.button_play));
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(5000);
+        solo.waitForView(solo.getView(R.id.button_play));
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(5000);
 
-		assertEquals("Variable has the wrong value after stage", 42.0,
-				dataContainer.getUserVariable("p2", sprite).getValue());
-	}
+        assertEquals("Variable has the wrong value after stage", 42.0,
+                dataContainer.getUserVariable("p2", sprite).getValue());
+    }
 
-	public void testCreatingNewVariableCancelling() {
-		Spinner setVariableSpinner = solo.getCurrentViews(Spinner.class).get(0);
-		Spinner changeVariableSpinner = solo.getCurrentViews(Spinner.class).get(1);
-		UserVariable setValueVar = (UserVariable) setVariableSpinner.getSelectedItem();
-		UserVariable changeVariableVar = (UserVariable) changeVariableSpinner.getSelectedItem();
-		String spinnerText1 = setValueVar.getName();
-		String spinnerText2 = changeVariableVar.getName();
+    public void testCreatingNewVariableCancelling() {
+        Spinner setVariableSpinner = solo.getCurrentViews(Spinner.class).get(0);
+        Spinner changeVariableSpinner = solo.getCurrentViews(Spinner.class).get(1);
+        UserVariable setValueVar = (UserVariable) setVariableSpinner.getSelectedItem();
+        UserVariable changeVariableVar = (UserVariable) changeVariableSpinner.getSelectedItem();
+        String spinnerText1 = setValueVar.getName();
+        String spinnerText2 = changeVariableVar.getName();
 
-		View view1 = solo.getView(Spinner.class, 0);
-		solo.clickOnView(view1);
-		solo.scrollToTop();
-		solo.clickOnView(solo.getView(TextView.class, 0));
-		solo.waitForText(solo.getString(R.string.cancel));
-		solo.clickOnButton(solo.getString(R.string.cancel));
-		solo.waitForText(spinnerText1);
+        View view1 = solo.getView(Spinner.class, 0);
+        solo.clickOnView(view1);
+        solo.scrollToTop();
+        solo.clickOnView(solo.getView(TextView.class, 0));
+        solo.waitForText(solo.getString(R.string.cancel));
+        solo.clickOnButton(solo.getString(R.string.cancel));
+        solo.waitForText(spinnerText1);
 
-		View view2 = solo.getView(Spinner.class, 1);
-		solo.clickOnView(view2);
-		solo.scrollToTop();
-		solo.clickOnView(solo.getView(TextView.class, 0));
-		solo.waitForText(solo.getString(R.string.cancel));
-		solo.clickOnButton(solo.getString(R.string.cancel));
-		solo.waitForText(spinnerText2);
+        View view2 = solo.getView(Spinner.class, 1);
+        solo.clickOnView(view2);
+        solo.scrollToTop();
+        solo.clickOnView(solo.getView(TextView.class, 0));
+        solo.waitForText(solo.getString(R.string.cancel));
+        solo.clickOnButton(solo.getString(R.string.cancel));
+        solo.waitForText(spinnerText2);
 
-		setValueVar = (UserVariable) setVariableSpinner.getSelectedItem();
-		changeVariableVar = (UserVariable) changeVariableSpinner.getSelectedItem();
-		String newSpinnerText1 = setValueVar.getName();
-		String newSpinnerText2 = changeVariableVar.getName();
+        setValueVar = (UserVariable) setVariableSpinner.getSelectedItem();
+        changeVariableVar = (UserVariable) changeVariableSpinner.getSelectedItem();
+        String newSpinnerText1 = setValueVar.getName();
+        String newSpinnerText2 = changeVariableVar.getName();
 
-		assertTrue("Wrong Spinner Value", spinnerText1.equals(newSpinnerText1));
-		assertTrue("Wrong Spinner Value", spinnerText2.equals(newSpinnerText2));
-	}
+        assertTrue("Wrong Spinner Value", spinnerText1.equals(newSpinnerText1));
+        assertTrue("Wrong Spinner Value", spinnerText2.equals(newSpinnerText2));
+    }
 
-	private void createProject() {
-		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		sprite = new SingleSprite("cat");
-		Script script = new StartScript();
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
+    private void createProject() {
+        project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        sprite = new SingleSprite("cat");
+        Script script = new StartScript();
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
 
-		dataContainer = project.getDefaultScene().getDataContainer();
-		dataContainer.addProjectUserVariable("p1");
-		dataContainer.addProjectUserVariable("p2");
-		dataContainer.addSpriteUserVariable("sprite_var1");
-		dataContainer.addSpriteUserVariable("sprite_var2");
+        dataContainer = project.getDefaultScene().getDataContainer();
+        dataContainer.addProjectUserVariable("p1");
+        dataContainer.addProjectUserVariable("p2");
+        dataContainer.addSpriteUserVariable("sprite_var1");
+        dataContainer.addSpriteUserVariable("sprite_var2");
 
-		setVariableBrick = new SetVariableBrick(0.0);
-		script.addBrick(setVariableBrick);
-		changeVariableBrick = new ChangeVariableBrick(1.1);
-		script.addBrick(changeVariableBrick);
+        setVariableBrick = new SetVariableBrick(0.0);
+        script.addBrick(setVariableBrick);
+        changeVariableBrick = new ChangeVariableBrick(1.1);
+        script.addBrick(changeVariableBrick);
 
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
-	}
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
+    }
 }

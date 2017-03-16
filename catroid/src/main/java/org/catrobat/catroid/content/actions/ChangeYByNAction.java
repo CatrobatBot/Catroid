@@ -32,24 +32,24 @@ import org.catrobat.catroid.formulaeditor.InterpretationException;
 
 public class ChangeYByNAction extends TemporalAction {
 
-	private Sprite sprite;
-	private Formula yMovement;
+    private Sprite sprite;
+    private Formula yMovement;
 
-	@Override
-	protected void update(float arg0) {
-		try {
-			Float newY = yMovement == null ? Float.valueOf(0f) : yMovement.interpretFloat(sprite);
-			sprite.look.changeYInUserInterfaceDimensionUnit(newY);
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}
-	}
+    @Override
+    protected void update(float arg0) {
+        try {
+            Float newY = yMovement == null ? Float.valueOf(0f) : yMovement.interpretFloat(sprite);
+            sprite.look.changeYInUserInterfaceDimensionUnit(newY);
+        } catch (InterpretationException interpretationException) {
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+        }
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setyMovement(Formula yMovement) {
-		this.yMovement = yMovement;
-	}
+    public void setyMovement(Formula yMovement) {
+        this.yMovement = yMovement;
+    }
 }

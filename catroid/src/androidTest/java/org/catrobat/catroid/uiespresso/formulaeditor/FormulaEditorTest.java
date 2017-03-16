@@ -42,30 +42,30 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 @RunWith(AndroidJUnit4.class)
 public class FormulaEditorTest {
 
-	@Rule
-	public BaseActivityInstrumentationRule<ScriptActivity> baseActivityTestRule = new
-			BaseActivityInstrumentationRule<>(ScriptActivity.class, true, false);
+    @Rule
+    public BaseActivityInstrumentationRule<ScriptActivity> baseActivityTestRule = new
+            BaseActivityInstrumentationRule<>(ScriptActivity.class, true, false);
 
-	@Before
-	public void setUp() throws Exception {
-		UiTestUtils.createProject("formulaEditorInputTest");
-		baseActivityTestRule.launchActivity(null);
-	}
+    @Before
+    public void setUp() throws Exception {
+        UiTestUtils.createProject("formulaEditorInputTest");
+        baseActivityTestRule.launchActivity(null);
+    }
 
-	@Test
-	public void numericValuesTest() {
-		onView(withId(R.id.brick_set_variable_edit_text))
-				.perform(click());
+    @Test
+    public void numericValuesTest() {
+        onView(withId(R.id.brick_set_variable_edit_text))
+                .perform(click());
 
-		//typeText not working for formula editor, so use CustomActions.typeInValue
-		onView(withId(R.id.formula_editor_edit_field))
-				.perform(CustomActions.typeInValue("12345,678"));
+        //typeText not working for formula editor, so use CustomActions.typeInValue
+        onView(withId(R.id.formula_editor_edit_field))
+                .perform(CustomActions.typeInValue("12345,678"));
 
-		onView(withId(R.id.formula_editor_keyboard_ok))
-				.perform(click());
-	}
+        onView(withId(R.id.formula_editor_keyboard_ok))
+                .perform(click());
+    }
 
-	@After
-	public void tearDown() throws Exception {
-	}
+    @After
+    public void tearDown() throws Exception {
+    }
 }

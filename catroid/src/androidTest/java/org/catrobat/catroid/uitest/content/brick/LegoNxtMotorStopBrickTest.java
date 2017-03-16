@@ -43,70 +43,70 @@ import java.util.ArrayList;
 
 public class LegoNxtMotorStopBrickTest extends BaseActivityInstrumentationTestCase<ScriptActivity> {
 
-	private Project project;
-	private LegoNxtMotorStopBrick motorStopBrick;
+    private Project project;
+    private LegoNxtMotorStopBrick motorStopBrick;
 
-	public LegoNxtMotorStopBrickTest() {
-		super(ScriptActivity.class);
-	}
+    public LegoNxtMotorStopBrickTest() {
+        super(ScriptActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		// normally super.setUp should be called first
-		// but kept the test failing due to view is null
-		// when starting in ScriptActivity
-		createProject();
-		super.setUp();
-	}
+    @Override
+    public void setUp() throws Exception {
+        // normally super.setUp should be called first
+        // but kept the test failing due to view is null
+        // when starting in ScriptActivity
+        createProject();
+        super.setUp();
+    }
 
-	public void testMotorActionBrick() {
-		ListView dragDropListView = UiTestUtils.getScriptListView(solo);
-		BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
+    public void testMotorActionBrick() {
+        ListView dragDropListView = UiTestUtils.getScriptListView(solo);
+        BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
 
-		int childrenCount = adapter.getChildCountFromLastGroup();
-		int groupCount = adapter.getScriptCount();
+        int childrenCount = adapter.getChildCountFromLastGroup();
+        int groupCount = adapter.getScriptCount();
 
-		assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
-		assertEquals("Incorrect number of bricks.", 1, childrenCount);
+        assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
+        assertEquals("Incorrect number of bricks.", 1, childrenCount);
 
-		ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
-		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
+        ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
+        assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
-		assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.nxt_motor_stop)));
+        assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
+        assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.nxt_motor_stop)));
 
-		String[] motors = getActivity().getResources().getStringArray(R.array.nxt_stop_motor_chooser);
-		assertTrue("Spinner items list too short!", motors.length == 5);
+        String[] motors = getActivity().getResources().getStringArray(R.array.nxt_stop_motor_chooser);
+        assertTrue("Spinner items list too short!", motors.length == 5);
 
-		int legoSpinnerIndex = 0;
+        int legoSpinnerIndex = 0;
 
-		Spinner currentSpinner = solo.getCurrentViews(Spinner.class).get(legoSpinnerIndex);
-		solo.pressSpinnerItem(legoSpinnerIndex, 5);
-		assertEquals("Wrong item in spinner!", motors[4], currentSpinner.getSelectedItem());
-		solo.pressSpinnerItem(legoSpinnerIndex, -1);
-		assertEquals("Wrong item in spinner!", motors[3], currentSpinner.getSelectedItem());
-		solo.pressSpinnerItem(legoSpinnerIndex, -1);
-		assertEquals("Wrong item in spinner!", motors[2], currentSpinner.getSelectedItem());
-		solo.pressSpinnerItem(legoSpinnerIndex, -1);
-		assertEquals("Wrong item in spinner!", motors[1], currentSpinner.getSelectedItem());
-		solo.pressSpinnerItem(legoSpinnerIndex, -1);
-		assertEquals("Wrong item in spinner!", motors[0], currentSpinner.getSelectedItem());
-	}
+        Spinner currentSpinner = solo.getCurrentViews(Spinner.class).get(legoSpinnerIndex);
+        solo.pressSpinnerItem(legoSpinnerIndex, 5);
+        assertEquals("Wrong item in spinner!", motors[4], currentSpinner.getSelectedItem());
+        solo.pressSpinnerItem(legoSpinnerIndex, -1);
+        assertEquals("Wrong item in spinner!", motors[3], currentSpinner.getSelectedItem());
+        solo.pressSpinnerItem(legoSpinnerIndex, -1);
+        assertEquals("Wrong item in spinner!", motors[2], currentSpinner.getSelectedItem());
+        solo.pressSpinnerItem(legoSpinnerIndex, -1);
+        assertEquals("Wrong item in spinner!", motors[1], currentSpinner.getSelectedItem());
+        solo.pressSpinnerItem(legoSpinnerIndex, -1);
+        assertEquals("Wrong item in spinner!", motors[0], currentSpinner.getSelectedItem());
+    }
 
-	private void createProject() {
-		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite sprite = new SingleSprite("cat");
-		Script script = new StartScript();
+    private void createProject() {
+        project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Sprite sprite = new SingleSprite("cat");
+        Script script = new StartScript();
 
-		motorStopBrick = new LegoNxtMotorStopBrick(LegoNxtMotorStopBrick.Motor.MOTOR_A);
+        motorStopBrick = new LegoNxtMotorStopBrick(LegoNxtMotorStopBrick.Motor.MOTOR_A);
 
-		script.addBrick(motorStopBrick);
+        script.addBrick(motorStopBrick);
 
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 }

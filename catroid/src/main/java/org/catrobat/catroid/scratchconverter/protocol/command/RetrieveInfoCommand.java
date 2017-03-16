@@ -24,7 +24,7 @@
 package org.catrobat.catroid.scratchconverter.protocol.command;
 
 public class RetrieveInfoCommand extends Command {
-	public RetrieveInfoCommand() {
-		super(Type.RETRIEVE_INFO);
-	}
+    public RetrieveInfoCommand() {
+        super(Type.RETRIEVE_INFO);
+    }
 }

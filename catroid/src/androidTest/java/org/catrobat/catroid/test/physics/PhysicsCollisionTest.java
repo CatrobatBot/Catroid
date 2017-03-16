@@ -31,27 +31,27 @@ import org.catrobat.catroid.test.utils.Reflection;
 
 public class PhysicsCollisionTest extends InstrumentationTestCase {
 
-	public void testGenerateKeyForCollisionBetween() {
-		PhysicsCollision physicsCollision = new PhysicsCollision(null);
-		Sprite sprite1 = new Sprite("testsprite_1234()77//Njasd%&klf");
-		Sprite sprite2 = new Sprite("spritetest_9087124356iguaöwdzf() //OGZLUSDüKJGFLHKsd");
+    public void testGenerateKeyForCollisionBetween() {
+        PhysicsCollision physicsCollision = new PhysicsCollision(null);
+        Sprite sprite1 = new Sprite("testsprite_1234()77//Njasd%&klf");
+        Sprite sprite2 = new Sprite("spritetest_9087124356iguaöwdzf() //OGZLUSDüKJGFLHKsd");
 
-		Object[] values1 = { sprite1, sprite2 };
-		Reflection.ParameterList paramList = new Reflection.ParameterList(values1);
-		String key1 = (String) Reflection.invokeMethod(PhysicsCollision.class, physicsCollision, "generateKey", paramList);
+        Object[] values1 = {sprite1, sprite2};
+        Reflection.ParameterList paramList = new Reflection.ParameterList(values1);
+        String key1 = (String) Reflection.invokeMethod(PhysicsCollision.class, physicsCollision, "generateKey", paramList);
 
-		Object[] values2 = { sprite2, sprite1 };
-		paramList = new Reflection.ParameterList(values2);
-		String key2 = (String) Reflection.invokeMethod(PhysicsCollision.class, physicsCollision, "generateKey", paramList);
+        Object[] values2 = {sprite2, sprite1};
+        paramList = new Reflection.ParameterList(values2);
+        String key2 = (String) Reflection.invokeMethod(PhysicsCollision.class, physicsCollision, "generateKey", paramList);
 
-		String key1SubstringSprite1 = key1.substring(0, sprite1.getName().length());
-		String key1SubstringSprite2 = key1.substring(key1.length() - sprite2.getName().length(), key1.length());
-		String key2SubstringSprite1 = key2.substring(key1.length() - sprite1.getName().length(), key2.length());
-		String key2SubstringSprite2 = key2.substring(0, sprite2.getName().length());
+        String key1SubstringSprite1 = key1.substring(0, sprite1.getName().length());
+        String key1SubstringSprite2 = key1.substring(key1.length() - sprite2.getName().length(), key1.length());
+        String key2SubstringSprite1 = key2.substring(key1.length() - sprite1.getName().length(), key2.length());
+        String key2SubstringSprite2 = key2.substring(0, sprite2.getName().length());
 
-		assertEquals("sprite1 name not equal to key1 partition", sprite1.getName(), key1SubstringSprite1);
-		assertEquals("sprite2 name not equal to key1 partition", sprite2.getName(), key1SubstringSprite2);
-		assertEquals("sprite1 name not equal to key2 partition", sprite1.getName(), key2SubstringSprite1);
-		assertEquals("sprite2 name not equal to key2 partition", sprite2.getName(), key2SubstringSprite2);
-	}
+        assertEquals("sprite1 name not equal to key1 partition", sprite1.getName(), key1SubstringSprite1);
+        assertEquals("sprite2 name not equal to key1 partition", sprite2.getName(), key1SubstringSprite2);
+        assertEquals("sprite1 name not equal to key2 partition", sprite1.getName(), key2SubstringSprite1);
+        assertEquals("sprite2 name not equal to key2 partition", sprite2.getName(), key2SubstringSprite2);
+    }
 }

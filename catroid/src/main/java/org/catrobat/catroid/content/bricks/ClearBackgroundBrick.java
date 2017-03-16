@@ -35,44 +35,44 @@ import java.util.List;
 
 public class ClearBackgroundBrick extends BrickBaseType {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public ClearBackgroundBrick() {
-	}
+    public ClearBackgroundBrick() {
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		ClearBackgroundBrick copyBrick = (ClearBackgroundBrick) clone();
-		return copyBrick;
-	}
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        ClearBackgroundBrick copyBrick = (ClearBackgroundBrick) clone();
+        return copyBrick;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		View view = View.inflate(context, R.layout.brick_clear_background, null);
+    @Override
+    public View getPrototypeView(Context context) {
+        View view = View.inflate(context, R.layout.brick_clear_background, null);
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public Brick clone() {
-		return new ClearBackgroundBrick();
-	}
+    @Override
+    public Brick clone() {
+        return new ClearBackgroundBrick();
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		view = View.inflate(context, R.layout.brick_clear_background, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        view = View.inflate(context, R.layout.brick_clear_background, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_clear_background_checkbox);
-		return view;
-	}
+        setCheckboxView(R.id.brick_clear_background_checkbox);
+        return view;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createClearBackgroundAction());
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createClearBackgroundAction());
+        return null;
+    }
 }

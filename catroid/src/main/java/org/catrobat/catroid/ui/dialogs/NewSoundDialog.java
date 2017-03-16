@@ -39,110 +39,110 @@ import org.catrobat.catroid.utils.Utils;
 
 public class NewSoundDialog extends DialogFragment {
 
-	public static final String TAG = "dialog_new_sound";
+    public static final String TAG = "dialog_new_sound";
 
-	private SoundFragment fragment = null;
-	private DialogInterface.OnDismissListener onDismissListener;
+    private SoundFragment fragment = null;
+    private DialogInterface.OnDismissListener onDismissListener;
 
-	public static NewSoundDialog newInstance() {
-		return new NewSoundDialog();
-	}
+    public static NewSoundDialog newInstance() {
+        return new NewSoundDialog();
+    }
 
-	public void showDialog(Fragment fragment) {
-		if (!(fragment instanceof SoundFragment)) {
-			throw new RuntimeException("This dialog (NewSoundDialog) can only be called by the SoundFragment.");
-		}
-		this.fragment = (SoundFragment) fragment;
-		show(fragment.getActivity().getFragmentManager(), TAG);
-	}
+    public void showDialog(Fragment fragment) {
+        if (!(fragment instanceof SoundFragment)) {
+            throw new RuntimeException("This dialog (NewSoundDialog) can only be called by the SoundFragment.");
+        }
+        this.fragment = (SoundFragment) fragment;
+        show(fragment.getActivity().getFragmentManager(), TAG);
+    }
 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		View dialogView = LayoutInflater.from(getActivity())
-				.inflate(R.layout.dialog_new_sound, (ViewGroup) getView(), false);
-		setupRecordButton(dialogView);
-		setupGalleryButton(dialogView);
-		setupMediaLibraryButton(dialogView);
-		setupPocketMusicButton(dialogView);
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        View dialogView = LayoutInflater.from(getActivity())
+                .inflate(R.layout.dialog_new_sound, (ViewGroup) getView(), false);
+        setupRecordButton(dialogView);
+        setupGalleryButton(dialogView);
+        setupMediaLibraryButton(dialogView);
+        setupPocketMusicButton(dialogView);
 
-		AlertDialog dialog;
-		AlertDialog.Builder dialogBuilder = new CustomAlertDialogBuilder(getActivity()).setView(dialogView).setTitle(
-				R.string.new_sound_dialog_title);
+        AlertDialog dialog;
+        AlertDialog.Builder dialogBuilder = new CustomAlertDialogBuilder(getActivity()).setView(dialogView).setTitle(
+                R.string.new_sound_dialog_title);
 
-		dialog = createDialog(dialogBuilder);
-		dialog.setCanceledOnTouchOutside(true);
-		return dialog;
-	}
+        dialog = createDialog(dialogBuilder);
+        dialog.setCanceledOnTouchOutside(true);
+        return dialog;
+    }
 
-	public void setOnDismissListener(DialogInterface.OnDismissListener listener) {
-		this.onDismissListener = listener;
-	}
+    public void setOnDismissListener(DialogInterface.OnDismissListener listener) {
+        this.onDismissListener = listener;
+    }
 
-	@Override
-	public void onDismiss(final DialogInterface dialog) {
-		super.onDismiss(dialog);
-		if (onDismissListener != null) {
-			onDismissListener.onDismiss(dialog);
-			dialog.dismiss();
-		}
-	}
+    @Override
+    public void onDismiss(final DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (onDismissListener != null) {
+            onDismissListener.onDismiss(dialog);
+            dialog.dismiss();
+        }
+    }
 
-	private AlertDialog createDialog(AlertDialog.Builder dialogBuilder) {
-		return dialogBuilder.create();
-	}
+    private AlertDialog createDialog(AlertDialog.Builder dialogBuilder) {
+        return dialogBuilder.create();
+    }
 
-	private void setupRecordButton(View parentView) {
-		View recordButton = parentView.findViewById(R.id.dialog_new_sound_recorder);
+    private void setupRecordButton(View parentView) {
+        View recordButton = parentView.findViewById(R.id.dialog_new_sound_recorder);
 
-		recordButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				fragment.addSoundRecord();
-				NewSoundDialog.this.dismiss();
-			}
-		});
-	}
+        recordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fragment.addSoundRecord();
+                NewSoundDialog.this.dismiss();
+            }
+        });
+    }
 
-	private void setupGalleryButton(View parentView) {
-		View galleryButton = parentView.findViewById(R.id.dialog_new_sound_gallery);
+    private void setupGalleryButton(View parentView) {
+        View galleryButton = parentView.findViewById(R.id.dialog_new_sound_gallery);
 
-		galleryButton.setOnClickListener(new View.OnClickListener() {
+        galleryButton.setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public void onClick(View view) {
-				fragment.addSoundChooseFile();
-				NewSoundDialog.this.dismiss();
-			}
-		});
-	}
+            @Override
+            public void onClick(View view) {
+                fragment.addSoundChooseFile();
+                NewSoundDialog.this.dismiss();
+            }
+        });
+    }
 
-	private void setupMediaLibraryButton(View parentView) {
-		View mediaLibraryButton = parentView.findViewById(R.id.dialog_new_sound_media_library);
+    private void setupMediaLibraryButton(View parentView) {
+        View mediaLibraryButton = parentView.findViewById(R.id.dialog_new_sound_media_library);
 
-		mediaLibraryButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				if (Utils.isNetworkAvailable(view.getContext(), true)) {
-					fragment.addSoundMediaLibrary();
-					NewSoundDialog.this.dismiss();
-				}
-			}
-		});
-	}
+        mediaLibraryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Utils.isNetworkAvailable(view.getContext(), true)) {
+                    fragment.addSoundMediaLibrary();
+                    NewSoundDialog.this.dismiss();
+                }
+            }
+        });
+    }
 
-	private void setupPocketMusicButton(View parentView) {
-		View pocketMusicButton = parentView.findViewById(R.id.dialog_new_sound_pocketmusic);
+    private void setupPocketMusicButton(View parentView) {
+        View pocketMusicButton = parentView.findViewById(R.id.dialog_new_sound_pocketmusic);
 
-		if (BuildConfig.FEATURE_POCKETMUSIC_ENABLED) {
-			pocketMusicButton.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					fragment.addPocketMusic();
-					NewSoundDialog.this.dismiss();
-				}
-			});
-		} else {
-			pocketMusicButton.setVisibility(View.GONE);
-		}
-	}
+        if (BuildConfig.FEATURE_POCKETMUSIC_ENABLED) {
+            pocketMusicButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    fragment.addPocketMusic();
+                    NewSoundDialog.this.dismiss();
+                }
+            });
+        } else {
+            pocketMusicButton.setVisibility(View.GONE);
+        }
+    }
 }

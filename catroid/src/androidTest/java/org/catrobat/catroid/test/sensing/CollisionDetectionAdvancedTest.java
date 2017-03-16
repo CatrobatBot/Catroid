@@ -47,104 +47,104 @@ import org.catrobat.catroid.utils.Utils;
 import java.io.File;
 
 public class CollisionDetectionAdvancedTest extends InstrumentationTestCase {
-	protected Project project;
-	protected Sprite sprite1;
-	protected Sprite sprite2;
+    protected Project project;
+    protected Sprite sprite1;
+    protected Sprite sprite2;
 
-	protected static LookData generateLookData(File testImage) {
-		LookData lookData = new LookData();
-		lookData.setLookFilename(testImage.getName());
-		lookData.setLookName(testImage.getName());
-		Pixmap pixmap = Utils.getPixmapFromFile(testImage);
-		lookData.setPixmap(pixmap);
-		return lookData;
-	}
+    protected static LookData generateLookData(File testImage) {
+        LookData lookData = new LookData();
+        lookData.setLookFilename(testImage.getName());
+        lookData.setLookName(testImage.getName());
+        Pixmap pixmap = Utils.getPixmapFromFile(testImage);
+        lookData.setPixmap(pixmap);
+        return lookData;
+    }
 
-	protected void initializeSprite(Sprite sprite, int resourceId, String filename) {
-		sprite.look = new Look(sprite);
-		sprite.setActionFactory(new ActionFactory());
+    protected void initializeSprite(Sprite sprite, int resourceId, String filename) {
+        sprite.look = new Look(sprite);
+        sprite.setActionFactory(new ActionFactory());
 
-		String hashedFileName = Utils.md5Checksum(filename) + "_" + filename;
-		File file = null;
+        String hashedFileName = Utils.md5Checksum(filename) + "_" + filename;
+        File file = null;
 
-		try {
-			file = TestUtils.saveFileToProject(TestUtils.DEFAULT_TEST_PROJECT_NAME, project.getDefaultScene().getName(),
-					hashedFileName, resourceId, getInstrumentation().getContext(),
-					TestUtils.TYPE_IMAGE_FILE);
-		} catch (Exception e) {
-			Assert.fail("Couldn't load file, exception thrown!");
-		}
+        try {
+            file = TestUtils.saveFileToProject(TestUtils.DEFAULT_TEST_PROJECT_NAME, project.getDefaultScene().getName(),
+                    hashedFileName, resourceId, getInstrumentation().getContext(),
+                    TestUtils.TYPE_IMAGE_FILE);
+        } catch (Exception e) {
+            Assert.fail("Couldn't load file, exception thrown!");
+        }
 
-		LookData lookData = generateLookData(file);
-		CollisionInformation collisionInformation = lookData.getCollisionInformation();
-		collisionInformation.loadOrCreateCollisionPolygon();
+        LookData lookData = generateLookData(file);
+        CollisionInformation collisionInformation = lookData.getCollisionInformation();
+        collisionInformation.loadOrCreateCollisionPolygon();
 
-		sprite.look.setLookData(lookData);
-		sprite.getLookDataList().add(lookData);
-		sprite.look.setHeight(sprite.look.getLookData().getPixmap().getHeight());
-		sprite.look.setWidth(sprite.look.getLookData().getPixmap().getWidth());
-		sprite.look.setPositionInUserInterfaceDimensionUnit(0, 0);
-	}
+        sprite.look.setLookData(lookData);
+        sprite.getLookDataList().add(lookData);
+        sprite.look.setHeight(sprite.look.getLookData().getPixmap().getHeight());
+        sprite.look.setWidth(sprite.look.getLookData().getPixmap().getWidth());
+        sprite.look.setPositionInUserInterfaceDimensionUnit(0, 0);
+    }
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		TestUtils.deleteTestProjects();
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        TestUtils.deleteTestProjects();
 
-		project = new Project(getInstrumentation().getTargetContext(), TestUtils.DEFAULT_TEST_PROJECT_NAME);
+        project = new Project(getInstrumentation().getTargetContext(), TestUtils.DEFAULT_TEST_PROJECT_NAME);
 
-		sprite1 = new Sprite("TestSprite1");
-		sprite2 = new Sprite("TestSprite2");
+        sprite1 = new Sprite("TestSprite1");
+        sprite2 = new Sprite("TestSprite2");
 
-		project.getDefaultScene().addSprite(sprite1);
-		project.getDefaultScene().addSprite(sprite2);
+        project.getDefaultScene().addSprite(sprite1);
+        project.getDefaultScene().addSprite(sprite2);
 
-		StorageHandler.getInstance().saveProject(project);
-		ProjectManager.getInstance().setProject(project);
+        StorageHandler.getInstance().saveProject(project);
+        ProjectManager.getInstance().setProject(project);
 
-		initializeSprite(sprite1, org.catrobat.catroid.test.R.raw.collision_donut, "collision_donut.png");
-		initializeSprite(sprite2, org.catrobat.catroid.test.R.raw.icon, "icon.png");
+        initializeSprite(sprite1, org.catrobat.catroid.test.R.raw.collision_donut, "collision_donut.png");
+        initializeSprite(sprite2, org.catrobat.catroid.test.R.raw.icon, "icon.png");
 
-		Polygon[] collisionPolygons1 = sprite1.look.getLookData().getCollisionInformation().collisionPolygons;
-		Polygon[] collisionPolygons2 = sprite2.look.getLookData().getCollisionInformation().collisionPolygons;
+        Polygon[] collisionPolygons1 = sprite1.look.getLookData().getCollisionInformation().collisionPolygons;
+        Polygon[] collisionPolygons2 = sprite2.look.getLookData().getCollisionInformation().collisionPolygons;
 
-		Assert.assertNotNull("CollsionPolygons is null", collisionPolygons1);
-		Assert.assertEquals("Wrong amount of collisionPolygons", 2, collisionPolygons1.length);
+        Assert.assertNotNull("CollsionPolygons is null", collisionPolygons1);
+        Assert.assertEquals("Wrong amount of collisionPolygons", 2, collisionPolygons1.length);
 
-		Assert.assertNotNull("CollsionPolygons is null", collisionPolygons2);
-		Assert.assertEquals("Wrong amount of collisionPolygons", 3, collisionPolygons2.length);
+        Assert.assertNotNull("CollsionPolygons is null", collisionPolygons2);
+        Assert.assertEquals("Wrong amount of collisionPolygons", 3, collisionPolygons2.length);
 
-		StorageHandler.getInstance().saveProject(project);
-	}
+        StorageHandler.getInstance().saveProject(project);
+    }
 
-	public void testCollisionBetweenMovingLooks() {
-		boolean colliding = CollisionDetection.checkCollisionBetweenLooks(sprite1.look, sprite2.look) != 0;
-		Assert.assertFalse("Looks wrongly detected as colliding", colliding);
+    public void testCollisionBetweenMovingLooks() {
+        boolean colliding = CollisionDetection.checkCollisionBetweenLooks(sprite1.look, sprite2.look) != 0;
+        Assert.assertFalse("Looks wrongly detected as colliding", colliding);
 
-		float steps = 200.0f;
-		ActionFactory factory = new ActionFactory();
-		sprite2.setActionFactory(factory);
-		Action moveNSteptsaction = factory.createMoveNStepsAction(sprite2, new Formula(steps));
-		moveNSteptsaction.act(1.0f);
+        float steps = 200.0f;
+        ActionFactory factory = new ActionFactory();
+        sprite2.setActionFactory(factory);
+        Action moveNSteptsaction = factory.createMoveNStepsAction(sprite2, new Formula(steps));
+        moveNSteptsaction.act(1.0f);
 
-		colliding = CollisionDetection.checkCollisionBetweenLooks(sprite1.look, sprite2.look) != 0;
+        colliding = CollisionDetection.checkCollisionBetweenLooks(sprite1.look, sprite2.look) != 0;
 
-		Assert.assertTrue("Looks wrongly detected as not colliding", colliding);
-	}
+        Assert.assertTrue("Looks wrongly detected as not colliding", colliding);
+    }
 
-	public void testCollisionBetweenExpandingLooks() {
-		boolean colliding = CollisionDetection.checkCollisionBetweenLooks(sprite1.look, sprite2.look) != 0;
+    public void testCollisionBetweenExpandingLooks() {
+        boolean colliding = CollisionDetection.checkCollisionBetweenLooks(sprite1.look, sprite2.look) != 0;
 
-		Assert.assertFalse("Looks wrongly detected as colliding", colliding);
+        Assert.assertFalse("Looks wrongly detected as colliding", colliding);
 
-		float size = 300.0f;
-		ActionFactory factory = new ActionFactory();
-		sprite2.setActionFactory(factory);
-		Action createChangeSizeByNAction = factory.createChangeSizeByNAction(sprite2, new Formula(size));
-		createChangeSizeByNAction.act(1.0f);
+        float size = 300.0f;
+        ActionFactory factory = new ActionFactory();
+        sprite2.setActionFactory(factory);
+        Action createChangeSizeByNAction = factory.createChangeSizeByNAction(sprite2, new Formula(size));
+        createChangeSizeByNAction.act(1.0f);
 
-		colliding = CollisionDetection.checkCollisionBetweenLooks(sprite1.look, sprite2.look) != 0;
+        colliding = CollisionDetection.checkCollisionBetweenLooks(sprite1.look, sprite2.look) != 0;
 
-		Assert.assertTrue("Looks wrongly detected as colliding", colliding);
-	}
+        Assert.assertTrue("Looks wrongly detected as colliding", colliding);
+    }
 }

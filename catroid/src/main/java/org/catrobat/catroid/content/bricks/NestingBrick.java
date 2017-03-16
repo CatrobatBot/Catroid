@@ -26,14 +26,14 @@ import java.util.List;
 
 public interface NestingBrick {
 
-	boolean isInitialized();
+    boolean isInitialized();
 
-	void initialize();
+    void initialize();
 
-	boolean isDraggableOver(Brick brick);
+    boolean isDraggableOver(Brick brick);
 
-	/**
-	 * @return List of NestingBricks in order of their appearance
-	 */
-	List<NestingBrick> getAllNestingBrickParts(boolean sorted);
+    /**
+     * @return List of NestingBricks in order of their appearance
+     */
+    List<NestingBrick> getAllNestingBrickParts(boolean sorted);
 }

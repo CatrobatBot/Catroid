@@ -57,30 +57,30 @@ import java.util.ArrayList;
 import java.util.List;
 */
 public class WhenNfcBrickHardwareTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
-	/*
-	private ArrayList<NfcTagData> tagDataList;
+    /*
+    private ArrayList<NfcTagData> tagDataList;
 
-	private static final String FIRST_TEST_TAG_NAME = "tagNameTest";
-	private static final String FIRST_TEST_TAG_ID = "08111111";
+    private static final String FIRST_TEST_TAG_NAME = "tagNameTest";
+    private static final String FIRST_TEST_TAG_ID = "08111111";
 
-	private static final String SECOND_TEST_TAG_NAME = "tagNameTest2";
-	private static final String SECOND_TEST_TAG_ID = "08222222";
+    private static final String SECOND_TEST_TAG_NAME = "tagNameTest2";
+    private static final String SECOND_TEST_TAG_ID = "08222222";
 
-	private String all;
+    private String all;
 
-	private static final int RESOURCE_SOUND = org.catrobat.catroid.test.R.raw.longsound;
+    private static final int RESOURCE_SOUND = org.catrobat.catroid.test.R.raw.longsound;
 
-	private String soundName = "testSound";
-	private File soundFile;
-	private ArrayList<SoundInfo> soundInfoList;
-	*/
-	public WhenNfcBrickHardwareTest() {
-		super(MainMenuActivity.class);
-	}
+    private String soundName = "testSound";
+    private File soundFile;
+    private ArrayList<SoundInfo> soundInfoList;
+    */
+    public WhenNfcBrickHardwareTest() {
+        super(MainMenuActivity.class);
+    }
 
-	public void testThisTestmethodIsOnlyHereForPassingTheSourceTest() {
-		assertSame("Remove me!!", "Remove me!!", "Remove me!!");
-	}
+    public void testThisTestmethodIsOnlyHereForPassingTheSourceTest() {
+        assertSame("Remove me!!", "Remove me!!", "Remove me!!");
+    }
 	/*
 	@Override
 	public void setUp() throws Exception {

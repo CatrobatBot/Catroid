@@ -31,97 +31,97 @@ import java.io.OutputStream;
 
 public class MindstormsConnectionImpl implements MindstormsConnection {
 
-	private BluetoothConnection bluetoothConnection;
-	private OutputStream legoOutputStream = null;
-	private DataInputStream legoInputStream = null;
+    private BluetoothConnection bluetoothConnection;
+    private OutputStream legoOutputStream = null;
+    private DataInputStream legoInputStream = null;
 
-	private boolean isConnected = false;
+    private boolean isConnected = false;
 
-	private short commandCounter = 1;
+    private short commandCounter = 1;
 
-	public MindstormsConnectionImpl(BluetoothConnection btConnection) {
-		this.bluetoothConnection = btConnection;
-	}
+    public MindstormsConnectionImpl(BluetoothConnection btConnection) {
+        this.bluetoothConnection = btConnection;
+    }
 
-	@Override
-	public void init() {
+    @Override
+    public void init() {
 
-		try {
-			legoInputStream = new DataInputStream(bluetoothConnection.getInputStream());
-			legoOutputStream = bluetoothConnection.getOutputStream();
-			isConnected = true;
-		} catch (IOException e) {
-			isConnected = false;
-			throw new MindstormsException(e, "Cannot establish BtConnection");
-		}
-	}
+        try {
+            legoInputStream = new DataInputStream(bluetoothConnection.getInputStream());
+            legoOutputStream = bluetoothConnection.getOutputStream();
+            isConnected = true;
+        } catch (IOException e) {
+            isConnected = false;
+            throw new MindstormsException(e, "Cannot establish BtConnection");
+        }
+    }
 
-	@Override
-	public boolean isConnected() {
-		return isConnected;
-	}
+    @Override
+    public boolean isConnected() {
+        return isConnected;
+    }
 
-	@Override
-	public void disconnect() {
+    @Override
+    public void disconnect() {
 
-		isConnected = false;
+        isConnected = false;
 
-		bluetoothConnection.disconnect();
+        bluetoothConnection.disconnect();
 
-		legoInputStream = null;
-		legoOutputStream = null;
-	}
+        legoInputStream = null;
+        legoOutputStream = null;
+    }
 
-	@Override
-	public synchronized byte[] sendAndReceive(MindstormsCommand command) {
-		send(command);
-		return receive();
-	}
+    @Override
+    public synchronized byte[] sendAndReceive(MindstormsCommand command) {
+        send(command);
+        return receive();
+    }
 
-	@Override
-	public void send(MindstormsCommand command) {
-		try {
-			int messageLength = command.getLength();
-			byte[] message = command.getRawCommand();
-			byte[] data = new byte[command.getLength() + 2];
-			data[0] = (byte) (messageLength & 0x00FF);
-			data[1] = (byte) ((messageLength & 0xFF00) >> 8);
+    @Override
+    public void send(MindstormsCommand command) {
+        try {
+            int messageLength = command.getLength();
+            byte[] message = command.getRawCommand();
+            byte[] data = new byte[command.getLength() + 2];
+            data[0] = (byte) (messageLength & 0x00FF);
+            data[1] = (byte) ((messageLength & 0xFF00) >> 8);
 
-			System.arraycopy(message, 0, data, 2, messageLength);
+            System.arraycopy(message, 0, data, 2, messageLength);
 
-			synchronized (legoOutputStream) {
-				legoOutputStream.write(data, 0, messageLength + 2);
-				legoOutputStream.flush();
-			}
-		} catch (IOException e) {
-			throw new MindstormsException(e, "Error on message send.");
-		}
-	}
+            synchronized (legoOutputStream) {
+                legoOutputStream.write(data, 0, messageLength + 2);
+                legoOutputStream.flush();
+            }
+        } catch (IOException e) {
+            throw new MindstormsException(e, "Error on message send.");
+        }
+    }
 
-	@Override
-	public short getCommandCounter() {
-		return commandCounter;
-	}
+    @Override
+    public short getCommandCounter() {
+        return commandCounter;
+    }
 
-	@Override
-	public void incCommandCounter() {
-		commandCounter++;
-	}
+    @Override
+    public void incCommandCounter() {
+        commandCounter++;
+    }
 
-	protected byte[] receive() {
-		byte[] data = new byte[2];
-		byte[] payload;
+    protected byte[] receive() {
+        byte[] data = new byte[2];
+        byte[] payload;
 
-		try {
-			legoInputStream.readFully(data, 0, 2);
-			int expectedLength = ((data[0] & 0xFF) | (data[1] & 0xFF) << 8);
-			payload = new byte[expectedLength];
+        try {
+            legoInputStream.readFully(data, 0, 2);
+            int expectedLength = ((data[0] & 0xFF) | (data[1] & 0xFF) << 8);
+            payload = new byte[expectedLength];
 
-			legoInputStream.readFully(payload, 0, expectedLength);
-		} catch (IOException e) {
-			throw new MindstormsException(e, "Read Error");
-		}
+            legoInputStream.readFully(payload, 0, expectedLength);
+        } catch (IOException e) {
+            throw new MindstormsException(e, "Read Error");
+        }
 
-		return payload;
-	}
+        return payload;
+    }
 }

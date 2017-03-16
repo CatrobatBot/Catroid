@@ -28,6 +28,7 @@ import java.io.OutputStream;
 
 public interface DeviceModel {
 
-	void start(DataInputStream inStream, OutputStream outStream) throws IOException;
-	void stop();
+    void start(DataInputStream inStream, OutputStream outStream) throws IOException;
+
+    void stop();
 }

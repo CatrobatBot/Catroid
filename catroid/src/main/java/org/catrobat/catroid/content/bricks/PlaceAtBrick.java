@@ -39,94 +39,94 @@ import org.catrobat.catroid.utils.Utils;
 import java.util.List;
 
 public class PlaceAtBrick extends FormulaBrick {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private transient View prototypeView;
+    private transient View prototypeView;
 
-	public PlaceAtBrick() {
-		addAllowedBrickField(BrickField.X_POSITION);
-		addAllowedBrickField(BrickField.Y_POSITION);
-	}
+    public PlaceAtBrick() {
+        addAllowedBrickField(BrickField.X_POSITION);
+        addAllowedBrickField(BrickField.Y_POSITION);
+    }
 
-	public PlaceAtBrick(int xPositionValue, int yPositionValue) {
-		initializeBrickFields(new Formula(xPositionValue), new Formula(yPositionValue));
-	}
+    public PlaceAtBrick(int xPositionValue, int yPositionValue) {
+        initializeBrickFields(new Formula(xPositionValue), new Formula(yPositionValue));
+    }
 
-	public PlaceAtBrick(Formula xPosition, Formula yPosition) {
-		initializeBrickFields(xPosition, yPosition);
-	}
+    public PlaceAtBrick(Formula xPosition, Formula yPosition) {
+        initializeBrickFields(xPosition, yPosition);
+    }
 
-	public void setXPosition(Formula xPosition) {
-		setFormulaWithBrickField(BrickField.X_POSITION, xPosition);
-	}
+    public void setXPosition(Formula xPosition) {
+        setFormulaWithBrickField(BrickField.X_POSITION, xPosition);
+    }
 
-	public void setYPosition(Formula yPosition) {
-		setFormulaWithBrickField(BrickField.Y_POSITION, yPosition);
-	}
+    public void setYPosition(Formula yPosition) {
+        setFormulaWithBrickField(BrickField.Y_POSITION, yPosition);
+    }
 
-	private void initializeBrickFields(Formula xPosition, Formula yPosition) {
-		addAllowedBrickField(BrickField.X_POSITION);
-		addAllowedBrickField(BrickField.Y_POSITION);
-		setFormulaWithBrickField(BrickField.X_POSITION, xPosition);
-		setFormulaWithBrickField(BrickField.Y_POSITION, yPosition);
-	}
+    private void initializeBrickFields(Formula xPosition, Formula yPosition) {
+        addAllowedBrickField(BrickField.X_POSITION);
+        addAllowedBrickField(BrickField.Y_POSITION);
+        setFormulaWithBrickField(BrickField.X_POSITION, xPosition);
+        setFormulaWithBrickField(BrickField.Y_POSITION, yPosition);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return getFormulaWithBrickField(BrickField.Y_POSITION).getRequiredResources() | getFormulaWithBrickField(BrickField.X_POSITION).getRequiredResources();
-	}
+    @Override
+    public int getRequiredResources() {
+        return getFormulaWithBrickField(BrickField.Y_POSITION).getRequiredResources() | getFormulaWithBrickField(BrickField.X_POSITION).getRequiredResources();
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_place_at, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_place_at, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_place_at_checkbox);
-		TextView editX = (TextView) view.findViewById(R.id.brick_place_at_edit_text_x);
-		getFormulaWithBrickField(BrickField.X_POSITION).setTextFieldId(R.id.brick_place_at_edit_text_x);
-		getFormulaWithBrickField(BrickField.X_POSITION).refreshTextField(view);
+        setCheckboxView(R.id.brick_place_at_checkbox);
+        TextView editX = (TextView) view.findViewById(R.id.brick_place_at_edit_text_x);
+        getFormulaWithBrickField(BrickField.X_POSITION).setTextFieldId(R.id.brick_place_at_edit_text_x);
+        getFormulaWithBrickField(BrickField.X_POSITION).refreshTextField(view);
 
-		editX.setOnClickListener(this);
+        editX.setOnClickListener(this);
 
-		TextView editY = (TextView) view.findViewById(R.id.brick_place_at_edit_text_y);
-		getFormulaWithBrickField(BrickField.Y_POSITION).setTextFieldId(R.id.brick_place_at_edit_text_y);
-		getFormulaWithBrickField(BrickField.Y_POSITION).refreshTextField(view);
-		editY.setOnClickListener(this);
-		return view;
-	}
+        TextView editY = (TextView) view.findViewById(R.id.brick_place_at_edit_text_y);
+        getFormulaWithBrickField(BrickField.Y_POSITION).setTextFieldId(R.id.brick_place_at_edit_text_y);
+        getFormulaWithBrickField(BrickField.Y_POSITION).refreshTextField(view);
+        editY.setOnClickListener(this);
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_place_at, null);
-		TextView textX = (TextView) prototypeView.findViewById(R.id.brick_place_at_edit_text_x);
-		textX.setText(Utils.getNumberStringForBricks(BrickValues.X_POSITION));
-		TextView textY = (TextView) prototypeView.findViewById(R.id.brick_place_at_edit_text_y);
-		textY.setText(Utils.getNumberStringForBricks(BrickValues.Y_POSITION));
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_place_at, null);
+        TextView textX = (TextView) prototypeView.findViewById(R.id.brick_place_at_edit_text_x);
+        textX.setText(Utils.getNumberStringForBricks(BrickValues.X_POSITION));
+        TextView textY = (TextView) prototypeView.findViewById(R.id.brick_place_at_edit_text_y);
+        textY.setText(Utils.getNumberStringForBricks(BrickValues.Y_POSITION));
+        return prototypeView;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createPlaceAtAction(sprite,
-				getFormulaWithBrickField(BrickField.X_POSITION),
-				getFormulaWithBrickField(BrickField.Y_POSITION)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createPlaceAtAction(sprite,
+                getFormulaWithBrickField(BrickField.X_POSITION),
+                getFormulaWithBrickField(BrickField.Y_POSITION)));
+        return null;
+    }
 
-	public void showFormulaEditorToEditFormula(View view) {
-		switch (view.getId()) {
-			case R.id.brick_place_at_edit_text_y:
-				FormulaEditorFragment.showFragment(view, this, BrickField.Y_POSITION);
-				break;
+    public void showFormulaEditorToEditFormula(View view) {
+        switch (view.getId()) {
+            case R.id.brick_place_at_edit_text_y:
+                FormulaEditorFragment.showFragment(view, this, BrickField.Y_POSITION);
+                break;
 
-			case R.id.brick_place_at_edit_text_x:
-			default:
-				FormulaEditorFragment.showFragment(view, this, BrickField.X_POSITION);
-				break;
-		}
-	}
+            case R.id.brick_place_at_edit_text_x:
+            default:
+                FormulaEditorFragment.showFragment(view, this, BrickField.X_POSITION);
+                break;
+        }
+    }
 }

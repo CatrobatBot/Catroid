@@ -41,86 +41,86 @@ import java.util.List;
 
 public class SpeakAndWaitBrick extends FormulaBrick {
 
-	private static final long serialVersionUID = 1L;
-	private transient View prototypeView;
+    private static final long serialVersionUID = 1L;
+    private transient View prototypeView;
 
-	File speechFile;
-	private float duration;
+    File speechFile;
+    private float duration;
 
-	public SpeakAndWaitBrick() {
-		addAllowedBrickField(BrickField.SPEAK);
-	}
+    public SpeakAndWaitBrick() {
+        addAllowedBrickField(BrickField.SPEAK);
+    }
 
-	public SpeakAndWaitBrick(String speak) {
-		initializeBrickFields(new Formula(speak));
-	}
+    public SpeakAndWaitBrick(String speak) {
+        initializeBrickFields(new Formula(speak));
+    }
 
-	public SpeakAndWaitBrick(Formula speak) {
-		initializeBrickFields(speak);
-	}
+    public SpeakAndWaitBrick(Formula speak) {
+        initializeBrickFields(speak);
+    }
 
-	private void initializeBrickFields(Formula speak) {
-		addAllowedBrickField(BrickField.SPEAK);
-		setFormulaWithBrickField(BrickField.SPEAK, speak);
-	}
+    private void initializeBrickFields(Formula speak) {
+        addAllowedBrickField(BrickField.SPEAK);
+        setFormulaWithBrickField(BrickField.SPEAK, speak);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return TEXT_TO_SPEECH;
-	}
+    @Override
+    public int getRequiredResources() {
+        return TEXT_TO_SPEECH;
+    }
 
-	@Override
-	public View getView(final Context context, int brickId, final BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(final Context context, int brickId, final BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_speak_and_wait, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_speak_and_wait, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_speak_and_wait_checkbox);
-		TextView textField = (TextView) view.findViewById(R.id.brick_speak_and_wait_edit_text);
-		getFormulaWithBrickField(BrickField.SPEAK).setTextFieldId(R.id.brick_speak_and_wait_edit_text);
-		getFormulaWithBrickField(BrickField.SPEAK).refreshTextField(view);
+        setCheckboxView(R.id.brick_speak_and_wait_checkbox);
+        TextView textField = (TextView) view.findViewById(R.id.brick_speak_and_wait_edit_text);
+        getFormulaWithBrickField(BrickField.SPEAK).setTextFieldId(R.id.brick_speak_and_wait_edit_text);
+        getFormulaWithBrickField(BrickField.SPEAK).refreshTextField(view);
 
-		textField.setOnClickListener(this);
-		return view;
-	}
+        textField.setOnClickListener(this);
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_speak_and_wait, null);
-		TextView textSpeak = (TextView) prototypeView.findViewById(R.id.brick_speak_and_wait_edit_text);
-		textSpeak.setText(context.getString(R.string.brick_speak_default_value));
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_speak_and_wait, null);
+        TextView textSpeak = (TextView) prototypeView.findViewById(R.id.brick_speak_and_wait_edit_text);
+        textSpeak.setText(context.getString(R.string.brick_speak_default_value));
 
-		return prototypeView;
-	}
+        return prototypeView;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createSpeakAction(sprite,
-				getFormulaWithBrickField(BrickField.SPEAK)));
-		sequence.addAction(sprite.getActionFactory().createWaitAction(sprite,
-				new Formula(getDurationOfSpokenText(sprite, getFormulaWithBrickField(BrickField.SPEAK)))));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createSpeakAction(sprite,
+                getFormulaWithBrickField(BrickField.SPEAK)));
+        sequence.addAction(sprite.getActionFactory().createWaitAction(sprite,
+                new Formula(getDurationOfSpokenText(sprite, getFormulaWithBrickField(BrickField.SPEAK)))));
+        return null;
+    }
 
-	public float getDurationOfSpokenText(Sprite sprite, Formula text) {
-		SpeakAction action = (SpeakAction) sprite.getActionFactory().createSpeakAction(sprite,
-				getFormulaWithBrickField(BrickField.SPEAK));
-		action.setSprite(sprite);
-		action.setText(text);
-		action.setDetermineLength(true);
+    public float getDurationOfSpokenText(Sprite sprite, Formula text) {
+        SpeakAction action = (SpeakAction) sprite.getActionFactory().createSpeakAction(sprite,
+                getFormulaWithBrickField(BrickField.SPEAK));
+        action.setSprite(sprite);
+        action.setText(text);
+        action.setDetermineLength(true);
 
-		action.act(1.0f);
+        action.act(1.0f);
 
-		duration = action.getLengthOfText() / 1000;
+        duration = action.getLengthOfText() / 1000;
 
-		return duration;
-	}
+        return duration;
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		FormulaEditorFragment.showFragment(view, this, BrickField.SPEAK);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        FormulaEditorFragment.showFragment(view, this, BrickField.SPEAK);
+    }
 }

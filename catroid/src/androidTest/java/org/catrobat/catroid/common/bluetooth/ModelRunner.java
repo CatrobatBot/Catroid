@@ -33,36 +33,36 @@ import java.io.OutputStream;
 
 class ModelRunner extends Thread {
 
-	public static final String TAG = ModelRunner.class.getSimpleName();
+    public static final String TAG = ModelRunner.class.getSimpleName();
 
-	private DataInputStream inStream;
-	private OutputStream outStream;
-	private DeviceModel model;
+    private DataInputStream inStream;
+    private OutputStream outStream;
+    private DeviceModel model;
 
-	ModelRunner(DeviceModel model, InputStream inStream, OutputStream outStream) {
+    ModelRunner(DeviceModel model, InputStream inStream, OutputStream outStream) {
 
-		this.model = model;
+        this.model = model;
 
-		this.inStream = new DataInputStream(inStream);
-		this.outStream = outStream;
-	}
+        this.inStream = new DataInputStream(inStream);
+        this.outStream = outStream;
+    }
 
-	@Override
-	public void run() {
-		try {
-			model.start(inStream, outStream);
-		} catch (IOException e) {
-			Log.e(TAG, "Model execution terminated, Input or Output stream was closed.");
-		}
-	}
+    @Override
+    public void run() {
+        try {
+            model.start(inStream, outStream);
+        } catch (IOException e) {
+            Log.e(TAG, "Model execution terminated, Input or Output stream was closed.");
+        }
+    }
 
-	public void stopModelRunner() {
-		try {
-			model.stop();
-			outStream.close();
-			inStream.close();
-		} catch (IOException e) {
-			Log.e(TAG, "An error occurred on stopping model.");
-		}
-	}
+    public void stopModelRunner() {
+        try {
+            model.stop();
+            outStream.close();
+            inStream.close();
+        } catch (IOException e) {
+            Log.e(TAG, "An error occurred on stopping model.");
+        }
+    }
 }

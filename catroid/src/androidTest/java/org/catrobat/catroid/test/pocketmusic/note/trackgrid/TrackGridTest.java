@@ -29,45 +29,45 @@ import org.catrobat.catroid.pocketmusic.note.trackgrid.TrackGrid;
 
 public class TrackGridTest extends AndroidTestCase {
 
-	public void testEquals1() {
-		TrackGrid trackGrid1 = TrackGridTestDataFactory.createSimpleTrackGrid();
-		TrackGrid trackGrid2 = TrackGridTestDataFactory.createSimpleTrackGrid();
+    public void testEquals1() {
+        TrackGrid trackGrid1 = TrackGridTestDataFactory.createSimpleTrackGrid();
+        TrackGrid trackGrid2 = TrackGridTestDataFactory.createSimpleTrackGrid();
 
-		assertTrue("TrackGrid not equal", trackGrid1.equals(trackGrid2));
-	}
+        assertTrue("TrackGrid not equal", trackGrid1.equals(trackGrid2));
+    }
 
-	public void testEquals2() {
-		TrackGrid trackGrid1 = TrackGridTestDataFactory.createTrackGridWithSeveralBreaks();
-		TrackGrid trackGrid2 = TrackGridTestDataFactory.createTrackGridWithSeveralBreaks();
+    public void testEquals2() {
+        TrackGrid trackGrid1 = TrackGridTestDataFactory.createTrackGridWithSeveralBreaks();
+        TrackGrid trackGrid2 = TrackGridTestDataFactory.createTrackGridWithSeveralBreaks();
 
-		assertTrue("TrackGrid not equal", trackGrid1.equals(trackGrid2));
-	}
+        assertTrue("TrackGrid not equal", trackGrid1.equals(trackGrid2));
+    }
 
-	public void testEquals3() {
-		TrackGrid trackGrid1 = TrackGridTestDataFactory.createSemiComplexTrackGrid();
-		TrackGrid trackGrid2 = TrackGridTestDataFactory.createSimpleTrackGrid();
+    public void testEquals3() {
+        TrackGrid trackGrid1 = TrackGridTestDataFactory.createSemiComplexTrackGrid();
+        TrackGrid trackGrid2 = TrackGridTestDataFactory.createSimpleTrackGrid();
 
-		assertFalse("TrackGrid equal", trackGrid1.equals(trackGrid2));
-	}
+        assertFalse("TrackGrid equal", trackGrid1.equals(trackGrid2));
+    }
 
-	public void testHashCode1() {
-		TrackGrid trackGrid1 = TrackGridTestDataFactory.createSimpleTrackGrid();
-		TrackGrid trackGrid2 = TrackGridTestDataFactory.createSimpleTrackGrid();
+    public void testHashCode1() {
+        TrackGrid trackGrid1 = TrackGridTestDataFactory.createSimpleTrackGrid();
+        TrackGrid trackGrid2 = TrackGridTestDataFactory.createSimpleTrackGrid();
 
-		assertTrue("HashCode not equal", trackGrid1.hashCode() == trackGrid2.hashCode());
-	}
+        assertTrue("HashCode not equal", trackGrid1.hashCode() == trackGrid2.hashCode());
+    }
 
-	public void testHashCode2() {
-		TrackGrid trackGrid1 = TrackGridTestDataFactory.createTrackGridWithSeveralBreaks();
-		TrackGrid trackGrid2 = TrackGridTestDataFactory.createSimpleTrackGrid();
+    public void testHashCode2() {
+        TrackGrid trackGrid1 = TrackGridTestDataFactory.createTrackGridWithSeveralBreaks();
+        TrackGrid trackGrid2 = TrackGridTestDataFactory.createSimpleTrackGrid();
 
-		assertFalse("HashCode equal", trackGrid1.hashCode() == trackGrid2.hashCode());
-	}
+        assertFalse("HashCode equal", trackGrid1.hashCode() == trackGrid2.hashCode());
+    }
 
-	public void testHashCode3() {
-		TrackGrid trackGrid1 = TrackGridTestDataFactory.createSemiComplexTrackGrid();
-		TrackGrid trackGrid2 = TrackGridTestDataFactory.createSimpleTrackGrid();
+    public void testHashCode3() {
+        TrackGrid trackGrid1 = TrackGridTestDataFactory.createSemiComplexTrackGrid();
+        TrackGrid trackGrid2 = TrackGridTestDataFactory.createSimpleTrackGrid();
 
-		assertFalse("HashCode equal", trackGrid1.hashCode() == trackGrid2.hashCode());
-	}
+        assertFalse("HashCode equal", trackGrid1.hashCode() == trackGrid2.hashCode());
+    }
 }

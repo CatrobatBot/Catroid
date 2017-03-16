@@ -27,29 +27,29 @@ import android.util.AttributeSet;
 import android.widget.ImageButton;
 
 public class RecordButton extends ImageButton {
-	private RecordState state = RecordState.STOP;
+    private RecordState state = RecordState.STOP;
 
-	public RecordButton(Context context) {
-		super(context);
-	}
+    public RecordButton(Context context) {
+        super(context);
+    }
 
-	public RecordButton(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
+    public RecordButton(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
 
-	public RecordButton(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-	}
+    public RecordButton(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+    }
 
-	public RecordState getState() {
-		return state;
-	}
+    public RecordState getState() {
+        return state;
+    }
 
-	public void setState(RecordState state) {
-		this.state = state;
-	}
+    public void setState(RecordState state) {
+        this.state = state;
+    }
 
-	public enum RecordState {
-		RECORD, STOP;
-	}
+    public enum RecordState {
+        RECORD, STOP;
+    }
 }

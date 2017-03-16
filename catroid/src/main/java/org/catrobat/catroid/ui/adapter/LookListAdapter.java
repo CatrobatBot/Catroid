@@ -35,34 +35,34 @@ import java.util.List;
 
 public class LookListAdapter extends CheckBoxListAdapter<LookData> {
 
-	public static final String TAG = LookListAdapter.class.getSimpleName();
+    public static final String TAG = LookListAdapter.class.getSimpleName();
 
-	public LookListAdapter(Context context, int resource, List<LookData> listItems) {
-		super(context, resource, listItems);
-	}
+    public LookListAdapter(Context context, int resource, List<LookData> listItems) {
+        super(context, resource, listItems);
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		View listItemView = super.getView(position, convertView, parent);
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View listItemView = super.getView(position, convertView, parent);
 
-		ListItemViewHolder listItemViewHolder = (ListItemViewHolder) listItemView.getTag();
-		LookData lookData = getItem(position);
+        ListItemViewHolder listItemViewHolder = (ListItemViewHolder) listItemView.getTag();
+        LookData lookData = getItem(position);
 
-		listItemViewHolder.name.setText(lookData.getLookName());
-		listItemViewHolder.image.setImageBitmap(lookData.getThumbnailBitmap());
+        listItemViewHolder.name.setText(lookData.getLookName());
+        listItemViewHolder.image.setImageBitmap(lookData.getThumbnailBitmap());
 
-		if (showDetails) {
-			listItemViewHolder.details.setVisibility(View.VISIBLE);
+        if (showDetails) {
+            listItemViewHolder.details.setVisibility(View.VISIBLE);
 
-			listItemViewHolder.leftBottomDetails.setText(R.string.look_measure);
-			int[] measure = lookData.getMeasure();
-			String measureString = measure[0] + " x " + measure[1];
-			listItemViewHolder.rightBottomDetails.setText(measureString);
+            listItemViewHolder.leftBottomDetails.setText(R.string.look_measure);
+            int[] measure = lookData.getMeasure();
+            String measureString = measure[0] + " x " + measure[1];
+            listItemViewHolder.rightBottomDetails.setText(measureString);
 
-			listItemViewHolder.leftTopDetails.setText(R.string.size);
-			listItemViewHolder.rightTopDetails.setText(UtilFile.getSizeAsString(new File(lookData.getAbsolutePath())));
-		}
+            listItemViewHolder.leftTopDetails.setText(R.string.size);
+            listItemViewHolder.rightTopDetails.setText(UtilFile.getSizeAsString(new File(lookData.getAbsolutePath())));
+        }
 
-		return listItemView;
-	}
+        return listItemView;
+    }
 }

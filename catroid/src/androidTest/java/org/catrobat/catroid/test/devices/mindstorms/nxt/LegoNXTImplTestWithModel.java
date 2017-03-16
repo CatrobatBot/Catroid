@@ -33,42 +33,42 @@ import org.catrobat.catroid.devices.mindstorms.nxt.LegoNXTImpl;
 
 public class LegoNXTImplTestWithModel extends AndroidTestCase {
 
-	private LegoNXT nxt;
-	private MindstormsNXTTestModel nxtTestModel;
-	ConnectionDataLogger logger;
+    private LegoNXT nxt;
+    private MindstormsNXTTestModel nxtTestModel;
+    ConnectionDataLogger logger;
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
 
-		Context applicationContext = this.getContext().getApplicationContext();
+        Context applicationContext = this.getContext().getApplicationContext();
 
-		nxtTestModel = new MindstormsNXTTestModel();
+        nxtTestModel = new MindstormsNXTTestModel();
 
-		nxt = new LegoNXTImpl(applicationContext);
-		logger = ConnectionDataLogger.createLocalConnectionLoggerWithDeviceModel(nxtTestModel);
-		nxt.setConnection(logger.getConnectionProxy());
-	}
+        nxt = new LegoNXTImpl(applicationContext);
+        logger = ConnectionDataLogger.createLocalConnectionLoggerWithDeviceModel(nxtTestModel);
+        nxt.setConnection(logger.getConnectionProxy());
+    }
 
-	@Override
-	protected void tearDown() throws Exception {
-		nxt.disconnect();
-		logger.disconnectAndDestroy();
-		super.tearDown();
-	}
+    @Override
+    protected void tearDown() throws Exception {
+        nxt.disconnect();
+        logger.disconnectAndDestroy();
+        super.tearDown();
+    }
 
-	public void testGetBatteryLevel() {
-		int expectedVoltage = 7533;
-		nxtTestModel.setBatteryValue(expectedVoltage);
-		nxt.initialise();
-		assertEquals("Expected battery voltage not the same as received from LegoNXT", expectedVoltage, nxt.getBatteryLevel());
-	}
+    public void testGetBatteryLevel() {
+        int expectedVoltage = 7533;
+        nxtTestModel.setBatteryValue(expectedVoltage);
+        nxt.initialise();
+        assertEquals("Expected battery voltage not the same as received from LegoNXT", expectedVoltage, nxt.getBatteryLevel());
+    }
 
-	public void testKeepAlive() {
+    public void testKeepAlive() {
 
-		int expectedKeepAliveTime = 3600;
-		nxtTestModel.setKeepAliveTime(expectedKeepAliveTime);
-		nxt.initialise();
-		assertEquals("Expected keep alive time not the same as received vom LegoNXT", expectedKeepAliveTime, nxt.getKeepAliveTime());
-	}
+        int expectedKeepAliveTime = 3600;
+        nxtTestModel.setKeepAliveTime(expectedKeepAliveTime);
+        nxt.initialise();
+        assertEquals("Expected keep alive time not the same as received vom LegoNXT", expectedKeepAliveTime, nxt.getKeepAliveTime());
+    }
 }

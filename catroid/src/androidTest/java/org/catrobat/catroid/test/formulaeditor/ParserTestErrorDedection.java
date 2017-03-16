@@ -35,108 +35,108 @@ import java.util.List;
 
 public class ParserTestErrorDedection extends AndroidTestCase {
 
-	public void testTooManyOperators() {
-		List<InternToken> internTokenList = new LinkedList<InternToken>();
+    public void testTooManyOperators() {
+        List<InternToken> internTokenList = new LinkedList<InternToken>();
 
-		internTokenList.add(new InternToken(InternTokenType.OPERATOR, Operators.MINUS.name()));
-		internTokenList.add(new InternToken(InternTokenType.OPERATOR, Operators.MINUS.name()));
-		internTokenList.add(new InternToken(InternTokenType.NUMBER, "42.42"));
-		InternFormulaParser internParser = new InternFormulaParser(internTokenList);
-		FormulaElement parseTree = internParser.parseFormula();
-		assertNull("Invalid formula parsed: - - 42.42", parseTree);
-		int errorTokenIndex = internParser.getErrorTokenIndex();
-		assertEquals("Error Token Index is not as expected", 1, errorTokenIndex);
+        internTokenList.add(new InternToken(InternTokenType.OPERATOR, Operators.MINUS.name()));
+        internTokenList.add(new InternToken(InternTokenType.OPERATOR, Operators.MINUS.name()));
+        internTokenList.add(new InternToken(InternTokenType.NUMBER, "42.42"));
+        InternFormulaParser internParser = new InternFormulaParser(internTokenList);
+        FormulaElement parseTree = internParser.parseFormula();
+        assertNull("Invalid formula parsed: - - 42.42", parseTree);
+        int errorTokenIndex = internParser.getErrorTokenIndex();
+        assertEquals("Error Token Index is not as expected", 1, errorTokenIndex);
 
-		internTokenList = new LinkedList<InternToken>();
-		internTokenList.add(new InternToken(InternTokenType.OPERATOR, Operators.PLUS.name()));
-		internParser = new InternFormulaParser(internTokenList);
-		parseTree = internParser.parseFormula();
-		assertNull("Invalid formula parsed: +", parseTree);
-		errorTokenIndex = internParser.getErrorTokenIndex();
-		assertEquals("Error Token Index is not as expected", 0, errorTokenIndex);
+        internTokenList = new LinkedList<InternToken>();
+        internTokenList.add(new InternToken(InternTokenType.OPERATOR, Operators.PLUS.name()));
+        internParser = new InternFormulaParser(internTokenList);
+        parseTree = internParser.parseFormula();
+        assertNull("Invalid formula parsed: +", parseTree);
+        errorTokenIndex = internParser.getErrorTokenIndex();
+        assertEquals("Error Token Index is not as expected", 0, errorTokenIndex);
 
-		internTokenList = new LinkedList<InternToken>();
-		internTokenList.add(new InternToken(InternTokenType.OPERATOR, Operators.MINUS.name()));
-		internTokenList.add(new InternToken(InternTokenType.OPERATOR, Operators.PLUS.name()));
-		internParser = new InternFormulaParser(internTokenList);
-		parseTree = internParser.parseFormula();
-		assertNull("Invalid formula parsed: + -", parseTree);
-		errorTokenIndex = internParser.getErrorTokenIndex();
-		assertEquals("Error Token Index is not as expected", 1, errorTokenIndex);
+        internTokenList = new LinkedList<InternToken>();
+        internTokenList.add(new InternToken(InternTokenType.OPERATOR, Operators.MINUS.name()));
+        internTokenList.add(new InternToken(InternTokenType.OPERATOR, Operators.PLUS.name()));
+        internParser = new InternFormulaParser(internTokenList);
+        parseTree = internParser.parseFormula();
+        assertNull("Invalid formula parsed: + -", parseTree);
+        errorTokenIndex = internParser.getErrorTokenIndex();
+        assertEquals("Error Token Index is not as expected", 1, errorTokenIndex);
 
-		internTokenList = new LinkedList<InternToken>();
-		internTokenList.add(new InternToken(InternTokenType.OPERATOR, Operators.MINUS.name()));
-		internTokenList.add(new InternToken(InternTokenType.NUMBER, "42.42"));
-		internTokenList.add(new InternToken(InternTokenType.OPERATOR, Operators.MINUS.name()));
-		internTokenList.add(new InternToken(InternTokenType.NUMBER, "42.42"));
-		internTokenList.add(new InternToken(InternTokenType.OPERATOR, Operators.MINUS.name()));
-		internParser = new InternFormulaParser(internTokenList);
-		parseTree = internParser.parseFormula();
-		assertNull("Invalid formula parsed: - 42.42 - 42.42 -", parseTree);
-		errorTokenIndex = internParser.getErrorTokenIndex();
-		assertEquals("Error Token Index is not as expected", 5, errorTokenIndex);
-	}
+        internTokenList = new LinkedList<InternToken>();
+        internTokenList.add(new InternToken(InternTokenType.OPERATOR, Operators.MINUS.name()));
+        internTokenList.add(new InternToken(InternTokenType.NUMBER, "42.42"));
+        internTokenList.add(new InternToken(InternTokenType.OPERATOR, Operators.MINUS.name()));
+        internTokenList.add(new InternToken(InternTokenType.NUMBER, "42.42"));
+        internTokenList.add(new InternToken(InternTokenType.OPERATOR, Operators.MINUS.name()));
+        internParser = new InternFormulaParser(internTokenList);
+        parseTree = internParser.parseFormula();
+        assertNull("Invalid formula parsed: - 42.42 - 42.42 -", parseTree);
+        errorTokenIndex = internParser.getErrorTokenIndex();
+        assertEquals("Error Token Index is not as expected", 5, errorTokenIndex);
+    }
 
-	public void testOperatorMissing() {
-		List<InternToken> internTokenList = new LinkedList<InternToken>();
+    public void testOperatorMissing() {
+        List<InternToken> internTokenList = new LinkedList<InternToken>();
 
-		internTokenList.add(new InternToken(InternTokenType.NUMBER, "42.53"));
-		internTokenList.add(new InternToken(InternTokenType.NUMBER, "42.42"));
-		InternFormulaParser internParser = new InternFormulaParser(internTokenList);
-		FormulaElement parseTree = internParser.parseFormula();
-		assertNull("Invalid formula parsed:  42.53 42.42", parseTree);
-		int errorTokenIndex = internParser.getErrorTokenIndex();
-		assertEquals("Error Token Index is not as expected", 1, errorTokenIndex);
-	}
+        internTokenList.add(new InternToken(InternTokenType.NUMBER, "42.53"));
+        internTokenList.add(new InternToken(InternTokenType.NUMBER, "42.42"));
+        InternFormulaParser internParser = new InternFormulaParser(internTokenList);
+        FormulaElement parseTree = internParser.parseFormula();
+        assertNull("Invalid formula parsed:  42.53 42.42", parseTree);
+        int errorTokenIndex = internParser.getErrorTokenIndex();
+        assertEquals("Error Token Index is not as expected", 1, errorTokenIndex);
+    }
 
-	public void testNumberMissing() {
-		List<InternToken> internTokenList = new LinkedList<InternToken>();
+    public void testNumberMissing() {
+        List<InternToken> internTokenList = new LinkedList<InternToken>();
 
-		internTokenList.add(new InternToken(InternTokenType.OPERATOR, Operators.MULT.name()));
-		internTokenList.add(new InternToken(InternTokenType.NUMBER, "42.53"));
-		InternFormulaParser internParser = new InternFormulaParser(internTokenList);
-		FormulaElement parseTree = internParser.parseFormula();
-		assertNull("Invalid formula parsed:  * 42.53", parseTree);
-		int errorTokenIndex = internParser.getErrorTokenIndex();
-		assertEquals("Error Token Index is not as expected", 0, errorTokenIndex);
-	}
+        internTokenList.add(new InternToken(InternTokenType.OPERATOR, Operators.MULT.name()));
+        internTokenList.add(new InternToken(InternTokenType.NUMBER, "42.53"));
+        InternFormulaParser internParser = new InternFormulaParser(internTokenList);
+        FormulaElement parseTree = internParser.parseFormula();
+        assertNull("Invalid formula parsed:  * 42.53", parseTree);
+        int errorTokenIndex = internParser.getErrorTokenIndex();
+        assertEquals("Error Token Index is not as expected", 0, errorTokenIndex);
+    }
 
-	public void testRightBracketMissing() {
-		List<InternToken> internTokenList = new LinkedList<InternToken>();
+    public void testRightBracketMissing() {
+        List<InternToken> internTokenList = new LinkedList<InternToken>();
 
-		internTokenList.add(new InternToken(InternTokenType.BRACKET_OPEN));
-		internTokenList.add(new InternToken(InternTokenType.NUMBER, "42.53"));
+        internTokenList.add(new InternToken(InternTokenType.BRACKET_OPEN));
+        internTokenList.add(new InternToken(InternTokenType.NUMBER, "42.53"));
 
-		InternFormulaParser internParser = new InternFormulaParser(internTokenList);
-		FormulaElement parseTree = internParser.parseFormula();
-		assertNull("Invalid formula parsed:   (42.53", parseTree);
-		int errorTokenIndex = internParser.getErrorTokenIndex();
-		assertEquals("Error Token Index is not as expected", 2, errorTokenIndex);
-	}
+        InternFormulaParser internParser = new InternFormulaParser(internTokenList);
+        FormulaElement parseTree = internParser.parseFormula();
+        assertNull("Invalid formula parsed:   (42.53", parseTree);
+        int errorTokenIndex = internParser.getErrorTokenIndex();
+        assertEquals("Error Token Index is not as expected", 2, errorTokenIndex);
+    }
 
-	public void testLefttBracketMissing() {
-		List<InternToken> internTokenList = new LinkedList<InternToken>();
+    public void testLefttBracketMissing() {
+        List<InternToken> internTokenList = new LinkedList<InternToken>();
 
-		internTokenList.add(new InternToken(InternTokenType.NUMBER, "42.53"));
-		internTokenList.add(new InternToken(InternTokenType.BRACKET_CLOSE));
+        internTokenList.add(new InternToken(InternTokenType.NUMBER, "42.53"));
+        internTokenList.add(new InternToken(InternTokenType.BRACKET_CLOSE));
 
-		InternFormulaParser internParser = new InternFormulaParser(internTokenList);
-		FormulaElement parseTree = internParser.parseFormula();
-		assertNull("Invalid formula parsed:   42.53)", parseTree);
-		int errorTokenIndex = internParser.getErrorTokenIndex();
-		assertEquals("Error Token Index is not as expected", 1, errorTokenIndex);
-	}
+        InternFormulaParser internParser = new InternFormulaParser(internTokenList);
+        FormulaElement parseTree = internParser.parseFormula();
+        assertNull("Invalid formula parsed:   42.53)", parseTree);
+        int errorTokenIndex = internParser.getErrorTokenIndex();
+        assertEquals("Error Token Index is not as expected", 1, errorTokenIndex);
+    }
 
-	public void testOutOfBound() {
-		List<InternToken> internTokenList = new LinkedList<InternToken>();
+    public void testOutOfBound() {
+        List<InternToken> internTokenList = new LinkedList<InternToken>();
 
-		internTokenList.add(new InternToken(InternTokenType.NUMBER, "42.53"));
-		internTokenList.add(new InternToken(InternTokenType.BRACKET_CLOSE));
+        internTokenList.add(new InternToken(InternTokenType.NUMBER, "42.53"));
+        internTokenList.add(new InternToken(InternTokenType.BRACKET_CLOSE));
 
-		InternFormulaParser internParser = new InternFormulaParser(internTokenList);
-		FormulaElement parseTree = internParser.parseFormula();
-		assertNull("Invalid formula parsed:   42.53)", parseTree);
-		int errorTokenIndex = internParser.getErrorTokenIndex();
-		assertEquals("Error Token Index is not as expected", 1, errorTokenIndex);
-	}
+        InternFormulaParser internParser = new InternFormulaParser(internTokenList);
+        FormulaElement parseTree = internParser.parseFormula();
+        assertNull("Invalid formula parsed:   42.53)", parseTree);
+        int errorTokenIndex = internParser.getErrorTokenIndex();
+        assertEquals("Error Token Index is not as expected", 1, errorTokenIndex);
+    }
 }

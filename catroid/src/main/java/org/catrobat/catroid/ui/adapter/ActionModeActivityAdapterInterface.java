@@ -25,17 +25,17 @@ package org.catrobat.catroid.ui.adapter;
 import java.util.Set;
 
 public interface ActionModeActivityAdapterInterface {
-	void setSelectMode(int mode);
+    void setSelectMode(int mode);
 
-	int getSelectMode();
+    int getSelectMode();
 
-	void setShowDetails(boolean showDetails);
+    void setShowDetails(boolean showDetails);
 
-	boolean getShowDetails();
+    boolean getShowDetails();
 
-	int getAmountOfCheckedItems();
+    int getAmountOfCheckedItems();
 
-	Set<Integer> getCheckedItems();
+    Set<Integer> getCheckedItems();
 
-	void clearCheckedItems();
+    void clearCheckedItems();
 }

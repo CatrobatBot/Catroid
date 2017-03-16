@@ -32,16 +32,16 @@ import org.catrobat.catroid.content.Sprite;
 import java.util.List;
 
 public class DroneSwitchCameraBrick extends DroneBasicLookBrick {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createDroneSwitchCameraAction());
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createDroneSwitchCameraAction());
+        return null;
+    }
 
-	@Override
-	protected String getBrickLabel(View view) {
-		return view.getResources().getString(R.string.brick_drone_switch_camera);
-	}
+    @Override
+    protected String getBrickLabel(View view) {
+        return view.getResources().getString(R.string.brick_drone_switch_camera);
+    }
 }

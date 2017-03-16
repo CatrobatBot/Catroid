@@ -27,36 +27,36 @@ import org.catrobat.catroid.content.bricks.WhenClonedBrick;
 
 public class WhenClonedScript extends Script {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public WhenClonedScript() {
-		super();
-	}
+    public WhenClonedScript() {
+        super();
+    }
 
-	public WhenClonedScript(WhenClonedBrick brick) {
-		this.brick = brick;
-	}
+    public WhenClonedScript(WhenClonedBrick brick) {
+        this.brick = brick;
+    }
 
-	@Override
-	protected Object readResolve() {
-		super.readResolve();
-		return this;
-	}
+    @Override
+    protected Object readResolve() {
+        super.readResolve();
+        return this;
+    }
 
-	@Override
-	public ScriptBrick getScriptBrick() {
-		if (brick == null) {
-			brick = new WhenClonedBrick(this);
-		}
+    @Override
+    public ScriptBrick getScriptBrick() {
+        if (brick == null) {
+            brick = new WhenClonedBrick(this);
+        }
 
-		return brick;
-	}
+        return brick;
+    }
 
-	@Override
-	public Script copyScriptForSprite(Sprite copySprite) {
-		WhenClonedScript cloneScript = new WhenClonedScript();
-		doCopy(copySprite, cloneScript);
+    @Override
+    public Script copyScriptForSprite(Sprite copySprite) {
+        WhenClonedScript cloneScript = new WhenClonedScript();
+        doCopy(copySprite, cloneScript);
 
-		return cloneScript;
-	}
+        return cloneScript;
+    }
 }

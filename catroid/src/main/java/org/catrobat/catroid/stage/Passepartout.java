@@ -30,54 +30,54 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class Passepartout extends Actor {
 
-	private float virtualScreenWidth;
-	private float virtualScreenHeight;
+    private float virtualScreenWidth;
+    private float virtualScreenHeight;
 
-	private final Color passepartoutColor = Color.BLACK;
-	private float passepartoutHeight;
-	private float passepartoutWidth;
+    private final Color passepartoutColor = Color.BLACK;
+    private float passepartoutHeight;
+    private float passepartoutWidth;
 
-	private Texture texture;
+    private Texture texture;
 
-	Passepartout(int screenWidth, int screenHeight, int screenViewPortWidth, int screenViewPortHeight,
-			float virtualScreenWidth, float virtualScreenHeight) {
+    Passepartout(int screenWidth, int screenHeight, int screenViewPortWidth, int screenViewPortHeight,
+                 float virtualScreenWidth, float virtualScreenHeight) {
 
-		this.virtualScreenWidth = virtualScreenWidth;
-		this.virtualScreenHeight = virtualScreenHeight;
+        this.virtualScreenWidth = virtualScreenWidth;
+        this.virtualScreenHeight = virtualScreenHeight;
 
-		passepartoutHeight = ((screenHeight / (screenViewPortHeight / virtualScreenHeight)) - virtualScreenHeight) / 2f;
-		passepartoutWidth = ((screenWidth / (screenViewPortWidth / virtualScreenWidth)) - virtualScreenWidth) / 2f;
+        passepartoutHeight = ((screenHeight / (screenViewPortHeight / virtualScreenHeight)) - virtualScreenHeight) / 2f;
+        passepartoutWidth = ((screenWidth / (screenViewPortWidth / virtualScreenWidth)) - virtualScreenWidth) / 2f;
 
-		Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-		pixmap.setColor(passepartoutColor);
-		pixmap.fill();
-		texture = new Texture(pixmap);
-	}
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(passepartoutColor);
+        pixmap.fill();
+        texture = new Texture(pixmap);
+    }
 
-	@Override
-	public void draw(Batch batch, float parentAlpha) {
-		batch.setColor(passepartoutColor);
-		if (Float.compare(passepartoutWidth, 0f) != 0) {
-			batch.draw(texture, -virtualScreenWidth / 2f, -virtualScreenHeight / 2f, -passepartoutWidth,
-					virtualScreenHeight);
-			batch.draw(texture, virtualScreenWidth / 2f, virtualScreenHeight / 2f, passepartoutWidth,
-					-virtualScreenHeight);
-		}
-		if (Float.compare(passepartoutHeight, 0f) != 0) {
-			batch.draw(texture, -virtualScreenWidth / 2f, -virtualScreenHeight / 2f, virtualScreenWidth,
-					-passepartoutHeight);
-			batch.draw(texture, virtualScreenWidth / 2f, virtualScreenHeight / 2f, -virtualScreenWidth,
-					passepartoutHeight);
-		}
-		batch.flush();
-	}
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        batch.setColor(passepartoutColor);
+        if (Float.compare(passepartoutWidth, 0f) != 0) {
+            batch.draw(texture, -virtualScreenWidth / 2f, -virtualScreenHeight / 2f, -passepartoutWidth,
+                    virtualScreenHeight);
+            batch.draw(texture, virtualScreenWidth / 2f, virtualScreenHeight / 2f, passepartoutWidth,
+                    -virtualScreenHeight);
+        }
+        if (Float.compare(passepartoutHeight, 0f) != 0) {
+            batch.draw(texture, -virtualScreenWidth / 2f, -virtualScreenHeight / 2f, virtualScreenWidth,
+                    -passepartoutHeight);
+            batch.draw(texture, virtualScreenWidth / 2f, virtualScreenHeight / 2f, -virtualScreenWidth,
+                    passepartoutHeight);
+        }
+        batch.flush();
+    }
 
-	@Override
-	public Actor hit(float x, float y, boolean touchable) {
-		if (x < -virtualScreenWidth / 2 || x > virtualScreenWidth / 2 || y < -virtualScreenHeight / 2
-				|| y > virtualScreenHeight / 2) {
-			return this;
-		}
-		return null;
-	}
+    @Override
+    public Actor hit(float x, float y, boolean touchable) {
+        if (x < -virtualScreenWidth / 2 || x > virtualScreenWidth / 2 || y < -virtualScreenHeight / 2
+                || y > virtualScreenHeight / 2) {
+            return this;
+        }
+        return null;
+    }
 }

@@ -57,334 +57,336 @@ import java.util.Queue;
 
 public class PhysicsLookTest extends InstrumentationTestCase {
 
-	private static final String TAG = PhysicsLookTest.class.getSimpleName();
+    private static final String TAG = PhysicsLookTest.class.getSimpleName();
 
-	PhysicsWorld physicsWorld;
-	private Project project;
-	private File testImage;
-	private String testImageFilename;
-	private static final int IMAGE_FILE_ID = R.raw.multible_mixed_polygons;
-	private Sprite sprite;
-	static {
-		GdxNativesLoader.load();
-	}
-	@Override
-	protected void setUp() throws Exception {
-		physicsWorld = new PhysicsWorld(1920, 1600);
-		File projectFile = new File(Constants.DEFAULT_ROOT + File.separator + TestUtils.DEFAULT_TEST_PROJECT_NAME);
+    PhysicsWorld physicsWorld;
+    private Project project;
+    private File testImage;
+    private String testImageFilename;
+    private static final int IMAGE_FILE_ID = R.raw.multible_mixed_polygons;
+    private Sprite sprite;
 
-		if (projectFile.exists()) {
-			UtilFile.deleteDirectory(projectFile);
-		}
-		testImageFilename = PhysicsTestUtils.getInternalImageFilenameFromFilename("testImage.png");
+    static {
+        GdxNativesLoader.load();
+    }
 
-		project = new Project(getInstrumentation().getTargetContext(), TestUtils.DEFAULT_TEST_PROJECT_NAME);
-		StorageHandler.getInstance().saveProject(project);
-		ProjectManager.getInstance().setProject(project);
+    @Override
+    protected void setUp() throws Exception {
+        physicsWorld = new PhysicsWorld(1920, 1600);
+        File projectFile = new File(Constants.DEFAULT_ROOT + File.separator + TestUtils.DEFAULT_TEST_PROJECT_NAME);
 
-		testImage = TestUtils.saveFileToProject(TestUtils.DEFAULT_TEST_PROJECT_NAME, project.getDefaultScene().getName(), testImageFilename, IMAGE_FILE_ID,
-				getInstrumentation().getContext(), TestUtils.TYPE_IMAGE_FILE);
+        if (projectFile.exists()) {
+            UtilFile.deleteDirectory(projectFile);
+        }
+        testImageFilename = PhysicsTestUtils.getInternalImageFilenameFromFilename("testImage.png");
 
-		sprite = new SingleSprite("TestSprite");
-		super.setUp();
-	}
+        project = new Project(getInstrumentation().getTargetContext(), TestUtils.DEFAULT_TEST_PROJECT_NAME);
+        StorageHandler.getInstance().saveProject(project);
+        ProjectManager.getInstance().setProject(project);
 
-	@Override
-	protected void tearDown() throws Exception {
-		TestUtils.clearProject(TestUtils.DEFAULT_TEST_PROJECT_NAME);
-		physicsWorld = null;
-		sprite = null;
-		super.tearDown();
-	}
+        testImage = TestUtils.saveFileToProject(TestUtils.DEFAULT_TEST_PROJECT_NAME, project.getDefaultScene().getName(), testImageFilename, IMAGE_FILE_ID,
+                getInstrumentation().getContext(), TestUtils.TYPE_IMAGE_FILE);
 
-	public void testShapeComputationOfLook() {
-		PhysicsShapeBuilder physicsShapeBuilder = PhysicsShapeBuilder.getInstance();
+        sprite = new SingleSprite("TestSprite");
+        super.setUp();
+    }
 
-		LookData lookData = new LookData();
-		lookData.setLookFilename(testImage.getName());
-		lookData.setLookName(testImage.getName());
-		sprite.getLookDataList().add(lookData);
-		Pixmap pixmap = null;
-		pixmap = Utils.getPixmapFromFile(testImage);
-		lookData.setPixmap(pixmap);
+    @Override
+    protected void tearDown() throws Exception {
+        TestUtils.clearProject(TestUtils.DEFAULT_TEST_PROJECT_NAME);
+        physicsWorld = null;
+        sprite = null;
+        super.tearDown();
+    }
 
-		Shape[] shapes = physicsShapeBuilder.getScaledShapes(lookData, sprite.look.getSizeInUserInterfaceDimensionUnit() / 100f);
+    public void testShapeComputationOfLook() {
+        PhysicsShapeBuilder physicsShapeBuilder = PhysicsShapeBuilder.getInstance();
 
-		assertTrue("shapes are 0", shapes.length > 0);
-		physicsShapeBuilder.reset();
-	}
+        LookData lookData = new LookData();
+        lookData.setLookFilename(testImage.getName());
+        lookData.setLookName(testImage.getName());
+        sprite.getLookDataList().add(lookData);
+        Pixmap pixmap = null;
+        pixmap = Utils.getPixmapFromFile(testImage);
+        lookData.setPixmap(pixmap);
 
-	public void testPositionAndAngle() {
-		PhysicsObject physicsObject = physicsWorld.getPhysicsObject(sprite);
-		PhysicsLook physicsLook = new PhysicsLook(sprite, physicsWorld);
+        Shape[] shapes = physicsShapeBuilder.getScaledShapes(lookData, sprite.look.getSizeInUserInterfaceDimensionUnit() / 100f);
 
-		float x = 1.2f;
-		physicsLook.setX(x);
-		assertEquals("Wrong x position in PhysicsObject", x, physicsObject.getX());
-		assertEquals("Wrong x position in PhysicsLook", x, physicsLook.getX());
+        assertTrue("shapes are 0", shapes.length > 0);
+        physicsShapeBuilder.reset();
+    }
 
-		float y = -3.4f;
-		physicsLook.setY(y);
-		assertEquals("Wrong y position in PhysicsObject", y, physicsObject.getY());
-		assertEquals("Wrong y position in PhysicsLook", y, physicsLook.getY());
+    public void testPositionAndAngle() {
+        PhysicsObject physicsObject = physicsWorld.getPhysicsObject(sprite);
+        PhysicsLook physicsLook = new PhysicsLook(sprite, physicsWorld);
 
-		x = 5.6f;
-		y = 7.8f;
-		physicsLook.setPosition(x, y);
-		assertEquals("Wrong position", new Vector2(x, y), physicsObject.getPosition());
-		assertEquals("Wrong x position in PhysicsLook (due to set/getPosition)", x, physicsLook.getX());
-		assertEquals("Wrong y position in PhysicsLook (due to set/getPosition)", y, physicsLook.getY());
+        float x = 1.2f;
+        physicsLook.setX(x);
+        assertEquals("Wrong x position in PhysicsObject", x, physicsObject.getX());
+        assertEquals("Wrong x position in PhysicsLook", x, physicsLook.getX());
 
-		float rotation = 9.0f;
-		physicsLook.setRotation(rotation);
-		assertEquals("Wrong physics object angle", rotation, physicsObject.getDirection());
+        float y = -3.4f;
+        physicsLook.setY(y);
+        assertEquals("Wrong y position in PhysicsObject", y, physicsObject.getY());
+        assertEquals("Wrong y position in PhysicsLook", y, physicsLook.getY());
 
-		assertEquals("X position has changed", x, physicsLook.getX());
-		assertEquals("Y position has changed", y, physicsLook.getY());
-		assertEquals("Wrong rotation", rotation, physicsLook.getRotation());
-	}
+        x = 5.6f;
+        y = 7.8f;
+        physicsLook.setPosition(x, y);
+        assertEquals("Wrong position", new Vector2(x, y), physicsObject.getPosition());
+        assertEquals("Wrong x position in PhysicsLook (due to set/getPosition)", x, physicsLook.getX());
+        assertEquals("Wrong y position in PhysicsLook (due to set/getPosition)", y, physicsLook.getY());
 
-	public void testSetScale() {
-		LookData lookData = new LookData();
-		lookData.setLookFilename(testImage.getName());
-		lookData.setLookName(testImageFilename);
-		sprite.getLookDataList().add(lookData);
-		Pixmap pixmap = Utils.getPixmapFromFile(testImage);
-		lookData.setPixmap(pixmap);
+        float rotation = 9.0f;
+        physicsLook.setRotation(rotation);
+        assertEquals("Wrong physics object angle", rotation, physicsObject.getDirection());
 
-		PhysicsObject physicsObject = physicsWorld.getPhysicsObject(sprite);
-		PhysicsLook physicsLook = new PhysicsLook(sprite, physicsWorld);
+        assertEquals("X position has changed", x, physicsLook.getX());
+        assertEquals("Y position has changed", y, physicsLook.getY());
+        assertEquals("Wrong rotation", rotation, physicsLook.getRotation());
+    }
 
-		Shape[] shapes = (Shape[]) Reflection.getPrivateField(physicsObject, "shapes");
-		assertEquals("Shapes are not null", null, shapes);
+    public void testSetScale() {
+        LookData lookData = new LookData();
+        lookData.setLookFilename(testImage.getName());
+        lookData.setLookName(testImageFilename);
+        sprite.getLookDataList().add(lookData);
+        Pixmap pixmap = Utils.getPixmapFromFile(testImage);
+        lookData.setPixmap(pixmap);
 
-		physicsLook.setLookData(lookData);
+        PhysicsObject physicsObject = physicsWorld.getPhysicsObject(sprite);
+        PhysicsLook physicsLook = new PhysicsLook(sprite, physicsWorld);
 
-		Queue<Float> vertexXQueue = new LinkedList<Float>();
-		Queue<Float> vertexYQueue = new LinkedList<Float>();
-		shapes = (Shape[]) Reflection.getPrivateField(physicsObject, "shapes");
-		assertNotNull("shapes is null", shapes);
-		assertTrue("shapes length not > 0", shapes.length > 0);
-		Log.d(TAG, "shapes.length: " + shapes.length);
-		for (Shape shape : shapes) {
-			switch (shape.getType()) {
-				case Chain:
-					Log.d(TAG, "type = Chain: ");
-					break;
-				case Circle:
-					Log.d(TAG, "type = Circle: ");
-					break;
-				case Edge:
-					Log.d(TAG, "type = Edge: ");
-					break;
-				case Polygon:
-					int vertexCount = ((PolygonShape) shape).getVertexCount();
-					Log.d(TAG, "type = Polygon: " + vertexCount);
-					for (int idx = 0; idx < vertexCount; idx++) {
-						Vector2 vertex = new Vector2();
-						((PolygonShape) shape).getVertex(idx, vertex);
-						vertexXQueue.add(Float.valueOf(vertex.x));
-						vertexYQueue.add(Float.valueOf(vertex.y));
-						Log.d(TAG, "x=" + vertex.x + ";y=" + vertex.y);
-					}
-					break;
-			}
-		}
+        Shape[] shapes = (Shape[]) Reflection.getPrivateField(physicsObject, "shapes");
+        assertEquals("Shapes are not null", null, shapes);
 
-		float[] accuracyLevels = (float[]) Reflection.getPrivateField(PhysicsShapeBuilder.class, "ACCURACY_LEVELS");
-		float testScaleFactor = 1.1f;
-		if (accuracyLevels.length > 1) {
-			for (int i = 0; i < accuracyLevels.length - 1; i++) {
-				if (Math.abs(accuracyLevels[i] - 1.0f) < 0.05) {
-					testScaleFactor = (accuracyLevels[i] + accuracyLevels[i + 1]);
-					testScaleFactor /= 2.0f;
-					testScaleFactor -= 0.025f;
-				}
-			}
-		}
+        physicsLook.setLookData(lookData);
 
-		physicsLook.setScale(testScaleFactor, testScaleFactor);
-		shapes = (Shape[]) Reflection.getPrivateField(physicsObject, "shapes");
-		assertNotNull("shapes is null", shapes);
-		assertTrue("shapes length not > 0", shapes.length > 0);
-		Log.d(TAG, "shapes.length: " + shapes.length);
-		for (Shape shape : shapes) {
-			switch (shape.getType()) {
-				case Chain:
-					Log.d(TAG, "type = Chain: ");
-					break;
-				case Circle:
-					Log.d(TAG, "type = Circle: ");
-					break;
-				case Edge:
-					Log.d(TAG, "type = Edge: ");
-					break;
-				case Polygon:
-					int vertexCount = ((PolygonShape) shape).getVertexCount();
-					Log.d(TAG, "type = Polygon: " + vertexCount);
-					for (int idx = 0; idx < vertexCount; idx++) {
-						Vector2 vertex = new Vector2();
-						((PolygonShape) shape).getVertex(idx, vertex);
+        Queue<Float> vertexXQueue = new LinkedList<Float>();
+        Queue<Float> vertexYQueue = new LinkedList<Float>();
+        shapes = (Shape[]) Reflection.getPrivateField(physicsObject, "shapes");
+        assertNotNull("shapes is null", shapes);
+        assertTrue("shapes length not > 0", shapes.length > 0);
+        Log.d(TAG, "shapes.length: " + shapes.length);
+        for (Shape shape : shapes) {
+            switch (shape.getType()) {
+                case Chain:
+                    Log.d(TAG, "type = Chain: ");
+                    break;
+                case Circle:
+                    Log.d(TAG, "type = Circle: ");
+                    break;
+                case Edge:
+                    Log.d(TAG, "type = Edge: ");
+                    break;
+                case Polygon:
+                    int vertexCount = ((PolygonShape) shape).getVertexCount();
+                    Log.d(TAG, "type = Polygon: " + vertexCount);
+                    for (int idx = 0; idx < vertexCount; idx++) {
+                        Vector2 vertex = new Vector2();
+                        ((PolygonShape) shape).getVertex(idx, vertex);
+                        vertexXQueue.add(Float.valueOf(vertex.x));
+                        vertexYQueue.add(Float.valueOf(vertex.y));
+                        Log.d(TAG, "x=" + vertex.x + ";y=" + vertex.y);
+                    }
+                    break;
+            }
+        }
 
-						Object[] objectsX = { vertexXQueue.poll(), testScaleFactor };
-						Reflection.ParameterList parameterListX = new Reflection.ParameterList(objectsX);
-						float scaledX = (float) Reflection.invokeMethod(PhysicsShapeScaleUtils.class, "scaleCoordinate",
-								parameterListX);
+        float[] accuracyLevels = (float[]) Reflection.getPrivateField(PhysicsShapeBuilder.class, "ACCURACY_LEVELS");
+        float testScaleFactor = 1.1f;
+        if (accuracyLevels.length > 1) {
+            for (int i = 0; i < accuracyLevels.length - 1; i++) {
+                if (Math.abs(accuracyLevels[i] - 1.0f) < 0.05) {
+                    testScaleFactor = (accuracyLevels[i] + accuracyLevels[i + 1]);
+                    testScaleFactor /= 2.0f;
+                    testScaleFactor -= 0.025f;
+                }
+            }
+        }
 
-						Object[] objectsY = { vertexYQueue.poll(), testScaleFactor };
-						Reflection.ParameterList parameterListY = new Reflection.ParameterList(objectsY);
-						float scaledY = (float) Reflection.invokeMethod(PhysicsShapeScaleUtils.class, "scaleCoordinate",
-								parameterListY);
+        physicsLook.setScale(testScaleFactor, testScaleFactor);
+        shapes = (Shape[]) Reflection.getPrivateField(physicsObject, "shapes");
+        assertNotNull("shapes is null", shapes);
+        assertTrue("shapes length not > 0", shapes.length > 0);
+        Log.d(TAG, "shapes.length: " + shapes.length);
+        for (Shape shape : shapes) {
+            switch (shape.getType()) {
+                case Chain:
+                    Log.d(TAG, "type = Chain: ");
+                    break;
+                case Circle:
+                    Log.d(TAG, "type = Circle: ");
+                    break;
+                case Edge:
+                    Log.d(TAG, "type = Edge: ");
+                    break;
+                case Polygon:
+                    int vertexCount = ((PolygonShape) shape).getVertexCount();
+                    Log.d(TAG, "type = Polygon: " + vertexCount);
+                    for (int idx = 0; idx < vertexCount; idx++) {
+                        Vector2 vertex = new Vector2();
+                        ((PolygonShape) shape).getVertex(idx, vertex);
 
-						assertEquals("vertex x-value is not the expected", scaledX, vertex.x);
-						assertEquals("vertex x-value is not the expected", scaledY, vertex.y);
-						Log.d(TAG, "x=" + vertex.x + ";y=" + vertex.y);
-					}
-					break;
-			}
-		}
-	}
+                        Object[] objectsX = {vertexXQueue.poll(), testScaleFactor};
+                        Reflection.ParameterList parameterListX = new Reflection.ParameterList(objectsX);
+                        float scaledX = (float) Reflection.invokeMethod(PhysicsShapeScaleUtils.class, "scaleCoordinate",
+                                parameterListX);
 
-	public void testSetLookDataWithNullPixmap() {
-		LookData lookData = new LookData();
-		lookData.setLookFilename(testImage.getName());
-		lookData.setLookName(testImage.getName());
+                        Object[] objectsY = {vertexYQueue.poll(), testScaleFactor};
+                        Reflection.ParameterList parameterListY = new Reflection.ParameterList(objectsY);
+                        float scaledY = (float) Reflection.invokeMethod(PhysicsShapeScaleUtils.class, "scaleCoordinate",
+                                parameterListY);
 
-		sprite.look = new PhysicsLook(sprite, physicsWorld);
-		try {
-			sprite.look.setLookData(lookData);
-		} catch (Exception exception) {
-			Log.e(TAG, "unexpected exception", exception);
-			fail("unexpected exception");
-		}
-	}
+                        assertEquals("vertex x-value is not the expected", scaledX, vertex.x);
+                        assertEquals("vertex x-value is not the expected", scaledY, vertex.y);
+                        Log.d(TAG, "x=" + vertex.x + ";y=" + vertex.y);
+                    }
+                    break;
+            }
+        }
+    }
 
-	public void testDefaultValueEqualityOfPhysicsLookAndLook() {
-		PhysicsLook physicsLook = new PhysicsLook(sprite, physicsWorld);
-		Look look = new Look(sprite);
+    public void testSetLookDataWithNullPixmap() {
+        LookData lookData = new LookData();
+        lookData.setLookFilename(testImage.getName());
+        lookData.setLookName(testImage.getName());
 
-		assertEquals("physicsLook getAngularVelocityInUserInterfaceDimensionUnit()"
-						+ physicsLook.getAngularVelocityInUserInterfaceDimensionUnit() + " differs from look value"
-						+ look.getAngularVelocityInUserInterfaceDimensionUnit() + ".",
-				physicsLook.getAngularVelocityInUserInterfaceDimensionUnit(), look.getAngularVelocityInUserInterfaceDimensionUnit());
+        sprite.look = new PhysicsLook(sprite, physicsWorld);
+        try {
+            sprite.look.setLookData(lookData);
+        } catch (Exception exception) {
+            Log.e(TAG, "unexpected exception", exception);
+            fail("unexpected exception");
+        }
+    }
 
-		assertEquals("physicsLook getXVelocityInUserInterfaceDimensionUnit()"
-						+ physicsLook.getXVelocityInUserInterfaceDimensionUnit() + " differs from look value"
-						+ look.getXVelocityInUserInterfaceDimensionUnit() + ".",
-				physicsLook.getXVelocityInUserInterfaceDimensionUnit(), look.getXVelocityInUserInterfaceDimensionUnit());
+    public void testDefaultValueEqualityOfPhysicsLookAndLook() {
+        PhysicsLook physicsLook = new PhysicsLook(sprite, physicsWorld);
+        Look look = new Look(sprite);
 
-		assertEquals("physicsLook getYVelocityInUserInterfaceDimensionUnit()"
-						+ physicsLook.getYVelocityInUserInterfaceDimensionUnit() + " differs from look value"
-						+ look.getYVelocityInUserInterfaceDimensionUnit() + ".",
-				physicsLook.getYVelocityInUserInterfaceDimensionUnit(), look.getYVelocityInUserInterfaceDimensionUnit());
+        assertEquals("physicsLook getAngularVelocityInUserInterfaceDimensionUnit()"
+                        + physicsLook.getAngularVelocityInUserInterfaceDimensionUnit() + " differs from look value"
+                        + look.getAngularVelocityInUserInterfaceDimensionUnit() + ".",
+                physicsLook.getAngularVelocityInUserInterfaceDimensionUnit(), look.getAngularVelocityInUserInterfaceDimensionUnit());
 
-		assertEquals("physicsLook getX()"
-						+ physicsLook.getX() + " differs from look value"
-						+ look.getX() + ".",
-				physicsLook.getX(), look.getX());
+        assertEquals("physicsLook getXVelocityInUserInterfaceDimensionUnit()"
+                        + physicsLook.getXVelocityInUserInterfaceDimensionUnit() + " differs from look value"
+                        + look.getXVelocityInUserInterfaceDimensionUnit() + ".",
+                physicsLook.getXVelocityInUserInterfaceDimensionUnit(), look.getXVelocityInUserInterfaceDimensionUnit());
 
-		assertEquals("physicsLook getY()"
-						+ physicsLook.getY() + " differs from look value"
-						+ look.getY() + ".",
-				physicsLook.getY(), look.getY());
+        assertEquals("physicsLook getYVelocityInUserInterfaceDimensionUnit()"
+                        + physicsLook.getYVelocityInUserInterfaceDimensionUnit() + " differs from look value"
+                        + look.getYVelocityInUserInterfaceDimensionUnit() + ".",
+                physicsLook.getYVelocityInUserInterfaceDimensionUnit(), look.getYVelocityInUserInterfaceDimensionUnit());
 
-		assertEquals("physicsLook getRotation()"
-						+ physicsLook.getRotation() + " differs from look value"
-						+ look.getRotation() + ".",
-				physicsLook.getRotation(), look.getRotation());
+        assertEquals("physicsLook getX()"
+                        + physicsLook.getX() + " differs from look value"
+                        + look.getX() + ".",
+                physicsLook.getX(), look.getX());
 
-		assertEquals("physicsLook getLookData()"
-						+ physicsLook.getLookData() + " differs from look value"
-						+ look.getLookData() + ".",
-				physicsLook.getLookData(), look.getLookData());
+        assertEquals("physicsLook getY()"
+                        + physicsLook.getY() + " differs from look value"
+                        + look.getY() + ".",
+                physicsLook.getY(), look.getY());
 
-		assertEquals("physicsLook getAllActionsAreFinished()"
-						+ physicsLook.getAllActionsAreFinished() + " differs from look value"
-						+ look.getAllActionsAreFinished() + ".",
-				physicsLook.getAllActionsAreFinished(), look.getAllActionsAreFinished());
+        assertEquals("physicsLook getRotation()"
+                        + physicsLook.getRotation() + " differs from look value"
+                        + look.getRotation() + ".",
+                physicsLook.getRotation(), look.getRotation());
 
-		assertEquals("physicsLook getImagePath()"
-						+ physicsLook.getImagePath() + " differs from look value"
-						+ look.getImagePath() + ".",
-				physicsLook.getImagePath(), look.getImagePath());
+        assertEquals("physicsLook getLookData()"
+                        + physicsLook.getLookData() + " differs from look value"
+                        + look.getLookData() + ".",
+                physicsLook.getLookData(), look.getLookData());
 
-		assertEquals("physicsLook getXInUserInterfaceDimensionUnit()"
-						+ physicsLook.getXInUserInterfaceDimensionUnit() + " differs from look value"
-						+ look.getXInUserInterfaceDimensionUnit() + ".",
-				physicsLook.getXInUserInterfaceDimensionUnit(), look.getXInUserInterfaceDimensionUnit());
+        assertEquals("physicsLook getAllActionsAreFinished()"
+                        + physicsLook.getAllActionsAreFinished() + " differs from look value"
+                        + look.getAllActionsAreFinished() + ".",
+                physicsLook.getAllActionsAreFinished(), look.getAllActionsAreFinished());
 
-		assertEquals("physicsLook getYInUserInterfaceDimensionUnit()"
-						+ physicsLook.getYInUserInterfaceDimensionUnit() + " differs from look value"
-						+ look.getYInUserInterfaceDimensionUnit() + ".",
-				physicsLook.getYInUserInterfaceDimensionUnit(), look.getYInUserInterfaceDimensionUnit());
+        assertEquals("physicsLook getImagePath()"
+                        + physicsLook.getImagePath() + " differs from look value"
+                        + look.getImagePath() + ".",
+                physicsLook.getImagePath(), look.getImagePath());
 
-		assertEquals("physicsLook getAngularVelocityInUserInterfaceDimensionUnit()"
-						+ physicsLook.getAngularVelocityInUserInterfaceDimensionUnit() + " differs from look value"
-						+ look.getAngularVelocityInUserInterfaceDimensionUnit() + ".",
-				physicsLook.getAngularVelocityInUserInterfaceDimensionUnit(), look.getAngularVelocityInUserInterfaceDimensionUnit());
+        assertEquals("physicsLook getXInUserInterfaceDimensionUnit()"
+                        + physicsLook.getXInUserInterfaceDimensionUnit() + " differs from look value"
+                        + look.getXInUserInterfaceDimensionUnit() + ".",
+                physicsLook.getXInUserInterfaceDimensionUnit(), look.getXInUserInterfaceDimensionUnit());
 
-		assertEquals("physicsLook getXVelocityInUserInterfaceDimensionUnit()"
-						+ physicsLook.getXVelocityInUserInterfaceDimensionUnit() + " differs from look value"
-						+ look.getXVelocityInUserInterfaceDimensionUnit() + ".",
-				physicsLook.getXVelocityInUserInterfaceDimensionUnit(), look.getXVelocityInUserInterfaceDimensionUnit());
+        assertEquals("physicsLook getYInUserInterfaceDimensionUnit()"
+                        + physicsLook.getYInUserInterfaceDimensionUnit() + " differs from look value"
+                        + look.getYInUserInterfaceDimensionUnit() + ".",
+                physicsLook.getYInUserInterfaceDimensionUnit(), look.getYInUserInterfaceDimensionUnit());
 
-		assertEquals("physicsLook getYVelocityInUserInterfaceDimensionUnit()"
-						+ physicsLook.getYVelocityInUserInterfaceDimensionUnit() + " differs from look value"
-						+ look.getYVelocityInUserInterfaceDimensionUnit() + ".",
-				physicsLook.getYVelocityInUserInterfaceDimensionUnit(), look.getYVelocityInUserInterfaceDimensionUnit());
+        assertEquals("physicsLook getAngularVelocityInUserInterfaceDimensionUnit()"
+                        + physicsLook.getAngularVelocityInUserInterfaceDimensionUnit() + " differs from look value"
+                        + look.getAngularVelocityInUserInterfaceDimensionUnit() + ".",
+                physicsLook.getAngularVelocityInUserInterfaceDimensionUnit(), look.getAngularVelocityInUserInterfaceDimensionUnit());
 
-		assertEquals("physicsLook getWidthInUserInterfaceDimensionUnit()"
-						+ physicsLook.getWidthInUserInterfaceDimensionUnit() + " differs from look value"
-						+ look.getWidthInUserInterfaceDimensionUnit() + ".",
-				physicsLook.getWidthInUserInterfaceDimensionUnit(), look.getWidthInUserInterfaceDimensionUnit());
+        assertEquals("physicsLook getXVelocityInUserInterfaceDimensionUnit()"
+                        + physicsLook.getXVelocityInUserInterfaceDimensionUnit() + " differs from look value"
+                        + look.getXVelocityInUserInterfaceDimensionUnit() + ".",
+                physicsLook.getXVelocityInUserInterfaceDimensionUnit(), look.getXVelocityInUserInterfaceDimensionUnit());
 
-		assertEquals("physicsLook getHeightInUserInterfaceDimensionUnit()"
-						+ physicsLook.getHeightInUserInterfaceDimensionUnit() + " differs from look value"
-						+ look.getHeightInUserInterfaceDimensionUnit() + ".",
-				physicsLook.getHeightInUserInterfaceDimensionUnit(), look.getHeightInUserInterfaceDimensionUnit());
+        assertEquals("physicsLook getYVelocityInUserInterfaceDimensionUnit()"
+                        + physicsLook.getYVelocityInUserInterfaceDimensionUnit() + " differs from look value"
+                        + look.getYVelocityInUserInterfaceDimensionUnit() + ".",
+                physicsLook.getYVelocityInUserInterfaceDimensionUnit(), look.getYVelocityInUserInterfaceDimensionUnit());
 
-		assertEquals("physicsLook getDirectionInUserInterfaceDimensionUnit()"
-						+ physicsLook.getDirectionInUserInterfaceDimensionUnit() + " differs from look value"
-						+ look.getDirectionInUserInterfaceDimensionUnit() + ".",
-				physicsLook.getDirectionInUserInterfaceDimensionUnit(), look.getDirectionInUserInterfaceDimensionUnit());
+        assertEquals("physicsLook getWidthInUserInterfaceDimensionUnit()"
+                        + physicsLook.getWidthInUserInterfaceDimensionUnit() + " differs from look value"
+                        + look.getWidthInUserInterfaceDimensionUnit() + ".",
+                physicsLook.getWidthInUserInterfaceDimensionUnit(), look.getWidthInUserInterfaceDimensionUnit());
 
-		assertEquals("physicsLook getSizeInUserInterfaceDimensionUnit()"
-						+ physicsLook.getSizeInUserInterfaceDimensionUnit() + " differs from look value"
-						+ look.getSizeInUserInterfaceDimensionUnit() + ".",
-				physicsLook.getSizeInUserInterfaceDimensionUnit(), look.getSizeInUserInterfaceDimensionUnit());
+        assertEquals("physicsLook getHeightInUserInterfaceDimensionUnit()"
+                        + physicsLook.getHeightInUserInterfaceDimensionUnit() + " differs from look value"
+                        + look.getHeightInUserInterfaceDimensionUnit() + ".",
+                physicsLook.getHeightInUserInterfaceDimensionUnit(), look.getHeightInUserInterfaceDimensionUnit());
 
-		assertEquals("physicsLook getTransparencyInUserInterfaceDimensionUnit()"
-						+ physicsLook.getTransparencyInUserInterfaceDimensionUnit() + " differs from look value"
-						+ look.getTransparencyInUserInterfaceDimensionUnit() + ".",
-				physicsLook.getTransparencyInUserInterfaceDimensionUnit(), look.getTransparencyInUserInterfaceDimensionUnit());
+        assertEquals("physicsLook getDirectionInUserInterfaceDimensionUnit()"
+                        + physicsLook.getDirectionInUserInterfaceDimensionUnit() + " differs from look value"
+                        + look.getDirectionInUserInterfaceDimensionUnit() + ".",
+                physicsLook.getDirectionInUserInterfaceDimensionUnit(), look.getDirectionInUserInterfaceDimensionUnit());
 
-		assertEquals("physicsLook getBrightnessInUserInterfaceDimensionUnit()"
-						+ physicsLook.getBrightnessInUserInterfaceDimensionUnit() + " differs from look value"
-						+ look.getBrightnessInUserInterfaceDimensionUnit() + ".",
-				physicsLook.getBrightnessInUserInterfaceDimensionUnit(), look.getBrightnessInUserInterfaceDimensionUnit());
-	}
+        assertEquals("physicsLook getSizeInUserInterfaceDimensionUnit()"
+                        + physicsLook.getSizeInUserInterfaceDimensionUnit() + " differs from look value"
+                        + look.getSizeInUserInterfaceDimensionUnit() + ".",
+                physicsLook.getSizeInUserInterfaceDimensionUnit(), look.getSizeInUserInterfaceDimensionUnit());
 
-	public void testCloneValues() {
-		PhysicsWorld world = new PhysicsWorld();
+        assertEquals("physicsLook getTransparencyInUserInterfaceDimensionUnit()"
+                        + physicsLook.getTransparencyInUserInterfaceDimensionUnit() + " differs from look value"
+                        + look.getTransparencyInUserInterfaceDimensionUnit() + ".",
+                physicsLook.getTransparencyInUserInterfaceDimensionUnit(), look.getTransparencyInUserInterfaceDimensionUnit());
 
-		Sprite originSprite = new Sprite("Origin");
-		PhysicsLook originLook = new PhysicsLook(originSprite, world);
-		PhysicsObject originPhysicsObject = world.getPhysicsObject(originSprite);
+        assertEquals("physicsLook getBrightnessInUserInterfaceDimensionUnit()"
+                        + physicsLook.getBrightnessInUserInterfaceDimensionUnit() + " differs from look value"
+                        + look.getBrightnessInUserInterfaceDimensionUnit() + ".",
+                physicsLook.getBrightnessInUserInterfaceDimensionUnit(), look.getBrightnessInUserInterfaceDimensionUnit());
+    }
 
-		Sprite cloneSprite = new Sprite("Clone");
-		PhysicsLook cloneLook = new PhysicsLook(cloneSprite, world);
-		PhysicsObject clonePhysicsObject = world.getPhysicsObject(cloneSprite);
+    public void testCloneValues() {
+        PhysicsWorld world = new PhysicsWorld();
 
-		originLook.setXInUserInterfaceDimensionUnit(10);
-		originLook.setBrightnessInUserInterfaceDimensionUnit(32);
-		originPhysicsObject.setMass(10);
+        Sprite originSprite = new Sprite("Origin");
+        PhysicsLook originLook = new PhysicsLook(originSprite, world);
+        PhysicsObject originPhysicsObject = world.getPhysicsObject(originSprite);
 
-		originLook.copyTo(cloneLook);
+        Sprite cloneSprite = new Sprite("Clone");
+        PhysicsLook cloneLook = new PhysicsLook(cloneSprite, world);
+        PhysicsObject clonePhysicsObject = world.getPhysicsObject(cloneSprite);
 
-		assertEquals("X position differs", originLook.getXInUserInterfaceDimensionUnit(),
-				cloneLook.getXInUserInterfaceDimensionUnit());
-		assertEquals("Brightness differs", originLook.getBrightnessInUserInterfaceDimensionUnit(),
-				cloneLook.getBrightnessInUserInterfaceDimensionUnit());
-		assertEquals("Mass differs", originPhysicsObject.getMass(), clonePhysicsObject.getMass());
-	}
+        originLook.setXInUserInterfaceDimensionUnit(10);
+        originLook.setBrightnessInUserInterfaceDimensionUnit(32);
+        originPhysicsObject.setMass(10);
+
+        originLook.copyTo(cloneLook);
+
+        assertEquals("X position differs", originLook.getXInUserInterfaceDimensionUnit(),
+                cloneLook.getXInUserInterfaceDimensionUnit());
+        assertEquals("Brightness differs", originLook.getBrightnessInUserInterfaceDimensionUnit(),
+                cloneLook.getBrightnessInUserInterfaceDimensionUnit());
+        assertEquals("Mass differs", originPhysicsObject.getMass(), clonePhysicsObject.getMass());
+    }
 }

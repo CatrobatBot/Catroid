@@ -45,90 +45,90 @@ import java.util.ArrayList;
 
 public class ScriptChangeTest extends BaseActivityInstrumentationTestCase<ScriptActivity> {
 
-	private ArrayList<Brick> brickListToCheck;
-	private Script testScript;
-	private Script testScript2;
-	private Script testScript3;
+    private ArrayList<Brick> brickListToCheck;
+    private Script testScript;
+    private Script testScript2;
+    private Script testScript3;
 
-	public ScriptChangeTest() {
-		super(ScriptActivity.class);
-	}
+    public ScriptChangeTest() {
+        super(ScriptActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		// normally super.setUp should be called first
-		// but kept the test failing due to view is null
-		// when starting in ScriptActivity
-		createTestProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		super.setUp();
-	}
+    @Override
+    public void setUp() throws Exception {
+        // normally super.setUp should be called first
+        // but kept the test failing due to view is null
+        // when starting in ScriptActivity
+        createTestProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        super.setUp();
+    }
 
-	public void testChangeScript() {
-		ListView parent = UiTestUtils.getScriptListView(solo);
-		View testScriptBrick = parent.getChildAt(0);
+    public void testChangeScript() {
+        ListView parent = UiTestUtils.getScriptListView(solo);
+        View testScriptBrick = parent.getChildAt(0);
 
-		solo.waitForText(solo.getString(R.string.brick_when_started));
-		solo.clickOnView(testScriptBrick);
-		solo.waitForText(solo.getString(R.string.brick_context_dialog_delete_brick));
-		solo.goBack();
-		solo.waitForText(solo.getString(R.string.brick_when_started));
+        solo.waitForText(solo.getString(R.string.brick_when_started));
+        solo.clickOnView(testScriptBrick);
+        solo.waitForText(solo.getString(R.string.brick_context_dialog_delete_brick));
+        solo.goBack();
+        solo.waitForText(solo.getString(R.string.brick_when_started));
 
-		assertEquals("Current Script in List is not testScript", testScript, ProjectManager.getInstance()
-				.getCurrentScript());
+        assertEquals("Current Script in List is not testScript", testScript, ProjectManager.getInstance()
+                .getCurrentScript());
 
-		View startBrick = parent.getChildAt(4);
-		solo.clickOnView(startBrick);
-		solo.waitForText(solo.getString(R.string.brick_context_dialog_delete_brick));
-		solo.goBack();
-		solo.waitForText(solo.getString(R.string.brick_when_started));
+        View startBrick = parent.getChildAt(4);
+        solo.clickOnView(startBrick);
+        solo.waitForText(solo.getString(R.string.brick_context_dialog_delete_brick));
+        solo.goBack();
+        solo.waitForText(solo.getString(R.string.brick_when_started));
 
-		assertEquals("Current Script in List is not testScript", testScript3, ProjectManager.getInstance()
-				.getCurrentScript());
+        assertEquals("Current Script in List is not testScript", testScript3, ProjectManager.getInstance()
+                .getCurrentScript());
 
-		startBrick = parent.getChildAt(5);
-		solo.clickOnView(startBrick);
-		solo.waitForText(solo.getString(R.string.brick_context_dialog_delete_brick));
-		solo.goBack();
-		solo.waitForText(solo.getString(R.string.brick_when_started));
+        startBrick = parent.getChildAt(5);
+        solo.clickOnView(startBrick);
+        solo.waitForText(solo.getString(R.string.brick_context_dialog_delete_brick));
+        solo.goBack();
+        solo.waitForText(solo.getString(R.string.brick_when_started));
 
-		assertEquals("Current Script in List is not testScript", testScript2, ProjectManager.getInstance()
-				.getCurrentScript());
+        assertEquals("Current Script in List is not testScript", testScript2, ProjectManager.getInstance()
+                .getCurrentScript());
 
-		startBrick = parent.getChildAt(2);
-		String textViewText = solo.getCurrentViews(TextView.class, startBrick).get(1).getText().toString();
-		String startBrickText = solo.getString(R.string.brick_show);
-		assertEquals("Third script in listView is not startScript", startBrickText, textViewText);
-	}
+        startBrick = parent.getChildAt(2);
+        String textViewText = solo.getCurrentViews(TextView.class, startBrick).get(1).getText().toString();
+        String startBrickText = solo.getString(R.string.brick_show);
+        assertEquals("Third script in listView is not startScript", startBrickText, textViewText);
+    }
 
-	private void createTestProject(String projectName) {
-		double size = 0.8;
+    private void createTestProject(String projectName) {
+        double size = 0.8;
 
-		Project project = new Project(null, projectName);
-		Sprite firstSprite = new SingleSprite("cat");
+        Project project = new Project(null, projectName);
+        Sprite firstSprite = new SingleSprite("cat");
 
-		testScript = new StartScript();
-		testScript2 = new StartScript();
-		testScript3 = new StartScript();
+        testScript = new StartScript();
+        testScript2 = new StartScript();
+        testScript3 = new StartScript();
 
-		brickListToCheck = new ArrayList<Brick>();
-		brickListToCheck.add(new HideBrick());
-		brickListToCheck.add(new ShowBrick());
-		brickListToCheck.add(new SetSizeToBrick(size));
+        brickListToCheck = new ArrayList<Brick>();
+        brickListToCheck.add(new HideBrick());
+        brickListToCheck.add(new ShowBrick());
+        brickListToCheck.add(new SetSizeToBrick(size));
 
-		// adding Bricks: ----------------
-		for (Brick brick : brickListToCheck) {
-			testScript.addBrick(brick);
-		}
-		// -------------------------------
+        // adding Bricks: ----------------
+        for (Brick brick : brickListToCheck) {
+            testScript.addBrick(brick);
+        }
+        // -------------------------------
 
-		firstSprite.addScript(testScript);
-		firstSprite.addScript(testScript3);
-		firstSprite.addScript(testScript2);
+        firstSprite.addScript(testScript);
+        firstSprite.addScript(testScript3);
+        firstSprite.addScript(testScript2);
 
-		project.getDefaultScene().addSprite(firstSprite);
+        project.getDefaultScene().addSprite(firstSprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(firstSprite);
-		ProjectManager.getInstance().setCurrentScript(testScript);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(firstSprite);
+        ProjectManager.getInstance().setCurrentScript(testScript);
+    }
 }

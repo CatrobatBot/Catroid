@@ -28,28 +28,28 @@ import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 
 public class StopOtherScriptsAction extends TemporalAction {
 
-	private Action currentAction;
+    private Action currentAction;
 
-	@Override
-	protected void update(float percent) {
-		if (this.actor == null || this.actor.getActions() == null) {
-			return;
-		}
+    @Override
+    protected void update(float percent) {
+        if (this.actor == null || this.actor.getActions() == null) {
+            return;
+        }
 
-		boolean alreadyStopped = false;
-		String currentActionSignature = this.currentAction.toString();
+        boolean alreadyStopped = false;
+        String currentActionSignature = this.currentAction.toString();
 
-		for (Action action : this.actor.getActions()) {
-			if (!alreadyStopped && action.toString().contains(currentActionSignature)) {
-				alreadyStopped = true;
-				continue;
-			} else {
-				action.reset();
-			}
-		}
-	}
+        for (Action action : this.actor.getActions()) {
+            if (!alreadyStopped && action.toString().contains(currentActionSignature)) {
+                alreadyStopped = true;
+                continue;
+            } else {
+                action.reset();
+            }
+        }
+    }
 
-	public void setCurrentAction(Action currentAction) {
-		this.currentAction = currentAction;
-	}
+    public void setCurrentAction(Action currentAction) {
+        this.currentAction = currentAction;
+    }
 }

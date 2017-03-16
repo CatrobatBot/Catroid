@@ -39,67 +39,67 @@ import org.catrobat.catroid.utils.Utils;
 import java.util.List;
 
 public class ChangeXByNBrick extends FormulaBrick {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private transient View prototypeView;
+    private transient View prototypeView;
 
-	public ChangeXByNBrick() {
-		addAllowedBrickField(BrickField.X_POSITION_CHANGE);
-	}
+    public ChangeXByNBrick() {
+        addAllowedBrickField(BrickField.X_POSITION_CHANGE);
+    }
 
-	public ChangeXByNBrick(int xMovementValue) {
-		initializeBrickFields(new Formula(xMovementValue));
-	}
+    public ChangeXByNBrick(int xMovementValue) {
+        initializeBrickFields(new Formula(xMovementValue));
+    }
 
-	public ChangeXByNBrick(Formula xMovement) {
-		initializeBrickFields(xMovement);
-	}
+    public ChangeXByNBrick(Formula xMovement) {
+        initializeBrickFields(xMovement);
+    }
 
-	private void initializeBrickFields(Formula xMovement) {
-		addAllowedBrickField(BrickField.X_POSITION_CHANGE);
-		setFormulaWithBrickField(BrickField.X_POSITION_CHANGE, xMovement);
-	}
+    private void initializeBrickFields(Formula xMovement) {
+        addAllowedBrickField(BrickField.X_POSITION_CHANGE);
+        setFormulaWithBrickField(BrickField.X_POSITION_CHANGE, xMovement);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return getFormulaWithBrickField(BrickField.X_POSITION_CHANGE).getRequiredResources();
-	}
+    @Override
+    public int getRequiredResources() {
+        return getFormulaWithBrickField(BrickField.X_POSITION_CHANGE).getRequiredResources();
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_change_x, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_change_x, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_change_x_checkbox);
-		TextView editX = (TextView) view.findViewById(R.id.brick_change_x_edit_text);
-		getFormulaWithBrickField(BrickField.X_POSITION_CHANGE).setTextFieldId(R.id.brick_change_x_edit_text);
-		getFormulaWithBrickField(BrickField.X_POSITION_CHANGE).refreshTextField(view);
+        setCheckboxView(R.id.brick_change_x_checkbox);
+        TextView editX = (TextView) view.findViewById(R.id.brick_change_x_edit_text);
+        getFormulaWithBrickField(BrickField.X_POSITION_CHANGE).setTextFieldId(R.id.brick_change_x_edit_text);
+        getFormulaWithBrickField(BrickField.X_POSITION_CHANGE).refreshTextField(view);
 
-		editX.setOnClickListener(this);
-		return view;
-	}
+        editX.setOnClickListener(this);
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_change_x, null);
-		TextView textXMovement = (TextView) prototypeView.findViewById(R.id.brick_change_x_edit_text);
-		textXMovement.setText(Utils.getNumberStringForBricks(BrickValues.CHANGE_X_BY));
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_change_x, null);
+        TextView textXMovement = (TextView) prototypeView.findViewById(R.id.brick_change_x_edit_text);
+        textXMovement.setText(Utils.getNumberStringForBricks(BrickValues.CHANGE_X_BY));
+        return prototypeView;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createChangeXByNAction(sprite,
-				getFormulaWithBrickField(BrickField.X_POSITION_CHANGE)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createChangeXByNAction(sprite,
+                getFormulaWithBrickField(BrickField.X_POSITION_CHANGE)));
+        return null;
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		FormulaEditorFragment.showFragment(view, this, BrickField.X_POSITION_CHANGE);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        FormulaEditorFragment.showFragment(view, this, BrickField.X_POSITION_CHANGE);
+    }
 }

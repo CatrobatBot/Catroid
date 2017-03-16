@@ -32,48 +32,48 @@ import org.catrobat.catroid.formulaeditor.UserVariable;
 
 public class ChangeVariableAction extends Action {
 
-	private Sprite sprite;
-	private Formula changeVariable;
-	private UserVariable userVariable;
+    private Sprite sprite;
+    private Formula changeVariable;
+    private UserVariable userVariable;
 
-	@Override
-	public boolean act(float delta) {
-		if (userVariable == null) {
-			return true;
-		}
-		Object originalValue = userVariable.getValue();
-		Object value = changeVariable == null ? 0d : changeVariable.interpretObject(sprite);
+    @Override
+    public boolean act(float delta) {
+        if (userVariable == null) {
+            return true;
+        }
+        Object originalValue = userVariable.getValue();
+        Object value = changeVariable == null ? 0d : changeVariable.interpretObject(sprite);
 
-		if (originalValue instanceof String) {
-			return true;
-		}
+        if (originalValue instanceof String) {
+            return true;
+        }
 
-		try {
-			if (value instanceof String) {
-				value = Double.valueOf((String) value);
-			}
-		} catch (NumberFormatException numberFormatException) {
-			Log.d(getClass().getSimpleName(), "Couldn't parse String", numberFormatException);
-		}
+        try {
+            if (value instanceof String) {
+                value = Double.valueOf((String) value);
+            }
+        } catch (NumberFormatException numberFormatException) {
+            Log.d(getClass().getSimpleName(), "Couldn't parse String", numberFormatException);
+        }
 
-		if (originalValue instanceof Double && value instanceof Double) {
-			originalValue = ((Double) originalValue).isNaN() ? 0d : originalValue;
-			value = ((Double) value).isNaN() ? 0d : value;
-			userVariable.setValue(((Double) originalValue) + ((Double) value));
-			return true;
-		}
-		return true;
-	}
+        if (originalValue instanceof Double && value instanceof Double) {
+            originalValue = ((Double) originalValue).isNaN() ? 0d : originalValue;
+            value = ((Double) value).isNaN() ? 0d : value;
+            userVariable.setValue(((Double) originalValue) + ((Double) value));
+            return true;
+        }
+        return true;
+    }
 
-	public void setUserVariable(UserVariable userVariable) {
-		this.userVariable = userVariable;
-	}
+    public void setUserVariable(UserVariable userVariable) {
+        this.userVariable = userVariable;
+    }
 
-	public void setChangeVariable(Formula changeVariable) {
-		this.changeVariable = changeVariable;
-	}
+    public void setChangeVariable(Formula changeVariable) {
+        this.changeVariable = changeVariable;
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 }

@@ -38,83 +38,83 @@ import java.util.List;
 
 public class CategoryBricksFactoryTest extends AndroidTestCase {
 
-	private final CategoryBricksFactory factory = new CategoryBricksFactory();
-	private Sprite background;
-	private Sprite sprite = new SingleSprite("newSprite");
-	private Context context = getContext();
+    private final CategoryBricksFactory factory = new CategoryBricksFactory();
+    private Sprite background;
+    private Sprite sprite = new SingleSprite("newSprite");
+    private Context context = getContext();
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		context = getContext();
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        context = getContext();
 
-		SettingsActivity.resetSharedPreferences(context);
+        SettingsActivity.resetSharedPreferences(context);
 
-		Project project = new Project(context, "Project");
-		background = project.getDefaultScene().getSpriteList().get(0);
-		project.getDefaultScene().addSprite(sprite);
-		ProjectManager.getInstance().setProject(project);
-	}
+        Project project = new Project(context, "Project");
+        background = project.getDefaultScene().getSpriteList().get(0);
+        project.getDefaultScene().addSprite(sprite);
+        ProjectManager.getInstance().setProject(project);
+    }
 
-	public void testEventBrick() {
-		final int expectedBrickCount = 10;
-		checkBrickCountInCategory(R.string.category_event, background, expectedBrickCount);
-		checkBrickCountInCategory(R.string.category_event, sprite, expectedBrickCount);
-	}
+    public void testEventBrick() {
+        final int expectedBrickCount = 10;
+        checkBrickCountInCategory(R.string.category_event, background, expectedBrickCount);
+        checkBrickCountInCategory(R.string.category_event, sprite, expectedBrickCount);
+    }
 
-	public void testControlBricks() {
-		final int expectedBrickCount = 14;
-		checkBrickCountInCategory(R.string.category_control, background, expectedBrickCount);
-		checkBrickCountInCategory(R.string.category_control, sprite, expectedBrickCount);
-	}
+    public void testControlBricks() {
+        final int expectedBrickCount = 14;
+        checkBrickCountInCategory(R.string.category_control, background, expectedBrickCount);
+        checkBrickCountInCategory(R.string.category_control, sprite, expectedBrickCount);
+    }
 
-	public void testMotionBricks() {
-		final int expectedBackgroundBrickCount = 22;
-		checkBrickCountInCategory(R.string.category_motion, background, expectedBackgroundBrickCount);
-		final int expectedSpriteBrickCount = 25;
-		checkBrickCountInCategory(R.string.category_motion, sprite, expectedSpriteBrickCount);
-	}
+    public void testMotionBricks() {
+        final int expectedBackgroundBrickCount = 22;
+        checkBrickCountInCategory(R.string.category_motion, background, expectedBackgroundBrickCount);
+        final int expectedSpriteBrickCount = 25;
+        checkBrickCountInCategory(R.string.category_motion, sprite, expectedSpriteBrickCount);
+    }
 
-	public void testSoundBricks() {
-		final int expectedBrickCount = 8;
-		checkBrickCountInCategory(R.string.category_sound, background, expectedBrickCount);
-		checkBrickCountInCategory(R.string.category_sound, sprite, expectedBrickCount);
-	}
+    public void testSoundBricks() {
+        final int expectedBrickCount = 8;
+        checkBrickCountInCategory(R.string.category_sound, background, expectedBrickCount);
+        checkBrickCountInCategory(R.string.category_sound, sprite, expectedBrickCount);
+    }
 
-	public void testLooksBricks() {
-		final int expectedBackgroundBrickCount = 20;
-		checkBrickCountInCategory(R.string.category_looks, background, expectedBackgroundBrickCount);
-		final int expectedBrickCount = 25;
-		checkBrickCountInCategory(R.string.category_looks, sprite, expectedBrickCount);
-	}
+    public void testLooksBricks() {
+        final int expectedBackgroundBrickCount = 20;
+        checkBrickCountInCategory(R.string.category_looks, background, expectedBackgroundBrickCount);
+        final int expectedBrickCount = 25;
+        checkBrickCountInCategory(R.string.category_looks, sprite, expectedBrickCount);
+    }
 
-	public void testPenBricks() {
-		final int expectedBackgroundBrickCount = 1;
-		checkBrickCountInCategory(R.string.category_pen, background, expectedBackgroundBrickCount);
-		final int expectedSpriteBrickCount = 6;
-		checkBrickCountInCategory(R.string.category_pen, sprite, expectedSpriteBrickCount);
-	}
+    public void testPenBricks() {
+        final int expectedBackgroundBrickCount = 1;
+        checkBrickCountInCategory(R.string.category_pen, background, expectedBackgroundBrickCount);
+        final int expectedSpriteBrickCount = 6;
+        checkBrickCountInCategory(R.string.category_pen, sprite, expectedSpriteBrickCount);
+    }
 
-	public void testDataBricks() {
-		final int expectedBrickCount = 10;
-		checkBrickCountInCategory(R.string.category_data, background, expectedBrickCount);
-		checkBrickCountInCategory(R.string.category_data, sprite, expectedBrickCount);
-	}
+    public void testDataBricks() {
+        final int expectedBrickCount = 10;
+        checkBrickCountInCategory(R.string.category_data, background, expectedBrickCount);
+        checkBrickCountInCategory(R.string.category_data, sprite, expectedBrickCount);
+    }
 
-	public void testLegoNxtBricks() {
-		final int expectedBrickCount = 4;
-		checkBrickCountInCategory(R.string.category_lego_nxt, background, expectedBrickCount);
-		checkBrickCountInCategory(R.string.category_lego_nxt, sprite, expectedBrickCount);
-	}
+    public void testLegoNxtBricks() {
+        final int expectedBrickCount = 4;
+        checkBrickCountInCategory(R.string.category_lego_nxt, background, expectedBrickCount);
+        checkBrickCountInCategory(R.string.category_lego_nxt, sprite, expectedBrickCount);
+    }
 
-	public void testUnknownCategory() {
-		List<Brick> bricks = factory.getBricks("NON_EXISTING_CATEGORY", sprite, context);
-		assertTrue("Non existing category is not empty", bricks.isEmpty());
-	}
+    public void testUnknownCategory() {
+        List<Brick> bricks = factory.getBricks("NON_EXISTING_CATEGORY", sprite, context);
+        assertTrue("Non existing category is not empty", bricks.isEmpty());
+    }
 
-	private void checkBrickCountInCategory(int categoryId, Sprite sprite, int expectedBrickCount) {
-		List<Brick> bricks = factory.getBricks(context.getString(categoryId), sprite, context);
-		assertEquals(String.format("Wrong bricks count in %s category", context.getString(categoryId)),
-				expectedBrickCount, bricks.size());
-	}
+    private void checkBrickCountInCategory(int categoryId, Sprite sprite, int expectedBrickCount) {
+        List<Brick> bricks = factory.getBricks(context.getString(categoryId), sprite, context);
+        assertEquals(String.format("Wrong bricks count in %s category", context.getString(categoryId)),
+                expectedBrickCount, bricks.size());
+    }
 }

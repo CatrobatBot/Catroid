@@ -35,31 +35,31 @@ import static org.catrobat.catroid.R.drawable.ic_program_menu_scripts;
 
 public class BackPackScriptListAdapter extends CheckBoxListAdapter<String> {
 
-	public static final String TAG = BackPackScriptListAdapter.class.getSimpleName();
+    public static final String TAG = BackPackScriptListAdapter.class.getSimpleName();
 
-	public BackPackScriptListAdapter(Context context, int resource, List<String> listItems) {
-		super(context, resource, listItems);
-	}
+    public BackPackScriptListAdapter(Context context, int resource, List<String> listItems) {
+        super(context, resource, listItems);
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		View listItemView = super.getView(position, convertView, parent);
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View listItemView = super.getView(position, convertView, parent);
 
-		ListItemViewHolder listItemViewHolder = (ListItemViewHolder) listItemView.getTag();
-		String scriptName = getItem(position);
+        ListItemViewHolder listItemViewHolder = (ListItemViewHolder) listItemView.getTag();
+        String scriptName = getItem(position);
 
-		listItemViewHolder.name.setText(scriptName);
-		listItemViewHolder.image.setImageResource(ic_program_menu_scripts);
+        listItemViewHolder.name.setText(scriptName);
+        listItemViewHolder.image.setImageResource(ic_program_menu_scripts);
 
-		if (showDetails) {
-			listItemViewHolder.details.setVisibility(View.VISIBLE);
-			int brickCount = BackPackListManager.getInstance().getBackPackedScripts().get(scriptName).size();
-			listItemViewHolder.leftTopDetails.setText(getContext().getResources().getString(R.string.number_of_bricks)
-					.concat(" ").concat(Integer.toString(brickCount)));
-			listItemViewHolder.leftBottomDetails.setVisibility(View.GONE);
-			listItemViewHolder.rightBottomDetails.setVisibility(View.GONE);
-		}
+        if (showDetails) {
+            listItemViewHolder.details.setVisibility(View.VISIBLE);
+            int brickCount = BackPackListManager.getInstance().getBackPackedScripts().get(scriptName).size();
+            listItemViewHolder.leftTopDetails.setText(getContext().getResources().getString(R.string.number_of_bricks)
+                    .concat(" ").concat(Integer.toString(brickCount)));
+            listItemViewHolder.leftBottomDetails.setVisibility(View.GONE);
+            listItemViewHolder.rightBottomDetails.setVisibility(View.GONE);
+        }
 
-		return listItemView;
-	}
+        return listItemView;
+    }
 }

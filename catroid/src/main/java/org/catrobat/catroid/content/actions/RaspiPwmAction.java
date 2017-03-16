@@ -35,73 +35,73 @@ import org.catrobat.catroid.formulaeditor.InterpretationException;
 
 public class RaspiPwmAction extends TemporalAction {
 
-	private static final String TAG = RaspiPwmAction.class.getSimpleName();
+    private static final String TAG = RaspiPwmAction.class.getSimpleName();
 
-	private Formula pinNumberFormula;
-	private Formula pwmFrequencyFormula;
-	private Formula pwmPercentageFormula;
+    private Formula pinNumberFormula;
+    private Formula pwmFrequencyFormula;
+    private Formula pwmPercentageFormula;
 
-	private Sprite sprite;
+    private Sprite sprite;
 
-	private int pinInterpretation;
-	private double frequencyInterpretation;
-	private double percentageInterpretation;
+    private int pinInterpretation;
+    private double frequencyInterpretation;
+    private double percentageInterpretation;
 
-	@Override
-	protected void begin() {
-		try {
-			pinInterpretation = pinNumberFormula == null ? Integer.valueOf(0) : pinNumberFormula.interpretInteger(sprite);
-		} catch (InterpretationException interpretationException) {
-			pinInterpretation = 0;
-			Log.d(TAG, "Formula interpretation for this specific Brick failed. (pin)",
-					interpretationException);
-		}
+    @Override
+    protected void begin() {
+        try {
+            pinInterpretation = pinNumberFormula == null ? Integer.valueOf(0) : pinNumberFormula.interpretInteger(sprite);
+        } catch (InterpretationException interpretationException) {
+            pinInterpretation = 0;
+            Log.d(TAG, "Formula interpretation for this specific Brick failed. (pin)",
+                    interpretationException);
+        }
 
-		try {
-			frequencyInterpretation = pwmFrequencyFormula == null ? Double.valueOf(0) : pwmFrequencyFormula
-					.interpretDouble(sprite);
-		} catch (InterpretationException interpretationException) {
-			frequencyInterpretation = 0;
-			Log.d(TAG, "Formula interpretation for this specific Brick failed. (frequency)",
-					interpretationException);
-		}
+        try {
+            frequencyInterpretation = pwmFrequencyFormula == null ? Double.valueOf(0) : pwmFrequencyFormula
+                    .interpretDouble(sprite);
+        } catch (InterpretationException interpretationException) {
+            frequencyInterpretation = 0;
+            Log.d(TAG, "Formula interpretation for this specific Brick failed. (frequency)",
+                    interpretationException);
+        }
 
-		try {
-			percentageInterpretation = pwmPercentageFormula == null ? Double.valueOf(0) : pwmPercentageFormula
-					.interpretDouble(sprite);
-		} catch (InterpretationException interpretationException) {
-			percentageInterpretation = 0;
-			Log.d(TAG, "Formula interpretation for this specific Brick failed. (percentage)",
-					interpretationException);
-		}
-	}
+        try {
+            percentageInterpretation = pwmPercentageFormula == null ? Double.valueOf(0) : pwmPercentageFormula
+                    .interpretDouble(sprite);
+        } catch (InterpretationException interpretationException) {
+            percentageInterpretation = 0;
+            Log.d(TAG, "Formula interpretation for this specific Brick failed. (percentage)",
+                    interpretationException);
+        }
+    }
 
-	@Override
-	protected void update(float percent) {
+    @Override
+    protected void update(float percent) {
 
-		RPiSocketConnection connection = RaspberryPiService.getInstance().connection;
-		try {
-			Log.d(TAG, "RPi pwm pin=" + pinInterpretation + ", " + percentageInterpretation
-					+ "%, " + frequencyInterpretation + "Hz");
-			connection.setPWM(pinInterpretation, frequencyInterpretation, percentageInterpretation);
-		} catch (Exception e) {
-			Log.e(TAG, "RPi: exception during setPwm: " + e);
-		}
-	}
+        RPiSocketConnection connection = RaspberryPiService.getInstance().connection;
+        try {
+            Log.d(TAG, "RPi pwm pin=" + pinInterpretation + ", " + percentageInterpretation
+                    + "%, " + frequencyInterpretation + "Hz");
+            connection.setPWM(pinInterpretation, frequencyInterpretation, percentageInterpretation);
+        } catch (Exception e) {
+            Log.e(TAG, "RPi: exception during setPwm: " + e);
+        }
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setPinNumberFormula(Formula pinNumberFormula) {
-		this.pinNumberFormula = pinNumberFormula;
-	}
+    public void setPinNumberFormula(Formula pinNumberFormula) {
+        this.pinNumberFormula = pinNumberFormula;
+    }
 
-	public void setPwmFrequencyFormula(Formula pwmFrequencyFormula) {
-		this.pwmFrequencyFormula = pwmFrequencyFormula;
-	}
+    public void setPwmFrequencyFormula(Formula pwmFrequencyFormula) {
+        this.pwmFrequencyFormula = pwmFrequencyFormula;
+    }
 
-	public void setPwmPercentageFormula(Formula pwmPercentageFormula) {
-		this.pwmPercentageFormula = pwmPercentageFormula;
-	}
+    public void setPwmPercentageFormula(Formula pwmPercentageFormula) {
+        this.pwmPercentageFormula = pwmPercentageFormula;
+    }
 }

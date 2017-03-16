@@ -24,23 +24,23 @@
 package org.catrobat.catroid.devices.mindstorms.ev3.sensors;
 
 public enum EV3SensorType {
-	NO_SENSOR(0x00), NXT_TOUCH(0x01), NXT_LIGHT(0x02),
-	NXT_SOUND(0x03), NXT_COLOR(0x04), NXT_ULTRASONIC(0x05),
-	NXT_TEMPERATURE(0x06),
+    NO_SENSOR(0x00), NXT_TOUCH(0x01), NXT_LIGHT(0x02),
+    NXT_SOUND(0x03), NXT_COLOR(0x04), NXT_ULTRASONIC(0x05),
+    NXT_TEMPERATURE(0x06),
 
-	EV3_LARGE_MOTOR(0x07), EV3_MEDIUM_MOTOR(0x08),
-	EV3_TOUCH(0x10), EV3_COLOR(0x1D), EV3_ULTRASONIC(0x1E),
-	EV3_GYRO(0x20), EV3_INFRARED(0x21),
+    EV3_LARGE_MOTOR(0x07), EV3_MEDIUM_MOTOR(0x08),
+    EV3_TOUCH(0x10), EV3_COLOR(0x1D), EV3_ULTRASONIC(0x1E),
+    EV3_GYRO(0x20), EV3_INFRARED(0x21),
 
-	ENERGY_METER(0x63), IIC(0x64);
+    ENERGY_METER(0x63), IIC(0x64);
 
-	private int sensorTypeValue;
+    private int sensorTypeValue;
 
-	EV3SensorType(int sensorTypeValue) {
-		this.sensorTypeValue = sensorTypeValue;
-	}
+    EV3SensorType(int sensorTypeValue) {
+        this.sensorTypeValue = sensorTypeValue;
+    }
 
-	public byte getByte() {
-		return (byte) sensorTypeValue;
-	}
+    public byte getByte() {
+        return (byte) sensorTypeValue;
+    }
 }

@@ -28,24 +28,24 @@ import org.catrobat.catroid.utils.FlashUtil;
 
 public class FlashAction extends TemporalAction {
 
-	private static final int OFF = 0;
-	private static final int ON = 1;
-	private int turnFlash = OFF;
+    private static final int OFF = 0;
+    private static final int ON = 1;
+    private int turnFlash = OFF;
 
-	@Override
-	protected void update(float percent) {
-		if (turnFlash == ON) {
-			FlashUtil.flashOn();
-		} else {
-			FlashUtil.flashOff();
-		}
-	}
+    @Override
+    protected void update(float percent) {
+        if (turnFlash == ON) {
+            FlashUtil.flashOn();
+        } else {
+            FlashUtil.flashOff();
+        }
+    }
 
-	public void turnFlashOn() {
-		turnFlash = ON;
-	}
+    public void turnFlashOn() {
+        turnFlash = ON;
+    }
 
-	public void turnFlashOff() {
-		turnFlash = OFF;
-	}
+    public void turnFlashOff() {
+        turnFlash = OFF;
+    }
 }

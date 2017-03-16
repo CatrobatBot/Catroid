@@ -28,37 +28,37 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class TextActor extends Actor {
 
-	private int posX;
-	private int posY;
-	private String text;
-	private BitmapFont font;
+    private int posX;
+    private int posY;
+    private String text;
+    private BitmapFont font;
 
-	public TextActor(String text, int posX, int posY) {
-		this.text = text;
-		this.posX = posX;
-		this.posY = posY;
-		init();
-	}
+    public TextActor(String text, int posX, int posY) {
+        this.text = text;
+        this.posX = posX;
+        this.posY = posY;
+        init();
+    }
 
-	@Override
-	public void draw(Batch batch, float parentAlpha) {
-		font.draw(batch, text, posX, posY);
-	}
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        font.draw(batch, text, posX, posY);
+    }
 
-	private void init() {
-		font = new BitmapFont();
-		font.setColor(1.0f, 0.0f, 0.0f, 1.0f);
-	}
+    private void init() {
+        font = new BitmapFont();
+        font.setColor(1.0f, 0.0f, 0.0f, 1.0f);
+    }
 
-	public void setPosX(int posX) {
-		this.posX = posX;
-	}
+    public void setPosX(int posX) {
+        this.posX = posX;
+    }
 
-	public void setPosY(int posY) {
-		this.posY = posY;
-	}
+    public void setPosY(int posY) {
+        this.posY = posY;
+    }
 
-	public void setText(String text) {
-		this.text = text;
-	}
+    public void setText(String text) {
+        this.text = text;
+    }
 }

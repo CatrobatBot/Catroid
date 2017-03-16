@@ -35,34 +35,34 @@ import java.util.List;
 
 public class SceneListAdapter extends CheckBoxListAdapter<Scene> implements DragAndDropAdapterInterface {
 
-	public static final String TAG = SceneListAdapter.class.getSimpleName();
-	private ProjectAndSceneScreenshotLoader screenshotLoader;
+    public static final String TAG = SceneListAdapter.class.getSimpleName();
+    private ProjectAndSceneScreenshotLoader screenshotLoader;
 
-	public SceneListAdapter(Context context, int resource, List<Scene> itemList) {
-		super(context, resource, itemList);
-		screenshotLoader = new ProjectAndSceneScreenshotLoader(context);
-	}
+    public SceneListAdapter(Context context, int resource, List<Scene> itemList) {
+        super(context, resource, itemList);
+        screenshotLoader = new ProjectAndSceneScreenshotLoader(context);
+    }
 
-	@Override
-	public View getView(final int position, View convertView, ViewGroup parent) {
-		View listItemView = super.getView(position, convertView, parent);
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        View listItemView = super.getView(position, convertView, parent);
 
-		ListItemViewHolder listItemViewHolder = (ListItemViewHolder) listItemView.getTag();
-		String projectName = null;
-		Scene scene = getItem(position);
+        ListItemViewHolder listItemViewHolder = (ListItemViewHolder) listItemView.getTag();
+        String projectName = null;
+        Scene scene = getItem(position);
 
-		if (scene.getProject() != null) {
-			projectName = scene.getProject().getName();
-		}
+        if (scene.getProject() != null) {
+            projectName = scene.getProject().getName();
+        }
 
-		String name = scene.getName();
-		if (scene == getItem(0)) {
-			name = getContext().getString(R.string.start_scene_name, name);
-		}
+        String name = scene.getName();
+        if (scene == getItem(0)) {
+            name = getContext().getString(R.string.start_scene_name, name);
+        }
 
-		listItemViewHolder.name.setText(name);
-		screenshotLoader.loadAndShowScreenshot(projectName, scene.getName(), scene.isBackPackScene, listItemViewHolder
-				.image);
-		return listItemView;
-	}
+        listItemViewHolder.name.setText(name);
+        screenshotLoader.loadAndShowScreenshot(projectName, scene.getName(), scene.isBackPackScene, listItemViewHolder
+                .image);
+        return listItemView;
+    }
 }

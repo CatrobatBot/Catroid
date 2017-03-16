@@ -33,24 +33,24 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 public final class ScriptListMatchers {
-	// Suppress default constructor for noninstantiability
-	private ScriptListMatchers() {
-		throw new AssertionError();
-	}
+    // Suppress default constructor for noninstantiability
+    private ScriptListMatchers() {
+        throw new AssertionError();
+    }
 
-	public static Matcher<View> isScriptListView() {
-		return new TypeSafeMatcher<View>() {
+    public static Matcher<View> isScriptListView() {
+        return new TypeSafeMatcher<View>() {
 
-			@Override
-			protected boolean matchesSafely(View view) {
-				return view instanceof BrickDragAndDropListView && ((ListView) view).getAdapter()
-						instanceof BrickAdapter;
-			}
+            @Override
+            protected boolean matchesSafely(View view) {
+                return view instanceof BrickDragAndDropListView && ((ListView) view).getAdapter()
+                        instanceof BrickAdapter;
+            }
 
-			@Override
-			public void describeTo(Description description) {
-				description.appendText("Locate scriptlistView within view");
-			}
-		};
-	}
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Locate scriptlistView within view");
+            }
+        };
+    }
 }

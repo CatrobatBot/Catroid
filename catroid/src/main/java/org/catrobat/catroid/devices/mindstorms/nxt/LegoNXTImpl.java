@@ -39,283 +39,283 @@ import java.util.UUID;
 
 public class LegoNXTImpl implements LegoNXT, NXTSensorService.OnSensorChangedListener {
 
-	private static final UUID LEGO_NXT_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-	private static final String TAG = LegoNXTImpl.class.getSimpleName();
+    private static final UUID LEGO_NXT_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    private static final String TAG = LegoNXTImpl.class.getSimpleName();
 
-	protected MindstormsConnection mindstormsConnection;
-	protected Context context;
+    protected MindstormsConnection mindstormsConnection;
+    protected Context context;
 
-	private boolean isInitialized = false;
+    private boolean isInitialized = false;
 
-	private NXTMotor motorA;
-	private NXTMotor motorB;
-	private NXTMotor motorC;
+    private NXTMotor motorA;
+    private NXTMotor motorB;
+    private NXTMotor motorC;
 
-	private NXTSensor sensor1;
-	private NXTSensor sensor2;
-	private NXTSensor sensor3;
-	private NXTSensor sensor4;
+    private NXTSensor sensor1;
+    private NXTSensor sensor2;
+    private NXTSensor sensor3;
+    private NXTSensor sensor4;
 
-	private NXTSensorService sensorService;
+    private NXTSensorService sensorService;
 
-	public LegoNXTImpl(Context applicationContext) {
-		this.context = applicationContext;
-	}
+    public LegoNXTImpl(Context applicationContext) {
+        this.context = applicationContext;
+    }
 
-	@Override
-	public String getName() {
-		return "Lego NXT";
-	}
+    @Override
+    public String getName() {
+        return "Lego NXT";
+    }
 
-	@Override
-	public Class<? extends BluetoothDevice> getDeviceType() {
-		return BluetoothDevice.LEGO_NXT;
-	}
+    @Override
+    public Class<? extends BluetoothDevice> getDeviceType() {
+        return BluetoothDevice.LEGO_NXT;
+    }
 
-	@Override
-	public void setConnection(BluetoothConnection btConnection) {
-		this.mindstormsConnection = new MindstormsConnectionImpl(btConnection);
-	}
+    @Override
+    public void setConnection(BluetoothConnection btConnection) {
+        this.mindstormsConnection = new MindstormsConnectionImpl(btConnection);
+    }
 
-	@Override
-	public UUID getBluetoothDeviceUUID() {
-		return LEGO_NXT_UUID;
-	}
+    @Override
+    public UUID getBluetoothDeviceUUID() {
+        return LEGO_NXT_UUID;
+    }
 
-	@Override
-	public void disconnect() {
-		if (mindstormsConnection.isConnected()) {
-			this.stopAllMovements();
+    @Override
+    public void disconnect() {
+        if (mindstormsConnection.isConnected()) {
+            this.stopAllMovements();
 
-			if (sensorService != null) {
-				sensorService.deactivateAllSensors(mindstormsConnection);
-				sensorService.destroy();
-			}
-			mindstormsConnection.disconnect();
-		}
-	}
+            if (sensorService != null) {
+                sensorService.deactivateAllSensors(mindstormsConnection);
+                sensorService.destroy();
+            }
+            mindstormsConnection.disconnect();
+        }
+    }
 
-	@Override
-	public boolean isAlive() {
-		try {
-			tryGetKeepAliveTime();
-			return true;
-		} catch (MindstormsException e) {
-			return false;
-		}
-	}
+    @Override
+    public boolean isAlive() {
+        try {
+            tryGetKeepAliveTime();
+            return true;
+        } catch (MindstormsException e) {
+            return false;
+        }
+    }
 
-	@Override
-	public void playTone(int frequencyInHz, int durationInMs) {
+    @Override
+    public void playTone(int frequencyInHz, int durationInMs) {
 
-		if (durationInMs <= 0) {
-			return;
-		}
+        if (durationInMs <= 0) {
+            return;
+        }
 
-		if (frequencyInHz > 14000) {
-			frequencyInHz = 14000;
-		} else if (frequencyInHz < 200) {
-			frequencyInHz = 200;
-		}
+        if (frequencyInHz > 14000) {
+            frequencyInHz = 14000;
+        } else if (frequencyInHz < 200) {
+            frequencyInHz = 200;
+        }
 
-		Command command = new Command(CommandType.DIRECT_COMMAND, CommandByte.PLAY_TONE, false);
-		command.append((byte) (frequencyInHz & 0x00FF));
-		command.append((byte) ((frequencyInHz & 0xFF00) >> 8));
-		command.append((byte) (durationInMs & 0x00FF));
-		command.append((byte) ((durationInMs & 0xFF00) >> 8));
+        Command command = new Command(CommandType.DIRECT_COMMAND, CommandByte.PLAY_TONE, false);
+        command.append((byte) (frequencyInHz & 0x00FF));
+        command.append((byte) ((frequencyInHz & 0xFF00) >> 8));
+        command.append((byte) (durationInMs & 0x00FF));
+        command.append((byte) ((durationInMs & 0xFF00) >> 8));
 
-		try {
-			mindstormsConnection.send(command);
-		} catch (MindstormsException e) {
-			Log.e(TAG, e.getMessage());
-		}
-	}
+        try {
+            mindstormsConnection.send(command);
+        } catch (MindstormsException e) {
+            Log.e(TAG, e.getMessage());
+        }
+    }
 
-	@Override
-	public int getKeepAliveTime() {
-		try {
-			return tryGetKeepAliveTime();
-		} catch (NXTException e) {
-			return -1;
-		} catch (MindstormsException e) {
-			return -1;
-		}
-	}
+    @Override
+    public int getKeepAliveTime() {
+        try {
+            return tryGetKeepAliveTime();
+        } catch (NXTException e) {
+            return -1;
+        } catch (MindstormsException e) {
+            return -1;
+        }
+    }
 
-	private int tryGetKeepAliveTime() {
-		Command command = new Command(CommandType.DIRECT_COMMAND, CommandByte.KEEP_ALIVE, true);
+    private int tryGetKeepAliveTime() {
+        Command command = new Command(CommandType.DIRECT_COMMAND, CommandByte.KEEP_ALIVE, true);
 
-		byte[] alive = mindstormsConnection.sendAndReceive(command);
+        byte[] alive = mindstormsConnection.sendAndReceive(command);
 
-		NXTReply reply = new NXTReply(mindstormsConnection.sendAndReceive(command));
-		NXTError.checkForError(reply, 7);
+        NXTReply reply = new NXTReply(mindstormsConnection.sendAndReceive(command));
+        NXTError.checkForError(reply, 7);
 
-		byte[] aliveTimeToInt = new byte[4];
-		aliveTimeToInt[0] = alive[3];
-		aliveTimeToInt[1] = alive[4];
-		aliveTimeToInt[2] = alive[5];
-		aliveTimeToInt[3] = alive[6];
+        byte[] aliveTimeToInt = new byte[4];
+        aliveTimeToInt[0] = alive[3];
+        aliveTimeToInt[1] = alive[4];
+        aliveTimeToInt[2] = alive[5];
+        aliveTimeToInt[3] = alive[6];
 
-		int aliveTime = java.nio.ByteBuffer.wrap(aliveTimeToInt).order(java.nio.ByteOrder.LITTLE_ENDIAN).getInt();
-		return aliveTime;
-	}
+        int aliveTime = java.nio.ByteBuffer.wrap(aliveTimeToInt).order(java.nio.ByteOrder.LITTLE_ENDIAN).getInt();
+        return aliveTime;
+    }
 
-	@Override
-	public int getBatteryLevel() {
-		try {
-			return tryGetBatteryLevel();
-		} catch (NXTException e) {
-			return -1;
-		} catch (MindstormsException e) {
-			return -1;
-		}
-	}
+    @Override
+    public int getBatteryLevel() {
+        try {
+            return tryGetBatteryLevel();
+        } catch (NXTException e) {
+            return -1;
+        } catch (MindstormsException e) {
+            return -1;
+        }
+    }
 
-	private int tryGetBatteryLevel() {
-		Command command = new Command(CommandType.DIRECT_COMMAND, CommandByte.GET_BATTERY_LEVEL, true);
+    private int tryGetBatteryLevel() {
+        Command command = new Command(CommandType.DIRECT_COMMAND, CommandByte.GET_BATTERY_LEVEL, true);
 
-		NXTReply reply = new NXTReply(mindstormsConnection.sendAndReceive(command));
-		NXTError.checkForError(reply, 5);
+        NXTReply reply = new NXTReply(mindstormsConnection.sendAndReceive(command));
+        NXTError.checkForError(reply, 5);
 
-		byte[] batByte = mindstormsConnection.sendAndReceive(command);
-		byte[] batValues = new byte[2];
-		batValues[0] = batByte[3];
-		batValues[1] = batByte[4];
+        byte[] batByte = mindstormsConnection.sendAndReceive(command);
+        byte[] batValues = new byte[2];
+        batValues[0] = batByte[3];
+        batValues[1] = batByte[4];
 
-		int millivolt = java.nio.ByteBuffer.wrap(batValues).order(java.nio.ByteOrder.LITTLE_ENDIAN).getShort();
+        int millivolt = java.nio.ByteBuffer.wrap(batValues).order(java.nio.ByteOrder.LITTLE_ENDIAN).getShort();
 
-		return millivolt;
-	}
+        return millivolt;
+    }
 
-	@Override
-	public NXTMotor getMotorA() {
-		return motorA;
-	}
+    @Override
+    public NXTMotor getMotorA() {
+        return motorA;
+    }
 
-	@Override
-	public NXTMotor getMotorB() {
-		return motorB;
-	}
+    @Override
+    public NXTMotor getMotorB() {
+        return motorB;
+    }
 
-	@Override
-	public NXTMotor getMotorC() {
-		return motorC;
-	}
+    @Override
+    public NXTMotor getMotorC() {
+        return motorC;
+    }
 
-	@Override
-	public void stopAllMovements() {
-		motorA.stop();
-		motorB.stop();
-		motorC.stop();
-	}
+    @Override
+    public void stopAllMovements() {
+        motorA.stop();
+        motorB.stop();
+        motorC.stop();
+    }
 
-	@Override
-	public synchronized int getSensorValue(Sensors sensor) {
+    @Override
+    public synchronized int getSensorValue(Sensors sensor) {
 
-		switch (sensor) {
-			case NXT_SENSOR_1:
-				if (getSensor1() == null) {
-					return 0;
-				}
-				return getSensor1().getLastSensorValue();
-			case NXT_SENSOR_2:
-				if (getSensor2() == null) {
-					return 0;
-				}
-				return getSensor2().getLastSensorValue();
-			case NXT_SENSOR_3:
-				if (getSensor3() == null) {
-					return 0;
-				}
-				return getSensor3().getLastSensorValue();
-			case NXT_SENSOR_4:
-				if (getSensor4() == null) {
-					return 0;
-				}
-				return getSensor4().getLastSensorValue();
-		}
+        switch (sensor) {
+            case NXT_SENSOR_1:
+                if (getSensor1() == null) {
+                    return 0;
+                }
+                return getSensor1().getLastSensorValue();
+            case NXT_SENSOR_2:
+                if (getSensor2() == null) {
+                    return 0;
+                }
+                return getSensor2().getLastSensorValue();
+            case NXT_SENSOR_3:
+                if (getSensor3() == null) {
+                    return 0;
+                }
+                return getSensor3().getLastSensorValue();
+            case NXT_SENSOR_4:
+                if (getSensor4() == null) {
+                    return 0;
+                }
+                return getSensor4().getLastSensorValue();
+        }
 
-		return -1;
-	}
+        return -1;
+    }
 
-	@Override
-	public MindstormsSensor getSensor1() {
-		return sensor1;
-	}
+    @Override
+    public MindstormsSensor getSensor1() {
+        return sensor1;
+    }
 
-	@Override
-	public MindstormsSensor getSensor2() {
-		return sensor2;
-	}
+    @Override
+    public MindstormsSensor getSensor2() {
+        return sensor2;
+    }
 
-	@Override
-	public MindstormsSensor getSensor3() {
-		return sensor3;
-	}
+    @Override
+    public MindstormsSensor getSensor3() {
+        return sensor3;
+    }
 
-	@Override
-	public MindstormsSensor getSensor4() {
-		return sensor4;
-	}
+    @Override
+    public MindstormsSensor getSensor4() {
+        return sensor4;
+    }
 
-	@Override
-	public void onSensorChanged() {
-		assignSensorsToPorts();
-	}
+    @Override
+    public void onSensorChanged() {
+        assignSensorsToPorts();
+    }
 
-	private NXTSensorService getSensorService() {
-		if (sensorService == null) {
-			sensorService = new NXTSensorService(context, mindstormsConnection);
-			sensorService.registerOnSensorChangedListener(this);
-		}
+    private NXTSensorService getSensorService() {
+        if (sensorService == null) {
+            sensorService = new NXTSensorService(context, mindstormsConnection);
+            sensorService.registerOnSensorChangedListener(this);
+        }
 
-		return sensorService;
-	}
+        return sensorService;
+    }
 
-	@Override
-	public synchronized void initialise() {
+    @Override
+    public synchronized void initialise() {
 
-		if (isInitialized) {
-			return;
-		}
+        if (isInitialized) {
+            return;
+        }
 
-		mindstormsConnection.init();
+        mindstormsConnection.init();
 
-		motorA = new NXTMotor(0, mindstormsConnection);
-		motorB = new NXTMotor(1, mindstormsConnection);
-		motorC = new NXTMotor(2, mindstormsConnection);
+        motorA = new NXTMotor(0, mindstormsConnection);
+        motorB = new NXTMotor(1, mindstormsConnection);
+        motorC = new NXTMotor(2, mindstormsConnection);
 
-		assignSensorsToPorts();
+        assignSensorsToPorts();
 
-		isInitialized = true;
-	}
+        isInitialized = true;
+    }
 
-	private synchronized void assignSensorsToPorts() {
-		NXTSensorService sensorService = getSensorService();
+    private synchronized void assignSensorsToPorts() {
+        NXTSensorService sensorService = getSensorService();
 
-		sensor1 = sensorService.createSensor1();
-		sensor2 = sensorService.createSensor2();
-		sensor3 = sensorService.createSensor3();
-		sensor4 = sensorService.createSensor4();
-	}
+        sensor1 = sensorService.createSensor1();
+        sensor2 = sensorService.createSensor2();
+        sensor3 = sensorService.createSensor3();
+        sensor4 = sensorService.createSensor4();
+    }
 
-	@Override
-	public void start() {
-		initialise();
+    @Override
+    public void start() {
+        initialise();
 
-		assignSensorsToPorts();
+        assignSensorsToPorts();
 
-		sensorService.resumeSensorUpdate();
-	}
+        sensorService.resumeSensorUpdate();
+    }
 
-	@Override
-	public void pause() {
-		stopAllMovements();
-		sensorService.pauseSensorUpdate();
-	}
+    @Override
+    public void pause() {
+        stopAllMovements();
+        sensorService.pauseSensorUpdate();
+    }
 
-	@Override
-	public void destroy() {
-		sensorService.deactivateAllSensors(mindstormsConnection);
-	}
+    @Override
+    public void destroy() {
+        sensorService.deactivateAllSensors(mindstormsConnection);
+    }
 }

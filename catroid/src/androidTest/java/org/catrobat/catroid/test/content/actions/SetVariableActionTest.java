@@ -33,54 +33,54 @@ import org.catrobat.catroid.formulaeditor.UserVariable;
 
 public class SetVariableActionTest extends AndroidTestCase {
 
-	private static final String TEST_USERVARIABLE = "testUservariable";
-	private static final double SET_VARIABLE_VALUE = 17;
-	private static final double INITIALIZED_VALUE = 0.0;
-	private Sprite testSprite;
-	private Project project;
-	private UserVariable userVariable;
+    private static final String TEST_USERVARIABLE = "testUservariable";
+    private static final double SET_VARIABLE_VALUE = 17;
+    private static final double INITIALIZED_VALUE = 0.0;
+    private Sprite testSprite;
+    private Project project;
+    private UserVariable userVariable;
 
-	@Override
-	protected void setUp() throws Exception {
-		testSprite = new SingleSprite("testSprite");
-		project = new Project(null, "testProject");
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().getCurrentScene().getDataContainer().addProjectUserVariable(TEST_USERVARIABLE);
-		userVariable = ProjectManager.getInstance().getCurrentScene().getDataContainer()
-				.getUserVariable(TEST_USERVARIABLE, null);
-		super.setUp();
-	}
+    @Override
+    protected void setUp() throws Exception {
+        testSprite = new SingleSprite("testSprite");
+        project = new Project(null, "testProject");
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().getCurrentScene().getDataContainer().addProjectUserVariable(TEST_USERVARIABLE);
+        userVariable = ProjectManager.getInstance().getCurrentScene().getDataContainer()
+                .getUserVariable(TEST_USERVARIABLE, null);
+        super.setUp();
+    }
 
-	public void testSetVariableWithNumericalFormula() {
-		testSprite.getActionFactory().createSetVariableAction(testSprite, new Formula(SET_VARIABLE_VALUE), userVariable).act(1f);
-		assertEquals("Variable not changed", SET_VARIABLE_VALUE, userVariable.getValue());
-	}
+    public void testSetVariableWithNumericalFormula() {
+        testSprite.getActionFactory().createSetVariableAction(testSprite, new Formula(SET_VARIABLE_VALUE), userVariable).act(1f);
+        assertEquals("Variable not changed", SET_VARIABLE_VALUE, userVariable.getValue());
+    }
 
-	public void testSetVariableWithInvalidUserVariable() {
-		testSprite.getActionFactory().createSetVariableAction(testSprite, new Formula(SET_VARIABLE_VALUE), null).act(1f);
-		assertEquals("Variable changed, but should not!", INITIALIZED_VALUE, userVariable.getValue());
-	}
+    public void testSetVariableWithInvalidUserVariable() {
+        testSprite.getActionFactory().createSetVariableAction(testSprite, new Formula(SET_VARIABLE_VALUE), null).act(1f);
+        assertEquals("Variable changed, but should not!", INITIALIZED_VALUE, userVariable.getValue());
+    }
 
-	public void testSetVariableWithNumericalStringFormula() {
-		String myString = "155";
-		testSprite.getActionFactory().createSetVariableAction(testSprite, new Formula(myString), userVariable).act(1f);
-		assertEquals("String UserVariable not changed!", Double.valueOf(myString), Double.valueOf((String) userVariable
-				.getValue()));
-	}
+    public void testSetVariableWithNumericalStringFormula() {
+        String myString = "155";
+        testSprite.getActionFactory().createSetVariableAction(testSprite, new Formula(myString), userVariable).act(1f);
+        assertEquals("String UserVariable not changed!", Double.valueOf(myString), Double.valueOf((String) userVariable
+                .getValue()));
+    }
 
-	public void testSetVariableWithStringFormula() {
-		String myString = "myString";
-		testSprite.getActionFactory().createSetVariableAction(testSprite, new Formula(myString), userVariable).act(1f);
-		assertEquals("String UserVariable not changed!", myString, (String) userVariable.getValue());
-	}
+    public void testSetVariableWithStringFormula() {
+        String myString = "myString";
+        testSprite.getActionFactory().createSetVariableAction(testSprite, new Formula(myString), userVariable).act(1f);
+        assertEquals("String UserVariable not changed!", myString, (String) userVariable.getValue());
+    }
 
-	public void testNullFormula() {
-		testSprite.getActionFactory().createSetVariableAction(testSprite, null, userVariable).act(1f);
-		assertEquals("String UserVariable not changed!", 0d, userVariable.getValue());
-	}
+    public void testNullFormula() {
+        testSprite.getActionFactory().createSetVariableAction(testSprite, null, userVariable).act(1f);
+        assertEquals("String UserVariable not changed!", 0d, userVariable.getValue());
+    }
 
-	public void testNotANumberFormula() {
-		testSprite.getActionFactory().createSetVariableAction(testSprite, new Formula(Double.NaN), userVariable).act(1f);
-		assertEquals("String UserVariable not changed!", Double.NaN, userVariable.getValue());
-	}
+    public void testNotANumberFormula() {
+        testSprite.getActionFactory().createSetVariableAction(testSprite, new Formula(Double.NaN), userVariable).act(1f);
+        assertEquals("String UserVariable not changed!", Double.NaN, userVariable.getValue());
+    }
 }

@@ -27,15 +27,15 @@ import org.catrobat.catroid.stage.StageActivity;
 
 public class WaitForBubbleBrickAction extends WaitAction {
 
-	public WaitForBubbleBrickAction() {
-	}
+    public WaitForBubbleBrickAction() {
+    }
 
-	@Override
-	protected void end() {
-		ShowBubbleActor actor = StageActivity.stageListener.getBubbleActorForSprite(sprite);
-		if (actor != null) {
-			StageActivity.stageListener.getStage().getActors().removeValue(actor, true);
-			StageActivity.stageListener.removeBubbleActorForSprite(sprite);
-		}
-	}
+    @Override
+    protected void end() {
+        ShowBubbleActor actor = StageActivity.stageListener.getBubbleActorForSprite(sprite);
+        if (actor != null) {
+            StageActivity.stageListener.getStage().getActors().removeValue(actor, true);
+            StageActivity.stageListener.removeBubbleActorForSprite(sprite);
+        }
+    }
 }

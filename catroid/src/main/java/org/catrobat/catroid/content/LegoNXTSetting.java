@@ -29,57 +29,57 @@ import java.io.Serializable;
 
 public class LegoNXTSetting implements Setting {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private NXTPort[] portSensorMapping = null;
+    private NXTPort[] portSensorMapping = null;
 
-	public LegoNXTSetting(NXTSensor.Sensor[] sensorMapping) {
-		portSensorMapping = new NXTPort[4];
-		for (int i = 0; i < portSensorMapping.length; ++i) {
-			portSensorMapping[i] = new NXTPort(i, sensorMapping[i]);
-		}
-	}
+    public LegoNXTSetting(NXTSensor.Sensor[] sensorMapping) {
+        portSensorMapping = new NXTPort[4];
+        for (int i = 0; i < portSensorMapping.length; ++i) {
+            portSensorMapping[i] = new NXTPort(i, sensorMapping[i]);
+        }
+    }
 
-	public void updateMapping(NXTSensor.Sensor[] sensorMapping) {
-		for (int i = 0; i < portSensorMapping.length; ++i) {
-			portSensorMapping[i].setNumber(i);
-			portSensorMapping[i].setSensor(sensorMapping[i]);
-		}
-	}
+    public void updateMapping(NXTSensor.Sensor[] sensorMapping) {
+        for (int i = 0; i < portSensorMapping.length; ++i) {
+            portSensorMapping[i].setNumber(i);
+            portSensorMapping[i].setSensor(sensorMapping[i]);
+        }
+    }
 
-	public NXTSensor.Sensor[] getSensorMapping() {
-		NXTSensor.Sensor[] sensorMapping = new NXTSensor.Sensor[4];
-		for (int i = 0; i < portSensorMapping.length; ++i) {
-			sensorMapping[i] = portSensorMapping[i].getSensor();
-		}
+    public NXTSensor.Sensor[] getSensorMapping() {
+        NXTSensor.Sensor[] sensorMapping = new NXTSensor.Sensor[4];
+        for (int i = 0; i < portSensorMapping.length; ++i) {
+            sensorMapping[i] = portSensorMapping[i].getSensor();
+        }
 
-		return sensorMapping;
-	}
+        return sensorMapping;
+    }
 
-	public static class NXTPort implements Serializable {
+    public static class NXTPort implements Serializable {
 
-		private int number;
-		private NXTSensor.Sensor sensor;
+        private int number;
+        private NXTSensor.Sensor sensor;
 
-		public NXTPort(int number, NXTSensor.Sensor sensor) {
-			this.number = number;
-			this.sensor = sensor;
-		}
+        public NXTPort(int number, NXTSensor.Sensor sensor) {
+            this.number = number;
+            this.sensor = sensor;
+        }
 
-		public NXTSensor.Sensor getSensor() {
-			return sensor;
-		}
+        public NXTSensor.Sensor getSensor() {
+            return sensor;
+        }
 
-		public void setSensor(NXTSensor.Sensor sensor) {
-			this.sensor = sensor;
-		}
+        public void setSensor(NXTSensor.Sensor sensor) {
+            this.sensor = sensor;
+        }
 
-		public int getNumber() {
-			return number;
-		}
+        public int getNumber() {
+            return number;
+        }
 
-		public void setNumber(int number) {
-			this.number = number;
-		}
-	}
+        public void setNumber(int number) {
+            this.number = number;
+        }
+    }
 }

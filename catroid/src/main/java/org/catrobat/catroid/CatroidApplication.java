@@ -31,55 +31,55 @@ import com.parrot.freeflight.settings.ApplicationSettings;
 
 public class CatroidApplication extends MultiDexApplication {
 
-	private static final String TAG = CatroidApplication.class.getSimpleName();
+    private static final String TAG = CatroidApplication.class.getSimpleName();
 
-	private ApplicationSettings settings;
-	private static Context context;
+    private ApplicationSettings settings;
+    private static Context context;
 
-	public static final String OS_ARCH = System.getProperty("os.arch");
+    public static final String OS_ARCH = System.getProperty("os.arch");
 
-	public static boolean parrotLibrariesLoaded = false;
+    public static boolean parrotLibrariesLoaded = false;
 
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		Log.d(TAG, "CatroidApplication onCreate");
-		settings = new ApplicationSettings(this);
-		CatroidApplication.context = getApplicationContext();
-	}
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Log.d(TAG, "CatroidApplication onCreate");
+        settings = new ApplicationSettings(this);
+        CatroidApplication.context = getApplicationContext();
+    }
 
-	@Override
-	protected void attachBaseContext(Context base) {
-		super.attachBaseContext(base);
-		MultiDex.install(this);
-	}
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
-	public ApplicationSettings getParrotApplicationSettings() {
-		return settings;
-	}
+    public ApplicationSettings getParrotApplicationSettings() {
+        return settings;
+    }
 
-	public static synchronized boolean loadNativeLibs() {
-		if (parrotLibrariesLoaded) {
-			return true;
-		}
+    public static synchronized boolean loadNativeLibs() {
+        if (parrotLibrariesLoaded) {
+            return true;
+        }
 
-		try {
-			System.loadLibrary("avutil");
-			System.loadLibrary("swscale");
-			System.loadLibrary("avcodec");
-			System.loadLibrary("avfilter");
-			System.loadLibrary("avformat");
-			System.loadLibrary("avdevice");
-			System.loadLibrary("adfreeflight");
-			parrotLibrariesLoaded = true;
-		} catch (UnsatisfiedLinkError e) {
-			Log.e(TAG, Log.getStackTraceString(e));
-			parrotLibrariesLoaded = false;
-		}
-		return parrotLibrariesLoaded;
-	}
+        try {
+            System.loadLibrary("avutil");
+            System.loadLibrary("swscale");
+            System.loadLibrary("avcodec");
+            System.loadLibrary("avfilter");
+            System.loadLibrary("avformat");
+            System.loadLibrary("avdevice");
+            System.loadLibrary("adfreeflight");
+            parrotLibrariesLoaded = true;
+        } catch (UnsatisfiedLinkError e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+            parrotLibrariesLoaded = false;
+        }
+        return parrotLibrariesLoaded;
+    }
 
-	public static Context getAppContext() {
-		return CatroidApplication.context;
-	}
+    public static Context getAppContext() {
+        return CatroidApplication.context;
+    }
 }

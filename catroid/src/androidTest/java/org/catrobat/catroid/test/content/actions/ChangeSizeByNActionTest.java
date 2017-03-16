@@ -33,62 +33,62 @@ import org.catrobat.catroid.formulaeditor.Formula;
 
 public class ChangeSizeByNActionTest extends InstrumentationTestCase {
 
-	private static final float INITIALIZED_VALUE = 100f;
-	private static final float CHANGE_VALUE = 44.4f;
-	private static final String NOT_NUMERICAL_STRING = "size";
-	private static final float CHANGE_SIZE = 20f;
-	private static final float DELTA = 0.0001f;
-	private Sprite sprite;
+    private static final float INITIALIZED_VALUE = 100f;
+    private static final float CHANGE_VALUE = 44.4f;
+    private static final String NOT_NUMERICAL_STRING = "size";
+    private static final float CHANGE_SIZE = 20f;
+    private static final float DELTA = 0.0001f;
+    private Sprite sprite;
 
-	@Override
-	protected void setUp() throws Exception {
-		sprite = new SingleSprite("testSprite");
-		super.setUp();
-	}
+    @Override
+    protected void setUp() throws Exception {
+        sprite = new SingleSprite("testSprite");
+        super.setUp();
+    }
 
-	public void testSize() {
-		assertEquals("Unexpected initial sprite size value", INITIALIZED_VALUE,
-				sprite.look.getSizeInUserInterfaceDimensionUnit());
+    public void testSize() {
+        assertEquals("Unexpected initial sprite size value", INITIALIZED_VALUE,
+                sprite.look.getSizeInUserInterfaceDimensionUnit());
 
-		sprite.getActionFactory().createChangeSizeByNAction(sprite, new Formula(CHANGE_SIZE)).act(1.0f);
-		assertEquals("Incorrect sprite size value after ChangeSizeByNBrick executed", INITIALIZED_VALUE + CHANGE_SIZE,
-				sprite.look.getSizeInUserInterfaceDimensionUnit(), DELTA);
+        sprite.getActionFactory().createChangeSizeByNAction(sprite, new Formula(CHANGE_SIZE)).act(1.0f);
+        assertEquals("Incorrect sprite size value after ChangeSizeByNBrick executed", INITIALIZED_VALUE + CHANGE_SIZE,
+                sprite.look.getSizeInUserInterfaceDimensionUnit(), DELTA);
 
-		sprite.getActionFactory().createChangeSizeByNAction(sprite, new Formula(-CHANGE_SIZE)).act(1.0f);
-		assertEquals("Incorrect sprite size value after ChangeSizeByNBrick executed", INITIALIZED_VALUE,
-				sprite.look.getSizeInUserInterfaceDimensionUnit(), DELTA);
-	}
+        sprite.getActionFactory().createChangeSizeByNAction(sprite, new Formula(-CHANGE_SIZE)).act(1.0f);
+        assertEquals("Incorrect sprite size value after ChangeSizeByNBrick executed", INITIALIZED_VALUE,
+                sprite.look.getSizeInUserInterfaceDimensionUnit(), DELTA);
+    }
 
-	public void testNullSprite() {
-		ActionFactory factory = new ActionFactory();
-		Action action = factory.createChangeSizeByNAction(null, new Formula(CHANGE_SIZE));
-		try {
-			action.act(1.0f);
-			fail("Execution of ChangeSizeByNBrick with null Sprite did not cause a NullPointerException to be thrown");
-		} catch (NullPointerException expected) {
-		}
-	}
+    public void testNullSprite() {
+        ActionFactory factory = new ActionFactory();
+        Action action = factory.createChangeSizeByNAction(null, new Formula(CHANGE_SIZE));
+        try {
+            action.act(1.0f);
+            fail("Execution of ChangeSizeByNBrick with null Sprite did not cause a NullPointerException to be thrown");
+        } catch (NullPointerException expected) {
+        }
+    }
 
-	public void testBrickWithStringFormula() {
-		sprite.getActionFactory().createChangeSizeByNAction(sprite, new Formula(String.valueOf(CHANGE_VALUE)))
-				.act(1.0f);
-		assertEquals("Incorrect sprite size value after ChangeSizeByNBrick executed", INITIALIZED_VALUE + CHANGE_VALUE,
-				sprite.look.getSizeInUserInterfaceDimensionUnit());
+    public void testBrickWithStringFormula() {
+        sprite.getActionFactory().createChangeSizeByNAction(sprite, new Formula(String.valueOf(CHANGE_VALUE)))
+                .act(1.0f);
+        assertEquals("Incorrect sprite size value after ChangeSizeByNBrick executed", INITIALIZED_VALUE + CHANGE_VALUE,
+                sprite.look.getSizeInUserInterfaceDimensionUnit());
 
-		sprite.getActionFactory().createChangeSizeByNAction(sprite, new Formula(NOT_NUMERICAL_STRING)).act(1.0f);
-		assertEquals("Incorrect sprite size value after ChangeSizeByNBrick executed", INITIALIZED_VALUE + CHANGE_VALUE,
-				sprite.look.getSizeInUserInterfaceDimensionUnit());
-	}
+        sprite.getActionFactory().createChangeSizeByNAction(sprite, new Formula(NOT_NUMERICAL_STRING)).act(1.0f);
+        assertEquals("Incorrect sprite size value after ChangeSizeByNBrick executed", INITIALIZED_VALUE + CHANGE_VALUE,
+                sprite.look.getSizeInUserInterfaceDimensionUnit());
+    }
 
-	public void testNullFormula() {
-		sprite.getActionFactory().createChangeSizeByNAction(sprite, null).act(1.0f);
-		assertEquals("Incorrect sprite size value after ChangeSizeByNBrick executed", INITIALIZED_VALUE,
-				sprite.look.getSizeInUserInterfaceDimensionUnit());
-	}
+    public void testNullFormula() {
+        sprite.getActionFactory().createChangeSizeByNAction(sprite, null).act(1.0f);
+        assertEquals("Incorrect sprite size value after ChangeSizeByNBrick executed", INITIALIZED_VALUE,
+                sprite.look.getSizeInUserInterfaceDimensionUnit());
+    }
 
-	public void testNotANumberFormula() {
-		sprite.getActionFactory().createChangeSizeByNAction(sprite, new Formula(Double.NaN)).act(1.0f);
-		assertEquals("Incorrect sprite size value after ChangeSizeByNBrick executed", INITIALIZED_VALUE,
-				sprite.look.getSizeInUserInterfaceDimensionUnit());
-	}
+    public void testNotANumberFormula() {
+        sprite.getActionFactory().createChangeSizeByNAction(sprite, new Formula(Double.NaN)).act(1.0f);
+        assertEquals("Incorrect sprite size value after ChangeSizeByNBrick executed", INITIALIZED_VALUE,
+                sprite.look.getSizeInUserInterfaceDimensionUnit());
+    }
 }

@@ -25,11 +25,11 @@ package org.catrobat.catroid.ui;
 
 public interface DragAndDropBrickLayoutListener {
 
-	/**
-	 * Re-orders elements in a list.
-	 * Removes element at <b>from</b> and adds it after element at <b>to</b>
-	 */
-	void reorder(int from, int to);
+    /**
+     * Re-orders elements in a list.
+     * Removes element at <b>from</b> and adds it after element at <b>to</b>
+     */
+    void reorder(int from, int to);
 
-	void click(int id);
+    void click(int id);
 }

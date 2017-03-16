@@ -36,69 +36,69 @@ import org.catrobat.catroid.formulaeditor.Formula;
 
 public class SingleSeekbar {
 
-	private final FormulaBrick formulaBrick;
-	private final Brick.BrickField seekbarField;
-	private int seekbarTitleId;
+    private final FormulaBrick formulaBrick;
+    private final Brick.BrickField seekbarField;
+    private int seekbarTitleId;
 
-	private TextView formulaEditorEditTextSeekbarValue;
-	private View seekbarView;
+    private TextView formulaEditorEditTextSeekbarValue;
+    private View seekbarView;
 
-	private SeekBar speedSeekBar;
+    private SeekBar speedSeekBar;
 
-	public SingleSeekbar(FormulaBrick formulaBrick,
-			Brick.BrickField seekbarField, int seekbarTitleId) {
-		this.formulaBrick = formulaBrick;
-		this.seekbarField = seekbarField;
-		this.seekbarTitleId = seekbarTitleId;
-	}
+    public SingleSeekbar(FormulaBrick formulaBrick,
+                         Brick.BrickField seekbarField, int seekbarTitleId) {
+        this.formulaBrick = formulaBrick;
+        this.seekbarField = seekbarField;
+        this.seekbarTitleId = seekbarTitleId;
+    }
 
-	public View getView(Context context) {
-		seekbarView = View.inflate(context, R.layout.single_seekbar_value_chooser, null);
-		seekbarView.setFocusableInTouchMode(true);
-		seekbarView.requestFocus();
+    public View getView(Context context) {
+        seekbarView = View.inflate(context, R.layout.single_seekbar_value_chooser, null);
+        seekbarView.setFocusableInTouchMode(true);
+        seekbarView.requestFocus();
 
-		OnClickListener onClickListener = new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				FormulaEditorFragment.showFragment(view, formulaBrick, seekbarField);
-			}
-		};
+        OnClickListener onClickListener = new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FormulaEditorFragment.showFragment(view, formulaBrick, seekbarField);
+            }
+        };
 
-		formulaEditorEditTextSeekbarValue = (TextView) seekbarView.findViewById(R.id.single_seekbar_value);
-		formulaEditorEditTextSeekbarValue.setOnClickListener(onClickListener);
-		formulaBrick.getFormulaWithBrickField(seekbarField).setTextFieldId(R.id.single_seekbar_value);
-		formulaBrick.getFormulaWithBrickField(seekbarField).refreshTextField(seekbarView);
+        formulaEditorEditTextSeekbarValue = (TextView) seekbarView.findViewById(R.id.single_seekbar_value);
+        formulaEditorEditTextSeekbarValue.setOnClickListener(onClickListener);
+        formulaBrick.getFormulaWithBrickField(seekbarField).setTextFieldId(R.id.single_seekbar_value);
+        formulaBrick.getFormulaWithBrickField(seekbarField).refreshTextField(seekbarView);
 
-		speedSeekBar = (SeekBar) seekbarView.findViewById(R.id.single_seekbar_seekbar);
+        speedSeekBar = (SeekBar) seekbarView.findViewById(R.id.single_seekbar_seekbar);
 
-		TextView seekbarTitle = (TextView) seekbarView.findViewById(R.id.single_seekbar_title);
-		seekbarTitle.setText(seekbarTitleId);
+        TextView seekbarTitle = (TextView) seekbarView.findViewById(R.id.single_seekbar_title);
+        seekbarTitle.setText(seekbarTitleId);
 
-		speedSeekBar.setProgress(getCurrentBrickFieldValue());
+        speedSeekBar.setProgress(getCurrentBrickFieldValue());
 
-		SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-				formulaEditorEditTextSeekbarValue.setText(String.valueOf(seekBar.getProgress()));
-			}
+        SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                formulaEditorEditTextSeekbarValue.setText(String.valueOf(seekBar.getProgress()));
+            }
 
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-			}
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				FormulaEditorFragment.overwriteFormula(seekbarView, new Formula(seekBar.getProgress()));
-			}
-		};
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                FormulaEditorFragment.overwriteFormula(seekbarView, new Formula(seekBar.getProgress()));
+            }
+        };
 
-		speedSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
+        speedSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
 
-		return seekbarView;
-	}
+        return seekbarView;
+    }
 
-	private int getCurrentBrickFieldValue() {
-		String stringValue = formulaBrick.getFormulaWithBrickField(seekbarField).getDisplayString(seekbarView.getContext());
-		return Double.valueOf(stringValue.replace(",", ".")).intValue();
-	}
+    private int getCurrentBrickFieldValue() {
+        String stringValue = formulaBrick.getFormulaWithBrickField(seekbarField).getDisplayString(seekbarView.getContext());
+        return Double.valueOf(stringValue.replace(",", ".")).intValue();
+    }
 }

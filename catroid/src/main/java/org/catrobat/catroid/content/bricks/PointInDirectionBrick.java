@@ -40,85 +40,85 @@ import java.util.List;
 
 public class PointInDirectionBrick extends FormulaBrick {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private transient View prototypeView;
+    private transient View prototypeView;
 
-	public static enum Direction {
-		RIGHT(90), LEFT(-90), UP(0), DOWN(180);
+    public static enum Direction {
+        RIGHT(90), LEFT(-90), UP(0), DOWN(180);
 
-		private double directionDegrees;
+        private double directionDegrees;
 
-		private Direction(double degrees) {
-			directionDegrees = degrees;
-		}
+        private Direction(double degrees) {
+            directionDegrees = degrees;
+        }
 
-		public double getDegrees() {
-			return directionDegrees;
-		}
-	}
+        public double getDegrees() {
+            return directionDegrees;
+        }
+    }
 
-	public PointInDirectionBrick() {
-		addAllowedBrickField(BrickField.DEGREES);
-	}
+    public PointInDirectionBrick() {
+        addAllowedBrickField(BrickField.DEGREES);
+    }
 
-	public PointInDirectionBrick(Direction direction) {
-		initializeBrickFields(new Formula(direction.getDegrees()));
-	}
+    public PointInDirectionBrick(Direction direction) {
+        initializeBrickFields(new Formula(direction.getDegrees()));
+    }
 
-	public PointInDirectionBrick(Formula direction) {
-		initializeBrickFields(direction);
-	}
+    public PointInDirectionBrick(Formula direction) {
+        initializeBrickFields(direction);
+    }
 
-	public PointInDirectionBrick(double direction) {
-		initializeBrickFields(new Formula(direction));
-	}
+    public PointInDirectionBrick(double direction) {
+        initializeBrickFields(new Formula(direction));
+    }
 
-	private void initializeBrickFields(Formula direction) {
-		addAllowedBrickField(BrickField.DEGREES);
-		setFormulaWithBrickField(BrickField.DEGREES, direction);
-	}
+    private void initializeBrickFields(Formula direction) {
+        addAllowedBrickField(BrickField.DEGREES);
+        setFormulaWithBrickField(BrickField.DEGREES, direction);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return getFormulaWithBrickField(BrickField.DEGREES).getRequiredResources();
-	}
+    @Override
+    public int getRequiredResources() {
+        return getFormulaWithBrickField(BrickField.DEGREES).getRequiredResources();
+    }
 
-	@Override
-	public View getView(final Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		view = View.inflate(context, R.layout.brick_point_in_direction, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
-		setCheckboxView(R.id.brick_point_in_direction_checkbox);
-		TextView setAngleTextField = (TextView) view.findViewById(R.id.brick_point_in_direction_edit_text);
+    @Override
+    public View getView(final Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        view = View.inflate(context, R.layout.brick_point_in_direction, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        setCheckboxView(R.id.brick_point_in_direction_checkbox);
+        TextView setAngleTextField = (TextView) view.findViewById(R.id.brick_point_in_direction_edit_text);
 
-		getFormulaWithBrickField(BrickField.DEGREES).setTextFieldId(R.id.brick_point_in_direction_edit_text);
-		getFormulaWithBrickField(BrickField.DEGREES).refreshTextField(view);
+        getFormulaWithBrickField(BrickField.DEGREES).setTextFieldId(R.id.brick_point_in_direction_edit_text);
+        getFormulaWithBrickField(BrickField.DEGREES).refreshTextField(view);
 
-		setAngleTextField.setOnClickListener(this);
-		return view;
-	}
+        setAngleTextField.setOnClickListener(this);
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_point_in_direction, null);
-		TextView setAngleTextView = (TextView) prototypeView
-				.findViewById(R.id.brick_point_in_direction_edit_text);
-		setAngleTextView.setText(Utils.getNumberStringForBricks(BrickValues.POINT_IN_DIRECTION));
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_point_in_direction, null);
+        TextView setAngleTextView = (TextView) prototypeView
+                .findViewById(R.id.brick_point_in_direction_edit_text);
+        setAngleTextView.setText(Utils.getNumberStringForBricks(BrickValues.POINT_IN_DIRECTION));
+        return prototypeView;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createPointInDirectionAction(sprite,
-				getFormulaWithBrickField(BrickField.DEGREES)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createPointInDirectionAction(sprite,
+                getFormulaWithBrickField(BrickField.DEGREES)));
+        return null;
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		FormulaEditorFragment.showFragment(view, this, BrickField.DEGREES);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        FormulaEditorFragment.showFragment(view, this, BrickField.DEGREES);
+    }
 }

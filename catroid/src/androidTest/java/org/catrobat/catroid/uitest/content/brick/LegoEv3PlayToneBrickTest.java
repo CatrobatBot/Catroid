@@ -42,70 +42,70 @@ import java.util.ArrayList;
 
 public class LegoEv3PlayToneBrickTest extends BaseActivityInstrumentationTestCase<ScriptActivity> {
 
-	private static final double INITIAL_DURATION = 1.3;
-	private static final double SET_DURATION = 0.2;
-	private static final int INITIAL_FREQUENCY = 20;
-	private static final int SET_FREQUENCY = 100;
-	private static final int INITIAL_VOLUME = 99;
-	private static final int SET_VOLUME = 22;
+    private static final double INITIAL_DURATION = 1.3;
+    private static final double SET_DURATION = 0.2;
+    private static final int INITIAL_FREQUENCY = 20;
+    private static final int SET_FREQUENCY = 100;
+    private static final int INITIAL_VOLUME = 99;
+    private static final int SET_VOLUME = 22;
 
-	private Project project;
-	private LegoEv3PlayToneBrick playToneBrick;
+    private Project project;
+    private LegoEv3PlayToneBrick playToneBrick;
 
-	public LegoEv3PlayToneBrickTest() {
-		super(ScriptActivity.class);
-	}
+    public LegoEv3PlayToneBrickTest() {
+        super(ScriptActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		// normally super.setUp should be called first
-		// but kept the test failing due to view is null
-		// when starting in ScriptActivity
-		createProject();
-		super.setUp();
-	}
+    @Override
+    public void setUp() throws Exception {
+        // normally super.setUp should be called first
+        // but kept the test failing due to view is null
+        // when starting in ScriptActivity
+        createProject();
+        super.setUp();
+    }
 
-	public void testEv3PlayToneBrick() {
-		ListView dragDropListView = UiTestUtils.getScriptListView(solo);
-		BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
+    public void testEv3PlayToneBrick() {
+        ListView dragDropListView = UiTestUtils.getScriptListView(solo);
+        BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
 
-		int childrenCount = adapter.getChildCountFromLastGroup();
-		int groupCount = adapter.getScriptCount();
+        int childrenCount = adapter.getChildCountFromLastGroup();
+        int groupCount = adapter.getScriptCount();
 
-		assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
-		assertEquals("Incorrect number of bricks.", 1, childrenCount);
+        assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
+        assertEquals("Incorrect number of bricks.", 1, childrenCount);
 
-		ArrayList<Brick> projectBrickList = project.getSceneList().get(0).getSpriteList().get(0).getScript(0)
-				.getBrickList();
-		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
+        ArrayList<Brick> projectBrickList = project.getSceneList().get(0).getSpriteList().get(0).getScript(0)
+                .getBrickList();
+        assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
-		assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.ev3_play_tone)));
+        assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
+        assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.ev3_play_tone)));
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
-				R.id.brick_ev3_tone_duration_edit_text, SET_DURATION, Brick.BrickField.LEGO_EV3_DURATION_IN_SECONDS, playToneBrick);
+        UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
+                R.id.brick_ev3_tone_duration_edit_text, SET_DURATION, Brick.BrickField.LEGO_EV3_DURATION_IN_SECONDS, playToneBrick);
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
-				R.id.brick_ev3_tone_freq_edit_text, SET_FREQUENCY, Brick.BrickField.LEGO_EV3_FREQUENCY, playToneBrick);
+        UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
+                R.id.brick_ev3_tone_freq_edit_text, SET_FREQUENCY, Brick.BrickField.LEGO_EV3_FREQUENCY, playToneBrick);
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
-				R.id.brick_ev3_tone_volume_edit_text, SET_VOLUME, Brick.BrickField.LEGO_EV3_VOLUME, playToneBrick);
-	}
+        UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
+                R.id.brick_ev3_tone_volume_edit_text, SET_VOLUME, Brick.BrickField.LEGO_EV3_VOLUME, playToneBrick);
+    }
 
-	private void createProject() {
-		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite sprite = new Sprite("cat");
-		Script script = new StartScript();
+    private void createProject() {
+        project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Sprite sprite = new Sprite("cat");
+        Script script = new StartScript();
 
-		playToneBrick = new LegoEv3PlayToneBrick(INITIAL_FREQUENCY, (float) INITIAL_DURATION, INITIAL_VOLUME);
+        playToneBrick = new LegoEv3PlayToneBrick(INITIAL_FREQUENCY, (float) INITIAL_DURATION, INITIAL_VOLUME);
 
-		script.addBrick(playToneBrick);
+        script.addBrick(playToneBrick);
 
-		sprite.addScript(script);
-		project.getSceneList().get(0).addSprite(sprite);
+        sprite.addScript(script);
+        project.getSceneList().get(0).addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 }

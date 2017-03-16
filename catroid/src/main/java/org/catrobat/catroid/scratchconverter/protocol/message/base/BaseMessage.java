@@ -40,56 +40,58 @@ import java.util.Map;
 
 public abstract class BaseMessage extends Message {
 
-	public enum Type {
-		ERROR(0),
-		INFO(1),
-		CLIENT_ID(2);
+    public enum Type {
+        ERROR(0),
+        INFO(1),
+        CLIENT_ID(2);
 
-		private int typeID;
+        private int typeID;
 
-		private static Map<Integer, Type> map = new HashMap<>();
-		static {
-			for (Type legEnum : Type.values()) {
-				map.put(legEnum.typeID, legEnum);
-			}
-		}
-		Type(final int typeID) {
-			this.typeID = typeID;
-		}
+        private static Map<Integer, Type> map = new HashMap<>();
 
-		public static Type valueOf(int typeID) {
-			return map.get(typeID);
-		}
+        static {
+            for (Type legEnum : Type.values()) {
+                map.put(legEnum.typeID, legEnum);
+            }
+        }
 
-		public int getTypeID() {
-			return typeID;
-		}
-	}
+        Type(final int typeID) {
+            this.typeID = typeID;
+        }
 
-	@Nullable
-	public static <T extends BaseMessage> T fromJson(final JSONObject jsonMessage) throws JSONException {
-		final JSONObject jsonData = jsonMessage.getJSONObject(JsonKeys.DATA.toString());
+        public static Type valueOf(int typeID) {
+            return map.get(typeID);
+        }
 
-		switch (Type.valueOf(jsonMessage.getInt(JsonKeys.TYPE.toString()))) {
-			case ERROR:
-				return (T) new ErrorMessage(jsonData.getString(JsonDataKeys.MSG.toString()));
+        public int getTypeID() {
+            return typeID;
+        }
+    }
 
-			case CLIENT_ID:
-				return (T) new ClientIDMessage(jsonData.getLong(JsonDataKeys.CLIENT_ID.toString()));
+    @Nullable
+    public static <T extends BaseMessage> T fromJson(final JSONObject jsonMessage) throws JSONException {
+        final JSONObject jsonData = jsonMessage.getJSONObject(JsonKeys.DATA.toString());
 
-			case INFO:
-				final double catrobatLangVersion = jsonData.getDouble(JsonDataKeys.CATROBAT_LANGUAGE_VERSION.toString());
-				final JSONArray jobsInfo = jsonData.getJSONArray(JsonDataKeys.JOBS_INFO.toString());
-				final List<Job> jobList = new ArrayList<>();
-				if (jobsInfo != null) {
-					for (int i = 0; i < jobsInfo.length(); ++i) {
-						jobList.add(Job.fromJson(jobsInfo.getJSONObject(i)));
-					}
-				}
-				return (T) new InfoMessage((float) catrobatLangVersion, jobList.toArray(new Job[jobList.size()]));
+        switch (Type.valueOf(jsonMessage.getInt(JsonKeys.TYPE.toString()))) {
+            case ERROR:
+                return (T) new ErrorMessage(jsonData.getString(JsonDataKeys.MSG.toString()));
 
-			default:
-				return null;
-		}
-	}
+            case CLIENT_ID:
+                return (T) new ClientIDMessage(jsonData.getLong(JsonDataKeys.CLIENT_ID.toString()));
+
+            case INFO:
+                final double catrobatLangVersion = jsonData.getDouble(JsonDataKeys.CATROBAT_LANGUAGE_VERSION.toString());
+                final JSONArray jobsInfo = jsonData.getJSONArray(JsonDataKeys.JOBS_INFO.toString());
+                final List<Job> jobList = new ArrayList<>();
+                if (jobsInfo != null) {
+                    for (int i = 0; i < jobsInfo.length(); ++i) {
+                        jobList.add(Job.fromJson(jobsInfo.getJSONObject(i)));
+                    }
+                }
+                return (T) new InfoMessage((float) catrobatLangVersion, jobList.toArray(new Job[jobList.size()]));
+
+            default:
+                return null;
+        }
+    }
 }

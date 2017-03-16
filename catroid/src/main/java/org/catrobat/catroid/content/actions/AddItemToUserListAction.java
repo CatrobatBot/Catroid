@@ -30,28 +30,28 @@ import org.catrobat.catroid.formulaeditor.UserList;
 
 public class AddItemToUserListAction extends TemporalAction {
 
-	private Sprite sprite;
-	private Formula formulaItemToAdd;
-	private UserList userList;
+    private Sprite sprite;
+    private Formula formulaItemToAdd;
+    private UserList userList;
 
-	@Override
-	protected void update(float percent) {
-		if (userList == null) {
-			return;
-		}
-		Object value = formulaItemToAdd == null ? Double.valueOf(0d) : formulaItemToAdd.interpretObject(sprite);
-		userList.addListItem(value);
-	}
+    @Override
+    protected void update(float percent) {
+        if (userList == null) {
+            return;
+        }
+        Object value = formulaItemToAdd == null ? Double.valueOf(0d) : formulaItemToAdd.interpretObject(sprite);
+        userList.addListItem(value);
+    }
 
-	public void setUserList(UserList userVariable) {
-		this.userList = userVariable;
-	}
+    public void setUserList(UserList userVariable) {
+        this.userList = userVariable;
+    }
 
-	public void setFormulaItemToAdd(Formula changeVariable) {
-		this.formulaItemToAdd = changeVariable;
-	}
+    public void setFormulaItemToAdd(Formula changeVariable) {
+        this.formulaItemToAdd = changeVariable;
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 }

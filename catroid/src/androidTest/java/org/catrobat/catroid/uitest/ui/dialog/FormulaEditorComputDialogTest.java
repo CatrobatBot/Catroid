@@ -38,61 +38,61 @@ import org.catrobat.catroid.uitest.util.UiTestUtils;
 
 public class FormulaEditorComputDialogTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
-	private static final int FORMULA_EDITOR_EDIT_TEXT_ID = 0;
-	private Integer testInteger = 911;
-	private Formula noteFormula = new Formula(testInteger);
+    private static final int FORMULA_EDITOR_EDIT_TEXT_ID = 0;
+    private Integer testInteger = 911;
+    private Formula noteFormula = new Formula(testInteger);
 
-	public FormulaEditorComputDialogTest() {
-		super(MainMenuActivity.class);
-	}
+    public FormulaEditorComputDialogTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		createProject();
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
-		solo.clickOnView(solo.getView(R.id.brick_note_edit_text));
-		solo.waitForFragmentByTag(FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG);
-		solo.clickOnView(solo.getView(R.id.formula_editor_keyboard_compute));
-	}
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        createProject();
+        UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
+        solo.clickOnView(solo.getView(R.id.brick_note_edit_text));
+        solo.waitForFragmentByTag(FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG);
+        solo.clickOnView(solo.getView(R.id.formula_editor_keyboard_compute));
+    }
 
-	public void testDialogCreation() {
-		assertTrue("Dialog not loaded!",
-				solo.searchText(testInteger + solo.getString(R.string.formula_editor_decimal_mark) + "0", true));
-	}
+    public void testDialogCreation() {
+        assertTrue("Dialog not loaded!",
+                solo.searchText(testInteger + solo.getString(R.string.formula_editor_decimal_mark) + "0", true));
+    }
 
-	public void testCancelOnTouchInsideOfDialog() {
-		solo.clickOnText(testInteger.toString());
-		solo.waitForFragmentByTag(FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG);
-		assertTrue("Dialog not canceled!", solo.searchText(testInteger.toString(), true));
-		assertFalse("Dialog not canceled!",
-				solo.searchText(testInteger + solo.getString(R.string.formula_editor_decimal_mark) + "0", true));
-		assertEquals("Wrong string in Formula Editor edit text!", testInteger + " ",
-				solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
-	}
+    public void testCancelOnTouchInsideOfDialog() {
+        solo.clickOnText(testInteger.toString());
+        solo.waitForFragmentByTag(FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG);
+        assertTrue("Dialog not canceled!", solo.searchText(testInteger.toString(), true));
+        assertFalse("Dialog not canceled!",
+                solo.searchText(testInteger + solo.getString(R.string.formula_editor_decimal_mark) + "0", true));
+        assertEquals("Wrong string in Formula Editor edit text!", testInteger + " ",
+                solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
+    }
 
-	public void testCancelOnTouchOutsideOfDialog() {
-		solo.waitForText(testInteger + solo.getString(R.string.formula_editor_decimal_mark) + "0");
-		solo.clickOnScreen(100, 100, 1);
-		solo.waitForFragmentByTag(FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG);
-		assertTrue("Dialog not canceled!", solo.searchText(testInteger.toString(), true));
-		assertFalse("Dialog not canceled!", solo.searchText(
-				testInteger + solo.getString(R.string.formula_editor_decimal_mark) + "0", true));
-		assertEquals("Wrong string in Formula Editor edit text!", testInteger + " ",
-				solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
-	}
+    public void testCancelOnTouchOutsideOfDialog() {
+        solo.waitForText(testInteger + solo.getString(R.string.formula_editor_decimal_mark) + "0");
+        solo.clickOnScreen(100, 100, 1);
+        solo.waitForFragmentByTag(FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG);
+        assertTrue("Dialog not canceled!", solo.searchText(testInteger.toString(), true));
+        assertFalse("Dialog not canceled!", solo.searchText(
+                testInteger + solo.getString(R.string.formula_editor_decimal_mark) + "0", true));
+        assertEquals("Wrong string in Formula Editor edit text!", testInteger + " ",
+                solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
+    }
 
-	private void createProject() {
-		Project project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite sprite = new SingleSprite("testsprite");
-		Script script = new StartScript();
-		script.addBrick(new NoteBrick(noteFormula));
+    private void createProject() {
+        Project project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Sprite sprite = new SingleSprite("testsprite");
+        Script script = new StartScript();
+        script.addBrick(new NoteBrick(noteFormula));
 
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 }

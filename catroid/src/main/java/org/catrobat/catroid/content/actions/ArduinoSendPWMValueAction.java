@@ -38,61 +38,61 @@ import org.catrobat.catroid.formulaeditor.InterpretationException;
 
 public class ArduinoSendPWMValueAction extends TemporalAction {
 
-	private Formula pinNumber;
-	private Formula pinValue;
-	private Sprite sprite;
-	private int pin;
-	private int value;
+    private Formula pinNumber;
+    private Formula pinValue;
+    private Sprite sprite;
+    private int pin;
+    private int value;
 
-	private boolean restart = false;
+    private boolean restart = false;
 
-	@Override
-	protected void begin() {
-		Integer pinNumberInterpretation;
-		Integer pinValueInterpretation;
+    @Override
+    protected void begin() {
+        Integer pinNumberInterpretation;
+        Integer pinValueInterpretation;
 
-		try {
-			pinNumberInterpretation = pinNumber == null ? Integer.valueOf(0) : pinNumber.interpretInteger(sprite);
-		} catch (InterpretationException interpretationException) {
-			pinNumberInterpretation = 0;
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed." ,
-					interpretationException);
-		}
+        try {
+            pinNumberInterpretation = pinNumber == null ? Integer.valueOf(0) : pinNumber.interpretInteger(sprite);
+        } catch (InterpretationException interpretationException) {
+            pinNumberInterpretation = 0;
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.",
+                    interpretationException);
+        }
 
-		try {
-			pinValueInterpretation = pinValue == null ? Integer.valueOf(0) : pinValue.interpretInteger(sprite);
-		} catch (InterpretationException interpretationException) {
-			pinValueInterpretation = 0;
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.",
-					interpretationException);
-		}
+        try {
+            pinValueInterpretation = pinValue == null ? Integer.valueOf(0) : pinValue.interpretInteger(sprite);
+        } catch (InterpretationException interpretationException) {
+            pinValueInterpretation = 0;
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.",
+                    interpretationException);
+        }
 
-		if ((!restart)
-				&& (pinNumberInterpretation >= 0)
-				&& (pinNumberInterpretation < ArduinoImpl.NUMBER_OF_DIGITAL_PINS)) {
-			this.pin = pinNumberInterpretation;
-			this.value = pinValueInterpretation;
-		}
-		restart = false;
-	}
+        if ((!restart)
+                && (pinNumberInterpretation >= 0)
+                && (pinNumberInterpretation < ArduinoImpl.NUMBER_OF_DIGITAL_PINS)) {
+            this.pin = pinNumberInterpretation;
+            this.value = pinValueInterpretation;
+        }
+        restart = false;
+    }
 
-	@Override
-	protected void update(float percent) {
-		Arduino arduino = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).getDevice(BluetoothDevice.ARDUINO);
-		if (arduino != null) {
-			arduino.setAnalogArduinoPin(pin, value);
-		}
-	}
+    @Override
+    protected void update(float percent) {
+        Arduino arduino = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE).getDevice(BluetoothDevice.ARDUINO);
+        if (arduino != null) {
+            arduino.setAnalogArduinoPin(pin, value);
+        }
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setPinNumber(Formula newPinNumber) {
-		pinNumber = newPinNumber;
-	}
+    public void setPinNumber(Formula newPinNumber) {
+        pinNumber = newPinNumber;
+    }
 
-	public void setPinValue(Formula newpinValue) {
-		pinValue = newpinValue;
-	}
+    public void setPinValue(Formula newpinValue) {
+        pinValue = newpinValue;
+    }
 }

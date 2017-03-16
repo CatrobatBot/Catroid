@@ -47,92 +47,92 @@ import org.catrobat.catroid.web.ServerCalls;
 
 public class LogInDialog extends DialogFragment implements LoginTask.OnLoginCompleteListener {
 
-	public static final String PASSWORD_FORGOTTEN_PATH = "resetting/request";
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_login_register";
+    public static final String PASSWORD_FORGOTTEN_PATH = "resetting/request";
+    public static final String DIALOG_FRAGMENT_TAG = "dialog_login_register";
 
-	private EditText usernameEditText;
-	private EditText passwordEditText;
-	private CheckBox showPasswordCheckBox;
+    private EditText usernameEditText;
+    private EditText passwordEditText;
+    private CheckBox showPasswordCheckBox;
 
-	@Override
-	public Dialog onCreateDialog(Bundle bundle) {
-		View rootView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_login, null);
+    @Override
+    public Dialog onCreateDialog(Bundle bundle) {
+        View rootView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_login, null);
 
-		usernameEditText = (EditText) rootView.findViewById(R.id.dialog_login_username);
-		passwordEditText = (EditText) rootView.findViewById(R.id.dialog_login_password);
-		showPasswordCheckBox = (CheckBox) rootView.findViewById(R.id.dialog_login_checkbox_showpassword);
+        usernameEditText = (EditText) rootView.findViewById(R.id.dialog_login_username);
+        passwordEditText = (EditText) rootView.findViewById(R.id.dialog_login_password);
+        showPasswordCheckBox = (CheckBox) rootView.findViewById(R.id.dialog_login_checkbox_showpassword);
 
-		usernameEditText.setText("");
-		passwordEditText.setText("");
+        usernameEditText.setText("");
+        passwordEditText.setText("");
 
-		showPasswordCheckBox.setChecked(false);
+        showPasswordCheckBox.setChecked(false);
 
-		showPasswordCheckBox.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				if (showPasswordCheckBox.isChecked()) {
-					passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT);
-				} else {
-					passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-				}
-			}
-		});
+        showPasswordCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (showPasswordCheckBox.isChecked()) {
+                    passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT);
+                } else {
+                    passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                }
+            }
+        });
 
-		final AlertDialog loginDialog = new AlertDialog.Builder(getActivity()).setView(rootView)
-				.setTitle(R.string.login).setPositiveButton(R.string.login, null)
-				.setNeutralButton(R.string.password_forgotten, null).create();
-		loginDialog.setCanceledOnTouchOutside(true);
-		loginDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        final AlertDialog loginDialog = new AlertDialog.Builder(getActivity()).setView(rootView)
+                .setTitle(R.string.login).setPositiveButton(R.string.login, null)
+                .setNeutralButton(R.string.password_forgotten, null).create();
+        loginDialog.setCanceledOnTouchOutside(true);
+        loginDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-		loginDialog.setOnShowListener(new OnShowListener() {
-			@Override
-			public void onShow(DialogInterface dialog) {
-				InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
-						Context.INPUT_METHOD_SERVICE);
-				inputManager.showSoftInput(usernameEditText, InputMethodManager.SHOW_IMPLICIT);
+        loginDialog.setOnShowListener(new OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
+                        Context.INPUT_METHOD_SERVICE);
+                inputManager.showSoftInput(usernameEditText, InputMethodManager.SHOW_IMPLICIT);
 
-				Button loginButton = loginDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-				loginButton.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						handleLoginButtonClick();
-					}
-				});
+                Button loginButton = loginDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                loginButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        handleLoginButtonClick();
+                    }
+                });
 
-				Button passwordForgottenButton = loginDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
-				passwordForgottenButton.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						handlePasswordForgottenButtonClick();
-					}
-				});
-			}
-		});
+                Button passwordForgottenButton = loginDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
+                passwordForgottenButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        handlePasswordForgottenButtonClick();
+                    }
+                });
+            }
+        });
 
-		return loginDialog;
-	}
+        return loginDialog;
+    }
 
-	@Override
-	public void onLoginComplete() {
-		dismiss();
-		Bundle bundle = new Bundle();
-		bundle.putString(Constants.CURRENT_OAUTH_PROVIDER, Constants.NO_OAUTH_PROVIDER);
-		ProjectManager.getInstance().signInFinished(getFragmentManager(), bundle);
-	}
+    @Override
+    public void onLoginComplete() {
+        dismiss();
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.CURRENT_OAUTH_PROVIDER, Constants.NO_OAUTH_PROVIDER);
+        ProjectManager.getInstance().signInFinished(getFragmentManager(), bundle);
+    }
 
-	private void handleLoginButtonClick() {
-		String username = usernameEditText.getText().toString();
-		String password = passwordEditText.getText().toString();
+    private void handleLoginButtonClick() {
+        String username = usernameEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
 
-		LoginTask loginTask = new LoginTask(getActivity(), username, password);
-		loginTask.setOnLoginCompleteListener(this);
-		loginTask.execute();
-	}
+        LoginTask loginTask = new LoginTask(getActivity(), username, password);
+        loginTask.setOnLoginCompleteListener(this);
+        loginTask.execute();
+    }
 
-	private void handlePasswordForgottenButtonClick() {
-		String baseUrl = ServerCalls.useTestUrl ? ServerCalls.BASE_URL_TEST_HTTPS : Constants.BASE_URL_HTTPS;
-		String url = baseUrl + PASSWORD_FORGOTTEN_PATH;
+    private void handlePasswordForgottenButtonClick() {
+        String baseUrl = ServerCalls.useTestUrl ? ServerCalls.BASE_URL_TEST_HTTPS : Constants.BASE_URL_HTTPS;
+        String url = baseUrl + PASSWORD_FORGOTTEN_PATH;
 
-		((MainMenuActivity) getActivity()).startWebViewActivity(url);
-	}
+        ((MainMenuActivity) getActivity()).startWebViewActivity(url);
+    }
 }

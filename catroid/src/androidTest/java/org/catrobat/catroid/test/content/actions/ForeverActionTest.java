@@ -36,40 +36,40 @@ import java.util.List;
 
 public class ForeverActionTest extends InstrumentationTestCase {
 
-	private static final int REPEAT_TIMES = 4;
-	private final float delta = 0.005f;
+    private static final int REPEAT_TIMES = 4;
+    private final float delta = 0.005f;
 
-	public void testLoopDelay() throws InterruptedException {
-		final int deltaY = -10;
+    public void testLoopDelay() throws InterruptedException {
+        final int deltaY = -10;
 
-		Sprite testSprite = new SingleSprite("testSprite");
-		StartScript testScript = new StartScript();
+        Sprite testSprite = new SingleSprite("testSprite");
+        StartScript testScript = new StartScript();
 
-		ForeverBrick foreverBrick = new ForeverBrick();
-		LoopEndBrick loopEndBrick = new LoopEndBrick(foreverBrick);
-		foreverBrick.setLoopEndBrick(loopEndBrick);
+        ForeverBrick foreverBrick = new ForeverBrick();
+        LoopEndBrick loopEndBrick = new LoopEndBrick(foreverBrick);
+        foreverBrick.setLoopEndBrick(loopEndBrick);
 
-		testScript.addBrick(foreverBrick);
-		testScript.addBrick(new ChangeYByNBrick(deltaY));
-		testScript.addBrick(loopEndBrick);
+        testScript.addBrick(foreverBrick);
+        testScript.addBrick(new ChangeYByNBrick(deltaY));
+        testScript.addBrick(loopEndBrick);
 
-		testSprite.addScript(testScript);
-		testSprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
+        testSprite.addScript(testScript);
+        testSprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
 
 		/*
 		 * This is only to document that a delay of 20ms is by contract. See Issue 28 in Google Code
 		 * http://code.google.com/p/catroid/issues/detail?id=28
 		 */
-		final float delayByContract = 0.020f;
+        final float delayByContract = 0.020f;
 
-		for (int index = 0; index < REPEAT_TIMES; index++) {
+        for (int index = 0; index < REPEAT_TIMES; index++) {
 
-			for (double time = 0f; time < delayByContract; time += delta) {
-				testSprite.look.act(delta);
-			}
-		}
+            for (double time = 0f; time < delayByContract; time += delta) {
+                testSprite.look.act(delta);
+            }
+        }
 
-		assertEquals("Loop delay did was not 20ms!", deltaY * REPEAT_TIMES,
-				(int) testSprite.look.getYInUserInterfaceDimensionUnit());
-	}
+        assertEquals("Loop delay did was not 20ms!", deltaY * REPEAT_TIMES,
+                (int) testSprite.look.getYInUserInterfaceDimensionUnit());
+    }
 }

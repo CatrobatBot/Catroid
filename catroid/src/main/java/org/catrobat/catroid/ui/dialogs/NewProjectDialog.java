@@ -54,157 +54,157 @@ import java.io.IOException;
 
 public class NewProjectDialog extends DialogFragment {
 
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_new_project";
+    public static final String DIALOG_FRAGMENT_TAG = "dialog_new_project";
 
-	private static final String TAG = NewProjectDialog.class.getSimpleName();
+    private static final String TAG = NewProjectDialog.class.getSimpleName();
 
-	private EditText newProjectEditText;
-	private Dialog newProjectDialog;
-	private RadioButton defaultProjectRadioButton;
-	private RadioButton defaultDroneProjectRadioButton;
-	private OrientationDialog orientationDialog;
+    private EditText newProjectEditText;
+    private Dialog newProjectDialog;
+    private RadioButton defaultProjectRadioButton;
+    private RadioButton defaultDroneProjectRadioButton;
+    private OrientationDialog orientationDialog;
 
-	private boolean openedFromProjectList = false;
+    private boolean openedFromProjectList = false;
 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_new_project, null);
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_new_project, null);
 
-		newProjectEditText = (EditText) dialogView.findViewById(R.id.project_name_edittext);
+        newProjectEditText = (EditText) dialogView.findViewById(R.id.project_name_edittext);
 
-		newProjectEditText.setText("");
+        newProjectEditText.setText("");
 
-		newProjectDialog = new AlertDialog.Builder(getActivity()).setView(dialogView)
-				.setTitle(R.string.new_project_dialog_title)
-				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				}).create();
+        newProjectDialog = new AlertDialog.Builder(getActivity()).setView(dialogView)
+                .setTitle(R.string.new_project_dialog_title)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).create();
 
-		newProjectDialog.setCanceledOnTouchOutside(true);
-		newProjectDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		newProjectDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        newProjectDialog.setCanceledOnTouchOutside(true);
+        newProjectDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        newProjectDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-		newProjectDialog.setOnShowListener(new OnShowListener() {
-			@Override
-			public void onShow(DialogInterface dialog) {
-				if (getActivity() == null) {
-					Log.e(TAG, "onShow() Activity was null!");
-					return;
-				}
+        newProjectDialog.setOnShowListener(new OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                if (getActivity() == null) {
+                    Log.e(TAG, "onShow() Activity was null!");
+                    return;
+                }
 
-				InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
-						Context.INPUT_METHOD_SERVICE);
-				inputManager.showSoftInput(newProjectEditText, InputMethodManager.SHOW_IMPLICIT);
+                InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
+                        Context.INPUT_METHOD_SERVICE);
+                inputManager.showSoftInput(newProjectEditText, InputMethodManager.SHOW_IMPLICIT);
 
-				((AlertDialog) newProjectDialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
-				newProjectEditText.addTextChangedListener(new TextWatcher() {
+                ((AlertDialog) newProjectDialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
+                newProjectEditText.addTextChangedListener(new TextWatcher() {
 
-					@Override
-					public void onTextChanged(CharSequence s, int start, int before, int count) {
-					}
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
 
-					@Override
-					public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-					}
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
 
-					@Override
-					public void afterTextChanged(Editable s) {
-						if (newProjectEditText.length() == 0) {
-							((AlertDialog) newProjectDialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
-						} else {
-							((AlertDialog) newProjectDialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(true);
-						}
-					}
-				});
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        if (newProjectEditText.length() == 0) {
+                            ((AlertDialog) newProjectDialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
+                        } else {
+                            ((AlertDialog) newProjectDialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(true);
+                        }
+                    }
+                });
 
-				Button positiveButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-				positiveButton.setOnClickListener(new OnClickListener() {
+                Button positiveButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                positiveButton.setOnClickListener(new OnClickListener() {
 
-					@Override
-					public void onClick(View view) {
-						handleOkButtonClick();
-					}
-				});
-			}
-		});
+                    @Override
+                    public void onClick(View view) {
+                        handleOkButtonClick();
+                    }
+                });
+            }
+        });
 
-		defaultProjectRadioButton = (RadioButton) dialogView.findViewById(R.id.project_default_radio_button);
-		defaultDroneProjectRadioButton = (RadioButton) dialogView.findViewById(R.id.project_default_drone_radio_button);
+        defaultProjectRadioButton = (RadioButton) dialogView.findViewById(R.id.project_default_radio_button);
+        defaultDroneProjectRadioButton = (RadioButton) dialogView.findViewById(R.id.project_default_drone_radio_button);
 
-		if (DroneServiceWrapper.isDroneSharedPreferenceEnabled()) {
-			defaultDroneProjectRadioButton.setVisibility(View.VISIBLE);
-		}
+        if (DroneServiceWrapper.isDroneSharedPreferenceEnabled()) {
+            defaultDroneProjectRadioButton.setVisibility(View.VISIBLE);
+        }
 
-		return newProjectDialog;
-	}
+        return newProjectDialog;
+    }
 
-	protected void handleOkButtonClick() {
-		String projectName = newProjectEditText.getText().toString().trim();
+    protected void handleOkButtonClick() {
+        String projectName = newProjectEditText.getText().toString().trim();
 
-		if (getActivity() == null) {
-			Log.e(TAG, "handleOkButtonClick() Activity was null!");
-			return;
-		}
+        if (getActivity() == null) {
+            Log.e(TAG, "handleOkButtonClick() Activity was null!");
+            return;
+        }
 
-		if (projectName.isEmpty()) {
-			Utils.showErrorDialog(getActivity(), R.string.no_name, R.string.error_no_program_name_entered);
-			return;
-		}
+        if (projectName.isEmpty()) {
+            Utils.showErrorDialog(getActivity(), R.string.no_name, R.string.error_no_program_name_entered);
+            return;
+        }
 
-		if (Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase(projectName)) {
-			Utils.showErrorDialog(getActivity(), R.string.name_exists, R.string.error_project_exists);
-			return;
-		}
+        if (Utils.checkIfProjectExistsOrIsDownloadingIgnoreCase(projectName)) {
+            Utils.showErrorDialog(getActivity(), R.string.name_exists, R.string.error_project_exists);
+            return;
+        }
 
-		boolean createEmptyProject = true;
+        boolean createEmptyProject = true;
 
-		if (defaultProjectRadioButton.isChecked()) {
-			createEmptyProject = false;
-		}
+        if (defaultProjectRadioButton.isChecked()) {
+            createEmptyProject = false;
+        }
 
-		if (defaultDroneProjectRadioButton.isChecked()) {
-			createEmptyProject = false;
-			try {
-				ProjectManager.getInstance().initializeNewProject(projectName, getActivity(), createEmptyProject, true, false);
-			} catch (IllegalArgumentException illegalArgumentException) {
-				Utils.showErrorDialog(getActivity(), R.string.error_project_exists);
-				return;
-			} catch (IOException ioException) {
-				Utils.showErrorDialog(getActivity(), R.string.error_new_project);
-				Log.e(TAG, Log.getStackTraceString(ioException));
-				dismiss();
-				return;
-			}
+        if (defaultDroneProjectRadioButton.isChecked()) {
+            createEmptyProject = false;
+            try {
+                ProjectManager.getInstance().initializeNewProject(projectName, getActivity(), createEmptyProject, true, false);
+            } catch (IllegalArgumentException illegalArgumentException) {
+                Utils.showErrorDialog(getActivity(), R.string.error_project_exists);
+                return;
+            } catch (IOException ioException) {
+                Utils.showErrorDialog(getActivity(), R.string.error_new_project);
+                Log.e(TAG, Log.getStackTraceString(ioException));
+                dismiss();
+                return;
+            }
 
-			Intent intent = new Intent(getActivity(), ProjectActivity.class);
-			intent.putExtra(Constants.PROJECTNAME_TO_LOAD, projectName);
+            Intent intent = new Intent(getActivity(), ProjectActivity.class);
+            intent.putExtra(Constants.PROJECTNAME_TO_LOAD, projectName);
 
-			if (openedFromProjectList) {
-				intent.putExtra(Constants.PROJECT_OPENED_FROM_PROJECTS_LIST, true);
-			}
+            if (openedFromProjectList) {
+                intent.putExtra(Constants.PROJECT_OPENED_FROM_PROJECTS_LIST, true);
+            }
 
-			getActivity().startActivity(intent);
-			dismiss();
-		} else {
-			orientationDialog = new OrientationDialog();
-			orientationDialog.show(getFragmentManager(), OrientationDialog.DIALOG_FRAGMENT_TAG);
-			orientationDialog.setOpenedFromProjectList(openedFromProjectList);
-			orientationDialog.setProjectName(projectName);
-			orientationDialog.setCreateEmptyProject(createEmptyProject);
+            getActivity().startActivity(intent);
+            dismiss();
+        } else {
+            orientationDialog = new OrientationDialog();
+            orientationDialog.show(getFragmentManager(), OrientationDialog.DIALOG_FRAGMENT_TAG);
+            orientationDialog.setOpenedFromProjectList(openedFromProjectList);
+            orientationDialog.setProjectName(projectName);
+            orientationDialog.setCreateEmptyProject(createEmptyProject);
 
-			Utils.saveToPreferences(getActivity(), Constants.PREF_PROJECTNAME_KEY, projectName);
+            Utils.saveToPreferences(getActivity(), Constants.PREF_PROJECTNAME_KEY, projectName);
 
-			dismiss();
-		}
-	}
+            dismiss();
+        }
+    }
 
-	public void setOpenedFromProjectList(boolean openedFromProjectList) {
-		this.openedFromProjectList = openedFromProjectList;
-	}
+    public void setOpenedFromProjectList(boolean openedFromProjectList) {
+        this.openedFromProjectList = openedFromProjectList;
+    }
 }

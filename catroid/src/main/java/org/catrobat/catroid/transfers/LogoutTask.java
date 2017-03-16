@@ -30,28 +30,28 @@ import org.catrobat.catroid.web.ServerCalls;
 
 public class LogoutTask extends AsyncTask<Void, Void, Boolean> {
 
-	private Context context;
-	private String username;
+    private Context context;
+    private String username;
 
-	public LogoutTask(Context activity, String username) {
-		this.context = activity;
-		this.username = username;
-	}
+    public LogoutTask(Context activity, String username) {
+        this.context = activity;
+        this.username = username;
+    }
 
-	@Override
-	protected void onPreExecute() {
-		super.onPreExecute();
-		if (context == null) {
-			return;
-		}
-	}
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        if (context == null) {
+            return;
+        }
+    }
 
-	@Override
-	protected Boolean doInBackground(Void... arg0) {
-		if (!Utils.isNetworkAvailable(context)) {
-			return false;
-		}
-		ServerCalls.getInstance().logout(username);
-		return true;
-	}
+    @Override
+    protected Boolean doInBackground(Void... arg0) {
+        if (!Utils.isNetworkAvailable(context)) {
+            return false;
+        }
+        ServerCalls.getInstance().logout(username);
+        return true;
+    }
 }

@@ -38,60 +38,60 @@ import org.catrobat.catroid.formulaeditor.InterpretationException;
 
 public class LegoNxtMotorTurnAngleAction extends TemporalAction {
 
-	private Motor motorEnum;
-	private Formula degrees;
-	private Sprite sprite;
+    private Motor motorEnum;
+    private Formula degrees;
+    private Sprite sprite;
 
-	private BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
+    private BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
 
-	@Override
-	protected void update(float percent) {
-		int degreesValue;
-		try {
-			degreesValue = degrees.interpretInteger(sprite);
-		} catch (InterpretationException interpretationException) {
-			degreesValue = 0;
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}
+    @Override
+    protected void update(float percent) {
+        int degreesValue;
+        try {
+            degreesValue = degrees.interpretInteger(sprite);
+        } catch (InterpretationException interpretationException) {
+            degreesValue = 0;
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+        }
 
-		int tmpAngle = degreesValue;
-		int direction = 1;
-		if (degreesValue < 0) {
-			direction = -1;
-			tmpAngle = degreesValue + (-2 * degreesValue);
-		}
+        int tmpAngle = degreesValue;
+        int direction = 1;
+        if (degreesValue < 0) {
+            direction = -1;
+            tmpAngle = degreesValue + (-2 * degreesValue);
+        }
 
-		LegoNXT nxt = btService.getDevice(BluetoothDevice.LEGO_NXT);
-		if (nxt == null) {
-			return;
-		}
+        LegoNXT nxt = btService.getDevice(BluetoothDevice.LEGO_NXT);
+        if (nxt == null) {
+            return;
+        }
 
-		switch (motorEnum) {
-			case MOTOR_A:
-				nxt.getMotorA().move(direction * 30, tmpAngle);
-				break;
-			case MOTOR_B:
-				nxt.getMotorB().move(direction * 30, tmpAngle);
-				break;
-			case MOTOR_C:
-				nxt.getMotorC().move(direction * 30, tmpAngle);
-				break;
-			case MOTOR_B_C:
-				nxt.getMotorB().move(direction * 30, tmpAngle);
-				nxt.getMotorC().move(direction * 30, tmpAngle);
-				break;
-		}
-	}
+        switch (motorEnum) {
+            case MOTOR_A:
+                nxt.getMotorA().move(direction * 30, tmpAngle);
+                break;
+            case MOTOR_B:
+                nxt.getMotorB().move(direction * 30, tmpAngle);
+                break;
+            case MOTOR_C:
+                nxt.getMotorC().move(direction * 30, tmpAngle);
+                break;
+            case MOTOR_B_C:
+                nxt.getMotorB().move(direction * 30, tmpAngle);
+                nxt.getMotorC().move(direction * 30, tmpAngle);
+                break;
+        }
+    }
 
-	public void setMotorEnum(Motor motorEnum) {
-		this.motorEnum = motorEnum;
-	}
+    public void setMotorEnum(Motor motorEnum) {
+        this.motorEnum = motorEnum;
+    }
 
-	public void setDegrees(Formula degrees) {
-		this.degrees = degrees;
-	}
+    public void setDegrees(Formula degrees) {
+        this.degrees = degrees;
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 }

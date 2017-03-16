@@ -24,25 +24,25 @@
 package org.catrobat.catroid.common.firmata;
 
 public class FirmataMessage {
-	private final int command;
-	private final int pin;
-	private final int data;
+    private final int command;
+    private final int pin;
+    private final int data;
 
-	public FirmataMessage(int command, int pin, int data) {
-		this.command = command;
-		this.pin = pin;
-		this.data = data;
-	}
+    public FirmataMessage(int command, int pin, int data) {
+        this.command = command;
+        this.pin = pin;
+        this.data = data;
+    }
 
-	public int getCommand() {
-		return command;
-	}
+    public int getCommand() {
+        return command;
+    }
 
-	public int getPin() {
-		return pin;
-	}
+    public int getPin() {
+        return pin;
+    }
 
-	public int getData() {
-		return data;
-	}
+    public int getData() {
+        return data;
+    }
 }

@@ -31,22 +31,22 @@ import android.os.Bundle;
  * A mock sound activity that simply returns a sound file from the sound resources.
  */
 public class MockSoundActivity extends Activity {
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		Bundle bundle = this.getIntent().getExtras();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = this.getIntent().getExtras();
 
-		if (bundle == null) {
-			return;
-		}
+        if (bundle == null) {
+            return;
+        }
 
-		if (bundle.containsKey("filePath")) {
-			String filePath = bundle.getString("filePath");
+        if (bundle.containsKey("filePath")) {
+            String filePath = bundle.getString("filePath");
 
-			Intent resultIntent = new Intent();
-			resultIntent.setData(Uri.parse(filePath));
-			setResult(RESULT_OK, resultIntent);
-		}
-		finish();
-	}
+            Intent resultIntent = new Intent();
+            resultIntent.setData(Uri.parse(filePath));
+            setResult(RESULT_OK, resultIntent);
+        }
+        finish();
+    }
 }

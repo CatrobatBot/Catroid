@@ -53,103 +53,103 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 @RunWith(AndroidJUnit4.class)
 public class FormulaEditorKeyboardTest {
 
-	@Rule
-	public BaseActivityInstrumentationRule<ScriptActivity> baseActivityTestRule = new
-			BaseActivityInstrumentationRule<>(ScriptActivity.class, true, false);
+    @Rule
+    public BaseActivityInstrumentationRule<ScriptActivity> baseActivityTestRule = new
+            BaseActivityInstrumentationRule<>(ScriptActivity.class, true, false);
 
-	@Before
-	public void setUp() throws Exception {
-		createProject("formulaEditorKeyboardTest");
-		baseActivityTestRule.launchActivity(null);
-	}
+    @Before
+    public void setUp() throws Exception {
+        createProject("formulaEditorKeyboardTest");
+        baseActivityTestRule.launchActivity(null);
+    }
 
-	@Test
-	public void numericKeysTest() {
-		onView(withId(R.id.brick_set_variable_edit_text)).perform(click());
+    @Test
+    public void numericKeysTest() {
+        onView(withId(R.id.brick_set_variable_edit_text)).perform(click());
 
-		onView(withId(R.id.formula_editor_keyboard_1)).perform(click());
-		onView(withId(R.id.formula_editor_keyboard_2)).perform(click());
-		onView(withId(R.id.formula_editor_keyboard_3)).perform(click());
-		onView(withId(R.id.formula_editor_keyboard_4)).perform(click());
-		onView(withId(R.id.formula_editor_keyboard_5)).perform(click());
-		onView(withId(R.id.formula_editor_keyboard_6)).perform(click());
-		onView(withId(R.id.formula_editor_keyboard_7)).perform(click());
-		onView(withId(R.id.formula_editor_keyboard_8)).perform(click());
-		onView(withId(R.id.formula_editor_keyboard_9)).perform(click());
-		onView(withId(R.id.formula_editor_keyboard_0)).perform(click());
-		onView(withId(R.id.formula_editor_keyboard_decimal_mark)).perform(click());
-		onView(withId(R.id.formula_editor_keyboard_1)).perform(click());
-		onView(withId(R.id.formula_editor_keyboard_ok)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_1)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_2)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_3)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_4)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_5)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_6)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_7)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_8)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_9)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_0)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_decimal_mark)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_1)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_ok)).perform(click());
 
-		onView(withId(R.id.formula_editor_edit_field))
-				.check(matches(withText("1234567890"
-						+ UiTestUtils.getResourcesString(R.string.formula_editor_decimal_mark) + "1 ")));
-	}
+        onView(withId(R.id.formula_editor_edit_field))
+                .check(matches(withText("1234567890"
+                        + UiTestUtils.getResourcesString(R.string.formula_editor_decimal_mark) + "1 ")));
+    }
 
-	@Test
-	public void basicMathOperatorKeysTest() {
-		onView(withId(R.id.brick_set_variable_edit_text)).perform(click());
+    @Test
+    public void basicMathOperatorKeysTest() {
+        onView(withId(R.id.brick_set_variable_edit_text)).perform(click());
 
-		onView(withId(R.id.formula_editor_keyboard_bracket_open)).perform(click());
-		onView(withId(R.id.formula_editor_keyboard_1)).perform(click());
-		onView(withId(R.id.formula_editor_keyboard_bracket_close)).perform(click());
-		onView(withId(R.id.formula_editor_keyboard_plus)).perform(click());
-		onView(withId(R.id.formula_editor_keyboard_1)).perform(click());
-		onView(withId(R.id.formula_editor_keyboard_minus)).perform(click());
-		onView(withId(R.id.formula_editor_keyboard_1)).perform(click());
-		onView(withId(R.id.formula_editor_keyboard_mult)).perform(click());
-		onView(withId(R.id.formula_editor_keyboard_1)).perform(click());
-		onView(withId(R.id.formula_editor_keyboard_divide)).perform(click());
-		onView(withId(R.id.formula_editor_keyboard_1)).perform(click());
-		onView(withId(R.id.formula_editor_keyboard_equal)).perform(click());
-		onView(withId(R.id.formula_editor_keyboard_1)).perform(click());
-		onView(withId(R.id.formula_editor_keyboard_ok)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_bracket_open)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_1)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_bracket_close)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_plus)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_1)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_minus)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_1)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_mult)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_1)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_divide)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_1)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_equal)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_1)).perform(click());
+        onView(withId(R.id.formula_editor_keyboard_ok)).perform(click());
 
-		onView(withId(R.id.formula_editor_edit_field))
-				.check(matches(withText("( 1 ) + 1 - 1 × 1 ÷ 1 = 1 ")));
-	}
+        onView(withId(R.id.formula_editor_edit_field))
+                .check(matches(withText("( 1 ) + 1 - 1 × 1 ÷ 1 = 1 ")));
+    }
 
-	@Test
-	public void enterStringTest() {
-		onView(withId(R.id.brick_set_variable_edit_text))
-				.perform(click());
-		onView(withId(R.id.formula_editor_keyboard_string))
-				.perform(click());
+    @Test
+    public void enterStringTest() {
+        onView(withId(R.id.brick_set_variable_edit_text))
+                .perform(click());
+        onView(withId(R.id.formula_editor_keyboard_string))
+                .perform(click());
 
-		onView(withText(R.string.formula_editor_new_string_name))
-				.check(matches(isDisplayed()));
-		onView(withId(R.id.formula_editor_string_name_edit_text))
-				.perform(typeText("Foo"));
-		onView(withText(R.string.ok))
-				.perform(click());
+        onView(withText(R.string.formula_editor_new_string_name))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.formula_editor_string_name_edit_text))
+                .perform(typeText("Foo"));
+        onView(withText(R.string.ok))
+                .perform(click());
 
-		onView(withId(R.id.formula_editor_keyboard_ok))
-				.perform(click());
-		onView(withId(R.id.formula_editor_edit_field))
-				.check(matches(withText("'Foo' ")));
-	}
+        onView(withId(R.id.formula_editor_keyboard_ok))
+                .perform(click());
+        onView(withId(R.id.formula_editor_edit_field))
+                .check(matches(withText("'Foo' ")));
+    }
 
-	@After
-	public void tearDown() throws Exception {
-	}
+    @After
+    public void tearDown() throws Exception {
+    }
 
-	public Project createProject(String projectName) {
-		Project project = new Project(null, projectName);
-		Sprite sprite = new Sprite("testSprite");
-		Script script = new StartScript();
+    public Project createProject(String projectName) {
+        Project project = new Project(null, projectName);
+        Sprite sprite = new Sprite("testSprite");
+        Script script = new StartScript();
 
-		SetVariableBrick setVariableBrick = new SetVariableBrick();
-		DataContainer dataContainer = project.getDefaultScene().getDataContainer();
-		UserVariable userVariable = dataContainer.addProjectUserVariable("Global1");
-		setVariableBrick.setUserVariable(userVariable);
+        SetVariableBrick setVariableBrick = new SetVariableBrick();
+        DataContainer dataContainer = project.getDefaultScene().getDataContainer();
+        UserVariable userVariable = dataContainer.addProjectUserVariable("Global1");
+        setVariableBrick.setUserVariable(userVariable);
 
-		script.addBrick(setVariableBrick);
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
+        script.addBrick(setVariableBrick);
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
 
-		return project;
-	}
+        return project;
+    }
 }

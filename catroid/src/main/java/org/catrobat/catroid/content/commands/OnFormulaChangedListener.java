@@ -28,5 +28,5 @@ import org.catrobat.catroid.formulaeditor.Formula;
 
 public interface OnFormulaChangedListener {
 
-	void onFormulaChanged(FormulaBrick formulaBrick, Brick.BrickField brickField, Formula newFormula);
+    void onFormulaChanged(FormulaBrick formulaBrick, Brick.BrickField brickField, Formula newFormula);
 }

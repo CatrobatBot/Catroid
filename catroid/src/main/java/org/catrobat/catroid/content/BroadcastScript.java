@@ -28,46 +28,46 @@ import org.catrobat.catroid.content.bricks.ScriptBrick;
 
 public class BroadcastScript extends Script implements BroadcastMessage {
 
-	private static final long serialVersionUID = 1L;
-	protected String receivedMessage;
+    private static final long serialVersionUID = 1L;
+    protected String receivedMessage;
 
-	public BroadcastScript(String broadcastMessage) {
-		super();
-		setBroadcastMessage(broadcastMessage);
-	}
+    public BroadcastScript(String broadcastMessage) {
+        super();
+        setBroadcastMessage(broadcastMessage);
+    }
 
-	@Override
-	public ScriptBrick getScriptBrick() {
-		if (brick == null) {
-			brick = new BroadcastReceiverBrick(this);
-		}
+    @Override
+    public ScriptBrick getScriptBrick() {
+        if (brick == null) {
+            brick = new BroadcastReceiverBrick(this);
+        }
 
-		return brick;
-	}
+        return brick;
+    }
 
-	@Override
-	protected Object readResolve() {
-		MessageContainer.addMessage(receivedMessage, this);
-		super.readResolve();
-		return this;
-	}
+    @Override
+    protected Object readResolve() {
+        MessageContainer.addMessage(receivedMessage, this);
+        super.readResolve();
+        return this;
+    }
 
-	@Override
-	public String getBroadcastMessage() {
-		return receivedMessage;
-	}
+    @Override
+    public String getBroadcastMessage() {
+        return receivedMessage;
+    }
 
-	public void setBroadcastMessage(String broadcastMessage) {
-		MessageContainer.removeReceiverScript(this.receivedMessage, this);
-		this.receivedMessage = broadcastMessage;
-		MessageContainer.addMessage(this.receivedMessage, this);
-	}
+    public void setBroadcastMessage(String broadcastMessage) {
+        MessageContainer.removeReceiverScript(this.receivedMessage, this);
+        this.receivedMessage = broadcastMessage;
+        MessageContainer.addMessage(this.receivedMessage, this);
+    }
 
-	@Override
-	public Script copyScriptForSprite(Sprite copySprite) {
-		BroadcastScript cloneScript = new BroadcastScript(receivedMessage);
+    @Override
+    public Script copyScriptForSprite(Sprite copySprite) {
+        BroadcastScript cloneScript = new BroadcastScript(receivedMessage);
 
-		doCopy(copySprite, cloneScript);
-		return cloneScript;
-	}
+        doCopy(copySprite, cloneScript);
+        return cloneScript;
+    }
 }

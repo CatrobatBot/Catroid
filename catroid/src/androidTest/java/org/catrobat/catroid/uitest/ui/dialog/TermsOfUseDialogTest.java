@@ -33,23 +33,23 @@ import java.util.ArrayList;
 
 public class TermsOfUseDialogTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
-	public TermsOfUseDialogTest() {
-		super(MainMenuActivity.class);
-	}
+    public TermsOfUseDialogTest() {
+        super(MainMenuActivity.class);
+    }
 
-	public void testTermsOfUseDialog() {
-		solo.clickOnMenuItem(solo.getString(R.string.main_menu_terms_of_use));
-		assertTrue("TermsOfUseDialog title not found", solo.searchText(solo.getString(R.string.dialog_terms_of_use_title)));
-		assertTrue("TermsOfUseDialog text not found", solo.searchText(solo
-				.getString(R.string.dialog_terms_of_use_info)));
-		assertTrue("TermsOfUseDialog linktext not found",
-				solo.searchText(solo.getString(R.string.dialog_terms_of_use_link_text)));
+    public void testTermsOfUseDialog() {
+        solo.clickOnMenuItem(solo.getString(R.string.main_menu_terms_of_use));
+        assertTrue("TermsOfUseDialog title not found", solo.searchText(solo.getString(R.string.dialog_terms_of_use_title)));
+        assertTrue("TermsOfUseDialog text not found", solo.searchText(solo
+                .getString(R.string.dialog_terms_of_use_info)));
+        assertTrue("TermsOfUseDialog linktext not found",
+                solo.searchText(solo.getString(R.string.dialog_terms_of_use_link_text)));
 
-		Button termsOfUseDialogButton = (Button) solo.getView(android.R.id.button2);
-		solo.clickOnButton(solo.getString(R.string.ok));
-		solo.sleep(200);
+        Button termsOfUseDialogButton = (Button) solo.getView(android.R.id.button2);
+        solo.clickOnButton(solo.getString(R.string.ok));
+        solo.sleep(200);
 
-		ArrayList<View> currentViews = solo.getCurrentViews();
-		assertFalse("Not returned to MainMenuActivity", currentViews.contains(termsOfUseDialogButton));
-	}
+        ArrayList<View> currentViews = solo.getCurrentViews();
+        assertFalse("Not returned to MainMenuActivity", currentViews.contains(termsOfUseDialogButton));
+    }
 }

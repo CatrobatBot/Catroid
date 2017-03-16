@@ -26,16 +26,16 @@ import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.formulaeditor.Formula;
 
 public class SayForBubbleBrick extends ThinkForBubbleBrick {
-	public SayForBubbleBrick() {
-		type = Constants.SAY_BRICK;
-		addAllowedBrickField(BrickField.STRING);
-		addAllowedBrickField(BrickField.DURATION_IN_SECONDS);
-	}
+    public SayForBubbleBrick() {
+        type = Constants.SAY_BRICK;
+        addAllowedBrickField(BrickField.STRING);
+        addAllowedBrickField(BrickField.DURATION_IN_SECONDS);
+    }
 
-	public SayForBubbleBrick(String text, float duration) {
-		type = Constants.SAY_BRICK;
-		addAllowedBrickField(BrickField.STRING);
-		addAllowedBrickField(BrickField.DURATION_IN_SECONDS);
-		initializeBrickFields(new Formula(text), new Formula(duration));
-	}
+    public SayForBubbleBrick(String text, float duration) {
+        type = Constants.SAY_BRICK;
+        addAllowedBrickField(BrickField.STRING);
+        addAllowedBrickField(BrickField.DURATION_IN_SECONDS);
+        initializeBrickFields(new Formula(text), new Formula(duration));
+    }
 }

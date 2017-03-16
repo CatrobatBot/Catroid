@@ -31,147 +31,147 @@ import org.catrobat.catroid.devices.mindstorms.ev3.LegoEV3Impl;
 
 public class LegoEV3ImplTest extends AndroidTestCase {
 
-	private Context applicationContext;
+    private Context applicationContext;
 
-	private LegoEV3 ev3;
-	ConnectionDataLogger logger;
+    private LegoEV3 ev3;
+    ConnectionDataLogger logger;
 
-	private static final int BASIC_MESSAGE_BYTE_OFFSET = 6;
+    private static final int BASIC_MESSAGE_BYTE_OFFSET = 6;
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
 
-		applicationContext = this.getContext().getApplicationContext();
+        applicationContext = this.getContext().getApplicationContext();
 
-		ev3 = new LegoEV3Impl(this.applicationContext);
-		logger = ConnectionDataLogger.createLocalConnectionLogger();
-		ev3.setConnection(logger.getConnectionProxy());
-	}
+        ev3 = new LegoEV3Impl(this.applicationContext);
+        logger = ConnectionDataLogger.createLocalConnectionLogger();
+        ev3.setConnection(logger.getConnectionProxy());
+    }
 
-	public void testSimplePlayToneTest() {
+    public void testSimplePlayToneTest() {
 
-		int inputHz = 9000;
-		int expectedHz = 9000;
-		int durationInMs = 3000;
-		int volume = 100;
+        int inputHz = 9000;
+        int expectedHz = 9000;
+        int durationInMs = 3000;
+        int volume = 100;
 
-		ev3.initialise();
-		ev3.playTone(inputHz, durationInMs, volume);
+        ev3.initialise();
+        ev3.playTone(inputHz, durationInMs, volume);
 
-		byte[] setOutputState = logger.getNextSentMessage(0, 2);
+        byte[] setOutputState = logger.getNextSentMessage(0, 2);
 
-		int offset = BASIC_MESSAGE_BYTE_OFFSET + 3; // 1 byte command, 1 bytes volume, 1 byte datatype
+        int offset = BASIC_MESSAGE_BYTE_OFFSET + 3; // 1 byte command, 1 bytes volume, 1 byte datatype
 
-		assertEquals("Expected Hz not same as input Hz", (byte) expectedHz, setOutputState[offset]);
-		assertEquals("Expected Hz not same as input Hz", (byte) (expectedHz >> 8), setOutputState[offset + 1]);
-	}
+        assertEquals("Expected Hz not same as input Hz", (byte) expectedHz, setOutputState[offset]);
+        assertEquals("Expected Hz not same as input Hz", (byte) (expectedHz >> 8), setOutputState[offset + 1]);
+    }
 
-	public void testPlayToneHzOverMaxValue() {
+    public void testPlayToneHzOverMaxValue() {
 
-		// MaxHz = 10000;
-		int inputHz = 16000;
-		int expectedHz = 10000;
-		int durationInMs = 5000;
-		int volume = 100;
+        // MaxHz = 10000;
+        int inputHz = 16000;
+        int expectedHz = 10000;
+        int durationInMs = 5000;
+        int volume = 100;
 
-		ev3.initialise();
-		ev3.playTone(inputHz, durationInMs, volume);
+        ev3.initialise();
+        ev3.playTone(inputHz, durationInMs, volume);
 
-		byte[] setOutputState = logger.getNextSentMessage(0, 2);
+        byte[] setOutputState = logger.getNextSentMessage(0, 2);
 
-		int offset = BASIC_MESSAGE_BYTE_OFFSET + 3; // 1 byte command, 1 bytes volume, 1 byte datatype
+        int offset = BASIC_MESSAGE_BYTE_OFFSET + 3; // 1 byte command, 1 bytes volume, 1 byte datatype
 
-		assertEquals("Expected Hz not same as input Hz", (byte) expectedHz, setOutputState[offset]);
-		assertEquals("Expected Hz not same as input Hz", (byte) (expectedHz >> 8), setOutputState[offset + 1]);
-	}
+        assertEquals("Expected Hz not same as input Hz", (byte) expectedHz, setOutputState[offset]);
+        assertEquals("Expected Hz not same as input Hz", (byte) (expectedHz >> 8), setOutputState[offset + 1]);
+    }
 
-	public void testPlayToneCheckDuration() {
+    public void testPlayToneCheckDuration() {
 
-		int inputHz = 9000;
-		int durationInMs = 2000;
-		int volume = 100;
-		int expectedDurationInMs = 2000;
+        int inputHz = 9000;
+        int durationInMs = 2000;
+        int volume = 100;
+        int expectedDurationInMs = 2000;
 
-		ev3.initialise();
-		ev3.playTone(inputHz, durationInMs, volume);
+        ev3.initialise();
+        ev3.playTone(inputHz, durationInMs, volume);
 
-		byte[] setOutputState = logger.getNextSentMessage(0, 2);
+        byte[] setOutputState = logger.getNextSentMessage(0, 2);
 
-		int offset = BASIC_MESSAGE_BYTE_OFFSET + 6; // 1 byte command, 1 bytes volume, 3 bytes freq, 1 byte datatype
+        int offset = BASIC_MESSAGE_BYTE_OFFSET + 6; // 1 byte command, 1 bytes volume, 3 bytes freq, 1 byte datatype
 
-		assertEquals("Expected duration not same as input", (byte) expectedDurationInMs, setOutputState[offset]);
-		assertEquals("Expected duration not same as input", (byte) (expectedDurationInMs >> 8), setOutputState[offset
-				+ 1]);
-	}
+        assertEquals("Expected duration not same as input", (byte) expectedDurationInMs, setOutputState[offset]);
+        assertEquals("Expected duration not same as input", (byte) (expectedDurationInMs >> 8), setOutputState[offset
+                + 1]);
+    }
 
-	public void testPlayToneCheckVolume() {
+    public void testPlayToneCheckVolume() {
 
-		int inputHz = 9000;
-		int durationInMs = 2000;
-		int volume1 = 100;
-		int expectedVolumeLevel1 = 13;
+        int inputHz = 9000;
+        int durationInMs = 2000;
+        int volume1 = 100;
+        int expectedVolumeLevel1 = 13;
 
-		ev3.initialise();
-		ev3.playTone(inputHz, durationInMs, volume1);
+        ev3.initialise();
+        ev3.playTone(inputHz, durationInMs, volume1);
 
-		byte[] setOutputState = logger.getNextSentMessage(0, 2);
+        byte[] setOutputState = logger.getNextSentMessage(0, 2);
 
-		int offset = BASIC_MESSAGE_BYTE_OFFSET + 1; // 1 byte command
+        int offset = BASIC_MESSAGE_BYTE_OFFSET + 1; // 1 byte command
 
-		assertEquals("Expected volume-level doesn't match input 100%", (byte) expectedVolumeLevel1,
-				setOutputState[offset]);
+        assertEquals("Expected volume-level doesn't match input 100%", (byte) expectedVolumeLevel1,
+                setOutputState[offset]);
 
-		int volume2 = 25;
-		int expectedVolumeLevel2 = 4;
-		ev3.playTone(inputHz, durationInMs, volume2);
+        int volume2 = 25;
+        int expectedVolumeLevel2 = 4;
+        ev3.playTone(inputHz, durationInMs, volume2);
 
-		setOutputState = logger.getNextSentMessage(0, 2);
+        setOutputState = logger.getNextSentMessage(0, 2);
 
-		assertEquals("Expected volume-level doesn't match input 25%", (byte) expectedVolumeLevel2,
-				setOutputState[offset]);
-	}
+        assertEquals("Expected volume-level doesn't match input 25%", (byte) expectedVolumeLevel2,
+                setOutputState[offset]);
+    }
 
-	public void testPlayToneWithZeroDuration() {
+    public void testPlayToneWithZeroDuration() {
 
-		int inputHz = 13000;
-		int inputDurationInMs = 0;
-		int volume = 100;
+        int inputHz = 13000;
+        int inputDurationInMs = 0;
+        int volume = 100;
 
-		ev3.initialise();
-		ev3.playTone(inputHz, inputDurationInMs, volume);
+        ev3.initialise();
+        ev3.playTone(inputHz, inputDurationInMs, volume);
 
-		byte[] command = logger.getNextSentMessage(0, 2);
+        byte[] command = logger.getNextSentMessage(0, 2);
 
-		assertEquals("LastSentCommand Should be NULL", null, command);
-	}
+        assertEquals("LastSentCommand Should be NULL", null, command);
+    }
 
-	public void testPlayToneWithZeroVolume() {
+    public void testPlayToneWithZeroVolume() {
 
-		int inputHz = 13000;
-		int inputDurationInMs = 0;
-		int volume = 0;
+        int inputHz = 13000;
+        int inputDurationInMs = 0;
+        int volume = 0;
 
-		ev3.initialise();
-		ev3.playTone(inputHz, inputDurationInMs, volume);
+        ev3.initialise();
+        ev3.playTone(inputHz, inputDurationInMs, volume);
 
-		byte[] command = logger.getNextSentMessage(0, 2);
+        byte[] command = logger.getNextSentMessage(0, 2);
 
-		assertEquals("LastSentCommand Should be NULL", null, command);
-	}
+        assertEquals("LastSentCommand Should be NULL", null, command);
+    }
 
-	public void testSimpleLED() {
+    public void testSimpleLED() {
 
-		int ledStatus = 0x04;
-		int expectedLedStatus = 0x04;
+        int ledStatus = 0x04;
+        int expectedLedStatus = 0x04;
 
-		ev3.initialise();
-		ev3.setLed(ledStatus);
+        ev3.initialise();
+        ev3.setLed(ledStatus);
 
-		byte[] setOutputState = logger.getNextSentMessage(0, 2);
+        byte[] setOutputState = logger.getNextSentMessage(0, 2);
 
-		int offset = BASIC_MESSAGE_BYTE_OFFSET + 2; // 1 byte command, 1 byte datatype
+        int offset = BASIC_MESSAGE_BYTE_OFFSET + 2; // 1 byte command, 1 byte datatype
 
-		assertEquals("Sent LED-Status doesn't match expected Status", (byte) expectedLedStatus, setOutputState[offset]);
-	}
+        assertEquals("Sent LED-Status doesn't match expected Status", (byte) expectedLedStatus, setOutputState[offset]);
+    }
 }

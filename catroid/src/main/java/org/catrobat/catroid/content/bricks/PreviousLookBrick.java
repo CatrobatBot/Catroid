@@ -37,52 +37,52 @@ import java.util.List;
 
 public class PreviousLookBrick extends BrickBaseType {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public PreviousLookBrick() {
-	}
+    public PreviousLookBrick() {
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		return clone();
-	}
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        return clone();
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		View view = View.inflate(context, R.layout.brick_previous_look, null);
+    @Override
+    public View getPrototypeView(Context context) {
+        View view = View.inflate(context, R.layout.brick_previous_look, null);
 
-		if (ProjectManager.getInstance().getCurrentSprite().getName().equals(context.getString(R.string.background))) {
-			TextView textField = (TextView) view.findViewById(R.id.brick_previous_look_text_view);
-			textField.setText(R.string.brick_previous_background);
-		}
-		return view;
-	}
+        if (ProjectManager.getInstance().getCurrentSprite().getName().equals(context.getString(R.string.background))) {
+            TextView textField = (TextView) view.findViewById(R.id.brick_previous_look_text_view);
+            textField.setText(R.string.brick_previous_background);
+        }
+        return view;
+    }
 
-	@Override
-	public Brick clone() {
-		return new PreviousLookBrick();
-	}
+    @Override
+    public Brick clone() {
+        return new PreviousLookBrick();
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		view = View.inflate(context, R.layout.brick_previous_look, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        view = View.inflate(context, R.layout.brick_previous_look, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_previous_look_checkbox);
-		if (ProjectManager.getInstance().getCurrentSprite().getName().equals(context.getString(R.string.background))) {
-			TextView textField = (TextView) view.findViewById(R.id.brick_previous_look_text_view);
-			textField.setText(R.string.brick_previous_background);
-		}
+        setCheckboxView(R.id.brick_previous_look_checkbox);
+        if (ProjectManager.getInstance().getCurrentSprite().getName().equals(context.getString(R.string.background))) {
+            TextView textField = (TextView) view.findViewById(R.id.brick_previous_look_text_view);
+            textField.setText(R.string.brick_previous_background);
+        }
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createPreviousLookAction(sprite));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createPreviousLookAction(sprite));
+        return null;
+    }
 }

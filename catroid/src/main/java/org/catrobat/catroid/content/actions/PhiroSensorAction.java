@@ -35,102 +35,102 @@ import org.catrobat.catroid.formulaeditor.Sensors;
 
 public class PhiroSensorAction extends Action {
 
-	private int sensorNumber;
-	private Sprite sprite;
-	private Action ifAction;
-	private Action elseAction;
-	private Formula ifCondition;
-	private Boolean ifConditionValue;
-	private boolean isInitialized = false;
-	private boolean isInterpretedCorrectly;
+    private int sensorNumber;
+    private Sprite sprite;
+    private Action ifAction;
+    private Action elseAction;
+    private Formula ifCondition;
+    private Boolean ifConditionValue;
+    private boolean isInitialized = false;
+    private boolean isInterpretedCorrectly;
 
-	private static final int DISTANCE_THRESHOLD_VALUE = 850;
+    private static final int DISTANCE_THRESHOLD_VALUE = 850;
 
-	protected void begin() {
-		try {
-			if (ifCondition == null) {
-				isInterpretedCorrectly = false;
-				return;
-			}
-			Double interpretation = ifCondition.interpretDouble(sprite);
-			ifConditionValue = interpretation.intValue() <= DISTANCE_THRESHOLD_VALUE ? true : false;
-			isInterpretedCorrectly = true;
-		} catch (InterpretationException interpretationException) {
-			isInterpretedCorrectly = false;
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}
-	}
+    protected void begin() {
+        try {
+            if (ifCondition == null) {
+                isInterpretedCorrectly = false;
+                return;
+            }
+            Double interpretation = ifCondition.interpretDouble(sprite);
+            ifConditionValue = interpretation.intValue() <= DISTANCE_THRESHOLD_VALUE ? true : false;
+            isInterpretedCorrectly = true;
+        } catch (InterpretationException interpretationException) {
+            isInterpretedCorrectly = false;
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+        }
+    }
 
-	@Override
-	public boolean act(float delta) {
-		if (!isInitialized) {
-			begin();
-			isInitialized = true;
-		}
+    @Override
+    public boolean act(float delta) {
+        if (!isInitialized) {
+            begin();
+            isInitialized = true;
+        }
 
-		if (!isInterpretedCorrectly) {
-			return true;
-		}
+        if (!isInterpretedCorrectly) {
+            return true;
+        }
 
-		if (ifConditionValue) {
-			return ifAction.act(delta);
-		} else {
-			return elseAction.act(delta);
-		}
-	}
+        if (ifConditionValue) {
+            return ifAction.act(delta);
+        } else {
+            return elseAction.act(delta);
+        }
+    }
 
-	@Override
-	public void restart() {
-		ifAction.restart();
-		elseAction.restart();
-		isInitialized = false;
-		super.restart();
-	}
+    @Override
+    public void restart() {
+        ifAction.restart();
+        elseAction.restart();
+        isInitialized = false;
+        super.restart();
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setIfAction(Action ifAction) {
-		this.ifAction = ifAction;
-	}
+    public void setIfAction(Action ifAction) {
+        this.ifAction = ifAction;
+    }
 
-	public void setElseAction(Action elseAction) {
-		this.elseAction = elseAction;
-	}
+    public void setElseAction(Action elseAction) {
+        this.elseAction = elseAction;
+    }
 
-	public void setIfCondition(Formula ifCondition) {
-		this.ifCondition = ifCondition;
-	}
+    public void setIfCondition(Formula ifCondition) {
+        this.ifCondition = ifCondition;
+    }
 
-	public void setSensor(int sensorNumber) {
-		this.sensorNumber = sensorNumber;
-		this.setIfCondition(new Formula(new FormulaElement(FormulaElement.ElementType.SENSOR, getPhiroProSensorByNumber().name(), null)));
-	}
+    public void setSensor(int sensorNumber) {
+        this.sensorNumber = sensorNumber;
+        this.setIfCondition(new Formula(new FormulaElement(FormulaElement.ElementType.SENSOR, getPhiroProSensorByNumber().name(), null)));
+    }
 
-	private Sensors getPhiroProSensorByNumber() {
-		switch (this.sensorNumber) {
-			case 0:
-				return Sensors.PHIRO_FRONT_LEFT;
-			case 1:
-				return Sensors.PHIRO_FRONT_RIGHT;
-			case 2:
-				return Sensors.PHIRO_SIDE_LEFT;
-			case 3:
-				return Sensors.PHIRO_SIDE_RIGHT;
-			case 4:
-				return Sensors.PHIRO_BOTTOM_LEFT;
-			case 5:
-				return Sensors.PHIRO_BOTTOM_RIGHT;
-		}
+    private Sensors getPhiroProSensorByNumber() {
+        switch (this.sensorNumber) {
+            case 0:
+                return Sensors.PHIRO_FRONT_LEFT;
+            case 1:
+                return Sensors.PHIRO_FRONT_RIGHT;
+            case 2:
+                return Sensors.PHIRO_SIDE_LEFT;
+            case 3:
+                return Sensors.PHIRO_SIDE_RIGHT;
+            case 4:
+                return Sensors.PHIRO_BOTTOM_LEFT;
+            case 5:
+                return Sensors.PHIRO_BOTTOM_RIGHT;
+        }
 
-		return Sensors.PHIRO_SIDE_RIGHT;
-	}
+        return Sensors.PHIRO_SIDE_RIGHT;
+    }
 
-	@Override
-	public void setActor(Actor actor) {
-		super.setActor(actor);
-		ifAction.setActor(actor);
-		elseAction.setActor(actor);
-	}
+    @Override
+    public void setActor(Actor actor) {
+        super.setActor(actor);
+        ifAction.setActor(actor);
+        elseAction.setActor(actor);
+    }
 }

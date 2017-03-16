@@ -29,18 +29,18 @@ import org.catrobat.catroid.camera.CameraManager;
 
 public class CameraBrickAction extends TemporalAction {
 
-	CameraManager.CameraState state = CameraManager.CameraState.notUsed;
+    CameraManager.CameraState state = CameraManager.CameraState.notUsed;
 
-	@Override
-	protected void update(float percent) {
-		CameraManager.getInstance().updatePreview(state);
-	}
+    @Override
+    protected void update(float percent) {
+        CameraManager.getInstance().updatePreview(state);
+    }
 
-	@Override
-	public void reset() {
-	}
+    @Override
+    public void reset() {
+    }
 
-	public void setCameraAction(CameraManager.CameraState newState) {
-		state = newState;
-	}
+    public void setCameraAction(CameraManager.CameraState newState) {
+        state = newState;
+    }
 }

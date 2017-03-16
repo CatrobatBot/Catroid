@@ -29,49 +29,49 @@ import org.catrobat.catroid.content.bricks.WhenStartedBrick;
 
 public class StartScript extends Script {
 
-	private static final long serialVersionUID = 1L;
-	private boolean isUserScript;
+    private static final long serialVersionUID = 1L;
+    private boolean isUserScript;
 
-	public StartScript() {
-		super();
-	}
+    public StartScript() {
+        super();
+    }
 
-	public StartScript(boolean isUserScript) {
-		this.isUserScript = isUserScript;
-	}
+    public StartScript(boolean isUserScript) {
+        this.isUserScript = isUserScript;
+    }
 
-	public StartScript(WhenStartedBrick brick) {
-		this.brick = brick;
-	}
+    public StartScript(WhenStartedBrick brick) {
+        this.brick = brick;
+    }
 
-	@Override
-	protected Object readResolve() {
-		super.readResolve();
-		return this;
-	}
+    @Override
+    protected Object readResolve() {
+        super.readResolve();
+        return this;
+    }
 
-	@Override
-	public ScriptBrick getScriptBrick() {
-		if (brick == null) {
-			if (!isUserScript) {
-				brick = new WhenStartedBrick(this);
-			} else {
-				brick = ProjectManager.getInstance().getCurrentUserBrick().getDefinitionBrick();
-				if (brick == null) {
-					brick = new UserScriptDefinitionBrick();
-				}
-			}
-		}
+    @Override
+    public ScriptBrick getScriptBrick() {
+        if (brick == null) {
+            if (!isUserScript) {
+                brick = new WhenStartedBrick(this);
+            } else {
+                brick = ProjectManager.getInstance().getCurrentUserBrick().getDefinitionBrick();
+                if (brick == null) {
+                    brick = new UserScriptDefinitionBrick();
+                }
+            }
+        }
 
-		return brick;
-	}
+        return brick;
+    }
 
-	@Override
-	public Script copyScriptForSprite(Sprite copySprite) {
+    @Override
+    public Script copyScriptForSprite(Sprite copySprite) {
 
-		Script cloneScript = new StartScript(isUserScript);
+        Script cloneScript = new StartScript(isUserScript);
 
-		doCopy(copySprite, cloneScript);
-		return cloneScript;
-	}
+        doCopy(copySprite, cloneScript);
+        return cloneScript;
+    }
 }

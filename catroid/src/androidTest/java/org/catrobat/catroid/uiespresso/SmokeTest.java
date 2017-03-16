@@ -50,73 +50,73 @@ import static junit.framework.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class SmokeTest {
-	private IdlingResource idlingResource;
+    private IdlingResource idlingResource;
 
-	@Rule
-	public BaseActivityInstrumentationRule<MainMenuActivity> baseActivityTestRule = new
-			BaseActivityInstrumentationRule<>(MainMenuActivity.class);
+    @Rule
+    public BaseActivityInstrumentationRule<MainMenuActivity> baseActivityTestRule = new
+            BaseActivityInstrumentationRule<>(MainMenuActivity.class);
 
-	@Before
-	public void registerIdlingResource() {
-		//class under test, in this case the mainMenuActivity has to implement getIdlingResource that returns
-		//the idlingResource instance it has. (in this case its a countingIdlingResource)
-		idlingResource = baseActivityTestRule.getActivity().getIdlingResource();
-		Espresso.registerIdlingResources(idlingResource);
-	}
+    @Before
+    public void registerIdlingResource() {
+        //class under test, in this case the mainMenuActivity has to implement getIdlingResource that returns
+        //the idlingResource instance it has. (in this case its a countingIdlingResource)
+        idlingResource = baseActivityTestRule.getActivity().getIdlingResource();
+        Espresso.registerIdlingResources(idlingResource);
+    }
 
-	@Before
-	public void setUp() throws Exception {
-	}
+    @Before
+    public void setUp() throws Exception {
+    }
 
-	@Test
-	public void newProject() {
-		onView(withId(R.id.main_menu_button_new))
-				.perform(click());
+    @Test
+    public void newProject() {
+        onView(withId(R.id.main_menu_button_new))
+                .perform(click());
 
-		//check if dialog title is displayed
-		onView(withText(R.string.new_project_dialog_title))
-				.check(matches(isDisplayed()));
+        //check if dialog title is displayed
+        onView(withText(R.string.new_project_dialog_title))
+                .check(matches(isDisplayed()));
 
-		//enter new project name
-		onView(withId(R.id.project_name_edittext))
-				.perform(typeText("TestProject"));
-		onView(withText(R.string.ok))
-				.perform(click());
+        //enter new project name
+        onView(withId(R.id.project_name_edittext))
+                .perform(typeText("TestProject"));
+        onView(withText(R.string.ok))
+                .perform(click());
 
-		//check if orientation dialog is displayed
-		onView(withText(R.string.project_orientation_title))
-				.check(matches(isDisplayed()));
-		//onView(withId(R.id.landscape_mode)).perform(click());
-		onView(withText(R.string.ok))
-				.perform(click());
+        //check if orientation dialog is displayed
+        onView(withText(R.string.project_orientation_title))
+                .check(matches(isDisplayed()));
+        //onView(withId(R.id.landscape_mode)).perform(click());
+        onView(withText(R.string.ok))
+                .perform(click());
 
-		//check if user ends up in right activity either by checking activity itself:
-		assertTrue(UiTestUtils.getCurrentActivity() instanceof ProjectActivity);
+        //check if user ends up in right activity either by checking activity itself:
+        assertTrue(UiTestUtils.getCurrentActivity() instanceof ProjectActivity);
 
-		//or better by checking on ui elements that identify this activity
-		//onView(withText(toUpperCase(R.string.spritelist_background_headline))).check(matches(isDisplayed()));
-		//onView(withText(toUpperCase(R.string.sprites))).check(matches(isDisplayed()));
+        //or better by checking on ui elements that identify this activity
+        //onView(withText(toUpperCase(R.string.spritelist_background_headline))).check(matches(isDisplayed()));
+        //onView(withText(toUpperCase(R.string.sprites))).check(matches(isDisplayed()));
 
-		//add sprite
-		onView(withId(R.id.button_add))
-				.perform(click());
+        //add sprite
+        onView(withId(R.id.button_add))
+                .perform(click());
 
-		//check if new object dialog is displayed
-		onView(withText(R.string.new_sprite_dialog_title))
-				.check(matches(isDisplayed()));
-		//cancel by back
-		pressBack();
+        //check if new object dialog is displayed
+        onView(withText(R.string.new_sprite_dialog_title))
+                .check(matches(isDisplayed()));
+        //cancel by back
+        pressBack();
 
-		//something you shouldnt do in the first place, but heres how to wait:
-		//onView(isRoot()).perform(CustomActions.wait(5000));
-	}
+        //something you shouldnt do in the first place, but heres how to wait:
+        //onView(isRoot()).perform(CustomActions.wait(5000));
+    }
 
-	@After
-	public void tearDown() throws Exception {
-	}
+    @After
+    public void tearDown() throws Exception {
+    }
 
-	@After
-	public void unregisterResource() {
-		Espresso.unregisterIdlingResources(idlingResource);
-	}
+    @After
+    public void unregisterResource() {
+        Espresso.unregisterIdlingResources(idlingResource);
+    }
 }

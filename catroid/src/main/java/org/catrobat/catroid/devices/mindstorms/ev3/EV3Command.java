@@ -34,129 +34,129 @@ import java.io.ByteArrayOutputStream;
 
 public class EV3Command implements MindstormsCommand {
 
-	private ByteArrayOutputStream commandData = new ByteArrayOutputStream();
+    private ByteArrayOutputStream commandData = new ByteArrayOutputStream();
 
-	public EV3Command(short commandCounter, EV3CommandType commandType, EV3CommandOpCode commandByte) {
+    public EV3Command(short commandCounter, EV3CommandType commandType, EV3CommandOpCode commandByte) {
 
-		commandData.write((byte) (commandCounter & 0x00FF));
-		commandData.write((byte) ((commandCounter & 0xFF00) >> 8));
+        commandData.write((byte) (commandCounter & 0x00FF));
+        commandData.write((byte) ((commandCounter & 0xFF00) >> 8));
 
-		commandData.write(commandType.getByte());
-		commandData.write(commandByte.getByte());
-	}
+        commandData.write(commandType.getByte());
+        commandData.write(commandByte.getByte());
+    }
 
-	public EV3Command(short commandCounter, EV3CommandType commandType, int globalVars, int localVars, EV3CommandOpCode commandByte) {
+    public EV3Command(short commandCounter, EV3CommandType commandType, int globalVars, int localVars, EV3CommandOpCode commandByte) {
 
-		commandData.write((byte) (commandCounter & 0x00FF));
-		commandData.write((byte) ((commandCounter & 0xFF00) >> 8));
+        commandData.write((byte) (commandCounter & 0x00FF));
+        commandData.write((byte) ((commandCounter & 0xFF00) >> 8));
 
-		commandData.write(commandType.getByte());
+        commandData.write(commandType.getByte());
 
-		byte reservationByte1 = (byte) (globalVars & 0xFF);
-		byte reservationByte2 = (byte) ((localVars << 2) | (globalVars >> 8));
-		commandData.write(reservationByte1);
-		commandData.write(reservationByte2);
+        byte reservationByte1 = (byte) (globalVars & 0xFF);
+        byte reservationByte2 = (byte) ((localVars << 2) | (globalVars >> 8));
+        commandData.write(reservationByte1);
+        commandData.write(reservationByte2);
 
-		commandData.write(commandByte.getByte());
-	}
+        commandData.write(commandByte.getByte());
+    }
 
-	public void append(byte data) {
-		commandData.write(data);
-	}
+    public void append(byte data) {
+        commandData.write(data);
+    }
 
-	public void append(byte[] data) {
-		commandData.write(data, 0, data.length);
-	}
+    public void append(byte[] data) {
+        commandData.write(data, 0, data.length);
+    }
 
-	public void append(int data) {
-		append((byte) (0xFF & data));
-		append((byte) (0xFF & (data >> 8)));
-		append((byte) (0xFF & (data >> 16)));
-		append((byte) (0xFF & (data >> 24)));
-	}
+    public void append(int data) {
+        append((byte) (0xFF & data));
+        append((byte) (0xFF & (data >> 8)));
+        append((byte) (0xFF & (data >> 16)));
+        append((byte) (0xFF & (data >> 24)));
+    }
 
-	public void append(EV3CommandByteCode commandCode) {
-		append(EV3CommandParamFormat.PARAM_FORMAT_SHORT, commandCode.getByte());
-	}
+    public void append(EV3CommandByteCode commandCode) {
+        append(EV3CommandParamFormat.PARAM_FORMAT_SHORT, commandCode.getByte());
+    }
 
-	public void append(EV3CommandVariableScope variableScope, int bytesToReserve) {
+    public void append(EV3CommandVariableScope variableScope, int bytesToReserve) {
 
-		int byteToAppend = EV3CommandParamFormat.PARAM_FORMAT_SHORT.getByte()
-				| EV3CommandParamByteCode.PARAM_TYPE_VARIABLE.getByte()
-				| variableScope.getByte()
-				| (EV3CommandParamByteCode.PARAM_SHORT_MAX.getByte() & bytesToReserve)
-				| EV3CommandParamByteCode.PARAM_SHORT_SIGN_POSITIVE.getByte();
+        int byteToAppend = EV3CommandParamFormat.PARAM_FORMAT_SHORT.getByte()
+                | EV3CommandParamByteCode.PARAM_TYPE_VARIABLE.getByte()
+                | variableScope.getByte()
+                | (EV3CommandParamByteCode.PARAM_SHORT_MAX.getByte() & bytesToReserve)
+                | EV3CommandParamByteCode.PARAM_SHORT_SIGN_POSITIVE.getByte();
 
-		append((byte) byteToAppend);
-	}
+        append((byte) byteToAppend);
+    }
 
-	public void append(EV3CommandParamFormat paramFormat, int data) {
-		int byteToAppend;
+    public void append(EV3CommandParamFormat paramFormat, int data) {
+        int byteToAppend;
 
-		if (paramFormat == EV3CommandParamFormat.PARAM_FORMAT_SHORT) {
-			byteToAppend = EV3CommandParamFormat.PARAM_FORMAT_SHORT.getByte()
-					| EV3CommandParamByteCode.PARAM_TYPE_CONSTANT.getByte()
-					| (EV3CommandParamByteCode.PARAM_SHORT_MAX.getByte() & data);
+        if (paramFormat == EV3CommandParamFormat.PARAM_FORMAT_SHORT) {
+            byteToAppend = EV3CommandParamFormat.PARAM_FORMAT_SHORT.getByte()
+                    | EV3CommandParamByteCode.PARAM_TYPE_CONSTANT.getByte()
+                    | (EV3CommandParamByteCode.PARAM_SHORT_MAX.getByte() & data);
 
-			if (data >= 0) {
-				byteToAppend |= EV3CommandParamByteCode.PARAM_SHORT_SIGN_POSITIVE.getByte();
-			} else {
-				byteToAppend |= EV3CommandParamByteCode.PARAM_SHORT_SIGN_NEGATIVE.getByte();
-			}
+            if (data >= 0) {
+                byteToAppend |= EV3CommandParamByteCode.PARAM_SHORT_SIGN_POSITIVE.getByte();
+            } else {
+                byteToAppend |= EV3CommandParamByteCode.PARAM_SHORT_SIGN_NEGATIVE.getByte();
+            }
 
-			append((byte) byteToAppend);
-		} else {
-			int controlByte;
+            append((byte) byteToAppend);
+        } else {
+            int controlByte;
 
-			if ((data >= 0 && data <= 0x7F) || (data < 0 && data <= 0xFF)) {
+            if ((data >= 0 && data <= 0x7F) || (data < 0 && data <= 0xFF)) {
 
-				controlByte = EV3CommandParamFormat.PARAM_FORMAT_LONG.getByte()
-						| EV3CommandParamByteCode.PARAM_TYPE_CONSTANT.getByte()
-						| EV3CommandParamByteCode.PARAM_FOLLOW_ONE_BYTE.getByte();
+                controlByte = EV3CommandParamFormat.PARAM_FORMAT_LONG.getByte()
+                        | EV3CommandParamByteCode.PARAM_TYPE_CONSTANT.getByte()
+                        | EV3CommandParamByteCode.PARAM_FOLLOW_ONE_BYTE.getByte();
 
-				byteToAppend = data & 0xFF;
+                byteToAppend = data & 0xFF;
 
-				append((byte) controlByte);
-				append((byte) byteToAppend);
-			} else {
+                append((byte) controlByte);
+                append((byte) byteToAppend);
+            } else {
 
-				int secondByteToAppend;
-				controlByte = EV3CommandParamFormat.PARAM_FORMAT_LONG.getByte()
-						| EV3CommandParamByteCode.PARAM_TYPE_CONSTANT.getByte()
-						| EV3CommandParamByteCode.PARAM_FOLLOW_TWO_BYTE.getByte();
+                int secondByteToAppend;
+                controlByte = EV3CommandParamFormat.PARAM_FORMAT_LONG.getByte()
+                        | EV3CommandParamByteCode.PARAM_TYPE_CONSTANT.getByte()
+                        | EV3CommandParamByteCode.PARAM_FOLLOW_TWO_BYTE.getByte();
 
-				byteToAppend = data & 0x00FF;
-				secondByteToAppend = (data & 0xFF00) >> 8;
+                byteToAppend = data & 0x00FF;
+                secondByteToAppend = (data & 0xFF00) >> 8;
 
-				append((byte) controlByte);
-				append((byte) byteToAppend);
-				append((byte) secondByteToAppend);
-			}
-		}
-	}
+                append((byte) controlByte);
+                append((byte) byteToAppend);
+                append((byte) secondByteToAppend);
+            }
+        }
+    }
 
-	@Override
-	public int getLength() {
-		return commandData.size();
-	}
+    @Override
+    public int getLength() {
+        return commandData.size();
+    }
 
-	public byte[] getRawCommand() {
-		return commandData.toByteArray();
-	}
+    public byte[] getRawCommand() {
+        return commandData.toByteArray();
+    }
 
-	public String toHexString(EV3Command command) {
-		byte[] rawBytes = command.getRawCommand();
-		String commandHexString = "0x";
+    public String toHexString(EV3Command command) {
+        byte[] rawBytes = command.getRawCommand();
+        String commandHexString = "0x";
 
-		if (rawBytes.length == 0) {
-			return "0";
-		}
+        if (rawBytes.length == 0) {
+            return "0";
+        }
 
-		for (int i = 0; i < rawBytes.length; i++) {
-			commandHexString += Integer.toHexString(rawBytes[i] & 0xFF);
-			commandHexString += "_";
-		}
+        for (int i = 0; i < rawBytes.length; i++) {
+            commandHexString += Integer.toHexString(rawBytes[i] & 0xFF);
+            commandHexString += "_";
+        }
 
-		return commandHexString;
-	}
+        return commandHexString;
+    }
 }

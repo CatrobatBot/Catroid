@@ -41,93 +41,93 @@ import org.catrobat.catroid.utils.Utils;
 
 public final class MergeManager {
 
-	private MergeManager() {
-	}
+    private MergeManager() {
+    }
 
-	public static void merge(String firstProjectName, String secondProjectName, Activity activity, ProjectListAdapter
-			adapter) {
-		Project firstProject = StorageHandler.getInstance().loadProject(firstProjectName, activity);
-		Project secondProject = StorageHandler.getInstance().loadProject(secondProjectName, activity);
+    public static void merge(String firstProjectName, String secondProjectName, Activity activity, ProjectListAdapter
+            adapter) {
+        Project firstProject = StorageHandler.getInstance().loadProject(firstProjectName, activity);
+        Project secondProject = StorageHandler.getInstance().loadProject(secondProjectName, activity);
 
-		if (firstProject == null || secondProject == null) {
-			Utils.showErrorDialog(activity, R.string.error_load_project);
-			return;
-		}
+        if (firstProject == null || secondProject == null) {
+            Utils.showErrorDialog(activity, R.string.error_load_project);
+            return;
+        }
 
-		boolean justAddAsScene = firstProject.getSceneList().size() == 1 ^ secondProject.getSceneList().size() == 1;
-		showMergeDialog(firstProject, secondProject, activity, adapter, justAddAsScene);
-	}
+        boolean justAddAsScene = firstProject.getSceneList().size() == 1 ^ secondProject.getSceneList().size() == 1;
+        showMergeDialog(firstProject, secondProject, activity, adapter, justAddAsScene);
+    }
 
-	private static void showMergeDialog(Project firstProject, Project secondProject, Activity activity,
-			ProjectListAdapter adapter, boolean addScene) {
-		XmlHeader firstHeader = firstProject.getXmlHeader();
-		XmlHeader secondHeader = secondProject.getXmlHeader();
-		boolean areScreenSizesDifferent = firstHeader.getVirtualScreenHeight() != secondHeader.getVirtualScreenHeight()
-				|| firstHeader.getVirtualScreenWidth() != secondHeader.getVirtualScreenWidth();
+    private static void showMergeDialog(Project firstProject, Project secondProject, Activity activity,
+                                        ProjectListAdapter adapter, boolean addScene) {
+        XmlHeader firstHeader = firstProject.getXmlHeader();
+        XmlHeader secondHeader = secondProject.getXmlHeader();
+        boolean areScreenSizesDifferent = firstHeader.getVirtualScreenHeight() != secondHeader.getVirtualScreenHeight()
+                || firstHeader.getVirtualScreenWidth() != secondHeader.getVirtualScreenWidth();
 
-		if (areScreenSizesDifferent) {
-			showDifferentResolutionDialog(firstProject, secondProject, activity, adapter, addScene);
-		} else {
-			MergeTask merge = new MergeTask(firstProject, secondProject, activity, adapter, addScene);
-			MergeNameDialog mergeDialog = new MergeNameDialog(merge);
+        if (areScreenSizesDifferent) {
+            showDifferentResolutionDialog(firstProject, secondProject, activity, adapter, addScene);
+        } else {
+            MergeTask merge = new MergeTask(firstProject, secondProject, activity, adapter, addScene);
+            MergeNameDialog mergeDialog = new MergeNameDialog(merge);
 
-			mergeDialog.show(activity.getFragmentManager(), NewProjectDialog.DIALOG_FRAGMENT_TAG);
-		}
-	}
+            mergeDialog.show(activity.getFragmentManager(), NewProjectDialog.DIALOG_FRAGMENT_TAG);
+        }
+    }
 
-	public static boolean mergeScene(String firstSceneName, String secondSceneName, String resultName, Activity activity) {
-		Scene firstScene = ProjectManager.getInstance().getCurrentProject().getSceneByName(firstSceneName);
-		Scene secondScene = ProjectManager.getInstance().getCurrentProject().getSceneByName(secondSceneName);
+    public static boolean mergeScene(String firstSceneName, String secondSceneName, String resultName, Activity activity) {
+        Scene firstScene = ProjectManager.getInstance().getCurrentProject().getSceneByName(firstSceneName);
+        Scene secondScene = ProjectManager.getInstance().getCurrentProject().getSceneByName(secondSceneName);
 
-		if (firstScene == null || secondScene == null) {
-			Utils.showErrorDialog(activity, R.string.error_merge_scene_not_found);
-			return false;
-		}
+        if (firstScene == null || secondScene == null) {
+            Utils.showErrorDialog(activity, R.string.error_merge_scene_not_found);
+            return false;
+        }
 
-		if (firstScene.getName().equals(secondScene.getName())) {
-			Utils.showErrorDialog(activity, R.string.error_merge_with_self_scene);
-			return false;
-		}
+        if (firstScene.getName().equals(secondScene.getName())) {
+            Utils.showErrorDialog(activity, R.string.error_merge_with_self_scene);
+            return false;
+        }
 
-		MergeTask merge = new MergeTask(firstScene, secondScene, activity);
-		if (!merge.mergeScenesInCurrentProject(resultName)) {
-			Utils.showErrorDialog(activity, R.string.merge_conflict);
-		}
+        MergeTask merge = new MergeTask(firstScene, secondScene, activity);
+        if (!merge.mergeScenesInCurrentProject(resultName)) {
+            Utils.showErrorDialog(activity, R.string.merge_conflict);
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	private static void showDifferentResolutionDialog(final Project firstProject, final Project secondProject,
-			final Activity activity, final ProjectListAdapter adapter, final boolean addScene) {
+    private static void showDifferentResolutionDialog(final Project firstProject, final Project secondProject,
+                                                      final Activity activity, final ProjectListAdapter adapter, final boolean addScene) {
 
-		XmlHeader currentProject = firstProject.getXmlHeader();
-		XmlHeader headerFrom = secondProject.getXmlHeader();
+        XmlHeader currentProject = firstProject.getXmlHeader();
+        XmlHeader headerFrom = secondProject.getXmlHeader();
 
-		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				switch (which) {
-					case DialogInterface.BUTTON_POSITIVE:
-						MergeTask merge = new MergeTask(firstProject, secondProject, activity, adapter, addScene);
-						MergeNameDialog mergeDialog = new MergeNameDialog(merge);
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        MergeTask merge = new MergeTask(firstProject, secondProject, activity, adapter, addScene);
+                        MergeNameDialog mergeDialog = new MergeNameDialog(merge);
 
-						mergeDialog.show(activity.getFragmentManager(), NewProjectDialog.DIALOG_FRAGMENT_TAG);
-						break;
-				}
-			}
-		};
-		String msg = String.format(activity.getString(R.string.error_different_resolutions),
-				currentProject.getProgramName(), currentProject.getVirtualScreenHeight(),
-				currentProject.getVirtualScreenWidth(), headerFrom.getProgramName(),
-				headerFrom.getVirtualScreenHeight(), headerFrom.getVirtualScreenWidth());
+                        mergeDialog.show(activity.getFragmentManager(), NewProjectDialog.DIALOG_FRAGMENT_TAG);
+                        break;
+                }
+            }
+        };
+        String msg = String.format(activity.getString(R.string.error_different_resolutions),
+                currentProject.getProgramName(), currentProject.getVirtualScreenHeight(),
+                currentProject.getVirtualScreenWidth(), headerFrom.getProgramName(),
+                headerFrom.getVirtualScreenHeight(), headerFrom.getVirtualScreenWidth());
 
-		AlertDialog.Builder builder = new CustomAlertDialogBuilder(activity);
-		builder.setTitle(R.string.warning);
-		builder.setMessage(msg);
-		builder.setPositiveButton(activity.getString(R.string.main_menu_continue), dialogClickListener);
-		builder.setNegativeButton(activity.getString(R.string.abort), dialogClickListener);
-		Dialog errorDialog = builder.create();
-		errorDialog.show();
-	}
+        AlertDialog.Builder builder = new CustomAlertDialogBuilder(activity);
+        builder.setTitle(R.string.warning);
+        builder.setMessage(msg);
+        builder.setPositiveButton(activity.getString(R.string.main_menu_continue), dialogClickListener);
+        builder.setNegativeButton(activity.getString(R.string.abort), dialogClickListener);
+        Dialog errorDialog = builder.create();
+        errorDialog.show();
+    }
 }

@@ -46,81 +46,81 @@ import java.util.ArrayList;
 
 public class WaitBrickTest extends BaseActivityInstrumentationTestCase<ScriptActivity> {
 
-	private Project project;
-	private WaitBrick waitBrick;
+    private Project project;
+    private WaitBrick waitBrick;
 
-	public WaitBrickTest() {
-		super(ScriptActivity.class);
-	}
+    public WaitBrickTest() {
+        super(ScriptActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		// normally super.setUp should be called first
-		// but kept the test failing due to view is null
-		// when starting in ScriptActivity
-		createProject();
-		super.setUp();
-	}
+    @Override
+    public void setUp() throws Exception {
+        // normally super.setUp should be called first
+        // but kept the test failing due to view is null
+        // when starting in ScriptActivity
+        createProject();
+        super.setUp();
+    }
 
-	public void testWaitBrick() {
-		ListView dragDropListView = UiTestUtils.getScriptListView(solo);
-		BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
+    public void testWaitBrick() {
+        ListView dragDropListView = UiTestUtils.getScriptListView(solo);
+        BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
 
-		int childrenCount = ProjectManager.getInstance().getCurrentSprite().getScript(adapter.getScriptCount() - 1)
-				.getBrickList().size();
-		assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
-		assertEquals("Incorrect number of bricks.", 1, childrenCount);
+        int childrenCount = ProjectManager.getInstance().getCurrentSprite().getScript(adapter.getScriptCount() - 1)
+                .getBrickList().size();
+        assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
+        assertEquals("Incorrect number of bricks.", 1, childrenCount);
 
-		ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
-		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getItem(1));
-		assertNotNull("TextView does not exist", solo.getText(solo.getString(R.string.brick_wait)));
+        ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
+        assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
+        assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getItem(1));
+        assertNotNull("TextView does not exist", solo.getText(solo.getString(R.string.brick_wait)));
 
-		double waitTime = 2.25;
+        double waitTime = 2.25;
 
-		UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_wait_edit_text, waitTime);
+        UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_wait_edit_text, waitTime);
 
-		Formula actualWaitTime = waitBrick.getFormulaWithBrickField(Brick.BrickField.TIME_TO_WAIT_IN_SECONDS);
-		try {
-			assertEquals("Wrong text in field", waitTime, actualWaitTime.interpretDouble(null));
-		} catch (InterpretationException interpretationException) {
-			fail("Wrong text in field.");
-		}
+        Formula actualWaitTime = waitBrick.getFormulaWithBrickField(Brick.BrickField.TIME_TO_WAIT_IN_SECONDS);
+        try {
+            assertEquals("Wrong text in field", waitTime, actualWaitTime.interpretDouble(null));
+        } catch (InterpretationException interpretationException) {
+            fail("Wrong text in field.");
+        }
 
-		assertEquals(
-				"Text not updated",
-				waitTime,
-				Double.parseDouble(((TextView) solo.getView(R.id.brick_wait_edit_text)).getText().toString()
-						.replace(',', '.')));
+        assertEquals(
+                "Text not updated",
+                waitTime,
+                Double.parseDouble(((TextView) solo.getView(R.id.brick_wait_edit_text)).getText().toString()
+                        .replace(',', '.')));
 
-		UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_wait_edit_text, 1);
-		TextView secondsTextView = (TextView) solo.getView(R.id.brick_wait_second_text_view);
-		assertTrue(
-				"Specifier hasn't changed from plural to singular",
-				secondsTextView.getText().equals(
-						secondsTextView.getResources().getQuantityString(R.plurals.second_plural, 1)));
+        UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_wait_edit_text, 1);
+        TextView secondsTextView = (TextView) solo.getView(R.id.brick_wait_second_text_view);
+        assertTrue(
+                "Specifier hasn't changed from plural to singular",
+                secondsTextView.getText().equals(
+                        secondsTextView.getResources().getQuantityString(R.plurals.second_plural, 1)));
 
-		UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_wait_edit_text, 1.4);
-		secondsTextView = (TextView) solo.getView(R.id.brick_wait_second_text_view);
-		assertTrue(
-				"Specifier hasn't changed from singular to plural",
-				secondsTextView.getText().equals(
-						secondsTextView.getResources().getQuantityString(R.plurals.second_plural,
-								Utils.convertDoubleToPluralInteger(1.4))));
-	}
+        UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_wait_edit_text, 1.4);
+        secondsTextView = (TextView) solo.getView(R.id.brick_wait_second_text_view);
+        assertTrue(
+                "Specifier hasn't changed from singular to plural",
+                secondsTextView.getText().equals(
+                        secondsTextView.getResources().getQuantityString(R.plurals.second_plural,
+                                Utils.convertDoubleToPluralInteger(1.4))));
+    }
 
-	private void createProject() {
-		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite sprite = new SingleSprite("cat");
-		Script script = new StartScript();
-		waitBrick = new WaitBrick(1000);
-		script.addBrick(waitBrick);
+    private void createProject() {
+        project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Sprite sprite = new SingleSprite("cat");
+        Script script = new StartScript();
+        waitBrick = new WaitBrick(1000);
+        script.addBrick(waitBrick);
 
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 }

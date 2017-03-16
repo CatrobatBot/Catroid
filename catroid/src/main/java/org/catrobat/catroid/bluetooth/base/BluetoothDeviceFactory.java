@@ -26,5 +26,5 @@ import android.content.Context;
 
 public interface BluetoothDeviceFactory {
 
-	<T extends BluetoothDevice> BluetoothDevice createDevice(Class<T> service, Context applicationContext);
+    <T extends BluetoothDevice> BluetoothDevice createDevice(Class<T> service, Context applicationContext);
 }

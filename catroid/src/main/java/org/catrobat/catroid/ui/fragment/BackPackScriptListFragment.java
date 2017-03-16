@@ -46,173 +46,173 @@ import org.catrobat.catroid.utils.Utils;
 import java.util.List;
 
 public class BackPackScriptListFragment extends BackPackActivityFragment implements CheckBoxListAdapter
-		.ListItemClickHandler, CheckBoxListAdapter.ListItemLongClickHandler {
+        .ListItemClickHandler, CheckBoxListAdapter.ListItemLongClickHandler {
 
-	public static final String TAG = BackPackScriptListFragment.class.getSimpleName();
-	private static final String SHARED_PREFERENCE_NAME = "showDetailsScripts";
+    public static final String TAG = BackPackScriptListFragment.class.getSimpleName();
+    private static final String SHARED_PREFERENCE_NAME = "showDetailsScripts";
 
-	private BackPackScriptListAdapter scriptAdapter;
-	private ListView listView;
+    private BackPackScriptListAdapter scriptAdapter;
+    private ListView listView;
 
-	private String scriptToEdit;
-	private int selectedScriptPosition;
+    private String scriptToEdit;
+    private int selectedScriptPosition;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View backPackScriptListFragment = inflater.inflate(R.layout.fragment_backpack, container, false);
-		listView = (ListView) backPackScriptListFragment.findViewById(android.R.id.list);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View backPackScriptListFragment = inflater.inflate(R.layout.fragment_backpack, container, false);
+        listView = (ListView) backPackScriptListFragment.findViewById(android.R.id.list);
 
-		return backPackScriptListFragment;
-	}
+        return backPackScriptListFragment;
+    }
 
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
-		registerForContextMenu(listView);
+        registerForContextMenu(listView);
 
-		singleItemTitle = getString(R.string.script_group);
-		multipleItemsTitle = getString(R.string.script_groups);
+        singleItemTitle = getString(R.string.script_group);
+        multipleItemsTitle = getString(R.string.script_groups);
 
-		initializeList();
-		checkEmptyBackgroundBackPack();
-		BottomBar.hideBottomBar(getActivity());
-	}
+        initializeList();
+        checkEmptyBackgroundBackPack();
+        BottomBar.hideBottomBar(getActivity());
+    }
 
-	private void initializeList() {
-		List<String> groupList = BackPackListManager.getInstance().getBackPackedScriptGroups();
+    private void initializeList() {
+        List<String> groupList = BackPackListManager.getInstance().getBackPackedScriptGroups();
 
-		scriptAdapter = new BackPackScriptListAdapter(getActivity(), R.layout.list_item, groupList);
-		setListAdapter(scriptAdapter);
-		scriptAdapter.setListItemClickHandler(this);
-		scriptAdapter.setListItemCheckHandler(this);
-		scriptAdapter.setListItemLongClickHandler(this);
-	}
+        scriptAdapter = new BackPackScriptListAdapter(getActivity(), R.layout.list_item, groupList);
+        setListAdapter(scriptAdapter);
+        scriptAdapter.setListItemClickHandler(this);
+        scriptAdapter.setListItemCheckHandler(this);
+        scriptAdapter.setListItemLongClickHandler(this);
+    }
 
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		outState.putSerializable(LookController.BUNDLE_ARGUMENTS_SELECTED_LOOK, scriptToEdit);
-		super.onSaveInstanceState(outState);
-	}
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(LookController.BUNDLE_ARGUMENTS_SELECTED_LOOK, scriptToEdit);
+        super.onSaveInstanceState(outState);
+    }
 
-	@Override
-	public void onResume() {
-		super.onResume();
+    @Override
+    public void onResume() {
+        super.onResume();
 
-		if (!Utils.checkForExternalStorageAvailableAndDisplayErrorIfNot(getActivity())) {
-			return;
-		}
+        if (!Utils.checkForExternalStorageAvailableAndDisplayErrorIfNot(getActivity())) {
+            return;
+        }
 
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity()
-				.getApplicationContext());
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity()
+                .getApplicationContext());
 
-		setShowDetails(settings.getBoolean(SHARED_PREFERENCE_NAME, false));
-	}
+        setShowDetails(settings.getBoolean(SHARED_PREFERENCE_NAME, false));
+    }
 
-	@Override
-	public void onPause() {
-		super.onPause();
+    @Override
+    public void onPause() {
+        super.onPause();
 
-		ProjectManager projectManager = ProjectManager.getInstance();
-		if (projectManager.getCurrentProject() != null) {
-			projectManager.saveProject(getActivity().getApplicationContext());
-		}
+        ProjectManager projectManager = ProjectManager.getInstance();
+        if (projectManager.getCurrentProject() != null) {
+            projectManager.saveProject(getActivity().getApplicationContext());
+        }
 
-		BackPackListManager.getInstance().saveBackpack();
+        BackPackListManager.getInstance().saveBackpack();
 
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity()
-				.getApplicationContext());
-		SharedPreferences.Editor editor = settings.edit();
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity()
+                .getApplicationContext());
+        SharedPreferences.Editor editor = settings.edit();
 
-		editor.putBoolean(SHARED_PREFERENCE_NAME, getShowDetails());
-		editor.commit();
-	}
+        editor.putBoolean(SHARED_PREFERENCE_NAME, getShowDetails());
+        editor.commit();
+    }
 
-	@Override
-	public void onPrepareOptionsMenu(Menu menu) {
-		super.onPrepareOptionsMenu(menu);
-		if (BackPackListManager.getInstance().getBackPackedScripts().isEmpty()) {
-			menu.findItem(R.id.unpacking).setVisible(false);
-		}
-	}
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (BackPackListManager.getInstance().getBackPackedScripts().isEmpty()) {
+            menu.findItem(R.id.unpacking).setVisible(false);
+        }
+    }
 
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, view, menuInfo);
 
-		scriptToEdit = scriptAdapter.getItem(selectedScriptPosition);
-		menu.setHeaderTitle(scriptToEdit);
+        scriptToEdit = scriptAdapter.getItem(selectedScriptPosition);
+        menu.setHeaderTitle(scriptToEdit);
 
-		getActivity().getMenuInflater().inflate(R.menu.context_menu_unpacking, menu);
-	}
+        getActivity().getMenuInflater().inflate(R.menu.context_menu_unpacking, menu);
+    }
 
-	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.context_menu_unpacking:
-				unpackCheckedItems(true);
-				break;
-			case R.id.context_menu_delete:
-				showDeleteDialog(true);
-				break;
-		}
-		return super.onContextItemSelected(item);
-	}
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.context_menu_unpacking:
+                unpackCheckedItems(true);
+                break;
+            case R.id.context_menu_delete:
+                showDeleteDialog(true);
+                break;
+        }
+        return super.onContextItemSelected(item);
+    }
 
-	@Override
-	public void handleOnItemClick(int position, View view, Object listItem) {
-		selectedScriptPosition = position;
-		listView.showContextMenuForChild(view);
-	}
+    @Override
+    public void handleOnItemClick(int position, View view, Object listItem) {
+        selectedScriptPosition = position;
+        listView.showContextMenuForChild(view);
+    }
 
-	@Override
-	public void handleOnItemLongClick(int position, View view) {
-		selectedScriptPosition = position;
-		listView.showContextMenuForChild(view);
-	}
+    @Override
+    public void handleOnItemLongClick(int position, View view) {
+        selectedScriptPosition = position;
+        listView.showContextMenuForChild(view);
+    }
 
-	@Override
-	protected void showDeleteDialog(boolean singleItem) {
-		int titleId;
-		if (scriptAdapter.getCheckedItems().size() == 1 || singleItem) {
-			titleId = R.string.dialog_confirm_delete_backpack_group_title;
-		} else {
-			titleId = R.string.dialog_confirm_delete_multiple_backpack_groups_title;
-		}
+    @Override
+    protected void showDeleteDialog(boolean singleItem) {
+        int titleId;
+        if (scriptAdapter.getCheckedItems().size() == 1 || singleItem) {
+            titleId = R.string.dialog_confirm_delete_backpack_group_title;
+        } else {
+            titleId = R.string.dialog_confirm_delete_multiple_backpack_groups_title;
+        }
 
-		showDeleteDialog(titleId, singleItem);
-	}
+        showDeleteDialog(titleId, singleItem);
+    }
 
-	@Override
-	protected void deleteCheckedItems(boolean singleItem) {
-		if (singleItem) {
-			deleteScript();
-			return;
-		}
-		for (String script : scriptAdapter.getCheckedItems()) {
-			scriptToEdit = script;
-			deleteScript();
-		}
-	}
+    @Override
+    protected void deleteCheckedItems(boolean singleItem) {
+        if (singleItem) {
+            deleteScript();
+            return;
+        }
+        for (String script : scriptAdapter.getCheckedItems()) {
+            scriptToEdit = script;
+            deleteScript();
+        }
+    }
 
-	private void deleteScript() {
-		BackPackListManager.getInstance().removeItemFromScriptBackPack(scriptToEdit);
-		checkEmptyBackgroundBackPack();
-		scriptAdapter.remove(scriptToEdit);
-	}
+    private void deleteScript() {
+        BackPackListManager.getInstance().removeItemFromScriptBackPack(scriptToEdit);
+        checkEmptyBackgroundBackPack();
+        scriptAdapter.remove(scriptToEdit);
+    }
 
-	protected void unpackCheckedItems(boolean singleItem) {
-		if (singleItem) {
-			BackPackScriptController.getInstance().unpack(scriptToEdit, false, true, getActivity(), false);
-			showUnpackingCompleteToast(1);
-			getActivity().finish();
-			return;
-		}
-		for (String script : scriptAdapter.getCheckedItems()) {
-			BackPackScriptController.getInstance().unpack(script, false, true, getActivity(), false);
-		}
-		showUnpackingCompleteToast(scriptAdapter.getCheckedItems().size());
-		clearCheckedItems();
-		getActivity().finish();
-	}
+    protected void unpackCheckedItems(boolean singleItem) {
+        if (singleItem) {
+            BackPackScriptController.getInstance().unpack(scriptToEdit, false, true, getActivity(), false);
+            showUnpackingCompleteToast(1);
+            getActivity().finish();
+            return;
+        }
+        for (String script : scriptAdapter.getCheckedItems()) {
+            BackPackScriptController.getInstance().unpack(script, false, true, getActivity(), false);
+        }
+        showUnpackingCompleteToast(scriptAdapter.getCheckedItems().size());
+        clearCheckedItems();
+        getActivity().finish();
+    }
 }

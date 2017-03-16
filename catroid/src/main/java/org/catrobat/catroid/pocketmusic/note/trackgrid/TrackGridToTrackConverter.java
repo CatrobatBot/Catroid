@@ -31,33 +31,33 @@ import java.util.List;
 
 public final class TrackGridToTrackConverter {
 
-	private TrackGridToTrackConverter() {
-	}
+    private TrackGridToTrackConverter() {
+    }
 
-	public static Track convertTrackGridToTrack(TrackGrid trackGrid, int beatsPerMinute) {
+    public static Track convertTrackGridToTrack(TrackGrid trackGrid, int beatsPerMinute) {
 
-		Track track = new Track(trackGrid.getKey(), trackGrid.getInstrument());
+        Track track = new Track(trackGrid.getKey(), trackGrid.getInstrument());
 
-		for (GridRow gridRow : trackGrid.getGridRows()) {
-			SparseArray<List<GridRowPosition>> positionsSparseArray = gridRow.getGridRowPositions();
-			for (int i = 0; i < positionsSparseArray.size(); i++) {
-				int key = positionsSparseArray.keyAt(i);
-				List<GridRowPosition> positionsList = positionsSparseArray.get(key);
+        for (GridRow gridRow : trackGrid.getGridRows()) {
+            SparseArray<List<GridRowPosition>> positionsSparseArray = gridRow.getGridRowPositions();
+            for (int i = 0; i < positionsSparseArray.size(); i++) {
+                int key = positionsSparseArray.keyAt(i);
+                List<GridRowPosition> positionsList = positionsSparseArray.get(key);
 
-				for (GridRowPosition position : positionsList) {
+                for (GridRowPosition position : positionsList) {
 
-					long startTicsInTrack = position.getStartTicksInTrack();
-					long noteLength = position.getNoteLength().toTicks(beatsPerMinute);
+                    long startTicsInTrack = position.getStartTicksInTrack();
+                    long noteLength = position.getNoteLength().toTicks(beatsPerMinute);
 
-					NoteEvent noteOnEvent = new NoteEvent(gridRow.getNoteName(), true);
-					track.addNoteEvent(startTicsInTrack, noteOnEvent);
+                    NoteEvent noteOnEvent = new NoteEvent(gridRow.getNoteName(), true);
+                    track.addNoteEvent(startTicsInTrack, noteOnEvent);
 
-					NoteEvent noteOffEvent = new NoteEvent(gridRow.getNoteName(), false);
-					track.addNoteEvent(startTicsInTrack + noteLength, noteOffEvent);
-				}
-			}
-		}
+                    NoteEvent noteOffEvent = new NoteEvent(gridRow.getNoteName(), false);
+                    track.addNoteEvent(startTicsInTrack + noteLength, noteOffEvent);
+                }
+            }
+        }
 
-		return track;
-	}
+        return track;
+    }
 }

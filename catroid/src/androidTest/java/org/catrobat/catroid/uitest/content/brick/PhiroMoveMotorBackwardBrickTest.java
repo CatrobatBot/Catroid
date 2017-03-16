@@ -43,76 +43,76 @@ import org.catrobat.catroid.uitest.util.UiTestUtils;
 import java.util.ArrayList;
 
 public class PhiroMoveMotorBackwardBrickTest extends BaseActivityInstrumentationTestCase<ScriptActivity> {
-	private static final int SET_SPEED = 30;
-	private static final int SET_SPEED_INITIALLY = -70;
+    private static final int SET_SPEED = 30;
+    private static final int SET_SPEED_INITIALLY = -70;
 
-	private Project project;
-	private PhiroMotorMoveBackwardBrick motorBrick;
+    private Project project;
+    private PhiroMotorMoveBackwardBrick motorBrick;
 
-	public PhiroMoveMotorBackwardBrickTest() {
-		super(ScriptActivity.class);
-	}
+    public PhiroMoveMotorBackwardBrickTest() {
+        super(ScriptActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		// normally super.setUp should be called first
-		// but kept the test failing due to view is null
-		// when starting in ScriptActivity
-		createProject();
-		super.setUp();
-	}
+    @Override
+    public void setUp() throws Exception {
+        // normally super.setUp should be called first
+        // but kept the test failing due to view is null
+        // when starting in ScriptActivity
+        createProject();
+        super.setUp();
+    }
 
-	public void testPhiroMotorActionBrick() {
-		ListView dragDropListView = UiTestUtils.getScriptListView(solo);
-		BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
+    public void testPhiroMotorActionBrick() {
+        ListView dragDropListView = UiTestUtils.getScriptListView(solo);
+        BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
 
-		int childrenCount = adapter.getChildCountFromLastGroup();
-		int groupCount = adapter.getScriptCount();
+        int childrenCount = adapter.getChildCountFromLastGroup();
+        int groupCount = adapter.getScriptCount();
 
-		assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
-		assertEquals("Incorrect number of bricks.", 1, childrenCount);
+        assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
+        assertEquals("Incorrect number of bricks.", 1, childrenCount);
 
-		ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
-		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
+        ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
+        assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
-		assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.brick_phiro_motor_backward_action)));
-		assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.phiro_motor_speed)));
+        assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
+        assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.brick_phiro_motor_backward_action)));
+        assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.phiro_motor_speed)));
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
-				R.id.brick_phiro_motor_backward_action_speed_edit_text, SET_SPEED, Brick.BrickField.PHIRO_SPEED, motorBrick);
+        UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
+                R.id.brick_phiro_motor_backward_action_speed_edit_text, SET_SPEED, Brick.BrickField.PHIRO_SPEED, motorBrick);
 
-		String[] motors = getActivity().getResources().getStringArray(R.array.brick_phiro_select_motor_spinner);
-		assertTrue("Spinner items list too short!", motors.length == 3);
+        String[] motors = getActivity().getResources().getStringArray(R.array.brick_phiro_select_motor_spinner);
+        assertTrue("Spinner items list too short!", motors.length == 3);
 
-		int phiroSpinnerIndex = 0;
+        int phiroSpinnerIndex = 0;
 
-		Spinner currentSpinner = solo.getCurrentViews(Spinner.class).get(phiroSpinnerIndex);
-		solo.pressSpinnerItem(phiroSpinnerIndex, -1);
-		solo.waitForActivity(ScriptActivity.class.getSimpleName());
-		assertEquals("Wrong item in spinner!", motors[0], currentSpinner.getSelectedItem());
-		solo.pressSpinnerItem(phiroSpinnerIndex, 1);
-		solo.waitForActivity(ScriptActivity.class.getSimpleName());
-		assertEquals("Wrong item in spinner!", motors[1], currentSpinner.getSelectedItem());
-		solo.pressSpinnerItem(phiroSpinnerIndex, 1);
-		solo.waitForActivity(ScriptActivity.class.getSimpleName());
-		assertEquals("Wrong item in spinner!", motors[2], currentSpinner.getSelectedItem());
-	}
+        Spinner currentSpinner = solo.getCurrentViews(Spinner.class).get(phiroSpinnerIndex);
+        solo.pressSpinnerItem(phiroSpinnerIndex, -1);
+        solo.waitForActivity(ScriptActivity.class.getSimpleName());
+        assertEquals("Wrong item in spinner!", motors[0], currentSpinner.getSelectedItem());
+        solo.pressSpinnerItem(phiroSpinnerIndex, 1);
+        solo.waitForActivity(ScriptActivity.class.getSimpleName());
+        assertEquals("Wrong item in spinner!", motors[1], currentSpinner.getSelectedItem());
+        solo.pressSpinnerItem(phiroSpinnerIndex, 1);
+        solo.waitForActivity(ScriptActivity.class.getSimpleName());
+        assertEquals("Wrong item in spinner!", motors[2], currentSpinner.getSelectedItem());
+    }
 
-	private void createProject() {
-		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite sprite = new SingleSprite("cat");
-		Script script = new StartScript();
+    private void createProject() {
+        project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Sprite sprite = new SingleSprite("cat");
+        Script script = new StartScript();
 
-		motorBrick = new PhiroMotorMoveBackwardBrick(PhiroMotorMoveBackwardBrick.Motor.MOTOR_RIGHT, SET_SPEED_INITIALLY);
+        motorBrick = new PhiroMotorMoveBackwardBrick(PhiroMotorMoveBackwardBrick.Motor.MOTOR_RIGHT, SET_SPEED_INITIALLY);
 
-		script.addBrick(motorBrick);
+        script.addBrick(motorBrick);
 
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 }

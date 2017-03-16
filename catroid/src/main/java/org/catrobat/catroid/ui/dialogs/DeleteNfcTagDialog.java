@@ -38,45 +38,45 @@ import java.util.List;
 
 public class DeleteNfcTagDialog extends DialogFragment {
 
-	private static final String BUNDLE_ARGUMENTS_SELECTED_POSITION = "selected_position";
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_delete_nfctag";
+    private static final String BUNDLE_ARGUMENTS_SELECTED_POSITION = "selected_position";
+    public static final String DIALOG_FRAGMENT_TAG = "dialog_delete_nfctag";
 
-	public static DeleteNfcTagDialog newInstance(int selectedPosition) {
-		DeleteNfcTagDialog dialog = new DeleteNfcTagDialog();
+    public static DeleteNfcTagDialog newInstance(int selectedPosition) {
+        DeleteNfcTagDialog dialog = new DeleteNfcTagDialog();
 
-		Bundle arguments = new Bundle();
-		arguments.putInt(BUNDLE_ARGUMENTS_SELECTED_POSITION, selectedPosition);
-		dialog.setArguments(arguments);
+        Bundle arguments = new Bundle();
+        arguments.putInt(BUNDLE_ARGUMENTS_SELECTED_POSITION, selectedPosition);
+        dialog.setArguments(arguments);
 
-		return dialog;
-	}
+        return dialog;
+    }
 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		final int selectedPosition = getArguments().getInt(BUNDLE_ARGUMENTS_SELECTED_POSITION);
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        final int selectedPosition = getArguments().getInt(BUNDLE_ARGUMENTS_SELECTED_POSITION);
 
-		Dialog dialog = new CustomAlertDialogBuilder(getActivity()).setTitle(R.string.delete_nfctag_dialog)
-				.setNegativeButton(R.string.cancel, new OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dismiss();
-					}
-				}).setPositiveButton(R.string.ok, new OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						handleDeleteNfcTag(selectedPosition);
-					}
-				}).create();
+        Dialog dialog = new CustomAlertDialogBuilder(getActivity()).setTitle(R.string.delete_nfctag_dialog)
+                .setNegativeButton(R.string.cancel, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dismiss();
+                    }
+                }).setPositiveButton(R.string.ok, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        handleDeleteNfcTag(selectedPosition);
+                    }
+                }).create();
 
-		dialog.setCanceledOnTouchOutside(true);
+        dialog.setCanceledOnTouchOutside(true);
 
-		return dialog;
-	}
+        return dialog;
+    }
 
-	private void handleDeleteNfcTag(int position) {
-		List<NfcTagData> nfcTagDataList = ProjectManager.getInstance().getCurrentSprite().getNfcTagList();
-		nfcTagDataList.remove(position);
+    private void handleDeleteNfcTag(int position) {
+        List<NfcTagData> nfcTagDataList = ProjectManager.getInstance().getCurrentSprite().getNfcTagList();
+        nfcTagDataList.remove(position);
 
-		getActivity().sendBroadcast(new Intent(ScriptActivity.ACTION_SOUND_DELETED));
-	}
+        getActivity().sendBroadcast(new Intent(ScriptActivity.ACTION_SOUND_DELETED));
+    }
 }

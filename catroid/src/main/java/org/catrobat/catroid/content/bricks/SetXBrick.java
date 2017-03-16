@@ -39,70 +39,70 @@ import org.catrobat.catroid.utils.Utils;
 import java.util.List;
 
 public class SetXBrick extends FormulaBrick {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private transient View prototypeView;
+    private transient View prototypeView;
 
-	public SetXBrick() {
-		addAllowedBrickField(BrickField.X_POSITION);
-	}
+    public SetXBrick() {
+        addAllowedBrickField(BrickField.X_POSITION);
+    }
 
-	public SetXBrick(int xPositionValue) {
-		initializeBrickFields(new Formula(xPositionValue));
-	}
+    public SetXBrick(int xPositionValue) {
+        initializeBrickFields(new Formula(xPositionValue));
+    }
 
-	public SetXBrick(Formula xPosition) {
-		initializeBrickFields(xPosition);
-	}
+    public SetXBrick(Formula xPosition) {
+        initializeBrickFields(xPosition);
+    }
 
-	private void initializeBrickFields(Formula xPosition) {
-		addAllowedBrickField(BrickField.X_POSITION);
-		setFormulaWithBrickField(BrickField.X_POSITION, xPosition);
-	}
+    private void initializeBrickFields(Formula xPosition) {
+        addAllowedBrickField(BrickField.X_POSITION);
+        setFormulaWithBrickField(BrickField.X_POSITION, xPosition);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return getFormulaWithBrickField(BrickField.X_POSITION).getRequiredResources();
-	}
+    @Override
+    public int getRequiredResources() {
+        return getFormulaWithBrickField(BrickField.X_POSITION).getRequiredResources();
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_set_x, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_set_x, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_set_x_checkbox);
+        setCheckboxView(R.id.brick_set_x_checkbox);
 
-		TextView editX = (TextView) view.findViewById(R.id.brick_set_x_edit_text);
+        TextView editX = (TextView) view.findViewById(R.id.brick_set_x_edit_text);
 
-		getFormulaWithBrickField(BrickField.X_POSITION).setTextFieldId(R.id.brick_set_x_edit_text);
-		getFormulaWithBrickField(BrickField.X_POSITION).refreshTextField(view);
+        getFormulaWithBrickField(BrickField.X_POSITION).setTextFieldId(R.id.brick_set_x_edit_text);
+        getFormulaWithBrickField(BrickField.X_POSITION).refreshTextField(view);
 
-		editX.setOnClickListener(this);
+        editX.setOnClickListener(this);
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_set_x, null);
-		TextView textXPosition = (TextView) prototypeView.findViewById(R.id.brick_set_x_edit_text);
-		textXPosition.setText(Utils.getNumberStringForBricks(BrickValues.X_POSITION));
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_set_x, null);
+        TextView textXPosition = (TextView) prototypeView.findViewById(R.id.brick_set_x_edit_text);
+        textXPosition.setText(Utils.getNumberStringForBricks(BrickValues.X_POSITION));
+        return prototypeView;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createSetXAction(sprite,
-				getFormulaWithBrickField(BrickField.X_POSITION)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createSetXAction(sprite,
+                getFormulaWithBrickField(BrickField.X_POSITION)));
+        return null;
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		FormulaEditorFragment.showFragment(view, this, BrickField.X_POSITION);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        FormulaEditorFragment.showFragment(view, this, BrickField.X_POSITION);
+    }
 }

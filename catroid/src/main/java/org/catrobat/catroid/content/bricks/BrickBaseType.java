@@ -37,123 +37,124 @@ import org.catrobat.catroid.ui.adapter.BrickAdapter;
 import java.util.List;
 
 public abstract class BrickBaseType implements Brick {
-	private static final long serialVersionUID = 1L;
-	private static final String TAG = BrickBaseType.class.getSimpleName();
-	public transient View view;
-	protected transient CheckBox checkbox;
-	protected transient BrickAdapter adapter;
-	protected transient int alphaValue = 255;
-	public transient boolean animationState = false;
+    private static final long serialVersionUID = 1L;
+    private static final String TAG = BrickBaseType.class.getSimpleName();
+    public transient View view;
+    protected transient CheckBox checkbox;
+    protected transient BrickAdapter adapter;
+    protected transient int alphaValue = 255;
+    public transient boolean animationState = false;
 
-	protected boolean commentedOut;
+    protected boolean commentedOut;
 
-	@Override
-	public boolean isCommentedOut() {
-		return commentedOut;
-	}
+    @Override
+    public boolean isCommentedOut() {
+        return commentedOut;
+    }
 
-	@Override
-	public void setCommentedOut(boolean commentedOut) {
-		this.commentedOut = commentedOut;
-	}
+    @Override
+    public void setCommentedOut(boolean commentedOut) {
+        this.commentedOut = commentedOut;
+    }
 
-	@Override
-	public boolean isEqualBrick(Brick brick, Scene mergeResult, Scene current) {
-		if (this.getClass().equals(brick.getClass())) {
-			return true;
-		}
-		return false;
-	}
+    @Override
+    public boolean isEqualBrick(Brick brick, Scene mergeResult, Scene current) {
+        if (this.getClass().equals(brick.getClass())) {
+            return true;
+        }
+        return false;
+    }
 
-	@Override
-	public boolean isChecked() {
-		return checkbox.isChecked();
-	}
+    @Override
+    public boolean isChecked() {
+        return checkbox.isChecked();
+    }
 
-	@Override
-	public void setAnimationState(boolean animationState) {
-		this.animationState = animationState;
-	}
+    @Override
+    public void setAnimationState(boolean animationState) {
+        this.animationState = animationState;
+    }
 
-	@Override
-	public int getAlphaValue() {
-		return alphaValue;
-	}
+    @Override
+    public int getAlphaValue() {
+        return alphaValue;
+    }
 
-	@Override
-	public void setBrickAdapter(BrickAdapter adapter) {
-		this.adapter = adapter;
-	}
+    @Override
+    public void setBrickAdapter(BrickAdapter adapter) {
+        this.adapter = adapter;
+    }
 
-	@Override
-	public CheckBox getCheckBox() {
-		return checkbox;
-	}
+    @Override
+    public CheckBox getCheckBox() {
+        return checkbox;
+    }
 
-	@Override
-	public void setCheckboxView(int id) {
-		setCheckboxView(id, view);
-	}
+    @Override
+    public void setCheckboxView(int id) {
+        setCheckboxView(id, view);
+    }
 
-	@Override
-	public void setCheckboxView(int id, View view) {
-		int checkboxVisibility = View.GONE;
-		boolean enabled = true;
-		boolean isChecked = false;
-		if (checkbox != null) {
-			checkboxVisibility = checkbox.getVisibility();
-			enabled = checkbox.isEnabled();
-			isChecked = checkbox.isChecked();
-		}
-		checkbox = (CheckBox) view.findViewById(id);
-		checkbox.setChecked(isChecked);
-		checkbox.setVisibility(checkboxVisibility);
-		checkbox.setEnabled(enabled);
+    @Override
+    public void setCheckboxView(int id, View view) {
+        int checkboxVisibility = View.GONE;
+        boolean enabled = true;
+        boolean isChecked = false;
+        if (checkbox != null) {
+            checkboxVisibility = checkbox.getVisibility();
+            enabled = checkbox.isEnabled();
+            isChecked = checkbox.isChecked();
+        }
+        checkbox = (CheckBox) view.findViewById(id);
+        checkbox.setChecked(isChecked);
+        checkbox.setVisibility(checkboxVisibility);
+        checkbox.setEnabled(enabled);
 
-		final Brick instance = this;
-		checkbox.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				adapter.handleCheck(instance, ((CheckBox) view).isChecked());
-			}
-		});
-	}
+        final Brick instance = this;
+        checkbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adapter.handleCheck(instance, ((CheckBox) view).isChecked());
+            }
+        });
+    }
 
-	@Override
-	public Brick clone() throws CloneNotSupportedException {
-		return (Brick) super.clone();
-	}
+    @Override
+    public Brick clone() throws CloneNotSupportedException {
+        return (Brick) super.clone();
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		BrickBaseType copyBrick = null;
-		try {
-			copyBrick = (BrickBaseType) clone();
-		} catch (CloneNotSupportedException exception) {
-			Log.e(TAG, Log.getStackTraceString(exception));
-		}
-		return copyBrick;
-	}
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        BrickBaseType copyBrick = null;
+        try {
+            copyBrick = (BrickBaseType) clone();
+        } catch (CloneNotSupportedException exception) {
+            Log.e(TAG, Log.getStackTraceString(exception));
+        }
+        return copyBrick;
+    }
 
-	@Override
-	public void setAlpha(int newAlpha) {
-		alphaValue = newAlpha;
-	}
+    @Override
+    public void setAlpha(int newAlpha) {
+        alphaValue = newAlpha;
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return NO_RESOURCES;
-	}
+    @Override
+    public int getRequiredResources() {
+        return NO_RESOURCES;
+    }
 
-	@Override
-	public abstract View getView(Context context, int brickId, BaseAdapter adapter);
+    @Override
+    public abstract View getView(Context context, int brickId, BaseAdapter adapter);
 
-	@Override
-	public abstract View getPrototypeView(Context context);
+    @Override
+    public abstract View getPrototypeView(Context context);
 
-	@Override
-	public abstract List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence);
+    @Override
+    public abstract List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence);
 
-	@Override
-	public void storeDataForBackPack(Sprite sprite) { }
+    @Override
+    public void storeDataForBackPack(Sprite sprite) {
+    }
 }

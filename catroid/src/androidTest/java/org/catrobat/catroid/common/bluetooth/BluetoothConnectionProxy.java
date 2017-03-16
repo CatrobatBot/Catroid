@@ -34,57 +34,57 @@ import java.util.UUID;
 
 class BluetoothConnectionProxy implements BluetoothConnection {
 
-	private final BluetoothLogger logger;
+    private final BluetoothLogger logger;
 
-	BluetoothConnection btConnection;
+    BluetoothConnection btConnection;
 
-	ObservedInputStream observedInputStream;
-	ObservedOutputStream observedOutputStream;
+    ObservedInputStream observedInputStream;
+    ObservedOutputStream observedOutputStream;
 
-	BluetoothConnectionProxy(String macAddress, UUID uuid, final BluetoothLogger logger) {
+    BluetoothConnectionProxy(String macAddress, UUID uuid, final BluetoothLogger logger) {
 
-		btConnection = new BluetoothConnectionImpl(macAddress, uuid);
-		this.logger = logger;
+        btConnection = new BluetoothConnectionImpl(macAddress, uuid);
+        this.logger = logger;
 
-		logger.loggerAttached(this);
-	}
+        logger.loggerAttached(this);
+    }
 
-	@Override
-	public State connect() {
-		return btConnection.connect();
-	}
+    @Override
+    public State connect() {
+        return btConnection.connect();
+    }
 
-	@Override
-	public State connectSocket(BluetoothSocket socket) {
-		return btConnection.connectSocket(socket);
-	}
+    @Override
+    public State connectSocket(BluetoothSocket socket) {
+        return btConnection.connectSocket(socket);
+    }
 
-	@Override
-	public void disconnect() {
-		btConnection.disconnect();
-	}
+    @Override
+    public void disconnect() {
+        btConnection.disconnect();
+    }
 
-	@Override
-	public InputStream getInputStream() throws IOException {
-		if (observedInputStream == null) {
-			observedInputStream = new ObservedInputStream(btConnection.getInputStream(), logger);
-		}
+    @Override
+    public InputStream getInputStream() throws IOException {
+        if (observedInputStream == null) {
+            observedInputStream = new ObservedInputStream(btConnection.getInputStream(), logger);
+        }
 
-		return observedInputStream;
-	}
+        return observedInputStream;
+    }
 
-	@Override
-	public OutputStream getOutputStream() throws IOException {
+    @Override
+    public OutputStream getOutputStream() throws IOException {
 
-		if (observedOutputStream == null) {
-			observedOutputStream = new ObservedOutputStream(btConnection.getOutputStream(), logger);
-		}
+        if (observedOutputStream == null) {
+            observedOutputStream = new ObservedOutputStream(btConnection.getOutputStream(), logger);
+        }
 
-		return observedOutputStream;
-	}
+        return observedOutputStream;
+    }
 
-	@Override
-	public State getState() {
-		return btConnection.getState();
-	}
+    @Override
+    public State getState() {
+        return btConnection.getState();
+    }
 }

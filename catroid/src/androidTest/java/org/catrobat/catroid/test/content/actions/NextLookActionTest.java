@@ -44,142 +44,142 @@ import java.io.File;
 
 public class NextLookActionTest extends InstrumentationTestCase {
 
-	private static final int IMAGE_FILE_ID = R.raw.icon;
-	private File testImage;
-	private String projectName = UiTestUtils.DEFAULT_TEST_PROJECT_NAME;
+    private static final int IMAGE_FILE_ID = R.raw.icon;
+    private File testImage;
+    private String projectName = UiTestUtils.DEFAULT_TEST_PROJECT_NAME;
 
-	@Override
-	protected void setUp() throws Exception {
+    @Override
+    protected void setUp() throws Exception {
 
-		File projectFile = new File(Constants.DEFAULT_ROOT + "/" + projectName);
+        File projectFile = new File(Constants.DEFAULT_ROOT + "/" + projectName);
 
-		if (projectFile.exists()) {
-			UtilFile.deleteDirectory(projectFile);
-		}
+        if (projectFile.exists()) {
+            UtilFile.deleteDirectory(projectFile);
+        }
 
-		UiTestUtils.createEmptyProject();
-		Project project = new Project(getInstrumentation().getTargetContext(), projectName);
-		StorageHandler.getInstance().saveProject(project);
-		ProjectManager.getInstance().setProject(project);
+        UiTestUtils.createEmptyProject();
+        Project project = new Project(getInstrumentation().getTargetContext(), projectName);
+        StorageHandler.getInstance().saveProject(project);
+        ProjectManager.getInstance().setProject(project);
 
-		testImage = TestUtils.saveFileToProject(projectName, project.getDefaultScene().getName(), "testImage.png", IMAGE_FILE_ID, getInstrumentation()
-				.getContext(), TestUtils.TYPE_IMAGE_FILE);
+        testImage = TestUtils.saveFileToProject(projectName, project.getDefaultScene().getName(), "testImage.png", IMAGE_FILE_ID, getInstrumentation()
+                .getContext(), TestUtils.TYPE_IMAGE_FILE);
 
-		ScreenValues.SCREEN_HEIGHT = 200;
-		ScreenValues.SCREEN_WIDTH = 200;
-	}
+        ScreenValues.SCREEN_HEIGHT = 200;
+        ScreenValues.SCREEN_WIDTH = 200;
+    }
 
-	@Override
-	protected void tearDown() throws Exception {
-		File projectFile = new File(Constants.DEFAULT_ROOT + "/" + projectName);
+    @Override
+    protected void tearDown() throws Exception {
+        File projectFile = new File(Constants.DEFAULT_ROOT + "/" + projectName);
 
-		if (projectFile.exists()) {
-			UtilFile.deleteDirectory(projectFile);
-		}
-		if (testImage != null && testImage.exists()) {
-			testImage.delete();
-		}
-		super.tearDown();
-	}
+        if (projectFile.exists()) {
+            UtilFile.deleteDirectory(projectFile);
+        }
+        if (testImage != null && testImage.exists()) {
+            testImage.delete();
+        }
+        super.tearDown();
+    }
 
-	public void testNextLook() {
+    public void testNextLook() {
 
-		Sprite sprite = new SingleSprite("cat");
+        Sprite sprite = new SingleSprite("cat");
 
-		LookData lookData1 = new LookData();
-		lookData1.setLookFilename(testImage.getName());
-		lookData1.setLookName("testImage1");
-		sprite.getLookDataList().add(lookData1);
+        LookData lookData1 = new LookData();
+        lookData1.setLookFilename(testImage.getName());
+        lookData1.setLookName("testImage1");
+        sprite.getLookDataList().add(lookData1);
 
-		LookData lookData2 = new LookData();
-		lookData2.setLookFilename(testImage.getName());
-		lookData2.setLookName("testImage2");
-		sprite.getLookDataList().add(lookData2);
+        LookData lookData2 = new LookData();
+        lookData2.setLookFilename(testImage.getName());
+        lookData2.setLookName("testImage2");
+        sprite.getLookDataList().add(lookData2);
 
-		ActionFactory factory = sprite.getActionFactory();
-		Action setLookAction = factory.createSetLookAction(sprite, lookData1);
-		Action nextLookAction = factory.createNextLookAction(sprite);
+        ActionFactory factory = sprite.getActionFactory();
+        Action setLookAction = factory.createSetLookAction(sprite, lookData1);
+        Action nextLookAction = factory.createNextLookAction(sprite);
 
-		setLookAction.act(1.0f);
-		nextLookAction.act(1.0f);
+        setLookAction.act(1.0f);
+        nextLookAction.act(1.0f);
 
-		assertEquals("Look is not next look", lookData2, sprite.look.getLookData());
-	}
+        assertEquals("Look is not next look", lookData2, sprite.look.getLookData());
+    }
 
-	public void testLastLook() {
-		Sprite sprite = new SingleSprite("cat");
+    public void testLastLook() {
+        Sprite sprite = new SingleSprite("cat");
 
-		LookData lookData1 = new LookData();
-		lookData1.setLookFilename(testImage.getName());
-		lookData1.setLookName("testImage1");
-		lookData1.setLookFilename("testImage1");
-		sprite.getLookDataList().add(lookData1);
+        LookData lookData1 = new LookData();
+        lookData1.setLookFilename(testImage.getName());
+        lookData1.setLookName("testImage1");
+        lookData1.setLookFilename("testImage1");
+        sprite.getLookDataList().add(lookData1);
 
-		LookData lookData2 = new LookData();
-		lookData2.setLookFilename(testImage.getName());
-		lookData2.setLookName("testImage");
-		lookData2.setLookFilename("testImage2");
-		sprite.getLookDataList().add(lookData2);
+        LookData lookData2 = new LookData();
+        lookData2.setLookFilename(testImage.getName());
+        lookData2.setLookName("testImage");
+        lookData2.setLookFilename("testImage2");
+        sprite.getLookDataList().add(lookData2);
 
-		LookData lookData3 = new LookData();
-		lookData3.setLookFilename(testImage.getName());
-		lookData3.setLookName("testImage");
-		lookData3.setLookFilename("testImage3");
-		sprite.getLookDataList().add(lookData3);
+        LookData lookData3 = new LookData();
+        lookData3.setLookFilename(testImage.getName());
+        lookData3.setLookName("testImage");
+        lookData3.setLookFilename("testImage3");
+        sprite.getLookDataList().add(lookData3);
 
-		ActionFactory factory = sprite.getActionFactory();
-		Action setLookAction = factory.createSetLookAction(sprite, lookData3);
-		Action nextLookAction = factory.createNextLookAction(sprite);
+        ActionFactory factory = sprite.getActionFactory();
+        Action setLookAction = factory.createSetLookAction(sprite, lookData3);
+        Action nextLookAction = factory.createNextLookAction(sprite);
 
-		setLookAction.act(1.0f);
-		nextLookAction.act(1.0f);
+        setLookAction.act(1.0f);
+        nextLookAction.act(1.0f);
 
-		assertEquals("Look is not next look", lookData1, sprite.look.getLookData());
-	}
+        assertEquals("Look is not next look", lookData1, sprite.look.getLookData());
+    }
 
-	public void testLookGalleryNull() {
+    public void testLookGalleryNull() {
 
-		Sprite sprite = new SingleSprite("cat");
-		ActionFactory factory = sprite.getActionFactory();
-		Action nextLookAction = factory.createNextLookAction(sprite);
-		nextLookAction.act(1.0f);
+        Sprite sprite = new SingleSprite("cat");
+        ActionFactory factory = sprite.getActionFactory();
+        Action nextLookAction = factory.createNextLookAction(sprite);
+        nextLookAction.act(1.0f);
 
-		assertEquals("Look is not null", null, sprite.look.getLookData());
-	}
+        assertEquals("Look is not null", null, sprite.look.getLookData());
+    }
 
-	public void testLookGalleryWithOneLook() {
-		Sprite sprite = new SingleSprite("cat");
+    public void testLookGalleryWithOneLook() {
+        Sprite sprite = new SingleSprite("cat");
 
-		LookData lookData1 = new LookData();
-		lookData1.setLookFilename(testImage.getName());
-		lookData1.setLookName("testImage1");
-		sprite.getLookDataList().add(lookData1);
+        LookData lookData1 = new LookData();
+        lookData1.setLookFilename(testImage.getName());
+        lookData1.setLookName("testImage1");
+        sprite.getLookDataList().add(lookData1);
 
-		ActionFactory factory = sprite.getActionFactory();
-		Action setLookAction = factory.createSetLookAction(sprite, lookData1);
-		Action nextLookAction = factory.createNextLookAction(sprite);
+        ActionFactory factory = sprite.getActionFactory();
+        Action setLookAction = factory.createSetLookAction(sprite, lookData1);
+        Action nextLookAction = factory.createNextLookAction(sprite);
 
-		setLookAction.act(1.0f);
-		nextLookAction.act(1.0f);
+        setLookAction.act(1.0f);
+        nextLookAction.act(1.0f);
 
-		assertEquals("Wrong look after executing NextLookBrick with just one look", lookData1,
-				sprite.look.getLookData());
-	}
+        assertEquals("Wrong look after executing NextLookBrick with just one look", lookData1,
+                sprite.look.getLookData());
+    }
 
-	public void testNextLookWithNoLookSet() {
+    public void testNextLookWithNoLookSet() {
 
-		Sprite sprite = new SingleSprite("cat");
+        Sprite sprite = new SingleSprite("cat");
 
-		ActionFactory factory = sprite.getActionFactory();
-		Action nextLookAction = factory.createNextLookAction(sprite);
+        ActionFactory factory = sprite.getActionFactory();
+        Action nextLookAction = factory.createNextLookAction(sprite);
 
-		LookData lookData1 = new LookData();
-		lookData1.setLookFilename(testImage.getName());
-		lookData1.setLookName("testImage1");
-		sprite.getLookDataList().add(lookData1);
+        LookData lookData1 = new LookData();
+        lookData1.setLookFilename(testImage.getName());
+        lookData1.setLookName("testImage1");
+        sprite.getLookDataList().add(lookData1);
 
-		nextLookAction.act(1.0f);
+        nextLookAction.act(1.0f);
 
-		assertNull("No Custume should be set.", sprite.look.getLookData());
-	}
+        assertNull("No Custume should be set.", sprite.look.getLookData());
+    }
 }

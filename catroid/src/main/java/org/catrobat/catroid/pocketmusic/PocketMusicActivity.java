@@ -50,118 +50,118 @@ import java.util.Random;
 
 public class PocketMusicActivity extends BaseActivity {
 
-	private static final String TAG = PocketMusicActivity.class.getSimpleName();
+    private static final String TAG = PocketMusicActivity.class.getSimpleName();
 
-	private Project project;
+    private Project project;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		String fileName = getIntent().getStringExtra("FILENAME");
-		String title = getIntent().getStringExtra("TITLE");
+        String fileName = getIntent().getStringExtra("FILENAME");
+        String title = getIntent().getStringExtra("TITLE");
 
-		if (null != fileName) {
-			MidiToProjectConverter converter = new MidiToProjectConverter();
-			try {
-				SoundInfo soundInfo = new SoundInfo();
-				soundInfo.setSoundFileName(fileName);
+        if (null != fileName) {
+            MidiToProjectConverter converter = new MidiToProjectConverter();
+            try {
+                SoundInfo soundInfo = new SoundInfo();
+                soundInfo.setSoundFileName(fileName);
 
-				project = converter.convertMidiFileToProject(new File(soundInfo.getAbsolutePath()));
-				project.setFileName(fileName);
-				project.setName(title);
-			} catch (MidiException | IOException ignored) {
-			}
-		}
-		if (project == null) {
-			project = createEmptyProject();
-		}
+                project = converter.convertMidiFileToProject(new File(soundInfo.getAbsolutePath()));
+                project.setFileName(fileName);
+                project.setName(title);
+            } catch (MidiException | IOException ignored) {
+            }
+        }
+        if (project == null) {
+            project = createEmptyProject();
+        }
 
-		setContentView(R.layout.activity_pocketmusic);
-		ViewGroup content = (ViewGroup) findViewById(android.R.id.content);
+        setContentView(R.layout.activity_pocketmusic);
+        ViewGroup content = (ViewGroup) findViewById(android.R.id.content);
 
-		TrackView trackView = (TrackView) findViewById(R.id.musicdroid_note_grid);
-		trackView.setTrack(project.getTrack("Track 1"), project.getBeatsPerMinute());
+        TrackView trackView = (TrackView) findViewById(R.id.musicdroid_note_grid);
+        trackView.setTrack(project.getTrack("Track 1"), project.getBeatsPerMinute());
 
-		new ScrollController(content, project.getBeatsPerMinute());
-	}
+        new ScrollController(content, project.getBeatsPerMinute());
+    }
 
-	public SoundInfo getSoundInfoForTrack(boolean fileExists) {
-		SoundInfo soundInfo = new SoundInfo();
+    public SoundInfo getSoundInfoForTrack(boolean fileExists) {
+        SoundInfo soundInfo = new SoundInfo();
 
-		if (fileExists) {
-			soundInfo.setTitle(project.getName());
-			soundInfo.setSoundFileName(project.getFileName());
-		} else {
-			soundInfo.setTitle(getString(R.string.pocketmusic_recorded_filename));
+        if (fileExists) {
+            soundInfo.setTitle(project.getName());
+            soundInfo.setSoundFileName(project.getFileName());
+        } else {
+            soundInfo.setTitle(getString(R.string.pocketmusic_recorded_filename));
 
-			Random randomGenerator = new Random();
-			soundInfo.setSoundFileName("MUS-" + Math.abs(randomGenerator.nextInt()) + ".midi");
-		}
-		return soundInfo;
-	}
+            Random randomGenerator = new Random();
+            soundInfo.setSoundFileName("MUS-" + Math.abs(randomGenerator.nextInt()) + ".midi");
+        }
+        return soundInfo;
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				finish();
-				break;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-	@Override
-	public void finish() {
+    @Override
+    public void finish() {
 
-		if (null != project) {
+        if (null != project) {
 
-			boolean fileExists = project.getFileName() != null;
+            boolean fileExists = project.getFileName() != null;
 
-			TrackView tv = (TrackView) findViewById(R.id.musicdroid_note_grid);
-			Track track = TrackGridToTrackConverter.convertTrackGridToTrack(tv.getTrackGrid(), Project.DEFAULT_BEATS_PER_MINUTE);
+            TrackView tv = (TrackView) findViewById(R.id.musicdroid_note_grid);
+            Track track = TrackGridToTrackConverter.convertTrackGridToTrack(tv.getTrackGrid(), Project.DEFAULT_BEATS_PER_MINUTE);
 
-			if (track.isEmpty() && fileExists) {
-				new File(project.getFileName()).delete();
-				SoundInfo soundInfo = getSoundInfoForTrack(true);
-				ProjectManager.getInstance().getCurrentSprite().getSoundList().remove(soundInfo);
-			} else if (!track.isEmpty()) {
-				for (String trackName : project.getTrackNames()) {
-					project.putTrack(trackName, track);
-				}
+            if (track.isEmpty() && fileExists) {
+                new File(project.getFileName()).delete();
+                SoundInfo soundInfo = getSoundInfoForTrack(true);
+                ProjectManager.getInstance().getCurrentSprite().getSoundList().remove(soundInfo);
+            } else if (!track.isEmpty()) {
+                for (String trackName : project.getTrackNames()) {
+                    project.putTrack(trackName, track);
+                }
 
-				SoundInfo soundInfo = getSoundInfoForTrack(fileExists);
+                SoundInfo soundInfo = getSoundInfoForTrack(fileExists);
 
-				ProjectToMidiConverter projectToMidiConverter = new ProjectToMidiConverter();
+                ProjectToMidiConverter projectToMidiConverter = new ProjectToMidiConverter();
 
-				File initialFile = new File(soundInfo.getAbsolutePath());
-				try {
-					projectToMidiConverter.writeProjectAsMidi(project, initialFile);
-				} catch (IOException | MidiException e) {
-					Log.e(TAG, "Couldn't save midi file (" + soundInfo.getSoundFileName() + ").", e);
-				}
+                File initialFile = new File(soundInfo.getAbsolutePath());
+                try {
+                    projectToMidiConverter.writeProjectAsMidi(project, initialFile);
+                } catch (IOException | MidiException e) {
+                    Log.e(TAG, "Couldn't save midi file (" + soundInfo.getSoundFileName() + ").", e);
+                }
 
-				if (!fileExists) {
-					soundInfo.setSoundFileName(Utils.md5Checksum(soundInfo.getAbsolutePath()) + "_" + soundInfo.getSoundFileName());
-					File rename = new File(soundInfo.getAbsolutePath());
-					initialFile.renameTo(rename);
+                if (!fileExists) {
+                    soundInfo.setSoundFileName(Utils.md5Checksum(soundInfo.getAbsolutePath()) + "_" + soundInfo.getSoundFileName());
+                    File rename = new File(soundInfo.getAbsolutePath());
+                    initialFile.renameTo(rename);
 
-					ProjectManager.getInstance().getCurrentSprite().getSoundList().add(soundInfo);
-				}
-			}
-		}
-		super.finish();
-	}
+                    ProjectManager.getInstance().getCurrentSprite().getSoundList().add(soundInfo);
+                }
+            }
+        }
+        super.finish();
+    }
 
-	private Project createEmptyProject() {
-		int bpm = 60;
+    private Project createEmptyProject() {
+        int bpm = 60;
 
-		Project project = new Project("Untitled song", MusicalBeat.BEAT_4_4, bpm);
+        Project project = new Project("Untitled song", MusicalBeat.BEAT_4_4, bpm);
 
-		Track track = new Track(MusicalKey.VIOLIN, MusicalInstrument.VIOLIN);
+        Track track = new Track(MusicalKey.VIOLIN, MusicalInstrument.VIOLIN);
 
-		project.putTrack("Track 1", track);
+        project.putTrack("Track 1", track);
 
-		return project;
-	}
+        return project;
+    }
 }

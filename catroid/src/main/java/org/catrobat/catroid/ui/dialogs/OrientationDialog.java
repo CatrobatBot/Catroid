@@ -45,97 +45,97 @@ import java.io.IOException;
 
 public class OrientationDialog extends DialogFragment {
 
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_orientation_project";
+    public static final String DIALOG_FRAGMENT_TAG = "dialog_orientation_project";
 
-	private static final String TAG = OrientationDialog.class.getSimpleName();
+    private static final String TAG = OrientationDialog.class.getSimpleName();
 
-	private Dialog orientationDialog;
-	private String projectName;
-	private RadioButton landscapeMode;
-	private boolean createEmptyProject;
-	private boolean createLandscapeProject = false;
+    private Dialog orientationDialog;
+    private String projectName;
+    private RadioButton landscapeMode;
+    private boolean createEmptyProject;
+    private boolean createLandscapeProject = false;
 
-	private boolean openedFromProjectList = false;
+    private boolean openedFromProjectList = false;
 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_orientation_new_project, null);
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_orientation_new_project, null);
 
-		orientationDialog = new AlertDialog.Builder(getActivity()).setView(dialogView)
-				.setTitle(R.string.project_orientation_title)
-				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				}).create();
+        orientationDialog = new AlertDialog.Builder(getActivity()).setView(dialogView)
+                .setTitle(R.string.project_orientation_title)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).create();
 
-		orientationDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-			@Override
-			public void onShow(DialogInterface dialog) {
-				if (getActivity() == null) {
-					Log.e(TAG, "onShow() Activity was null!");
-					return;
-				}
-				Button positiveButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-				positiveButton.setOnClickListener(new View.OnClickListener() {
+        orientationDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                if (getActivity() == null) {
+                    Log.e(TAG, "onShow() Activity was null!");
+                    return;
+                }
+                Button positiveButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                positiveButton.setOnClickListener(new View.OnClickListener() {
 
-					@Override
-					public void onClick(View view) {
-						handleOkButtonClick();
-					}
-				});
-			}
-		});
-		landscapeMode = (RadioButton) dialogView.findViewById(R.id.landscape_mode);
+                    @Override
+                    public void onClick(View view) {
+                        handleOkButtonClick();
+                    }
+                });
+            }
+        });
+        landscapeMode = (RadioButton) dialogView.findViewById(R.id.landscape_mode);
 
-		return orientationDialog;
-	}
+        return orientationDialog;
+    }
 
-	protected void handleOkButtonClick() {
-		createLandscapeProject = landscapeMode.isChecked();
+    protected void handleOkButtonClick() {
+        createLandscapeProject = landscapeMode.isChecked();
 
-		try {
-			ProjectManager.getInstance().initializeNewProject(projectName, getActivity(), createEmptyProject, false, createLandscapeProject);
-		} catch (IllegalArgumentException illegalArgumentException) {
-			Utils.showErrorDialog(getActivity(), R.string.error_project_exists);
-			return;
-		} catch (IOException ioException) {
-			Utils.showErrorDialog(getActivity(), R.string.error_new_project);
-			Log.e(TAG, Log.getStackTraceString(ioException));
-			dismiss();
-			return;
-		}
+        try {
+            ProjectManager.getInstance().initializeNewProject(projectName, getActivity(), createEmptyProject, false, createLandscapeProject);
+        } catch (IllegalArgumentException illegalArgumentException) {
+            Utils.showErrorDialog(getActivity(), R.string.error_project_exists);
+            return;
+        } catch (IOException ioException) {
+            Utils.showErrorDialog(getActivity(), R.string.error_new_project);
+            Log.e(TAG, Log.getStackTraceString(ioException));
+            dismiss();
+            return;
+        }
 
-		Intent intent = new Intent(getActivity(), ProjectActivity.class);
+        Intent intent = new Intent(getActivity(), ProjectActivity.class);
 
-		intent.putExtra(Constants.PROJECTNAME_TO_LOAD, projectName);
+        intent.putExtra(Constants.PROJECTNAME_TO_LOAD, projectName);
 
-		if (isOpenedFromProjectList()) {
-			intent.putExtra(Constants.PROJECT_OPENED_FROM_PROJECTS_LIST, true);
-		}
+        if (isOpenedFromProjectList()) {
+            intent.putExtra(Constants.PROJECT_OPENED_FROM_PROJECTS_LIST, true);
+        }
 
-		getActivity().startActivity(intent);
+        getActivity().startActivity(intent);
 
-		dismiss();
-	}
+        dismiss();
+    }
 
-	public boolean isOpenedFromProjectList() {
-		return openedFromProjectList;
-	}
+    public boolean isOpenedFromProjectList() {
+        return openedFromProjectList;
+    }
 
-	public void setOpenedFromProjectList(boolean openedFromProjectList) {
-		this.openedFromProjectList = openedFromProjectList;
-	}
+    public void setOpenedFromProjectList(boolean openedFromProjectList) {
+        this.openedFromProjectList = openedFromProjectList;
+    }
 
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
 
-	public void setCreateEmptyProject(boolean isChecked) {
-		this.createEmptyProject = isChecked;
-	}
+    public void setCreateEmptyProject(boolean isChecked) {
+        this.createEmptyProject = isChecked;
+    }
 }

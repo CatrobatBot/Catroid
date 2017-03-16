@@ -38,72 +38,72 @@ import java.io.File;
 
 public final class PhysicsTestUtils {
 
-	private PhysicsTestUtils() {
-		throw new AssertionError();
-	}
+    private PhysicsTestUtils() {
+        throw new AssertionError();
+    }
 
-	public static PhysicsObject createPhysicsObject(PhysicsWorld physicsWorld, PhysicsObject.Type type, float width,
-			float height) {
-		return createPhysicsObject(physicsWorld, type, createRectanglePolygonShape(width, height));
-	}
+    public static PhysicsObject createPhysicsObject(PhysicsWorld physicsWorld, PhysicsObject.Type type, float width,
+                                                    float height) {
+        return createPhysicsObject(physicsWorld, type, createRectanglePolygonShape(width, height));
+    }
 
-	public static PolygonShape createRectanglePolygonShape(float width, float height) {
-		PolygonShape rectangle = new PolygonShape();
-		rectangle.setAsBox(width / 2.0f, height / 2.0f);
-		return rectangle;
-	}
+    public static PolygonShape createRectanglePolygonShape(float width, float height) {
+        PolygonShape rectangle = new PolygonShape();
+        rectangle.setAsBox(width / 2.0f, height / 2.0f);
+        return rectangle;
+    }
 
-	public static PhysicsObject createPhysicsObject(PhysicsWorld physicsWorld, PhysicsObject.Type type, Shape shape) {
-		PhysicsObject physicsObject = physicsWorld.getPhysicsObject(new SingleSprite("TestSprite"));
+    public static PhysicsObject createPhysicsObject(PhysicsWorld physicsWorld, PhysicsObject.Type type, Shape shape) {
+        PhysicsObject physicsObject = physicsWorld.getPhysicsObject(new SingleSprite("TestSprite"));
 
-		if (type != null) {
-			physicsObject.setType(type);
-		}
+        if (type != null) {
+            physicsObject.setType(type);
+        }
 
-		if (shape != null) {
-			physicsObject.setShape(new Shape[] { shape });
-		}
-		return physicsObject;
-	}
+        if (shape != null) {
+            physicsObject.setShape(new Shape[]{shape});
+        }
+        return physicsObject;
+    }
 
-	public static PhysicsObject createPhysicsObject(PhysicsWorld physicsWorld, PhysicsObject.Type type) {
-		return createPhysicsObject(physicsWorld, type, null);
-	}
+    public static PhysicsObject createPhysicsObject(PhysicsWorld physicsWorld, PhysicsObject.Type type) {
+        return createPhysicsObject(physicsWorld, type, null);
+    }
 
-	public static PhysicsObject createPhysicsObject(PhysicsWorld physicsWorld) {
-		return createPhysicsObject(physicsWorld, null, null);
-	}
+    public static PhysicsObject createPhysicsObject(PhysicsWorld physicsWorld) {
+        return createPhysicsObject(physicsWorld, null, null);
+    }
 
-	public static Body getBody(PhysicsObject physicsObject) {
-		return (Body) Reflection.getPrivateField(physicsObject, "body");
-	}
+    public static Body getBody(PhysicsObject physicsObject) {
+        return (Body) Reflection.getPrivateField(physicsObject, "body");
+    }
 
-	public static PhysicsObject.Type getType(PhysicsObject physicsObject) {
-		return (PhysicsObject.Type) Reflection.getPrivateField(physicsObject, "type");
-	}
+    public static PhysicsObject.Type getType(PhysicsObject physicsObject) {
+        return (PhysicsObject.Type) Reflection.getPrivateField(physicsObject, "type");
+    }
 
-	public static float getMass(PhysicsObject physicsObject) {
-		return (Float) Reflection.getPrivateField(physicsObject, "mass");
-	}
+    public static float getMass(PhysicsObject physicsObject) {
+        return (Float) Reflection.getPrivateField(physicsObject, "mass");
+    }
 
-	public static Shape[] getShapes(PhysicsObject physicsObject) {
-		return (Shape[]) Reflection.getPrivateField(physicsObject, "shapes");
-	}
+    public static Shape[] getShapes(PhysicsObject physicsObject) {
+        return (Shape[]) Reflection.getPrivateField(physicsObject, "shapes");
+    }
 
-	public static FixtureDef getFixtureDef(PhysicsObject physicsObject) {
-		return (FixtureDef) Reflection.getPrivateField(physicsObject, "fixtureDef");
-	}
+    public static FixtureDef getFixtureDef(PhysicsObject physicsObject) {
+        return (FixtureDef) Reflection.getPrivateField(physicsObject, "fixtureDef");
+    }
 
-	public static String getInternalImageFilenameFromFilename(String filename) {
-		return Utils.md5Checksum(filename) + "_" + filename;
-	}
+    public static String getInternalImageFilenameFromFilename(String filename) {
+        return Utils.md5Checksum(filename) + "_" + filename;
+    }
 
-	public static LookData generateLookData(File testImage) {
-		LookData lookData = new LookData();
-		lookData.setLookFilename(testImage.getName());
-		lookData.setLookName(testImage.getName());
-		Pixmap pixmap = Utils.getPixmapFromFile(testImage);
-		lookData.setPixmap(pixmap);
-		return lookData;
-	}
+    public static LookData generateLookData(File testImage) {
+        LookData lookData = new LookData();
+        lookData.setLookFilename(testImage.getName());
+        lookData.setLookName(testImage.getName());
+        Pixmap pixmap = Utils.getPixmapFromFile(testImage);
+        lookData.setPixmap(pixmap);
+        return lookData;
+    }
 }

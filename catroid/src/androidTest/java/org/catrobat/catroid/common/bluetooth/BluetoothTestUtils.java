@@ -40,109 +40,109 @@ import java.util.Arrays;
 import java.util.UUID;
 
 public final class BluetoothTestUtils {
-	private static final String TAG = BluetoothTestUtils.class.getSimpleName();
+    private static final String TAG = BluetoothTestUtils.class.getSimpleName();
 
-	private BluetoothTestUtils() {
-	}
+    private BluetoothTestUtils() {
+    }
 
-	static byte[] intToByteArray(int i) {
-		return ByteBuffer.allocate(4).putInt(i).array();
-	}
+    static byte[] intToByteArray(int i) {
+        return ByteBuffer.allocate(4).putInt(i).array();
+    }
 
-	static byte[] getSubArray(byte[] buffer, int offset) {
-		if (buffer == null) {
-			return null;
-		}
+    static byte[] getSubArray(byte[] buffer, int offset) {
+        if (buffer == null) {
+            return null;
+        }
 
-		return Arrays.copyOfRange(buffer, offset, buffer.length);
-	}
+        return Arrays.copyOfRange(buffer, offset, buffer.length);
+    }
 
-	static byte[] getSubArray(byte[] buffer, int offset, int count) {
-		if (buffer == null) {
-			return null;
-		}
+    static byte[] getSubArray(byte[] buffer, int offset, int count) {
+        if (buffer == null) {
+            return null;
+        }
 
-		Assert.assertTrue("count can't be negative", count >= 0);
-		Assert.assertTrue("wrong offset or count", buffer.length - offset >= count);
+        Assert.assertTrue("count can't be negative", count >= 0);
+        Assert.assertTrue("wrong offset or count", buffer.length - offset >= count);
 
-		return Arrays.copyOfRange(buffer, offset, offset + count);
-	}
+        return Arrays.copyOfRange(buffer, offset, offset + count);
+    }
 
-	static void hookInConnection(final BluetoothConnection connectionProxy) {
-		ConnectBluetoothDeviceActivity.setConnectionFactory(new BluetoothConnectionFactory() {
-			@Override
-			public <T extends BluetoothDevice> BluetoothConnection createBTConnectionForDevice(
-					Class<T> bluetoothDeviceType, String address, UUID deviceUUID, Context applicationContext) {
-				return connectionProxy;
-			}
-		});
-	}
+    static void hookInConnection(final BluetoothConnection connectionProxy) {
+        ConnectBluetoothDeviceActivity.setConnectionFactory(new BluetoothConnectionFactory() {
+            @Override
+            public <T extends BluetoothDevice> BluetoothConnection createBTConnectionForDevice(
+                    Class<T> bluetoothDeviceType, String address, UUID deviceUUID, Context applicationContext) {
+                return connectionProxy;
+            }
+        });
+    }
 
-	static void hookInConnectionFactoryWithBluetoothConnectionProxy(final BluetoothLogger logger) {
-		ConnectBluetoothDeviceActivity.setConnectionFactory(new BluetoothConnectionFactory() {
-			@Override
-			public <T extends BluetoothDevice> BluetoothConnection createBTConnectionForDevice(Class<T> device, String address, UUID deviceUUID, Context applicationContext) {
-				return new BluetoothConnectionProxy(address, deviceUUID, logger);
-			}
-		});
-	}
+    static void hookInConnectionFactoryWithBluetoothConnectionProxy(final BluetoothLogger logger) {
+        ConnectBluetoothDeviceActivity.setConnectionFactory(new BluetoothConnectionFactory() {
+            @Override
+            public <T extends BluetoothDevice> BluetoothConnection createBTConnectionForDevice(Class<T> device, String address, UUID deviceUUID, Context applicationContext) {
+                return new BluetoothConnectionProxy(address, deviceUUID, logger);
+            }
+        });
+    }
 
-	static void hookInTestDevice(final BluetoothDevice testDevice) {
-		ConnectBluetoothDeviceActivity.setDeviceFactory(new BluetoothDeviceFactory() {
-			@Override
-			public <T extends BluetoothDevice> BluetoothDevice createDevice(Class<T> service, Context applicationContext) {
-				return testDevice;
-			}
-		});
-	}
+    static void hookInTestDevice(final BluetoothDevice testDevice) {
+        ConnectBluetoothDeviceActivity.setDeviceFactory(new BluetoothDeviceFactory() {
+            @Override
+            public <T extends BluetoothDevice> BluetoothDevice createDevice(Class<T> service, Context applicationContext) {
+                return testDevice;
+            }
+        });
+    }
 
-	static void resetConnectionHooks() {
-		ConnectBluetoothDeviceActivity.setConnectionFactory(null);
-		ConnectBluetoothDeviceActivity.setDeviceFactory(null);
-	}
+    static void resetConnectionHooks() {
+        ConnectBluetoothDeviceActivity.setConnectionFactory(null);
+        ConnectBluetoothDeviceActivity.setDeviceFactory(null);
+    }
 
-	public static void enableBluetooth() {
-		BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-		Assert.assertTrue("Bluetooth not supported on device", bluetoothAdapter != null);
+    public static void enableBluetooth() {
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        Assert.assertTrue("Bluetooth not supported on device", bluetoothAdapter != null);
 
-		if (!bluetoothAdapter.isEnabled()) {
-			bluetoothAdapter.enable();
-			try {
-				Thread.sleep(4000);
-			} catch (InterruptedException e) {
-				Log.w(TAG, "Sleep was interrupted", e);
-			}
-		}
-	}
+        if (!bluetoothAdapter.isEnabled()) {
+            bluetoothAdapter.enable();
+            try {
+                Thread.sleep(4000);
+            } catch (InterruptedException e) {
+                Log.w(TAG, "Sleep was interrupted", e);
+            }
+        }
+    }
 
-	public static void disableBluetooth() {
+    public static void disableBluetooth() {
 
-		BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-		Assert.assertTrue("Bluetooth not supported on device", bluetoothAdapter != null);
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        Assert.assertTrue("Bluetooth not supported on device", bluetoothAdapter != null);
 
-		if (bluetoothAdapter.isEnabled()) {
-			bluetoothAdapter.disable();
-			try {
-				Thread.sleep(4000);
-			} catch (InterruptedException e) {
-				Log.w(TAG, "Sleep was interrupted", e);
-			}
-		}
-	}
+        if (bluetoothAdapter.isEnabled()) {
+            bluetoothAdapter.disable();
+            try {
+                Thread.sleep(4000);
+            } catch (InterruptedException e) {
+                Log.w(TAG, "Sleep was interrupted", e);
+            }
+        }
+    }
 
-	public static boolean isBluetoothEnabled() {
-		BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-		Assert.assertTrue("Bluetooth not supported on device", bluetoothAdapter != null);
+    public static boolean isBluetoothEnabled() {
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        Assert.assertTrue("Bluetooth not supported on device", bluetoothAdapter != null);
 
-		return bluetoothAdapter.isEnabled();
-	}
+        return bluetoothAdapter.isEnabled();
+    }
 
-	public static void addPairedDevice(final String deviceName, final ConnectBluetoothDeviceActivity activity, Instrumentation instrumentation) {
-		instrumentation.runOnMainSync(new Runnable() {
-			@Override
-			public void run() {
-				activity.addPairedDevice(deviceName + "-00:00:00:00:00:00");
-			}
-		});
-	}
+    public static void addPairedDevice(final String deviceName, final ConnectBluetoothDeviceActivity activity, Instrumentation instrumentation) {
+        instrumentation.runOnMainSync(new Runnable() {
+            @Override
+            public void run() {
+                activity.addPairedDevice(deviceName + "-00:00:00:00:00:00");
+            }
+        });
+    }
 }

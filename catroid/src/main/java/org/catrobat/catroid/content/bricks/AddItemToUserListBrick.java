@@ -51,139 +51,139 @@ import java.util.List;
 
 public class AddItemToUserListBrick extends UserListBrick {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public AddItemToUserListBrick() {
-		addAllowedBrickField(BrickField.LIST_ADD_ITEM);
-	}
+    public AddItemToUserListBrick() {
+        addAllowedBrickField(BrickField.LIST_ADD_ITEM);
+    }
 
-	public AddItemToUserListBrick(Formula userListFormula, UserList userList) {
-		initializeBrickFields(userListFormula);
-		this.userList = userList;
-	}
+    public AddItemToUserListBrick(Formula userListFormula, UserList userList) {
+        initializeBrickFields(userListFormula);
+        this.userList = userList;
+    }
 
-	public AddItemToUserListBrick(double value) {
-		initializeBrickFields(new Formula(value));
-	}
+    public AddItemToUserListBrick(double value) {
+        initializeBrickFields(new Formula(value));
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createAddItemToUserListAction(sprite,
-				getFormulaWithBrickField(BrickField.LIST_ADD_ITEM), userList));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createAddItemToUserListAction(sprite,
+                getFormulaWithBrickField(BrickField.LIST_ADD_ITEM), userList));
+        return null;
+    }
 
-	@Override
-	public View getView(final Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		if (view == null) {
-			alphaValue = 255;
-		}
+    @Override
+    public View getView(final Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        if (view == null) {
+            alphaValue = 255;
+        }
 
-		view = View.inflate(context, R.layout.brick_add_item_to_userlist, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
-		setCheckboxView(R.id.brick_add_item_to_userlist_checkbox);
+        view = View.inflate(context, R.layout.brick_add_item_to_userlist, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        setCheckboxView(R.id.brick_add_item_to_userlist_checkbox);
 
-		TextView textField = (TextView) view.findViewById(R.id.brick_add_item_to_userlist_edit_text);
+        TextView textField = (TextView) view.findViewById(R.id.brick_add_item_to_userlist_edit_text);
 
-		getFormulaWithBrickField(BrickField.LIST_ADD_ITEM).setTextFieldId(R.id.brick_add_item_to_userlist_edit_text);
-		getFormulaWithBrickField(BrickField.LIST_ADD_ITEM).refreshTextField(view);
+        getFormulaWithBrickField(BrickField.LIST_ADD_ITEM).setTextFieldId(R.id.brick_add_item_to_userlist_edit_text);
+        getFormulaWithBrickField(BrickField.LIST_ADD_ITEM).refreshTextField(view);
 
-		textField.setOnClickListener(this);
+        textField.setOnClickListener(this);
 
-		Spinner userListSpinner = (Spinner) view.findViewById(R.id.add_item_to_userlist_spinner);
-		DataAdapter dataAdapter = ProjectManager.getInstance().getCurrentScene().getDataContainer()
-				.createDataAdapter(context, ProjectManager.getInstance().getCurrentSprite());
-		UserListAdapterWrapper userListAdapterWrapper = new UserListAdapterWrapper(context, dataAdapter);
-		userListAdapterWrapper.setItemLayout(android.R.layout.simple_spinner_item, android.R.id.text1);
+        Spinner userListSpinner = (Spinner) view.findViewById(R.id.add_item_to_userlist_spinner);
+        DataAdapter dataAdapter = ProjectManager.getInstance().getCurrentScene().getDataContainer()
+                .createDataAdapter(context, ProjectManager.getInstance().getCurrentSprite());
+        UserListAdapterWrapper userListAdapterWrapper = new UserListAdapterWrapper(context, dataAdapter);
+        userListAdapterWrapper.setItemLayout(android.R.layout.simple_spinner_item, android.R.id.text1);
 
-		userListSpinner.setAdapter(userListAdapterWrapper);
+        userListSpinner.setAdapter(userListAdapterWrapper);
 
-		setSpinnerSelection(userListSpinner, null);
+        setSpinnerSelection(userListSpinner, null);
 
-		userListSpinner.setOnTouchListener(new OnTouchListener() {
+        userListSpinner.setOnTouchListener(new OnTouchListener() {
 
-			@Override
-			public boolean onTouch(View view, MotionEvent event) {
-				if (event.getAction() == MotionEvent.ACTION_DOWN
-						&& (((Spinner) view).getSelectedItemPosition() == 0 && ((Spinner) view).getAdapter().getCount() == 1)) {
-					NewDataDialog dialog = new NewDataDialog((Spinner) view, NewDataDialog.DialogType.USER_LIST);
-					dialog.addUserListDialogListener(AddItemToUserListBrick.this);
-					dialog.show(((Activity) view.getContext()).getFragmentManager(),
-							NewDataDialog.DIALOG_FRAGMENT_TAG);
-					return true;
-				}
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN
+                        && (((Spinner) view).getSelectedItemPosition() == 0 && ((Spinner) view).getAdapter().getCount() == 1)) {
+                    NewDataDialog dialog = new NewDataDialog((Spinner) view, NewDataDialog.DialogType.USER_LIST);
+                    dialog.addUserListDialogListener(AddItemToUserListBrick.this);
+                    dialog.show(((Activity) view.getContext()).getFragmentManager(),
+                            NewDataDialog.DIALOG_FRAGMENT_TAG);
+                    return true;
+                }
 
-				return false;
-			}
-		});
-		userListSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				if (position == 0 && ((UserListAdapterWrapper) parent.getAdapter()).isTouchInDropDownView()) {
-					NewDataDialog dialog = new NewDataDialog((Spinner) parent, NewDataDialog.DialogType.USER_LIST);
-					dialog.addUserListDialogListener(AddItemToUserListBrick.this);
-					int spinnerPos = ((UserListAdapterWrapper) parent.getAdapter())
-							.getPositionOfItem(userList);
-					dialog.setUserVariableIfCancel(spinnerPos);
-					dialog.show(((Activity) view.getContext()).getFragmentManager(),
-							NewDataDialog.DIALOG_FRAGMENT_TAG);
-				}
-				((UserListAdapterWrapper) parent.getAdapter()).resetIsTouchInDropDownView();
-				userList = (UserList) parent.getItemAtPosition(position);
-			}
+                return false;
+            }
+        });
+        userListSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0 && ((UserListAdapterWrapper) parent.getAdapter()).isTouchInDropDownView()) {
+                    NewDataDialog dialog = new NewDataDialog((Spinner) parent, NewDataDialog.DialogType.USER_LIST);
+                    dialog.addUserListDialogListener(AddItemToUserListBrick.this);
+                    int spinnerPos = ((UserListAdapterWrapper) parent.getAdapter())
+                            .getPositionOfItem(userList);
+                    dialog.setUserVariableIfCancel(spinnerPos);
+                    dialog.show(((Activity) view.getContext()).getFragmentManager(),
+                            NewDataDialog.DIALOG_FRAGMENT_TAG);
+                }
+                ((UserListAdapterWrapper) parent.getAdapter()).resetIsTouchInDropDownView();
+                userList = (UserList) parent.getItemAtPosition(position);
+            }
 
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-				userList = null;
-			}
-		});
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                userList = null;
+            }
+        });
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		View prototypeView = View.inflate(context, R.layout.brick_add_item_to_userlist, null);
-		Spinner userListSpinner = (Spinner) prototypeView.findViewById(R.id.add_item_to_userlist_spinner);
+    @Override
+    public View getPrototypeView(Context context) {
+        View prototypeView = View.inflate(context, R.layout.brick_add_item_to_userlist, null);
+        Spinner userListSpinner = (Spinner) prototypeView.findViewById(R.id.add_item_to_userlist_spinner);
 
-		DataAdapter dataAdapter = ProjectManager.getInstance().getCurrentScene().getDataContainer()
-				.createDataAdapter(context, ProjectManager.getInstance().getCurrentSprite());
+        DataAdapter dataAdapter = ProjectManager.getInstance().getCurrentScene().getDataContainer()
+                .createDataAdapter(context, ProjectManager.getInstance().getCurrentSprite());
 
-		UserListAdapterWrapper userListAdapterWrapper = new UserListAdapterWrapper(context, dataAdapter);
+        UserListAdapterWrapper userListAdapterWrapper = new UserListAdapterWrapper(context, dataAdapter);
 
-		userListAdapterWrapper.setItemLayout(android.R.layout.simple_spinner_item, android.R.id.text1);
-		userListSpinner.setAdapter(userListAdapterWrapper);
-		setSpinnerSelection(userListSpinner, null);
+        userListAdapterWrapper.setItemLayout(android.R.layout.simple_spinner_item, android.R.id.text1);
+        userListSpinner.setAdapter(userListAdapterWrapper);
+        setSpinnerSelection(userListSpinner, null);
 
-		TextView textAddItemToList = (TextView) prototypeView
-				.findViewById(R.id.brick_add_item_to_userlist_edit_text);
-		textAddItemToList.setText(String.valueOf(BrickValues.ADD_ITEM_TO_USERLIST));
+        TextView textAddItemToList = (TextView) prototypeView
+                .findViewById(R.id.brick_add_item_to_userlist_edit_text);
+        textAddItemToList.setText(String.valueOf(BrickValues.ADD_ITEM_TO_USERLIST));
 
-		return prototypeView;
-	}
+        return prototypeView;
+    }
 
-	@Override
-	public Brick clone() {
-		AddItemToUserListBrick clonedBrick = new AddItemToUserListBrick(getFormulaWithBrickField(BrickField.LIST_ADD_ITEM).clone(), userList);
-		clonedBrick.setBackPackedData(new BackPackedListData(backPackedData));
-		return clonedBrick;
-	}
+    @Override
+    public Brick clone() {
+        AddItemToUserListBrick clonedBrick = new AddItemToUserListBrick(getFormulaWithBrickField(BrickField.LIST_ADD_ITEM).clone(), userList);
+        clonedBrick.setBackPackedData(new BackPackedListData(backPackedData));
+        return clonedBrick;
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		FormulaEditorFragment.showFragment(view, this, BrickField.LIST_ADD_ITEM);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        FormulaEditorFragment.showFragment(view, this, BrickField.LIST_ADD_ITEM);
+    }
 
-	private void initializeBrickFields(Formula listAddItemFormula) {
-		addAllowedBrickField(BrickField.LIST_ADD_ITEM);
-		setFormulaWithBrickField(BrickField.LIST_ADD_ITEM, listAddItemFormula);
-	}
+    private void initializeBrickFields(Formula listAddItemFormula) {
+        addAllowedBrickField(BrickField.LIST_ADD_ITEM);
+        setFormulaWithBrickField(BrickField.LIST_ADD_ITEM, listAddItemFormula);
+    }
 
-	@Override
-	public void updateReferenceAfterMerge(Scene into, Scene from) {
-		super.updateUserListReference(into, from);
-	}
+    @Override
+    public void updateReferenceAfterMerge(Scene into, Scene from) {
+        super.updateUserListReference(into, from);
+    }
 }

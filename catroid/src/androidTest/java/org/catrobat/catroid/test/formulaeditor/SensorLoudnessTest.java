@@ -31,23 +31,23 @@ import org.catrobat.catroid.test.utils.SimulatedSoundRecorder;
 
 public class SensorLoudnessTest extends InstrumentationTestCase {
 
-	@Override
-	public void tearDown() throws Exception {
-		SensorHandler.stopSensorListeners();
-		Reflection.setPrivateField(SensorLoudness.class, "instance", null);
-		super.tearDown();
-	}
+    @Override
+    public void tearDown() throws Exception {
+        SensorHandler.stopSensorListeners();
+        Reflection.setPrivateField(SensorLoudness.class, "instance", null);
+        super.tearDown();
+    }
 
-	public void testMicRelease() {
-		//Initialize
-		SensorLoudness.getSensorLoudness();
-		SensorLoudness loudnessSensor = (SensorLoudness) Reflection.getPrivateField(SensorLoudness.class, "instance");
-		SimulatedSoundRecorder simSoundRec = new SimulatedSoundRecorder("/dev/null");
-		Reflection.setPrivateField(loudnessSensor, "recorder", simSoundRec);
+    public void testMicRelease() {
+        //Initialize
+        SensorLoudness.getSensorLoudness();
+        SensorLoudness loudnessSensor = (SensorLoudness) Reflection.getPrivateField(SensorLoudness.class, "instance");
+        SimulatedSoundRecorder simSoundRec = new SimulatedSoundRecorder("/dev/null");
+        Reflection.setPrivateField(loudnessSensor, "recorder", simSoundRec);
 
-		SensorHandler.startSensorListener(getInstrumentation().getTargetContext());
-		assertEquals("LoudnessSensor not startet recording, isRecording()", true, simSoundRec.isRecording());
-		SensorHandler.stopSensorListeners();
-		assertEquals("LoudnessSensor not stopped recording, isRecording()", false, simSoundRec.isRecording());
-	}
+        SensorHandler.startSensorListener(getInstrumentation().getTargetContext());
+        assertEquals("LoudnessSensor not startet recording, isRecording()", true, simSoundRec.isRecording());
+        SensorHandler.stopSensorListeners();
+        assertEquals("LoudnessSensor not stopped recording, isRecording()", false, simSoundRec.isRecording());
+    }
 }

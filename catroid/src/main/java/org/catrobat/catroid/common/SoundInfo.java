@@ -34,145 +34,145 @@ import java.io.Serializable;
 
 public class SoundInfo implements Serializable, Comparable<SoundInfo>, Cloneable {
 
-	private static final long serialVersionUID = 1L;
-	private static final String TAG = SoundInfo.class.getSimpleName();
-	public transient boolean isPlaying;
-	private transient boolean isBackpackSoundInfo;
-	private String name;
-	private String fileName;
+    private static final long serialVersionUID = 1L;
+    private static final String TAG = SoundInfo.class.getSimpleName();
+    public transient boolean isPlaying;
+    private transient boolean isBackpackSoundInfo;
+    private String name;
+    private String fileName;
 
-	public SoundInfo() {
-	}
+    public SoundInfo() {
+    }
 
-	public SoundInfo(String name, String fileName) {
-		setTitle(name);
-		setSoundFileName(fileName);
-	}
+    public SoundInfo(String name, String fileName) {
+        setTitle(name);
+        setSoundFileName(fileName);
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof SoundInfo)) {
-			return false;
-		}
-		if (obj == this) {
-			return true;
-		}
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof SoundInfo)) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
 
-		SoundInfo soundInfo = (SoundInfo) obj;
-		if (soundInfo.fileName.equals(this.fileName) && soundInfo.name.equals(this.name)) {
-			return true;
-		}
-		return false;
-	}
+        SoundInfo soundInfo = (SoundInfo) obj;
+        if (soundInfo.fileName.equals(this.fileName) && soundInfo.name.equals(this.name)) {
+            return true;
+        }
+        return false;
+    }
 
-	@Override
-	public int hashCode() {
-		return name.hashCode() + fileName.hashCode() + super.hashCode();
-	}
+    @Override
+    public int hashCode() {
+        return name.hashCode() + fileName.hashCode() + super.hashCode();
+    }
 
-	@Override
-	public SoundInfo clone() {
-		SoundInfo cloneSoundInfo = new SoundInfo(this.name, this.fileName);
+    @Override
+    public SoundInfo clone() {
+        SoundInfo cloneSoundInfo = new SoundInfo(this.name, this.fileName);
 
-		try {
-			ProjectManager.getInstance().getFileChecksumContainer().incrementUsage(getAbsolutePath());
-		} catch (FileNotFoundException fileNotFoundexception) {
-			Log.e(TAG, Log.getStackTraceString(fileNotFoundexception));
-		}
+        try {
+            ProjectManager.getInstance().getFileChecksumContainer().incrementUsage(getAbsolutePath());
+        } catch (FileNotFoundException fileNotFoundexception) {
+            Log.e(TAG, Log.getStackTraceString(fileNotFoundexception));
+        }
 
-		return cloneSoundInfo;
-	}
+        return cloneSoundInfo;
+    }
 
-	public String getAbsolutePath() {
-		if (fileName != null) {
-			if (isBackpackSoundInfo) {
-				return Utils.buildPath(getPathToBackPackSoundDirectory(), fileName);
-			} else {
-				return Utils.buildPath(getPathToSoundDirectory(), fileName);
-			}
-		} else {
-			return null;
-		}
-	}
+    public String getAbsolutePath() {
+        if (fileName != null) {
+            if (isBackpackSoundInfo) {
+                return Utils.buildPath(getPathToBackPackSoundDirectory(), fileName);
+            } else {
+                return Utils.buildPath(getPathToSoundDirectory(), fileName);
+            }
+        } else {
+            return null;
+        }
+    }
 
-	public String getAbsoluteProjectPath() {
-		if (fileName != null) {
-			return Utils.buildPath(getPathToSoundDirectory(), fileName);
-		} else {
-			return null;
-		}
-	}
+    public String getAbsoluteProjectPath() {
+        if (fileName != null) {
+            return Utils.buildPath(getPathToSoundDirectory(), fileName);
+        } else {
+            return null;
+        }
+    }
 
-	public String getAbsoluteBackPackPath() {
-		if (fileName != null) {
-			return Utils.buildPath(getPathToBackPackSoundDirectory(), fileName);
-		} else {
-			return null;
-		}
-	}
+    public String getAbsoluteBackPackPath() {
+        if (fileName != null) {
+            return Utils.buildPath(getPathToBackPackSoundDirectory(), fileName);
+        } else {
+            return null;
+        }
+    }
 
-	public String getTitle() {
-		return name;
-	}
+    public String getTitle() {
+        return name;
+    }
 
-	public void setTitle(String title) {
-		this.name = title;
-	}
+    public void setTitle(String title) {
+        this.name = title;
+    }
 
-	public String getSoundFileName() {
-		return fileName;
-	}
+    public String getSoundFileName() {
+        return fileName;
+    }
 
-	public void setSoundFileName(String fileName) {
-		this.fileName = fileName;
-	}
+    public void setSoundFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
-	public String getChecksum() {
-		if (fileName == null) {
-			return null;
-		}
-		return fileName.substring(0, 32);
-	}
+    public String getChecksum() {
+        if (fileName == null) {
+            return null;
+        }
+        return fileName.substring(0, 32);
+    }
 
-	private String getPathToSoundDirectory() {
-		return Utils.buildPath(Utils.buildProjectPath(ProjectManager.getInstance().getCurrentProject().getName()),
-				getSceneNameBySoundInfo(), Constants.SOUND_DIRECTORY);
-	}
+    private String getPathToSoundDirectory() {
+        return Utils.buildPath(Utils.buildProjectPath(ProjectManager.getInstance().getCurrentProject().getName()),
+                getSceneNameBySoundInfo(), Constants.SOUND_DIRECTORY);
+    }
 
-	protected String getSceneNameBySoundInfo() {
-		for (Scene scene : ProjectManager.getInstance().getCurrentProject().getSceneList()) {
-			for (Sprite sprite : scene.getSpriteList()) {
-				if (sprite.getSoundList().contains(this)) {
-					return scene.getName();
-				}
-			}
-		}
-		return ProjectManager.getInstance().getCurrentScene().getName();
-	}
+    protected String getSceneNameBySoundInfo() {
+        for (Scene scene : ProjectManager.getInstance().getCurrentProject().getSceneList()) {
+            for (Sprite sprite : scene.getSpriteList()) {
+                if (sprite.getSoundList().contains(this)) {
+                    return scene.getName();
+                }
+            }
+        }
+        return ProjectManager.getInstance().getCurrentScene().getName();
+    }
 
-	private String getPathToBackPackSoundDirectory() {
-		return Utils.buildPath(Constants.DEFAULT_ROOT, Constants.BACKPACK_DIRECTORY,
-				Constants.BACKPACK_SOUND_DIRECTORY);
-	}
+    private String getPathToBackPackSoundDirectory() {
+        return Utils.buildPath(Constants.DEFAULT_ROOT, Constants.BACKPACK_DIRECTORY,
+                Constants.BACKPACK_SOUND_DIRECTORY);
+    }
 
-	@Override
-	public int compareTo(SoundInfo soundInfo) {
-		return name.compareTo(soundInfo.name);
-	}
+    @Override
+    public int compareTo(SoundInfo soundInfo) {
+        return name.compareTo(soundInfo.name);
+    }
 
-	@Override
-	public String toString() {
-		return name;
-	}
+    @Override
+    public String toString() {
+        return name;
+    }
 
-	public boolean isBackpackSoundInfo() {
-		return isBackpackSoundInfo;
-	}
+    public boolean isBackpackSoundInfo() {
+        return isBackpackSoundInfo;
+    }
 
-	public void setBackpackSoundInfo(boolean backpackSoundInfo) {
-		for (StackTraceElement stackTraceElement : Thread.currentThread().getStackTrace()) {
-			Log.e(TAG, stackTraceElement.getMethodName() + " setting Backpack to " + backpackSoundInfo);
-		}
-		isBackpackSoundInfo = backpackSoundInfo;
-	}
+    public void setBackpackSoundInfo(boolean backpackSoundInfo) {
+        for (StackTraceElement stackTraceElement : Thread.currentThread().getStackTrace()) {
+            Log.e(TAG, stackTraceElement.getMethodName() + " setting Backpack to " + backpackSoundInfo);
+        }
+        isBackpackSoundInfo = backpackSoundInfo;
+    }
 }

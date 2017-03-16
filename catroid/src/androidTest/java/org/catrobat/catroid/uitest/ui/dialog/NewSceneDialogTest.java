@@ -33,42 +33,42 @@ import org.catrobat.catroid.uitest.util.UiTestUtils;
 
 public class NewSceneDialogTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
-	private Project testingProject;
+    private Project testingProject;
 
-	public NewSceneDialogTest() {
-		super(MainMenuActivity.class);
-	}
+    public NewSceneDialogTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
 
-		String testingProjectName = UiTestUtils.PROJECTNAME1;
-		UiTestUtils.createTestProject(testingProjectName);
-		testingProject = ProjectManager.getInstance().getCurrentProject();
-		String testingSceneName = "testingScene";
-		Scene testingScene = new Scene(null, testingSceneName, testingProject);
-		testingProject.addScene(testingScene);
-		StorageHandler.getInstance().saveProject(testingProject);
-		ProjectManager.getInstance().loadProject(testingProjectName, getActivity());
-		UiTestUtils.getIntoScenesFromMainMenu(solo);
-	}
+        String testingProjectName = UiTestUtils.PROJECTNAME1;
+        UiTestUtils.createTestProject(testingProjectName);
+        testingProject = ProjectManager.getInstance().getCurrentProject();
+        String testingSceneName = "testingScene";
+        Scene testingScene = new Scene(null, testingSceneName, testingProject);
+        testingProject.addScene(testingScene);
+        StorageHandler.getInstance().saveProject(testingProject);
+        ProjectManager.getInstance().loadProject(testingProjectName, getActivity());
+        UiTestUtils.getIntoScenesFromMainMenu(solo);
+    }
 
-	public void testNewSceneDialogEmpty() {
-		testingProject = ProjectManager.getInstance().getCurrentProject();
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_add);
-		String defaultSceneName = String.format(solo.getString(R.string.default_scene_name), testingProject
-				.getSceneList().size());
-		assertTrue("Default name should be " + defaultSceneName, solo.waitForText(defaultSceneName));
+    public void testNewSceneDialogEmpty() {
+        testingProject = ProjectManager.getInstance().getCurrentProject();
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_add);
+        String defaultSceneName = String.format(solo.getString(R.string.default_scene_name), testingProject
+                .getSceneList().size());
+        assertTrue("Default name should be " + defaultSceneName, solo.waitForText(defaultSceneName));
 
-		solo.clickOnText(solo.getString(R.string.ok));
+        solo.clickOnText(solo.getString(R.string.ok));
 
-		solo.sleep(1000);
+        solo.sleep(1000);
 
-		Scene newScene = testingProject.getSceneByName(defaultSceneName);
-		assertNotNull("New scene was not added", newScene);
-		assertTrue("New Scene is not empty", newScene.getSpriteList().size() == 1 && newScene.getSpriteList().get(0)
-				.getListWithAllBricks().size() == 0 && newScene.getSpriteList().get(0).getSoundList().size() == 0
-				&& newScene.getSpriteList().get(0).getLookDataList().size() == 0);
-	}
+        Scene newScene = testingProject.getSceneByName(defaultSceneName);
+        assertNotNull("New scene was not added", newScene);
+        assertTrue("New Scene is not empty", newScene.getSpriteList().size() == 1 && newScene.getSpriteList().get(0)
+                .getListWithAllBricks().size() == 0 && newScene.getSpriteList().get(0).getSoundList().size() == 0
+                && newScene.getSpriteList().get(0).getLookDataList().size() == 0);
+    }
 }

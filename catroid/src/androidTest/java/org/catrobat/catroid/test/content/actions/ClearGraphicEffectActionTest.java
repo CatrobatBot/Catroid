@@ -32,30 +32,30 @@ import org.catrobat.catroid.content.Sprite;
 
 public class ClearGraphicEffectActionTest extends AndroidTestCase {
 
-	public void testClearGraphicEffect() {
-		float value = 80f;
-		Sprite sprite = new SingleSprite("new SingleSprite");
-		sprite.look.setTransparencyInUserInterfaceDimensionUnit(value);
-		assertEquals("Look hasn't ghost effect.", value, sprite.look.getTransparencyInUserInterfaceDimensionUnit());
-		sprite.look.setBrightnessInUserInterfaceDimensionUnit(value);
-		assertEquals("Look hasn't brightness effect.", value, sprite.look.getBrightnessInUserInterfaceDimensionUnit());
+    public void testClearGraphicEffect() {
+        float value = 80f;
+        Sprite sprite = new SingleSprite("new SingleSprite");
+        sprite.look.setTransparencyInUserInterfaceDimensionUnit(value);
+        assertEquals("Look hasn't ghost effect.", value, sprite.look.getTransparencyInUserInterfaceDimensionUnit());
+        sprite.look.setBrightnessInUserInterfaceDimensionUnit(value);
+        assertEquals("Look hasn't brightness effect.", value, sprite.look.getBrightnessInUserInterfaceDimensionUnit());
 
-		ActionFactory factory = sprite.getActionFactory();
-		Action action = factory.createClearGraphicEffectAction(sprite);
-		sprite.look.addAction(action);
-		action.act(1.0f);
-		assertEquals("Look's ghost effect is removed.", 0f, sprite.look.getTransparencyInUserInterfaceDimensionUnit());
-		assertEquals("Look's brightness effect is removed.", 100f,
-				sprite.look.getBrightnessInUserInterfaceDimensionUnit());
-	}
+        ActionFactory factory = sprite.getActionFactory();
+        Action action = factory.createClearGraphicEffectAction(sprite);
+        sprite.look.addAction(action);
+        action.act(1.0f);
+        assertEquals("Look's ghost effect is removed.", 0f, sprite.look.getTransparencyInUserInterfaceDimensionUnit());
+        assertEquals("Look's brightness effect is removed.", 100f,
+                sprite.look.getBrightnessInUserInterfaceDimensionUnit());
+    }
 
-	public void testNullSprite() {
-		ActionFactory factory = new ActionFactory();
-		Action action = factory.createClearGraphicEffectAction(null);
-		try {
-			action.act(1.0f);
-			fail("Execution of ClearGraphicEffectBrick with null Sprite did not cause a NullPointerException to be thrown");
-		} catch (NullPointerException expected) {
-		}
-	}
+    public void testNullSprite() {
+        ActionFactory factory = new ActionFactory();
+        Action action = factory.createClearGraphicEffectAction(null);
+        try {
+            action.act(1.0f);
+            fail("Execution of ClearGraphicEffectBrick with null Sprite did not cause a NullPointerException to be thrown");
+        } catch (NullPointerException expected) {
+        }
+    }
 }

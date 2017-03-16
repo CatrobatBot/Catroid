@@ -38,107 +38,107 @@ import org.catrobat.catroid.content.Sprite;
 import java.util.List;
 
 public class LegoEv3SetLedBrick extends BrickBaseType implements OnItemSelectedListener {
-	private static final long serialVersionUID = 1L;
-	private transient LedStatus ledStatusEnum;
-	private String ledStatus;
+    private static final long serialVersionUID = 1L;
+    private transient LedStatus ledStatusEnum;
+    private String ledStatus;
 
-	public static enum LedStatus {
-		LED_OFF, LED_GREEN, LED_RED, LED_ORANGE,
-		LED_GREEN_FLASHING, LED_RED_FLASHING, LED_ORANGE_FLASHING,
-		LED_GREEN_PULSE, LED_RED_PULSE, LED_ORANGE_PULSE
-	}
+    public static enum LedStatus {
+        LED_OFF, LED_GREEN, LED_RED, LED_ORANGE,
+        LED_GREEN_FLASHING, LED_RED_FLASHING, LED_ORANGE_FLASHING,
+        LED_GREEN_PULSE, LED_RED_PULSE, LED_ORANGE_PULSE
+    }
 
-	public LegoEv3SetLedBrick(LedStatus ledStatus) {
-		this.ledStatusEnum = ledStatus;
-		this.ledStatus = ledStatusEnum.name();
-	}
+    public LegoEv3SetLedBrick(LedStatus ledStatus) {
+        this.ledStatusEnum = ledStatus;
+        this.ledStatus = ledStatusEnum.name();
+    }
 
-	protected Object readResolve() {
-		if (ledStatus != null) {
-			ledStatusEnum = LedStatus.valueOf(ledStatus);
-		}
-		return this;
-	}
+    protected Object readResolve() {
+        if (ledStatus != null) {
+            ledStatusEnum = LedStatus.valueOf(ledStatus);
+        }
+        return this;
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return BLUETOOTH_LEGO_EV3;
-	}
+    @Override
+    public int getRequiredResources() {
+        return BLUETOOTH_LEGO_EV3;
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		LegoEv3SetLedBrick copyBrick = (LegoEv3SetLedBrick) clone();
-		return copyBrick;
-	}
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        LegoEv3SetLedBrick copyBrick = (LegoEv3SetLedBrick) clone();
+        return copyBrick;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		View prototypeView = View.inflate(context, R.layout.brick_ev3_set_led, null);
+    @Override
+    public View getPrototypeView(Context context) {
+        View prototypeView = View.inflate(context, R.layout.brick_ev3_set_led, null);
 
-		Spinner ledStatusSpinner = (Spinner) prototypeView.findViewById(R.id.brick_ev3_set_led_spinner);
-		ledStatusSpinner.setFocusableInTouchMode(false);
-		ledStatusSpinner.setFocusable(false);
+        Spinner ledStatusSpinner = (Spinner) prototypeView.findViewById(R.id.brick_ev3_set_led_spinner);
+        ledStatusSpinner.setFocusableInTouchMode(false);
+        ledStatusSpinner.setFocusable(false);
 
-		ArrayAdapter<CharSequence> ledStatusAdapter = ArrayAdapter.createFromResource(context,
-				R.array.ev3_led_status_chooser, android.R.layout.simple_spinner_item);
-		ledStatusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> ledStatusAdapter = ArrayAdapter.createFromResource(context,
+                R.array.ev3_led_status_chooser, android.R.layout.simple_spinner_item);
+        ledStatusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-		ledStatusSpinner.setAdapter(ledStatusAdapter);
-		ledStatusSpinner.setSelection(ledStatusEnum.ordinal());
-		return prototypeView;
-	}
+        ledStatusSpinner.setAdapter(ledStatusAdapter);
+        ledStatusSpinner.setSelection(ledStatusEnum.ordinal());
+        return prototypeView;
+    }
 
-	@Override
-	public Brick clone() {
-		return new LegoEv3SetLedBrick(ledStatusEnum);
-	}
+    @Override
+    public Brick clone() {
+        return new LegoEv3SetLedBrick(ledStatusEnum);
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		if (view == null) {
-			alphaValue = 255;
-		}
-		view = View.inflate(context, R.layout.brick_ev3_set_led, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        if (view == null) {
+            alphaValue = 255;
+        }
+        view = View.inflate(context, R.layout.brick_ev3_set_led, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_ev3_set_led_checkbox);
+        setCheckboxView(R.id.brick_ev3_set_led_checkbox);
 
-		ArrayAdapter<CharSequence> ledStatusAdapter = ArrayAdapter.createFromResource(context,
-				R.array.ev3_led_status_chooser, android.R.layout.simple_spinner_item);
-		ledStatusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> ledStatusAdapter = ArrayAdapter.createFromResource(context,
+                R.array.ev3_led_status_chooser, android.R.layout.simple_spinner_item);
+        ledStatusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-		Spinner ledStatusSpinner = (Spinner) view.findViewById(R.id.brick_ev3_set_led_spinner);
-		ledStatusSpinner.setOnItemSelectedListener(this);
+        Spinner ledStatusSpinner = (Spinner) view.findViewById(R.id.brick_ev3_set_led_spinner);
+        ledStatusSpinner.setOnItemSelectedListener(this);
 
-		if (!(checkbox.getVisibility() == View.VISIBLE)) {
-			ledStatusSpinner.setClickable(true);
-			ledStatusSpinner.setEnabled(true);
-		} else {
-			ledStatusSpinner.setClickable(false);
-			ledStatusSpinner.setEnabled(false);
-		}
+        if (!(checkbox.getVisibility() == View.VISIBLE)) {
+            ledStatusSpinner.setClickable(true);
+            ledStatusSpinner.setEnabled(true);
+        } else {
+            ledStatusSpinner.setClickable(false);
+            ledStatusSpinner.setEnabled(false);
+        }
 
-		ledStatusSpinner.setAdapter(ledStatusAdapter);
-		ledStatusSpinner.setSelection(ledStatusEnum.ordinal());
-		return view;
-	}
+        ledStatusSpinner.setAdapter(ledStatusAdapter);
+        ledStatusSpinner.setSelection(ledStatusEnum.ordinal());
+        return view;
+    }
 
-	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-		ledStatusEnum = LedStatus.values()[position];
-		ledStatus = ledStatusEnum.name();
-	}
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        ledStatusEnum = LedStatus.values()[position];
+        ledStatus = ledStatusEnum.name();
+    }
 
-	@Override
-	public void onNothingSelected(AdapterView<?> arg0) {
-	}
+    @Override
+    public void onNothingSelected(AdapterView<?> arg0) {
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createLegoEv3SetLedAction(ledStatusEnum));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createLegoEv3SetLedAction(ledStatusEnum));
+        return null;
+    }
 }

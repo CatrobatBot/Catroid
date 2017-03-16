@@ -40,107 +40,107 @@ import java.util.Map;
 
 public class ShowTextActor extends Actor {
 
-	private int xPosition;
-	private int yPosition;
-	private UserVariable variableToShow;
-	private String variableNameToCompare;
-	private String variableValue;
-	private String variableValueWithoutDecimal;
+    private int xPosition;
+    private int yPosition;
+    private UserVariable variableToShow;
+    private String variableNameToCompare;
+    private String variableValue;
+    private String variableValueWithoutDecimal;
 
-	private Sprite sprite;
-	private UserBrick userBrick;
-	private float scale = 3f;
-	private BitmapFont font;
+    private Sprite sprite;
+    private UserBrick userBrick;
+    private float scale = 3f;
+    private BitmapFont font;
 
-	public ShowTextActor(UserVariable userVariable, int xPosition, int yPosition, Sprite sprite, UserBrick userBrick) {
-		this.variableToShow = userVariable;
-		this.variableNameToCompare = variableToShow.getName();
-		this.variableValueWithoutDecimal = null;
-		this.xPosition = xPosition;
-		this.yPosition = yPosition;
-		this.sprite = sprite;
-		this.userBrick = userBrick;
-		init();
-	}
+    public ShowTextActor(UserVariable userVariable, int xPosition, int yPosition, Sprite sprite, UserBrick userBrick) {
+        this.variableToShow = userVariable;
+        this.variableNameToCompare = variableToShow.getName();
+        this.variableValueWithoutDecimal = null;
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
+        this.sprite = sprite;
+        this.userBrick = userBrick;
+        init();
+    }
 
-	@Override
-	public void draw(Batch batch, float parentAlpha) {
-		DataContainer dataContainer = ProjectManager.getInstance().getSceneToPlay().getDataContainer();
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        DataContainer dataContainer = ProjectManager.getInstance().getSceneToPlay().getDataContainer();
 
-		List<UserVariable> projectVariableList = dataContainer.getProjectVariables();
-		Map<Sprite, List<UserVariable>> spriteVariableMap = dataContainer.getSpriteVariableMap();
-		List<UserVariable> spriteVariableList = spriteVariableMap.get(sprite);
-		List<UserVariable> userBrickVariableList = dataContainer.getOrCreateVariableListForUserBrick(userBrick);
+        List<UserVariable> projectVariableList = dataContainer.getProjectVariables();
+        Map<Sprite, List<UserVariable>> spriteVariableMap = dataContainer.getSpriteVariableMap();
+        List<UserVariable> spriteVariableList = spriteVariableMap.get(sprite);
+        List<UserVariable> userBrickVariableList = dataContainer.getOrCreateVariableListForUserBrick(userBrick);
 
-		drawVariables(projectVariableList, batch);
-		drawVariables(spriteVariableList, batch);
-		drawVariables(userBrickVariableList, batch);
-	}
+        drawVariables(projectVariableList, batch);
+        drawVariables(spriteVariableList, batch);
+        drawVariables(userBrickVariableList, batch);
+    }
 
-	private void drawVariables(List<UserVariable> variableList, Batch batch) {
-		if (variableList == null) {
-			return;
-		}
+    private void drawVariables(List<UserVariable> variableList, Batch batch) {
+        if (variableList == null) {
+            return;
+        }
 
-		if (variableToShow.isDummy()) {
-			font.draw(batch, Constants.NO_VARIABLE_SELECTED, xPosition, yPosition);
-		} else {
-			for (UserVariable variable : variableList) {
-				if (variable.getName().equals(variableToShow.getName())) {
-					variableValue = variable.getValue().toString();
-					if (variable.getVisible()) {
-						if (isNumberAndInteger(variableValue)) {
-							font.draw(batch, variableValueWithoutDecimal, xPosition, yPosition);
-						} else {
-							font.draw(batch, variableValue, xPosition, yPosition);
-						}
-					}
-					break;
-				}
-			}
-		}
-	}
+        if (variableToShow.isDummy()) {
+            font.draw(batch, Constants.NO_VARIABLE_SELECTED, xPosition, yPosition);
+        } else {
+            for (UserVariable variable : variableList) {
+                if (variable.getName().equals(variableToShow.getName())) {
+                    variableValue = variable.getValue().toString();
+                    if (variable.getVisible()) {
+                        if (isNumberAndInteger(variableValue)) {
+                            font.draw(batch, variableValueWithoutDecimal, xPosition, yPosition);
+                        } else {
+                            font.draw(batch, variableValue, xPosition, yPosition);
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+    }
 
-	private void init() {
-		font = new BitmapFont();
-		font.setColor(Color.BLACK);
-		font.getData().setScale(scale);
-	}
+    private void init() {
+        font = new BitmapFont();
+        font.setColor(Color.BLACK);
+        font.getData().setScale(scale);
+    }
 
-	private boolean isNumberAndInteger(String variableValue) {
-		double variableValueIsNumber = 0;
+    private boolean isNumberAndInteger(String variableValue) {
+        double variableValueIsNumber = 0;
 
-		if (variableValue.matches("-?\\d+(\\.\\d+)?")) {
-			variableValueIsNumber = Double.parseDouble(variableValue);
-		} else {
-			return false;
-		}
+        if (variableValue.matches("-?\\d+(\\.\\d+)?")) {
+            variableValueIsNumber = Double.parseDouble(variableValue);
+        } else {
+            return false;
+        }
 
-		if (((int) variableValueIsNumber) - variableValueIsNumber == 0) {
-			variableValueWithoutDecimal = Integer.toString((int) variableValueIsNumber);
-			return true;
-		} else {
-			return false;
-		}
-	}
+        if (((int) variableValueIsNumber) - variableValueIsNumber == 0) {
+            variableValueWithoutDecimal = Integer.toString((int) variableValueIsNumber);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	public void setPositionX(int xPosition) {
-		this.xPosition = xPosition;
-	}
+    public void setPositionX(int xPosition) {
+        this.xPosition = xPosition;
+    }
 
-	public void setPositionY(int yPosition) {
-		this.yPosition = yPosition;
-	}
+    public void setPositionY(int yPosition) {
+        this.yPosition = yPosition;
+    }
 
-	public String getVariableNameToCompare() {
-		return variableNameToCompare;
-	}
+    public String getVariableNameToCompare() {
+        return variableNameToCompare;
+    }
 
-	public Sprite getSprite() {
-		return sprite;
-	}
+    public Sprite getSprite() {
+        return sprite;
+    }
 
-	public UserBrick getUserBrick() {
-		return userBrick;
-	}
+    public UserBrick getUserBrick() {
+        return userBrick;
+    }
 }

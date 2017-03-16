@@ -26,52 +26,54 @@ import org.catrobat.catroid.R;
 
 public class RenameItemDialog extends TextDialog {
 
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_rename";
+    public static final String DIALOG_FRAGMENT_TAG = "dialog_rename";
 
-	private RenameItemInterface renameItemInterface;
+    private RenameItemInterface renameItemInterface;
 
-	public RenameItemDialog(int title, int inputLabel, String previousItemName, RenameItemInterface
-			renameItemInterface) {
-		super(title, inputLabel, previousItemName, false);
-		this.renameItemInterface = renameItemInterface;
-	}
+    public RenameItemDialog(int title, int inputLabel, String previousItemName, RenameItemInterface
+            renameItemInterface) {
+        super(title, inputLabel, previousItemName, false);
+        this.renameItemInterface = renameItemInterface;
+    }
 
-	@Override
-	protected boolean handlePositiveButtonClick() {
-		String newName = input.getText().toString().trim();
+    @Override
+    protected boolean handlePositiveButtonClick() {
+        String newName = input.getText().toString().trim();
 
-		if (newName.equals(previousText)) {
-			renameItemInterface.clearCheckedItems();
-			return true;
-		}
+        if (newName.equals(previousText)) {
+            renameItemInterface.clearCheckedItems();
+            return true;
+        }
 
-		boolean newNameConsistsOfSpacesOnly = newName.isEmpty();
+        boolean newNameConsistsOfSpacesOnly = newName.isEmpty();
 
-		if (newNameConsistsOfSpacesOnly) {
-			input.setError(getString(R.string.name_consists_of_spaces_only));
-			return false;
-		}
+        if (newNameConsistsOfSpacesOnly) {
+            input.setError(getString(R.string.name_consists_of_spaces_only));
+            return false;
+        }
 
-		if (renameItemInterface.itemNameExists(newName)) {
-			input.setError(getString(R.string.name_already_exists));
-			return false;
-		} else {
-			renameItemInterface.clearCheckedItems();
-			renameItemInterface.renameItem(newName);
-			return true;
-		}
-	}
+        if (renameItemInterface.itemNameExists(newName)) {
+            input.setError(getString(R.string.name_already_exists));
+            return false;
+        } else {
+            renameItemInterface.clearCheckedItems();
+            renameItemInterface.renameItem(newName);
+            return true;
+        }
+    }
 
-	@Override
-	protected void handleNegativeButtonClick() {
-		renameItemInterface.clearCheckedItems();
-	}
+    @Override
+    protected void handleNegativeButtonClick() {
+        renameItemInterface.clearCheckedItems();
+    }
 
-	public interface RenameItemInterface {
+    public interface RenameItemInterface {
 
-		void clearCheckedItems();
-		boolean itemNameExists(String newItemName);
-		void renameItem(String newItemName);
-	}
+        void clearCheckedItems();
+
+        boolean itemNameExists(String newItemName);
+
+        void renameItem(String newItemName);
+    }
 }
 

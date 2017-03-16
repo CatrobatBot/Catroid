@@ -33,49 +33,49 @@ import java.util.ArrayList;
 
 public class InsertItemIntoUserListAction extends TemporalAction {
 
-	private Sprite sprite;
-	private Formula formulaIndexToInsert;
-	private Formula formulaItemToInsert;
+    private Sprite sprite;
+    private Formula formulaIndexToInsert;
+    private Formula formulaItemToInsert;
 
-	private UserList userList;
+    private UserList userList;
 
-	@Override
-	protected void update(float percent) {
-		if (userList == null) {
-			return;
-		}
+    @Override
+    protected void update(float percent) {
+        if (userList == null) {
+            return;
+        }
 
-		Object value = formulaItemToInsert == null ? Double.valueOf(0d) : formulaItemToInsert.interpretObject(sprite);
-		int indexToInsert;
+        Object value = formulaItemToInsert == null ? Double.valueOf(0d) : formulaItemToInsert.interpretObject(sprite);
+        int indexToInsert;
 
-		try {
-			indexToInsert = formulaIndexToInsert == null ? 1 : formulaIndexToInsert.interpretInteger(sprite);
-		} catch (InterpretationException interpretationException) {
-			indexToInsert = 1;
-		}
+        try {
+            indexToInsert = formulaIndexToInsert == null ? 1 : formulaIndexToInsert.interpretInteger(sprite);
+        } catch (InterpretationException interpretationException) {
+            indexToInsert = 1;
+        }
 
-		indexToInsert--;
+        indexToInsert--;
 
-		if (indexToInsert > userList.getList().size() || indexToInsert < 0) {
-			return;
-		}
+        if (indexToInsert > userList.getList().size() || indexToInsert < 0) {
+            return;
+        }
 
-		((ArrayList<Object>) userList.getList()).add(indexToInsert, value);
-	}
+        ((ArrayList<Object>) userList.getList()).add(indexToInsert, value);
+    }
 
-	public void setUserList(UserList userVariable) {
-		this.userList = userVariable;
-	}
+    public void setUserList(UserList userVariable) {
+        this.userList = userVariable;
+    }
 
-	public void setFormulaIndexToInsert(Formula formulaIndexToInsert) {
-		this.formulaIndexToInsert = formulaIndexToInsert;
-	}
+    public void setFormulaIndexToInsert(Formula formulaIndexToInsert) {
+        this.formulaIndexToInsert = formulaIndexToInsert;
+    }
 
-	public void setFormulaItemToInsert(Formula formulaItemToInsert) {
-		this.formulaItemToInsert = formulaItemToInsert;
-	}
+    public void setFormulaItemToInsert(Formula formulaItemToInsert) {
+        this.formulaItemToInsert = formulaItemToInsert;
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 }

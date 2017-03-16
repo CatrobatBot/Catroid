@@ -44,65 +44,65 @@ import org.catrobat.catroid.uitest.util.UiTestUtils;
 import java.util.ArrayList;
 
 public class SetBounceBrickTest extends ActivityInstrumentationTestCase2<ScriptActivity> {
-	private Solo solo;
-	private Project project;
-	private SetBounceBrick setBounceFactorBrick;
+    private Solo solo;
+    private Project project;
+    private SetBounceBrick setBounceFactorBrick;
 
-	public SetBounceBrickTest() {
-		super(ScriptActivity.class);
-	}
+    public SetBounceBrickTest() {
+        super(ScriptActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		createProject();
-		solo = new Solo(getInstrumentation(), getActivity());
-	}
+    @Override
+    public void setUp() throws Exception {
+        createProject();
+        solo = new Solo(getInstrumentation(), getActivity());
+    }
 
-	@Override
-	public void tearDown() throws Exception {
-		UiTestUtils.goBackToHome(getInstrumentation());
-		solo.finishOpenedActivities();
-		UiTestUtils.clearAllUtilTestProjects();
-		super.tearDown();
-		solo = null;
-	}
+    @Override
+    public void tearDown() throws Exception {
+        UiTestUtils.goBackToHome(getInstrumentation());
+        solo.finishOpenedActivities();
+        UiTestUtils.clearAllUtilTestProjects();
+        super.tearDown();
+        solo = null;
+    }
 
-	@Smoke
-	public void testSetBounceFactorBrick() {
-		ListView dragDropListView = UiTestUtils.getScriptListView(solo);
-		BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
+    @Smoke
+    public void testSetBounceFactorBrick() {
+        ListView dragDropListView = UiTestUtils.getScriptListView(solo);
+        BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
 
-		int childrenCount = adapter.getChildCountFromLastGroup();
-		int groupCount = adapter.getScriptCount();
+        int childrenCount = adapter.getChildCountFromLastGroup();
+        int groupCount = adapter.getScriptCount();
 
-		assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
-		assertEquals("Incorrect number of bricks.", 1, childrenCount);
+        assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
+        assertEquals("Incorrect number of bricks.", 1, childrenCount);
 
-		ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
-		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
+        ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
+        assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
-		assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.brick_set_bounce_factor)));
+        assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
+        assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.brick_set_bounce_factor)));
 
-		float bounceFactor = 0.65f;
+        float bounceFactor = 0.65f;
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
-				R.id.brick_set_bounce_factor_edit_text, bounceFactor, Brick.BrickField.PHYSICS_BOUNCE_FACTOR,
-				setBounceFactorBrick);
-	}
+        UiTestUtils.testBrickWithFormulaEditor(solo, ProjectManager.getInstance().getCurrentSprite(),
+                R.id.brick_set_bounce_factor_edit_text, bounceFactor, Brick.BrickField.PHYSICS_BOUNCE_FACTOR,
+                setBounceFactorBrick);
+    }
 
-	private void createProject() {
-		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite sprite = new SingleSprite("cat");
-		Script script = new StartScript();
-		setBounceFactorBrick = new SetBounceBrick(0.0f);
-		script.addBrick(setBounceFactorBrick);
+    private void createProject() {
+        project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Sprite sprite = new SingleSprite("cat");
+        Script script = new StartScript();
+        setBounceFactorBrick = new SetBounceBrick(0.0f);
+        script.addBrick(setBounceFactorBrick);
 
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 }

@@ -40,73 +40,73 @@ import org.catrobat.catroid.ui.fragment.FormulaEditorFragment;
 import java.util.List;
 
 public class SetFrictionBrick extends FormulaBrick {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private transient View prototypeView;
+    private transient View prototypeView;
 
-	public SetFrictionBrick() {
-		addAllowedBrickField(BrickField.PHYSICS_FRICTION);
-	}
+    public SetFrictionBrick() {
+        addAllowedBrickField(BrickField.PHYSICS_FRICTION);
+    }
 
-	public SetFrictionBrick(float friction) {
-		initializeBrickFields(new Formula(friction));
-	}
+    public SetFrictionBrick(float friction) {
+        initializeBrickFields(new Formula(friction));
+    }
 
-	public SetFrictionBrick(Formula friction) {
-		initializeBrickFields(friction);
-	}
+    public SetFrictionBrick(Formula friction) {
+        initializeBrickFields(friction);
+    }
 
-	private void initializeBrickFields(Formula friction) {
-		addAllowedBrickField(BrickField.PHYSICS_FRICTION);
-		setFormulaWithBrickField(BrickField.PHYSICS_FRICTION, friction);
-	}
+    private void initializeBrickFields(Formula friction) {
+        addAllowedBrickField(BrickField.PHYSICS_FRICTION);
+        setFormulaWithBrickField(BrickField.PHYSICS_FRICTION, friction);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return PHYSICS;
-	}
+    @Override
+    public int getRequiredResources() {
+        return PHYSICS;
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_physics_set_friction, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_physics_set_friction, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_set_friction_checkbox);
+        setCheckboxView(R.id.brick_set_friction_checkbox);
 
-		TextView edit = (TextView) view.findViewById(R.id.brick_set_friction_edit_text);
+        TextView edit = (TextView) view.findViewById(R.id.brick_set_friction_edit_text);
 
-		getFormulaWithBrickField(BrickField.PHYSICS_FRICTION).setTextFieldId(R.id.brick_set_friction_edit_text);
-		getFormulaWithBrickField(BrickField.PHYSICS_FRICTION).refreshTextField(view);
+        getFormulaWithBrickField(BrickField.PHYSICS_FRICTION).setTextFieldId(R.id.brick_set_friction_edit_text);
+        getFormulaWithBrickField(BrickField.PHYSICS_FRICTION).refreshTextField(view);
 
-		edit.setOnClickListener(this);
+        edit.setOnClickListener(this);
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_physics_set_friction, null);
-		TextView textFriction = (TextView) prototypeView.findViewById(R.id.brick_set_friction_edit_text);
-		textFriction.setText(String.valueOf(BrickValues.PHYSIC_FRICTION * 100));
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_physics_set_friction, null);
+        TextView textFriction = (TextView) prototypeView.findViewById(R.id.brick_set_friction_edit_text);
+        textFriction.setText(String.valueOf(BrickValues.PHYSIC_FRICTION * 100));
+        return prototypeView;
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		if (checkbox.getVisibility() == View.VISIBLE) {
-			return;
-		}
-		FormulaEditorFragment.showFragment(view, this, BrickField.PHYSICS_FRICTION);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        if (checkbox.getVisibility() == View.VISIBLE) {
+            return;
+        }
+        FormulaEditorFragment.showFragment(view, this, BrickField.PHYSICS_FRICTION);
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createSetFrictionAction(sprite,
-				getFormulaWithBrickField(BrickField.PHYSICS_FRICTION)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createSetFrictionAction(sprite,
+                getFormulaWithBrickField(BrickField.PHYSICS_FRICTION)));
+        return null;
+    }
 }

@@ -28,8 +28,8 @@ import org.catrobat.catroid.io.SoundManager;
 
 public class StopAllSoundsAction extends TemporalAction {
 
-	@Override
-	protected void update(float percent) {
-		SoundManager.getInstance().stopAllSounds();
-	}
+    @Override
+    protected void update(float percent) {
+        SoundManager.getInstance().stopAllSounds();
+    }
 }

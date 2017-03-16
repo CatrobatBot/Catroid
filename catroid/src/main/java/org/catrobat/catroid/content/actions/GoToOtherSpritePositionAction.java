@@ -29,28 +29,28 @@ import org.catrobat.catroid.content.Sprite;
 
 public class GoToOtherSpritePositionAction extends TemporalAction {
 
-	private Sprite sprite;
-	private Sprite destinationSprite;
+    private Sprite sprite;
+    private Sprite destinationSprite;
 
-	@Override
-	protected void update(float percent) {
-		if (destinationSprite == null) {
-			destinationSprite = this.sprite;
-			return;
-		}
+    @Override
+    protected void update(float percent) {
+        if (destinationSprite == null) {
+            destinationSprite = this.sprite;
+            return;
+        }
 
-		float destinationSpriteXPosition = destinationSprite.look.getXInUserInterfaceDimensionUnit();
-		float destinationSpriteYPosition = destinationSprite.look.getYInUserInterfaceDimensionUnit();
+        float destinationSpriteXPosition = destinationSprite.look.getXInUserInterfaceDimensionUnit();
+        float destinationSpriteYPosition = destinationSprite.look.getYInUserInterfaceDimensionUnit();
 
-		sprite.look.setXInUserInterfaceDimensionUnit(destinationSpriteXPosition);
-		sprite.look.setYInUserInterfaceDimensionUnit(destinationSpriteYPosition);
-	}
+        sprite.look.setXInUserInterfaceDimensionUnit(destinationSpriteXPosition);
+        sprite.look.setYInUserInterfaceDimensionUnit(destinationSpriteYPosition);
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setDestinationSprite(Sprite destinationSprite) {
-		this.destinationSprite = destinationSprite;
-	}
+    public void setDestinationSprite(Sprite destinationSprite) {
+        this.destinationSprite = destinationSprite;
+    }
 }

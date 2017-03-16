@@ -38,68 +38,68 @@ import org.catrobat.catroid.ui.fragment.FormulaEditorFragment;
 import java.util.List;
 
 public class ChangeColorByNBrick extends FormulaBrick {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private transient View prototypeView;
+    private transient View prototypeView;
 
-	public ChangeColorByNBrick() {
-		addAllowedBrickField(BrickField.COLOR_CHANGE);
-	}
+    public ChangeColorByNBrick() {
+        addAllowedBrickField(BrickField.COLOR_CHANGE);
+    }
 
-	public ChangeColorByNBrick(Float changeColorValue) {
-		initializeBrickFields(new Formula(changeColorValue));
-	}
+    public ChangeColorByNBrick(Float changeColorValue) {
+        initializeBrickFields(new Formula(changeColorValue));
+    }
 
-	public ChangeColorByNBrick(Formula changeColor) {
-		initializeBrickFields(changeColor);
-	}
+    public ChangeColorByNBrick(Formula changeColor) {
+        initializeBrickFields(changeColor);
+    }
 
-	private void initializeBrickFields(Formula changeColor) {
-		addAllowedBrickField(BrickField.COLOR_CHANGE);
-		setFormulaWithBrickField(BrickField.COLOR_CHANGE, changeColor);
-	}
+    private void initializeBrickFields(Formula changeColor) {
+        addAllowedBrickField(BrickField.COLOR_CHANGE);
+        setFormulaWithBrickField(BrickField.COLOR_CHANGE, changeColor);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return getFormulaWithBrickField(BrickField.COLOR_CHANGE).getRequiredResources();
-	}
+    @Override
+    public int getRequiredResources() {
+        return getFormulaWithBrickField(BrickField.COLOR_CHANGE).getRequiredResources();
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_change_color_by, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_change_color_by, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_change_color_by_checkbox);
-		TextView editX = (TextView) view.findViewById(R.id.brick_change_color_by_edit_text);
-		getFormulaWithBrickField(BrickField.COLOR_CHANGE).setTextFieldId(R.id.brick_change_color_by_edit_text);
-		getFormulaWithBrickField(BrickField.COLOR_CHANGE).refreshTextField(view);
+        setCheckboxView(R.id.brick_change_color_by_checkbox);
+        TextView editX = (TextView) view.findViewById(R.id.brick_change_color_by_edit_text);
+        getFormulaWithBrickField(BrickField.COLOR_CHANGE).setTextFieldId(R.id.brick_change_color_by_edit_text);
+        getFormulaWithBrickField(BrickField.COLOR_CHANGE).refreshTextField(view);
 
-		editX.setOnClickListener(this);
-		return view;
-	}
+        editX.setOnClickListener(this);
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_change_color_by, null);
-		TextView textChangeColor = (TextView) prototypeView
-				.findViewById(R.id.brick_change_color_by_edit_text);
-		textChangeColor.setText(String.valueOf(BrickValues.CHANGE_COLOR_BY));
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_change_color_by, null);
+        TextView textChangeColor = (TextView) prototypeView
+                .findViewById(R.id.brick_change_color_by_edit_text);
+        textChangeColor.setText(String.valueOf(BrickValues.CHANGE_COLOR_BY));
+        return prototypeView;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createChangeColorByNAction(sprite,
-				getFormulaWithBrickField(BrickField.COLOR_CHANGE)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createChangeColorByNAction(sprite,
+                getFormulaWithBrickField(BrickField.COLOR_CHANGE)));
+        return null;
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		FormulaEditorFragment.showFragment(view, this, BrickField.COLOR_CHANGE);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        FormulaEditorFragment.showFragment(view, this, BrickField.COLOR_CHANGE);
+    }
 }

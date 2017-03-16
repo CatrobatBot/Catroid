@@ -39,68 +39,68 @@ import org.catrobat.catroid.utils.Utils;
 import java.util.List;
 
 public class SetBrightnessBrick extends FormulaBrick {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private transient View prototypeView;
+    private transient View prototypeView;
 
-	public SetBrightnessBrick() {
-		addAllowedBrickField(BrickField.BRIGHTNESS);
-	}
+    public SetBrightnessBrick() {
+        addAllowedBrickField(BrickField.BRIGHTNESS);
+    }
 
-	public SetBrightnessBrick(double brightnessValue) {
-		initializeBrickFields(new Formula(brightnessValue));
-	}
+    public SetBrightnessBrick(double brightnessValue) {
+        initializeBrickFields(new Formula(brightnessValue));
+    }
 
-	public SetBrightnessBrick(Formula brightness) {
-		initializeBrickFields(brightness);
-	}
+    public SetBrightnessBrick(Formula brightness) {
+        initializeBrickFields(brightness);
+    }
 
-	private void initializeBrickFields(Formula brightness) {
-		addAllowedBrickField(BrickField.BRIGHTNESS);
-		setFormulaWithBrickField(BrickField.BRIGHTNESS, brightness);
-	}
+    private void initializeBrickFields(Formula brightness) {
+        addAllowedBrickField(BrickField.BRIGHTNESS);
+        setFormulaWithBrickField(BrickField.BRIGHTNESS, brightness);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return getFormulaWithBrickField(BrickField.BRIGHTNESS).getRequiredResources();
-	}
+    @Override
+    public int getRequiredResources() {
+        return getFormulaWithBrickField(BrickField.BRIGHTNESS).getRequiredResources();
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_set_brightness, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_set_brightness, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_set_brightness_checkbox);
-		TextView editX = (TextView) view.findViewById(R.id.brick_set_brightness_edit_text);
-		getFormulaWithBrickField(BrickField.BRIGHTNESS).setTextFieldId(R.id.brick_set_brightness_edit_text);
-		getFormulaWithBrickField(BrickField.BRIGHTNESS).refreshTextField(view);
+        setCheckboxView(R.id.brick_set_brightness_checkbox);
+        TextView editX = (TextView) view.findViewById(R.id.brick_set_brightness_edit_text);
+        getFormulaWithBrickField(BrickField.BRIGHTNESS).setTextFieldId(R.id.brick_set_brightness_edit_text);
+        getFormulaWithBrickField(BrickField.BRIGHTNESS).refreshTextField(view);
 
-		editX.setOnClickListener(this);
-		return view;
-	}
+        editX.setOnClickListener(this);
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_set_brightness, null);
-		TextView textSetBrightness = (TextView) prototypeView
-				.findViewById(R.id.brick_set_brightness_edit_text);
-		textSetBrightness.setText(Utils.getNumberStringForBricks(BrickValues.SET_BRIGHTNESS_TO));
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_set_brightness, null);
+        TextView textSetBrightness = (TextView) prototypeView
+                .findViewById(R.id.brick_set_brightness_edit_text);
+        textSetBrightness.setText(Utils.getNumberStringForBricks(BrickValues.SET_BRIGHTNESS_TO));
+        return prototypeView;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createSetBrightnessAction(sprite,
-				getFormulaWithBrickField(BrickField.BRIGHTNESS)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createSetBrightnessAction(sprite,
+                getFormulaWithBrickField(BrickField.BRIGHTNESS)));
+        return null;
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		FormulaEditorFragment.showFragment(view, this, BrickField.BRIGHTNESS);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        FormulaEditorFragment.showFragment(view, this, BrickField.BRIGHTNESS);
+    }
 }

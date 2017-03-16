@@ -34,46 +34,46 @@ import org.catrobat.catroid.content.Sprite;
 import java.util.List;
 
 public class ClearGraphicEffectBrick extends BrickBaseType {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public ClearGraphicEffectBrick() {
-	}
+    public ClearGraphicEffectBrick() {
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return NO_RESOURCES;
-	}
+    @Override
+    public int getRequiredResources() {
+        return NO_RESOURCES;
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		view = View.inflate(context, R.layout.brick_clear_graphic_effect, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        view = View.inflate(context, R.layout.brick_clear_graphic_effect, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_clear_graphic_effect_checkbox);
-		return view;
-	}
+        setCheckboxView(R.id.brick_clear_graphic_effect_checkbox);
+        return view;
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		return clone();
-	}
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        return clone();
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		return View.inflate(context, R.layout.brick_clear_graphic_effect, null);
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        return View.inflate(context, R.layout.brick_clear_graphic_effect, null);
+    }
 
-	@Override
-	public Brick clone() {
-		return new ClearGraphicEffectBrick();
-	}
+    @Override
+    public Brick clone() {
+        return new ClearGraphicEffectBrick();
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createClearGraphicEffectAction(sprite));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createClearGraphicEffectAction(sprite));
+        return null;
+    }
 }

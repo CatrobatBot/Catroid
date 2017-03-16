@@ -40,37 +40,37 @@ import org.catrobat.catroid.ui.SettingsActivity;
 import org.catrobat.catroid.utils.Utils;
 
 public class SendReportDialog extends DialogFragment {
-	public static final String TAG = "dialog_send_report";
+    public static final String TAG = "dialog_send_report";
 
-	@Override
-	public Dialog onCreateDialog(Bundle bundle) {
-		View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_send_report, null);
+    @Override
+    public Dialog onCreateDialog(Bundle bundle) {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_send_report, null);
 
-		CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBoxSendReportAutomatically);
-		checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				SettingsActivity.setAutoCrashReportingEnabled(getActivity(), isChecked);
-			}
-		});
-		Dialog reportDialog = new AlertDialog.Builder(getActivity()).setView(view).setTitle(getString(R.string
-				.pocket_code_has_crashed))
-				.setPositiveButton(R.string.crash_dialog_send, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int id) {
-						Utils.sendCaughtException(getActivity());
-					}
-				})
-				.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int id) {
-						PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().remove(
-								BaseExceptionHandler.EXCEPTION_FOR_REPORT).commit();
-					}
-				}).create();
+        CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBoxSendReportAutomatically);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SettingsActivity.setAutoCrashReportingEnabled(getActivity(), isChecked);
+            }
+        });
+        Dialog reportDialog = new AlertDialog.Builder(getActivity()).setView(view).setTitle(getString(R.string
+                .pocket_code_has_crashed))
+                .setPositiveButton(R.string.crash_dialog_send, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        Utils.sendCaughtException(getActivity());
+                    }
+                })
+                .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().remove(
+                                BaseExceptionHandler.EXCEPTION_FOR_REPORT).commit();
+                    }
+                }).create();
 
-		reportDialog.setCanceledOnTouchOutside(false);
+        reportDialog.setCanceledOnTouchOutside(false);
 
-		return reportDialog;
-	}
+        return reportDialog;
+    }
 }

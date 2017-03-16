@@ -29,9 +29,11 @@ import org.catrobat.catroid.common.ScratchSearchResult;
 import java.io.InterruptedIOException;
 
 public interface ScratchDataFetcher {
-	ScratchProgramData fetchScratchProgramDetails(final long programID)
-			throws WebconnectionException, WebScratchProgramException, InterruptedIOException;
-	ScratchSearchResult fetchDefaultScratchPrograms() throws WebconnectionException, InterruptedIOException;
-	ScratchSearchResult scratchSearch(final String query, final int numberOfItems, final int pageNumber)
-			throws WebconnectionException, InterruptedIOException;
+    ScratchProgramData fetchScratchProgramDetails(final long programID)
+            throws WebconnectionException, WebScratchProgramException, InterruptedIOException;
+
+    ScratchSearchResult fetchDefaultScratchPrograms() throws WebconnectionException, InterruptedIOException;
+
+    ScratchSearchResult scratchSearch(final String query, final int numberOfItems, final int pageNumber)
+            throws WebconnectionException, InterruptedIOException;
 }

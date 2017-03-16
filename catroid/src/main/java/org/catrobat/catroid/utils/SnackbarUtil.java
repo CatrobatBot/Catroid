@@ -39,50 +39,50 @@ import java.util.Set;
 
 public final class SnackbarUtil {
 
-	private SnackbarUtil() {
-	}
+    private SnackbarUtil() {
+    }
 
-	public static final String SHOWN_HINT_LIST = "shown_hint_list";
+    public static final String SHOWN_HINT_LIST = "shown_hint_list";
 
-	public static void showHintSnackbar(final Activity activity, @StringRes int resourceId) {
-		final String messageId = activity.getResources().getResourceName(resourceId);
-		final String message = activity.getString(resourceId);
+    public static void showHintSnackbar(final Activity activity, @StringRes int resourceId) {
+        final String messageId = activity.getResources().getResourceName(resourceId);
+        final String message = activity.getString(resourceId);
 
-		if (!wasHintAlreadyShown(activity, messageId) && areHintsEnabled(activity)) {
-			new SnackBar.Builder(activity)
-					.withMessage(message)
-					.withActionMessage(activity.getResources().getString(R.string.got_it))
-					.withTextColorId(R.color.solid_black)
-					.withBackgroundColorId(R.color.holo_blue_light)
-					.withOnClickListener(new SnackBar.OnMessageClickListener() {
-						@Override
-						public void onMessageClick(Parcelable token) {
-							setHintShown(activity, messageId);
-						}
-					})
-					.withDuration(SnackBar.PERMANENT_SNACK)
-					.show();
-		}
-	}
+        if (!wasHintAlreadyShown(activity, messageId) && areHintsEnabled(activity)) {
+            new SnackBar.Builder(activity)
+                    .withMessage(message)
+                    .withActionMessage(activity.getResources().getString(R.string.got_it))
+                    .withTextColorId(R.color.solid_black)
+                    .withBackgroundColorId(R.color.holo_blue_light)
+                    .withOnClickListener(new SnackBar.OnMessageClickListener() {
+                        @Override
+                        public void onMessageClick(Parcelable token) {
+                            setHintShown(activity, messageId);
+                        }
+                    })
+                    .withDuration(SnackBar.PERMANENT_SNACK)
+                    .show();
+        }
+    }
 
-	private static void setHintShown(Activity activity, String messageId) {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-		Set<String> hintList = getStringSetFromSharedPreferences(activity);
-		hintList.add(messageId);
-		prefs.edit().putStringSet(SnackbarUtil.SHOWN_HINT_LIST, hintList).commit();
-	}
+    private static void setHintShown(Activity activity, String messageId) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        Set<String> hintList = getStringSetFromSharedPreferences(activity);
+        hintList.add(messageId);
+        prefs.edit().putStringSet(SnackbarUtil.SHOWN_HINT_LIST, hintList).commit();
+    }
 
-	private static boolean wasHintAlreadyShown(Activity activity, String messageId) {
-		Set<String> hintList = getStringSetFromSharedPreferences(activity);
-		return hintList.contains(messageId);
-	}
+    private static boolean wasHintAlreadyShown(Activity activity, String messageId) {
+        Set<String> hintList = getStringSetFromSharedPreferences(activity);
+        return hintList.contains(messageId);
+    }
 
-	private static boolean areHintsEnabled(Activity activity) {
-		return PreferenceManager.getDefaultSharedPreferences(activity).getBoolean(SettingsActivity.SETTINGS_SHOW_HINTS, false);
-	}
+    private static boolean areHintsEnabled(Activity activity) {
+        return PreferenceManager.getDefaultSharedPreferences(activity).getBoolean(SettingsActivity.SETTINGS_SHOW_HINTS, false);
+    }
 
-	private static Set<String> getStringSetFromSharedPreferences(Context context) {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		return new HashSet<>(prefs.getStringSet(SnackbarUtil.SHOWN_HINT_LIST, new HashSet<String>()));
-	}
+    private static Set<String> getStringSetFromSharedPreferences(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return new HashSet<>(prefs.getStringSet(SnackbarUtil.SHOWN_HINT_LIST, new HashSet<String>()));
+    }
 }

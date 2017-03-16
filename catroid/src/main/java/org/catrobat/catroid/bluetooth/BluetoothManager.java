@@ -28,36 +28,36 @@ import android.content.Intent;
 
 public class BluetoothManager {
 
-	public static final int REQUEST_ENABLE_BT = 2000;
-	public static final int BLUETOOTH_NOT_SUPPORTED = -1;
-	public static final int BLUETOOTH_ALREADY_ON = 1;
-	public static final int BLUETOOTH_ACTIVATING = 0;
-	private BluetoothAdapter bluetoothAdapter;
+    public static final int REQUEST_ENABLE_BT = 2000;
+    public static final int BLUETOOTH_NOT_SUPPORTED = -1;
+    public static final int BLUETOOTH_ALREADY_ON = 1;
+    public static final int BLUETOOTH_ACTIVATING = 0;
+    private BluetoothAdapter bluetoothAdapter;
 
-	private final Activity activity;
+    private final Activity activity;
 
-	public BluetoothManager(Activity activity) {
-		this.activity = activity;
-	}
+    public BluetoothManager(Activity activity) {
+        this.activity = activity;
+    }
 
-	public int activateBluetooth() {
-		if (bluetoothAdapter == null) {
-			bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-		}
+    public int activateBluetooth() {
+        if (bluetoothAdapter == null) {
+            bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        }
 
-		if (bluetoothAdapter == null) {
-			return BLUETOOTH_NOT_SUPPORTED;
-		}
-		if (!bluetoothAdapter.isEnabled()) {
-			Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-			activity.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-			return BLUETOOTH_ACTIVATING;
-		} else {
-			return BLUETOOTH_ALREADY_ON;
-		}
-	}
+        if (bluetoothAdapter == null) {
+            return BLUETOOTH_NOT_SUPPORTED;
+        }
+        if (!bluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            activity.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            return BLUETOOTH_ACTIVATING;
+        } else {
+            return BLUETOOTH_ALREADY_ON;
+        }
+    }
 
-	public BluetoothAdapter getBluetoothAdapter() {
-		return bluetoothAdapter;
-	}
+    public BluetoothAdapter getBluetoothAdapter() {
+        return bluetoothAdapter;
+    }
 }

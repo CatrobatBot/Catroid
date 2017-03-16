@@ -37,95 +37,95 @@ import org.catrobat.catroid.ui.fragment.FormulaEditorFragment;
 
 public class UserBrickParameter extends FormulaBrick {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private UserScriptDefinitionBrickElement element;
+    private UserScriptDefinitionBrickElement element;
 
-	private transient TextView textView;
-	private transient TextView prototypeView;
+    private transient TextView textView;
+    private transient TextView prototypeView;
 
-	private transient UserBrick parent;
+    private transient UserBrick parent;
 
-	public UserBrickParameter(UserBrick parent, UserScriptDefinitionBrickElement element) {
-		this.parent = parent;
-		this.element = element;
-		addAllowedBrickField(BrickField.USER_BRICK);
-		setFormulaWithBrickField(BrickField.USER_BRICK, new Formula(0));
-	}
+    public UserBrickParameter(UserBrick parent, UserScriptDefinitionBrickElement element) {
+        this.parent = parent;
+        this.element = element;
+        addAllowedBrickField(BrickField.USER_BRICK);
+        setFormulaWithBrickField(BrickField.USER_BRICK, new Formula(0));
+    }
 
-	public UserBrickParameter(Formula parameter) {
-		addAllowedBrickField(BrickField.USER_BRICK);
-		setFormulaWithBrickField(BrickField.USER_BRICK, parameter);
-	}
+    public UserBrickParameter(Formula parameter) {
+        addAllowedBrickField(BrickField.USER_BRICK);
+        setFormulaWithBrickField(BrickField.USER_BRICK, parameter);
+    }
 
-	@Override
-	public UserBrickParameter clone() {
-		UserBrickParameter clonedBrick = new UserBrickParameter(getFormulaWithBrickField(
-				BrickField.USER_BRICK).clone());
-		if (textView != null) {
-			clonedBrick.getFormulaWithBrickField(BrickField.USER_BRICK).setTextFieldId(textView.getId());
-		}
-		clonedBrick.parent = parent;
-		clonedBrick.element = element;
-		clonedBrick.textView = textView;
-		clonedBrick.prototypeView = prototypeView;
-		return clonedBrick;
-	}
+    @Override
+    public UserBrickParameter clone() {
+        UserBrickParameter clonedBrick = new UserBrickParameter(getFormulaWithBrickField(
+                BrickField.USER_BRICK).clone());
+        if (textView != null) {
+            clonedBrick.getFormulaWithBrickField(BrickField.USER_BRICK).setTextFieldId(textView.getId());
+        }
+        clonedBrick.parent = parent;
+        clonedBrick.element = element;
+        clonedBrick.textView = textView;
+        clonedBrick.prototypeView = prototypeView;
+        return clonedBrick;
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter adapter) {
-		return parent.getView(context, brickId, adapter);
-	}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter adapter) {
+        return parent.getView(context, brickId, adapter);
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		return null;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        return null;
+    }
 
-	@Override
-	public java.util.List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		DataContainer dataContainer = ProjectManager.getInstance().getCurrentScene().getDataContainer();
-		String variableName = element.getText();
+    @Override
+    public java.util.List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        DataContainer dataContainer = ProjectManager.getInstance().getCurrentScene().getDataContainer();
+        String variableName = element.getText();
 
-		sequence.addAction(sprite.getActionFactory().createSetVariableAction(sprite,
-				getFormulaWithBrickField(BrickField.VARIABLE), dataContainer.getUserVariable(variableName, parent, sprite)));
-		return null;
-	}
+        sequence.addAction(sprite.getActionFactory().createSetVariableAction(sprite,
+                getFormulaWithBrickField(BrickField.VARIABLE), dataContainer.getUserVariable(variableName, parent, sprite)));
+        return null;
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		FormulaEditorFragment.showFragment(view, this, BrickField.USER_BRICK);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        FormulaEditorFragment.showFragment(view, this, BrickField.USER_BRICK);
+    }
 
-	public void setParent(UserBrick parent) {
-		this.parent = parent;
-	}
+    public void setParent(UserBrick parent) {
+        this.parent = parent;
+    }
 
-	public TextView getTextView() {
-		return textView;
-	}
+    public TextView getTextView() {
+        return textView;
+    }
 
-	public TextView getPrototypeView() {
-		return prototypeView;
-	}
+    public TextView getPrototypeView() {
+        return prototypeView;
+    }
 
-	public UserScriptDefinitionBrickElement getElement() {
-		return element;
-	}
+    public UserScriptDefinitionBrickElement getElement() {
+        return element;
+    }
 
-	public void setTextView(TextView textView) {
-		this.textView = textView;
-	}
+    public void setTextView(TextView textView) {
+        this.textView = textView;
+    }
 
-	public void setPrototypeView(TextView prototypeView) {
-		this.prototypeView = prototypeView;
-	}
+    public void setPrototypeView(TextView prototypeView) {
+        this.prototypeView = prototypeView;
+    }
 
-	public UserBrick getParent() {
-		return parent;
-	}
+    public UserBrick getParent() {
+        return parent;
+    }
 
-	public void setElement(UserScriptDefinitionBrickElement element) {
-		this.element = element;
-	}
+    public void setElement(UserScriptDefinitionBrickElement element) {
+        this.element = element;
+    }
 }

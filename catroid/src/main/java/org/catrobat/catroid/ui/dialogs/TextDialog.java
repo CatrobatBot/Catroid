@@ -41,105 +41,105 @@ import org.catrobat.catroid.R;
 
 public abstract class TextDialog extends DialogFragment {
 
-	protected EditText input;
+    protected EditText input;
 
-	protected int title;
-	protected int inputLabel;
-	protected String previousText;
-	protected boolean allowEmptyInput;
+    protected int title;
+    protected int inputLabel;
+    protected String previousText;
+    protected boolean allowEmptyInput;
 
-	public TextDialog(int title, int inputLabel, String previousText, boolean allowEmptyInput) {
-		this.title = title;
-		this.inputLabel = inputLabel;
-		this.previousText = previousText;
-		this.allowEmptyInput = allowEmptyInput;
-	}
+    public TextDialog(int title, int inputLabel, String previousText, boolean allowEmptyInput) {
+        this.title = title;
+        this.inputLabel = inputLabel;
+        this.previousText = previousText;
+        this.allowEmptyInput = allowEmptyInput;
+    }
 
-	protected View inflateLayout() {
-		final LayoutInflater inflater = getActivity().getLayoutInflater();
-		return inflater.inflate(R.layout.dialog_text_input, null);
-	}
+    protected View inflateLayout() {
+        final LayoutInflater inflater = getActivity().getLayoutInflater();
+        return inflater.inflate(R.layout.dialog_text_input, null);
+    }
 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-		View view = inflateLayout();
+        View view = inflateLayout();
 
-		builder.setTitle(title);
-		builder.setView(view);
+        builder.setTitle(title);
+        builder.setView(view);
 
-		final TextView inputLabelView = (TextView) view.findViewById(R.id.input_label);
-		inputLabelView.setText(inputLabel);
+        final TextView inputLabelView = (TextView) view.findViewById(R.id.input_label);
+        inputLabelView.setText(inputLabel);
 
-		input = (EditText) view.findViewById(R.id.edit_text);
-		input.setText(previousText);
+        input = (EditText) view.findViewById(R.id.edit_text);
+        input.setText(previousText);
 
-		builder.setPositiveButton(R.string.ok, null);
-		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				onCancel(dialog);
-			}
-		});
+        builder.setPositiveButton(R.string.ok, null);
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                onCancel(dialog);
+            }
+        });
 
-		final AlertDialog alertDialog = builder.create();
-		alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-			@Override
-			public void onShow(DialogInterface dialog) {
-				showKeyboard();
-				Button buttonPositive = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-				buttonPositive.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						if (handlePositiveButtonClick()) {
-							dismiss();
-						}
-					}
-				});
-				if (!allowEmptyInput) {
-					input.addTextChangedListener(getInputTextWatcher(buttonPositive));
-				}
-			}
-		});
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                showKeyboard();
+                Button buttonPositive = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                buttonPositive.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (handlePositiveButtonClick()) {
+                            dismiss();
+                        }
+                    }
+                });
+                if (!allowEmptyInput) {
+                    input.addTextChangedListener(getInputTextWatcher(buttonPositive));
+                }
+            }
+        });
 
-		return alertDialog;
-	}
+        return alertDialog;
+    }
 
-	@Override
-	public void onCancel(DialogInterface dialog) {
-		handleNegativeButtonClick();
-		dismiss();
-	}
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        handleNegativeButtonClick();
+        dismiss();
+    }
 
-	protected abstract boolean handlePositiveButtonClick();
+    protected abstract boolean handlePositiveButtonClick();
 
-	protected abstract void handleNegativeButtonClick();
+    protected abstract void handleNegativeButtonClick();
 
-	protected void showKeyboard() {
-		if (input.requestFocus()) {
-			InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-			imm.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT);
-		}
-	}
+    protected void showKeyboard() {
+        if (input.requestFocus()) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT);
+        }
+    }
 
-	protected TextWatcher getInputTextWatcher(final Button positiveButton) {
-		return new TextWatcher() {
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				if (s.length() == 0) {
-					positiveButton.setEnabled(false);
-				} else {
-					positiveButton.setEnabled(true);
-				}
-			}
+    protected TextWatcher getInputTextWatcher(final Button positiveButton) {
+        return new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 0) {
+                    positiveButton.setEnabled(false);
+                } else {
+                    positiveButton.setEnabled(true);
+                }
+            }
 
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			}
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
-			@Override
-			public void afterTextChanged(Editable s) {
-			}
-		};
-	}
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        };
+    }
 }

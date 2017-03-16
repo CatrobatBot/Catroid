@@ -43,133 +43,135 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class ScratchReconvertDialog extends DialogFragment {
-	public interface ReconvertDialogCallback {
-		void onDownloadExistingProgram();
-		void onReconvertProgram();
-		void onUserCanceledConversion();
-	}
+    public interface ReconvertDialogCallback {
+        void onDownloadExistingProgram();
 
-	private static final String TAG = ScratchReconvertDialog.class.getSimpleName();
-	public static final String DIALOG_FRAGMENT_TAG = "scratch_reconvert_dialog";
+        void onReconvertProgram();
 
-	protected RadioButton downloadExistingProgramRadioButton;
-	protected RadioButton reconvertProgramRadioButton;
-	protected Context context;
-	protected Date cachedDate;
-	protected ReconvertDialogCallback callback;
+        void onUserCanceledConversion();
+    }
 
-	public ScratchReconvertDialog() {
-		super();
-	}
+    private static final String TAG = ScratchReconvertDialog.class.getSimpleName();
+    public static final String DIALOG_FRAGMENT_TAG = "scratch_reconvert_dialog";
 
-	public void setCachedDate(final Date cachedDate) {
-		this.cachedDate = cachedDate;
-	}
+    protected RadioButton downloadExistingProgramRadioButton;
+    protected RadioButton reconvertProgramRadioButton;
+    protected Context context;
+    protected Date cachedDate;
+    protected ReconvertDialogCallback callback;
 
-	public void setContext(Context context) {
-		this.context = context;
-	}
+    public ScratchReconvertDialog() {
+        super();
+    }
 
-	public void setReconvertDialogCallback(final ReconvertDialogCallback callback) {
-		this.callback = callback;
-	}
+    public void setCachedDate(final Date cachedDate) {
+        this.cachedDate = cachedDate;
+    }
 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_scratch_reconvert, null);
+    public void setContext(Context context) {
+        this.context = context;
+    }
 
-		downloadExistingProgramRadioButton = (RadioButton) dialogView.findViewById(R.id.dialog_scratch_reconvert_radio_download);
-		reconvertProgramRadioButton = (RadioButton) dialogView.findViewById(R.id.dialog_scratch_reconvert_radio_reconvert);
+    public void setReconvertDialogCallback(final ReconvertDialogCallback callback) {
+        this.callback = callback;
+    }
 
-		final Date now = new Date();
-		final long timeDifferenceInMS = now.getTime() - cachedDate.getTime();
-		final int minutes = (int) TimeUnit.MILLISECONDS.toMinutes(timeDifferenceInMS);
-		final int hours = (int) TimeUnit.MILLISECONDS.toHours(timeDifferenceInMS);
-		final int days = (int) TimeUnit.MILLISECONDS.toDays(timeDifferenceInMS);
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_scratch_reconvert, null);
 
-		final String quantityString;
-		if (days > 0) {
-			quantityString = getResources().getQuantityString(R.plurals.days, days, days);
-		} else if (hours > 0) {
-			quantityString = getResources().getQuantityString(R.plurals.hours, hours, hours);
-		} else {
-			quantityString = getResources().getQuantityString(R.plurals.minutes, minutes, minutes);
-		}
-		final String titleText = getResources().getString(R.string.reconvert_text, quantityString);
+        downloadExistingProgramRadioButton = (RadioButton) dialogView.findViewById(R.id.dialog_scratch_reconvert_radio_download);
+        reconvertProgramRadioButton = (RadioButton) dialogView.findViewById(R.id.dialog_scratch_reconvert_radio_reconvert);
 
-		Dialog dialog = new AlertDialog.Builder(getActivity()).setView(dialogView).setTitle(titleText)
-				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						handleOkButton();
-					}
-				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						Log.d(TAG, "User canceled dialog by pressing Cancel-button");
-						ToastUtil.showError(context, R.string.notification_reconvert_download_program_cancel);
-						if (callback != null) {
-							callback.onUserCanceledConversion();
-						}
-					}
-				}).create();
+        final Date now = new Date();
+        final long timeDifferenceInMS = now.getTime() - cachedDate.getTime();
+        final int minutes = (int) TimeUnit.MILLISECONDS.toMinutes(timeDifferenceInMS);
+        final int hours = (int) TimeUnit.MILLISECONDS.toHours(timeDifferenceInMS);
+        final int days = (int) TimeUnit.MILLISECONDS.toDays(timeDifferenceInMS);
 
-		dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-			@Override
-			public void onShow(DialogInterface dialog) {
-				Button positiveButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-				positiveButton.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						handleOkButton();
-					}
-				});
-			}
-		});
+        final String quantityString;
+        if (days > 0) {
+            quantityString = getResources().getQuantityString(R.plurals.days, days, days);
+        } else if (hours > 0) {
+            quantityString = getResources().getQuantityString(R.plurals.hours, hours, hours);
+        } else {
+            quantityString = getResources().getQuantityString(R.plurals.minutes, minutes, minutes);
+        }
+        final String titleText = getResources().getString(R.string.reconvert_text, quantityString);
 
-		dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-			@Override
-			public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-				if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-					boolean okButtonResult = handleOkButton();
-					if (okButtonResult) {
-						dismiss();
-					}
-					return okButtonResult;
-				} else if (keyCode == KeyEvent.KEYCODE_BACK) {
-					Log.d(TAG, "User canceled dialog by pressing Back-button");
-					ToastUtil.showError(context, R.string.notification_reconvert_download_program_cancel);
-					if (callback != null) {
-						callback.onUserCanceledConversion();
-					}
-					dismiss();
-					return true;
-				}
+        Dialog dialog = new AlertDialog.Builder(getActivity()).setView(dialogView).setTitle(titleText)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        handleOkButton();
+                    }
+                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d(TAG, "User canceled dialog by pressing Cancel-button");
+                        ToastUtil.showError(context, R.string.notification_reconvert_download_program_cancel);
+                        if (callback != null) {
+                            callback.onUserCanceledConversion();
+                        }
+                    }
+                }).create();
 
-				return false;
-			}
-		});
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button positiveButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                positiveButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        handleOkButton();
+                    }
+                });
+            }
+        });
 
-		return dialog;
-	}
+        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                    boolean okButtonResult = handleOkButton();
+                    if (okButtonResult) {
+                        dismiss();
+                    }
+                    return okButtonResult;
+                } else if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    Log.d(TAG, "User canceled dialog by pressing Back-button");
+                    ToastUtil.showError(context, R.string.notification_reconvert_download_program_cancel);
+                    if (callback != null) {
+                        callback.onUserCanceledConversion();
+                    }
+                    dismiss();
+                    return true;
+                }
 
-	@Override
-	public void onCancel(DialogInterface dialog) {
-		super.onCancel(dialog);
-		Log.d(TAG, "User canceled dialog by clicking outside of the Dialog fragment");
-		ToastUtil.showError(context, R.string.notification_reconvert_download_program_cancel);
-		if (callback != null) {
-			callback.onUserCanceledConversion();
-		}
-	}
+                return false;
+            }
+        });
 
-	private boolean handleOkButton() {
-		if (downloadExistingProgramRadioButton.isChecked()) {
-			callback.onDownloadExistingProgram();
-		} else if (reconvertProgramRadioButton.isChecked()) {
-			callback.onReconvertProgram();
-		}
-		dismiss();
-		return true;
-	}
+        return dialog;
+    }
+
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
+        Log.d(TAG, "User canceled dialog by clicking outside of the Dialog fragment");
+        ToastUtil.showError(context, R.string.notification_reconvert_download_program_cancel);
+        if (callback != null) {
+            callback.onUserCanceledConversion();
+        }
+    }
+
+    private boolean handleOkButton() {
+        if (downloadExistingProgramRadioButton.isChecked()) {
+            callback.onDownloadExistingProgram();
+        } else if (reconvertProgramRadioButton.isChecked()) {
+            callback.onReconvertProgram();
+        }
+        dismiss();
+        return true;
+    }
 }

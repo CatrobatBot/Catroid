@@ -37,30 +37,30 @@ import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.Constants;
 
 public class AcceptTermsOfUseDialogFragment extends DialogFragment {
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_accept_terms_of_use";
+    public static final String DIALOG_FRAGMENT_TAG = "dialog_accept_terms_of_use";
 
-	@Override
-	public Dialog onCreateDialog(Bundle bundle) {
-		View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_terms_of_use, null);
+    @Override
+    public Dialog onCreateDialog(Bundle bundle) {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_terms_of_use, null);
 
-		TextView termsOfUseUrlTextView = (TextView) view.findViewById(R.id.dialog_terms_of_use_text_view_url);
-		termsOfUseUrlTextView.setMovementMethod(LinkMovementMethod.getInstance());
+        TextView termsOfUseUrlTextView = (TextView) view.findViewById(R.id.dialog_terms_of_use_text_view_url);
+        termsOfUseUrlTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
-		String termsOfUseUrl = getString(R.string.terms_of_use_link_template, Constants.CATROBAT_TERMS_OF_USE_URL,
-				getString(R.string.dialog_terms_of_use_link_text));
+        String termsOfUseUrl = getString(R.string.terms_of_use_link_template, Constants.CATROBAT_TERMS_OF_USE_URL,
+                getString(R.string.dialog_terms_of_use_link_text));
 
-		termsOfUseUrlTextView.setText(Html.fromHtml(termsOfUseUrl));
+        termsOfUseUrlTextView.setText(Html.fromHtml(termsOfUseUrl));
 
-		Dialog termsOfUseDialog = new AlertDialog.Builder(getActivity()).setView(view)
-				.setTitle(R.string.dialog_terms_of_use_title)
-				.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.cancel();
-					}
-				}).create();
-		termsOfUseDialog.setCanceledOnTouchOutside(true);
+        Dialog termsOfUseDialog = new AlertDialog.Builder(getActivity()).setView(view)
+                .setTitle(R.string.dialog_terms_of_use_title)
+                .setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                }).create();
+        termsOfUseDialog.setCanceledOnTouchOutside(true);
 
-		return termsOfUseDialog;
-	}
+        return termsOfUseDialog;
+    }
 }

@@ -42,76 +42,76 @@ import org.catrobat.catroid.ui.fragment.FormulaEditorFragment;
 
 public class NewStringDialog extends DialogFragment {
 
-	public static final String DIALOG_FRAGMENT_TAG = NewStringDialog.class.getSimpleName();
-	private EditText newStringEditText;
-	private String previousFormulaString;
+    public static final String DIALOG_FRAGMENT_TAG = NewStringDialog.class.getSimpleName();
+    private EditText newStringEditText;
+    private String previousFormulaString;
 
-	public NewStringDialog() {
-	}
+    public NewStringDialog() {
+    }
 
-	public static NewStringDialog newInstance() {
-		return new NewStringDialog();
-	}
+    public static NewStringDialog newInstance() {
+        return new NewStringDialog();
+    }
 
-	@Override
-	public Dialog onCreateDialog(Bundle bundle) {
-		final ViewGroup root = (ViewGroup) getActivity().getFragmentManager().findFragmentByTag(
-				FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG).getView().getRootView();
-		final View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_formulaeditor_string, root, false);
+    @Override
+    public Dialog onCreateDialog(Bundle bundle) {
+        final ViewGroup root = (ViewGroup) getActivity().getFragmentManager().findFragmentByTag(
+                FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG).getView().getRootView();
+        final View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_formulaeditor_string, root, false);
 
-		FormulaEditorFragment formulaEditor = (FormulaEditorFragment) getActivity().getFragmentManager()
-				.findFragmentByTag(FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG);
+        FormulaEditorFragment formulaEditor = (FormulaEditorFragment) getActivity().getFragmentManager()
+                .findFragmentByTag(FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG);
 
-		if (formulaEditor != null) {
-			previousFormulaString = formulaEditor.getSelectedFormulaText();
-		}
+        if (formulaEditor != null) {
+            previousFormulaString = formulaEditor.getSelectedFormulaText();
+        }
 
-		Dialog newStringDialog = new AlertDialog.Builder(getActivity()).setView(dialogView)
-				.setTitle(R.string.formula_editor_new_string_name)
-				.setNegativeButton(R.string.cancel, new OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.cancel();
-					}
-				}).setPositiveButton(R.string.ok, new OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						handleOkButton();
-					}
-				}).create();
-		newStringEditText = (EditText) dialogView.findViewById(R.id.formula_editor_string_name_edit_text);
+        Dialog newStringDialog = new AlertDialog.Builder(getActivity()).setView(dialogView)
+                .setTitle(R.string.formula_editor_new_string_name)
+                .setNegativeButton(R.string.cancel, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                }).setPositiveButton(R.string.ok, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        handleOkButton();
+                    }
+                }).create();
+        newStringEditText = (EditText) dialogView.findViewById(R.id.formula_editor_string_name_edit_text);
 
-		if (previousFormulaString != null && !previousFormulaString.trim().isEmpty()) {
-			newStringDialog.setTitle(R.string.formula_editor_dialog_change_text);
-			newStringEditText.setText(previousFormulaString);
-		}
-		newStringDialog.setCanceledOnTouchOutside(true);
-		newStringDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        if (previousFormulaString != null && !previousFormulaString.trim().isEmpty()) {
+            newStringDialog.setTitle(R.string.formula_editor_dialog_change_text);
+            newStringEditText.setText(previousFormulaString);
+        }
+        newStringDialog.setCanceledOnTouchOutside(true);
+        newStringDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-		newStringDialog.setOnShowListener(new OnShowListener() {
-			@Override
-			public void onShow(DialogInterface dialog) {
-				InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
-						Context.INPUT_METHOD_SERVICE);
-				inputManager.showSoftInput(newStringEditText, InputMethodManager.SHOW_IMPLICIT);
-			}
-		});
-		return newStringDialog;
-	}
+        newStringDialog.setOnShowListener(new OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
+                        Context.INPUT_METHOD_SERVICE);
+                inputManager.showSoftInput(newStringEditText, InputMethodManager.SHOW_IMPLICIT);
+            }
+        });
+        return newStringDialog;
+    }
 
-	private void handleOkButton() {
-		String userInput = newStringEditText.getText().toString();
+    private void handleOkButton() {
+        String userInput = newStringEditText.getText().toString();
 
-		FormulaEditorFragment formulaEditor = (FormulaEditorFragment) getActivity().getFragmentManager()
-				.findFragmentByTag(FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG);
-		if (formulaEditor != null) {
+        FormulaEditorFragment formulaEditor = (FormulaEditorFragment) getActivity().getFragmentManager()
+                .findFragmentByTag(FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG);
+        if (formulaEditor != null) {
 
-			if (previousFormulaString != null && !previousFormulaString.trim().isEmpty()) {
-				formulaEditor.overrideSelectedText(userInput);
-			} else {
-				formulaEditor.addStringToActiveFormula(userInput);
-			}
-			formulaEditor.updateButtonsOnKeyboardAndInvalidateOptionsMenu();
-		}
-	}
+            if (previousFormulaString != null && !previousFormulaString.trim().isEmpty()) {
+                formulaEditor.overrideSelectedText(userInput);
+            } else {
+                formulaEditor.addStringToActiveFormula(userInput);
+            }
+            formulaEditor.updateButtonsOnKeyboardAndInvalidateOptionsMenu();
+        }
+    }
 }

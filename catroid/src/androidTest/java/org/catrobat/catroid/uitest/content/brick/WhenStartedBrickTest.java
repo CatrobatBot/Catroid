@@ -40,117 +40,117 @@ import org.catrobat.catroid.uitest.util.UiTestUtils;
 import java.util.ArrayList;
 
 public class WhenStartedBrickTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
-	private Project project;
+    private Project project;
 
-	public WhenStartedBrickTest() {
-		super(MainMenuActivity.class);
-	}
+    public WhenStartedBrickTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		createProject();
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
-	}
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        createProject();
+        UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
+    }
 
-	public void testWhenStartedBrick() {
-		if (!solo.waitForView(BrickDragAndDropListView.class, 0, 5000, false)) {
-			fail("DragAndDropListView not shown in 5 secs!");
-		}
+    public void testWhenStartedBrick() {
+        if (!solo.waitForView(BrickDragAndDropListView.class, 0, 5000, false)) {
+            fail("DragAndDropListView not shown in 5 secs!");
+        }
 
-		ArrayList<Integer> yPosition;
-		int addedYPosition;
-		float whenBrickPosition = 300;
+        ArrayList<Integer> yPosition;
+        int addedYPosition;
+        float whenBrickPosition = 300;
 
-		assertEquals("Incorrect number of bricks.", 4, UiTestUtils.getScriptListView(solo).getCount());
+        assertEquals("Incorrect number of bricks.", 4, UiTestUtils.getScriptListView(solo).getCount());
 
-		ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
-		assertEquals("Incorrect number of bricks.", 3, projectBrickList.size());
-		assertNotNull("TextView does not exist", solo.getText(solo.getString(R.string.brick_when)));
+        ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
+        assertEquals("Incorrect number of bricks.", 3, projectBrickList.size());
+        assertNotNull("TextView does not exist", solo.getText(solo.getString(R.string.brick_when)));
 
-		solo.sleep(100);
+        solo.sleep(100);
 
-		UiTestUtils.addNewBrick(solo, R.string.brick_when_started);
+        UiTestUtils.addNewBrick(solo, R.string.brick_when_started);
 
-		yPosition = UiTestUtils.getListItemYPositions(solo, 0);
-		addedYPosition = UiTestUtils.getAddedListItemYPosition(solo);
+        yPosition = UiTestUtils.getListItemYPositions(solo, 0);
+        addedYPosition = UiTestUtils.getAddedListItemYPosition(solo);
 
-		solo.drag(20, 20, addedYPosition, yPosition.get(yPosition.size() - 1) + 20, 100);
-		solo.sleep(200);
-		projectBrickList = ProjectManager.getInstance().getCurrentSprite().getScript(0).getBrickList();
-		assertEquals("Incorrect number of bricks.", 3, projectBrickList.size());
-		projectBrickList = ProjectManager.getInstance().getCurrentSprite().getScript(1).getBrickList();
-		assertEquals("Incorrect number of bricks.", 0, projectBrickList.size());
-		assertTrue("Wrong Script instance.",
-				(ProjectManager.getInstance().getCurrentSprite().getScript(1) instanceof StartScript));
+        solo.drag(20, 20, addedYPosition, yPosition.get(yPosition.size() - 1) + 20, 100);
+        solo.sleep(200);
+        projectBrickList = ProjectManager.getInstance().getCurrentSprite().getScript(0).getBrickList();
+        assertEquals("Incorrect number of bricks.", 3, projectBrickList.size());
+        projectBrickList = ProjectManager.getInstance().getCurrentSprite().getScript(1).getBrickList();
+        assertEquals("Incorrect number of bricks.", 0, projectBrickList.size());
+        assertTrue("Wrong Script instance.",
+                (ProjectManager.getInstance().getCurrentSprite().getScript(1) instanceof StartScript));
 
-		solo.sleep(200);
+        solo.sleep(200);
 
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_add);
-		solo.clickOnText(solo.getString(R.string.category_control));
-		solo.searchText(solo.getString(R.string.category_control));
-		solo.clickOnScreen(200, whenBrickPosition);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_add);
+        solo.clickOnText(solo.getString(R.string.category_control));
+        solo.searchText(solo.getString(R.string.category_control));
+        solo.clickOnScreen(200, whenBrickPosition);
 
-		yPosition = UiTestUtils.getListItemYPositions(solo, 0);
-		addedYPosition = UiTestUtils.getAddedListItemYPosition(solo);
+        yPosition = UiTestUtils.getListItemYPositions(solo, 0);
+        addedYPosition = UiTestUtils.getAddedListItemYPosition(solo);
 
-		solo.drag(20, 20, addedYPosition, yPosition.get(3) + 20, 100);
-		solo.sleep(200);
-		projectBrickList = ProjectManager.getInstance().getCurrentSprite().getScript(0).getBrickList();
-		assertEquals("Incorrect number of bricks.", 2, projectBrickList.size());
-		assertTrue("Wrong Script instance.",
-				(ProjectManager.getInstance().getCurrentSprite().getScript(1) instanceof WhenScript));
+        solo.drag(20, 20, addedYPosition, yPosition.get(3) + 20, 100);
+        solo.sleep(200);
+        projectBrickList = ProjectManager.getInstance().getCurrentSprite().getScript(0).getBrickList();
+        assertEquals("Incorrect number of bricks.", 2, projectBrickList.size());
+        assertTrue("Wrong Script instance.",
+                (ProjectManager.getInstance().getCurrentSprite().getScript(1) instanceof WhenScript));
 
-		projectBrickList = ProjectManager.getInstance().getCurrentSprite().getScript(1).getBrickList();
-		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
-		assertTrue("Wrong Script instance.",
-				(ProjectManager.getInstance().getCurrentSprite().getScript(2) instanceof StartScript));
+        projectBrickList = ProjectManager.getInstance().getCurrentSprite().getScript(1).getBrickList();
+        assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
+        assertTrue("Wrong Script instance.",
+                (ProjectManager.getInstance().getCurrentSprite().getScript(2) instanceof StartScript));
 
-		projectBrickList = ProjectManager.getInstance().getCurrentSprite().getScript(2).getBrickList();
-		assertEquals("Incorrect number of bricks.", 0, projectBrickList.size());
-		assertTrue("Wrong Script instance.",
-				(ProjectManager.getInstance().getCurrentSprite().getScript(2) instanceof StartScript));
+        projectBrickList = ProjectManager.getInstance().getCurrentSprite().getScript(2).getBrickList();
+        assertEquals("Incorrect number of bricks.", 0, projectBrickList.size());
+        assertTrue("Wrong Script instance.",
+                (ProjectManager.getInstance().getCurrentSprite().getScript(2) instanceof StartScript));
 
-		solo.sleep(200);
+        solo.sleep(200);
 
-		UiTestUtils.addNewBrick(solo, R.string.brick_when_started);
+        UiTestUtils.addNewBrick(solo, R.string.brick_when_started);
 
-		yPosition = UiTestUtils.getListItemYPositions(solo, 0);
-		addedYPosition = UiTestUtils.getAddedListItemYPosition(solo);
+        yPosition = UiTestUtils.getListItemYPositions(solo, 0);
+        addedYPosition = UiTestUtils.getAddedListItemYPosition(solo);
 
-		solo.goBack();
+        solo.goBack();
 
-		solo.sleep(200);
-		projectBrickList = ProjectManager.getInstance().getCurrentSprite().getScript(0).getBrickList();
-		assertEquals("Incorrect number of bricks.", 2, projectBrickList.size());
-		assertTrue("Wrong Script instance.",
-				(ProjectManager.getInstance().getCurrentSprite().getScript(0) instanceof WhenScript));
+        solo.sleep(200);
+        projectBrickList = ProjectManager.getInstance().getCurrentSprite().getScript(0).getBrickList();
+        assertEquals("Incorrect number of bricks.", 2, projectBrickList.size());
+        assertTrue("Wrong Script instance.",
+                (ProjectManager.getInstance().getCurrentSprite().getScript(0) instanceof WhenScript));
 
-		projectBrickList = ProjectManager.getInstance().getCurrentSprite().getScript(1).getBrickList();
-		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
-		assertTrue("Wrong Script instance.",
-				(ProjectManager.getInstance().getCurrentSprite().getScript(1) instanceof WhenScript));
+        projectBrickList = ProjectManager.getInstance().getCurrentSprite().getScript(1).getBrickList();
+        assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
+        assertTrue("Wrong Script instance.",
+                (ProjectManager.getInstance().getCurrentSprite().getScript(1) instanceof WhenScript));
 
-		projectBrickList = ProjectManager.getInstance().getCurrentSprite().getScript(2).getBrickList();
-		assertEquals("Incorrect number of bricks.", 0, projectBrickList.size());
-		assertTrue("Wrong Script instance.",
-				(ProjectManager.getInstance().getCurrentSprite().getScript(2) instanceof StartScript));
-	}
+        projectBrickList = ProjectManager.getInstance().getCurrentSprite().getScript(2).getBrickList();
+        assertEquals("Incorrect number of bricks.", 0, projectBrickList.size());
+        assertTrue("Wrong Script instance.",
+                (ProjectManager.getInstance().getCurrentSprite().getScript(2) instanceof StartScript));
+    }
 
-	private void createProject() {
+    private void createProject() {
 
-		project = new Project(null, "testProject");
-		Sprite sprite = new SingleSprite("cat");
-		Script script = new WhenScript();
-		script.addBrick(new PlaceAtBrick(100, 100));
-		script.addBrick(new PlaceAtBrick(100, 100));
-		script.addBrick(new PlaceAtBrick(100, 100));
-		sprite.addScript(script);
+        project = new Project(null, "testProject");
+        Sprite sprite = new SingleSprite("cat");
+        Script script = new WhenScript();
+        script.addBrick(new PlaceAtBrick(100, 100));
+        script.addBrick(new PlaceAtBrick(100, 100));
+        script.addBrick(new PlaceAtBrick(100, 100));
+        sprite.addScript(script);
 
-		project.getDefaultScene().addSprite(sprite);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 }

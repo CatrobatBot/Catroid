@@ -39,106 +39,106 @@ import java.util.List;
 
 public class RaspiPwmBrick extends FormulaBrick {
 
-	private static final long serialVersionUID = 1L;
-	private transient View prototypeView;
+    private static final long serialVersionUID = 1L;
+    private transient View prototypeView;
 
-	public RaspiPwmBrick(int pinNumber, double pwmFrequency, double pwmPercentage) {
-		initializeBrickFields(new Formula(pinNumber), new Formula(pwmFrequency), new Formula(pwmPercentage));
-	}
+    public RaspiPwmBrick(int pinNumber, double pwmFrequency, double pwmPercentage) {
+        initializeBrickFields(new Formula(pinNumber), new Formula(pwmFrequency), new Formula(pwmPercentage));
+    }
 
-	private void initializeBrickFields(Formula pinNumber, Formula pwmFrequency, Formula pwmPercentage) {
-		addAllowedBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER);
-		addAllowedBrickField(BrickField.RASPI_PWM_FREQUENCY);
-		addAllowedBrickField(BrickField.RASPI_PWM_PERCENTAGE);
+    private void initializeBrickFields(Formula pinNumber, Formula pwmFrequency, Formula pwmPercentage) {
+        addAllowedBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER);
+        addAllowedBrickField(BrickField.RASPI_PWM_FREQUENCY);
+        addAllowedBrickField(BrickField.RASPI_PWM_PERCENTAGE);
 
-		setFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER, pinNumber);
-		setFormulaWithBrickField(BrickField.RASPI_PWM_FREQUENCY, pwmFrequency);
-		setFormulaWithBrickField(BrickField.RASPI_PWM_PERCENTAGE, pwmPercentage);
-	}
+        setFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER, pinNumber);
+        setFormulaWithBrickField(BrickField.RASPI_PWM_FREQUENCY, pwmFrequency);
+        setFormulaWithBrickField(BrickField.RASPI_PWM_PERCENTAGE, pwmPercentage);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return SOCKET_RASPI
-				| getFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER).getRequiredResources()
-				| getFormulaWithBrickField(BrickField.RASPI_PWM_FREQUENCY).getRequiredResources()
-				| getFormulaWithBrickField(BrickField.RASPI_PWM_PERCENTAGE).getRequiredResources();
-	}
+    @Override
+    public int getRequiredResources() {
+        return SOCKET_RASPI
+                | getFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER).getRequiredResources()
+                | getFormulaWithBrickField(BrickField.RASPI_PWM_FREQUENCY).getRequiredResources()
+                | getFormulaWithBrickField(BrickField.RASPI_PWM_PERCENTAGE).getRequiredResources();
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_raspi_pwm, null);
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_raspi_pwm, null);
 
-		TextView textPinNumber = (TextView) prototypeView.findViewById(R.id.brick_raspi_pwm_pin_edit_text);
-		textPinNumber.setText(String.valueOf(BrickValues.RASPI_DIGITAL_INITIAL_PIN_NUMBER));
+        TextView textPinNumber = (TextView) prototypeView.findViewById(R.id.brick_raspi_pwm_pin_edit_text);
+        textPinNumber.setText(String.valueOf(BrickValues.RASPI_DIGITAL_INITIAL_PIN_NUMBER));
 
-		TextView textPwmPercentage = (TextView) prototypeView.findViewById(R.id
-				.brick_raspi_pwm_percentage_edit_text);
-		textPwmPercentage.setText(String.valueOf(BrickValues.RASPI_PWM_INITIAL_PERCENTAGE));
+        TextView textPwmPercentage = (TextView) prototypeView.findViewById(R.id
+                .brick_raspi_pwm_percentage_edit_text);
+        textPwmPercentage.setText(String.valueOf(BrickValues.RASPI_PWM_INITIAL_PERCENTAGE));
 
-		TextView textPwmFrequency = (TextView) prototypeView.findViewById(R.id
-				.brick_raspi_pwm_frequency_edit_text);
-		textPwmFrequency.setText(String.valueOf(BrickValues.RASPI_PWM_INITIAL_FREQUENCY));
+        TextView textPwmFrequency = (TextView) prototypeView.findViewById(R.id
+                .brick_raspi_pwm_frequency_edit_text);
+        textPwmFrequency.setText(String.valueOf(BrickValues.RASPI_PWM_INITIAL_FREQUENCY));
 
-		return prototypeView;
-	}
+        return prototypeView;
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		if (view == null) {
-			alphaValue = 255;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        if (view == null) {
+            alphaValue = 255;
+        }
 
-		view = View.inflate(context, R.layout.brick_raspi_pwm, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_raspi_pwm, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_raspi_pwm_checkbox);
-		TextView editPinNumber = (TextView) view.findViewById(R.id.brick_raspi_pwm_pin_edit_text);
-		getFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER).setTextFieldId(R.id.brick_raspi_pwm_pin_edit_text);
-		getFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER).refreshTextField(view);
+        setCheckboxView(R.id.brick_raspi_pwm_checkbox);
+        TextView editPinNumber = (TextView) view.findViewById(R.id.brick_raspi_pwm_pin_edit_text);
+        getFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER).setTextFieldId(R.id.brick_raspi_pwm_pin_edit_text);
+        getFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER).refreshTextField(view);
 
-		editPinNumber.setOnClickListener(this);
+        editPinNumber.setOnClickListener(this);
 
-		TextView editPwmFrequency = (TextView) view.findViewById(R.id.brick_raspi_pwm_frequency_edit_text);
-		getFormulaWithBrickField(BrickField.RASPI_PWM_FREQUENCY).setTextFieldId(R.id.brick_raspi_pwm_frequency_edit_text);
-		getFormulaWithBrickField(BrickField.RASPI_PWM_FREQUENCY).refreshTextField(view);
+        TextView editPwmFrequency = (TextView) view.findViewById(R.id.brick_raspi_pwm_frequency_edit_text);
+        getFormulaWithBrickField(BrickField.RASPI_PWM_FREQUENCY).setTextFieldId(R.id.brick_raspi_pwm_frequency_edit_text);
+        getFormulaWithBrickField(BrickField.RASPI_PWM_FREQUENCY).refreshTextField(view);
 
-		editPwmFrequency.setOnClickListener(this);
+        editPwmFrequency.setOnClickListener(this);
 
-		TextView editPwmPercentage = (TextView) view.findViewById(R.id.brick_raspi_pwm_percentage_edit_text);
-		getFormulaWithBrickField(BrickField.RASPI_PWM_PERCENTAGE).setTextFieldId(R.id.brick_raspi_pwm_percentage_edit_text);
-		getFormulaWithBrickField(BrickField.RASPI_PWM_PERCENTAGE).refreshTextField(view);
+        TextView editPwmPercentage = (TextView) view.findViewById(R.id.brick_raspi_pwm_percentage_edit_text);
+        getFormulaWithBrickField(BrickField.RASPI_PWM_PERCENTAGE).setTextFieldId(R.id.brick_raspi_pwm_percentage_edit_text);
+        getFormulaWithBrickField(BrickField.RASPI_PWM_PERCENTAGE).refreshTextField(view);
 
-		editPwmPercentage.setOnClickListener(this);
+        editPwmPercentage.setOnClickListener(this);
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createSendRaspiPwmValueAction(sprite,
-				getFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER),
-				getFormulaWithBrickField(BrickField.RASPI_PWM_FREQUENCY),
-				getFormulaWithBrickField(BrickField.RASPI_PWM_PERCENTAGE)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createSendRaspiPwmValueAction(sprite,
+                getFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER),
+                getFormulaWithBrickField(BrickField.RASPI_PWM_FREQUENCY),
+                getFormulaWithBrickField(BrickField.RASPI_PWM_PERCENTAGE)));
+        return null;
+    }
 
-	public void showFormulaEditorToEditFormula(View view) {
-		switch (view.getId()) {
-			case R.id.brick_raspi_pwm_frequency_edit_text:
-				FormulaEditorFragment.showFragment(view, this, BrickField.RASPI_PWM_FREQUENCY);
-				break;
+    public void showFormulaEditorToEditFormula(View view) {
+        switch (view.getId()) {
+            case R.id.brick_raspi_pwm_frequency_edit_text:
+                FormulaEditorFragment.showFragment(view, this, BrickField.RASPI_PWM_FREQUENCY);
+                break;
 
-			case R.id.brick_raspi_pwm_percentage_edit_text:
-				FormulaEditorFragment.showFragment(view, this, BrickField.RASPI_PWM_PERCENTAGE);
-				break;
+            case R.id.brick_raspi_pwm_percentage_edit_text:
+                FormulaEditorFragment.showFragment(view, this, BrickField.RASPI_PWM_PERCENTAGE);
+                break;
 
-			case R.id.brick_raspi_pwm_pin_edit_text:
-			default:
-				FormulaEditorFragment.showFragment(view, this, BrickField.RASPI_DIGITAL_PIN_NUMBER);
-				break;
-		}
-	}
+            case R.id.brick_raspi_pwm_pin_edit_text:
+            default:
+                FormulaEditorFragment.showFragment(view, this, BrickField.RASPI_DIGITAL_PIN_NUMBER);
+                break;
+        }
+    }
 }

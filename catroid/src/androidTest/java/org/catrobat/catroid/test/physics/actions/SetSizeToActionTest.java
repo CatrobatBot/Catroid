@@ -33,84 +33,84 @@ import org.catrobat.catroid.test.utils.TestUtils;
 
 public class SetSizeToActionTest extends PhysicsBaseTest {
 
-	private PhysicsLook physicsLook;
-	private PhysicsObject physicsObject;
-	public static final float SIZE_COMPARISON_DELTA = 1.0f;
+    private PhysicsLook physicsLook;
+    private PhysicsObject physicsObject;
+    public static final float SIZE_COMPARISON_DELTA = 1.0f;
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		this.physicsLook = (PhysicsLook) sprite.look;
-		this.physicsObject = (PhysicsObject) Reflection.getPrivateField(physicsLook, "physicsObject");
-	}
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        this.physicsLook = (PhysicsLook) sprite.look;
+        this.physicsObject = (PhysicsObject) Reflection.getPrivateField(physicsLook, "physicsObject");
+    }
 
-	public void testSizeLarger() {
-		Vector2 oldAabbDimensions = physicsObject.getBoundaryBoxDimensions();
-		float oldCircumference = physicsObject.getCircumference();
-		float scaleFactor = 500.0f;
-		performSetSizeToAction(scaleFactor);
+    public void testSizeLarger() {
+        Vector2 oldAabbDimensions = physicsObject.getBoundaryBoxDimensions();
+        float oldCircumference = physicsObject.getCircumference();
+        float scaleFactor = 500.0f;
+        performSetSizeToAction(scaleFactor);
 
-		Vector2 newAabbDimensions = physicsObject.getBoundaryBoxDimensions();
-		float newCircumference = physicsObject.getCircumference();
-		assertEquals("Size is not being set to correct scale", oldAabbDimensions.x * (scaleFactor / 100.0f), newAabbDimensions.x, SIZE_COMPARISON_DELTA * scaleFactor / 100f);
-		assertEquals("Size is not being set to correct scale", oldAabbDimensions.y * (scaleFactor / 100.0f), newAabbDimensions.y, SIZE_COMPARISON_DELTA * scaleFactor / 100f);
-		assertEquals("Circumference is not being updated", oldCircumference * (scaleFactor / 100.0f), newCircumference, SIZE_COMPARISON_DELTA * scaleFactor / 100f);
-	}
+        Vector2 newAabbDimensions = physicsObject.getBoundaryBoxDimensions();
+        float newCircumference = physicsObject.getCircumference();
+        assertEquals("Size is not being set to correct scale", oldAabbDimensions.x * (scaleFactor / 100.0f), newAabbDimensions.x, SIZE_COMPARISON_DELTA * scaleFactor / 100f);
+        assertEquals("Size is not being set to correct scale", oldAabbDimensions.y * (scaleFactor / 100.0f), newAabbDimensions.y, SIZE_COMPARISON_DELTA * scaleFactor / 100f);
+        assertEquals("Circumference is not being updated", oldCircumference * (scaleFactor / 100.0f), newCircumference, SIZE_COMPARISON_DELTA * scaleFactor / 100f);
+    }
 
-	public void testSizeSmaller() {
-		float smallerSizeComparisonDelta = 1.5f;
-		Vector2 oldAabbDimensions = physicsObject.getBoundaryBoxDimensions();
-		float oldCircumference = physicsObject.getCircumference();
-		float scaleFactor = 10.0f;
-		performSetSizeToAction(scaleFactor);
+    public void testSizeSmaller() {
+        float smallerSizeComparisonDelta = 1.5f;
+        Vector2 oldAabbDimensions = physicsObject.getBoundaryBoxDimensions();
+        float oldCircumference = physicsObject.getCircumference();
+        float scaleFactor = 10.0f;
+        performSetSizeToAction(scaleFactor);
 
-		Vector2 newAabbDimensions = physicsObject.getBoundaryBoxDimensions();
-		float newCircumference = physicsObject.getCircumference();
-		assertEquals("Size is not being set to correct scale", oldAabbDimensions.x * (scaleFactor / 100.0f), newAabbDimensions.x, smallerSizeComparisonDelta);
-		assertEquals("Size is not being set to correct scale", oldAabbDimensions.y * (scaleFactor / 100.0f), newAabbDimensions.y, smallerSizeComparisonDelta);
-		assertEquals("Circumference is not being updated", oldCircumference * (scaleFactor / 100.0f), newCircumference, smallerSizeComparisonDelta);
-	}
+        Vector2 newAabbDimensions = physicsObject.getBoundaryBoxDimensions();
+        float newCircumference = physicsObject.getCircumference();
+        assertEquals("Size is not being set to correct scale", oldAabbDimensions.x * (scaleFactor / 100.0f), newAabbDimensions.x, smallerSizeComparisonDelta);
+        assertEquals("Size is not being set to correct scale", oldAabbDimensions.y * (scaleFactor / 100.0f), newAabbDimensions.y, smallerSizeComparisonDelta);
+        assertEquals("Circumference is not being updated", oldCircumference * (scaleFactor / 100.0f), newCircumference, smallerSizeComparisonDelta);
+    }
 
-	public void testSizeSame() {
-		Vector2 oldAabbDimensions = physicsObject.getBoundaryBoxDimensions();
-		float oldCircumference = physicsObject.getCircumference();
-		float scaleFactor = 100.0f;
-		performSetSizeToAction(scaleFactor);
+    public void testSizeSame() {
+        Vector2 oldAabbDimensions = physicsObject.getBoundaryBoxDimensions();
+        float oldCircumference = physicsObject.getCircumference();
+        float scaleFactor = 100.0f;
+        performSetSizeToAction(scaleFactor);
 
-		Vector2 newAabbDimensions = physicsObject.getBoundaryBoxDimensions();
-		float newCircumference = physicsObject.getCircumference();
-		assertEquals("Size is not being set to correct scale", oldAabbDimensions.x, newAabbDimensions.x, TestUtils.DELTA);
-		assertEquals("Size is not being set to correct scale", oldAabbDimensions.y, newAabbDimensions.y, TestUtils.DELTA);
-		assertEquals("Circumference is not being updated", oldCircumference, newCircumference, TestUtils.DELTA);
-	}
+        Vector2 newAabbDimensions = physicsObject.getBoundaryBoxDimensions();
+        float newCircumference = physicsObject.getCircumference();
+        assertEquals("Size is not being set to correct scale", oldAabbDimensions.x, newAabbDimensions.x, TestUtils.DELTA);
+        assertEquals("Size is not being set to correct scale", oldAabbDimensions.y, newAabbDimensions.y, TestUtils.DELTA);
+        assertEquals("Circumference is not being updated", oldCircumference, newCircumference, TestUtils.DELTA);
+    }
 
-	public void testSizeSmallerAndOriginal() {
-		Vector2 oldAabbDimensions = physicsObject.getBoundaryBoxDimensions();
-		float oldCircumference = physicsObject.getCircumference();
-		float scaleFactor = 25.0f;
-		performSetSizeToAction(scaleFactor);
-		scaleFactor = 100.0f;
-		performSetSizeToAction(scaleFactor);
+    public void testSizeSmallerAndOriginal() {
+        Vector2 oldAabbDimensions = physicsObject.getBoundaryBoxDimensions();
+        float oldCircumference = physicsObject.getCircumference();
+        float scaleFactor = 25.0f;
+        performSetSizeToAction(scaleFactor);
+        scaleFactor = 100.0f;
+        performSetSizeToAction(scaleFactor);
 
-		Vector2 newAabbDimensions = physicsObject.getBoundaryBoxDimensions();
-		float newCircumference = physicsObject.getCircumference();
-		assertEquals("Size is not being set to correct scale", oldAabbDimensions.x, newAabbDimensions.x, TestUtils.DELTA);
-		assertEquals("Size is not being set to correct scale", oldAabbDimensions.y, newAabbDimensions.y, TestUtils.DELTA);
-		assertEquals("Circumference is not being updated", oldCircumference, newCircumference, TestUtils.DELTA);
-	}
+        Vector2 newAabbDimensions = physicsObject.getBoundaryBoxDimensions();
+        float newCircumference = physicsObject.getCircumference();
+        assertEquals("Size is not being set to correct scale", oldAabbDimensions.x, newAabbDimensions.x, TestUtils.DELTA);
+        assertEquals("Size is not being set to correct scale", oldAabbDimensions.y, newAabbDimensions.y, TestUtils.DELTA);
+        assertEquals("Circumference is not being updated", oldCircumference, newCircumference, TestUtils.DELTA);
+    }
 
-	public void testSizeZero() {
-		float scaleFactor = 0.0f;
-		performSetSizeToAction(scaleFactor);
+    public void testSizeZero() {
+        float scaleFactor = 0.0f;
+        performSetSizeToAction(scaleFactor);
 
-		Vector2 newAabbDimensions = physicsObject.getBoundaryBoxDimensions();
-		float newCircumference = physicsObject.getCircumference();
-		assertEquals("Size is not being set to correct scale", 1, newAabbDimensions.x, TestUtils.DELTA);
-		assertEquals("Size is not being set to correct scale", 1, newAabbDimensions.y, TestUtils.DELTA);
-		assertEquals("Circumference is not being updated", 0.0f, newCircumference, TestUtils.DELTA);
-	}
+        Vector2 newAabbDimensions = physicsObject.getBoundaryBoxDimensions();
+        float newCircumference = physicsObject.getCircumference();
+        assertEquals("Size is not being set to correct scale", 1, newAabbDimensions.x, TestUtils.DELTA);
+        assertEquals("Size is not being set to correct scale", 1, newAabbDimensions.y, TestUtils.DELTA);
+        assertEquals("Circumference is not being updated", 0.0f, newCircumference, TestUtils.DELTA);
+    }
 
-	private void performSetSizeToAction(float scaleFactor) {
-		sprite.getActionFactory().createSetSizeToAction(sprite, new Formula(scaleFactor)).act(1.0f);
-	}
+    private void performSetSizeToAction(float scaleFactor) {
+        sprite.getActionFactory().createSetSizeToAction(sprite, new Formula(scaleFactor)).act(1.0f);
+    }
 }

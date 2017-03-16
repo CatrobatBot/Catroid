@@ -31,40 +31,40 @@ import java.util.Arrays;
 
 public class OctaveTest extends AndroidTestCase {
 
-	public void testGetNoteNames() {
-		NoteName[] noteNames = new NoteName[] {
-				NoteName.C4, NoteName.C4S, NoteName.D4,
-				NoteName.D4S, NoteName.E4, NoteName.F4,
-				NoteName.F4S, NoteName.G4, NoteName.G4S,
-				NoteName.A4, NoteName.A4S, NoteName.B4 };
-		Octave octave = Octave.ONE_LINE_OCTAVE;
+    public void testGetNoteNames() {
+        NoteName[] noteNames = new NoteName[]{
+                NoteName.C4, NoteName.C4S, NoteName.D4,
+                NoteName.D4S, NoteName.E4, NoteName.F4,
+                NoteName.F4S, NoteName.G4, NoteName.G4S,
+                NoteName.A4, NoteName.A4S, NoteName.B4};
+        Octave octave = Octave.ONE_LINE_OCTAVE;
 
-		assertTrue(Arrays.equals(noteNames, octave.getNoteNames()));
-	}
+        assertTrue(Arrays.equals(noteNames, octave.getNoteNames()));
+    }
 
-	public void testNext() {
-		Octave octave = Octave.ONE_LINE_OCTAVE;
-		Octave nextOctave = Octave.TWO_LINE_OCTAVE;
+    public void testNext() {
+        Octave octave = Octave.ONE_LINE_OCTAVE;
+        Octave nextOctave = Octave.TWO_LINE_OCTAVE;
 
-		assertEquals("Failed to get next octave", nextOctave, octave.next());
-	}
+        assertEquals("Failed to get next octave", nextOctave, octave.next());
+    }
 
-	public void testNextNoChange() {
-		Octave lastOctave = Octave.FOUR_LINE_OCTAVE;
+    public void testNextNoChange() {
+        Octave lastOctave = Octave.FOUR_LINE_OCTAVE;
 
-		assertEquals("Failed to get next octave", lastOctave, lastOctave.next());
-	}
+        assertEquals("Failed to get next octave", lastOctave, lastOctave.next());
+    }
 
-	public void testPrevious() {
-		Octave octave = Octave.THREE_LINE_OCTAVE;
-		Octave previousOctave = Octave.TWO_LINE_OCTAVE;
+    public void testPrevious() {
+        Octave octave = Octave.THREE_LINE_OCTAVE;
+        Octave previousOctave = Octave.TWO_LINE_OCTAVE;
 
-		assertEquals("Failed to get previous octave", previousOctave, octave.previous());
-	}
+        assertEquals("Failed to get previous octave", previousOctave, octave.previous());
+    }
 
-	public void testPreviousNoChange() {
-		Octave firstOctave = Octave.CONTRA_OCTAVE;
+    public void testPreviousNoChange() {
+        Octave firstOctave = Octave.CONTRA_OCTAVE;
 
-		assertEquals("Failed to get previous octave", firstOctave, firstOctave.previous());
-	}
+        assertEquals("Failed to get previous octave", firstOctave, firstOctave.previous());
+    }
 }

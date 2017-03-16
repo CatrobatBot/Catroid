@@ -26,14 +26,14 @@ import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.formulaeditor.Formula;
 
 public class SayBubbleBrick extends ThinkBubbleBrick {
-	public SayBubbleBrick() {
-		type = Constants.SAY_BRICK;
-		addAllowedBrickField(BrickField.STRING);
-	}
+    public SayBubbleBrick() {
+        type = Constants.SAY_BRICK;
+        addAllowedBrickField(BrickField.STRING);
+    }
 
-	public SayBubbleBrick(String text) {
-		type = Constants.SAY_BRICK;
-		addAllowedBrickField(BrickField.STRING);
-		initializeBrickFields(new Formula(text));
-	}
+    public SayBubbleBrick(String text) {
+        type = Constants.SAY_BRICK;
+        addAllowedBrickField(BrickField.STRING);
+        initializeBrickFields(new Formula(text));
+    }
 }

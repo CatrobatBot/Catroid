@@ -52,171 +52,171 @@ import org.catrobat.catroid.utils.Utils;
 import org.catrobat.catroid.web.ServerCalls;
 
 public class UploadProgressDialog extends DialogFragment {
-	public static final String DIALOG_PROGRESS_FRAGMENT_TAG = "dialog_upload_progress_tags";
-	public static final String NUMBER_OF_UPLOADED_PROJECTS = "number_of_uploaded_projects";
-	private static final String TAG = UploadProgressDialog.class.getSimpleName();
+    public static final String DIALOG_PROGRESS_FRAGMENT_TAG = "dialog_upload_progress_tags";
+    public static final String NUMBER_OF_UPLOADED_PROJECTS = "number_of_uploaded_projects";
+    private static final String TAG = UploadProgressDialog.class.getSimpleName();
 
-	private String openAuthProvider = Constants.NO_OAUTH_PROVIDER;
-	private String currentProjectName;
-	private String currentProjectDescription;
-	private ProgressBar progressBar;
-	private ImageView successImage;
-	private int progressPercent;
+    private String openAuthProvider = Constants.NO_OAUTH_PROVIDER;
+    private String currentProjectName;
+    private String currentProjectDescription;
+    private ProgressBar progressBar;
+    private ImageView successImage;
+    private int progressPercent;
 
-	AlertDialog progressBarDialog;
-	private Handler handler = new Handler();
+    AlertDialog progressBarDialog;
+    private Handler handler = new Handler();
 
-	@Override
-	public Dialog onCreateDialog(Bundle bundle) {
-		if (bundle != null) {
-			openAuthProvider = bundle.getString(Constants.CURRENT_OAUTH_PROVIDER);
-		}
-		View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_upload_project_progress, null);
+    @Override
+    public Dialog onCreateDialog(Bundle bundle) {
+        if (bundle != null) {
+            openAuthProvider = bundle.getString(Constants.CURRENT_OAUTH_PROVIDER);
+        }
+        View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_upload_project_progress, null);
 
-		progressBar = (ProgressBar) dialogView.findViewById(R.id.dialog_upload_progress_progressbar);
-		successImage = (ImageView) dialogView.findViewById(R.id.dialog_upload_progress_success_image);
-		progressBarDialog = new AlertDialog.Builder(getActivity()).setView(dialogView).create();
-		progressBarDialog.setTitle(getString(R.string.upload_project_dialog_title));
-		progressBarDialog.setCancelable(false);
-		progressBarDialog.setCanceledOnTouchOutside(false);
+        progressBar = (ProgressBar) dialogView.findViewById(R.id.dialog_upload_progress_progressbar);
+        successImage = (ImageView) dialogView.findViewById(R.id.dialog_upload_progress_success_image);
+        progressBarDialog = new AlertDialog.Builder(getActivity()).setView(dialogView).create();
+        progressBarDialog.setTitle(getString(R.string.upload_project_dialog_title));
+        progressBarDialog.setCancelable(false);
+        progressBarDialog.setCanceledOnTouchOutside(false);
 
-		progressBarDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), (DialogInterface
-				.OnClickListener) null);
-		progressBarDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.progress_upload_dialog_show_program), (DialogInterface
-				.OnClickListener) null);
+        progressBarDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), (DialogInterface
+                .OnClickListener) null);
+        progressBarDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.progress_upload_dialog_show_program), (DialogInterface
+                .OnClickListener) null);
 
-		return progressBarDialog;
-	}
+        return progressBarDialog;
+    }
 
-	@Override
-	public void onStart() {
-		super.onStart();
+    @Override
+    public void onStart() {
+        super.onStart();
 
-		final AlertDialog dialog = (AlertDialog) getDialog();
-		dialog.setCanceledOnTouchOutside(false);
-		dialog.setCancelable(false);
-		dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setText(getString(R.string.done));
-		dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+        final AlertDialog dialog = (AlertDialog) getDialog();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setText(getString(R.string.done));
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 
-		Button doneButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
-		Button showProgramButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        Button doneButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+        Button showProgramButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
 
-		doneButton.setWidth(50);
-		showProgramButton.setWidth(50);
+        doneButton.setWidth(50);
+        showProgramButton.setWidth(50);
 
-		uploadProject(currentProjectName, currentProjectDescription);
-		//QUICKFIX: upload response currently not working
-		new Thread(new Runnable() {
+        uploadProject(currentProjectName, currentProjectDescription);
+        //QUICKFIX: upload response currently not working
+        new Thread(new Runnable() {
 
-			public void run() {
-				while (progressPercent != 100) {
-					progressPercent = StatusBarNotificationManager.getInstance().getProgressPercent();
-					handler.post(new Runnable() {
+            public void run() {
+                while (progressPercent != 100) {
+                    progressPercent = StatusBarNotificationManager.getInstance().getProgressPercent();
+                    handler.post(new Runnable() {
 
-						public void run() {
-							if (progressPercent == 100) {
-								dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-								progressBar.setVisibility(View.GONE);
-								successImage.setImageResource(R.drawable.ic_upload_success);
-								successImage.setVisibility(View.VISIBLE);
-							}
-						}
-					});
+                        public void run() {
+                            if (progressPercent == 100) {
+                                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                                progressBar.setVisibility(View.GONE);
+                                successImage.setImageResource(R.drawable.ic_upload_success);
+                                successImage.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    });
 
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						Log.d(TAG, Log.getStackTraceString(e));
-					}
-				}
-			}
-		}).start();
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        Log.d(TAG, Log.getStackTraceString(e));
+                    }
+                }
+            }
+        }).start();
 
-		dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				startWebViewActivity(Constants.SHARE_PROGRAM_URL + ServerCalls.getInstance().getProjectId());
-				dismiss();
-			}
-		});
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startWebViewActivity(Constants.SHARE_PROGRAM_URL + ServerCalls.getInstance().getProjectId());
+                dismiss();
+            }
+        });
 
-		dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				dismiss();
-			}
-		});
-	}
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+    }
 
-	public void setProjectName(String projectName) {
-		this.currentProjectName = projectName;
-	}
+    public void setProjectName(String projectName) {
+        this.currentProjectName = projectName;
+    }
 
-	public void setProjectDescription(String projectDescription) {
-		this.currentProjectDescription = projectDescription;
-	}
+    public void setProjectDescription(String projectDescription) {
+        this.currentProjectDescription = projectDescription;
+    }
 
-	@SuppressLint("ParcelCreator")
-	private class UploadReceiver extends ResultReceiver {
+    @SuppressLint("ParcelCreator")
+    private class UploadReceiver extends ResultReceiver {
 
-		public UploadReceiver(Handler handler) {
-			super(handler);
-		}
+        public UploadReceiver(Handler handler) {
+            super(handler);
+        }
 
-		@Override
-		protected void onReceiveResult(int resultCode, Bundle resultData) {
-			if (resultCode == Constants.UPDATE_UPLOAD_PROGRESS) {
-				long progress = resultData.getLong("currentUploadProgress");
-				boolean endOfFileReached = resultData.getBoolean("endOfFileReached");
-				int notificationId = resultData.getInt("notificationId");
-				String projectName = resultData.getString("projectName");
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            if (resultCode == Constants.UPDATE_UPLOAD_PROGRESS) {
+                long progress = resultData.getLong("currentUploadProgress");
+                boolean endOfFileReached = resultData.getBoolean("endOfFileReached");
+                int notificationId = resultData.getInt("notificationId");
+                String projectName = resultData.getString("projectName");
 
-				if (endOfFileReached) {
-					progressPercent = 100;
-				} else {
-					progressPercent = (int) UtilFile.getProgressFromBytes(projectName, progress);
-				}
+                if (endOfFileReached) {
+                    progressPercent = 100;
+                } else {
+                    progressPercent = (int) UtilFile.getProgressFromBytes(projectName, progress);
+                }
 
-				StatusBarNotificationManager.getInstance().showOrUpdateNotification(notificationId, progressPercent);
-			}
-		}
-	}
+                StatusBarNotificationManager.getInstance().showOrUpdateNotification(notificationId, progressPercent);
+            }
+        }
+    }
 
-	public void startWebViewActivity(String url) {
-		Intent intent = new Intent(getActivity(), WebViewActivity.class);
-		intent.putExtra(WebViewActivity.INTENT_PARAMETER_URL, url);
-		startActivity(intent);
-	}
+    public void startWebViewActivity(String url) {
+        Intent intent = new Intent(getActivity(), WebViewActivity.class);
+        intent.putExtra(WebViewActivity.INTENT_PARAMETER_URL, url);
+        startActivity(intent);
+    }
 
-	private void uploadProject(String uploadName, String projectDescription) {
-		ProjectManager projectManager = ProjectManager.getInstance();
-		String projectPath = Utils.buildProjectPath(projectManager.getCurrentProject().getName());
+    private void uploadProject(String uploadName, String projectDescription) {
+        ProjectManager projectManager = ProjectManager.getInstance();
+        String projectPath = Utils.buildProjectPath(projectManager.getCurrentProject().getName());
 
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		String token = sharedPreferences.getString(Constants.TOKEN, Constants.NO_TOKEN);
-		String username = sharedPreferences.getString(Constants.USERNAME, Constants.NO_USERNAME);
-		Intent uploadIntent = new Intent(getActivity(), ProjectUploadService.class);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String token = sharedPreferences.getString(Constants.TOKEN, Constants.NO_TOKEN);
+        String username = sharedPreferences.getString(Constants.USERNAME, Constants.NO_USERNAME);
+        Intent uploadIntent = new Intent(getActivity(), ProjectUploadService.class);
 
-		// TODO check this extras - e.g. project description isn't used by web
-		uploadIntent.putExtra("receiver", new UploadReceiver(new Handler()));
-		uploadIntent.putExtra("uploadName", uploadName);
-		uploadIntent.putExtra("projectDescription", projectDescription);
-		uploadIntent.putExtra("projectPath", projectPath);
-		uploadIntent.putExtra("username", username);
-		uploadIntent.putExtra("token", token);
-		uploadIntent.putExtra("provider", openAuthProvider);
+        // TODO check this extras - e.g. project description isn't used by web
+        uploadIntent.putExtra("receiver", new UploadReceiver(new Handler()));
+        uploadIntent.putExtra("uploadName", uploadName);
+        uploadIntent.putExtra("projectDescription", projectDescription);
+        uploadIntent.putExtra("projectPath", projectPath);
+        uploadIntent.putExtra("username", username);
+        uploadIntent.putExtra("token", token);
+        uploadIntent.putExtra("provider", openAuthProvider);
 
-		int notificationId = StatusBarNotificationManager.getInstance().createUploadNotification(getActivity(),
-				uploadName);
-		uploadIntent.putExtra("notificationId", notificationId);
-		getActivity().startService(uploadIntent);
-		int numberOfUploadedProjects = sharedPreferences.getInt(NUMBER_OF_UPLOADED_PROJECTS, 0);
-		numberOfUploadedProjects = numberOfUploadedProjects + 1;
+        int notificationId = StatusBarNotificationManager.getInstance().createUploadNotification(getActivity(),
+                uploadName);
+        uploadIntent.putExtra("notificationId", notificationId);
+        getActivity().startService(uploadIntent);
+        int numberOfUploadedProjects = sharedPreferences.getInt(NUMBER_OF_UPLOADED_PROJECTS, 0);
+        numberOfUploadedProjects = numberOfUploadedProjects + 1;
 
-		if (numberOfUploadedProjects == 2) {
-			RatingDialog dialog = new RatingDialog();
-			dialog.show(getFragmentManager(), RatingDialog.TAG);
-		}
-		sharedPreferences.edit().putInt(NUMBER_OF_UPLOADED_PROJECTS, numberOfUploadedProjects).commit();
-	}
+        if (numberOfUploadedProjects == 2) {
+            RatingDialog dialog = new RatingDialog();
+            dialog.show(getFragmentManager(), RatingDialog.TAG);
+        }
+        sharedPreferences.edit().putInt(NUMBER_OF_UPLOADED_PROJECTS, numberOfUploadedProjects).commit();
+    }
 }

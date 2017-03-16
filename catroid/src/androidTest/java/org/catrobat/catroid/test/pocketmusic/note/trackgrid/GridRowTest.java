@@ -29,45 +29,45 @@ import org.catrobat.catroid.pocketmusic.note.trackgrid.GridRow;
 
 public class GridRowTest extends AndroidTestCase {
 
-	public void testEquals1() {
-		GridRow gridRow1 = GridRowTestDataFactory.createGridRowWithOnePosition();
-		GridRow gridRow2 = GridRowTestDataFactory.createGridRowWithOnePosition();
+    public void testEquals1() {
+        GridRow gridRow1 = GridRowTestDataFactory.createGridRowWithOnePosition();
+        GridRow gridRow2 = GridRowTestDataFactory.createGridRowWithOnePosition();
 
-		assertTrue("GridRows are not equal", gridRow1.equals(gridRow2));
-	}
+        assertTrue("GridRows are not equal", gridRow1.equals(gridRow2));
+    }
 
-	public void testEquals2() {
-		GridRow gridRow1 = GridRowTestDataFactory.createGridRowWithOnePosition();
-		GridRow gridRow2 = GridRowTestDataFactory.createGridRowWithDuplicatePositions();
+    public void testEquals2() {
+        GridRow gridRow1 = GridRowTestDataFactory.createGridRowWithOnePosition();
+        GridRow gridRow2 = GridRowTestDataFactory.createGridRowWithDuplicatePositions();
 
-		assertFalse("GridRows are equal", gridRow1.equals(gridRow2));
-	}
+        assertFalse("GridRows are equal", gridRow1.equals(gridRow2));
+    }
 
-	public void testEquals3() {
-		GridRow gridRow1 = GridRowTestDataFactory.createGridRowWithDifferentPositions();
-		GridRow gridRow2 = GridRowTestDataFactory.createGridRowWithDuplicatePositions();
+    public void testEquals3() {
+        GridRow gridRow1 = GridRowTestDataFactory.createGridRowWithDifferentPositions();
+        GridRow gridRow2 = GridRowTestDataFactory.createGridRowWithDuplicatePositions();
 
-		assertFalse("GridRows are equal", gridRow1.equals(gridRow2));
-	}
+        assertFalse("GridRows are equal", gridRow1.equals(gridRow2));
+    }
 
-	public void testEquals4() {
-		GridRow gridRow1 = GridRowTestDataFactory.createGridRowWithDifferentPositions();
-		GridRow gridRow2 = GridRowTestDataFactory.createGridRowWithDifferentPositions();
+    public void testEquals4() {
+        GridRow gridRow1 = GridRowTestDataFactory.createGridRowWithDifferentPositions();
+        GridRow gridRow2 = GridRowTestDataFactory.createGridRowWithDifferentPositions();
 
-		assertTrue("GridRows are not equal", gridRow1.equals(gridRow2));
-	}
+        assertTrue("GridRows are not equal", gridRow1.equals(gridRow2));
+    }
 
-	public void testHashCode1() {
-		GridRow gridRow1 = GridRowTestDataFactory.createGridRowWithOnePosition();
-		GridRow gridRow2 = GridRowTestDataFactory.createGridRowWithOnePosition();
+    public void testHashCode1() {
+        GridRow gridRow1 = GridRowTestDataFactory.createGridRowWithOnePosition();
+        GridRow gridRow2 = GridRowTestDataFactory.createGridRowWithOnePosition();
 
-		assertTrue("GridRow hashcode error", gridRow1.hashCode() == gridRow2.hashCode());
-	}
+        assertTrue("GridRow hashcode error", gridRow1.hashCode() == gridRow2.hashCode());
+    }
 
-	public void testHashCode2() {
-		GridRow gridRow1 = GridRowTestDataFactory.createGridRowWithDifferentPositions();
-		GridRow gridRow2 = GridRowTestDataFactory.createGridRowWithOnePosition();
+    public void testHashCode2() {
+        GridRow gridRow1 = GridRowTestDataFactory.createGridRowWithDifferentPositions();
+        GridRow gridRow2 = GridRowTestDataFactory.createGridRowWithOnePosition();
 
-		assertFalse("GridRow hashcode error", gridRow1.hashCode() == gridRow2.hashCode());
-	}
+        assertFalse("GridRow hashcode error", gridRow1.hashCode() == gridRow2.hashCode());
+    }
 }

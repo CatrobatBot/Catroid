@@ -40,41 +40,41 @@ import java.util.List;
 
 public class ProjectListAdapter extends CheckBoxListAdapter<ProjectData> {
 
-	public static final String TAG = ProjectListAdapter.class.getSimpleName();
+    public static final String TAG = ProjectListAdapter.class.getSimpleName();
 
-	ProjectAndSceneScreenshotLoader screenshotLoader;
+    ProjectAndSceneScreenshotLoader screenshotLoader;
 
-	public ProjectListAdapter(Context context, int resource, List<ProjectData> listItems) {
-		super(context, resource, listItems);
-		screenshotLoader = new ProjectAndSceneScreenshotLoader(context);
-	}
+    public ProjectListAdapter(Context context, int resource, List<ProjectData> listItems) {
+        super(context, resource, listItems);
+        screenshotLoader = new ProjectAndSceneScreenshotLoader(context);
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		View listItemView = super.getView(position, convertView, parent);
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View listItemView = super.getView(position, convertView, parent);
 
-		ListItemViewHolder listItemViewHolder = (ListItemViewHolder) listItemView.getTag();
-		ProjectData projectData = getItem(position);
+        ListItemViewHolder listItemViewHolder = (ListItemViewHolder) listItemView.getTag();
+        ProjectData projectData = getItem(position);
 
-		listItemViewHolder.name.setText(projectData.projectName);
-		String sceneName = StorageHandler.getInstance().getFirstSceneName(projectData.projectName);
+        listItemViewHolder.name.setText(projectData.projectName);
+        String sceneName = StorageHandler.getInstance().getFirstSceneName(projectData.projectName);
 
-		screenshotLoader.loadAndShowScreenshot(projectData.projectName, sceneName, false, listItemViewHolder.image);
+        screenshotLoader.loadAndShowScreenshot(projectData.projectName, sceneName, false, listItemViewHolder.image);
 
-		if (showDetails) {
-			listItemViewHolder.details.setVisibility(View.VISIBLE);
+        if (showDetails) {
+            listItemViewHolder.details.setVisibility(View.VISIBLE);
 
-			Date lastModified = new Date(projectData.lastUsed);
-			String lastAccess = DateFormat.getDateInstance(DateFormat.MEDIUM).format(lastModified);
+            Date lastModified = new Date(projectData.lastUsed);
+            String lastAccess = DateFormat.getDateInstance(DateFormat.MEDIUM).format(lastModified);
 
-			listItemViewHolder.leftTopDetails.setText(getContext().getString(R.string.last_used));
-			listItemViewHolder.rightTopDetails.setText(lastAccess);
+            listItemViewHolder.leftTopDetails.setText(getContext().getString(R.string.last_used));
+            listItemViewHolder.rightTopDetails.setText(lastAccess);
 
-			listItemViewHolder.leftBottomDetails.setText(getContext().getString(R.string.size));
-			String size = UtilFile.getSizeAsString(new File(Utils.buildProjectPath(projectData.projectName)));
-			listItemViewHolder.rightBottomDetails.setText(size);
-		}
+            listItemViewHolder.leftBottomDetails.setText(getContext().getString(R.string.size));
+            String size = UtilFile.getSizeAsString(new File(Utils.buildProjectPath(projectData.projectName)));
+            listItemViewHolder.rightBottomDetails.setText(size);
+        }
 
-		return listItemView;
-	}
+        return listItemView;
+    }
 }

@@ -29,33 +29,33 @@ import android.content.Context;
 import java.util.Locale;
 
 public final class UtilDeviceInfo {
-	public static final String SERVER_VALUE_FOR_UNDEFINED_COUNTRY = "undef";
+    public static final String SERVER_VALUE_FOR_UNDEFINED_COUNTRY = "undef";
 
-	// Suppress default constructor for noninstantiability
-	private UtilDeviceInfo() {
-		throw new AssertionError();
-	}
+    // Suppress default constructor for noninstantiability
+    private UtilDeviceInfo() {
+        throw new AssertionError();
+    }
 
-	public static String getUserEmail(Context context) {
-		if (context == null) {
-			return null;
-		}
-		Account[] accounts = AccountManager.get(context).getAccountsByType("com.google");
-		if (accounts.length > 0) {
-			return accounts[0].name;
-		}
-		return null;
-	}
+    public static String getUserEmail(Context context) {
+        if (context == null) {
+            return null;
+        }
+        Account[] accounts = AccountManager.get(context).getAccountsByType("com.google");
+        if (accounts.length > 0) {
+            return accounts[0].name;
+        }
+        return null;
+    }
 
-	public static String getUserLanguageCode() {
-		return Locale.getDefault().getLanguage();
-	}
+    public static String getUserLanguageCode() {
+        return Locale.getDefault().getLanguage();
+    }
 
-	public static String getUserCountryCode() {
-		String country = Locale.getDefault().getCountry();
-		if (country.isEmpty()) {
-			country = SERVER_VALUE_FOR_UNDEFINED_COUNTRY;
-		}
-		return country;
-	}
+    public static String getUserCountryCode() {
+        String country = Locale.getDefault().getCountry();
+        if (country.isEmpty()) {
+            country = SERVER_VALUE_FOR_UNDEFINED_COUNTRY;
+        }
+        return country;
+    }
 }

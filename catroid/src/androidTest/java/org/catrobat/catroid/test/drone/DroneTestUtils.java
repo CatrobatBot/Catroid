@@ -35,27 +35,27 @@ import org.catrobat.catroid.uitest.util.UiTestUtils;
 
 public abstract class DroneTestUtils {
 
-	private static final int DEFAULT_MOVE_TIME_IN_MILLISECONDS = 2000;
-	private static final int DEFAULT_MOVE_POWER_IN_PERCENT = 20;
+    private static final int DEFAULT_MOVE_TIME_IN_MILLISECONDS = 2000;
+    private static final int DEFAULT_MOVE_POWER_IN_PERCENT = 20;
 
-	public static void createDefaultDroneProject() {
-		Project project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite sprite = new SingleSprite("DroneBricksTest");
-		Script script = new StartScript();
+    public static void createDefaultDroneProject() {
+        Project project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Sprite sprite = new SingleSprite("DroneBricksTest");
+        Script script = new StartScript();
 
-		for (DroneBricks brick : DroneBrickFactory.DroneBricks.values()) {
-			BrickBaseType currentBrick = DroneBrickFactory.getInstanceOfDroneBrick(brick,
-					DEFAULT_MOVE_TIME_IN_MILLISECONDS, DEFAULT_MOVE_POWER_IN_PERCENT);
-			script.addBrick(currentBrick);
-			sprite.addScript(script);
-		}
-		project.getDefaultScene().addSprite(sprite);
-		setProjectAsCurrentProject(project, sprite, script);
-	}
+        for (DroneBricks brick : DroneBrickFactory.DroneBricks.values()) {
+            BrickBaseType currentBrick = DroneBrickFactory.getInstanceOfDroneBrick(brick,
+                    DEFAULT_MOVE_TIME_IN_MILLISECONDS, DEFAULT_MOVE_POWER_IN_PERCENT);
+            script.addBrick(currentBrick);
+            sprite.addScript(script);
+        }
+        project.getDefaultScene().addSprite(sprite);
+        setProjectAsCurrentProject(project, sprite, script);
+    }
 
-	private static void setProjectAsCurrentProject(Project project, Sprite sprite, Script script) {
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+    private static void setProjectAsCurrentProject(Project project, Sprite sprite, Script script) {
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 }

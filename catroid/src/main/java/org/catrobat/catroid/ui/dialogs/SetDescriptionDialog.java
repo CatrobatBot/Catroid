@@ -30,38 +30,38 @@ import org.catrobat.catroid.R;
 
 public class SetDescriptionDialog extends TextDialog {
 
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_set_description";
+    public static final String DIALOG_FRAGMENT_TAG = "dialog_set_description";
 
-	private ChangeDescriptionInterface descriptionInterface;
+    private ChangeDescriptionInterface descriptionInterface;
 
-	public SetDescriptionDialog(int title, int inputLabel, String previousText, ChangeDescriptionInterface
-			descriptionInterface) {
-		super(title, inputLabel, previousText, true);
-		this.descriptionInterface = descriptionInterface;
-	}
+    public SetDescriptionDialog(int title, int inputLabel, String previousText, ChangeDescriptionInterface
+            descriptionInterface) {
+        super(title, inputLabel, previousText, true);
+        this.descriptionInterface = descriptionInterface;
+    }
 
-	@Override
-	protected View inflateLayout() {
-		final LayoutInflater inflater = getActivity().getLayoutInflater();
-		View view = inflater.inflate(R.layout.dialog_text_input, null);
-		EditText input = (EditText) view.findViewById(R.id.edit_text);
-		input.setSingleLine(false);
-		return view;
-	}
+    @Override
+    protected View inflateLayout() {
+        final LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_text_input, null);
+        EditText input = (EditText) view.findViewById(R.id.edit_text);
+        input.setSingleLine(false);
+        return view;
+    }
 
-	@Override
-	protected boolean handlePositiveButtonClick() {
-		String newDescription = input.getText().toString().trim();
-		descriptionInterface.setDescription(newDescription);
-		return true;
-	}
+    @Override
+    protected boolean handlePositiveButtonClick() {
+        String newDescription = input.getText().toString().trim();
+        descriptionInterface.setDescription(newDescription);
+        return true;
+    }
 
-	@Override
-	protected void handleNegativeButtonClick() {
-	}
+    @Override
+    protected void handleNegativeButtonClick() {
+    }
 
-	public interface ChangeDescriptionInterface {
+    public interface ChangeDescriptionInterface {
 
-		void setDescription(String description);
-	}
+        void setDescription(String description);
+    }
 }

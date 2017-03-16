@@ -42,70 +42,70 @@ import org.catrobat.catroid.uitest.util.UiTestUtils;
 import java.util.ArrayList;
 
 public class NoteBrickTest extends BaseActivityInstrumentationTestCase<ScriptActivity> {
-	private static final String TEST_STRING = "test";
+    private static final String TEST_STRING = "test";
 
-	private Project project;
-	private NoteBrick noteBrick;
-	private Sprite sprite;
+    private Project project;
+    private NoteBrick noteBrick;
+    private Sprite sprite;
 
-	public NoteBrickTest() {
-		super(ScriptActivity.class);
-	}
+    public NoteBrickTest() {
+        super(ScriptActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		// normally super.setUp should be called first
-		// but kept the test failing due to view is null
-		// when starting in ScriptActivity
-		createProject();
-		super.setUp();
-	}
+    @Override
+    public void setUp() throws Exception {
+        // normally super.setUp should be called first
+        // but kept the test failing due to view is null
+        // when starting in ScriptActivity
+        createProject();
+        super.setUp();
+    }
 
-	public void testNoteBrick() {
-		ListView dragDropListView = UiTestUtils.getScriptListView(solo);
-		BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
+    public void testNoteBrick() {
+        ListView dragDropListView = UiTestUtils.getScriptListView(solo);
+        BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
 
-		int childrenCount = adapter.getChildCountFromLastGroup();
-		int groupCount = adapter.getScriptCount();
+        int childrenCount = adapter.getChildCountFromLastGroup();
+        int groupCount = adapter.getScriptCount();
 
-		assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
-		assertEquals("Incorrect number of bricks.", 1, childrenCount);
+        assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
+        assertEquals("Incorrect number of bricks.", 1, childrenCount);
 
-		ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
-		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
-		assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.brick_note)));
+        ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
+        assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
+        assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
+        assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.brick_note)));
 
-		UiTestUtils.testBrickWithFormulaEditor(sprite, solo, R.id.brick_note_edit_text, TEST_STRING, Brick.BrickField.NOTE, noteBrick);
-		try {
-			String note = noteBrick.getFormulaWithBrickField(Brick.BrickField.NOTE).interpretString(sprite);
-			assertEquals("Wrong text in field.", TEST_STRING, note);
-		} catch (InterpretationException interpretationException) {
-			fail("Wrong text in field.");
-		}
+        UiTestUtils.testBrickWithFormulaEditor(sprite, solo, R.id.brick_note_edit_text, TEST_STRING, Brick.BrickField.NOTE, noteBrick);
+        try {
+            String note = noteBrick.getFormulaWithBrickField(Brick.BrickField.NOTE).interpretString(sprite);
+            assertEquals("Wrong text in field.", TEST_STRING, note);
+        } catch (InterpretationException interpretationException) {
+            fail("Wrong text in field.");
+        }
 
-		UiTestUtils.testBrickWithFormulaEditor(sprite, solo, R.id.brick_note_edit_text, "", Brick.BrickField.NOTE, noteBrick);
-		try {
-			String note = noteBrick.getFormulaWithBrickField(Brick.BrickField.NOTE).interpretString(sprite);
-			assertEquals("Wrong text in field.", "", note);
-		} catch (InterpretationException interpretationException) {
-			fail("Wrong text in field.");
-		}
-	}
+        UiTestUtils.testBrickWithFormulaEditor(sprite, solo, R.id.brick_note_edit_text, "", Brick.BrickField.NOTE, noteBrick);
+        try {
+            String note = noteBrick.getFormulaWithBrickField(Brick.BrickField.NOTE).interpretString(sprite);
+            assertEquals("Wrong text in field.", "", note);
+        } catch (InterpretationException interpretationException) {
+            fail("Wrong text in field.");
+        }
+    }
 
-	private void createProject() {
-		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		sprite = new SingleSprite("cat");
-		Script script = new StartScript();
-		noteBrick = new NoteBrick("");
+    private void createProject() {
+        project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        sprite = new SingleSprite("cat");
+        Script script = new StartScript();
+        noteBrick = new NoteBrick("");
 
-		script.addBrick(noteBrick);
+        script.addBrick(noteBrick);
 
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 }

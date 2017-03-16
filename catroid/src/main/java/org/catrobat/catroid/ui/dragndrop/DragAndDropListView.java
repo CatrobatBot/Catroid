@@ -36,155 +36,155 @@ import org.catrobat.catroid.ui.adapter.CheckBoxListAdapter;
 
 public class DragAndDropListView extends ListView implements CheckBoxListAdapter.ListItemLongClickHandler {
 
-	public static final String TAG = DragAndDropListView.class.getSimpleName();
-	private static final int SMOOTH_SCROLL_BY = 15;
-	private int upperScrollBound;
-	private int lowerScrollBound;
+    public static final String TAG = DragAndDropListView.class.getSimpleName();
+    private static final int SMOOTH_SCROLL_BY = 15;
+    private int upperScrollBound;
+    private int lowerScrollBound;
 
-	private DragAndDropAdapterInterface adapterInterface;
+    private DragAndDropAdapterInterface adapterInterface;
 
-	private View view;
-	private BitmapDrawable hoveringListItem;
-	private int position;
+    private View view;
+    private BitmapDrawable hoveringListItem;
+    private int position;
 
-	private Rect viewBounds;
-	private float downY = 0;
-	private int offsetToCenter = 0;
+    private Rect viewBounds;
+    private float downY = 0;
+    private int offsetToCenter = 0;
 
-	public DragAndDropListView(Context context) {
-		super(context);
-	}
+    public DragAndDropListView(Context context) {
+        super(context);
+    }
 
-	public DragAndDropListView(Context context, AttributeSet attributes) {
-		super(context, attributes);
-	}
+    public DragAndDropListView(Context context, AttributeSet attributes) {
+        super(context, attributes);
+    }
 
-	public DragAndDropListView(Context context, AttributeSet attributes, int defStyle) {
-		super(context, attributes, defStyle);
-	}
+    public DragAndDropListView(Context context, AttributeSet attributes, int defStyle) {
+        super(context, attributes, defStyle);
+    }
 
-	public void setAdapterInterface(DragAndDropAdapterInterface adapterInterface) {
-		this.adapterInterface = adapterInterface;
-	}
+    public void setAdapterInterface(DragAndDropAdapterInterface adapterInterface) {
+        this.adapterInterface = adapterInterface;
+    }
 
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		if (hoveringListItem == null) {
-			return super.onTouchEvent(event);
-		}
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (hoveringListItem == null) {
+            return super.onTouchEvent(event);
+        }
 
-		switch (event.getAction()) {
-			case MotionEvent.ACTION_UP:
-			case MotionEvent.ACTION_CANCEL:
-				stopDragging();
-				break;
-			case MotionEvent.ACTION_DOWN:
-				downY = event.getY();
-				break;
-			case MotionEvent.ACTION_MOVE:
-				float dY = event.getY() - downY;
-				downY += dY;
-				downY -= offsetToCenter;
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                stopDragging();
+                break;
+            case MotionEvent.ACTION_DOWN:
+                downY = event.getY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                float dY = event.getY() - downY;
+                downY += dY;
+                downY -= offsetToCenter;
 
-				viewBounds.offsetTo(viewBounds.left, (int) downY);
-				hoveringListItem.setBounds(viewBounds);
+                viewBounds.offsetTo(viewBounds.left, (int) downY);
+                hoveringListItem.setBounds(viewBounds);
 
-				invalidate();
-				swapListItems();
-				scrollWhileDragging();
-				break;
-		}
-		return true;
-	}
+                invalidate();
+                swapListItems();
+                scrollWhileDragging();
+                break;
+        }
+        return true;
+    }
 
-	@Override
-	public void handleOnItemLongClick(int position, View view) {
-		upperScrollBound = getHeight() / 6;
-		lowerScrollBound = getHeight() / 6 * 4;
+    @Override
+    public void handleOnItemLongClick(int position, View view) {
+        upperScrollBound = getHeight() / 6;
+        lowerScrollBound = getHeight() / 6 * 4;
 
-		this.view = view;
-		this.position = position;
-		view.setVisibility(INVISIBLE);
-		hoveringListItem = getHoveringListItem(view);
-		setOffsetToCenter(viewBounds);
-		invalidate();
-	}
+        this.view = view;
+        this.position = position;
+        view.setVisibility(INVISIBLE);
+        hoveringListItem = getHoveringListItem(view);
+        setOffsetToCenter(viewBounds);
+        invalidate();
+    }
 
-	@Override
-	public void dispatchDraw(Canvas canvas) {
-		super.dispatchDraw(canvas);
-		if (hoveringListItem != null) {
-			hoveringListItem.draw(canvas);
-		}
-	}
+    @Override
+    public void dispatchDraw(Canvas canvas) {
+        super.dispatchDraw(canvas);
+        if (hoveringListItem != null) {
+            hoveringListItem.draw(canvas);
+        }
+    }
 
-	private BitmapDrawable getHoveringListItem(View view) {
-		Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
-		Canvas canvas = new Canvas(bitmap);
-		view.draw(canvas);
+    private BitmapDrawable getHoveringListItem(View view) {
+        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
 
-		BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
+        BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
 
-		viewBounds = new Rect(view.getLeft(), view.getTop(), view.getRight(), view.getBottom());
-		drawable.setBounds(viewBounds);
+        viewBounds = new Rect(view.getLeft(), view.getTop(), view.getRight(), view.getBottom());
+        drawable.setBounds(viewBounds);
 
-		return drawable;
-	}
+        return drawable;
+    }
 
-	private void setOffsetToCenter(Rect viewBounds) {
-		offsetToCenter = (viewBounds.height() / 2);
-	}
+    private void setOffsetToCenter(Rect viewBounds) {
+        offsetToCenter = (viewBounds.height() / 2);
+    }
 
-	private void swapListItems() {
-		int itemPositionAbove = position - 1;
-		int itemPositionBelow = position + 1;
+    private void swapListItems() {
+        int itemPositionAbove = position - 1;
+        int itemPositionBelow = position + 1;
 
-		View itemBelow = null;
-		View itemAbove = null;
+        View itemBelow = null;
+        View itemAbove = null;
 
-		if (isPositionValid(itemPositionAbove)) {
-			itemAbove = getChildAt(getVisiblePosition(itemPositionAbove));
-		}
+        if (isPositionValid(itemPositionAbove)) {
+            itemAbove = getChildAt(getVisiblePosition(itemPositionAbove));
+        }
 
-		if (isPositionValid(itemPositionBelow)) {
-			itemBelow = getChildAt(getVisiblePosition(itemPositionBelow));
-		}
+        if (isPositionValid(itemPositionBelow)) {
+            itemBelow = getChildAt(getVisiblePosition(itemPositionBelow));
+        }
 
-		boolean isAbove = (itemBelow != null) && (downY > itemBelow.getY());
-		boolean isBelow = (itemAbove != null) && (downY < itemAbove.getY());
+        boolean isAbove = (itemBelow != null) && (downY > itemBelow.getY());
+        boolean isBelow = (itemAbove != null) && (downY < itemAbove.getY());
 
-		if (isAbove || isBelow) {
-			int swapWith = isAbove ? itemPositionBelow : itemPositionAbove;
-			position = adapterInterface.swapItems(position, swapWith);
+        if (isAbove || isBelow) {
+            int swapWith = isAbove ? itemPositionBelow : itemPositionAbove;
+            position = adapterInterface.swapItems(position, swapWith);
 
-			view.setVisibility(VISIBLE);
-			view = getChildAt(getVisiblePosition(position));
-			view.setVisibility(INVISIBLE);
+            view.setVisibility(VISIBLE);
+            view = getChildAt(getVisiblePosition(position));
+            view.setVisibility(INVISIBLE);
 
-			invalidateViews();
-		}
-	}
+            invalidateViews();
+        }
+    }
 
-	private void scrollWhileDragging() {
-		if (downY > lowerScrollBound) {
-			smoothScrollBy(SMOOTH_SCROLL_BY, 0);
-		} else if (downY < upperScrollBound) {
-			smoothScrollBy(-SMOOTH_SCROLL_BY, 0);
-		}
-	}
+    private void scrollWhileDragging() {
+        if (downY > lowerScrollBound) {
+            smoothScrollBy(SMOOTH_SCROLL_BY, 0);
+        } else if (downY < upperScrollBound) {
+            smoothScrollBy(-SMOOTH_SCROLL_BY, 0);
+        }
+    }
 
-	private int getVisiblePosition(int positionInAdapter) {
-		return positionInAdapter - getFirstVisiblePosition();
-	}
+    private int getVisiblePosition(int positionInAdapter) {
+        return positionInAdapter - getFirstVisiblePosition();
+    }
 
-	private boolean isPositionValid(int position) {
-		return (position >= 0 && position < getCount());
-	}
+    private boolean isPositionValid(int position) {
+        return (position >= 0 && position < getCount());
+    }
 
-	private void stopDragging() {
-		view.setVisibility(VISIBLE);
-		view = null;
-		hoveringListItem = null;
-		invalidate();
-	}
+    private void stopDragging() {
+        view.setVisibility(VISIBLE);
+        view = null;
+        hoveringListItem = null;
+        invalidate();
+    }
 }

@@ -31,58 +31,58 @@ import org.catrobat.catroid.uitest.util.UiTestUtils;
 
 public class UserBrickDataEditorFragmentTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
-	public UserBrickDataEditorFragmentTest() {
-		super(MainMenuActivity.class);
-	}
+    public UserBrickDataEditorFragmentTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		UiTestUtils.prepareStageForTest();
-		UiTestUtils.createTestProjectWithNestedUserBrick();
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
-	}
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        UiTestUtils.prepareStageForTest();
+        UiTestUtils.createTestProjectWithNestedUserBrick();
+        UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
+    }
 
-	public void testRenameVariableEditsFormulas() throws InterruptedException {
-		UiTestUtils.showSourceAndEditBrick(UiTestUtils.TEST_USER_BRICK_NAME, solo);
+    public void testRenameVariableEditsFormulas() throws InterruptedException {
+        UiTestUtils.showSourceAndEditBrick(UiTestUtils.TEST_USER_BRICK_NAME, solo);
 
-		String textOnChangeXBrickTextField = "" + Math.round(BrickValues.CHANGE_X_BY);
+        String textOnChangeXBrickTextField = "" + Math.round(BrickValues.CHANGE_X_BY);
 
-		assertTrue("'" + textOnChangeXBrickTextField + "' should have appeared", solo.waitForText(textOnChangeXBrickTextField, 0, 2000));
+        assertTrue("'" + textOnChangeXBrickTextField + "' should have appeared", solo.waitForText(textOnChangeXBrickTextField, 0, 2000));
 
-		solo.clickOnText(textOnChangeXBrickTextField);
-		boolean gotIntoFormulaEditor = solo.waitForFragmentByTag(FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG);
+        solo.clickOnText(textOnChangeXBrickTextField);
+        boolean gotIntoFormulaEditor = solo.waitForFragmentByTag(FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG);
 
-		assertTrue("FormulaEditor should have appeared", gotIntoFormulaEditor);
+        assertTrue("FormulaEditor should have appeared", gotIntoFormulaEditor);
 
-		String stringOnVariablesButton = solo.getCurrentActivity().getString(R.string.formula_editor_data);
-		solo.clickOnText(stringOnVariablesButton);
+        String stringOnVariablesButton = solo.getCurrentActivity().getString(R.string.formula_editor_data);
+        solo.clickOnText(stringOnVariablesButton);
 
-		String stringOnUserBrickVar = UiTestUtils.TEST_USER_BRICK_VARIABLE;
-		boolean hasBrickVariable = solo.waitForText(stringOnUserBrickVar, 0, 5000);
+        String stringOnUserBrickVar = UiTestUtils.TEST_USER_BRICK_VARIABLE;
+        boolean hasBrickVariable = solo.waitForText(stringOnUserBrickVar, 0, 5000);
 
-		assertTrue("'" + stringOnUserBrickVar + "' didn't appear", hasBrickVariable);
-		solo.clickOnText(stringOnUserBrickVar);
+        assertTrue("'" + stringOnUserBrickVar + "' didn't appear", hasBrickVariable);
+        solo.clickOnText(stringOnUserBrickVar);
 
-		solo.goBack();
-		solo.waitForDialogToOpen(2000);
-		solo.clickOnText(solo.getCurrentActivity().getString(R.string.yes));
-		solo.waitForDialogToClose(2000);
+        solo.goBack();
+        solo.waitForDialogToOpen(2000);
+        solo.clickOnText(solo.getCurrentActivity().getString(R.string.yes));
+        solo.waitForDialogToClose(2000);
 
-		String defineString = solo.getCurrentActivity().getString(R.string.define);
+        String defineString = solo.getCurrentActivity().getString(R.string.define);
 
-		assertTrue("'" + defineString + "' should have appeared", solo.waitForText(defineString, 0, 2000));
-		solo.clickOnText(defineString);
+        assertTrue("'" + defineString + "' should have appeared", solo.waitForText(defineString, 0, 2000));
+        solo.clickOnText(defineString);
 
-		assertTrue("'" + stringOnUserBrickVar + "' should have appeared", solo.waitForText(stringOnUserBrickVar, 1, 2000));
-		solo.clickOnText(stringOnUserBrickVar, 1);
+        assertTrue("'" + stringOnUserBrickVar + "' should have appeared", solo.waitForText(stringOnUserBrickVar, 1, 2000));
+        solo.clickOnText(stringOnUserBrickVar, 1);
 
-		solo.waitForDialogToOpen(2000);
+        solo.waitForDialogToOpen(2000);
 
-		String newVariableName = "newName";
-		solo.clearEditText(0);
-		solo.enterText(0, newVariableName);
+        String newVariableName = "newName";
+        solo.clearEditText(0);
+        solo.enterText(0, newVariableName);
 
-		solo.clickOnText(solo.getCurrentActivity().getString(R.string.ok));
-	}
+        solo.clickOnText(solo.getCurrentActivity().getString(R.string.ok));
+    }
 }

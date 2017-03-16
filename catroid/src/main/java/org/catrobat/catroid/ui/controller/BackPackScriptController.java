@@ -61,240 +61,240 @@ import java.util.List;
 
 public final class BackPackScriptController {
 
-	public static final String TAG = BackPackScriptController.class.getSimpleName();
+    public static final String TAG = BackPackScriptController.class.getSimpleName();
 
-	private static final BackPackScriptController INSTANCE = new BackPackScriptController();
+    private static final BackPackScriptController INSTANCE = new BackPackScriptController();
 
-	private BackPackScriptController() {
-	}
+    private BackPackScriptController() {
+    }
 
-	public static BackPackScriptController getInstance() {
-		return INSTANCE;
-	}
+    public static BackPackScriptController getInstance() {
+        return INSTANCE;
+    }
 
-	public List<Script> backpack(String groupName, List<Brick> checkedBricks, boolean addToHiddenBackpack, Sprite
-			spriteToBackpack) {
-		Iterator<Brick> iterator = checkedBricks.iterator();
-		List<Script> scriptsToAdd = new ArrayList<>();
-		while (iterator.hasNext()) {
-			Brick currentBrick = iterator.next();
-			if (currentBrick instanceof ScriptBrick) {
-				Script original = ((ScriptBrick) currentBrick).getScriptSafe();
-				Script scriptToAdd = original.copyScriptForSprite(
-						ProjectManager.getInstance().getCurrentSprite());
-				ProjectManager.getInstance().checkCurrentScript(scriptToAdd, false);
-				scriptToAdd.setCommentedOut(original.isCommentedOut());
-				for (Brick brickOfScript : scriptToAdd.getBrickList()) {
-					brickOfScript.storeDataForBackPack(spriteToBackpack);
-				}
-				scriptsToAdd.add(scriptToAdd);
-			}
-		}
-		if (!scriptsToAdd.isEmpty()) {
-			if (addToHiddenBackpack) {
-				BackPackListManager.getInstance().addScriptToHiddenBackpack(groupName, scriptsToAdd);
-			} else {
-				BackPackListManager.getInstance().addScriptToBackPack(groupName, scriptsToAdd);
-			}
-		}
-		return scriptsToAdd;
-	}
+    public List<Script> backpack(String groupName, List<Brick> checkedBricks, boolean addToHiddenBackpack, Sprite
+            spriteToBackpack) {
+        Iterator<Brick> iterator = checkedBricks.iterator();
+        List<Script> scriptsToAdd = new ArrayList<>();
+        while (iterator.hasNext()) {
+            Brick currentBrick = iterator.next();
+            if (currentBrick instanceof ScriptBrick) {
+                Script original = ((ScriptBrick) currentBrick).getScriptSafe();
+                Script scriptToAdd = original.copyScriptForSprite(
+                        ProjectManager.getInstance().getCurrentSprite());
+                ProjectManager.getInstance().checkCurrentScript(scriptToAdd, false);
+                scriptToAdd.setCommentedOut(original.isCommentedOut());
+                for (Brick brickOfScript : scriptToAdd.getBrickList()) {
+                    brickOfScript.storeDataForBackPack(spriteToBackpack);
+                }
+                scriptsToAdd.add(scriptToAdd);
+            }
+        }
+        if (!scriptsToAdd.isEmpty()) {
+            if (addToHiddenBackpack) {
+                BackPackListManager.getInstance().addScriptToHiddenBackpack(groupName, scriptsToAdd);
+            } else {
+                BackPackListManager.getInstance().addScriptToBackPack(groupName, scriptsToAdd);
+            }
+        }
+        return scriptsToAdd;
+    }
 
-	public void unpack(String selectedScriptGroupBackPack, boolean deleteUnpackedItems, boolean
-			handleInsertFromScriptBackPack, Activity activity, boolean fromHiddenBackPack) {
-		List<Script> scriptsInGroup;
-		if (fromHiddenBackPack) {
-			scriptsInGroup = BackPackListManager.getInstance().getHiddenBackpackedScripts().get(selectedScriptGroupBackPack);
-		} else {
-			scriptsInGroup = BackPackListManager.getInstance().getBackPackedScripts().get(selectedScriptGroupBackPack);
-		}
+    public void unpack(String selectedScriptGroupBackPack, boolean deleteUnpackedItems, boolean
+            handleInsertFromScriptBackPack, Activity activity, boolean fromHiddenBackPack) {
+        List<Script> scriptsInGroup;
+        if (fromHiddenBackPack) {
+            scriptsInGroup = BackPackListManager.getInstance().getHiddenBackpackedScripts().get(selectedScriptGroupBackPack);
+        } else {
+            scriptsInGroup = BackPackListManager.getInstance().getBackPackedScripts().get(selectedScriptGroupBackPack);
+        }
 
-		if (scriptsInGroup == null) {
-			Log.d(TAG, "Attempted to unpack a not existing (maybe previously deleted) script group");
-			return;
-		}
-		Integer numberOfBricks = 0;
+        if (scriptsInGroup == null) {
+            Log.d(TAG, "Attempted to unpack a not existing (maybe previously deleted) script group");
+            return;
+        }
+        Integer numberOfBricks = 0;
 
-		for (Script backPackedScript : scriptsInGroup) {
-			Script newScript = backPackedScript.copyScriptForSprite(ProjectManager.getInstance().getCurrentSprite());
-			for (Brick brickOfScript : newScript.getBrickList()) {
-				handleBackPackedBricksWithAdditionalData(brickOfScript, deleteUnpackedItems);
-			}
+        for (Script backPackedScript : scriptsInGroup) {
+            Script newScript = backPackedScript.copyScriptForSprite(ProjectManager.getInstance().getCurrentSprite());
+            for (Brick brickOfScript : newScript.getBrickList()) {
+                handleBackPackedBricksWithAdditionalData(brickOfScript, deleteUnpackedItems);
+            }
 
-			ProjectManager.getInstance().getCurrentSprite().addScript(newScript);
-			numberOfBricks += backPackedScript.getBrickList().size();
+            ProjectManager.getInstance().getCurrentSprite().addScript(newScript);
+            numberOfBricks += backPackedScript.getBrickList().size();
 
-			if (deleteUnpackedItems) {
-				if (fromHiddenBackPack) {
-					BackPackListManager.getInstance().removeItemFromScriptHiddenBackpack(selectedScriptGroupBackPack);
-				} else {
-					BackPackListManager.getInstance().removeItemFromScriptBackPack(selectedScriptGroupBackPack);
-				}
-			}
-			if (handleInsertFromScriptBackPack) {
-				String textForUnPacking = activity.getResources().getQuantityString(R.plurals
-						.unpacking_items_plural, 1);
-				ToastUtil.showSuccess(activity, selectedScriptGroupBackPack + " " + textForUnPacking);
+            if (deleteUnpackedItems) {
+                if (fromHiddenBackPack) {
+                    BackPackListManager.getInstance().removeItemFromScriptHiddenBackpack(selectedScriptGroupBackPack);
+                } else {
+                    BackPackListManager.getInstance().removeItemFromScriptBackPack(selectedScriptGroupBackPack);
+                }
+            }
+            if (handleInsertFromScriptBackPack) {
+                String textForUnPacking = activity.getResources().getQuantityString(R.plurals
+                        .unpacking_items_plural, 1);
+                ToastUtil.showSuccess(activity, selectedScriptGroupBackPack + " " + textForUnPacking);
 
-				SharedPreferences sharedPreferences = PreferenceManager
-						.getDefaultSharedPreferences(activity);
-				sharedPreferences.edit().putInt(Constants.NUMBER_OF_BRICKS_INSERTED_FROM_BACKPACK, numberOfBricks).commit();
-				((BackPackActivity) activity)
-						.returnToScriptActivity(ScriptActivity.FRAGMENT_SCRIPTS);
-			}
-		}
-	}
+                SharedPreferences sharedPreferences = PreferenceManager
+                        .getDefaultSharedPreferences(activity);
+                sharedPreferences.edit().putInt(Constants.NUMBER_OF_BRICKS_INSERTED_FROM_BACKPACK, numberOfBricks).commit();
+                ((BackPackActivity) activity)
+                        .returnToScriptActivity(ScriptActivity.FRAGMENT_SCRIPTS);
+            }
+        }
+    }
 
-	private void handleBackPackedBricksWithAdditionalData(Brick brickOfScript, boolean deleteUnpackedItems) {
-		if (brickOfScript instanceof SetLookBrick) {
-			handleLookBrickUnpacking(brickOfScript, deleteUnpackedItems);
-		} else if (brickOfScript instanceof PlaySoundBrick) {
-			handleSoundBrickUnpacking(brickOfScript, deleteUnpackedItems);
-		} else if (brickOfScript instanceof UserVariableBrick) {
-			handleVariableBrickUnpacking(brickOfScript);
-		} else if (brickOfScript instanceof UserListBrick) {
-			handleVariableListUnpacking(brickOfScript);
-		} else if (brickOfScript instanceof PointToBrick) {
-			handlePointToBrickUnpacking(brickOfScript, deleteUnpackedItems);
-		} else if (brickOfScript instanceof UserBrick) {
-			handleUserBrickUnpacking(brickOfScript, deleteUnpackedItems);
-		} else if (brickOfScript instanceof FormulaBrick) {
-			handleFormulaBrickUnpacking(brickOfScript);
-		}
-	}
+    private void handleBackPackedBricksWithAdditionalData(Brick brickOfScript, boolean deleteUnpackedItems) {
+        if (brickOfScript instanceof SetLookBrick) {
+            handleLookBrickUnpacking(brickOfScript, deleteUnpackedItems);
+        } else if (brickOfScript instanceof PlaySoundBrick) {
+            handleSoundBrickUnpacking(brickOfScript, deleteUnpackedItems);
+        } else if (brickOfScript instanceof UserVariableBrick) {
+            handleVariableBrickUnpacking(brickOfScript);
+        } else if (brickOfScript instanceof UserListBrick) {
+            handleVariableListUnpacking(brickOfScript);
+        } else if (brickOfScript instanceof PointToBrick) {
+            handlePointToBrickUnpacking(brickOfScript, deleteUnpackedItems);
+        } else if (brickOfScript instanceof UserBrick) {
+            handleUserBrickUnpacking(brickOfScript, deleteUnpackedItems);
+        } else if (brickOfScript instanceof FormulaBrick) {
+            handleFormulaBrickUnpacking(brickOfScript);
+        }
+    }
 
-	private void handleFormulaBrickUnpacking(Brick brickOfScript) {
-		FormulaBrick brick = (FormulaBrick) brickOfScript;
-		for (BackPackedListData backPackedData : brick.getBackPackedListData()) {
-			if (backPackedData.userList != null) {
-				updateListsInDataContainer(backPackedData, backPackedData.userList);
-			}
-		}
+    private void handleFormulaBrickUnpacking(Brick brickOfScript) {
+        FormulaBrick brick = (FormulaBrick) brickOfScript;
+        for (BackPackedListData backPackedData : brick.getBackPackedListData()) {
+            if (backPackedData.userList != null) {
+                updateListsInDataContainer(backPackedData, backPackedData.userList);
+            }
+        }
 
-		for (BackPackedVariableData backPackedData : brick.getBackPackedVariableData()) {
-			if (backPackedData.userVariable != null) {
-				updateVariablesInDataContainer(backPackedData, backPackedData.userVariable);
-			}
-		}
-	}
+        for (BackPackedVariableData backPackedData : brick.getBackPackedVariableData()) {
+            if (backPackedData.userVariable != null) {
+                updateVariablesInDataContainer(backPackedData, backPackedData.userVariable);
+            }
+        }
+    }
 
-	private void handleLookBrickUnpacking(Brick brickOfScript, boolean deleteUnpackedItems) {
-		SetLookBrick brick = (SetLookBrick) brickOfScript;
-		LookData newLookData = LookController.getInstance().unpack(brick.getLook(), deleteUnpackedItems, true);
-		if (newLookData != null) {
-			brick.setLook(newLookData);
-		}
-	}
+    private void handleLookBrickUnpacking(Brick brickOfScript, boolean deleteUnpackedItems) {
+        SetLookBrick brick = (SetLookBrick) brickOfScript;
+        LookData newLookData = LookController.getInstance().unpack(brick.getLook(), deleteUnpackedItems, true);
+        if (newLookData != null) {
+            brick.setLook(newLookData);
+        }
+    }
 
-	private void handleSoundBrickUnpacking(Brick brickOfScript, boolean deleteUnpackedItems) {
-		PlaySoundBrick brick = (PlaySoundBrick) brickOfScript;
-		SoundInfo newSoundInfo = SoundController.getInstance().unpack(brick.getSound(), deleteUnpackedItems, true);
-		if (newSoundInfo != null) {
-			brick.setSoundInfo(newSoundInfo);
-		}
-	}
+    private void handleSoundBrickUnpacking(Brick brickOfScript, boolean deleteUnpackedItems) {
+        PlaySoundBrick brick = (PlaySoundBrick) brickOfScript;
+        SoundInfo newSoundInfo = SoundController.getInstance().unpack(brick.getSound(), deleteUnpackedItems, true);
+        if (newSoundInfo != null) {
+            brick.setSoundInfo(newSoundInfo);
+        }
+    }
 
-	private void handleVariableBrickUnpacking(Brick brickOfScript) {
-		UserVariableBrick brick = (UserVariableBrick) brickOfScript;
+    private void handleVariableBrickUnpacking(Brick brickOfScript) {
+        UserVariableBrick brick = (UserVariableBrick) brickOfScript;
 
-		BackPackedVariableData backPackedData = brick.getBackPackedData();
-		if (brick.getUserVariable() == null) {
-			brick.setUserVariable(backPackedData.userVariable);
-		}
+        BackPackedVariableData backPackedData = brick.getBackPackedData();
+        if (brick.getUserVariable() == null) {
+            brick.setUserVariable(backPackedData.userVariable);
+        }
 
-		UserVariable variable = updateVariablesInDataContainer(backPackedData, brick.getUserVariable());
-		brick.setUserVariable(variable);
-	}
+        UserVariable variable = updateVariablesInDataContainer(backPackedData, brick.getUserVariable());
+        brick.setUserVariable(variable);
+    }
 
-	private void handleVariableListUnpacking(Brick brickOfScript) {
-		UserListBrick brick = (UserListBrick) brickOfScript;
+    private void handleVariableListUnpacking(Brick brickOfScript) {
+        UserListBrick brick = (UserListBrick) brickOfScript;
 
-		BackPackedListData backPackedData = brick.getBackPackedData();
-		if (brick.getUserList() == null) {
-			brick.setUserList(backPackedData.userList);
-		}
+        BackPackedListData backPackedData = brick.getBackPackedData();
+        if (brick.getUserList() == null) {
+            brick.setUserList(backPackedData.userList);
+        }
 
-		updateListsInDataContainer(backPackedData, brick.getUserList());
-	}
+        updateListsInDataContainer(backPackedData, brick.getUserList());
+    }
 
-	private void handlePointToBrickUnpacking(Brick brickOfScript, boolean deleteUnpackedItems) {
-		PointToBrick brick = (PointToBrick) brickOfScript;
-		Sprite unpackedPointToSprite = BackPackSpriteController.getInstance().unpack(brick.getPointedObject(),
-				deleteUnpackedItems, true, true, false);
-		brick.setPointedObject(unpackedPointToSprite);
-	}
+    private void handlePointToBrickUnpacking(Brick brickOfScript, boolean deleteUnpackedItems) {
+        PointToBrick brick = (PointToBrick) brickOfScript;
+        Sprite unpackedPointToSprite = BackPackSpriteController.getInstance().unpack(brick.getPointedObject(),
+                deleteUnpackedItems, true, true, false);
+        brick.setPointedObject(unpackedPointToSprite);
+    }
 
-	private void handleUserBrickUnpacking(Brick brickOfScript, boolean deleteUnpackedItems) {
-		UserBrick brick = (UserBrick) brickOfScript;
-		Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
+    private void handleUserBrickUnpacking(Brick brickOfScript, boolean deleteUnpackedItems) {
+        UserBrick brick = (UserBrick) brickOfScript;
+        Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
 
-		UserBrick clonedPrototypeUserBrick = (UserBrick) brick.clone();
-		clonedPrototypeUserBrick.updateUserBrickParametersAndVariables();
-		currentSprite.addUserBrick(clonedPrototypeUserBrick);
+        UserBrick clonedPrototypeUserBrick = (UserBrick) brick.clone();
+        clonedPrototypeUserBrick.updateUserBrickParametersAndVariables();
+        currentSprite.addUserBrick(clonedPrototypeUserBrick);
 
-		for (Brick brickOfUserScript : brick.getDefinitionBrick().getUserScript().getBrickList()) {
-			handleBackPackedBricksWithAdditionalData(brickOfUserScript, deleteUnpackedItems);
-		}
+        for (Brick brickOfUserScript : brick.getDefinitionBrick().getUserScript().getBrickList()) {
+            handleBackPackedBricksWithAdditionalData(brickOfUserScript, deleteUnpackedItems);
+        }
 
-		setUserBrickElementReferences(brick);
-		brick.updateUserBrickParametersAndVariables();
-	}
+        setUserBrickElementReferences(brick);
+        brick.updateUserBrickParametersAndVariables();
+    }
 
-	private void setUserBrickElementReferences(UserBrick brick) {
-		UserScriptDefinitionBrick definitionBrick = brick.getDefinitionBrick();
-		List<UserScriptDefinitionBrickElement> userScriptDefinitionBrickElementList = definitionBrick.getUserScriptDefinitionBrickElements();
-		Iterator<UserBrickParameter> userBrickParameterIterator = brick.getUserBrickParameters().iterator();
+    private void setUserBrickElementReferences(UserBrick brick) {
+        UserScriptDefinitionBrick definitionBrick = brick.getDefinitionBrick();
+        List<UserScriptDefinitionBrickElement> userScriptDefinitionBrickElementList = definitionBrick.getUserScriptDefinitionBrickElements();
+        Iterator<UserBrickParameter> userBrickParameterIterator = brick.getUserBrickParameters().iterator();
 
-		for (UserScriptDefinitionBrickElement element : userScriptDefinitionBrickElementList) {
-			if (element.isVariable() && userBrickParameterIterator.hasNext()) {
-				UserBrickParameter parameter = userBrickParameterIterator.next();
-				parameter.setElement(element);
-			}
-		}
-	}
+        for (UserScriptDefinitionBrickElement element : userScriptDefinitionBrickElementList) {
+            if (element.isVariable() && userBrickParameterIterator.hasNext()) {
+                UserBrickParameter parameter = userBrickParameterIterator.next();
+                parameter.setElement(element);
+            }
+        }
+    }
 
-	private UserVariable updateVariablesInDataContainer(BackPackedVariableData backPackedData, UserVariable userVariable) {
-		ProjectManager projectManager = ProjectManager.getInstance();
-		DataContainer dataContainer = projectManager.getCurrentScene().getDataContainer();
-		UserVariable unpackedVariable = null;
+    private UserVariable updateVariablesInDataContainer(BackPackedVariableData backPackedData, UserVariable userVariable) {
+        ProjectManager projectManager = ProjectManager.getInstance();
+        DataContainer dataContainer = projectManager.getCurrentScene().getDataContainer();
+        UserVariable unpackedVariable = null;
 
-		switch (backPackedData.userVariableType) {
-			case DataContainer.USER_VARIABLE_SPRITE:
-				Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
-				unpackedVariable = dataContainer.addSpriteVariableIfDoesNotExist(userVariable.getName(), currentSprite);
-				break;
-			case DataContainer.USER_VARIABLE_PROJECT:
-				unpackedVariable = dataContainer.findUserVariable(userVariable.getName(),
-						dataContainer.getProjectVariables());
-				if (unpackedVariable == null) {
-					unpackedVariable = dataContainer.addProjectUserVariable(userVariable.getName());
-				}
-				break;
-			case DataContainer.USER_VARIABLE_USERBRICK:
-				UserBrick userBrick = ProjectManager.getInstance().getCurrentUserBrick();
-				if (userVariable != null) {
-					unpackedVariable = dataContainer.addUserBrickVariableToUserBrickIfNotExists(userBrick, userVariable.getName(),
-							userVariable.getValue());
-				}
-				break;
-		}
-		return unpackedVariable;
-	}
+        switch (backPackedData.userVariableType) {
+            case DataContainer.USER_VARIABLE_SPRITE:
+                Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
+                unpackedVariable = dataContainer.addSpriteVariableIfDoesNotExist(userVariable.getName(), currentSprite);
+                break;
+            case DataContainer.USER_VARIABLE_PROJECT:
+                unpackedVariable = dataContainer.findUserVariable(userVariable.getName(),
+                        dataContainer.getProjectVariables());
+                if (unpackedVariable == null) {
+                    unpackedVariable = dataContainer.addProjectUserVariable(userVariable.getName());
+                }
+                break;
+            case DataContainer.USER_VARIABLE_USERBRICK:
+                UserBrick userBrick = ProjectManager.getInstance().getCurrentUserBrick();
+                if (userVariable != null) {
+                    unpackedVariable = dataContainer.addUserBrickVariableToUserBrickIfNotExists(userBrick, userVariable.getName(),
+                            userVariable.getValue());
+                }
+                break;
+        }
+        return unpackedVariable;
+    }
 
-	private void updateListsInDataContainer(BackPackedListData backPackedData, UserList userList) {
-		ProjectManager projectManager = ProjectManager.getInstance();
-		DataContainer dataContainer = projectManager.getCurrentScene().getDataContainer();
-		switch (backPackedData.userListType) {
-			case DataContainer.USER_LIST_SPRITE:
-				Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
-				dataContainer.addSpriteListIfDoesNotExist(userList.getName(), currentSprite);
-				break;
-			case DataContainer.USER_LIST_PROJECT:
-				if (dataContainer.findUserList(userList.getName(),
-						dataContainer.getProjectLists()) == null) {
-					dataContainer.addProjectUserList(userList.getName());
-				}
-				break;
-		}
-	}
+    private void updateListsInDataContainer(BackPackedListData backPackedData, UserList userList) {
+        ProjectManager projectManager = ProjectManager.getInstance();
+        DataContainer dataContainer = projectManager.getCurrentScene().getDataContainer();
+        switch (backPackedData.userListType) {
+            case DataContainer.USER_LIST_SPRITE:
+                Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
+                dataContainer.addSpriteListIfDoesNotExist(userList.getName(), currentSprite);
+                break;
+            case DataContainer.USER_LIST_PROJECT:
+                if (dataContainer.findUserList(userList.getName(),
+                        dataContainer.getProjectLists()) == null) {
+                    dataContainer.addProjectUserList(userList.getName());
+                }
+                break;
+        }
+    }
 }

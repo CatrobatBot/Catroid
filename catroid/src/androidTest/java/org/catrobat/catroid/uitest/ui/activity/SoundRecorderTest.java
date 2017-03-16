@@ -48,157 +48,157 @@ import java.util.List;
 
 public class SoundRecorderTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
-	private RecordButton recordButton = null;
+    private RecordButton recordButton = null;
 
-	public SoundRecorderTest() {
-		super(MainMenuActivity.class);
-	}
+    public SoundRecorderTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		UiTestUtils.createTestProject();
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        UiTestUtils.createTestProject();
 
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
-		UiTestUtils.switchToFragmentInScriptActivity(solo, UiTestUtils.SOUNDS_INDEX);
-	}
+        UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
+        UiTestUtils.switchToFragmentInScriptActivity(solo, UiTestUtils.SOUNDS_INDEX);
+    }
 
-	public void testOrientation() throws NameNotFoundException {
-		prepareRecording();
-		solo.waitForActivity(SoundRecorderActivity.class.getSimpleName());
-		/// Method 1: Assert it is currently in portrait mode.
-		assertEquals("SoundRecorderActivity not in Portrait mode!", Configuration.ORIENTATION_PORTRAIT, solo
-				.getCurrentActivity().getResources().getConfiguration().orientation);
+    public void testOrientation() throws NameNotFoundException {
+        prepareRecording();
+        solo.waitForActivity(SoundRecorderActivity.class.getSimpleName());
+        /// Method 1: Assert it is currently in portrait mode.
+        assertEquals("SoundRecorderActivity not in Portrait mode!", Configuration.ORIENTATION_PORTRAIT, solo
+                .getCurrentActivity().getResources().getConfiguration().orientation);
 
-		/// Method 2: Retreive info about Activity as collected from AndroidManifest.xml
-		// https://developer.android.com/reference/android/content/pm/ActivityInfo.html
-		PackageManager packageManager = solo.getCurrentActivity().getPackageManager();
-		ActivityInfo activityInfo = packageManager.getActivityInfo(solo.getCurrentActivity().getComponentName(),
-				PackageManager.GET_META_DATA);
+        /// Method 2: Retreive info about Activity as collected from AndroidManifest.xml
+        // https://developer.android.com/reference/android/content/pm/ActivityInfo.html
+        PackageManager packageManager = solo.getCurrentActivity().getPackageManager();
+        ActivityInfo activityInfo = packageManager.getActivityInfo(solo.getCurrentActivity().getComponentName(),
+                PackageManager.GET_META_DATA);
 
-		// Note that the activity is _indeed_ rotated on your device/emulator!
-		// Robotium can _force_ the activity to be in landscapeMode mode (and so could we, programmatically)
-		solo.setActivityOrientation(Solo.LANDSCAPE);
-		solo.sleep(200);
+        // Note that the activity is _indeed_ rotated on your device/emulator!
+        // Robotium can _force_ the activity to be in landscapeMode mode (and so could we, programmatically)
+        solo.setActivityOrientation(Solo.LANDSCAPE);
+        solo.sleep(200);
 
-		assertEquals(SoundRecorderActivity.class.getSimpleName()
-						+ " not set to be in portrait mode in AndroidManifest.xml!", ActivityInfo.SCREEN_ORIENTATION_PORTRAIT,
-				activityInfo.screenOrientation
-		);
-	}
+        assertEquals(SoundRecorderActivity.class.getSimpleName()
+                        + " not set to be in portrait mode in AndroidManifest.xml!", ActivityInfo.SCREEN_ORIENTATION_PORTRAIT,
+                activityInfo.screenOrientation
+        );
+    }
 
-	public void testRecordMultipleSounds() throws InterruptedException {
+    public void testRecordMultipleSounds() throws InterruptedException {
 
-		prepareRecording();
+        prepareRecording();
 
-		recordButton = (RecordButton) solo.getView(R.id.soundrecorder_record_button);
-		assertTrue("Could not find record Button Object!", recordButton != null);
+        recordButton = (RecordButton) solo.getView(R.id.soundrecorder_record_button);
+        assertTrue("Could not find record Button Object!", recordButton != null);
 
-		recordSound();
-		solo.sleep(1000);
-		assertSoundRecording(1);
+        recordSound();
+        solo.sleep(1000);
+        assertSoundRecording(1);
 
-		prepareRecording();
+        prepareRecording();
 
-		// fetch again, to receive changed state, otherwise timeout !
-		recordButton = (RecordButton) solo.getView(R.id.soundrecorder_record_button);
-		assertTrue("Could not find record Button Object!", recordButton != null);
+        // fetch again, to receive changed state, otherwise timeout !
+        recordButton = (RecordButton) solo.getView(R.id.soundrecorder_record_button);
+        assertTrue("Could not find record Button Object!", recordButton != null);
 
-		recordSoundGoBackWhileRecording();
+        recordSoundGoBackWhileRecording();
 
-		solo.sleep(1000);
-		assertSoundRecording(2);
-		solo.sleep(500);
-	}
+        solo.sleep(1000);
+        assertSoundRecording(2);
+        solo.sleep(500);
+    }
 
-	private void recordSound() throws InterruptedException {
-		solo.waitForActivity(SoundRecorderActivity.class.getSimpleName());
-		solo.clickOnView(recordButton);
+    private void recordSound() throws InterruptedException {
+        solo.waitForActivity(SoundRecorderActivity.class.getSimpleName());
+        solo.clickOnView(recordButton);
 
-		WaitForRecord waitForRecord = new WaitForRecord();
-		boolean result = solo.waitForCondition(waitForRecord, 5000);
-		assertTrue("TimeOut at changing Recording State", result);
+        WaitForRecord waitForRecord = new WaitForRecord();
+        boolean result = solo.waitForCondition(waitForRecord, 5000);
+        assertTrue("TimeOut at changing Recording State", result);
 
-		int recordTime = 500;
-		solo.sleep(recordTime);
+        int recordTime = 500;
+        solo.sleep(recordTime);
 
-		solo.clickOnView(recordButton);
-		WaitForStop waitForStop = new WaitForStop();
+        solo.clickOnView(recordButton);
+        WaitForStop waitForStop = new WaitForStop();
 
-		result = solo.waitForCondition(waitForStop, 5000);
-		assertTrue("TimeOut at changing Recording State", result);
-	}
+        result = solo.waitForCondition(waitForStop, 5000);
+        assertTrue("TimeOut at changing Recording State", result);
+    }
 
-	private void recordSoundGoBackWhileRecording() throws InterruptedException {
-		solo.waitForActivity(SoundRecorderActivity.class.getSimpleName());
+    private void recordSoundGoBackWhileRecording() throws InterruptedException {
+        solo.waitForActivity(SoundRecorderActivity.class.getSimpleName());
 
-		solo.clickOnView(recordButton);
-		WaitForRecord waitForRecord = new WaitForRecord();
-		boolean result = solo.waitForCondition(waitForRecord, 5000);
-		assertTrue("TimeOut at changing Recording State", result);
+        solo.clickOnView(recordButton);
+        WaitForRecord waitForRecord = new WaitForRecord();
+        boolean result = solo.waitForCondition(waitForRecord, 5000);
+        assertTrue("TimeOut at changing Recording State", result);
 
-		int recordTime = 500;
-		solo.sleep(recordTime);
+        int recordTime = 500;
+        solo.sleep(recordTime);
 
-		solo.goBack();
-		WaitForStop waitForStop = new WaitForStop();
+        solo.goBack();
+        WaitForStop waitForStop = new WaitForStop();
 
-		result = solo.waitForCondition(waitForStop, 5000);
-		assertTrue("TimeOut at changing Recording State", result);
-	}
+        result = solo.waitForCondition(waitForStop, 5000);
+        assertTrue("TimeOut at changing Recording State", result);
+    }
 
-	private void prepareRecording() {
-		UiTestUtils.waitForFragment(solo, R.id.fragment_sprites_list);
+    private void prepareRecording() {
+        UiTestUtils.waitForFragment(solo, R.id.fragment_sprites_list);
 
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_add);
-		// quickfix for Jenkins to get rid of Resources$NotFoundException: String resource
-		// String soundRecorderText = solo.getString(R.string.soundrecorder_name);
-		String soundRecorderText = solo.getString(R.string.add_sound_from_recorder);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_add);
+        // quickfix for Jenkins to get rid of Resources$NotFoundException: String resource
+        // String soundRecorderText = solo.getString(R.string.soundrecorder_name);
+        String soundRecorderText = solo.getString(R.string.add_sound_from_recorder);
 
-		solo.waitForText(soundRecorderText);
-		assertTrue("Catroid Sound Recorder is not present", solo.searchText(soundRecorderText));
-		solo.clickOnText(soundRecorderText);
-	}
+        solo.waitForText(soundRecorderText);
+        assertTrue("Catroid Sound Recorder is not present", solo.searchText(soundRecorderText));
+        solo.clickOnText(soundRecorderText);
+    }
 
-	private void assertSoundRecording(int recordNumber) {
-		String recordPath = Utils.buildPath(Constants.TMP_PATH,
-				solo.getString(R.string.soundrecorder_recorded_filename) + SoundRecorder.RECORDING_EXTENSION);
-		File recordedFile = new File(recordPath);
-		assertTrue("recorded sound file not found in file system", recordedFile.exists());
+    private void assertSoundRecording(int recordNumber) {
+        String recordPath = Utils.buildPath(Constants.TMP_PATH,
+                solo.getString(R.string.soundrecorder_recorded_filename) + SoundRecorder.RECORDING_EXTENSION);
+        File recordedFile = new File(recordPath);
+        assertTrue("recorded sound file not found in file system", recordedFile.exists());
 
-		solo.waitForActivity(ScriptActivity.class.getSimpleName());
+        solo.waitForActivity(ScriptActivity.class.getSimpleName());
 
-		String recordTitle = solo.getString(R.string.soundrecorder_recorded_filename);
-		if (recordNumber > 1) {
-			recordTitle += (recordNumber - 1);
-		}
+        String recordTitle = solo.getString(R.string.soundrecorder_recorded_filename);
+        if (recordNumber > 1) {
+            recordTitle += (recordNumber - 1);
+        }
 
-		List<SoundInfo> soundInfoList = ProjectManager.getInstance().getCurrentSprite().getSoundList();
-		assertEquals("wrong number of items in the list ", recordNumber, soundInfoList.size());
-		SoundInfo lastAddedSoundInfo = soundInfoList.get(soundInfoList.size() - 1);
-		assertEquals("recorded sound not found in project", recordTitle, lastAddedSoundInfo.getTitle());
+        List<SoundInfo> soundInfoList = ProjectManager.getInstance().getCurrentSprite().getSoundList();
+        assertEquals("wrong number of items in the list ", recordNumber, soundInfoList.size());
+        SoundInfo lastAddedSoundInfo = soundInfoList.get(soundInfoList.size() - 1);
+        assertEquals("recorded sound not found in project", recordTitle, lastAddedSoundInfo.getTitle());
 
-		File lastAddedSoundFile = new File(lastAddedSoundInfo.getAbsolutePath());
-		assertTrue("recorded sound file not found in project", lastAddedSoundFile.exists());
-	}
+        File lastAddedSoundFile = new File(lastAddedSoundInfo.getAbsolutePath());
+        assertTrue("recorded sound file not found in project", lastAddedSoundFile.exists());
+    }
 
-	public class WaitForRecord implements Condition {
+    public class WaitForRecord implements Condition {
 
-		public boolean isSatisfied() {
-			if (recordButton != null) {
-				return (recordButton.getState() == RecordButton.RecordState.RECORD);
-			}
-			return false;
-		}
-	}
+        public boolean isSatisfied() {
+            if (recordButton != null) {
+                return (recordButton.getState() == RecordButton.RecordState.RECORD);
+            }
+            return false;
+        }
+    }
 
-	public class WaitForStop implements Condition {
+    public class WaitForStop implements Condition {
 
-		public boolean isSatisfied() {
-			if (recordButton != null) {
-				return (recordButton.getState() == RecordButton.RecordState.STOP);
-			}
-			return false;
-		}
-	}
+        public boolean isSatisfied() {
+            if (recordButton != null) {
+                return (recordButton.getState() == RecordButton.RecordState.STOP);
+            }
+            return false;
+        }
+    }
 }

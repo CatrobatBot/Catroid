@@ -35,86 +35,86 @@ import java.util.List;
 
 public class TrackGrid {
 
-	private final MusicalKey key;
-	private final MusicalInstrument instrument;
-	private final MusicalBeat beat;
-	private final List<GridRow> gridRows;
+    private final MusicalKey key;
+    private final MusicalInstrument instrument;
+    private final MusicalBeat beat;
+    private final List<GridRow> gridRows;
 
-	public TrackGrid(MusicalKey key, MusicalInstrument instrument, MusicalBeat beat, List<GridRow> gridRows) {
-		this.key = key;
-		this.instrument = instrument;
-		this.beat = beat;
-		this.gridRows = gridRows;
-	}
+    public TrackGrid(MusicalKey key, MusicalInstrument instrument, MusicalBeat beat, List<GridRow> gridRows) {
+        this.key = key;
+        this.instrument = instrument;
+        this.beat = beat;
+        this.gridRows = gridRows;
+    }
 
-	public MusicalKey getKey() {
-		return key;
-	}
+    public MusicalKey getKey() {
+        return key;
+    }
 
-	public MusicalInstrument getInstrument() {
-		return instrument;
-	}
+    public MusicalInstrument getInstrument() {
+        return instrument;
+    }
 
-	public MusicalBeat getBeat() {
-		return beat;
-	}
+    public MusicalBeat getBeat() {
+        return beat;
+    }
 
-	public List<GridRow> getGridRows() {
-		return gridRows;
-	}
+    public List<GridRow> getGridRows() {
+        return gridRows;
+    }
 
-	@Override
-	public int hashCode() {
-		int hashCode = 172;
-		int primeWithGoodCollisionPrevention = 31;
-		hashCode = primeWithGoodCollisionPrevention * hashCode + key.hashCode();
-		hashCode = primeWithGoodCollisionPrevention * hashCode + instrument.hashCode();
-		hashCode = primeWithGoodCollisionPrevention * hashCode + beat.hashCode();
-		hashCode = primeWithGoodCollisionPrevention * hashCode + gridRows.hashCode();
-		return hashCode;
-	}
+    @Override
+    public int hashCode() {
+        int hashCode = 172;
+        int primeWithGoodCollisionPrevention = 31;
+        hashCode = primeWithGoodCollisionPrevention * hashCode + key.hashCode();
+        hashCode = primeWithGoodCollisionPrevention * hashCode + instrument.hashCode();
+        hashCode = primeWithGoodCollisionPrevention * hashCode + beat.hashCode();
+        hashCode = primeWithGoodCollisionPrevention * hashCode + gridRows.hashCode();
+        return hashCode;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		TrackGrid reference = (TrackGrid) o;
-		return reference.gridRows.containsAll(gridRows)
-				&& gridRows.containsAll(reference.gridRows)
-				&& reference.beat.equals(beat)
-				&& reference.instrument.equals(instrument)
-				&& reference.key.equals(key);
-	}
+    @Override
+    public boolean equals(Object o) {
+        TrackGrid reference = (TrackGrid) o;
+        return reference.gridRows.containsAll(gridRows)
+                && gridRows.containsAll(reference.gridRows)
+                && reference.beat.equals(beat)
+                && reference.instrument.equals(instrument)
+                && reference.key.equals(key);
+    }
 
-	public GridRow getGridRowForNoteName(NoteName noteName) {
-		for (GridRow gridRow : gridRows) {
-			if (gridRow.getNoteName().equals(noteName)) {
-				return gridRow;
-			}
-		}
-		return null;
-	}
+    public GridRow getGridRowForNoteName(NoteName noteName) {
+        for (GridRow gridRow : gridRows) {
+            if (gridRow.getNoteName().equals(noteName)) {
+                return gridRow;
+            }
+        }
+        return null;
+    }
 
-	public void updateGridRowPosition(NoteName noteName, int columnIndex, NoteLength noteLength, boolean toggled) {
-		GridRow gridRow = getGridRowForNoteName(noteName);
-		if (null == gridRow) {
-			List<GridRowPosition> gridRowPositions = new ArrayList<>();
-			SparseArray<List<GridRowPosition>> array = new SparseArray<>();
-			array.append(0, gridRowPositions);
-			gridRow = new GridRow(noteName, array);
-			gridRows.add(gridRow);
-		}
-		List<GridRowPosition> firstGridRowPositions = gridRow.getGridRowPositions().get(0);
-		int indexInList = GridRowPosition.getGridRowPositionIndexInList(firstGridRowPositions, columnIndex);
-		if (toggled) {
-			if (indexInList == -1) {
-				firstGridRowPositions.add(new GridRowPosition(columnIndex, noteLength));
-			}
-		} else {
-			if (indexInList >= 0) {
-				firstGridRowPositions.remove(indexInList);
-				if (firstGridRowPositions.isEmpty()) {
-					gridRows.remove(gridRow);
-				}
-			}
-		}
-	}
+    public void updateGridRowPosition(NoteName noteName, int columnIndex, NoteLength noteLength, boolean toggled) {
+        GridRow gridRow = getGridRowForNoteName(noteName);
+        if (null == gridRow) {
+            List<GridRowPosition> gridRowPositions = new ArrayList<>();
+            SparseArray<List<GridRowPosition>> array = new SparseArray<>();
+            array.append(0, gridRowPositions);
+            gridRow = new GridRow(noteName, array);
+            gridRows.add(gridRow);
+        }
+        List<GridRowPosition> firstGridRowPositions = gridRow.getGridRowPositions().get(0);
+        int indexInList = GridRowPosition.getGridRowPositionIndexInList(firstGridRowPositions, columnIndex);
+        if (toggled) {
+            if (indexInList == -1) {
+                firstGridRowPositions.add(new GridRowPosition(columnIndex, noteLength));
+            }
+        } else {
+            if (indexInList >= 0) {
+                firstGridRowPositions.remove(indexInList);
+                if (firstGridRowPositions.isEmpty()) {
+                    gridRows.remove(gridRow);
+                }
+            }
+        }
+    }
 }

@@ -37,75 +37,75 @@ import java.util.List;
 
 public final class ConflictHelper {
 
-	private ConflictHelper() {
-	}
+    private ConflictHelper() {
+    }
 
-	public static boolean checkMergeConflict(Context context, Scene mergeResult) {
-		return checkVariableMergeConflict(context, mergeResult)
-				&& checkListMergeConflict(context, mergeResult);
-	}
+    public static boolean checkMergeConflict(Context context, Scene mergeResult) {
+        return checkVariableMergeConflict(context, mergeResult)
+                && checkListMergeConflict(context, mergeResult);
+    }
 
-	private static boolean checkVariableMergeConflict(Context context, Scene mergeResult) {
-		List<UserVariable> globalValues = mergeResult.getDataContainer().getProjectVariables();
+    private static boolean checkVariableMergeConflict(Context context, Scene mergeResult) {
+        List<UserVariable> globalValues = mergeResult.getDataContainer().getProjectVariables();
 
-		for (Sprite sprite : mergeResult.getSpriteList()) {
-			List<UserVariable> localValues = mergeResult.getDataContainer().getVariableListForSprite(sprite);
+        for (Sprite sprite : mergeResult.getSpriteList()) {
+            List<UserVariable> localValues = mergeResult.getDataContainer().getVariableListForSprite(sprite);
 
-			if (localValues.size() == 0) {
-				continue;
-			}
+            if (localValues.size() == 0) {
+                continue;
+            }
 
-			String name = checkVariableNames(globalValues, localValues);
-			if (name != null) {
-				if (context instanceof Activity) {
-					String msg = String.format(context.getString(R.string.merge_conflict_variable), name);
-					Utils.showErrorDialog(context, msg, R.string.merge_conflict);
-				}
-				return false;
-			}
-		}
-		return true;
-	}
+            String name = checkVariableNames(globalValues, localValues);
+            if (name != null) {
+                if (context instanceof Activity) {
+                    String msg = String.format(context.getString(R.string.merge_conflict_variable), name);
+                    Utils.showErrorDialog(context, msg, R.string.merge_conflict);
+                }
+                return false;
+            }
+        }
+        return true;
+    }
 
-	private static boolean checkListMergeConflict(Context context, Scene mergeResult) {
-		List<UserList> globalLists = mergeResult.getDataContainer().getProjectLists();
+    private static boolean checkListMergeConflict(Context context, Scene mergeResult) {
+        List<UserList> globalLists = mergeResult.getDataContainer().getProjectLists();
 
-		for (Sprite sprite : mergeResult.getSpriteList()) {
-			List<UserList> localLists = mergeResult.getDataContainer().getUserListListForSprite(sprite);
-			if (localLists.size() == 0) {
-				continue;
-			}
-			String name = checkListNames(globalLists, localLists);
-			if (name != null) {
-				if (context instanceof Activity) {
-					String msg = String.format(context.getString(R.string.merge_conflict_list), name);
-					Utils.showErrorDialog(context, msg, R.string.merge_conflict);
-				}
-				return false;
-			}
-		}
-		return true;
-	}
+        for (Sprite sprite : mergeResult.getSpriteList()) {
+            List<UserList> localLists = mergeResult.getDataContainer().getUserListListForSprite(sprite);
+            if (localLists.size() == 0) {
+                continue;
+            }
+            String name = checkListNames(globalLists, localLists);
+            if (name != null) {
+                if (context instanceof Activity) {
+                    String msg = String.format(context.getString(R.string.merge_conflict_list), name);
+                    Utils.showErrorDialog(context, msg, R.string.merge_conflict);
+                }
+                return false;
+            }
+        }
+        return true;
+    }
 
-	private static String checkVariableNames(List<UserVariable> globalValues, List<UserVariable> localValues) {
-		for (UserVariable global : globalValues) {
-			for (UserVariable local : localValues) {
-				if (global.getName().equals(local.getName())) {
-					return global.getName();
-				}
-			}
-		}
-		return null;
-	}
+    private static String checkVariableNames(List<UserVariable> globalValues, List<UserVariable> localValues) {
+        for (UserVariable global : globalValues) {
+            for (UserVariable local : localValues) {
+                if (global.getName().equals(local.getName())) {
+                    return global.getName();
+                }
+            }
+        }
+        return null;
+    }
 
-	private static String checkListNames(List<UserList> globalLists, List<UserList> localLists) {
-		for (UserList global : globalLists) {
-			for (UserList local : localLists) {
-				if (global.getName().equals(local.getName())) {
-					return global.getName();
-				}
-			}
-		}
-		return null;
-	}
+    private static String checkListNames(List<UserList> globalLists, List<UserList> localLists) {
+        for (UserList global : globalLists) {
+            for (UserList local : localLists) {
+                if (global.getName().equals(local.getName())) {
+                    return global.getName();
+                }
+            }
+        }
+        return null;
+    }
 }

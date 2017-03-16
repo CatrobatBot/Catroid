@@ -42,52 +42,52 @@ import java.util.ArrayList;
 
 public class SetRotationStyleTest extends BaseActivityInstrumentationTestCase<ScriptActivity> {
 
-	private Project project;
+    private Project project;
 
-	public SetRotationStyleTest() {
-		super(ScriptActivity.class);
-	}
+    public SetRotationStyleTest() {
+        super(ScriptActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		createProject();
-		super.setUp();
-	}
+    @Override
+    public void setUp() throws Exception {
+        createProject();
+        super.setUp();
+    }
 
-	public void testSetRotationStyleBrick() {
-		ListView dragDropListView = UiTestUtils.getScriptListView(solo);
-		BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
+    public void testSetRotationStyleBrick() {
+        ListView dragDropListView = UiTestUtils.getScriptListView(solo);
+        BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
 
-		int childrenCount = adapter.getChildCountFromLastGroup();
-		int groupCount = adapter.getScriptCount();
+        int childrenCount = adapter.getChildCountFromLastGroup();
+        int groupCount = adapter.getScriptCount();
 
-		assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
-		assertEquals("Incorrect number of bricks.", 1, childrenCount);
+        assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
+        assertEquals("Incorrect number of bricks.", 1, childrenCount);
 
-		ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
+        ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
 
-		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
-		assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.brick_set_rotation_style)));
-		assertNotNull("Spinner does not exist.", solo.getView(R.id.brick_set_rotation_style_spinner));
-		solo.clickOnView(solo.getView(R.id.brick_set_rotation_style_spinner));
-		assertNotNull("Spinner empty? (left/right rotation missing)", solo.getText(solo.getString(R.string.brick_set_rotation_style_lr)));
-		assertNotNull("Spinner empty? (no rotation missing)", solo.getText(solo.getString(R.string.brick_set_rotation_style_no)));
-		assertNotNull("Spinner empty? (normal rotation missing)", solo.getText(solo.getString(R.string.brick_set_rotation_style_normal)));
-	}
+        assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
+        assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
+        assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.brick_set_rotation_style)));
+        assertNotNull("Spinner does not exist.", solo.getView(R.id.brick_set_rotation_style_spinner));
+        solo.clickOnView(solo.getView(R.id.brick_set_rotation_style_spinner));
+        assertNotNull("Spinner empty? (left/right rotation missing)", solo.getText(solo.getString(R.string.brick_set_rotation_style_lr)));
+        assertNotNull("Spinner empty? (no rotation missing)", solo.getText(solo.getString(R.string.brick_set_rotation_style_no)));
+        assertNotNull("Spinner empty? (normal rotation missing)", solo.getText(solo.getString(R.string.brick_set_rotation_style_normal)));
+    }
 
-	private void createProject() {
-		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite sprite = new SingleSprite("cat");
-		Script script = new StartScript();
-		ProjectManager.getInstance().setProject(project);
-		script.addBrick(new SetRotationStyleBrick());
+    private void createProject() {
+        project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Sprite sprite = new SingleSprite("cat");
+        Script script = new StartScript();
+        ProjectManager.getInstance().setProject(project);
+        script.addBrick(new SetRotationStyleBrick());
 
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 }

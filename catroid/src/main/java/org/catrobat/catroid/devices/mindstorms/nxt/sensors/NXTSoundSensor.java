@@ -26,16 +26,16 @@ import org.catrobat.catroid.devices.mindstorms.MindstormsConnection;
 
 public class NXTSoundSensor extends NXTSensor {
 
-	public static final String TAG = NXTLightSensor.class.getSimpleName();
-	private static final int DEFAULT_VALUE = 0;
+    public static final String TAG = NXTLightSensor.class.getSimpleName();
+    private static final int DEFAULT_VALUE = 0;
 
-	public NXTSoundSensor(int port, MindstormsConnection connection) {
-		super(port, NXTSensorType.SOUND_DBA, NXTSensorMode.Percent, connection);
-		lastValidValue = DEFAULT_VALUE;
-	}
+    public NXTSoundSensor(int port, MindstormsConnection connection) {
+        super(port, NXTSensorType.SOUND_DBA, NXTSensorMode.Percent, connection);
+        lastValidValue = DEFAULT_VALUE;
+    }
 
-	@Override
-	public int getValue() {
-		return getScaledValue();
-	}
+    @Override
+    public int getValue() {
+        return getScaledValue();
+    }
 }

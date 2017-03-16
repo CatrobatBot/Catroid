@@ -42,227 +42,227 @@ import java.util.ArrayList;
 
 public class RPiSocketConnection {
 
-	private static final String TAG = AsyncRPiTaskRunner.class.getSimpleName();
-	private Socket clientSocket;
-	private String rpiVersion;
-	private String host;
+    private static final String TAG = AsyncRPiTaskRunner.class.getSimpleName();
+    private Socket clientSocket;
+    private String rpiVersion;
+    private String host;
 
-	private boolean isConnected;
-	private OutputStream outToServer;
-	private DataOutputStream outStream;
-	private BufferedReader reader;
-	private ArrayList<Integer> availableGPIOs;
-	private int interruptReceiverPort;
-	private Thread receiverThread;
+    private boolean isConnected;
+    private OutputStream outToServer;
+    private DataOutputStream outStream;
+    private BufferedReader reader;
+    private ArrayList<Integer> availableGPIOs;
+    private int interruptReceiverPort;
+    private Thread receiverThread;
 
-	public RPiSocketConnection() {
-	}
+    public RPiSocketConnection() {
+    }
 
-	public void connect(String host, int port) throws Exception {
-		if (isConnected) {
-			disconnect();
-		}
+    public void connect(String host, int port) throws Exception {
+        if (isConnected) {
+            disconnect();
+        }
 
-		this.host = host;
-		clientSocket = new Socket();
-		clientSocket.connect(new InetSocketAddress(host, port), 2000);
+        this.host = host;
+        clientSocket = new Socket();
+        clientSocket.connect(new InetSocketAddress(host, port), 2000);
 
-		outToServer = clientSocket.getOutputStream();
-		outStream = new DataOutputStream(outToServer);
-		reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        outToServer = clientSocket.getOutputStream();
+        outStream = new DataOutputStream(outToServer);
+        reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-		String hello = reader.readLine();
+        String hello = reader.readLine();
 
-		if (hello.startsWith("quit")) {
-			throw new NoConnectionException("Server refused to accept our connection!");
-		} else if (hello.startsWith("hello")) {
-			isConnected = true;
+        if (hello.startsWith("quit")) {
+            throw new NoConnectionException("Server refused to accept our connection!");
+        } else if (hello.startsWith("hello")) {
+            isConnected = true;
 
-			respondVersion();
-			readServerPort();
+            respondVersion();
+            readServerPort();
 
-			receiverThread = new Thread(new RPiSocketReceiver());
-			receiverThread.start();
-		}
-	}
+            receiverThread = new Thread(new RPiSocketReceiver());
+            receiverThread.start();
+        }
+    }
 
-	public void disconnect() throws IOException {
-		if (!isConnected) {
-			return;
-		}
+    public void disconnect() throws IOException {
+        if (!isConnected) {
+            return;
+        }
 
-		try {
-			processCommand("quit");
-		} catch (NoConnectionException e) {
-			Log.d(TAG, "Error during quit, this should not happen!");
-		}
+        try {
+            processCommand("quit");
+        } catch (NoConnectionException e) {
+            Log.d(TAG, "Error during quit, this should not happen!");
+        }
 
-		isConnected = false;
-		clientSocket.close();
-		receiverThread.interrupt();
-	}
+        isConnected = false;
+        clientSocket.close();
+        receiverThread.interrupt();
+    }
 
-	private void respondVersion() throws Exception {
-		String receivedLine = processCommand("rev");
-		rpiVersion = receivedLine.split(" ")[1];
-		availableGPIOs = RaspberryPiService.getInstance().getGpioList(rpiVersion);
-	}
+    private void respondVersion() throws Exception {
+        String receivedLine = processCommand("rev");
+        rpiVersion = receivedLine.split(" ")[1];
+        availableGPIOs = RaspberryPiService.getInstance().getGpioList(rpiVersion);
+    }
 
-	private void readServerPort() throws Exception {
-		String receivedLine = processCommand("serverport");
-		interruptReceiverPort = Integer.parseInt(receivedLine.split(" ")[1]);
-	}
+    private void readServerPort() throws Exception {
+        String receivedLine = processCommand("serverport");
+        interruptReceiverPort = Integer.parseInt(receivedLine.split(" ")[1]);
+    }
 
-	private String processCommand(String command) throws IOException, NoConnectionException {
-		if (!isConnected) {
-			throw new NoConnectionException("No active connection!");
-		}
+    private String processCommand(String command) throws IOException, NoConnectionException {
+        if (!isConnected) {
+            throw new NoConnectionException("No active connection!");
+        }
 
-		Log.d(TAG, "Sending:  " + command);
+        Log.d(TAG, "Sending:  " + command);
 
-		outStream.write(command.getBytes());
-		String receivedLine = reader.readLine();
+        outStream.write(command.getBytes());
+        String receivedLine = reader.readLine();
 
-		Log.d(TAG, "Received: " + receivedLine);
+        Log.d(TAG, "Received: " + receivedLine);
 
-		if (receivedLine == null || !receivedLine.startsWith(command.split(" ")[0])) {
-			throw new IOException("Error with response");
-		}
+        if (receivedLine == null || !receivedLine.startsWith(command.split(" ")[0])) {
+            throw new IOException("Error with response");
+        }
 
-		return receivedLine;
-	}
+        return receivedLine;
+    }
 
-	private void callEvent(String broadcastMessage) {
-		Sprite dummySenderSprite = new SpriteFactory().newInstance(SingleSprite.class.getSimpleName());
-		dummySenderSprite.setName("raspi_interrupt_dummy");
-		BroadcastAction action = (BroadcastAction) ActionFactory.createBroadcastAction(dummySenderSprite,
-				broadcastMessage);
-		action.act(0);
-	}
+    private void callEvent(String broadcastMessage) {
+        Sprite dummySenderSprite = new SpriteFactory().newInstance(SingleSprite.class.getSimpleName());
+        dummySenderSprite.setName("raspi_interrupt_dummy");
+        BroadcastAction action = (BroadcastAction) ActionFactory.createBroadcastAction(dummySenderSprite,
+                broadcastMessage);
+        action.act(0);
+    }
 
-	public void setPin(int pin, boolean value) throws NoConnectionException, IOException, NoGpioException {
-		if (!isConnected) {
-			throw new NoConnectionException("No active connection!");
-		}
+    public void setPin(int pin, boolean value) throws NoConnectionException, IOException, NoGpioException {
+        if (!isConnected) {
+            throw new NoConnectionException("No active connection!");
+        }
 
-		if (!availableGPIOs.contains(pin)) {
-			throw new NoGpioException("Pin out of range on this model!");
-		}
+        if (!availableGPIOs.contains(pin)) {
+            throw new NoGpioException("Pin out of range on this model!");
+        }
 
-		short valueShort = (short) (value ? 1 : 0);
+        short valueShort = (short) (value ? 1 : 0);
 
-		String setRequestMessage = "set " + pin + " " + valueShort;
-		String receivedLine = processCommand(setRequestMessage);
-		String[] tokens = receivedLine.split(" ");
+        String setRequestMessage = "set " + pin + " " + valueShort;
+        String receivedLine = processCommand(setRequestMessage);
+        String[] tokens = receivedLine.split(" ");
 
-		if (tokens.length != 3) {
-			throw new IOException("setRequest: Error with response");
-		}
-	}
+        if (tokens.length != 3) {
+            throw new IOException("setRequest: Error with response");
+        }
+    }
 
-	public boolean getPin(int pin) throws NoConnectionException, IOException, NoGpioException {
-		if (!availableGPIOs.contains(pin)) {
-			throw new NoGpioException("Pin out of range on this model!");
-		}
+    public boolean getPin(int pin) throws NoConnectionException, IOException, NoGpioException {
+        if (!availableGPIOs.contains(pin)) {
+            throw new NoGpioException("Pin out of range on this model!");
+        }
 
-		String readRequestMsg = "read " + pin;
-		String receivedLine = processCommand(readRequestMsg);
-		String[] tokens = receivedLine.split(" ");
+        String readRequestMsg = "read " + pin;
+        String receivedLine = processCommand(readRequestMsg);
+        String[] tokens = receivedLine.split(" ");
 
-		if (tokens.length != 3) {
-			throw new IOException("readRequest: Error with response");
-		}
+        if (tokens.length != 3) {
+            throw new IOException("readRequest: Error with response");
+        }
 
-		if (tokens[2].equals("1")) {
-			return true;
-		} else if (tokens[2].equals("0")) {
-			return false;
-		} else {
-			throw new IOException("readRequest: Error with response");
-		}
-	}
+        if (tokens[2].equals("1")) {
+            return true;
+        } else if (tokens[2].equals("0")) {
+            return false;
+        } else {
+            throw new IOException("readRequest: Error with response");
+        }
+    }
 
-	public void activatePinInterrupt(int pin) throws NoConnectionException, IOException, NoGpioException {
-		if (!availableGPIOs.contains(pin)) {
-			throw new NoGpioException("Pin out of range on this model!");
-		}
+    public void activatePinInterrupt(int pin) throws NoConnectionException, IOException, NoGpioException {
+        if (!availableGPIOs.contains(pin)) {
+            throw new NoGpioException("Pin out of range on this model!");
+        }
 
-		String readRequestMsg = "readint " + pin;
-		String receivedLine = processCommand(readRequestMsg);
-		String[] tokens = receivedLine.split(" ");
+        String readRequestMsg = "readint " + pin;
+        String receivedLine = processCommand(readRequestMsg);
+        String[] tokens = receivedLine.split(" ");
 
-		if (tokens.length != 3) {
-			throw new IOException("readRequest: Error with response");
-		}
-	}
+        if (tokens.length != 3) {
+            throw new IOException("readRequest: Error with response");
+        }
+    }
 
-	public void setPWM(int pin, double frequencyInHz, double dutyCycleInPercent) throws NoConnectionException,
-			IOException, NoGpioException {
-		if (!availableGPIOs.contains(pin)) {
-			throw new NoGpioException("Pin out of range on this model!");
-		}
+    public void setPWM(int pin, double frequencyInHz, double dutyCycleInPercent) throws NoConnectionException,
+            IOException, NoGpioException {
+        if (!availableGPIOs.contains(pin)) {
+            throw new NoGpioException("Pin out of range on this model!");
+        }
 
-		String pwmRequestMessage = "pwm " + pin + " " + frequencyInHz + " " + dutyCycleInPercent;
-		String receivedLine = processCommand(pwmRequestMessage);
+        String pwmRequestMessage = "pwm " + pin + " " + frequencyInHz + " " + dutyCycleInPercent;
+        String receivedLine = processCommand(pwmRequestMessage);
 
-		if (!pwmRequestMessage.equals(receivedLine)) {
-			throw new IOException("pwmRequest: Error with response");
-		}
-	}
+        if (!pwmRequestMessage.equals(receivedLine)) {
+            throw new IOException("pwmRequest: Error with response");
+        }
+    }
 
-	private class RPiSocketReceiver implements Runnable {
+    private class RPiSocketReceiver implements Runnable {
 
-		@Override
-		public void run() {
-			Socket receiverSocket = null;
-			try {
-				receiverSocket = new Socket(host, interruptReceiverPort);
-				BufferedReader receiverReader = new BufferedReader(new InputStreamReader(receiverSocket.getInputStream()));
-				while (!Thread.interrupted()) {
-					String receivedLine = receiverReader.readLine();
-					if (receivedLine == null) {
-						break;
-					}
+        @Override
+        public void run() {
+            Socket receiverSocket = null;
+            try {
+                receiverSocket = new Socket(host, interruptReceiverPort);
+                BufferedReader receiverReader = new BufferedReader(new InputStreamReader(receiverSocket.getInputStream()));
+                while (!Thread.interrupted()) {
+                    String receivedLine = receiverReader.readLine();
+                    if (receivedLine == null) {
+                        break;
+                    }
 
-					Log.d(TAG, "Interrupt: " + receivedLine);
+                    Log.d(TAG, "Interrupt: " + receivedLine);
 
-					callEvent(Constants.RASPI_BROADCAST_PREFIX + receivedLine);
-				}
-				receiverSocket.close();
-				Log.d(TAG, "RPiSocketReceiver closed");
-			} catch (IOException e) {
-				Log.e(TAG, "Exception " + e);
-			}
-		}
-	}
+                    callEvent(Constants.RASPI_BROADCAST_PREFIX + receivedLine);
+                }
+                receiverSocket.close();
+                Log.d(TAG, "RPiSocketReceiver closed");
+            } catch (IOException e) {
+                Log.e(TAG, "Exception " + e);
+            }
+        }
+    }
 
-	public String getVersion() throws NoConnectionException {
-		if (!isConnected) {
-			throw new NoConnectionException("No active connection!");
-		}
+    public String getVersion() throws NoConnectionException {
+        if (!isConnected) {
+            throw new NoConnectionException("No active connection!");
+        }
 
-		return rpiVersion;
-	}
+        return rpiVersion;
+    }
 
-	public class NoGpioException extends Exception {
+    public class NoGpioException extends Exception {
 
-		private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
 
-		public NoGpioException(String msg) {
-			super(msg);
-		}
-	}
+        public NoGpioException(String msg) {
+            super(msg);
+        }
+    }
 
-	public class NoConnectionException extends Exception {
+    public class NoConnectionException extends Exception {
 
-		private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
 
-		public NoConnectionException(String msg) {
-			super(msg);
-		}
-	}
+        public NoConnectionException(String msg) {
+            super(msg);
+        }
+    }
 
-	public boolean isConnected() {
-		return isConnected;
-	}
+    public boolean isConnected() {
+        return isConnected;
+    }
 }

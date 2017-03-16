@@ -42,70 +42,70 @@ import org.catrobat.catroid.uitest.util.BaseActivityInstrumentationTestCase;
 import org.catrobat.catroid.uitest.util.UiTestUtils;
 
 public class PenBricksTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
-	private static final int NEW_PEN_SIZE = 17;
-	private static final Color NEW_PEN_COLOR = Color.GREEN;
+    private static final int NEW_PEN_SIZE = 17;
+    private static final Color NEW_PEN_COLOR = Color.GREEN;
 
-	private Sprite sprite;
+    private Sprite sprite;
 
-	public PenBricksTest() {
-		super(MainMenuActivity.class);
-	}
+    public PenBricksTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		createProject();
-	}
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        createProject();
+    }
 
-	public void testPenBricks() {
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
+    public void testPenBricks() {
+        UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
 
-		int brickCount = ProjectManager.getInstance().getCurrentSprite().getNumberOfBricks();
-		assertEquals("Incorrect number of bricks.", 11, brickCount);
+        int brickCount = ProjectManager.getInstance().getCurrentSprite().getNumberOfBricks();
+        assertEquals("Incorrect number of bricks.", 11, brickCount);
 
-		UiTestUtils.clickOnPlayButton(solo);
-		solo.waitForActivity(StageActivity.class);
-		solo.waitForCondition(new Condition() {
-			@Override
-			public boolean isSatisfied() {
-				return sprite.penConfiguration.penDown;
-			}
-		}, 3000);
-		solo.sleep(1100);
-		assertFalse("Pen not up", sprite.penConfiguration.penDown);
-		solo.sleep(1000);
-		assertEquals("Pen size wrong", NEW_PEN_SIZE, (int) sprite.penConfiguration.penSize);
-		solo.sleep(1000);
+        UiTestUtils.clickOnPlayButton(solo);
+        solo.waitForActivity(StageActivity.class);
+        solo.waitForCondition(new Condition() {
+            @Override
+            public boolean isSatisfied() {
+                return sprite.penConfiguration.penDown;
+            }
+        }, 3000);
+        solo.sleep(1100);
+        assertFalse("Pen not up", sprite.penConfiguration.penDown);
+        solo.sleep(1000);
+        assertEquals("Pen size wrong", NEW_PEN_SIZE, (int) sprite.penConfiguration.penSize);
+        solo.sleep(1000);
 
-		Color color = new Color();
-		Color.argb8888ToColor(color, android.graphics.Color.argb(0xFF, (int) NEW_PEN_COLOR.r, (int) NEW_PEN_COLOR.g, (int) NEW_PEN_COLOR.b));
-		assertEquals("Wrong red value", color.r, sprite.penConfiguration.penColor.r);
-		assertEquals("Wrong blue value", color.g, sprite.penConfiguration.penColor.g);
-		assertEquals("Wrong green value", color.b, sprite.penConfiguration.penColor.b);
-	}
+        Color color = new Color();
+        Color.argb8888ToColor(color, android.graphics.Color.argb(0xFF, (int) NEW_PEN_COLOR.r, (int) NEW_PEN_COLOR.g, (int) NEW_PEN_COLOR.b));
+        assertEquals("Wrong red value", color.r, sprite.penConfiguration.penColor.r);
+        assertEquals("Wrong blue value", color.g, sprite.penConfiguration.penColor.g);
+        assertEquals("Wrong green value", color.b, sprite.penConfiguration.penColor.b);
+    }
 
-	private void createProject() {
-		Project project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		sprite = new SingleSprite("cat");
-		Script script = new StartScript();
-		PenDownBrick penDownBrick = new PenDownBrick();
-		PenUpBrick penUpBrick = new PenUpBrick();
-		SetPenSizeBrick setPenSizeBrick = new SetPenSizeBrick(NEW_PEN_SIZE);
-		SetPenColorBrick setPenColorBrick = new SetPenColorBrick((int) NEW_PEN_COLOR.r, (int) NEW_PEN_COLOR.g, (int) NEW_PEN_COLOR.b);
-		WaitBrick waitBrick = new WaitBrick(1000);
-		script.addBrick(penDownBrick);
-		script.addBrick(waitBrick);
-		script.addBrick(penUpBrick);
-		script.addBrick(waitBrick);
-		script.addBrick(setPenSizeBrick);
-		script.addBrick(waitBrick);
-		script.addBrick(setPenColorBrick);
+    private void createProject() {
+        Project project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        sprite = new SingleSprite("cat");
+        Script script = new StartScript();
+        PenDownBrick penDownBrick = new PenDownBrick();
+        PenUpBrick penUpBrick = new PenUpBrick();
+        SetPenSizeBrick setPenSizeBrick = new SetPenSizeBrick(NEW_PEN_SIZE);
+        SetPenColorBrick setPenColorBrick = new SetPenColorBrick((int) NEW_PEN_COLOR.r, (int) NEW_PEN_COLOR.g, (int) NEW_PEN_COLOR.b);
+        WaitBrick waitBrick = new WaitBrick(1000);
+        script.addBrick(penDownBrick);
+        script.addBrick(waitBrick);
+        script.addBrick(penUpBrick);
+        script.addBrick(waitBrick);
+        script.addBrick(setPenSizeBrick);
+        script.addBrick(waitBrick);
+        script.addBrick(setPenColorBrick);
 
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 }

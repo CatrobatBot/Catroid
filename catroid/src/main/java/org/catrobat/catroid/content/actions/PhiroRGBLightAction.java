@@ -37,76 +37,76 @@ import org.catrobat.catroid.formulaeditor.Formula;
 import org.catrobat.catroid.formulaeditor.InterpretationException;
 
 public class PhiroRGBLightAction extends TemporalAction {
-	private static final String TAG = PhiroRGBLightAction.class.getSimpleName();
-	private static final int MIN_VALUE = 0;
-	private static final int MAX_VALUE = 255;
+    private static final String TAG = PhiroRGBLightAction.class.getSimpleName();
+    private static final int MIN_VALUE = 0;
+    private static final int MAX_VALUE = 255;
 
-	private Eye eyeEnum;
-	private Formula red;
-	private Formula green;
-	private Formula blue;
-	private Sprite sprite;
+    private Eye eyeEnum;
+    private Formula red;
+    private Formula green;
+    private Formula blue;
+    private Sprite sprite;
 
-	private BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
+    private BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
 
-	@Override
-	protected void update(float percent) {
+    @Override
+    protected void update(float percent) {
 
-		int redValue = updateFormulaValue(red);
-		int greenValue = updateFormulaValue(green);
-		int blueValue = updateFormulaValue(blue);
+        int redValue = updateFormulaValue(red);
+        int greenValue = updateFormulaValue(green);
+        int blueValue = updateFormulaValue(blue);
 
-		Phiro phiro = btService.getDevice(BluetoothDevice.PHIRO);
+        Phiro phiro = btService.getDevice(BluetoothDevice.PHIRO);
 
-		if (eyeEnum.equals(Eye.LEFT)) {
-			phiro.setLeftRGBLightColor(redValue, greenValue, blueValue);
-		} else if (eyeEnum.equals(Eye.RIGHT)) {
-			phiro.setRightRGBLightColor(redValue, greenValue, blueValue);
-		} else if (eyeEnum.equals(Eye.BOTH)) {
-			phiro.setLeftRGBLightColor(redValue, greenValue, blueValue);
-			phiro.setRightRGBLightColor(redValue, greenValue, blueValue);
-		} else {
-			Log.d(TAG, "Error: EyeEnum:" + eyeEnum);
-		}
-	}
+        if (eyeEnum.equals(Eye.LEFT)) {
+            phiro.setLeftRGBLightColor(redValue, greenValue, blueValue);
+        } else if (eyeEnum.equals(Eye.RIGHT)) {
+            phiro.setRightRGBLightColor(redValue, greenValue, blueValue);
+        } else if (eyeEnum.equals(Eye.BOTH)) {
+            phiro.setLeftRGBLightColor(redValue, greenValue, blueValue);
+            phiro.setRightRGBLightColor(redValue, greenValue, blueValue);
+        } else {
+            Log.d(TAG, "Error: EyeEnum:" + eyeEnum);
+        }
+    }
 
-	private int updateFormulaValue(Formula rgbFormula) {
+    private int updateFormulaValue(Formula rgbFormula) {
 
-		int rgbValue;
+        int rgbValue;
 
-		try {
-			rgbValue = rgbFormula.interpretInteger(sprite);
-		} catch (InterpretationException interpretationException) {
-			rgbValue = 0;
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}
+        try {
+            rgbValue = rgbFormula.interpretInteger(sprite);
+        } catch (InterpretationException interpretationException) {
+            rgbValue = 0;
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+        }
 
-		if (rgbValue < MIN_VALUE) {
-			rgbValue = MIN_VALUE;
-		} else if (rgbValue > MAX_VALUE) {
-			rgbValue = MAX_VALUE;
-		}
+        if (rgbValue < MIN_VALUE) {
+            rgbValue = MIN_VALUE;
+        } else if (rgbValue > MAX_VALUE) {
+            rgbValue = MAX_VALUE;
+        }
 
-		return rgbValue;
-	}
+        return rgbValue;
+    }
 
-	public void setEyeEnum(Eye eyeEnum) {
-		this.eyeEnum = eyeEnum;
-	}
+    public void setEyeEnum(Eye eyeEnum) {
+        this.eyeEnum = eyeEnum;
+    }
 
-	public void setRed(Formula red) {
-		this.red = red;
-	}
+    public void setRed(Formula red) {
+        this.red = red;
+    }
 
-	public void setGreen(Formula green) {
-		this.green = green;
-	}
+    public void setGreen(Formula green) {
+        this.green = green;
+    }
 
-	public void setBlue(Formula blue) {
-		this.blue = blue;
-	}
+    public void setBlue(Formula blue) {
+        this.blue = blue;
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 }

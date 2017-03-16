@@ -36,71 +36,71 @@ import org.catrobat.catroid.content.StartScript;
 import java.util.List;
 
 public class WhenStartedBrick extends BrickBaseType implements ScriptBrick {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private Script script;
+    private Script script;
 
-	public WhenStartedBrick(Script script) {
-		this.script = script;
+    public WhenStartedBrick(Script script) {
+        this.script = script;
 
-		if (script != null && script.isCommentedOut()) {
-			setCommentedOut(true);
-		}
-	}
+        if (script != null && script.isCommentedOut()) {
+            setCommentedOut(true);
+        }
+    }
 
-	public WhenStartedBrick() {
-	}
+    public WhenStartedBrick() {
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return NO_RESOURCES;
-	}
+    @Override
+    public int getRequiredResources() {
+        return NO_RESOURCES;
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		WhenStartedBrick copyBrick = (WhenStartedBrick) clone();
-		copyBrick.script = script;
-		return copyBrick;
-	}
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        WhenStartedBrick copyBrick = (WhenStartedBrick) clone();
+        copyBrick.script = script;
+        return copyBrick;
+    }
 
-	@Override
-	public View getView(Context context, int brickId, final BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		view = View.inflate(context, R.layout.brick_when_started, null);
+    @Override
+    public View getView(Context context, int brickId, final BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        view = View.inflate(context, R.layout.brick_when_started, null);
 
-		setCheckboxView(R.id.brick_when_started_checkbox);
-		return view;
-	}
+        setCheckboxView(R.id.brick_when_started_checkbox);
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		return View.inflate(context, R.layout.brick_when_started, null);
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        return View.inflate(context, R.layout.brick_when_started, null);
+    }
 
-	@Override
-	public Brick clone() {
-		return new WhenStartedBrick(null);
-	}
+    @Override
+    public Brick clone() {
+        return new WhenStartedBrick(null);
+    }
 
-	@Override
-	public Script getScriptSafe() {
-		if (script == null) {
-			script = new StartScript();
-		}
+    @Override
+    public Script getScriptSafe() {
+        if (script == null) {
+            script = new StartScript();
+        }
 
-		return script;
-	}
+        return script;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        return null;
+    }
 
-	@Override
-	public void setCommentedOut(boolean commentedOut) {
-		super.setCommentedOut(commentedOut);
-		getScriptSafe().setCommentedOut(commentedOut);
-	}
+    @Override
+    public void setCommentedOut(boolean commentedOut) {
+        super.setCommentedOut(commentedOut);
+        getScriptSafe().setCommentedOut(commentedOut);
+    }
 }

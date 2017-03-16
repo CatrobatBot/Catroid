@@ -24,19 +24,19 @@ package org.catrobat.catroid.formulaeditor;
 
 public class ExternToken {
 
-	private int startIndex;
-	private int endIndex;
+    private int startIndex;
+    private int endIndex;
 
-	public ExternToken(int startIndex, int endIndex) {
-		this.startIndex = startIndex;
-		this.endIndex = endIndex;
-	}
+    public ExternToken(int startIndex, int endIndex) {
+        this.startIndex = startIndex;
+        this.endIndex = endIndex;
+    }
 
-	public int getStartIndex() {
-		return startIndex;
-	}
+    public int getStartIndex() {
+        return startIndex;
+    }
 
-	public int getEndIndex() {
-		return endIndex;
-	}
+    public int getEndIndex() {
+        return endIndex;
+    }
 }

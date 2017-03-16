@@ -45,172 +45,172 @@ import java.util.concurrent.TimeUnit;
 
 public class NXTSensorService implements CatroidService, SharedPreferences.OnSharedPreferenceChangeListener {
 
-	private SensorRegistry sensorRegistry;
-	private NXTSensorFactory sensorFactory;
+    private SensorRegistry sensorRegistry;
+    private NXTSensorFactory sensorFactory;
 
-	private SharedPreferences preferences;
-	private Context context;
+    private SharedPreferences preferences;
+    private Context context;
 
-	private PausableScheduledThreadPoolExecutor sensorScheduler;
+    private PausableScheduledThreadPoolExecutor sensorScheduler;
 
-	private static final String TAG = NXTSensorService.class.getSimpleName();
-	private static final int SENSOR_UPDATER_THREAD_COUNT = 2;
+    private static final String TAG = NXTSensorService.class.getSimpleName();
+    private static final int SENSOR_UPDATER_THREAD_COUNT = 2;
 
-	public NXTSensorService(Context context, MindstormsConnection connection) {
-		this.context = context;
+    public NXTSensorService(Context context, MindstormsConnection connection) {
+        this.context = context;
 
-		preferences = PreferenceManager.getDefaultSharedPreferences(context);
-		preferences.registerOnSharedPreferenceChangeListener(this);
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        preferences.registerOnSharedPreferenceChangeListener(this);
 
-		sensorRegistry = new SensorRegistry();
-		sensorFactory = new NXTSensorFactory(connection);
+        sensorRegistry = new SensorRegistry();
+        sensorFactory = new NXTSensorFactory(connection);
 
-		sensorScheduler = new PausableScheduledThreadPoolExecutor(SENSOR_UPDATER_THREAD_COUNT);
-		sensorScheduler.pause();
-	}
+        sensorScheduler = new PausableScheduledThreadPoolExecutor(SENSOR_UPDATER_THREAD_COUNT);
+        sensorScheduler.pause();
+    }
 
-	public void pauseSensorUpdate() {
-		sensorScheduler.pause();
-	}
+    public void pauseSensorUpdate() {
+        sensorScheduler.pause();
+    }
 
-	public void resumeSensorUpdate() {
-		sensorScheduler.resume();
-	}
+    public void resumeSensorUpdate() {
+        sensorScheduler.resume();
+    }
 
-	public void destroy() {
-		sensorScheduler.shutdown();
-		preferences.unregisterOnSharedPreferenceChangeListener(this);
-	}
+    public void destroy() {
+        sensorScheduler.shutdown();
+        preferences.unregisterOnSharedPreferenceChangeListener(this);
+    }
 
-	public NXTSensor createSensor1() {
-		NXTSensor.Sensor sensor = SettingsActivity.getLegoMindstormsNXTSensorMapping(context, SettingsActivity.NXT_SENSOR_1);
-		return createSensor(sensor, 0);
-	}
+    public NXTSensor createSensor1() {
+        NXTSensor.Sensor sensor = SettingsActivity.getLegoMindstormsNXTSensorMapping(context, SettingsActivity.NXT_SENSOR_1);
+        return createSensor(sensor, 0);
+    }
 
-	public NXTSensor createSensor2() {
-		NXTSensor.Sensor sensor = SettingsActivity.getLegoMindstormsNXTSensorMapping(context, SettingsActivity.NXT_SENSOR_2);
-		return createSensor(sensor, 1);
-	}
+    public NXTSensor createSensor2() {
+        NXTSensor.Sensor sensor = SettingsActivity.getLegoMindstormsNXTSensorMapping(context, SettingsActivity.NXT_SENSOR_2);
+        return createSensor(sensor, 1);
+    }
 
-	public NXTSensor createSensor3() {
-		NXTSensor.Sensor sensor = SettingsActivity.getLegoMindstormsNXTSensorMapping(context, SettingsActivity.NXT_SENSOR_3);
-		return createSensor(sensor, 2);
-	}
+    public NXTSensor createSensor3() {
+        NXTSensor.Sensor sensor = SettingsActivity.getLegoMindstormsNXTSensorMapping(context, SettingsActivity.NXT_SENSOR_3);
+        return createSensor(sensor, 2);
+    }
 
-	public NXTSensor createSensor4() {
-		NXTSensor.Sensor sensor = SettingsActivity.getLegoMindstormsNXTSensorMapping(context, SettingsActivity.NXT_SENSOR_4);
-		return createSensor(sensor, 3);
-	}
+    public NXTSensor createSensor4() {
+        NXTSensor.Sensor sensor = SettingsActivity.getLegoMindstormsNXTSensorMapping(context, SettingsActivity.NXT_SENSOR_4);
+        return createSensor(sensor, 3);
+    }
 
-	private NXTSensor createSensor(NXTSensor.Sensor sensorType, int port) {
-		if (sensorType == NXTSensor.Sensor.NO_SENSOR) {
-			sensorRegistry.remove(port);
-			return null;
-		}
-		NXTSensor sensor = sensorFactory.create(sensorType, port);
-		sensorRegistry.add(sensor);
+    private NXTSensor createSensor(NXTSensor.Sensor sensorType, int port) {
+        if (sensorType == NXTSensor.Sensor.NO_SENSOR) {
+            sensorRegistry.remove(port);
+            return null;
+        }
+        NXTSensor sensor = sensorFactory.create(sensorType, port);
+        sensorRegistry.add(sensor);
 
-		return sensor;
-	}
+        return sensor;
+    }
 
-	public void deactivateAllSensors(MindstormsConnection connection) {
+    public void deactivateAllSensors(MindstormsConnection connection) {
 
-		for (int port = 0; port < 4; port++) {
+        for (int port = 0; port < 4; port++) {
 
-			Command command = new Command(CommandType.DIRECT_COMMAND, CommandByte.SET_INPUT_MODE, false);
-			command.append((byte) port);
-			command.append(NXTSensorType.NO_SENSOR.getByte());
-			command.append(NXTSensorMode.RAW.getByte());
+            Command command = new Command(CommandType.DIRECT_COMMAND, CommandByte.SET_INPUT_MODE, false);
+            command.append((byte) port);
+            command.append(NXTSensorType.NO_SENSOR.getByte());
+            command.append(NXTSensorMode.RAW.getByte());
 
-			try {
-				connection.send(command);
-			} catch (MindstormsException e) {
-				Log.e(TAG, e.getMessage());
-			}
-		}
-	}
+            try {
+                connection.send(command);
+            } catch (MindstormsException e) {
+                Log.e(TAG, e.getMessage());
+            }
+        }
+    }
 
-	List<OnSensorChangedListener> sensorChangedListeners = new LinkedList<OnSensorChangedListener>();
+    List<OnSensorChangedListener> sensorChangedListeners = new LinkedList<OnSensorChangedListener>();
 
-	public void registerOnSensorChangedListener(OnSensorChangedListener listener) {
-		sensorChangedListeners.add(listener);
-	}
+    public void registerOnSensorChangedListener(OnSensorChangedListener listener) {
+        sensorChangedListeners.add(listener);
+    }
 
-	private boolean isChangedPreferenceASensorPreference(String preference) {
-		return (preference.equals(SettingsActivity.NXT_SENSOR_1)
-				|| preference.equals(SettingsActivity.NXT_SENSOR_2)
-				|| preference.equals(SettingsActivity.NXT_SENSOR_3)
-				|| preference.equals(SettingsActivity.NXT_SENSOR_4));
-	}
+    private boolean isChangedPreferenceASensorPreference(String preference) {
+        return (preference.equals(SettingsActivity.NXT_SENSOR_1)
+                || preference.equals(SettingsActivity.NXT_SENSOR_2)
+                || preference.equals(SettingsActivity.NXT_SENSOR_3)
+                || preference.equals(SettingsActivity.NXT_SENSOR_4));
+    }
 
-	@Override
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String preference) {
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String preference) {
 
-		if (!isChangedPreferenceASensorPreference(preference)) {
-			return;
-		}
+        if (!isChangedPreferenceASensorPreference(preference)) {
+            return;
+        }
 
-		for (OnSensorChangedListener listener : sensorChangedListeners) {
-			if (listener != null) {
-				listener.onSensorChanged();
-			}
-		}
-	}
+        for (OnSensorChangedListener listener : sensorChangedListeners) {
+            if (listener != null) {
+                listener.onSensorChanged();
+            }
+        }
+    }
 
-	public interface OnSensorChangedListener {
-		void onSensorChanged();
-	}
+    public interface OnSensorChangedListener {
+        void onSensorChanged();
+    }
 
-	private static class SensorValueUpdater implements Runnable {
-		private NXTSensor sensor;
+    private static class SensorValueUpdater implements Runnable {
+        private NXTSensor sensor;
 
-		public SensorValueUpdater(NXTSensor sensor) {
-			this.sensor = sensor;
-		}
+        public SensorValueUpdater(NXTSensor sensor) {
+            this.sensor = sensor;
+        }
 
-		@Override
-		public void run() {
-			Stopwatch stopwatch = new Stopwatch();
-			stopwatch.start();
-			sensor.updateLastSensorValue();
-		}
-	}
+        @Override
+        public void run() {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.start();
+            sensor.updateLastSensorValue();
+        }
+    }
 
-	private class SensorRegistry {
+    private class SensorRegistry {
 
-		private class SensorTuple {
+        private class SensorTuple {
 
-			public ScheduledFuture scheduledFuture;
-			public NXTSensor sensor;
+            public ScheduledFuture scheduledFuture;
+            public NXTSensor sensor;
 
-			public SensorTuple(ScheduledFuture scheduledFuture, NXTSensor sensor) {
-				this.scheduledFuture = scheduledFuture;
-				this.sensor = sensor;
-			}
-		}
+            public SensorTuple(ScheduledFuture scheduledFuture, NXTSensor sensor) {
+                this.scheduledFuture = scheduledFuture;
+                this.sensor = sensor;
+            }
+        }
 
-		private SparseArray<SensorTuple> registeredSensors = new SparseArray<SensorTuple>();
-		private static final int INITIAL_DELAY = 500;
+        private SparseArray<SensorTuple> registeredSensors = new SparseArray<SensorTuple>();
+        private static final int INITIAL_DELAY = 500;
 
-		public synchronized void add(NXTSensor sensor) {
-			remove(sensor.getConnectedPort());
-			ScheduledFuture scheduledFuture = sensorScheduler.scheduleWithFixedDelay(new SensorValueUpdater(sensor),
-					INITIAL_DELAY, sensor.getUpdateInterval(), TimeUnit.MILLISECONDS);
+        public synchronized void add(NXTSensor sensor) {
+            remove(sensor.getConnectedPort());
+            ScheduledFuture scheduledFuture = sensorScheduler.scheduleWithFixedDelay(new SensorValueUpdater(sensor),
+                    INITIAL_DELAY, sensor.getUpdateInterval(), TimeUnit.MILLISECONDS);
 
-			registeredSensors.put(sensor.getConnectedPort(), new SensorTuple(scheduledFuture, sensor));
-		}
+            registeredSensors.put(sensor.getConnectedPort(), new SensorTuple(scheduledFuture, sensor));
+        }
 
-		public synchronized void remove(NXTSensor sensor) {
-			int port = sensor.getConnectedPort();
-			remove(port);
-		}
+        public synchronized void remove(NXTSensor sensor) {
+            int port = sensor.getConnectedPort();
+            remove(port);
+        }
 
-		public synchronized void remove(int port) {
-			SensorTuple tuple = registeredSensors.get(port);
-			if (tuple != null) {
-				tuple.scheduledFuture.cancel(false);
-			}
-			registeredSensors.remove(port);
-		}
-	}
+        public synchronized void remove(int port) {
+            SensorTuple tuple = registeredSensors.get(port);
+            if (tuple != null) {
+                tuple.scheduledFuture.cancel(false);
+            }
+            registeredSensors.remove(port);
+        }
+    }
 }

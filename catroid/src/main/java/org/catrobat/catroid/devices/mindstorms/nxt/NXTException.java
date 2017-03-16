@@ -26,20 +26,20 @@ import org.catrobat.catroid.devices.mindstorms.MindstormsException;
 
 public class NXTException extends MindstormsException {
 
-	private final NXTError.ErrorCode error;
+    private final NXTError.ErrorCode error;
 
-	public NXTError.ErrorCode getError() {
-		return error;
-	}
+    public NXTError.ErrorCode getError() {
+        return error;
+    }
 
-	public NXTException(NXTError.ErrorCode error, CommandByte commandByte) {
-		super(String.format("NXTException: Error caused by  '%s' on command '%s'",
-				error.name(), commandByte.name()));
-		this.error = error;
-	}
+    public NXTException(NXTError.ErrorCode error, CommandByte commandByte) {
+        super(String.format("NXTException: Error caused by  '%s' on command '%s'",
+                error.name(), commandByte.name()));
+        this.error = error;
+    }
 
-	public NXTException(String message) {
-		super(message);
-		this.error = null;
-	}
+    public NXTException(String message) {
+        super(message);
+        this.error = null;
+    }
 }

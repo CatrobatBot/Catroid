@@ -38,82 +38,82 @@ import java.util.List;
 
 public class NfcTagAdapter extends NfcTagBaseAdapter implements ActionModeActivityAdapterInterface {
 
-	private static final int INVALID_ID = -1;
+    private static final int INVALID_ID = -1;
 
-	private NfcTagFragment nfcTagFragment;
+    private NfcTagFragment nfcTagFragment;
 
-	private HashMap<NfcTagData, Integer> idMap = new HashMap<NfcTagData, Integer>();
+    private HashMap<NfcTagData, Integer> idMap = new HashMap<NfcTagData, Integer>();
 
-	public NfcTagAdapter(final Context context, int resource, int textViewResourceId, List<NfcTagData> items,
-			boolean showDetails) {
-		super(context, resource, textViewResourceId, items, showDetails);
-		for (int i = 0; i < items.size(); ++i) {
-			idMap.put(items.get(i), i);
-		}
-	}
+    public NfcTagAdapter(final Context context, int resource, int textViewResourceId, List<NfcTagData> items,
+                         boolean showDetails) {
+        super(context, resource, textViewResourceId, items, showDetails);
+        for (int i = 0; i < items.size(); ++i) {
+            idMap.put(items.get(i), i);
+        }
+    }
 
-	@Override
-	public long getItemId(int position) {
-		if (position < 0 || position >= idMap.size()) {
-			return INVALID_ID;
-		}
-		NfcTagData item = getItem(position);
-		return idMap.get(item);
-	}
+    @Override
+    public long getItemId(int position) {
+        if (position < 0 || position >= idMap.size()) {
+            return INVALID_ID;
+        }
+        NfcTagData item = getItem(position);
+        return idMap.get(item);
+    }
 
-	@Override
-	public void notifyDataSetChanged() {
-		super.notifyDataSetChanged();
-		if (getCount() != idMap.size()) {
-			idMap.clear();
-			for (int i = 0; i < getCount(); i++) {
-				idMap.put(getItem(i), i);
-			}
-		}
-	}
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        if (getCount() != idMap.size()) {
+            idMap.clear();
+            for (int i = 0; i < getCount(); i++) {
+                idMap.put(getItem(i), i);
+            }
+        }
+    }
 
-	@Override
-	public boolean hasStableIds() {
-		return true;
-	}
+    @Override
+    public boolean hasStableIds() {
+        return true;
+    }
 
-	@Override
-	public View getView(final int position, View convertView, ViewGroup parent) {
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
-		if (nfcTagFragment == null) {
-			return convertView;
-		}
-		return nfcTagFragment.getView(position, convertView);
-	}
+        if (nfcTagFragment == null) {
+            return convertView;
+        }
+        return nfcTagFragment.getView(position, convertView);
+    }
 
-	public void onDestroyActionModeRename(ActionMode mode, ListView listView) {
-		Iterator<Integer> iterator = checkedNfcTags.iterator();
+    public void onDestroyActionModeRename(ActionMode mode, ListView listView) {
+        Iterator<Integer> iterator = checkedNfcTags.iterator();
 
-		if (iterator.hasNext()) {
-			int position = iterator.next();
-			nfcTagFragment.setSelectedNfcTagData((NfcTagData) listView.getItemAtPosition(position));
-			nfcTagFragment.showRenameDialog();
-		}
-		nfcTagFragment.clearCheckedNfcTagsAndEnableButtons();
-	}
+        if (iterator.hasNext()) {
+            int position = iterator.next();
+            nfcTagFragment.setSelectedNfcTagData((NfcTagData) listView.getItemAtPosition(position));
+            nfcTagFragment.showRenameDialog();
+        }
+        nfcTagFragment.clearCheckedNfcTagsAndEnableButtons();
+    }
 
-	public void onDestroyActionModeCopy(ActionMode mode) {
-		Iterator<Integer> iterator = checkedNfcTags.iterator();
-		while (iterator.hasNext()) {
-			int position = iterator.next();
-			NfcTagData newData = NfcTagController.getInstance().copyNfcTag(position,
-					nfcTagFragment.getNfcTagDataList(), this);
-			nfcTagFragment.updateNfcTagAdapter(newData);
-		}
-		nfcTagFragment.clearCheckedNfcTagsAndEnableButtons();
-	}
+    public void onDestroyActionModeCopy(ActionMode mode) {
+        Iterator<Integer> iterator = checkedNfcTags.iterator();
+        while (iterator.hasNext()) {
+            int position = iterator.next();
+            NfcTagData newData = NfcTagController.getInstance().copyNfcTag(position,
+                    nfcTagFragment.getNfcTagDataList(), this);
+            nfcTagFragment.updateNfcTagAdapter(newData);
+        }
+        nfcTagFragment.clearCheckedNfcTagsAndEnableButtons();
+    }
 
-	public void setNfcTagFragment(NfcTagFragment nfcTagFragment) {
-		this.nfcTagFragment = nfcTagFragment;
-	}
+    public void setNfcTagFragment(NfcTagFragment nfcTagFragment) {
+        this.nfcTagFragment = nfcTagFragment;
+    }
 
-	@Override
-	public List<NfcTagData> getNfcTagDataItems() {
-		return nfcTagDataItems;
-	}
+    @Override
+    public List<NfcTagData> getNfcTagDataItems() {
+        return nfcTagDataItems;
+    }
 }

@@ -51,128 +51,128 @@ import org.catrobat.catroid.utils.Utils;
 
 public class MergeSceneDialog extends DialogFragment {
 
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_merge_scene";
+    public static final String DIALOG_FRAGMENT_TAG = "dialog_merge_scene";
 
-	private static final String TAG = MergeSceneDialog.class.getSimpleName();
+    private static final String TAG = MergeSceneDialog.class.getSimpleName();
 
-	private EditText nameEditText;
-	private Dialog mergeSceneDialog;
-	private String firstSelectedScene;
-	private String secondSelectedScene;
+    private EditText nameEditText;
+    private Dialog mergeSceneDialog;
+    private String firstSelectedScene;
+    private String secondSelectedScene;
 
-	public MergeSceneDialog() {
-	}
+    public MergeSceneDialog() {
+    }
 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_merge_scene, null);
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_merge_scene, null);
 
-		nameEditText = (EditText) dialogView.findViewById(R.id.scene_merge_name_edittext);
-		Spinner spinnerFirstScene = (Spinner) dialogView.findViewById(R.id.merge_scene_spinner_first);
-		Spinner spinnerSecondScene = (Spinner) dialogView.findViewById(R.id.merge_scene_spinner_second);
+        nameEditText = (EditText) dialogView.findViewById(R.id.scene_merge_name_edittext);
+        Spinner spinnerFirstScene = (Spinner) dialogView.findViewById(R.id.merge_scene_spinner_first);
+        Spinner spinnerSecondScene = (Spinner) dialogView.findViewById(R.id.merge_scene_spinner_second);
 
-		ArrayAdapter<String> firstAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item,
-				ProjectManager.getInstance().getCurrentProject().getSceneOrder());
-		firstAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		ArrayAdapter<String> secondAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item,
-				ProjectManager.getInstance().getCurrentProject().getSceneOrder());
-		secondAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinnerFirstScene.setAdapter(firstAdapter);
-		spinnerSecondScene.setAdapter(secondAdapter);
-		spinnerFirstScene.setSelection(0);
-		spinnerSecondScene.setSelection(1);
+        ArrayAdapter<String> firstAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item,
+                ProjectManager.getInstance().getCurrentProject().getSceneOrder());
+        firstAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> secondAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item,
+                ProjectManager.getInstance().getCurrentProject().getSceneOrder());
+        secondAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerFirstScene.setAdapter(firstAdapter);
+        spinnerSecondScene.setAdapter(secondAdapter);
+        spinnerFirstScene.setSelection(0);
+        spinnerSecondScene.setSelection(1);
 
-		spinnerFirstScene.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinnerFirstScene.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				firstSelectedScene = (String) parent.getItemAtPosition(position);
-			}
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                firstSelectedScene = (String) parent.getItemAtPosition(position);
+            }
 
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
 
-		spinnerSecondScene.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinnerSecondScene.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				secondSelectedScene = (String) parent.getItemAtPosition(position);
-			}
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                secondSelectedScene = (String) parent.getItemAtPosition(position);
+            }
 
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
 
-		mergeSceneDialog = new AlertDialog.Builder(getActivity()).setView(dialogView)
-				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				}).create();
+        mergeSceneDialog = new AlertDialog.Builder(getActivity()).setView(dialogView)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).create();
 
-		mergeSceneDialog.setCanceledOnTouchOutside(true);
-		mergeSceneDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-		mergeSceneDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        mergeSceneDialog.setCanceledOnTouchOutside(true);
+        mergeSceneDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mergeSceneDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-		mergeSceneDialog.setOnShowListener(new OnShowListener() {
-			@Override
-			public void onShow(DialogInterface dialog) {
-				if (getActivity() == null) {
-					Log.e(TAG, "onShow() Activity was null!");
-					return;
-				}
+        mergeSceneDialog.setOnShowListener(new OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                if (getActivity() == null) {
+                    Log.e(TAG, "onShow() Activity was null!");
+                    return;
+                }
 
-				InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
-						Context.INPUT_METHOD_SERVICE);
-				inputManager.showSoftInput(nameEditText, InputMethodManager.SHOW_IMPLICIT);
+                InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
+                        Context.INPUT_METHOD_SERVICE);
+                inputManager.showSoftInput(nameEditText, InputMethodManager.SHOW_IMPLICIT);
 
-				((AlertDialog) mergeSceneDialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
-				nameEditText.addTextChangedListener(new TextWatcher() {
+                ((AlertDialog) mergeSceneDialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
+                nameEditText.addTextChangedListener(new TextWatcher() {
 
-					@Override
-					public void onTextChanged(CharSequence s, int start, int before, int count) {
-					}
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
 
-					@Override
-					public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-					}
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
 
-					@Override
-					public void afterTextChanged(Editable s) {
-						if (nameEditText.length() == 0) {
-							((AlertDialog) mergeSceneDialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
-						} else {
-							((AlertDialog) mergeSceneDialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(true);
-						}
-					}
-				});
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        if (nameEditText.length() == 0) {
+                            ((AlertDialog) mergeSceneDialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
+                        } else {
+                            ((AlertDialog) mergeSceneDialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(true);
+                        }
+                    }
+                });
 
-				Button positiveButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-				positiveButton.setOnClickListener(new View.OnClickListener() {
+                Button positiveButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                positiveButton.setOnClickListener(new View.OnClickListener() {
 
-					@Override
-					public void onClick(View view) {
-						handleOkButtonClick();
-					}
-				});
-			}
-		});
-		return mergeSceneDialog;
-	}
+                    @Override
+                    public void onClick(View view) {
+                        handleOkButtonClick();
+                    }
+                });
+            }
+        });
+        return mergeSceneDialog;
+    }
 
-	protected void handleOkButtonClick() {
-		if (ProjectManager.getInstance().getCurrentProject().getSceneOrder().contains(nameEditText.getText().toString().trim())) {
-			Utils.showErrorDialog(getActivity(), R.string.error_scene_exists);
-		} else if (MergeManager.mergeScene(firstSelectedScene, secondSelectedScene, nameEditText.getText().toString(),
-				getActivity())) {
-			dismiss();
-		}
-	}
+    protected void handleOkButtonClick() {
+        if (ProjectManager.getInstance().getCurrentProject().getSceneOrder().contains(nameEditText.getText().toString().trim())) {
+            Utils.showErrorDialog(getActivity(), R.string.error_scene_exists);
+        } else if (MergeManager.mergeScene(firstSelectedScene, secondSelectedScene, nameEditText.getText().toString(),
+                getActivity())) {
+            dismiss();
+        }
+    }
 }

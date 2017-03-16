@@ -28,29 +28,29 @@ import android.support.test.espresso.IdlingResource;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BooleanInitiallyBusyIdlingResource implements IdlingResource {
-	@Nullable
-	private volatile ResourceCallback callback;
-	private AtomicBoolean isIdleNow = new AtomicBoolean(false);
+    @Nullable
+    private volatile ResourceCallback callback;
+    private AtomicBoolean isIdleNow = new AtomicBoolean(false);
 
-	@Override
-	public String getName() {
-		return BooleanInitiallyBusyIdlingResource.class.getName();
-	}
+    @Override
+    public String getName() {
+        return BooleanInitiallyBusyIdlingResource.class.getName();
+    }
 
-	@Override
-	public boolean isIdleNow() {
-		return isIdleNow.get();
-	}
+    @Override
+    public boolean isIdleNow() {
+        return isIdleNow.get();
+    }
 
-	@Override
-	public void registerIdleTransitionCallback(ResourceCallback callback) {
-		this.callback = callback;
-	}
+    @Override
+    public void registerIdleTransitionCallback(ResourceCallback callback) {
+        this.callback = callback;
+    }
 
-	public void setIdleState(boolean isIdleNow) {
-		this.isIdleNow.set(isIdleNow);
-		if (isIdleNow && callback != null) {
-			callback.onTransitionToIdle();
-		}
-	}
+    public void setIdleState(boolean isIdleNow) {
+        this.isIdleNow.set(isIdleNow);
+        if (isIdleNow && callback != null) {
+            callback.onTransitionToIdle();
+        }
+    }
 }

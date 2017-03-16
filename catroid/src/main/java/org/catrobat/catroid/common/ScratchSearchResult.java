@@ -26,25 +26,25 @@ package org.catrobat.catroid.common;
 import java.util.List;
 
 public class ScratchSearchResult {
-	private List<ScratchProgramData> programDataList;
-	private String query;
-	private int pageNumber;
+    private List<ScratchProgramData> programDataList;
+    private String query;
+    private int pageNumber;
 
-	public ScratchSearchResult(List<ScratchProgramData> programDataList, String query, int pageNumber) {
-		this.query = query;
-		this.programDataList = programDataList;
-		this.pageNumber = pageNumber;
-	}
+    public ScratchSearchResult(List<ScratchProgramData> programDataList, String query, int pageNumber) {
+        this.query = query;
+        this.programDataList = programDataList;
+        this.pageNumber = pageNumber;
+    }
 
-	public List<ScratchProgramData> getProgramDataList() {
-		return programDataList;
-	}
+    public List<ScratchProgramData> getProgramDataList() {
+        return programDataList;
+    }
 
-	public String getQuery() {
-		return query;
-	}
+    public String getQuery() {
+        return query;
+    }
 
-	public int getPageNumber() {
-		return pageNumber;
-	}
+    public int getPageNumber() {
+        return pageNumber;
+    }
 }

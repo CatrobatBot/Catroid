@@ -50,45 +50,45 @@ import static org.hamcrest.Matchers.instanceOf;
 
 @RunWith(AndroidJUnit4.class)
 public class ForeverBrickTest {
-	@Rule
-	public BaseActivityInstrumentationRule<ScriptActivity> baseActivityTestRule = new
-			BaseActivityInstrumentationRule<>(ScriptActivity.class, true, false);
+    @Rule
+    public BaseActivityInstrumentationRule<ScriptActivity> baseActivityTestRule = new
+            BaseActivityInstrumentationRule<>(ScriptActivity.class, true, false);
 
-	@Before
-	public void setUp() throws Exception {
-		createProject();
-		baseActivityTestRule.launchActivity(null);
-	}
+    @Before
+    public void setUp() throws Exception {
+        createProject();
+        baseActivityTestRule.launchActivity(null);
+    }
 
-	@Test
-	public void foreverBrickTest() {
-		//multiple ways to check this, full verbose espresso way of checking:
-		onData(instanceOf(Brick.class)).inAdapterView(ScriptListMatchers.isScriptListView()).atPosition(1)
-				.onChildView(withText(R.string.brick_forever))
-				.check(matches(isDisplayed()));
+    @Test
+    public void foreverBrickTest() {
+        //multiple ways to check this, full verbose espresso way of checking:
+        onData(instanceOf(Brick.class)).inAdapterView(ScriptListMatchers.isScriptListView()).atPosition(1)
+                .onChildView(withText(R.string.brick_forever))
+                .check(matches(isDisplayed()));
 
-		//shortened with utility function to get scriptlist datainteraction object:
-		onScriptList().atPosition(1).onChildView(withText(R.string.brick_forever))
-				.check(matches(isDisplayed()));
+        //shortened with utility function to get scriptlist datainteraction object:
+        onScriptList().atPosition(1).onChildView(withText(R.string.brick_forever))
+                .check(matches(isDisplayed()));
 
-		//shortened even more with utility function
-		checkIfBrickAtPositionShowsString(1, R.string.brick_forever);
+        //shortened even more with utility function
+        checkIfBrickAtPositionShowsString(1, R.string.brick_forever);
 
-		//ok, now for the real test, check if all bricks are there in right order and displayed:
-		checkIfBrickAtPositionShowsString(0, R.string.brick_when_started);
-		checkIfBrickAtPositionShowsString(1, R.string.brick_forever);
-		checkIfBrickAtPositionShowsString(2, R.string.brick_loop_end);
-	}
+        //ok, now for the real test, check if all bricks are there in right order and displayed:
+        checkIfBrickAtPositionShowsString(0, R.string.brick_when_started);
+        checkIfBrickAtPositionShowsString(1, R.string.brick_forever);
+        checkIfBrickAtPositionShowsString(2, R.string.brick_loop_end);
+    }
 
-	@After
-	public void tearDown() throws Exception {
-	}
+    @After
+    public void tearDown() throws Exception {
+    }
 
-	public void createProject() {
-		Script startScript = BrickTestUtils.createProjectAndGetStartScript("foreverBrickTest1");
-		ForeverBrick foreverBrick = new ForeverBrick();
-		startScript.addBrick(foreverBrick);
-		startScript.addBrick(new LoopEndlessBrick(foreverBrick));
-	}
+    public void createProject() {
+        Script startScript = BrickTestUtils.createProjectAndGetStartScript("foreverBrickTest1");
+        ForeverBrick foreverBrick = new ForeverBrick();
+        startScript.addBrick(foreverBrick);
+        startScript.addBrick(new LoopEndlessBrick(foreverBrick));
+    }
 }
 

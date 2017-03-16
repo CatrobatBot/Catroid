@@ -36,35 +36,35 @@ import org.catrobat.catroid.content.Setting;
 
 public class XStreamSettingConverter extends ReflectionConverter {
 
-	private static final String TAG = XStreamSettingConverter.class.getSimpleName();
-	private static final String BRICKS_PACKAGE_NAME = "org.catrobat.catroid.content";
-	private static final String TYPE = "type";
+    private static final String TAG = XStreamSettingConverter.class.getSimpleName();
+    private static final String BRICKS_PACKAGE_NAME = "org.catrobat.catroid.content";
+    private static final String TYPE = "type";
 
-	public XStreamSettingConverter(Mapper mapper, ReflectionProvider reflectionProvider) {
-		super(mapper, reflectionProvider);
-	}
+    public XStreamSettingConverter(Mapper mapper, ReflectionProvider reflectionProvider) {
+        super(mapper, reflectionProvider);
+    }
 
-	@Override
-	public boolean canConvert(Class type) {
-		return Setting.class.isAssignableFrom(type);
-	}
+    @Override
+    public boolean canConvert(Class type) {
+        return Setting.class.isAssignableFrom(type);
+    }
 
-	@Override
-	protected void doMarshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
-		writer.addAttribute(TYPE, source.getClass().getSimpleName());
-		super.doMarshal(source, writer, context);
-	}
+    @Override
+    protected void doMarshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
+        writer.addAttribute(TYPE, source.getClass().getSimpleName());
+        super.doMarshal(source, writer, context);
+    }
 
-	@Override
-	public Object doUnmarshal(Object result, HierarchicalStreamReader reader, UnmarshallingContext context) {
-		try {
-			String type = reader.getAttribute(TYPE);
-			Class cls = Class.forName(BRICKS_PACKAGE_NAME + "." + type);
-			Setting setting = (Setting) reflectionProvider.newInstance(cls);
-			return super.doUnmarshal(setting, reader, context);
-		} catch (ClassNotFoundException exception) {
-			Log.e(TAG, "Setting class not found : " + result.toString(), exception);
-		}
-		return super.doUnmarshal(result, reader, context);
-	}
+    @Override
+    public Object doUnmarshal(Object result, HierarchicalStreamReader reader, UnmarshallingContext context) {
+        try {
+            String type = reader.getAttribute(TYPE);
+            Class cls = Class.forName(BRICKS_PACKAGE_NAME + "." + type);
+            Setting setting = (Setting) reflectionProvider.newInstance(cls);
+            return super.doUnmarshal(setting, reader, context);
+        } catch (ClassNotFoundException exception) {
+            Log.e(TAG, "Setting class not found : " + result.toString(), exception);
+        }
+        return super.doUnmarshal(result, reader, context);
+    }
 }

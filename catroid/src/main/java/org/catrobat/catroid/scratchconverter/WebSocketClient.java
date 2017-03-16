@@ -46,246 +46,247 @@ import org.catrobat.catroid.scratchconverter.protocol.message.base.ErrorMessage;
 import org.catrobat.catroid.scratchconverter.protocol.message.base.InfoMessage;
 
 public final class WebSocketClient<T extends MessageListener & StringCallback>
-		implements Client, BaseMessageHandler, CompletedCallback {
+        implements Client, BaseMessageHandler, CompletedCallback {
 
-	private interface ConnectCallback {
-		void onSuccess();
-		void onFailure(ClientException ex);
-	}
+    private interface ConnectCallback {
+        void onSuccess();
 
-	private static final String TAG = WebSocketClient.class.getSimpleName();
+        void onFailure(ClientException ex);
+    }
 
-	private Client.State state;
-	private long clientID;
-	private final T messageListener;
-	private AsyncHttpClient asyncHttpClient = AsyncHttpClient.getDefaultInstance();
-	private WebSocket webSocket;
-	private Client.ConnectAuthCallback connectAuthCallback;
-	private ConvertCallback convertCallback;
+    private static final String TAG = WebSocketClient.class.getSimpleName();
 
-	public WebSocketClient(final long clientID, final T messageListener) {
-		this.clientID = clientID;
-		this.state = State.NOT_CONNECTED;
-		messageListener.setBaseMessageHandler(this);
-		this.messageListener = messageListener;
-		this.webSocket = null;
-		this.connectAuthCallback = null;
-		this.convertCallback = null;
-	}
+    private Client.State state;
+    private long clientID;
+    private final T messageListener;
+    private AsyncHttpClient asyncHttpClient = AsyncHttpClient.getDefaultInstance();
+    private WebSocket webSocket;
+    private Client.ConnectAuthCallback connectAuthCallback;
+    private ConvertCallback convertCallback;
 
-	public boolean isConnected() {
-		return state == State.CONNECTED || state == State.CONNECTED_AUTHENTICATED;
-	}
+    public WebSocketClient(final long clientID, final T messageListener) {
+        this.clientID = clientID;
+        this.state = State.NOT_CONNECTED;
+        messageListener.setBaseMessageHandler(this);
+        this.messageListener = messageListener;
+        this.webSocket = null;
+        this.connectAuthCallback = null;
+        this.convertCallback = null;
+    }
 
-	@Override
-	public boolean isClosed() {
-		return state == State.NOT_CONNECTED;
-	}
+    public boolean isConnected() {
+        return state == State.CONNECTED || state == State.CONNECTED_AUTHENTICATED;
+    }
 
-	@Override
-	public boolean isAuthenticated() {
-		return state == State.CONNECTED_AUTHENTICATED;
-	}
+    @Override
+    public boolean isClosed() {
+        return state == State.NOT_CONNECTED;
+    }
 
-	public void setAsyncHttpClient(final AsyncHttpClient asyncHttpClient) {
-		this.asyncHttpClient = asyncHttpClient;
-	}
+    @Override
+    public boolean isAuthenticated() {
+        return state == State.CONNECTED_AUTHENTICATED;
+    }
 
-	public void setConvertCallback(final ConvertCallback callback) {
-		convertCallback = callback;
-	}
+    public void setAsyncHttpClient(final AsyncHttpClient asyncHttpClient) {
+        this.asyncHttpClient = asyncHttpClient;
+    }
 
-	private void connect(final ConnectCallback connectCallback) {
-		if (state == State.CONNECTED) {
-			connectCallback.onSuccess();
-			return;
-		}
-		Preconditions.checkState(webSocket == null);
-		Preconditions.checkState(asyncHttpClient != null);
+    public void setConvertCallback(final ConvertCallback callback) {
+        convertCallback = callback;
+    }
 
-		final WebSocketClient client = this;
-		asyncHttpClient.websocket(Constants.SCRATCH_CONVERTER_WEB_SOCKET, null, new
-				AsyncHttpClient.WebSocketConnectCallback() {
-					@Override
-					public void onCompleted(Exception ex, final WebSocket newWebSocket) {
-						Preconditions.checkState(state != State.CONNECTED && webSocket == null);
-						if (ex != null) {
-							connectCallback.onFailure(new ClientException(ex));
-							return;
-						}
+    private void connect(final ConnectCallback connectCallback) {
+        if (state == State.CONNECTED) {
+            connectCallback.onSuccess();
+            return;
+        }
+        Preconditions.checkState(webSocket == null);
+        Preconditions.checkState(asyncHttpClient != null);
 
-						state = State.CONNECTED;
-						webSocket = newWebSocket;
+        final WebSocketClient client = this;
+        asyncHttpClient.websocket(Constants.SCRATCH_CONVERTER_WEB_SOCKET, null, new
+                AsyncHttpClient.WebSocketConnectCallback() {
+                    @Override
+                    public void onCompleted(Exception ex, final WebSocket newWebSocket) {
+                        Preconditions.checkState(state != State.CONNECTED && webSocket == null);
+                        if (ex != null) {
+                            connectCallback.onFailure(new ClientException(ex));
+                            return;
+                        }
 
-						// onMessage callback
-						webSocket.setStringCallback(messageListener);
+                        state = State.CONNECTED;
+                        webSocket = newWebSocket;
 
-						// onClose callback
-						webSocket.setClosedCallback(client);
-						connectCallback.onSuccess();
-					}
-				});
-	}
+                        // onMessage callback
+                        webSocket.setStringCallback(messageListener);
 
-	@Override
-	public void onCompleted(Exception ex) {
-		// Note: this is the central connection-closed callback-method
-		// (called when the server or client closes the connection):
-		state = State.NOT_CONNECTED;
-		connectAuthCallback.onConnectionClosed(new ClientException(ex));
-	}
+                        // onClose callback
+                        webSocket.setClosedCallback(client);
+                        connectCallback.onSuccess();
+                    }
+                });
+    }
 
-	public void close() {
-		Preconditions.checkState(state != State.NOT_CONNECTED);
-		Preconditions.checkState(webSocket != null);
-		Preconditions.checkState(connectAuthCallback != null);
-		state = State.NOT_CONNECTED;
-		webSocket.close();
-	}
+    @Override
+    public void onCompleted(Exception ex) {
+        // Note: this is the central connection-closed callback-method
+        // (called when the server or client closes the connection):
+        state = State.NOT_CONNECTED;
+        connectAuthCallback.onConnectionClosed(new ClientException(ex));
+    }
 
-	private void authenticate() {
-		Preconditions.checkState(state == State.CONNECTED);
-		Preconditions.checkState(webSocket != null);
-		sendCommand(new AuthenticateCommand(clientID));
-	}
+    public void close() {
+        Preconditions.checkState(state != State.NOT_CONNECTED);
+        Preconditions.checkState(webSocket != null);
+        Preconditions.checkState(connectAuthCallback != null);
+        state = State.NOT_CONNECTED;
+        webSocket.close();
+    }
 
-	public void connectAndAuthenticate(final ConnectAuthCallback connectAuthCallback) {
-		this.connectAuthCallback = connectAuthCallback;
+    private void authenticate() {
+        Preconditions.checkState(state == State.CONNECTED);
+        Preconditions.checkState(webSocket != null);
+        sendCommand(new AuthenticateCommand(clientID));
+    }
 
-		switch (state) {
-			case NOT_CONNECTED:
-				connect(new ConnectCallback() {
-					@Override
-					public void onSuccess() {
-						Log.i(TAG, "Successfully connected to WebSocket server");
-						authenticate();
-					}
+    public void connectAndAuthenticate(final ConnectAuthCallback connectAuthCallback) {
+        this.connectAuthCallback = connectAuthCallback;
 
-					@Override
-					public void onFailure(ClientException ex) {
-						connectAuthCallback.onConnectionFailure(ex);
-					}
-				});
-				break;
+        switch (state) {
+            case NOT_CONNECTED:
+                connect(new ConnectCallback() {
+                    @Override
+                    public void onSuccess() {
+                        Log.i(TAG, "Successfully connected to WebSocket server");
+                        authenticate();
+                    }
 
-			case CONNECTED:
-				Log.i(TAG, "Already connected to WebSocket server!");
-				authenticate();
-				break;
+                    @Override
+                    public void onFailure(ClientException ex) {
+                        connectAuthCallback.onConnectionFailure(ex);
+                    }
+                });
+                break;
 
-			case CONNECTED_AUTHENTICATED:
-				Log.i(TAG, "Already authenticated!");
-				connectAuthCallback.onSuccess(clientID);
-				break;
-		}
-	}
+            case CONNECTED:
+                Log.i(TAG, "Already connected to WebSocket server!");
+                authenticate();
+                break;
 
-	@Override
-	public void retrieveInfo() {
-		Preconditions.checkState(state == State.CONNECTED_AUTHENTICATED);
-		Preconditions.checkState(clientID != INVALID_CLIENT_ID);
-		sendCommand(new RetrieveInfoCommand());
-	}
+            case CONNECTED_AUTHENTICATED:
+                Log.i(TAG, "Already authenticated!");
+                connectAuthCallback.onSuccess(clientID);
+                break;
+        }
+    }
 
-	@Override
-	public boolean isJobInProgress(long jobID) {
-		return messageListener.isJobInProgress(jobID);
-	}
+    @Override
+    public void retrieveInfo() {
+        Preconditions.checkState(state == State.CONNECTED_AUTHENTICATED);
+        Preconditions.checkState(clientID != INVALID_CLIENT_ID);
+        sendCommand(new RetrieveInfoCommand());
+    }
 
-	@Override
-	public int getNumberOfJobsInProgress() {
-		return messageListener.getNumberOfJobsInProgress();
-	}
+    @Override
+    public boolean isJobInProgress(long jobID) {
+        return messageListener.isJobInProgress(jobID);
+    }
 
-	@Override
-	public void convertProgram(final long jobID, final String title, final WebImage image, final boolean verbose,
-			final boolean force) {
-		Preconditions.checkState(state == State.CONNECTED_AUTHENTICATED);
-		Preconditions.checkState(clientID != INVALID_CLIENT_ID);
-		final Job job = new Job(jobID, title, image);
+    @Override
+    public int getNumberOfJobsInProgress() {
+        return messageListener.getNumberOfJobsInProgress();
+    }
 
-		if (state != State.CONNECTED_AUTHENTICATED || webSocket == null) {
-			convertCallback.onConversionFailure(job, new ClientException("Not connected!"));
-			return;
-		}
+    @Override
+    public void convertProgram(final long jobID, final String title, final WebImage image, final boolean verbose,
+                               final boolean force) {
+        Preconditions.checkState(state == State.CONNECTED_AUTHENTICATED);
+        Preconditions.checkState(clientID != INVALID_CLIENT_ID);
+        final Job job = new Job(jobID, title, image);
 
-		if (!messageListener.scheduleJob(job, force, convertCallback)) {
-			Log.e(TAG, "Cannot schedule job since another job of the same Scratch program is already running (job ID "
-					+ "is: " + jobID + ")");
-			convertCallback.onConversionFailure(job, new ClientException("Cannot start this job since the job "
-					+ "already exists and is in progress! Set force-flag to true to restart the conversion while it "
-					+ "is running!"));
-			return;
-		}
+        if (state != State.CONNECTED_AUTHENTICATED || webSocket == null) {
+            convertCallback.onConversionFailure(job, new ClientException("Not connected!"));
+            return;
+        }
 
-		Log.i(TAG, "Scheduling new job with ID: " + jobID);
-		sendCommand(new ScheduleJobCommand(jobID, force, verbose));
-	}
+        if (!messageListener.scheduleJob(job, force, convertCallback)) {
+            Log.e(TAG, "Cannot schedule job since another job of the same Scratch program is already running (job ID "
+                    + "is: " + jobID + ")");
+            convertCallback.onConversionFailure(job, new ClientException("Cannot start this job since the job "
+                    + "already exists and is in progress! Set force-flag to true to restart the conversion while it "
+                    + "is running!"));
+            return;
+        }
 
-	@Override
-	public void onUserCanceledConversion(long jobID) {
-		Preconditions.checkState(state == State.CONNECTED_AUTHENTICATED);
-		Preconditions.checkState(clientID != INVALID_CLIENT_ID);
-		messageListener.onUserCanceledConversion(jobID);
-	}
+        Log.i(TAG, "Scheduling new job with ID: " + jobID);
+        sendCommand(new ScheduleJobCommand(jobID, force, verbose));
+    }
 
-	@Override
-	public void onBaseMessage(BaseMessage baseMessage) {
-		if (baseMessage instanceof InfoMessage) {
-			final InfoMessage infoMessage = (InfoMessage) baseMessage;
-			convertCallback.onInfo(infoMessage.getCatrobatLanguageVersion(), infoMessage.getJobList());
+    @Override
+    public void onUserCanceledConversion(long jobID) {
+        Preconditions.checkState(state == State.CONNECTED_AUTHENTICATED);
+        Preconditions.checkState(clientID != INVALID_CLIENT_ID);
+        messageListener.onUserCanceledConversion(jobID);
+    }
 
-			final Job[] jobs = infoMessage.getJobList();
-			for (Job job : jobs) {
-				DownloadCallback downloadCallback = messageListener.restoreJobIfRunning(job, convertCallback);
-				if (downloadCallback != null) {
-					convertCallback.onConversionAlreadyFinished(job, downloadCallback, job.getDownloadURL());
-				}
-			}
-			return;
-		}
+    @Override
+    public void onBaseMessage(BaseMessage baseMessage) {
+        if (baseMessage instanceof InfoMessage) {
+            final InfoMessage infoMessage = (InfoMessage) baseMessage;
+            convertCallback.onInfo(infoMessage.getCatrobatLanguageVersion(), infoMessage.getJobList());
 
-		if (baseMessage instanceof ErrorMessage) {
-			final ErrorMessage errorMessage = (ErrorMessage) baseMessage;
-			Log.e(TAG, errorMessage.getMessage());
+            final Job[] jobs = infoMessage.getJobList();
+            for (Job job : jobs) {
+                DownloadCallback downloadCallback = messageListener.restoreJobIfRunning(job, convertCallback);
+                if (downloadCallback != null) {
+                    convertCallback.onConversionAlreadyFinished(job, downloadCallback, job.getDownloadURL());
+                }
+            }
+            return;
+        }
 
-			if (state == State.CONNECTED) {
-				Preconditions.checkState(connectAuthCallback != null);
-				connectAuthCallback.onAuthenticationFailure(new ClientException(errorMessage.getMessage()));
-			} else if (state == State.CONNECTED_AUTHENTICATED) {
-				convertCallback.onConversionFailure(null, new ClientException(errorMessage.getMessage()));
-			} else {
-				convertCallback.onError(errorMessage.getMessage());
-			}
-			return;
-		}
+        if (baseMessage instanceof ErrorMessage) {
+            final ErrorMessage errorMessage = (ErrorMessage) baseMessage;
+            Log.e(TAG, errorMessage.getMessage());
 
-		if (baseMessage instanceof ClientIDMessage) {
-			Preconditions.checkState(state == State.CONNECTED);
+            if (state == State.CONNECTED) {
+                Preconditions.checkState(connectAuthCallback != null);
+                connectAuthCallback.onAuthenticationFailure(new ClientException(errorMessage.getMessage()));
+            } else if (state == State.CONNECTED_AUTHENTICATED) {
+                convertCallback.onConversionFailure(null, new ClientException(errorMessage.getMessage()));
+            } else {
+                convertCallback.onError(errorMessage.getMessage());
+            }
+            return;
+        }
 
-			final ClientIDMessage clientIDMessage = (ClientIDMessage) baseMessage;
-			long oldClientID = clientID;
-			clientID = clientIDMessage.getClientID();
+        if (baseMessage instanceof ClientIDMessage) {
+            Preconditions.checkState(state == State.CONNECTED);
 
-			if (clientID != oldClientID) {
-				Log.d(TAG, "New Client ID: " + clientID);
-			}
+            final ClientIDMessage clientIDMessage = (ClientIDMessage) baseMessage;
+            long oldClientID = clientID;
+            clientID = clientIDMessage.getClientID();
 
-			state = State.CONNECTED_AUTHENTICATED;
-			connectAuthCallback.onSuccess(clientID);
-			return;
-		}
+            if (clientID != oldClientID) {
+                Log.d(TAG, "New Client ID: " + clientID);
+            }
 
-		Log.e(TAG, "No handler implemented for base message: " + baseMessage);
-	}
+            state = State.CONNECTED_AUTHENTICATED;
+            connectAuthCallback.onSuccess(clientID);
+            return;
+        }
 
-	private void sendCommand(final Command command) {
-		Preconditions.checkArgument(command != null);
-		Preconditions.checkState(state == State.CONNECTED || state == State.CONNECTED_AUTHENTICATED);
-		Preconditions.checkState(webSocket != null);
+        Log.e(TAG, "No handler implemented for base message: " + baseMessage);
+    }
 
-		final String dataToSend = command.toJson().toString();
-		Log.d(TAG, "Sending: " + dataToSend);
-		webSocket.send(dataToSend);
-	}
+    private void sendCommand(final Command command) {
+        Preconditions.checkArgument(command != null);
+        Preconditions.checkState(state == State.CONNECTED || state == State.CONNECTED_AUTHENTICATED);
+        Preconditions.checkState(webSocket != null);
+
+        final String dataToSend = command.toJson().toString();
+        Log.d(TAG, "Sending: " + dataToSend);
+        webSocket.send(dataToSend);
+    }
 }

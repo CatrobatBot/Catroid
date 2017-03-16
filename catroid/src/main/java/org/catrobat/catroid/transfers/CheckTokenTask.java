@@ -34,97 +34,97 @@ import org.catrobat.catroid.web.ServerCalls;
 import org.catrobat.catroid.web.WebconnectionException;
 
 public class CheckTokenTask extends AsyncTask<Void, Void, Boolean> {
-	private static final String TAG = CheckTokenTask.class.getSimpleName();
+    private static final String TAG = CheckTokenTask.class.getSimpleName();
 
-	private Activity activity;
-	private ProgressDialog progressDialog;
-	private String token;
-	private String username;
+    private Activity activity;
+    private ProgressDialog progressDialog;
+    private String token;
+    private String username;
 
-	private WebconnectionException exception;
+    private WebconnectionException exception;
 
-	private OnCheckTokenCompleteListener onCheckTokenCompleteListener;
+    private OnCheckTokenCompleteListener onCheckTokenCompleteListener;
 
-	public CheckTokenTask(Activity activity, String token, String username) {
-		this.activity = activity;
-		this.token = token;
-		this.username = username;
-	}
+    public CheckTokenTask(Activity activity, String token, String username) {
+        this.activity = activity;
+        this.token = token;
+        this.username = username;
+    }
 
-	public void setOnCheckTokenCompleteListener(OnCheckTokenCompleteListener listener) {
-		onCheckTokenCompleteListener = listener;
-	}
+    public void setOnCheckTokenCompleteListener(OnCheckTokenCompleteListener listener) {
+        onCheckTokenCompleteListener = listener;
+    }
 
-	@Override
-	protected void onPreExecute() {
-		super.onPreExecute();
-		if (activity == null) {
-			return;
-		}
-		String title = activity.getString(R.string.please_wait);
-		String message = activity.getString(R.string.loading_check_token);
-		progressDialog = ProgressDialog.show(activity, title, message);
-	}
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        if (activity == null) {
+            return;
+        }
+        String title = activity.getString(R.string.please_wait);
+        String message = activity.getString(R.string.loading_check_token);
+        progressDialog = ProgressDialog.show(activity, title, message);
+    }
 
-	@Override
-	protected Boolean doInBackground(Void... arg0) {
-		try {
-			if (!Utils.isNetworkAvailable(activity)) {
-				exception = new WebconnectionException(WebconnectionException.ERROR_NETWORK, "Network not available!");
-				return false;
-			}
+    @Override
+    protected Boolean doInBackground(Void... arg0) {
+        try {
+            if (!Utils.isNetworkAvailable(activity)) {
+                exception = new WebconnectionException(WebconnectionException.ERROR_NETWORK, "Network not available!");
+                return false;
+            }
 
-			return ServerCalls.getInstance().checkToken(token, username);
-		} catch (WebconnectionException webconnectionException) {
-			Log.e(TAG, Log.getStackTraceString(webconnectionException));
-			exception = webconnectionException;
-		}
-		return false;
-	}
+            return ServerCalls.getInstance().checkToken(token, username);
+        } catch (WebconnectionException webconnectionException) {
+            Log.e(TAG, Log.getStackTraceString(webconnectionException));
+            exception = webconnectionException;
+        }
+        return false;
+    }
 
-	@Override
-	protected void onPostExecute(Boolean success) {
-		super.onPostExecute(success);
+    @Override
+    protected void onPostExecute(Boolean success) {
+        super.onPostExecute(success);
 
-		if (progressDialog != null && progressDialog.isShowing()) {
-			progressDialog.dismiss();
-		}
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
 
-		if (Utils.checkForNetworkError(success, exception)) {
-			showDialog(R.string.error_internet_connection);
-			return;
-		}
-		if (!success) {
-			// token is not valid -> maybe password has changed
-			if (onCheckTokenCompleteListener != null) {
-				onCheckTokenCompleteListener.onTokenNotValid(activity);
-			}
+        if (Utils.checkForNetworkError(success, exception)) {
+            showDialog(R.string.error_internet_connection);
+            return;
+        }
+        if (!success) {
+            // token is not valid -> maybe password has changed
+            if (onCheckTokenCompleteListener != null) {
+                onCheckTokenCompleteListener.onTokenNotValid(activity);
+            }
 
-			return;
-		}
+            return;
+        }
 
-		if (onCheckTokenCompleteListener != null) {
-			onCheckTokenCompleteListener.onCheckTokenSuccess(activity);
-		}
-	}
+        if (onCheckTokenCompleteListener != null) {
+            onCheckTokenCompleteListener.onCheckTokenSuccess(activity);
+        }
+    }
 
-	private void showDialog(int messageId) {
-		if (activity == null) {
-			return;
-		}
-		if (exception.getMessage() == null) {
-			new CustomAlertDialogBuilder(activity).setMessage(messageId).setPositiveButton(R.string.ok, null)
-					.show();
-		} else {
-			new CustomAlertDialogBuilder(activity).setMessage(exception.getMessage())
-					.setPositiveButton(R.string.ok, null).show();
-		}
-	}
+    private void showDialog(int messageId) {
+        if (activity == null) {
+            return;
+        }
+        if (exception.getMessage() == null) {
+            new CustomAlertDialogBuilder(activity).setMessage(messageId).setPositiveButton(R.string.ok, null)
+                    .show();
+        } else {
+            new CustomAlertDialogBuilder(activity).setMessage(exception.getMessage())
+                    .setPositiveButton(R.string.ok, null).show();
+        }
+    }
 
-	public interface OnCheckTokenCompleteListener {
+    public interface OnCheckTokenCompleteListener {
 
-		void onTokenNotValid(Activity activity);
+        void onTokenNotValid(Activity activity);
 
-		void onCheckTokenSuccess(Activity activity);
-	}
+        void onCheckTokenSuccess(Activity activity);
+    }
 }

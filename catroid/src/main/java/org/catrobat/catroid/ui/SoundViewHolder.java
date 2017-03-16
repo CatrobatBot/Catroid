@@ -29,12 +29,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class SoundViewHolder {
-	public ImageButton playAndStopButton;
-	public LinearLayout soundFragmentButtonLayout;
-	public CheckBox checkbox;
-	public TextView titleTextView;
-	public TextView timeSeparatorTextView;
-	public TextView soundFileSizePrefixTextView;
-	public TextView soundFileSizeTextView;
-	public Chronometer timePlayedChronometer;
+    public ImageButton playAndStopButton;
+    public LinearLayout soundFragmentButtonLayout;
+    public CheckBox checkbox;
+    public TextView titleTextView;
+    public TextView timeSeparatorTextView;
+    public TextView soundFileSizePrefixTextView;
+    public TextView soundFileSizeTextView;
+    public Chronometer timePlayedChronometer;
 }

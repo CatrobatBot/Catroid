@@ -52,158 +52,158 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class SwitchToLookCrashTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
-	private static final String TAG = SwitchToLookCrashTest.class.getSimpleName();
+    private static final String TAG = SwitchToLookCrashTest.class.getSimpleName();
 
-	public SwitchToLookCrashTest() {
-		super(MainMenuActivity.class);
-	}
+    public SwitchToLookCrashTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		UiTestUtils.prepareStageForTest();
-		prepareTest();
-	}
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        UiTestUtils.prepareStageForTest();
+        prepareTest();
+    }
 
-	public void testSwitchToLookCrashPNG() throws IOException {
-		String nyanCatPath = "";
-		String nyanCat = "nyancat_crash";
-		String nyanCatPng = "nyancat_crash.png";
-		try {
-			// need to load image from assets, not from resources folder.
-			// this way, the image is loaded similar to catroid, when importing an look.
-			// if we use the image from res-folder instead of assets, test would
-			// pass even if the needed code in copyImageIntoCatroid() was deleted
-			InputStream inputStream = getInstrumentation().getContext().getResources().getAssets().open(nyanCatPng);
-			nyanCatPath = Utils.buildPath(Utils.buildScenePath(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, ProjectManager.getInstance().getCurrentProject().getDefaultScene().getName()), Constants.IMAGE_DIRECTORY, nyanCatPng);
-			writeBufferToFile(inputStream, nyanCatPath);
-		} catch (IOException e) {
-			Log.e(TAG, "Image not loaded from Assets", e);
-			fail("Image not loaded from Assets");
-		}
+    public void testSwitchToLookCrashPNG() throws IOException {
+        String nyanCatPath = "";
+        String nyanCat = "nyancat_crash";
+        String nyanCatPng = "nyancat_crash.png";
+        try {
+            // need to load image from assets, not from resources folder.
+            // this way, the image is loaded similar to catroid, when importing an look.
+            // if we use the image from res-folder instead of assets, test would
+            // pass even if the needed code in copyImageIntoCatroid() was deleted
+            InputStream inputStream = getInstrumentation().getContext().getResources().getAssets().open(nyanCatPng);
+            nyanCatPath = Utils.buildPath(Utils.buildScenePath(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, ProjectManager.getInstance().getCurrentProject().getDefaultScene().getName()), Constants.IMAGE_DIRECTORY, nyanCatPng);
+            writeBufferToFile(inputStream, nyanCatPath);
+        } catch (IOException e) {
+            Log.e(TAG, "Image not loaded from Assets", e);
+            fail("Image not loaded from Assets");
+        }
 
-		File nyanCatPngFile = new File(nyanCatPath);
-		Bundle bundleForGallery = new Bundle();
-		bundleForGallery.putString("filePath", nyanCatPngFile.getAbsolutePath());
-		Intent intent = new Intent(getInstrumentation().getContext(),
-				org.catrobat.catroid.uitest.mockups.MockGalleryActivity.class);
-		intent.putExtras(bundleForGallery);
+        File nyanCatPngFile = new File(nyanCatPath);
+        Bundle bundleForGallery = new Bundle();
+        bundleForGallery.putString("filePath", nyanCatPngFile.getAbsolutePath());
+        Intent intent = new Intent(getInstrumentation().getContext(),
+                org.catrobat.catroid.uitest.mockups.MockGalleryActivity.class);
+        intent.putExtras(bundleForGallery);
 
-		getLookFragment().startActivityForResult(intent, LookController.REQUEST_SELECT_OR_DRAW_IMAGE);
-		solo.sleep(200);
-		assertTrue("Testfile not added from mockActivity", solo.searchText(nyanCat));
+        getLookFragment().startActivityForResult(intent, LookController.REQUEST_SELECT_OR_DRAW_IMAGE);
+        solo.sleep(200);
+        assertTrue("Testfile not added from mockActivity", solo.searchText(nyanCat));
 
-		String checksumNyanCatImageFile = Utils.md5Checksum(nyanCatPngFile);
-		assertTrue("Checksum not in checksumcontainer", ProjectManager.getInstance().getFileChecksumContainer()
-				.containsChecksum(checksumNyanCatImageFile));
+        String checksumNyanCatImageFile = Utils.md5Checksum(nyanCatPngFile);
+        assertTrue("Checksum not in checksumcontainer", ProjectManager.getInstance().getFileChecksumContainer()
+                .containsChecksum(checksumNyanCatImageFile));
 
-		boolean isInLookDataList = false;
-		for (LookData lookData : ProjectManager.getInstance().getCurrentSprite().getLookDataList()) {
-			if (lookData.getChecksum().equalsIgnoreCase(checksumNyanCatImageFile)) {
-				isInLookDataList = true;
-			}
-		}
-		if (!isInLookDataList) {
-			fail("File not added in LookDataList");
-		}
+        boolean isInLookDataList = false;
+        for (LookData lookData : ProjectManager.getInstance().getCurrentSprite().getLookDataList()) {
+            if (lookData.getChecksum().equalsIgnoreCase(checksumNyanCatImageFile)) {
+                isInLookDataList = true;
+            }
+        }
+        if (!isInLookDataList) {
+            fail("File not added in LookDataList");
+        }
 
-		UiTestUtils.switchToFragmentInScriptActivity(solo, UiTestUtils.SCRIPTS_INDEX);
+        UiTestUtils.switchToFragmentInScriptActivity(solo, UiTestUtils.SCRIPTS_INDEX);
 
-		assertTrue(nyanCat + " is not selected in Spinner", solo.isSpinnerTextSelected(nyanCat));
+        assertTrue(nyanCat + " is not selected in Spinner", solo.isSpinnerTextSelected(nyanCat));
 
-		UiTestUtils.clickOnActionBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(5000);
-	}
+        UiTestUtils.clickOnActionBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(5000);
+    }
 
-	public void testSwitchToLookCrashJPG() throws IOException {
-		String manImagePath = "";
-		String manImage = "man_crash";
-		String manImageJpg = "man_crash.jpg";
-		try {
-			// need to load image from assets, not from resources folder.
-			// this way, the image is loaded similar to catroid, when importing an look.
-			// if we use the image from res-folder instead of assets, test would
-			// pass even if the needed code in copyImageIntoCatroid() was deleted
-			InputStream inputStream = getInstrumentation().getContext().getResources().getAssets().open(manImageJpg);
-			manImagePath = Utils.buildPath(Utils.buildScenePath(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, ProjectManager.getInstance().getCurrentProject().getDefaultScene().getName()), Constants.IMAGE_DIRECTORY, manImageJpg);
-			writeBufferToFile(inputStream, manImagePath);
-		} catch (IOException e) {
-			Log.e(TAG, "Image not loaded from Assets", e);
-			fail("Image not loaded from Assets");
-		}
+    public void testSwitchToLookCrashJPG() throws IOException {
+        String manImagePath = "";
+        String manImage = "man_crash";
+        String manImageJpg = "man_crash.jpg";
+        try {
+            // need to load image from assets, not from resources folder.
+            // this way, the image is loaded similar to catroid, when importing an look.
+            // if we use the image from res-folder instead of assets, test would
+            // pass even if the needed code in copyImageIntoCatroid() was deleted
+            InputStream inputStream = getInstrumentation().getContext().getResources().getAssets().open(manImageJpg);
+            manImagePath = Utils.buildPath(Utils.buildScenePath(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, ProjectManager.getInstance().getCurrentProject().getDefaultScene().getName()), Constants.IMAGE_DIRECTORY, manImageJpg);
+            writeBufferToFile(inputStream, manImagePath);
+        } catch (IOException e) {
+            Log.e(TAG, "Image not loaded from Assets", e);
+            fail("Image not loaded from Assets");
+        }
 
-		File nyanCatPngFile = new File(manImagePath);
-		Bundle bundleForGallery = new Bundle();
-		bundleForGallery.putString("filePath", nyanCatPngFile.getAbsolutePath());
-		Intent intent = new Intent(getInstrumentation().getContext(),
-				org.catrobat.catroid.uitest.mockups.MockGalleryActivity.class);
-		intent.putExtras(bundleForGallery);
+        File nyanCatPngFile = new File(manImagePath);
+        Bundle bundleForGallery = new Bundle();
+        bundleForGallery.putString("filePath", nyanCatPngFile.getAbsolutePath());
+        Intent intent = new Intent(getInstrumentation().getContext(),
+                org.catrobat.catroid.uitest.mockups.MockGalleryActivity.class);
+        intent.putExtras(bundleForGallery);
 
-		getLookFragment().startActivityForResult(intent, LookController.REQUEST_SELECT_OR_DRAW_IMAGE);
-		solo.sleep(200);
-		assertTrue("Testfile not added from mockActivity", solo.searchText(manImage));
+        getLookFragment().startActivityForResult(intent, LookController.REQUEST_SELECT_OR_DRAW_IMAGE);
+        solo.sleep(200);
+        assertTrue("Testfile not added from mockActivity", solo.searchText(manImage));
 
-		String checksumNyanCatImageFile = Utils.md5Checksum(nyanCatPngFile);
-		assertTrue("Checksum not in checksumcontainer", ProjectManager.getInstance().getFileChecksumContainer()
-				.containsChecksum(checksumNyanCatImageFile));
+        String checksumNyanCatImageFile = Utils.md5Checksum(nyanCatPngFile);
+        assertTrue("Checksum not in checksumcontainer", ProjectManager.getInstance().getFileChecksumContainer()
+                .containsChecksum(checksumNyanCatImageFile));
 
-		boolean isInLookDataList = false;
-		for (LookData lookData : ProjectManager.getInstance().getCurrentSprite().getLookDataList()) {
-			if (lookData.getChecksum().equalsIgnoreCase(checksumNyanCatImageFile)) {
-				isInLookDataList = true;
-			}
-		}
-		if (!isInLookDataList) {
-			fail("File not added in LookDataList");
-		}
+        boolean isInLookDataList = false;
+        for (LookData lookData : ProjectManager.getInstance().getCurrentSprite().getLookDataList()) {
+            if (lookData.getChecksum().equalsIgnoreCase(checksumNyanCatImageFile)) {
+                isInLookDataList = true;
+            }
+        }
+        if (!isInLookDataList) {
+            fail("File not added in LookDataList");
+        }
 
-		UiTestUtils.switchToFragmentInScriptActivity(solo, UiTestUtils.SCRIPTS_INDEX);
+        UiTestUtils.switchToFragmentInScriptActivity(solo, UiTestUtils.SCRIPTS_INDEX);
 
-		assertTrue(manImage + " is not selected in Spinner", solo.isSpinnerTextSelected(manImage));
+        assertTrue(manImage + " is not selected in Spinner", solo.isSpinnerTextSelected(manImage));
 
-		UiTestUtils.clickOnActionBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(5000);
-	}
+        UiTestUtils.clickOnActionBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(5000);
+    }
 
-	private void writeBufferToFile(InputStream inputStream, String imageFilePath) throws IOException {
-		FileOutputStream nyanCatFileOutputStream;
-		nyanCatFileOutputStream = new FileOutputStream(imageFilePath);
-		byte[] buffer = new byte[inputStream.available()];
-		inputStream.read(buffer);
-		inputStream.close();
-		nyanCatFileOutputStream.write(buffer);
-		nyanCatFileOutputStream.close();
-	}
+    private void writeBufferToFile(InputStream inputStream, String imageFilePath) throws IOException {
+        FileOutputStream nyanCatFileOutputStream;
+        nyanCatFileOutputStream = new FileOutputStream(imageFilePath);
+        byte[] buffer = new byte[inputStream.available()];
+        inputStream.read(buffer);
+        inputStream.close();
+        nyanCatFileOutputStream.write(buffer);
+        nyanCatFileOutputStream.close();
+    }
 
-	private void prepareTest() {
-		createProject();
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
-		UiTestUtils.switchToFragmentInScriptActivity(solo, UiTestUtils.LOOKS_INDEX);
-	}
+    private void prepareTest() {
+        createProject();
+        UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
+        UiTestUtils.switchToFragmentInScriptActivity(solo, UiTestUtils.LOOKS_INDEX);
+    }
 
-	private void createProject() {
-		StorageHandler storageHandler = StorageHandler.getInstance();
-		Project project = new Project(getActivity(), UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+    private void createProject() {
+        StorageHandler storageHandler = StorageHandler.getInstance();
+        Project project = new Project(getActivity(), UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
 
-		Sprite backgroundSprite = project.getDefaultScene().getSpriteList().get(0);
-		Script startScript = new StartScript();
-		SetLookBrick setLookBrick = new SetLookBrick();
+        Sprite backgroundSprite = project.getDefaultScene().getSpriteList().get(0);
+        Script startScript = new StartScript();
+        SetLookBrick setLookBrick = new SetLookBrick();
 
-		startScript.addBrick(setLookBrick);
-		backgroundSprite.addScript(startScript);
-		project.getDefaultScene().addSprite(backgroundSprite);
+        startScript.addBrick(setLookBrick);
+        backgroundSprite.addScript(startScript);
+        project.getDefaultScene().addSprite(backgroundSprite);
 
-		ProjectManager.getInstance().setFileChecksumContainer(new FileChecksumContainer());
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(backgroundSprite);
-		ProjectManager.getInstance().setCurrentScript(startScript);
-		storageHandler.saveProject(project);
-	}
+        ProjectManager.getInstance().setFileChecksumContainer(new FileChecksumContainer());
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(backgroundSprite);
+        ProjectManager.getInstance().setCurrentScript(startScript);
+        storageHandler.saveProject(project);
+    }
 
-	private LookFragment getLookFragment() {
-		ScriptActivity activity = (ScriptActivity) solo.getCurrentActivity();
-		return (LookFragment) activity.getFragment(ScriptActivity.FRAGMENT_LOOKS);
-	}
+    private LookFragment getLookFragment() {
+        ScriptActivity activity = (ScriptActivity) solo.getCurrentActivity();
+        return (LookFragment) activity.getFragment(ScriptActivity.FRAGMENT_LOOKS);
+    }
 }

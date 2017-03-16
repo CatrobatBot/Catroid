@@ -28,19 +28,19 @@ import org.catrobat.catroid.formulaeditor.UserVariable;
 
 public class XStreamUserVariableConverter implements SingleValueConverter {
 
-	@Override
-	public boolean canConvert(Class type) {
-		return type.equals(UserVariable.class);
-	}
+    @Override
+    public boolean canConvert(Class type) {
+        return type.equals(UserVariable.class);
+    }
 
-	@Override
-	public String toString(Object object) {
-		UserVariable userVariable = (UserVariable) object;
-		return userVariable.getName();
-	}
+    @Override
+    public String toString(Object object) {
+        UserVariable userVariable = (UserVariable) object;
+        return userVariable.getName();
+    }
 
-	@Override
-	public Object fromString(String s) {
-		return new UserVariable(s);
-	}
+    @Override
+    public Object fromString(String s) {
+        return new UserVariable(s);
+    }
 }

@@ -39,70 +39,70 @@ import org.catrobat.catroid.utils.Utils;
 import java.util.List;
 
 public class SetPenSizeBrick extends FormulaBrick {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private transient View prototypeView;
+    private transient View prototypeView;
 
-	public SetPenSizeBrick() {
-		addAllowedBrickField(BrickField.PEN_SIZE);
-	}
+    public SetPenSizeBrick() {
+        addAllowedBrickField(BrickField.PEN_SIZE);
+    }
 
-	public SetPenSizeBrick(int penSize) {
-		initializeBrickFields(new Formula(penSize));
-	}
+    public SetPenSizeBrick(int penSize) {
+        initializeBrickFields(new Formula(penSize));
+    }
 
-	public SetPenSizeBrick(Formula penSize) {
-		initializeBrickFields(penSize);
-	}
+    public SetPenSizeBrick(Formula penSize) {
+        initializeBrickFields(penSize);
+    }
 
-	private void initializeBrickFields(Formula penSize) {
-		addAllowedBrickField(BrickField.PEN_SIZE);
-		setFormulaWithBrickField(BrickField.PEN_SIZE, penSize);
-	}
+    private void initializeBrickFields(Formula penSize) {
+        addAllowedBrickField(BrickField.PEN_SIZE);
+        setFormulaWithBrickField(BrickField.PEN_SIZE, penSize);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return getFormulaWithBrickField(BrickField.PEN_SIZE).getRequiredResources();
-	}
+    @Override
+    public int getRequiredResources() {
+        return getFormulaWithBrickField(BrickField.PEN_SIZE).getRequiredResources();
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_set_pen_size, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_set_pen_size, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_set_pen_size_checkbox);
+        setCheckboxView(R.id.brick_set_pen_size_checkbox);
 
-		TextView penSizeEdit = (TextView) view.findViewById(R.id.brick_set_pen_size_edit_text);
+        TextView penSizeEdit = (TextView) view.findViewById(R.id.brick_set_pen_size_edit_text);
 
-		getFormulaWithBrickField(BrickField.PEN_SIZE).setTextFieldId(R.id.brick_set_pen_size_edit_text);
-		getFormulaWithBrickField(BrickField.PEN_SIZE).refreshTextField(view);
+        getFormulaWithBrickField(BrickField.PEN_SIZE).setTextFieldId(R.id.brick_set_pen_size_edit_text);
+        getFormulaWithBrickField(BrickField.PEN_SIZE).refreshTextField(view);
 
-		penSizeEdit.setOnClickListener(this);
+        penSizeEdit.setOnClickListener(this);
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_set_pen_size, null);
-		TextView penSizeText = (TextView) prototypeView.findViewById(R.id.brick_set_pen_size_edit_text);
-		penSizeText.setText(Utils.getNumberStringForBricks(BrickValues.PEN_SIZE));
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_set_pen_size, null);
+        TextView penSizeText = (TextView) prototypeView.findViewById(R.id.brick_set_pen_size_edit_text);
+        penSizeText.setText(Utils.getNumberStringForBricks(BrickValues.PEN_SIZE));
+        return prototypeView;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createSetPenSizeAction(sprite,
-				getFormulaWithBrickField(BrickField.PEN_SIZE)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createSetPenSizeAction(sprite,
+                getFormulaWithBrickField(BrickField.PEN_SIZE)));
+        return null;
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		FormulaEditorFragment.showFragment(view, this, BrickField.PEN_SIZE);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        FormulaEditorFragment.showFragment(view, this, BrickField.PEN_SIZE);
+    }
 }

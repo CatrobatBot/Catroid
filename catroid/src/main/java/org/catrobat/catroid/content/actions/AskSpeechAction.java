@@ -40,108 +40,108 @@ import java.util.ArrayList;
 
 public class AskSpeechAction extends Action implements StageActivity.IntentListener {
 
-	private static final String TAG = "AskSpeechAction";
-	private Sprite sprite;
-	private Formula questionFormula;
-	private UserVariable answerVariable;
+    private static final String TAG = "AskSpeechAction";
+    private Sprite sprite;
+    private Formula questionFormula;
+    private UserVariable answerVariable;
 
-	private boolean questionAsked = false;
-	private boolean answerReceived = false;
+    private boolean questionAsked = false;
+    private boolean answerReceived = false;
 
-	private void askQuestion() {
-		if (StageActivity.messageHandler == null) {
-			return;
-		}
-		ArrayList<Object> params = new ArrayList<>();
-		params.add(this);
-		Message message = StageActivity.messageHandler.obtainMessage(StageActivity.REGISTER_INTENT, params);
-		message.sendToTarget();
+    private void askQuestion() {
+        if (StageActivity.messageHandler == null) {
+            return;
+        }
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(this);
+        Message message = StageActivity.messageHandler.obtainMessage(StageActivity.REGISTER_INTENT, params);
+        message.sendToTarget();
 
-		questionAsked = true;
-	}
+        questionAsked = true;
+    }
 
-	private Intent createRecognitionIntent(String question) {
-		Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-		intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-				RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-		if (question != null && question.length() != 0) {
-			intent.putExtra(RecognizerIntent.EXTRA_PROMPT, question);
-		}
-		return intent;
-	}
+    private Intent createRecognitionIntent(String question) {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        if (question != null && question.length() != 0) {
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, question);
+        }
+        return intent;
+    }
 
-	public void setAnswerText(String answer) {
-		if (answerVariable == null) {
-			return;
-		}
-		answerVariable.setValue(answer);
+    public void setAnswerText(String answer) {
+        if (answerVariable == null) {
+            return;
+        }
+        answerVariable.setValue(answer);
 
-		answerReceived = true;
-	}
+        answerReceived = true;
+    }
 
-	public void setAnswerVariable(UserVariable answerVariable) {
-		if (answerVariable == null) {
-			return;
-		}
-		this.answerVariable = answerVariable;
-	}
+    public void setAnswerVariable(UserVariable answerVariable) {
+        if (answerVariable == null) {
+            return;
+        }
+        this.answerVariable = answerVariable;
+    }
 
-	public void setQuestionFormula(Formula questionFormula) {
-		this.questionFormula = questionFormula;
-	}
+    public void setQuestionFormula(Formula questionFormula) {
+        this.questionFormula = questionFormula;
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	@Override
-	public boolean act(float delta) {
-		if (!questionAsked) {
-			askQuestion();
-		}
+    @Override
+    public boolean act(float delta) {
+        if (!questionAsked) {
+            askQuestion();
+        }
 
-		return answerReceived;
-	}
+        return answerReceived;
+    }
 
-	@Override
-	public void restart() {
-		questionAsked = false;
-		answerReceived = false;
-		super.restart();
-	}
+    @Override
+    public void restart() {
+        questionAsked = false;
+        answerReceived = false;
+        super.restart();
+    }
 
-	@Override
-	public Intent getTargetIntent() {
-		String question = "";
-		try {
-			if (questionFormula != null) {
-				question = questionFormula.interpretString(sprite);
-			}
-		} catch (InterpretationException e) {
-			Log.e(getClass().getSimpleName(), "formula interpretation in ask brick failed");
-		}
-		return createRecognitionIntent(question);
-	}
+    @Override
+    public Intent getTargetIntent() {
+        String question = "";
+        try {
+            if (questionFormula != null) {
+                question = questionFormula.interpretString(sprite);
+            }
+        } catch (InterpretationException e) {
+            Log.e(getClass().getSimpleName(), "formula interpretation in ask brick failed");
+        }
+        return createRecognitionIntent(question);
+    }
 
-	@Override
-	public void onIntentResult(int resultCode, Intent data) {
-		ArrayList<String> matches;
-		switch (resultCode) {
-			case Activity.RESULT_OK:
-				matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-				Log.d(TAG, "Results Speechrecognition: " + matches.toString());
-				if (matches != null && matches.size() > 0) {
-					setAnswerText(matches.get(0));
-				} else {
-					setAnswerText("");
-				}
-				break;
-			case Activity.RESULT_CANCELED:
-			case Activity.RESULT_FIRST_USER:
-				setAnswerText(""); //User canceled action
-				break;
-			default:
-				Log.e(TAG, "unhandeld speech recognizer resultCode " + resultCode);
-		}
-	}
+    @Override
+    public void onIntentResult(int resultCode, Intent data) {
+        ArrayList<String> matches;
+        switch (resultCode) {
+            case Activity.RESULT_OK:
+                matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                Log.d(TAG, "Results Speechrecognition: " + matches.toString());
+                if (matches != null && matches.size() > 0) {
+                    setAnswerText(matches.get(0));
+                } else {
+                    setAnswerText("");
+                }
+                break;
+            case Activity.RESULT_CANCELED:
+            case Activity.RESULT_FIRST_USER:
+                setAnswerText(""); //User canceled action
+                break;
+            default:
+                Log.e(TAG, "unhandeld speech recognizer resultCode " + resultCode);
+        }
+    }
 }

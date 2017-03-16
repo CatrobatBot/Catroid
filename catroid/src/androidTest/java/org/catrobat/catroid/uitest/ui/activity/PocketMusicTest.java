@@ -47,139 +47,139 @@ import java.util.Random;
 
 public class PocketMusicTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
-	public PocketMusicTest() {
-		super(MainMenuActivity.class);
-	}
+    public PocketMusicTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		UiTestUtils.createTestProject();
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        UiTestUtils.createTestProject();
 
-		UiTestUtils.getIntoSoundsFromMainMenu(solo);
-		prepareTest();
-	}
+        UiTestUtils.getIntoSoundsFromMainMenu(solo);
+        prepareTest();
+    }
 
-	public void testOrientation() throws NameNotFoundException {
-		solo.waitForActivity(PocketMusicActivity.class.getSimpleName());
+    public void testOrientation() throws NameNotFoundException {
+        solo.waitForActivity(PocketMusicActivity.class.getSimpleName());
 
-		assertEquals("PocketcodeActivity not in Portrait mode!", Configuration.ORIENTATION_PORTRAIT, solo
-				.getCurrentActivity().getResources().getConfiguration().orientation);
+        assertEquals("PocketcodeActivity not in Portrait mode!", Configuration.ORIENTATION_PORTRAIT, solo
+                .getCurrentActivity().getResources().getConfiguration().orientation);
 
-		PackageManager packageManager = solo.getCurrentActivity().getPackageManager();
-		ActivityInfo activityInfo = packageManager.getActivityInfo(solo.getCurrentActivity().getComponentName(),
-				PackageManager.GET_META_DATA);
+        PackageManager packageManager = solo.getCurrentActivity().getPackageManager();
+        ActivityInfo activityInfo = packageManager.getActivityInfo(solo.getCurrentActivity().getComponentName(),
+                PackageManager.GET_META_DATA);
 
-		solo.setActivityOrientation(Solo.LANDSCAPE);
-		solo.sleep(200);
+        solo.setActivityOrientation(Solo.LANDSCAPE);
+        solo.sleep(200);
 
-		assertEquals(SoundRecorderActivity.class.getSimpleName()
-						+ " not set to be in portrait mode in AndroidManifest.xml!",
-				ActivityInfo.SCREEN_ORIENTATION_PORTRAIT,
-				activityInfo.screenOrientation
-		);
-	}
+        assertEquals(SoundRecorderActivity.class.getSimpleName()
+                        + " not set to be in portrait mode in AndroidManifest.xml!",
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT,
+                activityInfo.screenOrientation
+        );
+    }
 
-	public void testPianoElement() {
-		solo.waitForActivity(PocketMusicActivity.class.getSimpleName());
+    public void testPianoElement() {
+        solo.waitForActivity(PocketMusicActivity.class.getSimpleName());
 
-		assertNotNull("Piano Element was not found.", solo.getCurrentActivity().findViewById(R.id.musicdroid_piano));
-	}
+        assertNotNull("Piano Element was not found.", solo.getCurrentActivity().findViewById(R.id.musicdroid_piano));
+    }
 
-	public void testPocketmusic() {
-		solo.waitForActivity(PocketMusicActivity.class.getSimpleName());
+    public void testPocketmusic() {
+        solo.waitForActivity(PocketMusicActivity.class.getSimpleName());
 
-		TrackView trackView = (TrackView) solo.getCurrentActivity().findViewById(R.id.musicdroid_note_grid);
-		int trackGridHashCode = trackView.getTrackGrid().hashCode();
+        TrackView trackView = (TrackView) solo.getCurrentActivity().findViewById(R.id.musicdroid_note_grid);
+        int trackGridHashCode = trackView.getTrackGrid().hashCode();
 
-		Random random = new Random();
-		int randomRow = random.nextInt(TrackView.ROW_COUNT);
-		int randomCol = random.nextInt(TrackRowView.QUARTER_COUNT);
-		toggleNote(trackView, randomRow, randomCol, "Button not toggled");
+        Random random = new Random();
+        int randomRow = random.nextInt(TrackView.ROW_COUNT);
+        int randomCol = random.nextInt(TrackRowView.QUARTER_COUNT);
+        toggleNote(trackView, randomRow, randomCol, "Button not toggled");
 
-		solo.goBack();
+        solo.goBack();
 
-		ScriptActivity scriptActivity = (ScriptActivity) solo.getCurrentActivity();
-		SoundFragment soundFragment = (SoundFragment) scriptActivity.getFragment(ScriptActivity.FRAGMENT_SOUNDS);
+        ScriptActivity scriptActivity = (ScriptActivity) solo.getCurrentActivity();
+        SoundFragment soundFragment = (SoundFragment) scriptActivity.getFragment(ScriptActivity.FRAGMENT_SOUNDS);
 
-		assertEquals("Saving Pocketmusic MIDI did not work.", 1, soundFragment.getSoundInfoList().size());
+        assertEquals("Saving Pocketmusic MIDI did not work.", 1, soundFragment.getSoundInfoList().size());
 
-		View firstPocketMusicView = null;
+        View firstPocketMusicView = null;
 
-		for (int i = 0; i < soundFragment.getSoundInfoList().size(); i++) {
-			SoundInfo soundInfo = soundFragment.getSoundInfoList().get(i);
-			if (soundInfo.getSoundFileName().matches(".*MUS-.*\\.midi")) {
-				assertEquals("Wrong Pocketmusic title.", solo.getString(R.string.pocketmusic_recorded_filename),
-						soundInfo.getTitle());
-				firstPocketMusicView = soundFragment.getListView().getChildAt(i);
-				break;
-			}
-		}
+        for (int i = 0; i < soundFragment.getSoundInfoList().size(); i++) {
+            SoundInfo soundInfo = soundFragment.getSoundInfoList().get(i);
+            if (soundInfo.getSoundFileName().matches(".*MUS-.*\\.midi")) {
+                assertEquals("Wrong Pocketmusic title.", solo.getString(R.string.pocketmusic_recorded_filename),
+                        soundInfo.getTitle());
+                firstPocketMusicView = soundFragment.getListView().getChildAt(i);
+                break;
+            }
+        }
 
-		solo.clickOnView(firstPocketMusicView);
-		solo.waitForActivity(PocketMusicActivity.class.getSimpleName());
+        solo.clickOnView(firstPocketMusicView);
+        solo.waitForActivity(PocketMusicActivity.class.getSimpleName());
 
-		trackView = (TrackView) solo.getCurrentActivity().findViewById(R.id.musicdroid_note_grid);
+        trackView = (TrackView) solo.getCurrentActivity().findViewById(R.id.musicdroid_note_grid);
 
-		int loadedTrackgridHashCode = trackView.getTrackGrid().hashCode();
+        int loadedTrackgridHashCode = trackView.getTrackGrid().hashCode();
 
-		assertFalse("Loaded Track is the same.", trackGridHashCode == loadedTrackgridHashCode);
+        assertFalse("Loaded Track is the same.", trackGridHashCode == loadedTrackgridHashCode);
 
-		toggleNote(trackView, randomRow, randomCol, "Button toggled");
+        toggleNote(trackView, randomRow, randomCol, "Button toggled");
 
-		loadedTrackgridHashCode = trackView.getTrackGrid().hashCode();
+        loadedTrackgridHashCode = trackView.getTrackGrid().hashCode();
 
-		assertTrue("Loaded Track is not the same.", trackGridHashCode == loadedTrackgridHashCode);
-	}
+        assertTrue("Loaded Track is not the same.", trackGridHashCode == loadedTrackgridHashCode);
+    }
 
-	public void testRandomButtonToggle() {
-		solo.waitForActivity(PocketMusicActivity.class.getSimpleName());
+    public void testRandomButtonToggle() {
+        solo.waitForActivity(PocketMusicActivity.class.getSimpleName());
 
-		TrackView trackView = (TrackView) solo.getCurrentActivity().findViewById(R.id.musicdroid_note_grid);
+        TrackView trackView = (TrackView) solo.getCurrentActivity().findViewById(R.id.musicdroid_note_grid);
 
-		Random random = new Random();
-		int randomRow = random.nextInt(TrackView.ROW_COUNT);
-		int randomCol = random.nextInt(TrackRowView.QUARTER_COUNT);
-		toggleNote(trackView, randomRow, randomCol, "Button not toggled");
-		toggleNote(trackView, randomRow, randomCol, "Button toggled");
-	}
+        Random random = new Random();
+        int randomRow = random.nextInt(TrackView.ROW_COUNT);
+        int randomCol = random.nextInt(TrackRowView.QUARTER_COUNT);
+        toggleNote(trackView, randomRow, randomCol, "Button not toggled");
+        toggleNote(trackView, randomRow, randomCol, "Button toggled");
+    }
 
-	private void toggleNote(TrackView trackView, int rowIndex, int columnIndex, String
-			assertionText) {
-		TrackRowView randomRowView = trackView.getTrackRowViews().get(rowIndex);
-		NoteView randomNoteView = randomRowView.getNoteViews().get(columnIndex);
-		boolean toggled = randomNoteView.isToggled();
-		solo.clickOnView(randomNoteView);
-		solo.sleep(200);
-		assertEquals(assertionText, randomNoteView.isToggled(), !toggled);
-	}
+    private void toggleNote(TrackView trackView, int rowIndex, int columnIndex, String
+            assertionText) {
+        TrackRowView randomRowView = trackView.getTrackRowViews().get(rowIndex);
+        NoteView randomNoteView = randomRowView.getNoteViews().get(columnIndex);
+        boolean toggled = randomNoteView.isToggled();
+        solo.clickOnView(randomNoteView);
+        solo.sleep(200);
+        assertEquals(assertionText, randomNoteView.isToggled(), !toggled);
+    }
 
-	public void testButtonCount() {
-		solo.waitForActivity(PocketMusicActivity.class.getSimpleName());
+    public void testButtonCount() {
+        solo.waitForActivity(PocketMusicActivity.class.getSimpleName());
 
-		TrackView trackView = (TrackView) solo.getCurrentActivity().findViewById(R.id.musicdroid_note_grid);
-		assertEquals("TrackView size invalid", TrackView.ROW_COUNT, trackView.getTrackRowViews().size());
+        TrackView trackView = (TrackView) solo.getCurrentActivity().findViewById(R.id.musicdroid_note_grid);
+        assertEquals("TrackView size invalid", TrackView.ROW_COUNT, trackView.getTrackRowViews().size());
 
-		for (TrackRowView trackRowView : trackView.getTrackRowViews()) {
-			assertEquals("TrackRowView size invalid", trackRowView.getTactCount(), trackRowView.getNoteViews().size());
-		}
-	}
+        for (TrackRowView trackRowView : trackView.getTrackRowViews()) {
+            assertEquals("TrackRowView size invalid", trackRowView.getTactCount(), trackRowView.getNoteViews().size());
+        }
+    }
 
-	public void testPlayButtonElement() {
-		solo.waitForActivity(PocketMusicActivity.class.getSimpleName());
+    public void testPlayButtonElement() {
+        solo.waitForActivity(PocketMusicActivity.class.getSimpleName());
 
-		assertNotNull("Play Button Element was not found.",
-				solo.getCurrentActivity().findViewById(R.id.pocketmusic_play_button));
-	}
+        assertNotNull("Play Button Element was not found.",
+                solo.getCurrentActivity().findViewById(R.id.pocketmusic_play_button));
+    }
 
-	private void prepareTest() {
-		UiTestUtils.waitForFragment(solo, R.id.fragment_sound);
+    private void prepareTest() {
+        UiTestUtils.waitForFragment(solo, R.id.fragment_sound);
 
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_add);
-		String pocketRecorderText = solo.getString(R.string.add_sound_pocketmusic);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_add);
+        String pocketRecorderText = solo.getString(R.string.add_sound_pocketmusic);
 
-		solo.waitForText(pocketRecorderText);
-		assertTrue("Pocketmusic is not present", solo.searchText(pocketRecorderText));
-		solo.clickOnText(pocketRecorderText);
-	}
+        solo.waitForText(pocketRecorderText);
+        assertTrue("Pocketmusic is not present", solo.searchText(pocketRecorderText));
+        solo.clickOnText(pocketRecorderText);
+    }
 }

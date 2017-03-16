@@ -25,14 +25,14 @@ package org.catrobat.catroid.scratchconverter.protocol.message.job;
 
 public class JobFailedMessage extends JobMessage {
 
-	private final String message;
+    private final String message;
 
-	public JobFailedMessage(final long jobID, final String message) {
-		super(jobID);
-		this.message = message;
-	}
+    public JobFailedMessage(final long jobID, final String message) {
+        super(jobID);
+        this.message = message;
+    }
 
-	public String getMessage() {
-		return message;
-	}
+    public String getMessage() {
+        return message;
+    }
 }

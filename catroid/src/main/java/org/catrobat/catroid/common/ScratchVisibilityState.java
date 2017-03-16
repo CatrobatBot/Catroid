@@ -30,46 +30,48 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum ScratchVisibilityState implements Parcelable {
-	// NOTE: do not change values!
-	UNKNOWN(0),
-	PRIVATE(1),
-	PUBLIC(2);
+    // NOTE: do not change values!
+    UNKNOWN(0),
+    PRIVATE(1),
+    PUBLIC(2);
 
-	private int visibilityState;
+    private int visibilityState;
 
-	private static Map<Integer, ScratchVisibilityState> map = new HashMap<>();
-	static {
-		for (ScratchVisibilityState legEnum : ScratchVisibilityState.values()) {
-			map.put(legEnum.visibilityState, legEnum);
-		}
-	}
-	ScratchVisibilityState(final int visibilityState) {
-		this.visibilityState = visibilityState;
-	}
+    private static Map<Integer, ScratchVisibilityState> map = new HashMap<>();
 
-	public static ScratchVisibilityState valueOf(int visibilityState) {
-		return map.get(visibilityState);
-	}
+    static {
+        for (ScratchVisibilityState legEnum : ScratchVisibilityState.values()) {
+            map.put(legEnum.visibilityState, legEnum);
+        }
+    }
 
-	@Override
-	public int describeContents() {
-		return 0;
-	}
+    ScratchVisibilityState(final int visibilityState) {
+        this.visibilityState = visibilityState;
+    }
 
-	@Override
-	public void writeToParcel(final Parcel dest, final int flags) {
-		dest.writeInt(ordinal());
-	}
+    public static ScratchVisibilityState valueOf(int visibilityState) {
+        return map.get(visibilityState);
+    }
 
-	public static final Creator<ScratchVisibilityState> CREATOR = new Creator<ScratchVisibilityState>() {
-		@Override
-		public ScratchVisibilityState createFromParcel(final Parcel source) {
-			return ScratchVisibilityState.values()[source.readInt()];
-		}
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
-		@Override
-		public ScratchVisibilityState[] newArray(final int size) {
-			return new ScratchVisibilityState[size];
-		}
-	};
+    @Override
+    public void writeToParcel(final Parcel dest, final int flags) {
+        dest.writeInt(ordinal());
+    }
+
+    public static final Creator<ScratchVisibilityState> CREATOR = new Creator<ScratchVisibilityState>() {
+        @Override
+        public ScratchVisibilityState createFromParcel(final Parcel source) {
+            return ScratchVisibilityState.values()[source.readInt()];
+        }
+
+        @Override
+        public ScratchVisibilityState[] newArray(final int size) {
+            return new ScratchVisibilityState[size];
+        }
+    };
 }

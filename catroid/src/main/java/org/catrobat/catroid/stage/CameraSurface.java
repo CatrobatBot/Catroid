@@ -32,51 +32,51 @@ import android.view.SurfaceView;
 import org.catrobat.catroid.camera.CameraManager;
 
 public class CameraSurface extends SurfaceView implements SurfaceHolder.Callback {
-	private static final String TAG = CameraSurface.class.getSimpleName();
+    private static final String TAG = CameraSurface.class.getSimpleName();
 
-	private Camera camera = null;
+    private Camera camera = null;
 
-	public CameraSurface(Context context) {
-		super(context);
+    public CameraSurface(Context context) {
+        super(context);
 
-		// We're implementing the Callback interface and want to get notified
-		// about certain surface events.
-		getHolder().addCallback(this);
-		// We're changing the surface to a PUSH surface, meaning we're receiving
-		// all buffer data from another component - the camera, in this case.
-		getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-	}
+        // We're implementing the Callback interface and want to get notified
+        // about certain surface events.
+        getHolder().addCallback(this);
+        // We're changing the surface to a PUSH surface, meaning we're receiving
+        // all buffer data from another component - the camera, in this case.
+        getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+    }
 
-	@Override
-	public void surfaceCreated(SurfaceHolder surfaceHolder) {
-		camera = CameraManager.getInstance().getCurrentCamera();
-	}
+    @Override
+    public void surfaceCreated(SurfaceHolder surfaceHolder) {
+        camera = CameraManager.getInstance().getCurrentCamera();
+    }
 
-	@Override
-	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-		// This method is called when the surface changes, e.g. when it's size is set.
-		// We use the opportunity to initialize the camera preview display dimensions
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        // This method is called when the surface changes, e.g. when it's size is set.
+        // We use the opportunity to initialize the camera preview display dimensions
 
-		// We also assign the preview display to this surface...
-		synchronized (CameraManager.getInstance().cameraChangeLock) {
-			try {
-				if (camera != null) {
-					camera.stopPreview();
-					camera.setPreviewDisplay(holder);
-					camera.startPreview();
-				}
-			} catch (Exception e) {
-				Log.e(TAG, "Error at surfaceChanged");
-				Log.e(TAG, e.getMessage());
-			}
-		}
-	}
+        // We also assign the preview display to this surface...
+        synchronized (CameraManager.getInstance().cameraChangeLock) {
+            try {
+                if (camera != null) {
+                    camera.stopPreview();
+                    camera.setPreviewDisplay(holder);
+                    camera.startPreview();
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error at surfaceChanged");
+                Log.e(TAG, e.getMessage());
+            }
+        }
+    }
 
-	@Override
-	public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-		this.getHolder().removeCallback(this);
-		//camera.stopPreview();
-		//camera.release();
-		//camera = null;
-	}
+    @Override
+    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+        this.getHolder().removeCallback(this);
+        //camera.stopPreview();
+        //camera.release();
+        //camera = null;
+    }
 }

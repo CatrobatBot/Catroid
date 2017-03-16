@@ -25,52 +25,52 @@ package org.catrobat.catroid.formulaeditor;
 import java.io.Serializable;
 
 public class UserVariable implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private String name;
-	private transient Object value;
-	private transient boolean visible = true;
-	private transient boolean dummy = false;
+    private String name;
+    private transient Object value;
+    private transient boolean visible = true;
+    private transient boolean dummy = false;
 
-	public UserVariable(String name) {
-		this.name = name;
-		this.value = 0d;
-	}
+    public UserVariable(String name) {
+        this.name = name;
+        this.value = 0d;
+    }
 
-	public UserVariable(final String name, final Object value) {
-		this.name = name;
-		this.value = value;
-	}
+    public UserVariable(final String name, final Object value) {
+        this.name = name;
+        this.value = value;
+    }
 
-	public Object getValue() {
-		return value;
-	}
+    public Object getValue() {
+        return value;
+    }
 
-	public void setValue(Object value) {
-		this.value = value;
-	}
+    public void setValue(Object value) {
+        this.value = value;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public boolean getVisible() {
-		return visible;
-	}
+    public boolean getVisible() {
+        return visible;
+    }
 
-	public void setVisible(boolean visible) {
-		this.visible = visible;
-	}
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
 
-	public boolean isDummy() {
-		return dummy;
-	}
+    public boolean isDummy() {
+        return dummy;
+    }
 
-	public void setDummy(boolean dummy) {
-		this.dummy = dummy;
-	}
+    public void setDummy(boolean dummy) {
+        this.dummy = dummy;
+    }
 }

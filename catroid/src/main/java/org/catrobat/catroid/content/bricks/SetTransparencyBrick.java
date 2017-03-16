@@ -40,68 +40,68 @@ import java.util.List;
 
 public class SetTransparencyBrick extends FormulaBrick {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private transient View prototypeView;
+    private transient View prototypeView;
 
-	public SetTransparencyBrick() {
-		addAllowedBrickField(BrickField.TRANSPARENCY);
-	}
+    public SetTransparencyBrick() {
+        addAllowedBrickField(BrickField.TRANSPARENCY);
+    }
 
-	public SetTransparencyBrick(double transparencyEffectValue) {
-		initializeBrickFields(new Formula(transparencyEffectValue));
-	}
+    public SetTransparencyBrick(double transparencyEffectValue) {
+        initializeBrickFields(new Formula(transparencyEffectValue));
+    }
 
-	public SetTransparencyBrick(Formula transparency) {
-		initializeBrickFields(transparency);
-	}
+    public SetTransparencyBrick(Formula transparency) {
+        initializeBrickFields(transparency);
+    }
 
-	private void initializeBrickFields(Formula transparency) {
-		addAllowedBrickField(BrickField.TRANSPARENCY);
-		setFormulaWithBrickField(BrickField.TRANSPARENCY, transparency);
-	}
+    private void initializeBrickFields(Formula transparency) {
+        addAllowedBrickField(BrickField.TRANSPARENCY);
+        setFormulaWithBrickField(BrickField.TRANSPARENCY, transparency);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return getFormulaWithBrickField(BrickField.TRANSPARENCY).getRequiredResources();
-	}
+    @Override
+    public int getRequiredResources() {
+        return getFormulaWithBrickField(BrickField.TRANSPARENCY).getRequiredResources();
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_set_transparency, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_set_transparency, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_set_transparency_checkbox);
-		TextView editX = (TextView) view.findViewById(R.id.brick_set_transparency_to_edit_text);
-		getFormulaWithBrickField(BrickField.TRANSPARENCY).setTextFieldId(R.id.brick_set_transparency_to_edit_text);
-		getFormulaWithBrickField(BrickField.TRANSPARENCY).refreshTextField(view);
+        setCheckboxView(R.id.brick_set_transparency_checkbox);
+        TextView editX = (TextView) view.findViewById(R.id.brick_set_transparency_to_edit_text);
+        getFormulaWithBrickField(BrickField.TRANSPARENCY).setTextFieldId(R.id.brick_set_transparency_to_edit_text);
+        getFormulaWithBrickField(BrickField.TRANSPARENCY).refreshTextField(view);
 
-		editX.setOnClickListener(this);
-		return view;
-	}
+        editX.setOnClickListener(this);
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_set_transparency, null);
-		TextView textSetTransparency = (TextView) prototypeView
-				.findViewById(R.id.brick_set_transparency_to_edit_text);
-		textSetTransparency.setText(Utils.getNumberStringForBricks(BrickValues.SET_TRANSPARENCY));
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_set_transparency, null);
+        TextView textSetTransparency = (TextView) prototypeView
+                .findViewById(R.id.brick_set_transparency_to_edit_text);
+        textSetTransparency.setText(Utils.getNumberStringForBricks(BrickValues.SET_TRANSPARENCY));
+        return prototypeView;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createSetTransparencyAction(sprite,
-				getFormulaWithBrickField(BrickField.TRANSPARENCY)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createSetTransparencyAction(sprite,
+                getFormulaWithBrickField(BrickField.TRANSPARENCY)));
+        return null;
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		FormulaEditorFragment.showFragment(view, this, BrickField.TRANSPARENCY);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        FormulaEditorFragment.showFragment(view, this, BrickField.TRANSPARENCY);
+    }
 }

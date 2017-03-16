@@ -30,137 +30,137 @@ import org.catrobat.catroid.formulaeditor.SensorCustomEventListener;
 
 public final class FaceDetectionHandler {
 
-	private static final String TAG = FaceDetectionHandler.class.getSimpleName();
-	private static FaceDetector faceDetector;
-	private static boolean running = false;
-	private static boolean paused = false;
+    private static final String TAG = FaceDetectionHandler.class.getSimpleName();
+    private static FaceDetector faceDetector;
+    private static boolean running = false;
+    private static boolean paused = false;
 
-	// Suppress default constructor for noninstantiability
-	private FaceDetectionHandler() {
-		throw new AssertionError();
-	}
+    // Suppress default constructor for noninstantiability
+    private FaceDetectionHandler() {
+        throw new AssertionError();
+    }
 
-	private static void createFaceDetector() {
-		if (isIcsFaceDetectionSupported()) {
-			faceDetector = new IcsFaceDetector();
-		} else {
-			faceDetector = new SlowFaceDetector();
-		}
-	}
+    private static void createFaceDetector() {
+        if (isIcsFaceDetectionSupported()) {
+            faceDetector = new IcsFaceDetector();
+        } else {
+            faceDetector = new SlowFaceDetector();
+        }
+    }
 
-	public static boolean isFaceDetectionRunning() {
-		return running;
-	}
+    public static boolean isFaceDetectionRunning() {
+        return running;
+    }
 
-	public static boolean startFaceDetection() {
-		if (running) {
-			return true;
-		}
-		if (!CameraManager.getInstance().hasBackCamera() && !CameraManager.getInstance().hasFrontCamera()) {
-			return false;
-		}
+    public static boolean startFaceDetection() {
+        if (running) {
+            return true;
+        }
+        if (!CameraManager.getInstance().hasBackCamera() && !CameraManager.getInstance().hasFrontCamera()) {
+            return false;
+        }
 
-		if (faceDetector == null) {
-			createFaceDetector();
-			if (faceDetector == null) {
-				return false;
-			}
-		}
-		running = faceDetector.startFaceDetection();
-		return running;
-	}
+        if (faceDetector == null) {
+            createFaceDetector();
+            if (faceDetector == null) {
+                return false;
+            }
+        }
+        running = faceDetector.startFaceDetection();
+        return running;
+    }
 
-	public static void resetFaceDedection() {
-		if (running) {
-			stopFaceDetection();
-		}
-		paused = false;
-	}
+    public static void resetFaceDedection() {
+        if (running) {
+            stopFaceDetection();
+        }
+        paused = false;
+    }
 
-	public static void stopFaceDetection() {
-		if (!running) {
-			return;
-		}
-		if (faceDetector == null) {
-			return;
-		}
+    public static void stopFaceDetection() {
+        if (!running) {
+            return;
+        }
+        if (faceDetector == null) {
+            return;
+        }
 
-		faceDetector.stopFaceDetection();
-		running = false;
-	}
+        faceDetector.stopFaceDetection();
+        running = false;
+    }
 
-	public static void pauseFaceDetection() {
-		if (!running) {
-			return;
-		}
-		if (faceDetector == null) {
-			return;
-		}
-		paused = true;
-		stopFaceDetection();
-		running = false;
-	}
+    public static void pauseFaceDetection() {
+        if (!running) {
+            return;
+        }
+        if (faceDetector == null) {
+            return;
+        }
+        paused = true;
+        stopFaceDetection();
+        running = false;
+    }
 
-	public static void resumeFaceDetection() {
-		if (!paused) {
-			return;
-		}
-		startFaceDetection();
-		paused = false;
-	}
+    public static void resumeFaceDetection() {
+        if (!paused) {
+            return;
+        }
+        startFaceDetection();
+        paused = false;
+    }
 
-	public static void registerOnFaceDetectedListener(SensorCustomEventListener listener) {
-		if (faceDetector == null) {
-			createFaceDetector();
-		}
-		faceDetector.addOnFaceDetectedListener(listener);
-	}
+    public static void registerOnFaceDetectedListener(SensorCustomEventListener listener) {
+        if (faceDetector == null) {
+            createFaceDetector();
+        }
+        faceDetector.addOnFaceDetectedListener(listener);
+    }
 
-	public static void unregisterOnFaceDetectedListener(SensorCustomEventListener listener) {
-		if (faceDetector == null) {
-			return;
-		}
-		faceDetector.removeOnFaceDetectedListener(listener);
-	}
+    public static void unregisterOnFaceDetectedListener(SensorCustomEventListener listener) {
+        if (faceDetector == null) {
+            return;
+        }
+        faceDetector.removeOnFaceDetectedListener(listener);
+    }
 
-	public static void registerOnFaceDetectionStatusListener(SensorCustomEventListener listener) {
-		if (faceDetector == null) {
-			createFaceDetector();
-		}
-		faceDetector.addOnFaceDetectionStatusListener(listener);
-	}
+    public static void registerOnFaceDetectionStatusListener(SensorCustomEventListener listener) {
+        if (faceDetector == null) {
+            createFaceDetector();
+        }
+        faceDetector.addOnFaceDetectionStatusListener(listener);
+    }
 
-	public static void unregisterOnFaceDetectionStatusListener(SensorCustomEventListener listener) {
-		if (faceDetector == null) {
-			return;
-		}
-		faceDetector.removeOnFaceDetectionStatusListener(listener);
-	}
+    public static void unregisterOnFaceDetectionStatusListener(SensorCustomEventListener listener) {
+        if (faceDetector == null) {
+            return;
+        }
+        faceDetector.removeOnFaceDetectionStatusListener(listener);
+    }
 
-	public static boolean isIcsFaceDetectionSupported() {
-		int possibleFaces = 0;
-		try {
-			boolean cameraReady = CameraManager.getInstance().isReady();
-			if (!cameraReady) {
-				CameraManager.getInstance().startCamera();
-			}
+    public static boolean isIcsFaceDetectionSupported() {
+        int possibleFaces = 0;
+        try {
+            boolean cameraReady = CameraManager.getInstance().isReady();
+            if (!cameraReady) {
+                CameraManager.getInstance().startCamera();
+            }
 
-			Camera camera = CameraManager.getInstance().getCurrentCamera();
-			possibleFaces = getMaxNumberOfFaces(camera);
+            Camera camera = CameraManager.getInstance().getCurrentCamera();
+            possibleFaces = getMaxNumberOfFaces(camera);
 
-			if (!cameraReady) {
-				CameraManager.getInstance().releaseCamera();
-			}
-		} catch (Exception exception) {
-			Log.e(TAG, "Camera unaccessable!", exception);
-		}
-		return possibleFaces > 0;
-	}
+            if (!cameraReady) {
+                CameraManager.getInstance().releaseCamera();
+            }
+        } catch (Exception exception) {
+            Log.e(TAG, "Camera unaccessable!", exception);
+        }
+        return possibleFaces > 0;
+    }
 
-	private static int getMaxNumberOfFaces(Camera camera) {
-		if (camera != null && camera.getParameters() != null) {
-			return camera.getParameters().getMaxNumDetectedFaces();
-		}
-		return 0;
-	}
+    private static int getMaxNumberOfFaces(Camera camera) {
+        if (camera != null && camera.getParameters() != null) {
+            return camera.getParameters().getMaxNumDetectedFaces();
+        }
+        return 0;
+    }
 }

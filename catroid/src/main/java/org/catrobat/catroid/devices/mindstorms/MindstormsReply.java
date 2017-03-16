@@ -24,54 +24,55 @@ package org.catrobat.catroid.devices.mindstorms;
 
 public abstract class MindstormsReply {
 
-	protected byte[] data;
+    protected byte[] data;
 
-	public MindstormsReply(byte[] data) {
-		this.data = data.clone();
-	}
+    public MindstormsReply(byte[] data) {
+        this.data = data.clone();
+    }
 
-	public abstract boolean hasError();
+    public abstract boolean hasError();
 
-	public abstract byte getStatusByte();
-	public abstract byte getCommandByte();
+    public abstract byte getStatusByte();
 
-	public int getLength() {
-		return data.length;
-	}
+    public abstract byte getCommandByte();
 
-	public byte[] getData() {
-		return data.clone();
-	}
+    public int getLength() {
+        return data.length;
+    }
 
-	public byte[] getData(int offset, int length) {
-		byte[] a = null;
-		if (offset <= data.length - length) {
-			a = new byte[length];
-			for (int i = 0; i < length; i++) {
-				a[i] = data[i + offset];
-			}
-		}
+    public byte[] getData() {
+        return data.clone();
+    }
 
-		return a;
-	}
+    public byte[] getData(int offset, int length) {
+        byte[] a = null;
+        if (offset <= data.length - length) {
+            a = new byte[length];
+            for (int i = 0; i < length; i++) {
+                a[i] = data[i + offset];
+            }
+        }
 
-	public byte getByte(int number) {
-		return data[number];
-	}
+        return a;
+    }
 
-	public int getShort(int offset) {
-		int value = ((data[offset] & 0xFF) | (data[offset + 1] & 0xFF) << 8);
+    public byte getByte(int number) {
+        return data[number];
+    }
 
-		return (short) value;
-	}
+    public int getShort(int offset) {
+        int value = ((data[offset] & 0xFF) | (data[offset + 1] & 0xFF) << 8);
 
-	public int getInt(int offset) {
-		int value = ((data[offset] & 0xFF)
-				| (data[offset + 1] & 0xFF) << 8
-				| (data[offset + 2] & 0xFF) << 16
-				| (data[offset + 3] & 0xFF) << 24
-		);
+        return (short) value;
+    }
 
-		return value;
-	}
+    public int getInt(int offset) {
+        int value = ((data[offset] & 0xFF)
+                | (data[offset + 1] & 0xFF) << 8
+                | (data[offset + 2] & 0xFF) << 16
+                | (data[offset + 3] & 0xFF) << 24
+        );
+
+        return value;
+    }
 }

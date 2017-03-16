@@ -40,67 +40,67 @@ import org.catrobat.catroid.uitest.util.UiTestUtils;
 import java.util.ArrayList;
 
 public class IfThenBrickTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
-	private Project project;
-	private IfThenLogicBeginBrick ifBrick;
+    private Project project;
+    private IfThenLogicBeginBrick ifBrick;
 
-	public IfThenBrickTest() {
-		super(MainMenuActivity.class);
-	}
+    public IfThenBrickTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		createProject();
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
-	}
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        createProject();
+        UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
+    }
 
-	private void createProject() {
-		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite sprite = new SingleSprite("cat");
-		Script script = new StartScript();
-		ifBrick = new IfThenLogicBeginBrick(0);
-		IfThenLogicEndBrick ifEndBrick = new IfThenLogicEndBrick(ifBrick);
-		ifBrick.setIfThenEndBrick(ifEndBrick);
+    private void createProject() {
+        project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Sprite sprite = new SingleSprite("cat");
+        Script script = new StartScript();
+        ifBrick = new IfThenLogicBeginBrick(0);
+        IfThenLogicEndBrick ifEndBrick = new IfThenLogicEndBrick(ifBrick);
+        ifBrick.setIfThenEndBrick(ifEndBrick);
 
-		script.addBrick(ifBrick);
-		script.addBrick(new ChangeYByNBrick(-10));
-		script.addBrick(ifEndBrick);
+        script.addBrick(ifBrick);
+        script.addBrick(new ChangeYByNBrick(-10));
+        script.addBrick(ifEndBrick);
 
-		sprite.addScript(script);
-		sprite.addScript(new StartScript());
-		project.getDefaultScene().addSprite(sprite);
+        sprite.addScript(script);
+        sprite.addScript(new StartScript());
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 
-	public void testCopyIfLogicBeginBrick() {
-		UiTestUtils.openActionMode(solo, solo.getString(R.string.copy), R.id.copy);
-		solo.clickOnCheckBox(1);
-		UiTestUtils.acceptAndCloseActionMode(solo);
+    public void testCopyIfLogicBeginBrick() {
+        UiTestUtils.openActionMode(solo, solo.getString(R.string.copy), R.id.copy);
+        solo.clickOnCheckBox(1);
+        UiTestUtils.acceptAndCloseActionMode(solo);
 
-		ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
+        ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
 
-		assertEquals("Incorrect number of bricks.", 5, projectBrickList.size());
-		assertTrue("Wrong Brick instance.", projectBrickList.get(0) instanceof IfThenLogicBeginBrick);
-		assertTrue("Wrong Brick instance.", projectBrickList.get(1) instanceof ChangeYByNBrick);
-		assertTrue("Wrong Brick instance.", projectBrickList.get(2) instanceof IfThenLogicEndBrick);
-		assertTrue("Wrong Brick instance.", projectBrickList.get(3) instanceof IfThenLogicBeginBrick);
-		assertTrue("Wrong Brick instance.", projectBrickList.get(4) instanceof IfThenLogicEndBrick);
-	}
+        assertEquals("Incorrect number of bricks.", 5, projectBrickList.size());
+        assertTrue("Wrong Brick instance.", projectBrickList.get(0) instanceof IfThenLogicBeginBrick);
+        assertTrue("Wrong Brick instance.", projectBrickList.get(1) instanceof ChangeYByNBrick);
+        assertTrue("Wrong Brick instance.", projectBrickList.get(2) instanceof IfThenLogicEndBrick);
+        assertTrue("Wrong Brick instance.", projectBrickList.get(3) instanceof IfThenLogicBeginBrick);
+        assertTrue("Wrong Brick instance.", projectBrickList.get(4) instanceof IfThenLogicEndBrick);
+    }
 
-	public void testCopyIfLogicEndBrick() {
-		UiTestUtils.openActionMode(solo, solo.getString(R.string.copy), R.id.copy);
-		solo.clickOnCheckBox(3);
-		UiTestUtils.acceptAndCloseActionMode(solo);
+    public void testCopyIfLogicEndBrick() {
+        UiTestUtils.openActionMode(solo, solo.getString(R.string.copy), R.id.copy);
+        solo.clickOnCheckBox(3);
+        UiTestUtils.acceptAndCloseActionMode(solo);
 
-		ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
-		assertEquals("Incorrect number of bricks.", 5, projectBrickList.size());
-		assertTrue("Wrong Brick instance.", projectBrickList.get(0) instanceof IfThenLogicBeginBrick);
-		assertTrue("Wrong Brick instance.", projectBrickList.get(1) instanceof ChangeYByNBrick);
-		assertTrue("Wrong Brick instance.", projectBrickList.get(2) instanceof IfThenLogicEndBrick);
-		assertTrue("Wrong Brick instance.", projectBrickList.get(3) instanceof IfThenLogicBeginBrick);
-		assertTrue("Wrong Brick instance.", projectBrickList.get(4) instanceof IfThenLogicEndBrick);
-	}
+        ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
+        assertEquals("Incorrect number of bricks.", 5, projectBrickList.size());
+        assertTrue("Wrong Brick instance.", projectBrickList.get(0) instanceof IfThenLogicBeginBrick);
+        assertTrue("Wrong Brick instance.", projectBrickList.get(1) instanceof ChangeYByNBrick);
+        assertTrue("Wrong Brick instance.", projectBrickList.get(2) instanceof IfThenLogicEndBrick);
+        assertTrue("Wrong Brick instance.", projectBrickList.get(3) instanceof IfThenLogicBeginBrick);
+        assertTrue("Wrong Brick instance.", projectBrickList.get(4) instanceof IfThenLogicEndBrick);
+    }
 }

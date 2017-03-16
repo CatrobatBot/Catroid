@@ -35,64 +35,64 @@ import java.util.List;
 
 public abstract class FaceDetector {
 
-	private List<SensorCustomEventListener> faceDetectedListeners = new LinkedList<SensorCustomEventListener>();
-	private List<SensorCustomEventListener> faceDetectionStatusListeners = new LinkedList<SensorCustomEventListener>();
+    private List<SensorCustomEventListener> faceDetectedListeners = new LinkedList<SensorCustomEventListener>();
+    private List<SensorCustomEventListener> faceDetectionStatusListeners = new LinkedList<SensorCustomEventListener>();
 
-	private boolean faceDetected = false;
+    private boolean faceDetected = false;
 
-	public abstract boolean startFaceDetection();
+    public abstract boolean startFaceDetection();
 
-	public abstract void stopFaceDetection();
+    public abstract void stopFaceDetection();
 
-	public void addOnFaceDetectedListener(SensorCustomEventListener listener) {
-		if (listener == null) {
-			return;
-		}
-		faceDetectedListeners.add(listener);
-	}
+    public void addOnFaceDetectedListener(SensorCustomEventListener listener) {
+        if (listener == null) {
+            return;
+        }
+        faceDetectedListeners.add(listener);
+    }
 
-	public void removeOnFaceDetectedListener(SensorCustomEventListener listener) {
-		faceDetectedListeners.remove(listener);
-	}
+    public void removeOnFaceDetectedListener(SensorCustomEventListener listener) {
+        faceDetectedListeners.remove(listener);
+    }
 
-	public void addOnFaceDetectionStatusListener(SensorCustomEventListener listener) {
-		if (listener == null) {
-			return;
-		}
-		faceDetectionStatusListeners.add(listener);
-	}
+    public void addOnFaceDetectionStatusListener(SensorCustomEventListener listener) {
+        if (listener == null) {
+            return;
+        }
+        faceDetectionStatusListeners.add(listener);
+    }
 
-	public void removeOnFaceDetectionStatusListener(SensorCustomEventListener listener) {
-		faceDetectionStatusListeners.remove(listener);
-	}
+    public void removeOnFaceDetectionStatusListener(SensorCustomEventListener listener) {
+        faceDetectionStatusListeners.remove(listener);
+    }
 
-	protected void onFaceDetected(Point position, int size) {
-		float[] positionXFloatValue = new float[] { position.x };
-		boolean invertY = !CameraManager.getInstance().isCurrentCameraFacingBack();
-		float[] positionYFloatValue = new float[] { invertY ? -position.y : position.y };
-		float[] sizeFloatValue = new float[] { size };
-		SensorCustomEvent xPositionEvent = new SensorCustomEvent(Sensors.FACE_X_POSITION, positionXFloatValue);
-		SensorCustomEvent yPositionEvent = new SensorCustomEvent(Sensors.FACE_Y_POSITION, positionYFloatValue);
-		SensorCustomEvent sizeEvent = new SensorCustomEvent(Sensors.FACE_SIZE, sizeFloatValue);
-		for (SensorCustomEventListener faceDetectedListener : faceDetectedListeners) {
-			faceDetectedListener.onCustomSensorChanged(xPositionEvent);
-			faceDetectedListener.onCustomSensorChanged(yPositionEvent);
-			faceDetectedListener.onCustomSensorChanged(sizeEvent);
-		}
-	}
+    protected void onFaceDetected(Point position, int size) {
+        float[] positionXFloatValue = new float[]{position.x};
+        boolean invertY = !CameraManager.getInstance().isCurrentCameraFacingBack();
+        float[] positionYFloatValue = new float[]{invertY ? -position.y : position.y};
+        float[] sizeFloatValue = new float[]{size};
+        SensorCustomEvent xPositionEvent = new SensorCustomEvent(Sensors.FACE_X_POSITION, positionXFloatValue);
+        SensorCustomEvent yPositionEvent = new SensorCustomEvent(Sensors.FACE_Y_POSITION, positionYFloatValue);
+        SensorCustomEvent sizeEvent = new SensorCustomEvent(Sensors.FACE_SIZE, sizeFloatValue);
+        for (SensorCustomEventListener faceDetectedListener : faceDetectedListeners) {
+            faceDetectedListener.onCustomSensorChanged(xPositionEvent);
+            faceDetectedListener.onCustomSensorChanged(yPositionEvent);
+            faceDetectedListener.onCustomSensorChanged(sizeEvent);
+        }
+    }
 
-	protected void onFaceDetected(boolean faceDetected) {
-		if (this.faceDetected != faceDetected) {
-			this.faceDetected = faceDetected;
-			float[] detectedFloatValue = new float[] { faceDetected ? 1 : 0 };
-			SensorCustomEvent event = new SensorCustomEvent(Sensors.FACE_DETECTED, detectedFloatValue);
-			for (SensorCustomEventListener listener : faceDetectionStatusListeners) {
-				listener.onCustomSensorChanged(event);
-			}
-		}
-	}
+    protected void onFaceDetected(boolean faceDetected) {
+        if (this.faceDetected != faceDetected) {
+            this.faceDetected = faceDetected;
+            float[] detectedFloatValue = new float[]{faceDetected ? 1 : 0};
+            SensorCustomEvent event = new SensorCustomEvent(Sensors.FACE_DETECTED, detectedFloatValue);
+            for (SensorCustomEventListener listener : faceDetectionStatusListeners) {
+                listener.onCustomSensorChanged(event);
+            }
+        }
+    }
 
-	protected Point getRelationForFacePosition() {
-		return new Point(-ScreenValues.SCREEN_WIDTH, -ScreenValues.SCREEN_HEIGHT);
-	}
+    protected Point getRelationForFacePosition() {
+        return new Point(-ScreenValues.SCREEN_WIDTH, -ScreenValues.SCREEN_HEIGHT);
+    }
 }

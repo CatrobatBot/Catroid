@@ -33,44 +33,44 @@ import org.catrobat.catroid.pocketmusic.note.trackgrid.TrackToTrackGridConverter
 
 public class TrackGridToTrackConverterTest extends AndroidTestCase {
 
-	private int beatsPerMinute = Project.DEFAULT_BEATS_PER_MINUTE;
+    private int beatsPerMinute = Project.DEFAULT_BEATS_PER_MINUTE;
 
-	public TrackGridToTrackConverterTest() {
-	}
+    public TrackGridToTrackConverterTest() {
+    }
 
-	public void testConvertSimpleTrackGrid() {
-		TrackGrid simpleTrackGrid = TrackGridTestDataFactory.createFirstOctaveOnlyTrackGrid();
+    public void testConvertSimpleTrackGrid() {
+        TrackGrid simpleTrackGrid = TrackGridTestDataFactory.createFirstOctaveOnlyTrackGrid();
 
-		Track track = TrackGridToTrackConverter.convertTrackGridToTrack(simpleTrackGrid, beatsPerMinute);
+        Track track = TrackGridToTrackConverter.convertTrackGridToTrack(simpleTrackGrid, beatsPerMinute);
 
-		TrackGrid newTrackGrid = TrackToTrackGridConverter.convertTrackToTrackGrid(track, MusicalBeat.BEAT_4_4,
-				beatsPerMinute);
+        TrackGrid newTrackGrid = TrackToTrackGridConverter.convertTrackToTrackGrid(track, MusicalBeat.BEAT_4_4,
+                beatsPerMinute);
 
-		assertTrue("Conversion from Track to Trackgrid failed for simple track grid.",
-				newTrackGrid.equals(simpleTrackGrid));
-	}
+        assertTrue("Conversion from Track to Trackgrid failed for simple track grid.",
+                newTrackGrid.equals(simpleTrackGrid));
+    }
 
-	public void testConvertTrackGridWithSeveralBreaks() {
-		TrackGrid trackWithSeveralBreaks = TrackGridTestDataFactory.createTrackGridWithSeveralBreaks();
+    public void testConvertTrackGridWithSeveralBreaks() {
+        TrackGrid trackWithSeveralBreaks = TrackGridTestDataFactory.createTrackGridWithSeveralBreaks();
 
-		Track track = TrackGridToTrackConverter.convertTrackGridToTrack(trackWithSeveralBreaks, beatsPerMinute);
+        Track track = TrackGridToTrackConverter.convertTrackGridToTrack(trackWithSeveralBreaks, beatsPerMinute);
 
-		TrackGrid convertedTrackGrid = TrackToTrackGridConverter.convertTrackToTrackGrid(track,
-				MusicalBeat.BEAT_4_4, beatsPerMinute);
+        TrackGrid convertedTrackGrid = TrackToTrackGridConverter.convertTrackToTrackGrid(track,
+                MusicalBeat.BEAT_4_4, beatsPerMinute);
 
-		assertTrue("Conversion from Track to Trackgrid failed for track grid with several breaks.", convertedTrackGrid
-				.equals(trackWithSeveralBreaks));
-	}
+        assertTrue("Conversion from Track to Trackgrid failed for track grid with several breaks.", convertedTrackGrid
+                .equals(trackWithSeveralBreaks));
+    }
 
-	public void testConvertSemiComplexTrackGrid() {
-		TrackGrid semiComplexTrackGrid = TrackGridTestDataFactory.createSemiComplexTrackGrid();
+    public void testConvertSemiComplexTrackGrid() {
+        TrackGrid semiComplexTrackGrid = TrackGridTestDataFactory.createSemiComplexTrackGrid();
 
-		Track track = TrackGridToTrackConverter.convertTrackGridToTrack(semiComplexTrackGrid, beatsPerMinute);
+        Track track = TrackGridToTrackConverter.convertTrackGridToTrack(semiComplexTrackGrid, beatsPerMinute);
 
-		TrackGrid convertedTrackGrid = TrackToTrackGridConverter.convertTrackToTrackGrid(track,
-				MusicalBeat.BEAT_4_4, beatsPerMinute);
+        TrackGrid convertedTrackGrid = TrackToTrackGridConverter.convertTrackToTrackGrid(track,
+                MusicalBeat.BEAT_4_4, beatsPerMinute);
 
-		assertTrue("Conversion from Track to Trackgrid failed for semi complex track grid.",
-				convertedTrackGrid.equals(semiComplexTrackGrid));
-	}
+        assertTrue("Conversion from Track to Trackgrid failed for semi complex track grid.",
+                convertedTrackGrid.equals(semiComplexTrackGrid));
+    }
 }

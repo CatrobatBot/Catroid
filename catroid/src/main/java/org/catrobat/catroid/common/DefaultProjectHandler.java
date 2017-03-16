@@ -39,101 +39,101 @@ import java.io.IOException;
 
 public final class DefaultProjectHandler {
 
-	private static final String TAG = DefaultProjectHandler.class.getSimpleName();
+    private static final String TAG = DefaultProjectHandler.class.getSimpleName();
 
-	public enum ProjectCreatorType {
-		PROJECT_CREATOR_DEFAULT, PROJECT_CREATOR_DRONE, PROJECT_CREATOR_PHYSICS
-	}
+    public enum ProjectCreatorType {
+        PROJECT_CREATOR_DEFAULT, PROJECT_CREATOR_DRONE, PROJECT_CREATOR_PHYSICS
+    }
 
-	private static DefaultProjectHandler instance = null;
-	private DefaultProjectCreator defaultProjectCreator;
+    private static DefaultProjectHandler instance = null;
+    private DefaultProjectCreator defaultProjectCreator;
 
-	public static DefaultProjectHandler getInstance() {
-		if (instance == null) {
-			instance = new DefaultProjectHandler();
-		}
-		return instance;
-	}
+    public static DefaultProjectHandler getInstance() {
+        if (instance == null) {
+            instance = new DefaultProjectHandler();
+        }
+        return instance;
+    }
 
-	private DefaultProjectHandler() {
-		setDefaultProjectCreator(ProjectCreatorType.PROJECT_CREATOR_DEFAULT);
-	}
+    private DefaultProjectHandler() {
+        setDefaultProjectCreator(ProjectCreatorType.PROJECT_CREATOR_DEFAULT);
+    }
 
-	public static Project createAndSaveDefaultProject(Context context, boolean landscapeMode, boolean forScene) throws
-			IOException {
-		String projectName = context.getString(getInstance().defaultProjectCreator.getDefaultProjectNameID());
-		Project defaultProject = null;
+    public static Project createAndSaveDefaultProject(Context context, boolean landscapeMode, boolean forScene) throws
+            IOException {
+        String projectName = context.getString(getInstance().defaultProjectCreator.getDefaultProjectNameID());
+        Project defaultProject = null;
 
-		if (StorageHandler.getInstance().projectExists(projectName) && !forScene) {
-			StorageHandler.getInstance().deleteProject(projectName);
-		}
+        if (StorageHandler.getInstance().projectExists(projectName) && !forScene) {
+            StorageHandler.getInstance().deleteProject(projectName);
+        }
 
-		if (forScene) {
-			projectName = Utils.getUniqueProjectName();
-		}
+        if (forScene) {
+            projectName = Utils.getUniqueProjectName();
+        }
 
-		try {
-			defaultProject = createAndSaveDefaultProject(projectName, context, landscapeMode);
-		} catch (IllegalArgumentException ilArgument) {
-			Log.e(TAG, "Could not create standard project!", ilArgument);
-		}
+        try {
+            defaultProject = createAndSaveDefaultProject(projectName, context, landscapeMode);
+        } catch (IllegalArgumentException ilArgument) {
+            Log.e(TAG, "Could not create standard project!", ilArgument);
+        }
 
-		return defaultProject;
-	}
+        return defaultProject;
+    }
 
-	public static Project createAndSaveDefaultProject(Context context) throws IOException {
-		return createAndSaveDefaultProject(context, false, false);
-	}
+    public static Project createAndSaveDefaultProject(Context context) throws IOException {
+        return createAndSaveDefaultProject(context, false, false);
+    }
 
-	public static Project createDefaultProjectForScene(Context context, boolean landscape) throws IOException {
-		return createAndSaveDefaultProject(context, landscape, true);
-	}
+    public static Project createDefaultProjectForScene(Context context, boolean landscape) throws IOException {
+        return createAndSaveDefaultProject(context, landscape, true);
+    }
 
-	public static Project createAndSaveDefaultProject(String projectName, Context context, boolean
-			landscapeMode)
-			throws IOException,
-			IllegalArgumentException {
-		return getInstance().defaultProjectCreator.createDefaultProject(projectName, context, landscapeMode);
-	}
+    public static Project createAndSaveDefaultProject(String projectName, Context context, boolean
+            landscapeMode)
+            throws IOException,
+            IllegalArgumentException {
+        return getInstance().defaultProjectCreator.createDefaultProject(projectName, context, landscapeMode);
+    }
 
-	public static Project createAndSaveDefaultProject(String projectName, Context context) throws
-			IOException,
-			IllegalArgumentException {
-		return createAndSaveDefaultProject(projectName, context, false);
-	}
+    public static Project createAndSaveDefaultProject(String projectName, Context context) throws
+            IOException,
+            IllegalArgumentException {
+        return createAndSaveDefaultProject(projectName, context, false);
+    }
 
-	public static Project createAndSaveEmptyProject(String projectName, Context context, boolean
-			landscapeMode) {
-		if (StorageHandler.getInstance().projectExists(projectName)) {
-			throw new IllegalArgumentException("Project with name '" + projectName + "' already exists!");
-		}
-		Project emptyProject = new Project(context, projectName, landscapeMode);
-		emptyProject.setDeviceData(context);
-		StorageHandler.getInstance().saveProject(emptyProject);
-		ProjectManager.getInstance().setProject(emptyProject);
+    public static Project createAndSaveEmptyProject(String projectName, Context context, boolean
+            landscapeMode) {
+        if (StorageHandler.getInstance().projectExists(projectName)) {
+            throw new IllegalArgumentException("Project with name '" + projectName + "' already exists!");
+        }
+        Project emptyProject = new Project(context, projectName, landscapeMode);
+        emptyProject.setDeviceData(context);
+        StorageHandler.getInstance().saveProject(emptyProject);
+        ProjectManager.getInstance().setProject(emptyProject);
 
-		return emptyProject;
-	}
+        return emptyProject;
+    }
 
-	public static Project createAndSaveEmptyProject(String projectName, Context context) {
-		return createAndSaveEmptyProject(projectName, context, false);
-	}
+    public static Project createAndSaveEmptyProject(String projectName, Context context) {
+        return createAndSaveEmptyProject(projectName, context, false);
+    }
 
-	public void setDefaultProjectCreator(ProjectCreatorType type) {
-		switch (type) {
-			case PROJECT_CREATOR_DEFAULT:
-				defaultProjectCreator = new DefaultProjectCreatorDefault();
-				break;
-			case PROJECT_CREATOR_DRONE:
-				if (BuildConfig.FEATURE_PARROT_AR_DRONE_ENABLED) {
-					defaultProjectCreator = new DefaultProjectCreatorDrone();
-				} else {
-					defaultProjectCreator = new DefaultProjectCreatorDefault();
-				}
-				break;
-			case PROJECT_CREATOR_PHYSICS:
-				defaultProjectCreator = new DefaultProjectCreatorPhysics();
-				break;
-		}
-	}
+    public void setDefaultProjectCreator(ProjectCreatorType type) {
+        switch (type) {
+            case PROJECT_CREATOR_DEFAULT:
+                defaultProjectCreator = new DefaultProjectCreatorDefault();
+                break;
+            case PROJECT_CREATOR_DRONE:
+                if (BuildConfig.FEATURE_PARROT_AR_DRONE_ENABLED) {
+                    defaultProjectCreator = new DefaultProjectCreatorDrone();
+                } else {
+                    defaultProjectCreator = new DefaultProjectCreatorDefault();
+                }
+                break;
+            case PROJECT_CREATOR_PHYSICS:
+                defaultProjectCreator = new DefaultProjectCreatorPhysics();
+                break;
+        }
+    }
 }

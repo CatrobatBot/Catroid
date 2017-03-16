@@ -33,40 +33,40 @@ import org.catrobat.catroid.physics.PhysicsWorld;
 
 public class SetGravityAction extends TemporalAction {
 
-	private Sprite sprite;
-	private PhysicsWorld physicsWorld;
-	private Formula gravityX;
-	private Formula gravityY;
+    private Sprite sprite;
+    private PhysicsWorld physicsWorld;
+    private Formula gravityX;
+    private Formula gravityY;
 
-	@Override
-	protected void update(float percent) {
-		Float newGravityX;
-		try {
-			newGravityX = gravityX == null ? Float.valueOf(0f) : gravityX.interpretFloat(sprite);
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-			return;
-		}
-		Float newGravityY;
-		try {
-			newGravityY = gravityY == null ? Float.valueOf(0f) : gravityY.interpretFloat(sprite);
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-			return;
-		}
-		physicsWorld.setGravity(newGravityX, newGravityY);
-	}
+    @Override
+    protected void update(float percent) {
+        Float newGravityX;
+        try {
+            newGravityX = gravityX == null ? Float.valueOf(0f) : gravityX.interpretFloat(sprite);
+        } catch (InterpretationException interpretationException) {
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+            return;
+        }
+        Float newGravityY;
+        try {
+            newGravityY = gravityY == null ? Float.valueOf(0f) : gravityY.interpretFloat(sprite);
+        } catch (InterpretationException interpretationException) {
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+            return;
+        }
+        physicsWorld.setGravity(newGravityX, newGravityY);
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setPhysicsWorld(PhysicsWorld physicsWorld) {
-		this.physicsWorld = physicsWorld;
-	}
+    public void setPhysicsWorld(PhysicsWorld physicsWorld) {
+        this.physicsWorld = physicsWorld;
+    }
 
-	public void setGravity(Formula gravityX, Formula gravityY) {
-		this.gravityX = gravityX;
-		this.gravityY = gravityY;
-	}
+    public void setGravity(Formula gravityX, Formula gravityY) {
+        this.gravityX = gravityX;
+        this.gravityY = gravityY;
+    }
 }

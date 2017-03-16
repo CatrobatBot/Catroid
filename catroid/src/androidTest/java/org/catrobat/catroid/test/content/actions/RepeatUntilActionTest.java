@@ -48,154 +48,154 @@ import java.util.List;
 
 public class RepeatUntilActionTest extends InstrumentationTestCase {
 
-	private static final String NOT_NUMERICAL_STRING = "NOT_NUMERICAL_STRING";
-	private Sprite testSprite;
-	private Script testScript;
-	private int delta = 5;
-	private UserVariable userVariable;
-	private UserVariable userVariable2;
-	private static final int START_VALUE = 3;
-	private static final int TRUE_VALUE = 6;
-	private static final String TEST_USERVARIABLE = "testUservariable";
-	private static final String TEST_USERVARIABLE_2 = "testUservariable2";
-	private Project project;
+    private static final String NOT_NUMERICAL_STRING = "NOT_NUMERICAL_STRING";
+    private Sprite testSprite;
+    private Script testScript;
+    private int delta = 5;
+    private UserVariable userVariable;
+    private UserVariable userVariable2;
+    private static final int START_VALUE = 3;
+    private static final int TRUE_VALUE = 6;
+    private static final String TEST_USERVARIABLE = "testUservariable";
+    private static final String TEST_USERVARIABLE_2 = "testUservariable2";
+    private Project project;
 
-	@Override
-	protected void setUp() throws Exception {
-		testSprite = new SingleSprite("testSprite");
-		project = new Project(null, "testProject");
-		testScript = new StartScript();
-		testSprite.removeAllScripts();
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(new SingleSprite("testSprite1"));
+    @Override
+    protected void setUp() throws Exception {
+        testSprite = new SingleSprite("testSprite");
+        project = new Project(null, "testProject");
+        testScript = new StartScript();
+        testSprite.removeAllScripts();
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(new SingleSprite("testSprite1"));
 
-		ProjectManager.getInstance().getCurrentScene().getDataContainer().deleteUserVariableByName(TEST_USERVARIABLE);
-		ProjectManager.getInstance().getCurrentScene().getDataContainer().addProjectUserVariable(TEST_USERVARIABLE);
-		userVariable = ProjectManager.getInstance().getCurrentScene().getDataContainer()
-				.getUserVariable(TEST_USERVARIABLE, null);
+        ProjectManager.getInstance().getCurrentScene().getDataContainer().deleteUserVariableByName(TEST_USERVARIABLE);
+        ProjectManager.getInstance().getCurrentScene().getDataContainer().addProjectUserVariable(TEST_USERVARIABLE);
+        userVariable = ProjectManager.getInstance().getCurrentScene().getDataContainer()
+                .getUserVariable(TEST_USERVARIABLE, null);
 
-		ProjectManager.getInstance().getCurrentScene().getDataContainer().deleteUserVariableByName(TEST_USERVARIABLE_2);
-		ProjectManager.getInstance().getCurrentScene().getDataContainer().addProjectUserVariable(TEST_USERVARIABLE_2);
-		userVariable2 = ProjectManager.getInstance().getCurrentScene().getDataContainer()
-				.getUserVariable(TEST_USERVARIABLE_2, null);
+        ProjectManager.getInstance().getCurrentScene().getDataContainer().deleteUserVariableByName(TEST_USERVARIABLE_2);
+        ProjectManager.getInstance().getCurrentScene().getDataContainer().addProjectUserVariable(TEST_USERVARIABLE_2);
+        userVariable2 = ProjectManager.getInstance().getCurrentScene().getDataContainer()
+                .getUserVariable(TEST_USERVARIABLE_2, null);
 
-		super.setUp();
-	}
+        super.setUp();
+    }
 
-	public void testRepeatBrick() throws InterruptedException {
+    public void testRepeatBrick() throws InterruptedException {
 
-		SetVariableBrick setVariableBrick = new SetVariableBrick(new Formula(START_VALUE), userVariable);
+        SetVariableBrick setVariableBrick = new SetVariableBrick(new Formula(START_VALUE), userVariable);
 
-		Formula validFormula = new Formula(1);
-		validFormula.setRoot(new FormulaElement(ElementType.OPERATOR, Operators.SMALLER_OR_EQUAL.name(), null,
-				new FormulaElement(ElementType.NUMBER, String.valueOf(TRUE_VALUE), null),
-				new FormulaElement(ElementType.USER_VARIABLE, userVariable.getName(), null)));
+        Formula validFormula = new Formula(1);
+        validFormula.setRoot(new FormulaElement(ElementType.OPERATOR, Operators.SMALLER_OR_EQUAL.name(), null,
+                new FormulaElement(ElementType.NUMBER, String.valueOf(TRUE_VALUE), null),
+                new FormulaElement(ElementType.USER_VARIABLE, userVariable.getName(), null)));
 
-		RepeatUntilBrick repeatBrick = new RepeatUntilBrick(validFormula);
-		LoopEndBrick loopEndBrick = new LoopEndBrick(repeatBrick);
+        RepeatUntilBrick repeatBrick = new RepeatUntilBrick(validFormula);
+        LoopEndBrick loopEndBrick = new LoopEndBrick(repeatBrick);
 
-		repeatBrick.setLoopEndBrick(loopEndBrick);
+        repeatBrick.setLoopEndBrick(loopEndBrick);
 
-		final int deltaY = -10;
+        final int deltaY = -10;
 
-		testScript.addBrick(setVariableBrick);
-		testScript.addBrick(repeatBrick);
-		testScript.addBrick(new ChangeYByNBrick(deltaY));
+        testScript.addBrick(setVariableBrick);
+        testScript.addBrick(repeatBrick);
+        testScript.addBrick(new ChangeYByNBrick(deltaY));
 
-		Formula validFormula2 = new Formula(1);
-		validFormula2.setRoot(new FormulaElement(ElementType.OPERATOR, Operators.PLUS.name(), null,
-				new FormulaElement(ElementType.NUMBER, String.valueOf(1), null),
-				new FormulaElement(ElementType.USER_VARIABLE, userVariable.getName(), null)));
+        Formula validFormula2 = new Formula(1);
+        validFormula2.setRoot(new FormulaElement(ElementType.OPERATOR, Operators.PLUS.name(), null,
+                new FormulaElement(ElementType.NUMBER, String.valueOf(1), null),
+                new FormulaElement(ElementType.USER_VARIABLE, userVariable.getName(), null)));
 
-		SetVariableBrick setVariableBrick2 = new SetVariableBrick(validFormula2, userVariable);
-		testScript.addBrick(setVariableBrick2);
-		testScript.addBrick(loopEndBrick);
+        SetVariableBrick setVariableBrick2 = new SetVariableBrick(validFormula2, userVariable);
+        testScript.addBrick(setVariableBrick2);
+        testScript.addBrick(loopEndBrick);
 
-		testSprite.addScript(testScript);
-		testSprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
+        testSprite.addScript(testScript);
+        testSprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
 
-		while (!testSprite.look.getAllActionsAreFinished()) {
-			testSprite.look.act(1.0f);
-		}
+        while (!testSprite.look.getAllActionsAreFinished()) {
+            testSprite.look.act(1.0f);
+        }
 
-		assertEquals("Executed the wrong number of times!", (TRUE_VALUE - START_VALUE) * deltaY,
-				(int) testSprite.look.getYInUserInterfaceDimensionUnit());
-	}
+        assertEquals("Executed the wrong number of times!", (TRUE_VALUE - START_VALUE) * deltaY,
+                (int) testSprite.look.getYInUserInterfaceDimensionUnit());
+    }
 
-	public void testNoRepeat() {
-		Formula validFormula = new Formula(1);
-		validFormula.setRoot(new FormulaElement(ElementType.OPERATOR, Operators.SMALLER_THAN.name(), null,
-				new FormulaElement(ElementType.NUMBER, "1", null), new FormulaElement(ElementType
-				.NUMBER,
-				"2",
-				null)));
+    public void testNoRepeat() {
+        Formula validFormula = new Formula(1);
+        validFormula.setRoot(new FormulaElement(ElementType.OPERATOR, Operators.SMALLER_THAN.name(), null,
+                new FormulaElement(ElementType.NUMBER, "1", null), new FormulaElement(ElementType
+                .NUMBER,
+                "2",
+                null)));
 
-		this.testWithFormula(validFormula, 0.0f);
-	}
+        this.testWithFormula(validFormula, 0.0f);
+    }
 
-	public void testBrickWithInValidStringFormula() {
-		Formula stringFormula = new Formula(String.valueOf(NOT_NUMERICAL_STRING));
-		testWithFormula(stringFormula, testSprite.look.getYInUserInterfaceDimensionUnit());
-	}
+    public void testBrickWithInValidStringFormula() {
+        Formula stringFormula = new Formula(String.valueOf(NOT_NUMERICAL_STRING));
+        testWithFormula(stringFormula, testSprite.look.getYInUserInterfaceDimensionUnit());
+    }
 
-	public void testNullFormula() {
-		Action repeatedAction = testSprite.getActionFactory().createSetXAction(testSprite, new Formula(10));
-		Action repeatAction = testSprite.getActionFactory().createRepeatUntilAction(testSprite, null, repeatedAction);
+    public void testNullFormula() {
+        Action repeatedAction = testSprite.getActionFactory().createSetXAction(testSprite, new Formula(10));
+        Action repeatAction = testSprite.getActionFactory().createRepeatUntilAction(testSprite, null, repeatedAction);
 
-		repeatAction.act(1.0f);
-		int repeatCountValue = ((RepeatUntilAction) repeatAction).getExecutedCount();
-		assertEquals("Null Formula should not have been possible to interpret!", 0, repeatCountValue);
-	}
+        repeatAction.act(1.0f);
+        int repeatCountValue = ((RepeatUntilAction) repeatAction).getExecutedCount();
+        assertEquals("Null Formula should not have been possible to interpret!", 0, repeatCountValue);
+    }
 
-	public void testNotANumberFormula() {
-		Formula notANumber = new Formula(Double.NaN);
-		testWithFormula(notANumber, testSprite.look.getYInUserInterfaceDimensionUnit());
-	}
+    public void testNotANumberFormula() {
+        Formula notANumber = new Formula(Double.NaN);
+        testWithFormula(notANumber, testSprite.look.getYInUserInterfaceDimensionUnit());
+    }
 
-	private void testWithFormula(Formula formula, Float expected) {
-		RepeatUntilBrick repeatBrick = new RepeatUntilBrick(formula);
-		LoopEndBrick loopEndBrick = new LoopEndBrick(repeatBrick);
-		repeatBrick.setLoopEndBrick(loopEndBrick);
+    private void testWithFormula(Formula formula, Float expected) {
+        RepeatUntilBrick repeatBrick = new RepeatUntilBrick(formula);
+        LoopEndBrick loopEndBrick = new LoopEndBrick(repeatBrick);
+        repeatBrick.setLoopEndBrick(loopEndBrick);
 
-		testScript.addBrick(repeatBrick);
-		testScript.addBrick(new ChangeYByNBrick(delta));
-		testScript.addBrick(loopEndBrick);
-		testSprite.addScript(testScript);
-		testSprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
+        testScript.addBrick(repeatBrick);
+        testScript.addBrick(new ChangeYByNBrick(delta));
+        testScript.addBrick(loopEndBrick);
+        testSprite.addScript(testScript);
+        testSprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
 
-		while (!testSprite.look.getAllActionsAreFinished()) {
-			testSprite.look.act(1.0f);
-		}
-		assertEquals("Executed the wrong number of times!", expected,
-				testSprite.look.getYInUserInterfaceDimensionUnit());
-	}
+        while (!testSprite.look.getAllActionsAreFinished()) {
+            testSprite.look.act(1.0f);
+        }
+        assertEquals("Executed the wrong number of times!", expected,
+                testSprite.look.getYInUserInterfaceDimensionUnit());
+    }
 
-	public void testConditionCheckedOnlyAtEnd() {
-		Formula validFormula = new Formula(1);
-		validFormula.setRoot(new FormulaElement(ElementType.OPERATOR, Operators.EQUAL.name(), null,
-				new FormulaElement(ElementType.NUMBER, String.valueOf(TRUE_VALUE), null),
-				new FormulaElement(ElementType.USER_VARIABLE, userVariable.getName(), null)));
+    public void testConditionCheckedOnlyAtEnd() {
+        Formula validFormula = new Formula(1);
+        validFormula.setRoot(new FormulaElement(ElementType.OPERATOR, Operators.EQUAL.name(), null,
+                new FormulaElement(ElementType.NUMBER, String.valueOf(TRUE_VALUE), null),
+                new FormulaElement(ElementType.USER_VARIABLE, userVariable.getName(), null)));
 
-		RepeatUntilBrick repeatBrick = new RepeatUntilBrick(validFormula);
-		LoopEndBrick loopEndBrick = new LoopEndBrick(repeatBrick);
-		repeatBrick.setLoopEndBrick(loopEndBrick);
+        RepeatUntilBrick repeatBrick = new RepeatUntilBrick(validFormula);
+        LoopEndBrick loopEndBrick = new LoopEndBrick(repeatBrick);
+        repeatBrick.setLoopEndBrick(loopEndBrick);
 
-		testScript.addBrick(repeatBrick);
-		testScript.addBrick(new SetVariableBrick(new Formula(TRUE_VALUE), userVariable));
-		testScript.addBrick(new SetVariableBrick(new Formula(TRUE_VALUE), userVariable2));
-		testScript.addBrick(loopEndBrick);
+        testScript.addBrick(repeatBrick);
+        testScript.addBrick(new SetVariableBrick(new Formula(TRUE_VALUE), userVariable));
+        testScript.addBrick(new SetVariableBrick(new Formula(TRUE_VALUE), userVariable2));
+        testScript.addBrick(loopEndBrick);
 
-		testSprite.addScript(testScript);
-		testSprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
+        testSprite.addScript(testScript);
+        testSprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
 
-		while (!testSprite.look.getAllActionsAreFinished()) {
-			testSprite.look.act(1.0f);
-		}
+        while (!testSprite.look.getAllActionsAreFinished()) {
+            testSprite.look.act(1.0f);
+        }
 
-		int valueOfUserVariable = ((Double) userVariable.getValue()).intValue();
-		int valueOfUserVariable2 = ((Double) userVariable2.getValue()).intValue();
+        int valueOfUserVariable = ((Double) userVariable.getValue()).intValue();
+        int valueOfUserVariable2 = ((Double) userVariable2.getValue()).intValue();
 
-		assertEquals("Wrong value for userVariable", TRUE_VALUE, valueOfUserVariable);
-		assertEquals("Wrong value for userVariable2", TRUE_VALUE, valueOfUserVariable2);
-	}
+        assertEquals("Wrong value for userVariable", TRUE_VALUE, valueOfUserVariable);
+        assertEquals("Wrong value for userVariable2", TRUE_VALUE, valueOfUserVariable2);
+    }
 }

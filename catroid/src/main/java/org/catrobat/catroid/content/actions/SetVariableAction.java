@@ -33,44 +33,44 @@ import org.catrobat.catroid.formulaeditor.UserVariable;
 
 public class SetVariableAction extends TemporalAction {
 
-	private Sprite sprite;
-	private Formula changeVariable;
-	private UserVariable userVariable;
+    private Sprite sprite;
+    private Formula changeVariable;
+    private UserVariable userVariable;
 
-	@Override
-	protected void update(float percent) {
-		if (userVariable == null) {
-			return;
-		}
-		Object value = changeVariable == null ? Double.valueOf(0d) : changeVariable.interpretObject(sprite);
+    @Override
+    protected void update(float percent) {
+        if (userVariable == null) {
+            return;
+        }
+        Object value = changeVariable == null ? Double.valueOf(0d) : changeVariable.interpretObject(sprite);
 
-		boolean isFirstLevelStringTree = false;
-		if (changeVariable != null && changeVariable.getRoot().getElementType() == FormulaElement.ElementType.STRING) {
-			isFirstLevelStringTree = true;
-		}
+        boolean isFirstLevelStringTree = false;
+        if (changeVariable != null && changeVariable.getRoot().getElementType() == FormulaElement.ElementType.STRING) {
+            isFirstLevelStringTree = true;
+        }
 
-		try {
-			if (!isFirstLevelStringTree && value instanceof String) {
-				value = Double.valueOf((String) value);
-			}
-		} catch (NumberFormatException numberFormatException) {
-			Log.d(getClass().getSimpleName(), "Couldn't parse String", numberFormatException);
-		}
-		userVariable.setValue(value);
-	}
+        try {
+            if (!isFirstLevelStringTree && value instanceof String) {
+                value = Double.valueOf((String) value);
+            }
+        } catch (NumberFormatException numberFormatException) {
+            Log.d(getClass().getSimpleName(), "Couldn't parse String", numberFormatException);
+        }
+        userVariable.setValue(value);
+    }
 
-	public void setUserVariable(UserVariable userVariable) {
-		if (userVariable == null) {
-			return;
-		}
-		this.userVariable = userVariable;
-	}
+    public void setUserVariable(UserVariable userVariable) {
+        if (userVariable == null) {
+            return;
+        }
+        this.userVariable = userVariable;
+    }
 
-	public void setChangeVariable(Formula changeVariable) {
-		this.changeVariable = changeVariable;
-	}
+    public void setChangeVariable(Formula changeVariable) {
+        this.changeVariable = changeVariable;
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 }

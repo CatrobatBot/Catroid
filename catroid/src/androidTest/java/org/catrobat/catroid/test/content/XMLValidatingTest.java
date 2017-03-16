@@ -53,69 +53,69 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class XMLValidatingTest extends AndroidTestCase {
-	private static final String TAG = XMLValidatingTest.class.getSimpleName();
-	private String testProjectName = "xmlTestProjectName";
+    private static final String TAG = XMLValidatingTest.class.getSimpleName();
+    private String testProjectName = "xmlTestProjectName";
 
-	public XMLValidatingTest() throws IOException {
-	}
+    public XMLValidatingTest() throws IOException {
+    }
 
-	@Override
-	public void tearDown() throws Exception {
-		TestUtils.clearProject(testProjectName);
-		super.tearDown();
-	}
+    @Override
+    public void tearDown() throws Exception {
+        TestUtils.clearProject(testProjectName);
+        super.tearDown();
+    }
 
-	@Override
-	public void setUp() {
-		TestUtils.clearProject(testProjectName);
-	}
+    @Override
+    public void setUp() {
+        TestUtils.clearProject(testProjectName);
+    }
 
-	public void testSerializeProjectWithAllBricks() throws IllegalArgumentException, IllegalAccessException,
-			InvocationTargetException, IOException, JSONException {
+    public void testSerializeProjectWithAllBricks() throws IllegalArgumentException, IllegalAccessException,
+            InvocationTargetException, IOException, JSONException {
 
-		File projectDirectory = new File(Constants.DEFAULT_ROOT + "/" + testProjectName);
-		if (projectDirectory.exists()) {
-			UtilFile.deleteDirectory(projectDirectory);
-		}
+        File projectDirectory = new File(Constants.DEFAULT_ROOT + "/" + testProjectName);
+        if (projectDirectory.exists()) {
+            UtilFile.deleteDirectory(projectDirectory);
+        }
 
-		Project project = new Project(getContext(), testProjectName);
-		Sprite sprite = new SingleSprite("testSprite");
-		Script startScript = new StartScript();
-		Script whenScript = new WhenScript();
-		Script broadcastScript = new BroadcastScript("message1");
-		sprite.addScript(startScript);
-		sprite.addScript(whenScript);
-		sprite.addScript(broadcastScript);
-		project.getDefaultScene().addSprite(sprite);
+        Project project = new Project(getContext(), testProjectName);
+        Sprite sprite = new SingleSprite("testSprite");
+        Script startScript = new StartScript();
+        Script whenScript = new WhenScript();
+        Script broadcastScript = new BroadcastScript("message1");
+        sprite.addScript(startScript);
+        sprite.addScript(whenScript);
+        sprite.addScript(broadcastScript);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(startScript);
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(startScript);
 
-		Context context = getContext();
-		String[] categories = { context.getString(R.string.category_control),
-				context.getString(R.string.category_motion), context.getString(R.string.category_sound),
-				context.getString(R.string.category_looks), context.getString(R.string.category_data),
-				context.getString(R.string.category_lego_nxt) };
+        Context context = getContext();
+        String[] categories = {context.getString(R.string.category_control),
+                context.getString(R.string.category_motion), context.getString(R.string.category_sound),
+                context.getString(R.string.category_looks), context.getString(R.string.category_data),
+                context.getString(R.string.category_lego_nxt)};
 
-		CategoryBricksFactory brickFactory = new CategoryBricksFactory();
-		List<Brick> bricks = new ArrayList<Brick>();
-		for (String category : categories) {
-			bricks.addAll(brickFactory.getBricks(category, sprite, context));
-		}
+        CategoryBricksFactory brickFactory = new CategoryBricksFactory();
+        List<Brick> bricks = new ArrayList<Brick>();
+        for (String category : categories) {
+            bricks.addAll(brickFactory.getBricks(category, sprite, context));
+        }
 
-		for (Brick brick : bricks) {
-			if (brick.getClass().equals(WhenBrick.class) || brick.getClass().equals(WhenStartedBrick.class)
-					|| brick.getClass().equals(BroadcastReceiverBrick.class)) {
-				Log.i(TAG, "These bricks are not in the new schema");
-			} else {
-				startScript.addBrick(brick);
-			}
-		}
+        for (Brick brick : bricks) {
+            if (brick.getClass().equals(WhenBrick.class) || brick.getClass().equals(WhenStartedBrick.class)
+                    || brick.getClass().equals(BroadcastReceiverBrick.class)) {
+                Log.i(TAG, "These bricks are not in the new schema");
+            } else {
+                startScript.addBrick(brick);
+            }
+        }
 
-		assertTrue("no bricks added to the start script", startScript.getBrickList().size() > 0);
-		StorageHandler.getInstance().saveProject(project);
-		// TODO: add XML validation based on xsd
-		//	XMLValidationUtil.sendProjectXMLToServerForValidating(project);
-	}
+        assertTrue("no bricks added to the start script", startScript.getBrickList().size() > 0);
+        StorageHandler.getInstance().saveProject(project);
+        // TODO: add XML validation based on xsd
+        //	XMLValidationUtil.sendProjectXMLToServerForValidating(project);
+    }
 }

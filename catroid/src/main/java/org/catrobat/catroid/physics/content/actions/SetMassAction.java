@@ -33,31 +33,31 @@ import org.catrobat.catroid.physics.PhysicsObject;
 
 public class SetMassAction extends TemporalAction {
 
-	private Sprite sprite;
-	private PhysicsObject physicsObject;
-	private Formula mass;
+    private Sprite sprite;
+    private PhysicsObject physicsObject;
+    private Formula mass;
 
-	@Override
-	protected void update(float percent) {
-		Float newMass;
-		try {
-			newMass = mass == null ? Float.valueOf(0f) : mass.interpretFloat(sprite);
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-			return;
-		}
-		physicsObject.setMass(newMass);
-	}
+    @Override
+    protected void update(float percent) {
+        Float newMass;
+        try {
+            newMass = mass == null ? Float.valueOf(0f) : mass.interpretFloat(sprite);
+        } catch (InterpretationException interpretationException) {
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+            return;
+        }
+        physicsObject.setMass(newMass);
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setPhysicsObject(PhysicsObject physicsObject) {
-		this.physicsObject = physicsObject;
-	}
+    public void setPhysicsObject(PhysicsObject physicsObject) {
+        this.physicsObject = physicsObject;
+    }
 
-	public void setMass(Formula mass) {
-		this.mass = mass;
-	}
+    public void setMass(Formula mass) {
+        this.mass = mass;
+    }
 }

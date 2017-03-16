@@ -34,59 +34,59 @@ import org.catrobat.catroid.uitest.util.UiTestUtils;
 
 public class PauseResumeInStageTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
-	public PauseResumeInStageTest() {
-		super(MainMenuActivity.class);
-	}
+    public PauseResumeInStageTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		UiTestUtils.prepareStageForTest();
-		UiTestUtils.getIntoStageFromMainMenu(solo);
-		waitForStage();
-	}
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        UiTestUtils.prepareStageForTest();
+        UiTestUtils.getIntoStageFromMainMenu(solo);
+        waitForStage();
+    }
 
-	public void testIgnoreTouchEventsWhenStagePaused() {
-		InputListenerMock touchListener = new InputListenerMock();
-		StageActivity.stageListener.getStage().addListener(touchListener);
+    public void testIgnoreTouchEventsWhenStagePaused() {
+        InputListenerMock touchListener = new InputListenerMock();
+        StageActivity.stageListener.getStage().addListener(touchListener);
 
-		assertFalse("Already clicked on the stage", touchListener.called);
+        assertFalse("Already clicked on the stage", touchListener.called);
 
-		clickOnStage();
+        clickOnStage();
 
-		assertTrue("Touch event not fired", touchListener.called);
+        assertTrue("Touch event not fired", touchListener.called);
 
-		UiTestUtils.pauseStage(solo);
-		touchListener.called = false;
+        UiTestUtils.pauseStage(solo);
+        touchListener.called = false;
 
-		assertFalse("Already clicked on the stage", touchListener.called);
+        assertFalse("Already clicked on the stage", touchListener.called);
 
-		clickOnStage();
+        clickOnStage();
 
-		assertFalse("Touch events shouldn't be fired when stage is paused", touchListener.called);
-	}
+        assertFalse("Touch events shouldn't be fired when stage is paused", touchListener.called);
+    }
 
-	private void waitForStage() {
-		solo.waitForCondition(new Condition() {
-			@Override
-			public boolean isSatisfied() {
-				return StageActivity.stageListener != null && StageActivity.stageListener.getStage() != null;
-			}
-		}, 2000);
-	}
+    private void waitForStage() {
+        solo.waitForCondition(new Condition() {
+            @Override
+            public boolean isSatisfied() {
+                return StageActivity.stageListener != null && StageActivity.stageListener.getStage() != null;
+            }
+        }, 2000);
+    }
 
-	private void clickOnStage() {
-		solo.clickOnScreen(ScreenValues.SCREEN_WIDTH / 2f, ScreenValues.SCREEN_HEIGHT / 2f);
-		solo.sleep(500);
-	}
+    private void clickOnStage() {
+        solo.clickOnScreen(ScreenValues.SCREEN_WIDTH / 2f, ScreenValues.SCREEN_HEIGHT / 2f);
+        solo.sleep(500);
+    }
 
-	private static class InputListenerMock extends InputListener {
-		public boolean called;
+    private static class InputListenerMock extends InputListener {
+        public boolean called;
 
-		@Override
-		public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-			called = true;
-			return super.touchDown(event, x, y, pointer, button);
-		}
-	}
+        @Override
+        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            called = true;
+            return super.touchDown(event, x, y, pointer, button);
+        }
+    }
 }

@@ -33,81 +33,81 @@ import org.catrobat.catroid.utils.NotificationData;
 import org.catrobat.catroid.utils.StatusBarNotificationManager;
 
 public class StatusBarNotificationManagerTest extends AndroidTestCase {
-	private static final String TAG = StatusBarNotificationManagerTest.class.getSimpleName();
+    private static final String TAG = StatusBarNotificationManagerTest.class.getSimpleName();
 
-	private final StatusBarNotificationManager notificationManager = StatusBarNotificationManager.getInstance();
+    private final StatusBarNotificationManager notificationManager = StatusBarNotificationManager.getInstance();
 
-	@Override
-	protected void tearDown() throws Exception {
-		TestUtils.cancelAllNotifications(getContext());
-		super.tearDown();
-	}
+    @Override
+    protected void tearDown() throws Exception {
+        TestUtils.cancelAllNotifications(getContext());
+        super.tearDown();
+    }
 
-	public void testCreateCopyNotification() {
-		int id = notificationManager.createCopyNotification(getContext(), TestUtils.DEFAULT_TEST_PROJECT_NAME);
-		checkNotificationData(id);
+    public void testCreateCopyNotification() {
+        int id = notificationManager.createCopyNotification(getContext(), TestUtils.DEFAULT_TEST_PROJECT_NAME);
+        checkNotificationData(id);
 
-		assertEquals("-1 as return parameter expected", -1,
-				notificationManager.createCopyNotification(null, TestUtils.DEFAULT_TEST_PROJECT_NAME));
-		assertEquals("-1 as return parameter expected", -1,
-				notificationManager.createCopyNotification(getContext(), null));
-		assertEquals("-1 as return parameter expected", -1, notificationManager.createCopyNotification(null, null));
-	}
+        assertEquals("-1 as return parameter expected", -1,
+                notificationManager.createCopyNotification(null, TestUtils.DEFAULT_TEST_PROJECT_NAME));
+        assertEquals("-1 as return parameter expected", -1,
+                notificationManager.createCopyNotification(getContext(), null));
+        assertEquals("-1 as return parameter expected", -1, notificationManager.createCopyNotification(null, null));
+    }
 
-	public void testCreateDownloadNotification() {
-		int id = notificationManager.createDownloadNotification(getContext(), TestUtils.DEFAULT_TEST_PROJECT_NAME);
-		checkNotificationData(id);
+    public void testCreateDownloadNotification() {
+        int id = notificationManager.createDownloadNotification(getContext(), TestUtils.DEFAULT_TEST_PROJECT_NAME);
+        checkNotificationData(id);
 
-		assertEquals("-1 as return parameter expected", -1,
-				notificationManager.createDownloadNotification(null, TestUtils.DEFAULT_TEST_PROJECT_NAME));
-		assertEquals("-1 as return parameter expected", -1,
-				notificationManager.createDownloadNotification(getContext(), null));
-		assertEquals("-1 as return parameter expected", -1, notificationManager.createDownloadNotification(null, null));
-	}
+        assertEquals("-1 as return parameter expected", -1,
+                notificationManager.createDownloadNotification(null, TestUtils.DEFAULT_TEST_PROJECT_NAME));
+        assertEquals("-1 as return parameter expected", -1,
+                notificationManager.createDownloadNotification(getContext(), null));
+        assertEquals("-1 as return parameter expected", -1, notificationManager.createDownloadNotification(null, null));
+    }
 
-	public void testCreateUploadNotification() {
-		int id = notificationManager.createUploadNotification(getContext(), TestUtils.DEFAULT_TEST_PROJECT_NAME);
-		checkNotificationData(id);
+    public void testCreateUploadNotification() {
+        int id = notificationManager.createUploadNotification(getContext(), TestUtils.DEFAULT_TEST_PROJECT_NAME);
+        checkNotificationData(id);
 
-		assertEquals("-1 as return parameter expected", -1,
-				notificationManager.createUploadNotification(null, TestUtils.DEFAULT_TEST_PROJECT_NAME));
-		assertEquals("-1 as return parameter expected", -1,
-				notificationManager.createUploadNotification(getContext(), null));
-		assertEquals("-1 as return parameter expected", -1, notificationManager.createUploadNotification(null, null));
-	}
+        assertEquals("-1 as return parameter expected", -1,
+                notificationManager.createUploadNotification(null, TestUtils.DEFAULT_TEST_PROJECT_NAME));
+        assertEquals("-1 as return parameter expected", -1,
+                notificationManager.createUploadNotification(getContext(), null));
+        assertEquals("-1 as return parameter expected", -1, notificationManager.createUploadNotification(null, null));
+    }
 
-	public void testShowOrUpdateNotification() {
-		try {
-			notificationManager.showOrUpdateNotification(-1, 0);
-		} catch (Exception ex) {
-			Log.e(TAG, "showOrUpdateNotification() failed", ex);
-			fail("there shouldn't be any exception thrown");
-		}
-	}
+    public void testShowOrUpdateNotification() {
+        try {
+            notificationManager.showOrUpdateNotification(-1, 0);
+        } catch (Exception ex) {
+            Log.e(TAG, "showOrUpdateNotification() failed", ex);
+            fail("there shouldn't be any exception thrown");
+        }
+    }
 
-	public void testUploadRejectedNotification() {
-		int id = notificationManager.createUploadNotification(getContext(), TestUtils.DEFAULT_TEST_PROJECT_NAME);
-		checkNotificationData(id);
-		notificationManager.showUploadRejectedNotification(id, 507, getContext().getResources().getString(R.string.error_project_upload), new Bundle());
-		@SuppressWarnings("unchecked")
-		SparseArray<NotificationData> notificationDataMap = (SparseArray<NotificationData>) Reflection.getPrivateField(
-				StatusBarNotificationManager.class, notificationManager, "notificationDataMap");
+    public void testUploadRejectedNotification() {
+        int id = notificationManager.createUploadNotification(getContext(), TestUtils.DEFAULT_TEST_PROJECT_NAME);
+        checkNotificationData(id);
+        notificationManager.showUploadRejectedNotification(id, 507, getContext().getResources().getString(R.string.error_project_upload), new Bundle());
+        @SuppressWarnings("unchecked")
+        SparseArray<NotificationData> notificationDataMap = (SparseArray<NotificationData>) Reflection.getPrivateField(
+                StatusBarNotificationManager.class, notificationManager, "notificationDataMap");
 
-		NotificationData data = notificationDataMap.get(id);
-		assertEquals("error message should match", data.getNotificationTextDone(), getContext().getResources().getString(R.string.error_project_upload));
-	}
+        NotificationData data = notificationDataMap.get(id);
+        assertEquals("error message should match", data.getNotificationTextDone(), getContext().getResources().getString(R.string.error_project_upload));
+    }
 
-	private void checkNotificationData(int id) {
-		assertTrue("id must not me negative", id >= 0);
+    private void checkNotificationData(int id) {
+        assertTrue("id must not me negative", id >= 0);
 
-		@SuppressWarnings("unchecked")
-		SparseArray<NotificationData> notificationDataMap = (SparseArray<NotificationData>) Reflection.getPrivateField(
-				StatusBarNotificationManager.class, notificationManager, "notificationDataMap");
+        @SuppressWarnings("unchecked")
+        SparseArray<NotificationData> notificationDataMap = (SparseArray<NotificationData>) Reflection.getPrivateField(
+                StatusBarNotificationManager.class, notificationManager, "notificationDataMap");
 
-		NotificationData data = notificationDataMap.get(id);
-		assertNotNull("there should be an entry in the sparse array", data);
-		assertNotNull("there should be a pending intent defined", data.getPendingIntent());
-		assertNotNull("there should be a builder defined", data.getNotificationBuilder());
-		assertEquals("program names should match", TestUtils.DEFAULT_TEST_PROJECT_NAME, data.getProgramName());
-	}
+        NotificationData data = notificationDataMap.get(id);
+        assertNotNull("there should be an entry in the sparse array", data);
+        assertNotNull("there should be a pending intent defined", data.getPendingIntent());
+        assertNotNull("there should be a builder defined", data.getNotificationBuilder());
+        assertEquals("program names should match", TestUtils.DEFAULT_TEST_PROJECT_NAME, data.getProgramName());
+    }
 }

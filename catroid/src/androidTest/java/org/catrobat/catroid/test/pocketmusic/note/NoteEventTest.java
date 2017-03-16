@@ -29,60 +29,60 @@ import org.catrobat.catroid.pocketmusic.note.NoteName;
 
 public class NoteEventTest extends AndroidTestCase {
 
-	public void testEquals1() {
-		NoteEvent noteEvent1 = NoteEventTestDataFactory.createNoteEvent();
-		NoteEvent noteEvent2 = NoteEventTestDataFactory.createNoteEvent();
+    public void testEquals1() {
+        NoteEvent noteEvent1 = NoteEventTestDataFactory.createNoteEvent();
+        NoteEvent noteEvent2 = NoteEventTestDataFactory.createNoteEvent();
 
-		assertTrue("Notes not equal", noteEvent1.equals(noteEvent2));
-	}
+        assertTrue("Notes not equal", noteEvent1.equals(noteEvent2));
+    }
 
-	public void testEquals2() {
-		NoteEvent noteEvent1 = NoteEventTestDataFactory.createNoteEvent(NoteName.C1);
-		NoteEvent noteEvent2 = NoteEventTestDataFactory.createNoteEvent(NoteName.C2);
+    public void testEquals2() {
+        NoteEvent noteEvent1 = NoteEventTestDataFactory.createNoteEvent(NoteName.C1);
+        NoteEvent noteEvent2 = NoteEventTestDataFactory.createNoteEvent(NoteName.C2);
 
-		assertFalse("Notes not equal", noteEvent1.equals(noteEvent2));
-	}
+        assertFalse("Notes not equal", noteEvent1.equals(noteEvent2));
+    }
 
-	public void testEquals3() {
-		NoteName noteName = NoteName.C1;
-		NoteEvent noteEvent1 = NoteEventTestDataFactory.createNoteEvent(noteName, true);
-		NoteEvent noteEvent2 = NoteEventTestDataFactory.createNoteEvent(noteName, false);
+    public void testEquals3() {
+        NoteName noteName = NoteName.C1;
+        NoteEvent noteEvent1 = NoteEventTestDataFactory.createNoteEvent(noteName, true);
+        NoteEvent noteEvent2 = NoteEventTestDataFactory.createNoteEvent(noteName, false);
 
-		assertFalse("Notes not equal", noteEvent1.equals(noteEvent2));
-	}
+        assertFalse("Notes not equal", noteEvent1.equals(noteEvent2));
+    }
 
-	public void testEquals4() {
-		NoteEvent noteEvent1 = NoteEventTestDataFactory.createNoteEvent(NoteName.C1, true);
-		NoteEvent noteEvent2 = NoteEventTestDataFactory.createNoteEvent(NoteName.C2, false);
+    public void testEquals4() {
+        NoteEvent noteEvent1 = NoteEventTestDataFactory.createNoteEvent(NoteName.C1, true);
+        NoteEvent noteEvent2 = NoteEventTestDataFactory.createNoteEvent(NoteName.C2, false);
 
-		assertFalse("Notes not equal", noteEvent1.equals(noteEvent2));
-	}
+        assertFalse("Notes not equal", noteEvent1.equals(noteEvent2));
+    }
 
-	public void testEquals5() {
-		NoteEvent noteEvent = NoteEventTestDataFactory.createNoteEvent();
+    public void testEquals5() {
+        NoteEvent noteEvent = NoteEventTestDataFactory.createNoteEvent();
 
-		assertFalse("Notes not equal", noteEvent.equals(null));
-	}
+        assertFalse("Notes not equal", noteEvent.equals(null));
+    }
 
-	public void testEquals6() {
-		NoteEvent noteEvent = NoteEventTestDataFactory.createNoteEvent();
+    public void testEquals6() {
+        NoteEvent noteEvent = NoteEventTestDataFactory.createNoteEvent();
 
-		assertFalse("Notes not equal", noteEvent.equals(""));
-	}
+        assertFalse("Notes not equal", noteEvent.equals(""));
+    }
 
-	public void testToString() {
-		NoteEvent noteEvent = NoteEventTestDataFactory.createNoteEvent();
-		String expectedString = "[NoteEvent] noteName= " + noteEvent.getNoteName()
-				+ " noteOn=" + noteEvent.isNoteOn();
+    public void testToString() {
+        NoteEvent noteEvent = NoteEventTestDataFactory.createNoteEvent();
+        String expectedString = "[NoteEvent] noteName= " + noteEvent.getNoteName()
+                + " noteOn=" + noteEvent.isNoteOn();
 
-		assertEquals("Failed to convert to String", expectedString, noteEvent.toString());
-	}
+        assertEquals("Failed to convert to String", expectedString, noteEvent.toString());
+    }
 
-	public void testCopyNoteEvent() {
-		NoteEvent noteEvent = NoteEventTestDataFactory.createNoteEvent();
-		NoteEvent copyNoteEvent = new NoteEvent(noteEvent);
+    public void testCopyNoteEvent() {
+        NoteEvent noteEvent = NoteEventTestDataFactory.createNoteEvent();
+        NoteEvent copyNoteEvent = new NoteEvent(noteEvent);
 
-		assertTrue("Copy failed", noteEvent != copyNoteEvent);
-		assertTrue("Copy failed", noteEvent.equals(copyNoteEvent));
-	}
+        assertTrue("Copy failed", noteEvent != copyNoteEvent);
+        assertTrue("Copy failed", noteEvent.equals(copyNoteEvent));
+    }
 }

@@ -44,141 +44,141 @@ import org.catrobat.catroid.ui.fragment.SingleSeekbar;
 import java.util.List;
 
 public class PhiroMotorMoveBackwardBrick extends FormulaBrick {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private transient View prototypeView;
+    private transient View prototypeView;
 
-	private String motor;
-	private transient Motor motorEnum;
-	private transient TextView editSpeed;
+    private String motor;
+    private transient Motor motorEnum;
+    private transient TextView editSpeed;
 
-	private transient SingleSeekbar speedSeekbar =
-			new SingleSeekbar(this, BrickField.PHIRO_SPEED, R.string.phiro_motor_speed);
+    private transient SingleSeekbar speedSeekbar =
+            new SingleSeekbar(this, BrickField.PHIRO_SPEED, R.string.phiro_motor_speed);
 
-	public enum Motor {
-		MOTOR_LEFT, MOTOR_RIGHT, MOTOR_BOTH
-	}
+    public enum Motor {
+        MOTOR_LEFT, MOTOR_RIGHT, MOTOR_BOTH
+    }
 
-	public PhiroMotorMoveBackwardBrick() {
-		addAllowedBrickField(BrickField.PHIRO_SPEED);
-	}
+    public PhiroMotorMoveBackwardBrick() {
+        addAllowedBrickField(BrickField.PHIRO_SPEED);
+    }
 
-	public PhiroMotorMoveBackwardBrick(Motor motor, int speedValue) {
-		this.motorEnum = motor;
-		this.motor = motorEnum.name();
-		initializeBrickFields(new Formula(speedValue));
-	}
+    public PhiroMotorMoveBackwardBrick(Motor motor, int speedValue) {
+        this.motorEnum = motor;
+        this.motor = motorEnum.name();
+        initializeBrickFields(new Formula(speedValue));
+    }
 
-	public PhiroMotorMoveBackwardBrick(Motor motor, Formula speedFormula) {
-		this.motorEnum = motor;
-		this.motor = motorEnum.name();
+    public PhiroMotorMoveBackwardBrick(Motor motor, Formula speedFormula) {
+        this.motorEnum = motor;
+        this.motor = motorEnum.name();
 
-		initializeBrickFields(speedFormula);
-	}
+        initializeBrickFields(speedFormula);
+    }
 
-	private void initializeBrickFields(Formula speed) {
-		addAllowedBrickField(BrickField.PHIRO_SPEED);
-		setFormulaWithBrickField(BrickField.PHIRO_SPEED, speed);
-	}
+    private void initializeBrickFields(Formula speed) {
+        addAllowedBrickField(BrickField.PHIRO_SPEED);
+        setFormulaWithBrickField(BrickField.PHIRO_SPEED, speed);
+    }
 
-	protected Object readResolve() {
-		if (motor != null) {
-			motorEnum = Motor.valueOf(motor);
-		}
-		return this;
-	}
+    protected Object readResolve() {
+        if (motor != null) {
+            motorEnum = Motor.valueOf(motor);
+        }
+        return this;
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return BLUETOOTH_PHIRO | getFormulaWithBrickField(BrickField.PHIRO_SPEED).getRequiredResources();
-	}
+    @Override
+    public int getRequiredResources() {
+        return BLUETOOTH_PHIRO | getFormulaWithBrickField(BrickField.PHIRO_SPEED).getRequiredResources();
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_phiro_motor_backward, null);
-		TextView textSpeed = (TextView) prototypeView.findViewById(R.id.brick_phiro_motor_backward_action_speed_edit_text);
-		textSpeed.setText(String.valueOf(BrickValues.PHIRO_SPEED));
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_phiro_motor_backward, null);
+        TextView textSpeed = (TextView) prototypeView.findViewById(R.id.brick_phiro_motor_backward_action_speed_edit_text);
+        textSpeed.setText(String.valueOf(BrickValues.PHIRO_SPEED));
 
-		Spinner phiroProMotorSpinner = (Spinner) prototypeView.findViewById(R.id.brick_phiro_motor_backward_action_spinner);
+        Spinner phiroProMotorSpinner = (Spinner) prototypeView.findViewById(R.id.brick_phiro_motor_backward_action_spinner);
 
-		ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter.createFromResource(context, R.array.brick_phiro_select_motor_spinner,
-				android.R.layout.simple_spinner_item);
-		motorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter.createFromResource(context, R.array.brick_phiro_select_motor_spinner,
+                android.R.layout.simple_spinner_item);
+        motorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-		phiroProMotorSpinner.setAdapter(motorAdapter);
-		phiroProMotorSpinner.setSelection(motorEnum.ordinal());
+        phiroProMotorSpinner.setAdapter(motorAdapter);
+        phiroProMotorSpinner.setSelection(motorEnum.ordinal());
 
-		return prototypeView;
-	}
+        return prototypeView;
+    }
 
-	@Override
-	public Brick clone() {
-		return new PhiroMotorMoveBackwardBrick(motorEnum,
-				getFormulaWithBrickField(BrickField.PHIRO_SPEED).clone());
-	}
+    @Override
+    public Brick clone() {
+        return new PhiroMotorMoveBackwardBrick(motorEnum,
+                getFormulaWithBrickField(BrickField.PHIRO_SPEED).clone());
+    }
 
-	@Override
-	public View getCustomView(Context context, int brickId, BaseAdapter baseAdapter) {
-		return speedSeekbar.getView(context);
-	}
+    @Override
+    public View getCustomView(Context context, int brickId, BaseAdapter baseAdapter) {
+        return speedSeekbar.getView(context);
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_phiro_motor_backward, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
-		setCheckboxView(R.id.brick_phiro_motor_backward_action_checkbox);
+        view = View.inflate(context, R.layout.brick_phiro_motor_backward, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        setCheckboxView(R.id.brick_phiro_motor_backward_action_checkbox);
 
-		editSpeed = (TextView) view.findViewById(R.id.brick_phiro_motor_backward_action_speed_edit_text);
-		getFormulaWithBrickField(BrickField.PHIRO_SPEED).setTextFieldId(R.id.brick_phiro_motor_backward_action_speed_edit_text);
-		getFormulaWithBrickField(BrickField.PHIRO_SPEED).refreshTextField(view);
+        editSpeed = (TextView) view.findViewById(R.id.brick_phiro_motor_backward_action_speed_edit_text);
+        getFormulaWithBrickField(BrickField.PHIRO_SPEED).setTextFieldId(R.id.brick_phiro_motor_backward_action_speed_edit_text);
+        getFormulaWithBrickField(BrickField.PHIRO_SPEED).refreshTextField(view);
 
-		editSpeed.setOnClickListener(this);
+        editSpeed.setOnClickListener(this);
 
-		ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter.createFromResource(context, R.array.brick_phiro_select_motor_spinner,
-				android.R.layout.simple_spinner_item);
-		motorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		Spinner motorSpinner = (Spinner) view.findViewById(R.id.brick_phiro_motor_backward_action_spinner);
+        ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter.createFromResource(context, R.array.brick_phiro_select_motor_spinner,
+                android.R.layout.simple_spinner_item);
+        motorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner motorSpinner = (Spinner) view.findViewById(R.id.brick_phiro_motor_backward_action_spinner);
 
-		motorSpinner.setAdapter(motorAdapter);
-		motorSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+        motorSpinner.setAdapter(motorAdapter);
+        motorSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
-			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
-				motorEnum = Motor.values()[position];
-				motor = motorEnum.name();
-			}
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                motorEnum = Motor.values()[position];
+                motor = motorEnum.name();
+            }
 
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
 
-		motorSpinner.setSelection(motorEnum.ordinal());
+        motorSpinner.setSelection(motorEnum.ordinal());
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		if (isSpeedOnlyANumber()) {
-			FormulaEditorFragment.showCustomFragment(view, this, BrickField.PHIRO_SPEED);
-		} else {
-			FormulaEditorFragment.showFragment(view, this, BrickField.PHIRO_SPEED);
-		}
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        if (isSpeedOnlyANumber()) {
+            FormulaEditorFragment.showCustomFragment(view, this, BrickField.PHIRO_SPEED);
+        } else {
+            FormulaEditorFragment.showFragment(view, this, BrickField.PHIRO_SPEED);
+        }
+    }
 
-	private boolean isSpeedOnlyANumber() {
-		return getFormulaWithBrickField(BrickField.PHIRO_SPEED).getRoot().getElementType()
-				== FormulaElement.ElementType.NUMBER;
-	}
+    private boolean isSpeedOnlyANumber() {
+        return getFormulaWithBrickField(BrickField.PHIRO_SPEED).getRoot().getElementType()
+                == FormulaElement.ElementType.NUMBER;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createPhiroMotorMoveBackwardActionAction(sprite, motorEnum, getFormulaWithBrickField(BrickField.PHIRO_SPEED)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createPhiroMotorMoveBackwardActionAction(sprite, motorEnum, getFormulaWithBrickField(BrickField.PHIRO_SPEED)));
+        return null;
+    }
 }

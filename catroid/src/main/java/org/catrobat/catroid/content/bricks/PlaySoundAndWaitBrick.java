@@ -51,279 +51,279 @@ import org.catrobat.catroid.ui.fragment.SoundFragment.OnSoundInfoListChangedAfte
 import java.util.List;
 
 public class PlaySoundAndWaitBrick extends BrickBaseType implements OnItemSelectedListener,
-		OnSoundInfoListChangedAfterNewListener {
+        OnSoundInfoListChangedAfterNewListener {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private SoundInfo sound;
-	private transient SoundInfo oldSelectedSound;
+    private SoundInfo sound;
+    private transient SoundInfo oldSelectedSound;
 
-	public PlaySoundAndWaitBrick() {
-	}
+    public PlaySoundAndWaitBrick() {
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return NO_RESOURCES;
-	}
+    @Override
+    public int getRequiredResources() {
+        return NO_RESOURCES;
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		PlaySoundAndWaitBrick copyBrick = (PlaySoundAndWaitBrick) clone();
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        PlaySoundAndWaitBrick copyBrick = (PlaySoundAndWaitBrick) clone();
 
-		if (sound != null && sound.isBackpackSoundInfo()) {
-			copyBrick.sound = sound;
-			copyBrick.sound.setBackpackSoundInfo(false);
-			return copyBrick;
-		}
+        if (sound != null && sound.isBackpackSoundInfo()) {
+            copyBrick.sound = sound;
+            copyBrick.sound.setBackpackSoundInfo(false);
+            return copyBrick;
+        }
 
-		for (SoundInfo soundInfo : sprite.getSoundList()) {
-			if (sound != null && soundInfo != null && soundInfo.getAbsolutePath().equals(sound.getAbsolutePath())) {
-				copyBrick.sound = soundInfo;
-				copyBrick.sound.setBackpackSoundInfo(false);
-				break;
-			}
-		}
+        for (SoundInfo soundInfo : sprite.getSoundList()) {
+            if (sound != null && soundInfo != null && soundInfo.getAbsolutePath().equals(sound.getAbsolutePath())) {
+                copyBrick.sound = soundInfo;
+                copyBrick.sound.setBackpackSoundInfo(false);
+                break;
+            }
+        }
 
-		return copyBrick;
-	}
+        return copyBrick;
+    }
 
-	@Override
-	public View getView(final Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(final Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_play_sound_and_wait, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_play_sound_and_wait, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_play_sound_and_wait_checkbox);
-		final Spinner playSoundAndWaitSpinner = (Spinner) view.findViewById(R.id.playsound_spinner);
+        setCheckboxView(R.id.brick_play_sound_and_wait_checkbox);
+        final Spinner playSoundAndWaitSpinner = (Spinner) view.findViewById(R.id.playsound_spinner);
 
-		if (!(checkbox.getVisibility() == View.VISIBLE)) {
-			playSoundAndWaitSpinner.setOnItemSelectedListener(this);
-		}
+        if (!(checkbox.getVisibility() == View.VISIBLE)) {
+            playSoundAndWaitSpinner.setOnItemSelectedListener(this);
+        }
 
-		final ArrayAdapter<SoundInfo> spinnerAdapter = createSoundAdapter(context);
+        final ArrayAdapter<SoundInfo> spinnerAdapter = createSoundAdapter(context);
 
-		SpinnerAdapterWrapper spinnerAdapterWrapper = new SpinnerAdapterWrapper(context, spinnerAdapter);
+        SpinnerAdapterWrapper spinnerAdapterWrapper = new SpinnerAdapterWrapper(context, spinnerAdapter);
 
-		playSoundAndWaitSpinner.setAdapter(spinnerAdapterWrapper);
+        playSoundAndWaitSpinner.setAdapter(spinnerAdapterWrapper);
 
-		setSpinnerSelection(playSoundAndWaitSpinner);
+        setSpinnerSelection(playSoundAndWaitSpinner);
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		View prototypeView = View.inflate(context, R.layout.brick_play_sound_and_wait, null);
+    @Override
+    public View getPrototypeView(Context context) {
+        View prototypeView = View.inflate(context, R.layout.brick_play_sound_and_wait, null);
 
-		Spinner playSoundAndWaitSpinner = (Spinner) prototypeView.findViewById(R.id.playsound_spinner);
+        Spinner playSoundAndWaitSpinner = (Spinner) prototypeView.findViewById(R.id.playsound_spinner);
 
-		SpinnerAdapter playSoundSpinnerAdapter = createSoundAdapter(context);
-		playSoundAndWaitSpinner.setAdapter(playSoundSpinnerAdapter);
-		setSpinnerSelection(playSoundAndWaitSpinner);
+        SpinnerAdapter playSoundSpinnerAdapter = createSoundAdapter(context);
+        playSoundAndWaitSpinner.setAdapter(playSoundSpinnerAdapter);
+        setSpinnerSelection(playSoundAndWaitSpinner);
 
-		return prototypeView;
-	}
+        return prototypeView;
+    }
 
-	private void setSpinnerSelection(Spinner spinner) {
-		List<SoundInfo> soundsList = ProjectManager.getInstance().getCurrentSprite().getSoundList();
+    private void setSpinnerSelection(Spinner spinner) {
+        List<SoundInfo> soundsList = ProjectManager.getInstance().getCurrentSprite().getSoundList();
 
-		if (soundsList.contains(sound)) {
-			oldSelectedSound = sound;
-			spinner.setSelection(soundsList.indexOf(sound) + 1, true);
-		} else {
-			if (spinner.getAdapter() != null && spinner.getAdapter().getCount() > 1) {
-				if (soundsList.indexOf(oldSelectedSound) >= 0) {
-					spinner.setSelection(soundsList
-							.indexOf(oldSelectedSound) + 1, true);
-				} else {
-					spinner.setSelection(1, true);
-				}
-			} else {
-				spinner.setSelection(0, true);
-			}
-		}
-	}
+        if (soundsList.contains(sound)) {
+            oldSelectedSound = sound;
+            spinner.setSelection(soundsList.indexOf(sound) + 1, true);
+        } else {
+            if (spinner.getAdapter() != null && spinner.getAdapter().getCount() > 1) {
+                if (soundsList.indexOf(oldSelectedSound) >= 0) {
+                    spinner.setSelection(soundsList
+                            .indexOf(oldSelectedSound) + 1, true);
+                } else {
+                    spinner.setSelection(1, true);
+                }
+            } else {
+                spinner.setSelection(0, true);
+            }
+        }
+    }
 
-	private ArrayAdapter<SoundInfo> createSoundAdapter(Context context) {
-		ArrayAdapter<SoundInfo> arrayAdapter = new ArrayAdapter<SoundInfo>(context,
-				android.R.layout.simple_spinner_item);
+    private ArrayAdapter<SoundInfo> createSoundAdapter(Context context) {
+        ArrayAdapter<SoundInfo> arrayAdapter = new ArrayAdapter<SoundInfo>(context,
+                android.R.layout.simple_spinner_item);
 
-		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		SoundInfo dummySoundInfo = new SoundInfo();
-		dummySoundInfo.setTitle(context.getString(R.string.new_broadcast_message));
-		arrayAdapter.add(dummySoundInfo);
-		arrayAdapter.addAll(ProjectManager.getInstance().getCurrentSprite().getSoundList());
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        SoundInfo dummySoundInfo = new SoundInfo();
+        dummySoundInfo.setTitle(context.getString(R.string.new_broadcast_message));
+        arrayAdapter.add(dummySoundInfo);
+        arrayAdapter.addAll(ProjectManager.getInstance().getCurrentSprite().getSoundList());
 
-		return arrayAdapter;
-	}
+        return arrayAdapter;
+    }
 
-	@Override
-	public void onItemSelected(AdapterView<?> parent, View arg1, int position, long arg3) {
-		if (position == 0) {
-			sound = null;
-		} else {
-			sound = (SoundInfo) parent.getItemAtPosition(position);
-			oldSelectedSound = sound;
-		}
-	}
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View arg1, int position, long arg3) {
+        if (position == 0) {
+            sound = null;
+        } else {
+            sound = (SoundInfo) parent.getItemAtPosition(position);
+            oldSelectedSound = sound;
+        }
+    }
 
-	@Override
-	public void onNothingSelected(AdapterView<?> arg0) {
-	}
+    @Override
+    public void onNothingSelected(AdapterView<?> arg0) {
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createPlaySoundAction(sprite, sound));
-		sequence.addAction(sprite.getActionFactory().createWaitAction(sprite,
-				new Formula(getDurationOfSoundFile(sprite, sound))));
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createPlaySoundAction(sprite, sound));
+        sequence.addAction(sprite.getActionFactory().createWaitAction(sprite,
+                new Formula(getDurationOfSoundFile(sprite, sound))));
 
-		return null;
-	}
+        return null;
+    }
 
-	private float getDurationOfSoundFile(Sprite sprite, SoundInfo sound) {
-		float duration = 0;
+    private float getDurationOfSoundFile(Sprite sprite, SoundInfo sound) {
+        float duration = 0;
 
-		if (sound != null && sprite.getSoundList().contains(sound) && sound.getAbsolutePath() != null) {
-			duration = (SoundManager.getInstance().getDurationOfSoundFile(sound.getAbsolutePath())) / 1000;
-		}
+        if (sound != null && sprite.getSoundList().contains(sound) && sound.getAbsolutePath() != null) {
+            duration = (SoundManager.getInstance().getDurationOfSoundFile(sound.getAbsolutePath())) / 1000;
+        }
 
-		return duration;
-	}
+        return duration;
+    }
 
-	// for testing purposes:
-	public void setSoundInfo(SoundInfo soundInfo) {
-		this.sound = soundInfo;
-	}
+    // for testing purposes:
+    public void setSoundInfo(SoundInfo soundInfo) {
+        this.sound = soundInfo;
+    }
 
-	public SoundInfo getSound() {
-		return sound;
-	}
+    public SoundInfo getSound() {
+        return sound;
+    }
 
-	private void setOnSoundInfoListChangedAfterNewListener(Context context) {
-		ScriptActivity scriptActivity = (ScriptActivity) context;
-		SoundFragment soundFragment = (SoundFragment) scriptActivity.getFragment(ScriptActivity.FRAGMENT_SOUNDS);
-		if (soundFragment != null) {
-			soundFragment.setOnSoundInfoListChangedAfterNewListener(this);
-		}
-	}
+    private void setOnSoundInfoListChangedAfterNewListener(Context context) {
+        ScriptActivity scriptActivity = (ScriptActivity) context;
+        SoundFragment soundFragment = (SoundFragment) scriptActivity.getFragment(ScriptActivity.FRAGMENT_SOUNDS);
+        if (soundFragment != null) {
+            soundFragment.setOnSoundInfoListChangedAfterNewListener(this);
+        }
+    }
 
-	@Override
-	public Brick clone() {
-		return new PlaySoundAndWaitBrick();
-	}
+    @Override
+    public Brick clone() {
+        return new PlaySoundAndWaitBrick();
+    }
 
-	private class SpinnerAdapterWrapper implements SpinnerAdapter {
+    private class SpinnerAdapterWrapper implements SpinnerAdapter {
 
-		protected Context context;
-		protected ArrayAdapter<SoundInfo> spinnerAdapter;
+        protected Context context;
+        protected ArrayAdapter<SoundInfo> spinnerAdapter;
 
-		private boolean isTouchInDropDownView;
+        private boolean isTouchInDropDownView;
 
-		public SpinnerAdapterWrapper(Context context, ArrayAdapter<SoundInfo> spinnerAdapter) {
-			this.context = context;
-			this.spinnerAdapter = spinnerAdapter;
+        public SpinnerAdapterWrapper(Context context, ArrayAdapter<SoundInfo> spinnerAdapter) {
+            this.context = context;
+            this.spinnerAdapter = spinnerAdapter;
 
-			this.isTouchInDropDownView = false;
-		}
+            this.isTouchInDropDownView = false;
+        }
 
-		@Override
-		public void registerDataSetObserver(DataSetObserver paramDataSetObserver) {
-			spinnerAdapter.registerDataSetObserver(paramDataSetObserver);
-		}
+        @Override
+        public void registerDataSetObserver(DataSetObserver paramDataSetObserver) {
+            spinnerAdapter.registerDataSetObserver(paramDataSetObserver);
+        }
 
-		@Override
-		public void unregisterDataSetObserver(DataSetObserver paramDataSetObserver) {
-			spinnerAdapter.unregisterDataSetObserver(paramDataSetObserver);
-		}
+        @Override
+        public void unregisterDataSetObserver(DataSetObserver paramDataSetObserver) {
+            spinnerAdapter.unregisterDataSetObserver(paramDataSetObserver);
+        }
 
-		@Override
-		public int getCount() {
-			return spinnerAdapter.getCount();
-		}
+        @Override
+        public int getCount() {
+            return spinnerAdapter.getCount();
+        }
 
-		@Override
-		public Object getItem(int paramInt) {
-			return spinnerAdapter.getItem(paramInt);
-		}
+        @Override
+        public Object getItem(int paramInt) {
+            return spinnerAdapter.getItem(paramInt);
+        }
 
-		@Override
-		public long getItemId(int paramInt) {
-			SoundInfo currentSound = spinnerAdapter.getItem(paramInt);
-			if (!currentSound.getTitle().equals(context.getString(R.string.new_broadcast_message))) {
-				oldSelectedSound = currentSound;
-			}
-			return spinnerAdapter.getItemId(paramInt);
-		}
+        @Override
+        public long getItemId(int paramInt) {
+            SoundInfo currentSound = spinnerAdapter.getItem(paramInt);
+            if (!currentSound.getTitle().equals(context.getString(R.string.new_broadcast_message))) {
+                oldSelectedSound = currentSound;
+            }
+            return spinnerAdapter.getItemId(paramInt);
+        }
 
-		@Override
-		public boolean hasStableIds() {
-			return spinnerAdapter.hasStableIds();
-		}
+        @Override
+        public boolean hasStableIds() {
+            return spinnerAdapter.hasStableIds();
+        }
 
-		@Override
-		public View getView(int paramInt, View paramView, ViewGroup paramViewGroup) {
-			if (isTouchInDropDownView) {
-				isTouchInDropDownView = false;
-				if (paramInt == 0) {
-					switchToSoundFragmentFromScriptFragment();
-				}
-			}
-			return spinnerAdapter.getView(paramInt, paramView, paramViewGroup);
-		}
+        @Override
+        public View getView(int paramInt, View paramView, ViewGroup paramViewGroup) {
+            if (isTouchInDropDownView) {
+                isTouchInDropDownView = false;
+                if (paramInt == 0) {
+                    switchToSoundFragmentFromScriptFragment();
+                }
+            }
+            return spinnerAdapter.getView(paramInt, paramView, paramViewGroup);
+        }
 
-		@Override
-		public int getItemViewType(int paramInt) {
-			return spinnerAdapter.getItemViewType(paramInt);
-		}
+        @Override
+        public int getItemViewType(int paramInt) {
+            return spinnerAdapter.getItemViewType(paramInt);
+        }
 
-		@Override
-		public int getViewTypeCount() {
-			return spinnerAdapter.getViewTypeCount();
-		}
+        @Override
+        public int getViewTypeCount() {
+            return spinnerAdapter.getViewTypeCount();
+        }
 
-		@Override
-		public boolean isEmpty() {
-			return spinnerAdapter.isEmpty();
-		}
+        @Override
+        public boolean isEmpty() {
+            return spinnerAdapter.isEmpty();
+        }
 
-		@Override
-		public View getDropDownView(int paramInt, View paramView, ViewGroup paramViewGroup) {
-			View dropDownView = spinnerAdapter.getDropDownView(paramInt, paramView, paramViewGroup);
+        @Override
+        public View getDropDownView(int paramInt, View paramView, ViewGroup paramViewGroup) {
+            View dropDownView = spinnerAdapter.getDropDownView(paramInt, paramView, paramViewGroup);
 
-			dropDownView.setOnTouchListener(new OnTouchListener() {
-				@Override
-				public boolean onTouch(View paramView, MotionEvent paramMotionEvent) {
-					isTouchInDropDownView = true;
-					return false;
-				}
-			});
+            dropDownView.setOnTouchListener(new OnTouchListener() {
+                @Override
+                public boolean onTouch(View paramView, MotionEvent paramMotionEvent) {
+                    isTouchInDropDownView = true;
+                    return false;
+                }
+            });
 
-			return dropDownView;
-		}
+            return dropDownView;
+        }
 
-		private void switchToSoundFragmentFromScriptFragment() {
-			ScriptActivity scriptActivity = ((ScriptActivity) context);
-			scriptActivity.switchToFragmentFromScriptFragment(ScriptActivity.FRAGMENT_SOUNDS);
+        private void switchToSoundFragmentFromScriptFragment() {
+            ScriptActivity scriptActivity = ((ScriptActivity) context);
+            scriptActivity.switchToFragmentFromScriptFragment(ScriptActivity.FRAGMENT_SOUNDS);
 
-			setOnSoundInfoListChangedAfterNewListener(context);
-		}
-	}
+            setOnSoundInfoListChangedAfterNewListener(context);
+        }
+    }
 
-	@Override
-	public void onSoundInfoListChangedAfterNew(SoundInfo soundInfo) {
-		sound = soundInfo;
-		oldSelectedSound = soundInfo;
-	}
+    @Override
+    public void onSoundInfoListChangedAfterNew(SoundInfo soundInfo) {
+        sound = soundInfo;
+        oldSelectedSound = soundInfo;
+    }
 
-	@Override
-	public void storeDataForBackPack(Sprite sprite) {
-		SoundInfo backPackedSoundInfo = SoundController.getInstance().backPackHiddenSound(sound);
-		setSoundInfo(backPackedSoundInfo);
-		if (sprite != null && !sprite.getSoundList().contains(backPackedSoundInfo)) {
-			sprite.getSoundList().add(backPackedSoundInfo);
-		}
-	}
+    @Override
+    public void storeDataForBackPack(Sprite sprite) {
+        SoundInfo backPackedSoundInfo = SoundController.getInstance().backPackHiddenSound(sound);
+        setSoundInfo(backPackedSoundInfo);
+        if (sprite != null && !sprite.getSoundList().contains(backPackedSoundInfo)) {
+            sprite.getSoundList().add(backPackedSoundInfo);
+        }
+    }
 }

@@ -29,20 +29,20 @@ import java.util.Arrays;
 
 public class InfoMessage extends BaseMessage {
 
-	private final Job[] jobList;
-	private final float catrobatLanguageVersion;
+    private final Job[] jobList;
+    private final float catrobatLanguageVersion;
 
-	public InfoMessage(final float catrobatLanguageVersion, final Job[] jobList) {
-		super();
-		this.catrobatLanguageVersion = catrobatLanguageVersion;
-		this.jobList = (jobList != null) ? Arrays.copyOf(jobList, jobList.length) : new Job[0];
-	}
+    public InfoMessage(final float catrobatLanguageVersion, final Job[] jobList) {
+        super();
+        this.catrobatLanguageVersion = catrobatLanguageVersion;
+        this.jobList = (jobList != null) ? Arrays.copyOf(jobList, jobList.length) : new Job[0];
+    }
 
-	public float getCatrobatLanguageVersion() {
-		return catrobatLanguageVersion;
-	}
+    public float getCatrobatLanguageVersion() {
+        return catrobatLanguageVersion;
+    }
 
-	public Job[] getJobList() {
-		return Arrays.copyOf(jobList, jobList.length);
-	}
+    public Job[] getJobList() {
+        return Arrays.copyOf(jobList, jobList.length);
+    }
 }

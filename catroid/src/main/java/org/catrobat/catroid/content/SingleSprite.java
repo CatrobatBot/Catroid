@@ -23,13 +23,13 @@
 package org.catrobat.catroid.content;
 
 public class SingleSprite extends Sprite {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public SingleSprite(String name) {
-		super(name);
-	}
+    public SingleSprite(String name) {
+        super(name);
+    }
 
-	public SingleSprite() {
-		super();
-	}
+    public SingleSprite() {
+        super();
+    }
 }

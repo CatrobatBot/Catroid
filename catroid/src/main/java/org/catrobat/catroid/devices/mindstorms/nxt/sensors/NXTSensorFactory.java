@@ -27,32 +27,32 @@ import org.catrobat.catroid.devices.mindstorms.MindstormsException;
 
 public class NXTSensorFactory {
 
-	private MindstormsConnection connection;
+    private MindstormsConnection connection;
 
-	public NXTSensorFactory(MindstormsConnection connection) {
-		this.connection = connection;
-	}
+    public NXTSensorFactory(MindstormsConnection connection) {
+        this.connection = connection;
+    }
 
-	public NXTSensor create(NXTSensor.Sensor sensorType, int port) {
+    public NXTSensor create(NXTSensor.Sensor sensorType, int port) {
 
-		switch (sensorType) {
-			case TOUCH:
-				return new NXTTouchSensor(port, connection);
+        switch (sensorType) {
+            case TOUCH:
+                return new NXTTouchSensor(port, connection);
 
-			case SOUND:
-				return new NXTSoundSensor(port, connection);
+            case SOUND:
+                return new NXTSoundSensor(port, connection);
 
-			case LIGHT_INACTIVE:
-				return new NXTLightSensor(port, connection);
+            case LIGHT_INACTIVE:
+                return new NXTLightSensor(port, connection);
 
-			case LIGHT_ACTIVE:
-				return new NXTLightSensorActive(port, connection);
+            case LIGHT_ACTIVE:
+                return new NXTLightSensorActive(port, connection);
 
-			case ULTRASONIC:
-				return new NXTI2CUltraSonicSensor(connection);
+            case ULTRASONIC:
+                return new NXTI2CUltraSonicSensor(connection);
 
-			default:
-				throw new MindstormsException("No valid sensor found!"); // Should never occur
-		}
-	}
+            default:
+                throw new MindstormsException("No valid sensor found!"); // Should never occur
+        }
+    }
 }

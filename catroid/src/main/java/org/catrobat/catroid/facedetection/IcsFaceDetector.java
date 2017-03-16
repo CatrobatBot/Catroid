@@ -32,63 +32,63 @@ import org.catrobat.catroid.camera.CameraManager;
 
 public class IcsFaceDetector extends FaceDetector implements FaceDetectionListener {
 
-	private boolean running = false;
+    private boolean running = false;
 
-	public IcsFaceDetector() {
-	}
+    public IcsFaceDetector() {
+    }
 
-	@Override
-	public boolean startFaceDetection() {
-		if (running) {
-			return true;
-		}
+    @Override
+    public boolean startFaceDetection() {
+        if (running) {
+            return true;
+        }
 
-		if (!CameraManager.getInstance().isReady()) {
-			CameraManager.getInstance().startCamera();
-		}
+        if (!CameraManager.getInstance().isReady()) {
+            CameraManager.getInstance().startCamera();
+        }
 
-		Camera camera = CameraManager.getInstance().getCurrentCamera();
-		if (camera == null) {
-			return false;
-		}
-		camera.setFaceDetectionListener(this);
-		camera.startFaceDetection();
+        Camera camera = CameraManager.getInstance().getCurrentCamera();
+        if (camera == null) {
+            return false;
+        }
+        camera.setFaceDetectionListener(this);
+        camera.startFaceDetection();
 
-		return running = true;
-	}
+        return running = true;
+    }
 
-	@Override
-	public void stopFaceDetection() {
-		if (!running) {
-			return;
-		}
-		running = false;
-		CameraManager.getInstance().getCurrentCamera().stopFaceDetection();
-	}
+    @Override
+    public void stopFaceDetection() {
+        if (!running) {
+            return;
+        }
+        running = false;
+        CameraManager.getInstance().getCurrentCamera().stopFaceDetection();
+    }
 
-	@Override
-	public void onFaceDetection(Face[] faces, Camera camera) {
-		boolean detected = faces.length > 0;
-		onFaceDetected(detected);
-		if (detected) {
-			int maxConfidence = faces[0].score;
-			int bestFaceIndex = 0;
-			for (int i = 1; i < faces.length; i++) {
-				if (faces[i].score > maxConfidence) {
-					maxConfidence = faces[i].score;
-					bestFaceIndex = i;
-				}
-			}
-			Face bestFace = faces[bestFaceIndex];
-			Rect faceBounds = bestFace.rect;
-			Point centerPoint = new Point(faceBounds.centerX(), faceBounds.centerY());
-			Point portraitCenterPoint = new Point(centerPoint.y, centerPoint.x);
-			Point relationSize = getRelationForFacePosition();
-			Point relativePoint = new Point(portraitCenterPoint.x * relationSize.x / 2000, portraitCenterPoint.y
-					* relationSize.y / 2000);
-			int faceSize = (faceBounds.right - faceBounds.left) / 10;
-			faceSize = faceSize > 100 ? 100 : faceSize;
-			onFaceDetected(relativePoint, faceSize);
-		}
-	}
+    @Override
+    public void onFaceDetection(Face[] faces, Camera camera) {
+        boolean detected = faces.length > 0;
+        onFaceDetected(detected);
+        if (detected) {
+            int maxConfidence = faces[0].score;
+            int bestFaceIndex = 0;
+            for (int i = 1; i < faces.length; i++) {
+                if (faces[i].score > maxConfidence) {
+                    maxConfidence = faces[i].score;
+                    bestFaceIndex = i;
+                }
+            }
+            Face bestFace = faces[bestFaceIndex];
+            Rect faceBounds = bestFace.rect;
+            Point centerPoint = new Point(faceBounds.centerX(), faceBounds.centerY());
+            Point portraitCenterPoint = new Point(centerPoint.y, centerPoint.x);
+            Point relationSize = getRelationForFacePosition();
+            Point relativePoint = new Point(portraitCenterPoint.x * relationSize.x / 2000, portraitCenterPoint.y
+                    * relationSize.y / 2000);
+            int faceSize = (faceBounds.right - faceBounds.left) / 10;
+            faceSize = faceSize > 100 ? 100 : faceSize;
+            onFaceDetected(relativePoint, faceSize);
+        }
+    }
 }

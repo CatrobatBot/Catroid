@@ -30,19 +30,19 @@ import org.mockito.Mockito;
 
 public class DroneDemoTest extends InstrumentationTestCase {
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		//Workaround for Android 4.4 Devices
-		//https://code.google.com/p/dexmaker/issues/detail?id=2
-		System.setProperty("dexmaker.dexcache", getInstrumentation().getTargetContext().getCacheDir().getPath());
-	}
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        //Workaround for Android 4.4 Devices
+        //https://code.google.com/p/dexmaker/issues/detail?id=2
+        System.setProperty("dexmaker.dexcache", getInstrumentation().getTargetContext().getCacheDir().getPath());
+    }
 
-	public void testDemo() {
-		DroneProxy droneMock = Mockito.mock(DroneProxy.class);
+    public void testDemo() {
+        DroneProxy droneMock = Mockito.mock(DroneProxy.class);
 
-		droneMock.doFlip();
-		// was the method called once?
-		Mockito.verify(droneMock, Mockito.atLeast(1)).doFlip();
-	}
+        droneMock.doFlip();
+        // was the method called once?
+        Mockito.verify(droneMock, Mockito.atLeast(1)).doFlip();
+    }
 }

@@ -47,189 +47,189 @@ import org.catrobat.catroid.uitest.util.UiTestUtils;
 import java.io.File;
 
 public class SingleExecutionWhenBrickTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
-	private static final int SCREEN_WIDTH = 480;
-	private static final int SCREEN_HEIGHT = 800;
+    private static final int SCREEN_WIDTH = 480;
+    private static final int SCREEN_HEIGHT = 800;
 
-	private Project projectWhenBrick;
-	Sprite yellowSprite;
-	Sprite greenSprite;
-	WhenScript yellowWhenScript;
-	BroadcastScript greenBroadcastScript;
-	String broadcastMessage = "broadcastMessage";
+    private Project projectWhenBrick;
+    Sprite yellowSprite;
+    Sprite greenSprite;
+    WhenScript yellowWhenScript;
+    BroadcastScript greenBroadcastScript;
+    String broadcastMessage = "broadcastMessage";
 
-	public SingleExecutionWhenBrickTest() {
-		super(MainMenuActivity.class);
-	}
+    public SingleExecutionWhenBrickTest() {
+        super(MainMenuActivity.class);
+    }
 
-	public void testWaitBrickWhenTapped() {
+    public void testWaitBrickWhenTapped() {
 
-		createProjectWhenBrick(SCREEN_HEIGHT, SCREEN_WIDTH);
-		UiTestUtils.prepareStageForTest();
-		UiTestUtils.getIntoSpritesFromMainMenu(solo);
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(500);
+        createProjectWhenBrick(SCREEN_HEIGHT, SCREEN_WIDTH);
+        UiTestUtils.prepareStageForTest();
+        UiTestUtils.getIntoSpritesFromMainMenu(solo);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(500);
 
-		for (int i = 1; i <= 10; ++i) {
-			solo.sleep(100);
-			assertEquals("Look has wrong AlphaValue.", 0f,
-					yellowSprite.look.getTransparencyInUserInterfaceDimensionUnit());
-			solo.clickOnScreen((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2));
-		}
-		solo.sleep(100);
-		assertEquals("Look has wrong AlphaValue.", 0f, yellowSprite.look.getTransparencyInUserInterfaceDimensionUnit());
-		solo.sleep(2000);
-		assertEquals("Look has wrong AlphaValue.", 50f, yellowSprite.look.getTransparencyInUserInterfaceDimensionUnit());
-	}
+        for (int i = 1; i <= 10; ++i) {
+            solo.sleep(100);
+            assertEquals("Look has wrong AlphaValue.", 0f,
+                    yellowSprite.look.getTransparencyInUserInterfaceDimensionUnit());
+            solo.clickOnScreen((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2));
+        }
+        solo.sleep(100);
+        assertEquals("Look has wrong AlphaValue.", 0f, yellowSprite.look.getTransparencyInUserInterfaceDimensionUnit());
+        solo.sleep(2000);
+        assertEquals("Look has wrong AlphaValue.", 50f, yellowSprite.look.getTransparencyInUserInterfaceDimensionUnit());
+    }
 
-	public void testWaitBrickBroadcast() {
+    public void testWaitBrickBroadcast() {
 
-		createProjectWhenBrick(SCREEN_HEIGHT, SCREEN_WIDTH);
-		UiTestUtils.prepareStageForTest();
-		UiTestUtils.getIntoSpritesFromMainMenu(solo);
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(500);
+        createProjectWhenBrick(SCREEN_HEIGHT, SCREEN_WIDTH);
+        UiTestUtils.prepareStageForTest();
+        UiTestUtils.getIntoSpritesFromMainMenu(solo);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(500);
 
-		for (int i = 1; i <= 10; ++i) {
-			solo.sleep(1000);
-			assertEquals("Look has wrong AlphaValue.", 0f,
-					greenSprite.look.getTransparencyInUserInterfaceDimensionUnit());
-			solo.clickOnScreen((SCREEN_WIDTH / 2) + 100, (SCREEN_HEIGHT / 2) - 200);
-		}
-		solo.sleep(1000);
-		assertEquals("Look has wrong AlphaValue.", 0f, greenSprite.look.getTransparencyInUserInterfaceDimensionUnit());
-		solo.sleep(2000);
-		assertEquals("Look has wrong AlphaValue.", 100f, greenSprite.look.getTransparencyInUserInterfaceDimensionUnit());
-	}
+        for (int i = 1; i <= 10; ++i) {
+            solo.sleep(1000);
+            assertEquals("Look has wrong AlphaValue.", 0f,
+                    greenSprite.look.getTransparencyInUserInterfaceDimensionUnit());
+            solo.clickOnScreen((SCREEN_WIDTH / 2) + 100, (SCREEN_HEIGHT / 2) - 200);
+        }
+        solo.sleep(1000);
+        assertEquals("Look has wrong AlphaValue.", 0f, greenSprite.look.getTransparencyInUserInterfaceDimensionUnit());
+        solo.sleep(2000);
+        assertEquals("Look has wrong AlphaValue.", 100f, greenSprite.look.getTransparencyInUserInterfaceDimensionUnit());
+    }
 
-	public void testWaitBrickWhenStreched() {
+    public void testWaitBrickWhenStreched() {
 
-		createProjectWhenBrick(SCREEN_WIDTH, SCREEN_WIDTH);
-		ScreenValues.SCREEN_HEIGHT = SCREEN_HEIGHT;
-		UiTestUtils.prepareStageForTest();
-		UiTestUtils.getIntoSpritesFromMainMenu(solo);
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(500);
+        createProjectWhenBrick(SCREEN_WIDTH, SCREEN_WIDTH);
+        ScreenValues.SCREEN_HEIGHT = SCREEN_HEIGHT;
+        UiTestUtils.prepareStageForTest();
+        UiTestUtils.getIntoSpritesFromMainMenu(solo);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(500);
 
-		for (int i = 1; i <= 10; ++i) {
-			solo.sleep(1000);
-			assertEquals("Look has wrong AlphaValue.", 0f,
-					greenSprite.look.getTransparencyInUserInterfaceDimensionUnit());
-			solo.clickOnScreen((SCREEN_WIDTH / 2) + 100, (SCREEN_HEIGHT / 2) - 390); //188
-		}
-		solo.sleep(1000);
-		assertEquals("Look has wrong AlphaValue.", 0f, greenSprite.look.getTransparencyInUserInterfaceDimensionUnit());
-		solo.sleep(2000);
-		assertEquals("Look has wrong AlphaValue.", 100f, greenSprite.look.getTransparencyInUserInterfaceDimensionUnit());
-	}
+        for (int i = 1; i <= 10; ++i) {
+            solo.sleep(1000);
+            assertEquals("Look has wrong AlphaValue.", 0f,
+                    greenSprite.look.getTransparencyInUserInterfaceDimensionUnit());
+            solo.clickOnScreen((SCREEN_WIDTH / 2) + 100, (SCREEN_HEIGHT / 2) - 390); //188
+        }
+        solo.sleep(1000);
+        assertEquals("Look has wrong AlphaValue.", 0f, greenSprite.look.getTransparencyInUserInterfaceDimensionUnit());
+        solo.sleep(2000);
+        assertEquals("Look has wrong AlphaValue.", 100f, greenSprite.look.getTransparencyInUserInterfaceDimensionUnit());
+    }
 
-	private void createProjectWhenBrick(int screenHeight, int screenWidth) {
-		ScreenValues.SCREEN_HEIGHT = screenHeight;
-		ScreenValues.SCREEN_WIDTH = screenWidth;
+    private void createProjectWhenBrick(int screenHeight, int screenWidth) {
+        ScreenValues.SCREEN_HEIGHT = screenHeight;
+        ScreenValues.SCREEN_WIDTH = screenWidth;
 
-		projectWhenBrick = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        projectWhenBrick = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
 
-		// yellow Sprite
-		yellowSprite = new SingleSprite("yellowSprite");
+        // yellow Sprite
+        yellowSprite = new SingleSprite("yellowSprite");
 
-		StartScript yellowStartScript = new StartScript();
-		SetLookBrick yellowLookBrick = new SetLookBrick();
-		SetSizeToBrick yellowSetSizeToBrick = new SetSizeToBrick(200d);
-		LookData yellowLookData = new LookData();
-		String yellowImageName = "yellow_image.bmp";
-		yellowLookData.setLookName(yellowImageName);
-		yellowSprite.getLookDataList().add(yellowLookData);
-		yellowLookBrick.setLook(yellowLookData);
-		yellowStartScript.addBrick(yellowLookBrick);
-		yellowStartScript.addBrick(yellowSetSizeToBrick);
-		yellowSprite.addScript(yellowStartScript);
+        StartScript yellowStartScript = new StartScript();
+        SetLookBrick yellowLookBrick = new SetLookBrick();
+        SetSizeToBrick yellowSetSizeToBrick = new SetSizeToBrick(200d);
+        LookData yellowLookData = new LookData();
+        String yellowImageName = "yellow_image.bmp";
+        yellowLookData.setLookName(yellowImageName);
+        yellowSprite.getLookDataList().add(yellowLookData);
+        yellowLookBrick.setLook(yellowLookData);
+        yellowStartScript.addBrick(yellowLookBrick);
+        yellowStartScript.addBrick(yellowSetSizeToBrick);
+        yellowSprite.addScript(yellowStartScript);
 
-		yellowWhenScript = new WhenScript();
-		WaitBrick yellowWaitBrick = new WaitBrick(2000);
-		SetTransparencyBrick yellowSetTransparencyBrick = new SetTransparencyBrick(50d);
-		yellowWhenScript.addBrick(yellowWaitBrick);
-		yellowWhenScript.addBrick(yellowSetTransparencyBrick);
-		yellowSprite.addScript(yellowWhenScript);
+        yellowWhenScript = new WhenScript();
+        WaitBrick yellowWaitBrick = new WaitBrick(2000);
+        SetTransparencyBrick yellowSetTransparencyBrick = new SetTransparencyBrick(50d);
+        yellowWhenScript.addBrick(yellowWaitBrick);
+        yellowWhenScript.addBrick(yellowSetTransparencyBrick);
+        yellowSprite.addScript(yellowWhenScript);
 
-		// blue Sprite
-		Sprite blueSprite = new SingleSprite("blueSprite");
-		StartScript blueStartScript = new StartScript();
-		SetLookBrick blueLookBrick = new SetLookBrick();
-		SetSizeToBrick blueSetSizeToBrick = new SetSizeToBrick(200d);
-		BroadcastWaitBrick broadcastWaitBrick = new BroadcastWaitBrick(broadcastMessage);
-		LookData blueLookData = new LookData();
-		String blueImageName = "blue_image.bmp";
+        // blue Sprite
+        Sprite blueSprite = new SingleSprite("blueSprite");
+        StartScript blueStartScript = new StartScript();
+        SetLookBrick blueLookBrick = new SetLookBrick();
+        SetSizeToBrick blueSetSizeToBrick = new SetSizeToBrick(200d);
+        BroadcastWaitBrick broadcastWaitBrick = new BroadcastWaitBrick(broadcastMessage);
+        LookData blueLookData = new LookData();
+        String blueImageName = "blue_image.bmp";
 
-		blueLookData.setLookName(blueImageName);
+        blueLookData.setLookName(blueImageName);
 
-		blueSprite.getLookDataList().add(blueLookData);
+        blueSprite.getLookDataList().add(blueLookData);
 
-		blueLookBrick.setLook(blueLookData);
-		blueStartScript.addBrick(blueLookBrick);
-		blueStartScript.addBrick(blueSetSizeToBrick);
-		blueStartScript.addBrick(new PlaceAtBrick(100, 200));
+        blueLookBrick.setLook(blueLookData);
+        blueStartScript.addBrick(blueLookBrick);
+        blueStartScript.addBrick(blueSetSizeToBrick);
+        blueStartScript.addBrick(new PlaceAtBrick(100, 200));
 
-		blueSprite.addScript(blueStartScript);
+        blueSprite.addScript(blueStartScript);
 
-		WhenScript blueWhenScript = new WhenScript();
-		blueWhenScript.addBrick(broadcastWaitBrick);
-		blueSprite.addScript(blueWhenScript);
+        WhenScript blueWhenScript = new WhenScript();
+        blueWhenScript.addBrick(broadcastWaitBrick);
+        blueSprite.addScript(blueWhenScript);
 
-		// green Sprite
-		greenSprite = new SingleSprite("greenSprite");
-		StartScript greenStartScript = new StartScript();
-		SetLookBrick greenLookBrick = new SetLookBrick();
-		SetSizeToBrick greenSetSizeToBrick = new SetSizeToBrick(200d);
-		LookData greenLookData = new LookData();
-		String greenImageName = "green_image.bmp";
+        // green Sprite
+        greenSprite = new SingleSprite("greenSprite");
+        StartScript greenStartScript = new StartScript();
+        SetLookBrick greenLookBrick = new SetLookBrick();
+        SetSizeToBrick greenSetSizeToBrick = new SetSizeToBrick(200d);
+        LookData greenLookData = new LookData();
+        String greenImageName = "green_image.bmp";
 
-		greenLookData.setLookName(greenImageName);
+        greenLookData.setLookName(greenImageName);
 
-		greenSprite.getLookDataList().add(greenLookData);
+        greenSprite.getLookDataList().add(greenLookData);
 
-		greenLookBrick.setLook(greenLookData);
-		greenStartScript.addBrick(greenLookBrick);
-		greenStartScript.addBrick(greenSetSizeToBrick);
-		greenStartScript.addBrick(new PlaceAtBrick(-100, 200));
+        greenLookBrick.setLook(greenLookData);
+        greenStartScript.addBrick(greenLookBrick);
+        greenStartScript.addBrick(greenSetSizeToBrick);
+        greenStartScript.addBrick(new PlaceAtBrick(-100, 200));
 
-		greenSprite.addScript(greenStartScript);
+        greenSprite.addScript(greenStartScript);
 
-		greenBroadcastScript = new BroadcastScript(broadcastMessage);
-		WaitBrick waitBrick = new WaitBrick(2000);
+        greenBroadcastScript = new BroadcastScript(broadcastMessage);
+        WaitBrick waitBrick = new WaitBrick(2000);
 
-		SetTransparencyBrick greenSetTransparencyBrick2 = new SetTransparencyBrick(100d);
-		greenBroadcastScript.addBrick(waitBrick);
-		greenBroadcastScript.addBrick(greenSetTransparencyBrick2);
-		greenSprite.addScript(greenBroadcastScript);
+        SetTransparencyBrick greenSetTransparencyBrick2 = new SetTransparencyBrick(100d);
+        greenBroadcastScript.addBrick(waitBrick);
+        greenBroadcastScript.addBrick(greenSetTransparencyBrick2);
+        greenSprite.addScript(greenBroadcastScript);
 
-		projectWhenBrick.getDefaultScene().addSprite(yellowSprite);
+        projectWhenBrick.getDefaultScene().addSprite(yellowSprite);
 
-		projectWhenBrick.getDefaultScene().addSprite(blueSprite);
+        projectWhenBrick.getDefaultScene().addSprite(blueSprite);
 
-		projectWhenBrick.getDefaultScene().addSprite(greenSprite);
+        projectWhenBrick.getDefaultScene().addSprite(greenSprite);
 
-		StorageHandler.getInstance().saveProject(projectWhenBrick);
+        StorageHandler.getInstance().saveProject(projectWhenBrick);
 
-		File yellowImageFile = UiTestUtils.saveFileToProject(projectWhenBrick.getName(), projectWhenBrick.getDefaultScene().getName(), yellowImageName,
-				org.catrobat.catroid.test.R.raw.yellow_image, getInstrumentation().getContext(),
-				UiTestUtils.FileTypes.IMAGE);
+        File yellowImageFile = UiTestUtils.saveFileToProject(projectWhenBrick.getName(), projectWhenBrick.getDefaultScene().getName(), yellowImageName,
+                org.catrobat.catroid.test.R.raw.yellow_image, getInstrumentation().getContext(),
+                UiTestUtils.FileTypes.IMAGE);
 
-		File blueImageFile = UiTestUtils.saveFileToProject(projectWhenBrick.getName(), projectWhenBrick.getDefaultScene().getName(), blueImageName,
-				org.catrobat.catroid.test.R.raw.blue_image, getInstrumentation().getContext(),
-				UiTestUtils.FileTypes.IMAGE);
+        File blueImageFile = UiTestUtils.saveFileToProject(projectWhenBrick.getName(), projectWhenBrick.getDefaultScene().getName(), blueImageName,
+                org.catrobat.catroid.test.R.raw.blue_image, getInstrumentation().getContext(),
+                UiTestUtils.FileTypes.IMAGE);
 
-		File greenImageFile = UiTestUtils.saveFileToProject(projectWhenBrick.getName(), projectWhenBrick.getDefaultScene().getName(), greenImageName,
-				org.catrobat.catroid.test.R.raw.green_image, getInstrumentation().getContext(),
-				UiTestUtils.FileTypes.IMAGE);
+        File greenImageFile = UiTestUtils.saveFileToProject(projectWhenBrick.getName(), projectWhenBrick.getDefaultScene().getName(), greenImageName,
+                org.catrobat.catroid.test.R.raw.green_image, getInstrumentation().getContext(),
+                UiTestUtils.FileTypes.IMAGE);
 
-		yellowLookData.setLookFilename(yellowImageFile.getName());
+        yellowLookData.setLookFilename(yellowImageFile.getName());
 
-		blueLookData.setLookFilename(blueImageFile.getName());
+        blueLookData.setLookFilename(blueImageFile.getName());
 
-		greenLookData.setLookFilename(greenImageFile.getName());
-		StorageHandler.getInstance().saveProject(projectWhenBrick);
-		ProjectManager.getInstance().setProject(projectWhenBrick);
-	}
+        greenLookData.setLookFilename(greenImageFile.getName());
+        StorageHandler.getInstance().saveProject(projectWhenBrick);
+        ProjectManager.getInstance().setProject(projectWhenBrick);
+    }
 }

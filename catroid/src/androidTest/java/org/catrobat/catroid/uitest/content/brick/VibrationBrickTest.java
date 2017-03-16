@@ -32,36 +32,36 @@ import org.catrobat.catroid.uitest.util.BaseActivityInstrumentationTestCase;
 
 public class VibrationBrickTest extends BaseActivityInstrumentationTestCase<ScriptActivity> {
 
-	private static final String TAG = VibrationBrickTest.class.getSimpleName();
+    private static final String TAG = VibrationBrickTest.class.getSimpleName();
 
-	//private static final int WLAN_DELAY_MS = 500;
+    //private static final int WLAN_DELAY_MS = 500;
 
-	//private VibrationBrick vibrationBrick5Seconds;
-	//private VibrationBrick vibrationBrick15Seconds;
-	//private Project project;
+    //private VibrationBrick vibrationBrick5Seconds;
+    //private VibrationBrick vibrationBrick15Seconds;
+    //private Project project;
 
-	public VibrationBrickTest() {
-		super(ScriptActivity.class);
-	}
+    public VibrationBrickTest() {
+        super(ScriptActivity.class);
+    }
 
-	@Override
-	protected void setUp() throws Exception {
+    @Override
+    protected void setUp() throws Exception {
 	/*	createProject();
 		SensorTestServerConnection.connectToArduinoServer();
 		setActivityInitialTouchMode(false);
 		SensorTestServerConnection.closeConnection();
 		super.setUp();*/
-	}
+    }
 
-	@Override
-	protected void tearDown() throws Exception {
+    @Override
+    protected void tearDown() throws Exception {
 	/*	SensorTestServerConnection.closeConnection();
 		setActivityInitialTouchMode(true);
 		super.tearDown();*/
-	}
+    }
 
-	@Device
-	public void testVibrationBrick() {
+    @Device
+    public void testVibrationBrick() {
 //		SensorTestServerConnection.calibrateVibrationSensor();
 //
 //		ListView dragDropListView = UiTestUtils.getScriptListView(solo);
@@ -121,9 +121,9 @@ public class VibrationBrickTest extends BaseActivityInstrumentationTestCase<Scri
 //
 //		Log.d(TAG, "test finished");
 
-		Assert.assertTrue("This is only here, because device vibrates to weak", true);
-		Log.d(TAG, "testLedBrick() finished");
-	}
+        Assert.assertTrue("This is only here, because device vibrates to weak", true);
+        Log.d(TAG, "testLedBrick() finished");
+    }
 
 /*	private void createProject () {
 		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);

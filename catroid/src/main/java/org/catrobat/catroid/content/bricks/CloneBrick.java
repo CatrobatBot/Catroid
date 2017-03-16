@@ -41,114 +41,114 @@ import java.util.List;
 
 public class CloneBrick extends BrickBaseType {
 
-	private static final long serialVersionUID = 1L;
-	private Sprite objectToClone;
+    private static final long serialVersionUID = 1L;
+    private Sprite objectToClone;
 
-	public CloneBrick(Sprite objectToClone) {
-		this.objectToClone = objectToClone;
-	}
+    public CloneBrick(Sprite objectToClone) {
+        this.objectToClone = objectToClone;
+    }
 
-	public CloneBrick() {
-	}
+    public CloneBrick() {
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		CloneBrick copyBrick = (CloneBrick) clone();
-		return copyBrick;
-	}
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        CloneBrick copyBrick = (CloneBrick) clone();
+        return copyBrick;
+    }
 
-	@Override
-	public View getView(final Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(final Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_clone, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_clone, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_clone_checkbox);
-		setupValueSpinner(context);
-		return view;
-	}
+        setCheckboxView(R.id.brick_clone_checkbox);
+        setupValueSpinner(context);
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		View view = View.inflate(context, R.layout.brick_clone, null);
-		Spinner cloneSpinner = (Spinner) view.findViewById(R.id.brick_clone_spinner);
+    @Override
+    public View getPrototypeView(Context context) {
+        View view = View.inflate(context, R.layout.brick_clone, null);
+        Spinner cloneSpinner = (Spinner) view.findViewById(R.id.brick_clone_spinner);
 
-		cloneSpinner.setAdapter(getSpinnerArrayAdapter(context));
+        cloneSpinner.setAdapter(getSpinnerArrayAdapter(context));
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public Brick clone() {
-		return new CloneBrick(objectToClone);
-	}
+    @Override
+    public Brick clone() {
+        return new CloneBrick(objectToClone);
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite thisObject, SequenceAction sequence) {
-		Sprite s = (objectToClone != null) ? objectToClone : thisObject;
-		sequence.addAction(thisObject.getActionFactory().createCloneAction(s));
-		return Collections.emptyList();
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite thisObject, SequenceAction sequence) {
+        Sprite s = (objectToClone != null) ? objectToClone : thisObject;
+        sequence.addAction(thisObject.getActionFactory().createCloneAction(s));
+        return Collections.emptyList();
+    }
 
-	@Override
-	public void storeDataForBackPack(Sprite sprite) {
-		if (objectToClone == null) {
-			return;
-		}
+    @Override
+    public void storeDataForBackPack(Sprite sprite) {
+        if (objectToClone == null) {
+            return;
+        }
 
-		Sprite spriteToRestore = ProjectManager.getInstance().getCurrentSprite();
-		Sprite backPackedSprite = BackPackSpriteController.getInstance().backpackHiddenSprite(objectToClone);
-		objectToClone = backPackedSprite;
-		ProjectManager.getInstance().setCurrentSprite(spriteToRestore);
-	}
+        Sprite spriteToRestore = ProjectManager.getInstance().getCurrentSprite();
+        Sprite backPackedSprite = BackPackSpriteController.getInstance().backpackHiddenSprite(objectToClone);
+        objectToClone = backPackedSprite;
+        ProjectManager.getInstance().setCurrentSprite(spriteToRestore);
+    }
 
-	private void setupValueSpinner(final Context context) {
-		final Spinner valueSpinner = (Spinner) view.findViewById(R.id.brick_clone_spinner);
+    private void setupValueSpinner(final Context context) {
+        final Spinner valueSpinner = (Spinner) view.findViewById(R.id.brick_clone_spinner);
 
-		final List<Sprite> spriteList = ProjectManager.getInstance().getCurrentScene()
-				.getSpriteList();
+        final List<Sprite> spriteList = ProjectManager.getInstance().getCurrentScene()
+                .getSpriteList();
 
-		ArrayAdapter<String> valueAdapter = getSpinnerArrayAdapter(context);
-		valueSpinner.setAdapter(valueAdapter);
-		valueSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				String selectedObject = valueSpinner.getSelectedItem().toString();
+        ArrayAdapter<String> valueAdapter = getSpinnerArrayAdapter(context);
+        valueSpinner.setAdapter(valueAdapter);
+        valueSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedObject = valueSpinner.getSelectedItem().toString();
 
-				objectToClone = null;
-				for (Sprite sprite : spriteList) {
-					if (sprite.getName().equals(selectedObject)) {
-						objectToClone = sprite;
-						break;
-					}
-				}
-			}
+                objectToClone = null;
+                for (Sprite sprite : spriteList) {
+                    if (sprite.getName().equals(selectedObject)) {
+                        objectToClone = sprite;
+                        break;
+                    }
+                }
+            }
 
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-			}
-		});
-		valueSpinner.setSelection(objectToClone != null ? valueAdapter.getPosition(objectToClone.getName()) : 0, true);
-	}
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+        valueSpinner.setSelection(objectToClone != null ? valueAdapter.getPosition(objectToClone.getName()) : 0, true);
+    }
 
-	private ArrayAdapter<String> getSpinnerArrayAdapter(Context context) {
-		ArrayAdapter<String> messageAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item);
-		messageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		messageAdapter.add(context.getString(R.string.brick_clone_this));
+    private ArrayAdapter<String> getSpinnerArrayAdapter(Context context) {
+        ArrayAdapter<String> messageAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item);
+        messageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        messageAdapter.add(context.getString(R.string.brick_clone_this));
 
-		final List<Sprite> spriteList = ProjectManager.getInstance().getCurrentScene()
-				.getSpriteList();
+        final List<Sprite> spriteList = ProjectManager.getInstance().getCurrentScene()
+                .getSpriteList();
 
-		for (Sprite sprite : spriteList) {
-			if (sprite.getName().equals(context.getString(R.string.background))) {
-				continue;
-			}
-			messageAdapter.add(sprite.getName());
-		}
+        for (Sprite sprite : spriteList) {
+            if (sprite.getName().equals(context.getString(R.string.background))) {
+                continue;
+            }
+            messageAdapter.add(sprite.getName());
+        }
 
-		return messageAdapter;
-	}
+        return messageAdapter;
+    }
 }

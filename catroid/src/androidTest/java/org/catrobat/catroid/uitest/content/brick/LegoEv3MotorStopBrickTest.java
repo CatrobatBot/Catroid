@@ -42,57 +42,57 @@ import java.util.ArrayList;
 
 public class LegoEv3MotorStopBrickTest extends BaseActivityInstrumentationTestCase<ScriptActivity> {
 
-	private Project project;
-	private LegoEv3MotorStopBrick motorStopBrick;
+    private Project project;
+    private LegoEv3MotorStopBrick motorStopBrick;
 
-	public LegoEv3MotorStopBrickTest() {
-		super(ScriptActivity.class);
-	}
+    public LegoEv3MotorStopBrickTest() {
+        super(ScriptActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		// normally super.setUp should be called first
-		// but kept the test failing due to view is null
-		// when starting in ScriptActivity
-		createProject();
-		super.setUp();
-	}
+    @Override
+    public void setUp() throws Exception {
+        // normally super.setUp should be called first
+        // but kept the test failing due to view is null
+        // when starting in ScriptActivity
+        createProject();
+        super.setUp();
+    }
 
-	public void testEV3StopMotorBrick() {
-		ListView dragDropListView = UiTestUtils.getScriptListView(solo);
-		BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
+    public void testEV3StopMotorBrick() {
+        ListView dragDropListView = UiTestUtils.getScriptListView(solo);
+        BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
 
-		int childrenCount = adapter.getChildCountFromLastGroup();
-		int groupCount = adapter.getScriptCount();
+        int childrenCount = adapter.getChildCountFromLastGroup();
+        int groupCount = adapter.getScriptCount();
 
-		assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
-		assertEquals("Incorrect number of bricks.", 1, childrenCount);
+        assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
+        assertEquals("Incorrect number of bricks.", 1, childrenCount);
 
-		ArrayList<Brick> projectBrickList = project.getSceneList().get(0).getSpriteList().get(0).getScript(0)
-				.getBrickList();
-		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
+        ArrayList<Brick> projectBrickList = project.getSceneList().get(0).getSpriteList().get(0).getScript(0)
+                .getBrickList();
+        assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
-		assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.ev3_motor_stop)));
+        assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
+        assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.ev3_motor_stop)));
 
-		String[] motors = getActivity().getResources().getStringArray(R.array.ev3_stop_motor_chooser);
-		assertTrue("Spinner items list too short!", motors.length == 6);
-	}
+        String[] motors = getActivity().getResources().getStringArray(R.array.ev3_stop_motor_chooser);
+        assertTrue("Spinner items list too short!", motors.length == 6);
+    }
 
-	private void createProject() {
-		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite sprite = new Sprite("cat");
-		Script script = new StartScript();
+    private void createProject() {
+        project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Sprite sprite = new Sprite("cat");
+        Script script = new StartScript();
 
-		motorStopBrick = new LegoEv3MotorStopBrick(LegoEv3MotorStopBrick.Motor.MOTOR_A);
+        motorStopBrick = new LegoEv3MotorStopBrick(LegoEv3MotorStopBrick.Motor.MOTOR_A);
 
-		script.addBrick(motorStopBrick);
-		sprite.addScript(script);
+        script.addBrick(motorStopBrick);
+        sprite.addScript(script);
 
-		project.getSceneList().get(0).addSprite(sprite);
+        project.getSceneList().get(0).addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 }

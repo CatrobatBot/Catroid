@@ -44,74 +44,74 @@ import java.util.ArrayList;
 
 public class SpeakAndWaitBrickTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
-	private Project project;
-	private SpeakAndWaitBrick speakAndWaitBrick;
-	private Sprite sprite;
+    private Project project;
+    private SpeakAndWaitBrick speakAndWaitBrick;
+    private Sprite sprite;
 
-	private String testString = "test";
+    private String testString = "test";
 
-	public SpeakAndWaitBrickTest() {
-		super(MainMenuActivity.class);
-	}
+    public SpeakAndWaitBrickTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		createProject();
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
-	}
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        createProject();
+        UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
+    }
 
-	public void testSpeakAndWaitBrick() {
-		ListView dragDropListView = UiTestUtils.getScriptListView(solo);
-		BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
+    public void testSpeakAndWaitBrick() {
+        ListView dragDropListView = UiTestUtils.getScriptListView(solo);
+        BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
 
-		int childrenCount = adapter.getChildCountFromLastGroup();
-		int groupCount = adapter.getScriptCount();
+        int childrenCount = adapter.getChildCountFromLastGroup();
+        int groupCount = adapter.getScriptCount();
 
-		assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
-		assertEquals("Incorrect number of bricks.", 1, childrenCount);
+        assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
+        assertEquals("Incorrect number of bricks.", 1, childrenCount);
 
-		ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0)
-				.getBrickList();
-		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
+        ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0)
+                .getBrickList();
+        assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
-		assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.brick_speak_and_wait)));
+        assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
+        assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.brick_speak_and_wait)));
 
-		UiTestUtils.testBrickWithFormulaEditor(sprite, solo, R.id.brick_speak_and_wait_edit_text, testString, Brick
-				.BrickField.SPEAK, speakAndWaitBrick);
-		try {
-			String brickText = speakAndWaitBrick.getFormulaWithBrickField(Brick.BrickField.SPEAK).interpretString(
-					sprite);
-			assertEquals("Wrong text in field.", testString, brickText);
-		} catch (InterpretationException interpretationException) {
-			fail("Wrong text in field.");
-		}
+        UiTestUtils.testBrickWithFormulaEditor(sprite, solo, R.id.brick_speak_and_wait_edit_text, testString, Brick
+                .BrickField.SPEAK, speakAndWaitBrick);
+        try {
+            String brickText = speakAndWaitBrick.getFormulaWithBrickField(Brick.BrickField.SPEAK).interpretString(
+                    sprite);
+            assertEquals("Wrong text in field.", testString, brickText);
+        } catch (InterpretationException interpretationException) {
+            fail("Wrong text in field.");
+        }
 
-		UiTestUtils.testBrickWithFormulaEditor(sprite, solo, R.id.brick_speak_and_wait_edit_text, "", Brick.BrickField.SPEAK,
-				speakAndWaitBrick);
+        UiTestUtils.testBrickWithFormulaEditor(sprite, solo, R.id.brick_speak_and_wait_edit_text, "", Brick.BrickField.SPEAK,
+                speakAndWaitBrick);
 
-		try {
-			String brickText = speakAndWaitBrick.getFormulaWithBrickField(Brick.BrickField.SPEAK).interpretString(sprite);
-			assertEquals("Wrong text in field.", "", brickText);
-		} catch (InterpretationException interpretationException) {
-			fail("Wrong text in field.");
-		}
-	}
+        try {
+            String brickText = speakAndWaitBrick.getFormulaWithBrickField(Brick.BrickField.SPEAK).interpretString(sprite);
+            assertEquals("Wrong text in field.", "", brickText);
+        } catch (InterpretationException interpretationException) {
+            fail("Wrong text in field.");
+        }
+    }
 
-	private void createProject() {
-		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		sprite = new SingleSprite("sprite");
-		Script script = new StartScript();
-		speakAndWaitBrick = new SpeakAndWaitBrick("");
+    private void createProject() {
+        project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        sprite = new SingleSprite("sprite");
+        Script script = new StartScript();
+        speakAndWaitBrick = new SpeakAndWaitBrick("");
 
-		script.addBrick(speakAndWaitBrick);
+        script.addBrick(speakAndWaitBrick);
 
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 }

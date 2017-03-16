@@ -33,44 +33,44 @@ import org.catrobat.catroid.devices.mindstorms.ev3.LegoEV3;
 
 public class LegoEv3MotorStopAction extends TemporalAction {
 
-	private Motor motorEnum;
-	private BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
+    private Motor motorEnum;
+    private BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
 
-	@Override
-	protected void update(float percent) {
+    @Override
+    protected void update(float percent) {
 
-		LegoEV3 ev3 = btService.getDevice(BluetoothDevice.LEGO_EV3);
-		if (ev3 == null) {
-			return;
-		}
+        LegoEV3 ev3 = btService.getDevice(BluetoothDevice.LEGO_EV3);
+        if (ev3 == null) {
+            return;
+        }
 
-		byte outputField = (byte) 0x00;
+        byte outputField = (byte) 0x00;
 
-		switch (motorEnum) {
-			case MOTOR_A:
-				outputField = (byte) 0x01;
-				break;
-			case MOTOR_B:
-				outputField = (byte) 0x02;
-				break;
-			case MOTOR_C:
-				outputField = (byte) 0x04;
-				break;
-			case MOTOR_D:
-				outputField = (byte) 0x08;
-				break;
-			case MOTOR_B_C:
-				outputField = (byte) 0x06;
-				break;
-			case ALL_MOTORS:
-				outputField = (byte) 0x0F;
-				break;
-		}
+        switch (motorEnum) {
+            case MOTOR_A:
+                outputField = (byte) 0x01;
+                break;
+            case MOTOR_B:
+                outputField = (byte) 0x02;
+                break;
+            case MOTOR_C:
+                outputField = (byte) 0x04;
+                break;
+            case MOTOR_D:
+                outputField = (byte) 0x08;
+                break;
+            case MOTOR_B_C:
+                outputField = (byte) 0x06;
+                break;
+            case ALL_MOTORS:
+                outputField = (byte) 0x0F;
+                break;
+        }
 
-		ev3.stopMotor(outputField, 0, true);
-	}
+        ev3.stopMotor(outputField, 0, true);
+    }
 
-	public void setMotorEnum(Motor motorEnum) {
-		this.motorEnum = motorEnum;
-	}
+    public void setMotorEnum(Motor motorEnum) {
+        this.motorEnum = motorEnum;
+    }
 }

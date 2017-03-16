@@ -44,84 +44,84 @@ import org.catrobat.catroid.ui.controller.BackPackSpriteController;
 
 public class ConfirmUnpackBackgroundDialog extends DialogFragment {
 
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_unpack_background";
+    public static final String DIALOG_FRAGMENT_TAG = "dialog_unpack_background";
 
-	private static final String TAG = ConfirmUnpackBackgroundDialog.class.getSimpleName();
+    private static final String TAG = ConfirmUnpackBackgroundDialog.class.getSimpleName();
 
-	private Dialog confirmUnpackBackgroundDialog;
+    private Dialog confirmUnpackBackgroundDialog;
 
-	private Sprite selectedSprite;
-	private boolean delete;
-	private boolean keepCurrentSprite;
-	private boolean fromHiddenBackPack;
-	private boolean asBackground;
+    private Sprite selectedSprite;
+    private boolean delete;
+    private boolean keepCurrentSprite;
+    private boolean fromHiddenBackPack;
+    private boolean asBackground;
 
-	public ConfirmUnpackBackgroundDialog(Sprite selectedSprite, boolean delete, boolean keepCurrentSprite, boolean fromHiddenBackPack, boolean asBackground) {
-		this.selectedSprite = selectedSprite;
-		this.delete = delete;
-		this.keepCurrentSprite = keepCurrentSprite;
-		this.fromHiddenBackPack = fromHiddenBackPack;
-		this.asBackground = asBackground;
-	}
+    public ConfirmUnpackBackgroundDialog(Sprite selectedSprite, boolean delete, boolean keepCurrentSprite, boolean fromHiddenBackPack, boolean asBackground) {
+        this.selectedSprite = selectedSprite;
+        this.delete = delete;
+        this.keepCurrentSprite = keepCurrentSprite;
+        this.fromHiddenBackPack = fromHiddenBackPack;
+        this.asBackground = asBackground;
+    }
 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_unpack_background, null);
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_unpack_background, null);
 
-		confirmUnpackBackgroundDialog = new AlertDialog.Builder(getActivity()).setView(dialogView)
-				.setTitle(R.string.unpack)
-				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				}).create();
+        confirmUnpackBackgroundDialog = new AlertDialog.Builder(getActivity()).setView(dialogView)
+                .setTitle(R.string.unpack)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).create();
 
-		confirmUnpackBackgroundDialog.setCanceledOnTouchOutside(true);
-		confirmUnpackBackgroundDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		confirmUnpackBackgroundDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        confirmUnpackBackgroundDialog.setCanceledOnTouchOutside(true);
+        confirmUnpackBackgroundDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        confirmUnpackBackgroundDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-		confirmUnpackBackgroundDialog.setOnShowListener(new OnShowListener() {
-			@Override
-			public void onShow(DialogInterface dialog) {
-				if (getActivity() == null) {
-					Log.e(TAG, "onShow() Activity was null!");
-					return;
-				}
+        confirmUnpackBackgroundDialog.setOnShowListener(new OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                if (getActivity() == null) {
+                    Log.e(TAG, "onShow() Activity was null!");
+                    return;
+                }
 
-				Button positiveButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-				positiveButton.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						handleOkButtonClick();
-					}
-				});
-			}
-		});
+                Button positiveButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                positiveButton.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        handleOkButtonClick();
+                    }
+                });
+            }
+        });
 
-		return confirmUnpackBackgroundDialog;
-	}
+        return confirmUnpackBackgroundDialog;
+    }
 
-	protected void handleOkButtonClick() {
-		if (getActivity() == null) {
-			Log.e(TAG, "handleOkButtonClick() Activity was null!");
-			return;
-		}
+    protected void handleOkButtonClick() {
+        if (getActivity() == null) {
+            Log.e(TAG, "handleOkButtonClick() Activity was null!");
+            return;
+        }
 
-		Sprite unpackedSprite = BackPackSpriteController.getInstance().unpack(selectedSprite, delete,
-				keepCurrentSprite, fromHiddenBackPack, asBackground);
-		unpackedSprite.setName(getActivity().getString(R.string.background));
-		returnToProjectActivity();
+        Sprite unpackedSprite = BackPackSpriteController.getInstance().unpack(selectedSprite, delete,
+                keepCurrentSprite, fromHiddenBackPack, asBackground);
+        unpackedSprite.setName(getActivity().getString(R.string.background));
+        returnToProjectActivity();
 
-		dismiss();
-	}
+        dismiss();
+    }
 
-	private void returnToProjectActivity() {
-		Intent intent = new Intent(getActivity(), ProjectActivity.class);
-		intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		getActivity().startActivity(intent);
-	}
+    private void returnToProjectActivity() {
+        Intent intent = new Intent(getActivity(), ProjectActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        getActivity().startActivity(intent);
+    }
 }

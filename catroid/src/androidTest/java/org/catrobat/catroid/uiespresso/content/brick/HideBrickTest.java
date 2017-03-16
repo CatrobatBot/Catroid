@@ -38,19 +38,19 @@ import static org.catrobat.catroid.uiespresso.content.brick.BrickTestUtils.check
 
 @RunWith(AndroidJUnit4.class)
 public class HideBrickTest {
-	@Rule
-	public BaseActivityInstrumentationRule<ScriptActivity> baseActivityTestRule = new
-			BaseActivityInstrumentationRule<>(ScriptActivity.class, true, false);
+    @Rule
+    public BaseActivityInstrumentationRule<ScriptActivity> baseActivityTestRule = new
+            BaseActivityInstrumentationRule<>(ScriptActivity.class, true, false);
 
-	@Before
-	public void setUp() throws Exception {
-		BrickTestUtils.createProjectAndGetStartScript("hideBrickTest1").addBrick(new HideBrick());
-		baseActivityTestRule.launchActivity(null);
-	}
+    @Before
+    public void setUp() throws Exception {
+        BrickTestUtils.createProjectAndGetStartScript("hideBrickTest1").addBrick(new HideBrick());
+        baseActivityTestRule.launchActivity(null);
+    }
 
-	@Test
-	public void hideBrickTest() {
-		checkIfBrickAtPositionShowsString(0, R.string.brick_when_started);
-		checkIfBrickAtPositionShowsString(1, R.string.brick_hide);
-	}
+    @Test
+    public void hideBrickTest() {
+        checkIfBrickAtPositionShowsString(0, R.string.brick_when_started);
+        checkIfBrickAtPositionShowsString(1, R.string.brick_hide);
+    }
 }

@@ -40,54 +40,54 @@ import org.catrobat.catroid.uitest.util.UiTestUtils;
 
 public class NewStringDialogTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
-	private static final int FORMULA_EDITOR_EDIT_TEXT_ID = 0;
-	private static final String NOTE = "some note about yummy cookies ;)";
-	private static final String EDIT_TEXT_STRING = "my edit text string";
+    private static final int FORMULA_EDITOR_EDIT_TEXT_ID = 0;
+    private static final String NOTE = "some note about yummy cookies ;)";
+    private static final String EDIT_TEXT_STRING = "my edit text string";
 
-	public NewStringDialogTest() {
-		super(MainMenuActivity.class);
-	}
+    public NewStringDialogTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		createProject();
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
-		solo.clickOnView(solo.getView(R.id.brick_note_edit_text));
-		solo.waitForFragmentByTag(FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG);
-		solo.clickOnView(solo.getView(R.id.formula_editor_keyboard_string));
-	}
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        createProject();
+        UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
+        solo.clickOnView(solo.getView(R.id.brick_note_edit_text));
+        solo.waitForFragmentByTag(FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG);
+        solo.clickOnView(solo.getView(R.id.formula_editor_keyboard_string));
+    }
 
-	public void testDialogCreation() {
-		assertTrue(NewStringDialog.class.getSimpleName() + " did not load under 5 seconds!",
-				solo.waitForFragmentByTag(NewStringDialog.DIALOG_FRAGMENT_TAG, 5000));
-	}
+    public void testDialogCreation() {
+        assertTrue(NewStringDialog.class.getSimpleName() + " did not load under 5 seconds!",
+                solo.waitForFragmentByTag(NewStringDialog.DIALOG_FRAGMENT_TAG, 5000));
+    }
 
-	public void testPositiveButtonAndCreationOfNewString() {
-		EditText stringEditText = (EditText) solo.getView(R.id.formula_editor_string_name_edit_text);
-		solo.enterText(stringEditText, EDIT_TEXT_STRING);
-		solo.clickOnButton(solo.getString(R.string.ok));
-		solo.waitForFragmentByTag(FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG);
-		assertEquals("Wrong string in Formula Editor edit text!", "\'" + EDIT_TEXT_STRING + "\' ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
-	}
+    public void testPositiveButtonAndCreationOfNewString() {
+        EditText stringEditText = (EditText) solo.getView(R.id.formula_editor_string_name_edit_text);
+        solo.enterText(stringEditText, EDIT_TEXT_STRING);
+        solo.clickOnButton(solo.getString(R.string.ok));
+        solo.waitForFragmentByTag(FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG);
+        assertEquals("Wrong string in Formula Editor edit text!", "\'" + EDIT_TEXT_STRING + "\' ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
+    }
 
-	public void testNegativeButton() {
-		solo.clickOnButton(solo.getString(R.string.cancel));
-		assertTrue("New " + NewStringDialog.class.getSimpleName() + " should be closed!", solo.waitForFragmentByTag(FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG));
-		assertEquals("Wrong string in Formula Editor edit text!", "\'" + NOTE + "\' ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
-	}
+    public void testNegativeButton() {
+        solo.clickOnButton(solo.getString(R.string.cancel));
+        assertTrue("New " + NewStringDialog.class.getSimpleName() + " should be closed!", solo.waitForFragmentByTag(FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG));
+        assertEquals("Wrong string in Formula Editor edit text!", "\'" + NOTE + "\' ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
+    }
 
-	private void createProject() {
-		Project project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite sprite = new SingleSprite("testSprite");
-		Script script = new StartScript();
-		script.addBrick(new NoteBrick(NOTE));
+    private void createProject() {
+        Project project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Sprite sprite = new SingleSprite("testSprite");
+        Script script = new StartScript();
+        script.addBrick(new NoteBrick(NOTE));
 
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 }

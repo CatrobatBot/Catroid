@@ -32,10 +32,10 @@ import java.util.UUID;
 
 public class BluetoothConnectionFactoryImpl implements BluetoothConnectionFactory {
 
-	@Override
-	public <T extends BluetoothDevice> BluetoothConnection createBTConnectionForDevice(Class<T> bluetoothDeviceType,
-			String address, UUID deviceUUID, Context applicationContext) {
+    @Override
+    public <T extends BluetoothDevice> BluetoothConnection createBTConnectionForDevice(Class<T> bluetoothDeviceType,
+                                                                                       String address, UUID deviceUUID, Context applicationContext) {
 
-		return new BluetoothConnectionImpl(address, deviceUUID);
-	}
+        return new BluetoothConnectionImpl(address, deviceUUID);
+    }
 }

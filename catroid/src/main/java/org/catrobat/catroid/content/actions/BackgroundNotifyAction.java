@@ -29,15 +29,15 @@ import org.catrobat.catroid.content.BackgroundWaitHandler;
 
 public class BackgroundNotifyAction extends Action {
 
-	private LookData lookData;
+    private LookData lookData;
 
-	@Override
-	public boolean act(float delta) {
-		BackgroundWaitHandler.decrementRunningScripts(lookData);
-		return true;
-	}
+    @Override
+    public boolean act(float delta) {
+        BackgroundWaitHandler.decrementRunningScripts(lookData);
+        return true;
+    }
 
-	public void setLookData(LookData lookData) {
-		this.lookData = lookData;
-	}
+    public void setLookData(LookData lookData) {
+        this.lookData = lookData;
+    }
 }

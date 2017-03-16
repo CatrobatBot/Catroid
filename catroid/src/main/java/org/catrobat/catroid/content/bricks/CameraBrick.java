@@ -40,93 +40,93 @@ import java.util.List;
 
 public class CameraBrick extends BrickBaseType {
 
-	private static final int OFF = 0;
-	private static final int ON = 1;
+    private static final int OFF = 0;
+    private static final int ON = 1;
 
-	private transient View prototypeView;
+    private transient View prototypeView;
 
-	private int spinnerSelectionID;
+    private int spinnerSelectionID;
 
-	public CameraBrick() {
-		spinnerSelectionID = ON;
-	}
+    public CameraBrick() {
+        spinnerSelectionID = ON;
+    }
 
-	public CameraBrick(int onOrOff) {
-		spinnerSelectionID = onOrOff;
-	}
+    public CameraBrick(int onOrOff) {
+        spinnerSelectionID = onOrOff;
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		view = View.inflate(context, R.layout.brick_video, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        view = View.inflate(context, R.layout.brick_video, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_video_checkbox);
-		Spinner videoSpinner = (Spinner) view.findViewById(R.id.brick_video_spinner);
+        setCheckboxView(R.id.brick_video_checkbox);
+        Spinner videoSpinner = (Spinner) view.findViewById(R.id.brick_video_spinner);
 
-		ArrayAdapter<String> spinnerAdapter = createArrayAdapter(context);
+        ArrayAdapter<String> spinnerAdapter = createArrayAdapter(context);
 
-		videoSpinner.setAdapter(spinnerAdapter);
+        videoSpinner.setAdapter(spinnerAdapter);
 
-		videoSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        videoSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-			@Override
-			public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-				spinnerSelectionID = position;
-			}
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                spinnerSelectionID = position;
+            }
 
-			@Override
-			public void onNothingSelected(AdapterView<?> adapterView) {
-			}
-		});
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
 
-		videoSpinner.setSelection(spinnerSelectionID);
+        videoSpinner.setSelection(spinnerSelectionID);
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_video, null);
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_video, null);
 
-		Spinner setVideoSpinner = (Spinner) prototypeView.findViewById(R.id.brick_video_spinner);
+        Spinner setVideoSpinner = (Spinner) prototypeView.findViewById(R.id.brick_video_spinner);
 
-		ArrayAdapter<String> spinnerAdapter = createArrayAdapter(context);
-		setVideoSpinner.setAdapter(spinnerAdapter);
-		setVideoSpinner.setSelection(spinnerSelectionID);
+        ArrayAdapter<String> spinnerAdapter = createArrayAdapter(context);
+        setVideoSpinner.setAdapter(spinnerAdapter);
+        setVideoSpinner.setSelection(spinnerSelectionID);
 
-		return prototypeView;
-	}
+        return prototypeView;
+    }
 
-	private ArrayAdapter<String> createArrayAdapter(Context context) {
-		String[] spinnerValues = new String[2];
-		spinnerValues[OFF] = context.getString(R.string.video_brick_camera_off);
-		spinnerValues[ON] = context.getString(R.string.video_brick_camera_on);
+    private ArrayAdapter<String> createArrayAdapter(Context context) {
+        String[] spinnerValues = new String[2];
+        spinnerValues[OFF] = context.getString(R.string.video_brick_camera_off);
+        spinnerValues[ON] = context.getString(R.string.video_brick_camera_on);
 
-		ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, spinnerValues);
-		spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, spinnerValues);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-		return spinnerAdapter;
-	}
+        return spinnerAdapter;
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return Brick.VIDEO;
-	}
+    @Override
+    public int getRequiredResources() {
+        return Brick.VIDEO;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createUpdateCameraPreviewAction(getCameraStateFromSpinner()));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createUpdateCameraPreviewAction(getCameraStateFromSpinner()));
+        return null;
+    }
 
-	private CameraManager.CameraState getCameraStateFromSpinner() {
-		if (spinnerSelectionID == OFF) {
-			return CameraManager.CameraState.stopped;
-		}
+    private CameraManager.CameraState getCameraStateFromSpinner() {
+        if (spinnerSelectionID == OFF) {
+            return CameraManager.CameraState.stopped;
+        }
 
-		return CameraManager.CameraState.prepare;
-	}
+        return CameraManager.CameraState.prepare;
+    }
 }

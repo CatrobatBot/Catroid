@@ -40,83 +40,83 @@ import org.catrobat.catroid.ui.dialogs.CustomAlertDialogBuilder;
 
 public class LoadProjectTask extends AsyncTask<Void, Void, Boolean> {
 
-	private static final String TAG = LoadProjectTask.class.getSimpleName();
+    private static final String TAG = LoadProjectTask.class.getSimpleName();
 
-	private Activity activity;
-	private String projectName;
-	private boolean showErrorMessage;
-	private String errorMessage;
-	private boolean startProjectActivity;
-	private LinearLayout linearLayoutProgressCircle;
+    private Activity activity;
+    private String projectName;
+    private boolean showErrorMessage;
+    private String errorMessage;
+    private boolean startProjectActivity;
+    private LinearLayout linearLayoutProgressCircle;
 
-	private OnLoadProjectCompleteListener onLoadProjectCompleteListener;
+    private OnLoadProjectCompleteListener onLoadProjectCompleteListener;
 
-	public LoadProjectTask(Activity activity, String projectName, boolean showErrorMessage, boolean startProjectActivity) {
-		this.activity = activity;
-		this.projectName = projectName;
-		this.showErrorMessage = showErrorMessage;
-		this.startProjectActivity = startProjectActivity;
-		this.errorMessage = activity.getString(R.string.error_load_project);
-	}
+    public LoadProjectTask(Activity activity, String projectName, boolean showErrorMessage, boolean startProjectActivity) {
+        this.activity = activity;
+        this.projectName = projectName;
+        this.showErrorMessage = showErrorMessage;
+        this.startProjectActivity = startProjectActivity;
+        this.errorMessage = activity.getString(R.string.error_load_project);
+    }
 
-	public void setOnLoadProjectCompleteListener(OnLoadProjectCompleteListener listener) {
-		onLoadProjectCompleteListener = listener;
-	}
+    public void setOnLoadProjectCompleteListener(OnLoadProjectCompleteListener listener) {
+        onLoadProjectCompleteListener = listener;
+    }
 
-	@Override
-	protected void onPreExecute() {
-		super.onPreExecute();
-		if (activity == null) {
-			return;
-		}
-		linearLayoutProgressCircle = (LinearLayout) activity.findViewById(R.id.progress_circle);
-		linearLayoutProgressCircle.setVisibility(View.VISIBLE);
-		linearLayoutProgressCircle.bringToFront();
-	}
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        if (activity == null) {
+            return;
+        }
+        linearLayoutProgressCircle = (LinearLayout) activity.findViewById(R.id.progress_circle);
+        linearLayoutProgressCircle.setVisibility(View.VISIBLE);
+        linearLayoutProgressCircle.bringToFront();
+    }
 
-	@Override
-	protected Boolean doInBackground(Void... arg0) {
-		Project currentProject = ProjectManager.getInstance().getCurrentProject();
-		if (currentProject == null || !currentProject.getName().equals(projectName)) {
-			try {
-				ProjectManager.getInstance().loadProject(projectName, activity);
-			} catch (ProjectException projectException) {
-				Log.e(TAG, "Project cannot load", projectException);
-				errorMessage = projectException.getUiErrorMessage();
-				return false;
-			}
-		}
-		return true;
-	}
+    @Override
+    protected Boolean doInBackground(Void... arg0) {
+        Project currentProject = ProjectManager.getInstance().getCurrentProject();
+        if (currentProject == null || !currentProject.getName().equals(projectName)) {
+            try {
+                ProjectManager.getInstance().loadProject(projectName, activity);
+            } catch (ProjectException projectException) {
+                Log.e(TAG, "Project cannot load", projectException);
+                errorMessage = projectException.getUiErrorMessage();
+                return false;
+            }
+        }
+        return true;
+    }
 
-	@Override
-	protected void onPostExecute(Boolean success) {
-		super.onPostExecute(success);
-		linearLayoutProgressCircle.setVisibility(View.GONE);
+    @Override
+    protected void onPostExecute(Boolean success) {
+        super.onPostExecute(success);
+        linearLayoutProgressCircle.setVisibility(View.GONE);
 
-		if (onLoadProjectCompleteListener != null) {
-			if (!success && showErrorMessage) {
-				Builder builder = new CustomAlertDialogBuilder(activity);
-				builder.setTitle(R.string.error);
-				builder.setMessage(errorMessage);
-				builder.setNeutralButton(R.string.close, new OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						onLoadProjectCompleteListener.onLoadProjectFailure();
-					}
-				});
-				Dialog errorDialog = builder.create();
-				errorDialog.show();
-			} else {
-				onLoadProjectCompleteListener.onLoadProjectSuccess(startProjectActivity);
-			}
-		}
-	}
+        if (onLoadProjectCompleteListener != null) {
+            if (!success && showErrorMessage) {
+                Builder builder = new CustomAlertDialogBuilder(activity);
+                builder.setTitle(R.string.error);
+                builder.setMessage(errorMessage);
+                builder.setNeutralButton(R.string.close, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        onLoadProjectCompleteListener.onLoadProjectFailure();
+                    }
+                });
+                Dialog errorDialog = builder.create();
+                errorDialog.show();
+            } else {
+                onLoadProjectCompleteListener.onLoadProjectSuccess(startProjectActivity);
+            }
+        }
+    }
 
-	public interface OnLoadProjectCompleteListener {
+    public interface OnLoadProjectCompleteListener {
 
-		void onLoadProjectSuccess(boolean startProjectActivity);
+        void onLoadProjectSuccess(boolean startProjectActivity);
 
-		void onLoadProjectFailure();
-	}
+        void onLoadProjectFailure();
+    }
 }

@@ -25,65 +25,65 @@ package org.catrobat.catroid.scratchconverter.protocol;
 
 public enum JsonKeys {
 
-	// main JSON-keys for messages received by server
-	CATEGORY("category"),
-	DATA("data"),
-	TYPE("type");
+    // main JSON-keys for messages received by server
+    CATEGORY("category"),
+    DATA("data"),
+    TYPE("type");
 
-	private final String rawValue;
+    private final String rawValue;
 
-	JsonKeys(final String rawValue) {
-		this.rawValue = rawValue;
-	}
+    JsonKeys(final String rawValue) {
+        this.rawValue = rawValue;
+    }
 
-	@Override
-	public String toString() {
-		return rawValue;
-	}
+    @Override
+    public String toString() {
+        return rawValue;
+    }
 
-	// JSON-keys of arguments contained in data
-	public enum JsonDataKeys {
-		MSG("msg"),
-		JOB_ID("jobID"),
-		JOB_TITLE("jobTitle"),
-		JOB_IMAGE_URL("jobImageURL"),
-		LINES("lines"),
-		PROGRESS("progress"),
-		URL("url"),
-		CACHED_UTC_DATE("cachedUTCDate"),
-		JOBS_INFO("jobsInfo"),
-		CATROBAT_LANGUAGE_VERSION("catLangVers"),
-		CLIENT_ID("clientID");
+    // JSON-keys of arguments contained in data
+    public enum JsonDataKeys {
+        MSG("msg"),
+        JOB_ID("jobID"),
+        JOB_TITLE("jobTitle"),
+        JOB_IMAGE_URL("jobImageURL"),
+        LINES("lines"),
+        PROGRESS("progress"),
+        URL("url"),
+        CACHED_UTC_DATE("cachedUTCDate"),
+        JOBS_INFO("jobsInfo"),
+        CATROBAT_LANGUAGE_VERSION("catLangVers"),
+        CLIENT_ID("clientID");
 
-		private final String rawValue;
+        private final String rawValue;
 
-		JsonDataKeys(final String rawValue) {
-			this.rawValue = rawValue;
-		}
+        JsonDataKeys(final String rawValue) {
+            this.rawValue = rawValue;
+        }
 
-		@Override
-		public String toString() {
-			return rawValue;
-		}
-	}
+        @Override
+        public String toString() {
+            return rawValue;
+        }
+    }
 
-	// JSON-keys of job-arguments in InfoMessage
-	public enum JsonJobDataKeys {
-		STATE("state"),
-		JOB_ID("jobID"),
-		TITLE("title"),
-		IMAGE_URL("imageURL"),
-		PROGRESS("progress"),
-		DOWNLOAD_URL("downloadURL");
-		private final String rawValue;
+    // JSON-keys of job-arguments in InfoMessage
+    public enum JsonJobDataKeys {
+        STATE("state"),
+        JOB_ID("jobID"),
+        TITLE("title"),
+        IMAGE_URL("imageURL"),
+        PROGRESS("progress"),
+        DOWNLOAD_URL("downloadURL");
+        private final String rawValue;
 
-		JsonJobDataKeys(final String rawValue) {
-			this.rawValue = rawValue;
-		}
+        JsonJobDataKeys(final String rawValue) {
+            this.rawValue = rawValue;
+        }
 
-		@Override
-		public String toString() {
-			return rawValue;
-		}
-	}
+        @Override
+        public String toString() {
+            return rawValue;
+        }
+    }
 }

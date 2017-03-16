@@ -42,88 +42,88 @@ import org.catrobat.catroid.utils.Utils;
 import java.util.List;
 
 public class VibrationBrick extends FormulaBrick {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private transient View prototypeView;
+    private transient View prototypeView;
 
-	public VibrationBrick() {
-		addAllowedBrickField(BrickField.VIBRATE_DURATION_IN_SECONDS);
-	}
+    public VibrationBrick() {
+        addAllowedBrickField(BrickField.VIBRATE_DURATION_IN_SECONDS);
+    }
 
-	public VibrationBrick(float vibrateDurationInSeconds) {
-		initializeBrickFields(new Formula(vibrateDurationInSeconds));
-	}
+    public VibrationBrick(float vibrateDurationInSeconds) {
+        initializeBrickFields(new Formula(vibrateDurationInSeconds));
+    }
 
-	public VibrationBrick(Formula vibrateDurationInSecondsFormula) {
-		initializeBrickFields(vibrateDurationInSecondsFormula);
-	}
+    public VibrationBrick(Formula vibrateDurationInSecondsFormula) {
+        initializeBrickFields(vibrateDurationInSecondsFormula);
+    }
 
-	private void initializeBrickFields(Formula vibrateDurationInSecondsFormula) {
-		addAllowedBrickField(BrickField.VIBRATE_DURATION_IN_SECONDS);
-		setFormulaWithBrickField(BrickField.VIBRATE_DURATION_IN_SECONDS, vibrateDurationInSecondsFormula);
-	}
+    private void initializeBrickFields(Formula vibrateDurationInSecondsFormula) {
+        addAllowedBrickField(BrickField.VIBRATE_DURATION_IN_SECONDS);
+        setFormulaWithBrickField(BrickField.VIBRATE_DURATION_IN_SECONDS, vibrateDurationInSecondsFormula);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return VIBRATOR;
-	}
+    @Override
+    public int getRequiredResources() {
+        return VIBRATOR;
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_vibration, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_vibration, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_vibration_checkbox);
+        setCheckboxView(R.id.brick_vibration_checkbox);
 
-		TextView editVibrate = (TextView) view.findViewById(R.id.brick_vibration_edit_text);
-		TextView secondTextVibrate = (TextView) view.findViewById(R.id.brick_vibration_second_label);
+        TextView editVibrate = (TextView) view.findViewById(R.id.brick_vibration_edit_text);
+        TextView secondTextVibrate = (TextView) view.findViewById(R.id.brick_vibration_second_label);
 
-		getFormulaWithBrickField(BrickField.VIBRATE_DURATION_IN_SECONDS)
-				.setTextFieldId(R.id.brick_vibration_edit_text);
-		getFormulaWithBrickField(BrickField.VIBRATE_DURATION_IN_SECONDS).refreshTextField(view);
+        getFormulaWithBrickField(BrickField.VIBRATE_DURATION_IN_SECONDS)
+                .setTextFieldId(R.id.brick_vibration_edit_text);
+        getFormulaWithBrickField(BrickField.VIBRATE_DURATION_IN_SECONDS).refreshTextField(view);
 
-		if (getFormulaWithBrickField(BrickField.VIBRATE_DURATION_IN_SECONDS).isSingleNumberFormula()) {
-			try {
-				secondTextVibrate.setText(view.getResources().getQuantityString(R.plurals.second_plural,
-						Utils.convertDoubleToPluralInteger(getFormulaWithBrickField(BrickField.VIBRATE_DURATION_IN_SECONDS)
-								.interpretDouble(ProjectManager.getInstance().getCurrentSprite()))));
-			} catch (InterpretationException interpretationException) {
-				Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-			}
-		} else {
-			secondTextVibrate.setText(view.getResources().getQuantityString(R.plurals.second_plural,
-					Utils.TRANSLATION_PLURAL_OTHER_INTEGER));
-		}
+        if (getFormulaWithBrickField(BrickField.VIBRATE_DURATION_IN_SECONDS).isSingleNumberFormula()) {
+            try {
+                secondTextVibrate.setText(view.getResources().getQuantityString(R.plurals.second_plural,
+                        Utils.convertDoubleToPluralInteger(getFormulaWithBrickField(BrickField.VIBRATE_DURATION_IN_SECONDS)
+                                .interpretDouble(ProjectManager.getInstance().getCurrentSprite()))));
+            } catch (InterpretationException interpretationException) {
+                Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+            }
+        } else {
+            secondTextVibrate.setText(view.getResources().getQuantityString(R.plurals.second_plural,
+                    Utils.TRANSLATION_PLURAL_OTHER_INTEGER));
+        }
 
-		editVibrate.setOnClickListener(this);
+        editVibrate.setOnClickListener(this);
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_vibration, null);
-		TextView textVibrate = (TextView) prototypeView.findViewById(R.id.brick_vibration_edit_text);
-		textVibrate.setText(Utils.getNumberStringForBricks(BrickValues.VIBRATE_SECONDS));
-		TextView secondTextVibrate = (TextView) prototypeView.findViewById(R.id.brick_vibration_second_label);
-		secondTextVibrate.setText(context.getResources().getQuantityString(R.plurals.second_plural,
-				Utils.convertDoubleToPluralInteger(BrickValues.VIBRATE_SECONDS)));
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_vibration, null);
+        TextView textVibrate = (TextView) prototypeView.findViewById(R.id.brick_vibration_edit_text);
+        textVibrate.setText(Utils.getNumberStringForBricks(BrickValues.VIBRATE_SECONDS));
+        TextView secondTextVibrate = (TextView) prototypeView.findViewById(R.id.brick_vibration_second_label);
+        secondTextVibrate.setText(context.getResources().getQuantityString(R.plurals.second_plural,
+                Utils.convertDoubleToPluralInteger(BrickValues.VIBRATE_SECONDS)));
+        return prototypeView;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createVibrateAction(sprite,
-				getFormulaWithBrickField(BrickField.VIBRATE_DURATION_IN_SECONDS)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createVibrateAction(sprite,
+                getFormulaWithBrickField(BrickField.VIBRATE_DURATION_IN_SECONDS)));
+        return null;
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		FormulaEditorFragment.showFragment(view, this, BrickField.VIBRATE_DURATION_IN_SECONDS);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        FormulaEditorFragment.showFragment(view, this, BrickField.VIBRATE_DURATION_IN_SECONDS);
+    }
 }

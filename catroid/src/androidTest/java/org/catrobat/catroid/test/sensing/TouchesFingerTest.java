@@ -37,54 +37,54 @@ import org.catrobat.catroid.test.utils.TestUtils;
 import org.catrobat.catroid.utils.TouchUtil;
 
 public class TouchesFingerTest extends InstrumentationTestCase {
-	protected Project project;
-	protected Sprite sprite1;
+    protected Project project;
+    protected Sprite sprite1;
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		TestUtils.deleteTestProjects();
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        TestUtils.deleteTestProjects();
 
-		project = new Project(getInstrumentation().getTargetContext(), TestUtils.DEFAULT_TEST_PROJECT_NAME);
-		sprite1 = new Sprite("TestSprite1");
-		project.getDefaultScene().addSprite(sprite1);
+        project = new Project(getInstrumentation().getTargetContext(), TestUtils.DEFAULT_TEST_PROJECT_NAME);
+        sprite1 = new Sprite("TestSprite1");
+        project.getDefaultScene().addSprite(sprite1);
 
-		StorageHandler.getInstance().saveProject(project);
-		ProjectManager.getInstance().setProject(project);
+        StorageHandler.getInstance().saveProject(project);
+        ProjectManager.getInstance().setProject(project);
 
-		CollisionTestUtils.initializeSprite(sprite1, org.catrobat.catroid.test.R.raw.collision_donut,
-				"collision_donut.png", getInstrumentation().getContext(), project);
-	}
+        CollisionTestUtils.initializeSprite(sprite1, org.catrobat.catroid.test.R.raw.collision_donut,
+                "collision_donut.png", getInstrumentation().getContext(), project);
+    }
 
-	public void testBasicOneTouchingPoint() {
-		TouchUtil.reset();
-		TouchUtil.touchDown(150, 150, 1);
-		Assert.assertTrue("Not detected as touching", CollisionDetection.collidesWithFinger(sprite1.look) == 1d);
-		TouchUtil.touchUp(1);
-		TouchUtil.touchDown(0, 0, 1);
-		Assert.assertFalse("Detected as touching", CollisionDetection.collidesWithFinger(sprite1.look) == 1d);
-	}
+    public void testBasicOneTouchingPoint() {
+        TouchUtil.reset();
+        TouchUtil.touchDown(150, 150, 1);
+        Assert.assertTrue("Not detected as touching", CollisionDetection.collidesWithFinger(sprite1.look) == 1d);
+        TouchUtil.touchUp(1);
+        TouchUtil.touchDown(0, 0, 1);
+        Assert.assertFalse("Detected as touching", CollisionDetection.collidesWithFinger(sprite1.look) == 1d);
+    }
 
-	public void testBasicMultipleTouchingPoints() {
-		TouchUtil.reset();
-		TouchUtil.touchDown(150, 150, 1);
-		TouchUtil.touchDown(0, 0, 2);
-		TouchUtil.touchDown(151, 151, 3);
-		Assert.assertTrue("Not detected as touching", CollisionDetection.collidesWithFinger(sprite1.look) == 1d);
-	}
+    public void testBasicMultipleTouchingPoints() {
+        TouchUtil.reset();
+        TouchUtil.touchDown(150, 150, 1);
+        TouchUtil.touchDown(0, 0, 2);
+        TouchUtil.touchDown(151, 151, 3);
+        Assert.assertTrue("Not detected as touching", CollisionDetection.collidesWithFinger(sprite1.look) == 1d);
+    }
 
-	public void testAdvancedOneTouchingPoint() {
-		TouchUtil.reset();
-		TouchUtil.touchDown(0, 0, 1);
+    public void testAdvancedOneTouchingPoint() {
+        TouchUtil.reset();
+        TouchUtil.touchDown(0, 0, 1);
 
-		Assert.assertFalse("Detected as touching", CollisionDetection.collidesWithFinger(sprite1.look) == 1d);
+        Assert.assertFalse("Detected as touching", CollisionDetection.collidesWithFinger(sprite1.look) == 1d);
 
-		float x = sprite1.look.getXInUserInterfaceDimensionUnit();
-		float y = sprite1.look.getYInUserInterfaceDimensionUnit();
+        float x = sprite1.look.getXInUserInterfaceDimensionUnit();
+        float y = sprite1.look.getYInUserInterfaceDimensionUnit();
 
-		sprite1.look.setXInUserInterfaceDimensionUnit(x - 150);
-		sprite1.look.setYInUserInterfaceDimensionUnit(y - 150);
+        sprite1.look.setXInUserInterfaceDimensionUnit(x - 150);
+        sprite1.look.setYInUserInterfaceDimensionUnit(y - 150);
 
-		Assert.assertTrue("Not detected as touching", CollisionDetection.collidesWithFinger(sprite1.look) == 1d);
-	}
+        Assert.assertTrue("Not detected as touching", CollisionDetection.collidesWithFinger(sprite1.look) == 1d);
+    }
 }

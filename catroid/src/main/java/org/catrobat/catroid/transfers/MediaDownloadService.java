@@ -38,72 +38,72 @@ import java.io.IOException;
 
 public class MediaDownloadService extends IntentService {
 
-	public static final String TAG = MediaDownloadService.class.getSimpleName();
+    public static final String TAG = MediaDownloadService.class.getSimpleName();
 
-	public static final String RECEIVER_TAG = "receiver";
-	public static final String URL_TAG = "url";
-	public static final String MEDIA_FILE_PATH = "path";
+    public static final String RECEIVER_TAG = "receiver";
+    public static final String URL_TAG = "url";
+    public static final String MEDIA_FILE_PATH = "path";
 
-	public ResultReceiver receiver;
-	private Handler handler;
+    public ResultReceiver receiver;
+    private Handler handler;
 
-	public MediaDownloadService() {
-		super(MediaDownloadService.class.getSimpleName());
-	}
+    public MediaDownloadService() {
+        super(MediaDownloadService.class.getSimpleName());
+    }
 
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		handler = new Handler();
-	}
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        handler = new Handler();
+    }
 
-	@Override
-	protected void onHandleIntent(Intent intent) {
-		boolean result = true;
-		String url = intent.getStringExtra(URL_TAG);
-		String fileString = intent.getStringExtra(MEDIA_FILE_PATH);
-		int errorMessage = R.string.error_unknown_error;
+    @Override
+    protected void onHandleIntent(Intent intent) {
+        boolean result = true;
+        String url = intent.getStringExtra(URL_TAG);
+        String fileString = intent.getStringExtra(MEDIA_FILE_PATH);
+        int errorMessage = R.string.error_unknown_error;
 
-		receiver = intent.getParcelableExtra(RECEIVER_TAG);
-		try {
-			ServerCalls.getInstance().downloadMedia(url, fileString, receiver);
-		} catch (IOException ioException) {
-			Log.e(TAG, Log.getStackTraceString(ioException));
-			result = false;
-			receiver.send(Constants.UPDATE_DOWNLOAD_ERROR, null);
-		} catch (WebconnectionException webconnectionException) {
-			Log.e(TAG, Log.getStackTraceString(webconnectionException));
-			result = false;
-			errorMessage = R.string.error_internet_connection;
-			receiver.send(Constants.UPDATE_DOWNLOAD_ERROR, null);
-		}
+        receiver = intent.getParcelableExtra(RECEIVER_TAG);
+        try {
+            ServerCalls.getInstance().downloadMedia(url, fileString, receiver);
+        } catch (IOException ioException) {
+            Log.e(TAG, Log.getStackTraceString(ioException));
+            result = false;
+            receiver.send(Constants.UPDATE_DOWNLOAD_ERROR, null);
+        } catch (WebconnectionException webconnectionException) {
+            Log.e(TAG, Log.getStackTraceString(webconnectionException));
+            result = false;
+            errorMessage = R.string.error_internet_connection;
+            receiver.send(Constants.UPDATE_DOWNLOAD_ERROR, null);
+        }
 
-		if (!result) {
-			showToast(errorMessage, true);
-			return;
-		}
+        if (!result) {
+            showToast(errorMessage, true);
+            return;
+        }
 
-		showToast(R.string.notification_download_finished, false);
-	}
+        showToast(R.string.notification_download_finished, false);
+    }
 
-	private void showToast(final int messageId, boolean error) {
+    private void showToast(final int messageId, boolean error) {
 
-		if (error) {
-			handler.post(new Runnable() {
+        if (error) {
+            handler.post(new Runnable() {
 
-				@Override
-				public void run() {
-					ToastUtil.showError(getApplicationContext(), messageId);
-				}
-			});
-		} else {
-			handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    ToastUtil.showError(getApplicationContext(), messageId);
+                }
+            });
+        } else {
+            handler.post(new Runnable() {
 
-				@Override
-				public void run() {
-					ToastUtil.showSuccess(getApplicationContext(), messageId);
-				}
-			});
-		}
-	}
+                @Override
+                public void run() {
+                    ToastUtil.showSuccess(getApplicationContext(), messageId);
+                }
+            });
+        }
+    }
 }

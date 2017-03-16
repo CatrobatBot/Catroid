@@ -27,24 +27,24 @@ import org.catrobat.catroid.devices.mindstorms.MindstormsConnection;
 
 public class EV3ColorSensor extends EV3Sensor {
 
-	public static final String TAG = EV3ColorSensor.class.getSimpleName();
-	private static final int DEFAULT_VALUE = 50;
+    public static final String TAG = EV3ColorSensor.class.getSimpleName();
+    private static final int DEFAULT_VALUE = 50;
 
-	public EV3ColorSensor(int port, MindstormsConnection connection, EV3SensorMode mode) {
-		// Mode0: Reflected light
-		// Mode1: Ambient light
-		// Mode2: Color
+    public EV3ColorSensor(int port, MindstormsConnection connection, EV3SensorMode mode) {
+        // Mode0: Reflected light
+        // Mode1: Ambient light
+        // Mode2: Color
 
-		super(port, EV3SensorType.EV3_COLOR, mode, connection);
-		lastValidValue = DEFAULT_VALUE;
-	}
+        super(port, EV3SensorType.EV3_COLOR, mode, connection);
+        lastValidValue = DEFAULT_VALUE;
+    }
 
-	@Override
-	public int getValue() {
-		if (this.sensorMode == EV3SensorMode.MODE2) {
-			return getRawValue();
-		} else {
-			return getPercentValue();
-		}
-	}
+    @Override
+    public int getValue() {
+        if (this.sensorMode == EV3SensorMode.MODE2) {
+            return getRawValue();
+        } else {
+            return getPercentValue();
+        }
+    }
 }

@@ -51,156 +51,156 @@ import java.util.ArrayList;
 
 public class PointToBrickTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
-	private Project project;
-	private PointToBrick pointToBrick;
-	private File lookFile;
+    private Project project;
+    private PointToBrick pointToBrick;
+    private File lookFile;
 
-	private final String spriteName1 = "cat1";
-	private final String spriteName2 = "cat2";
+    private final String spriteName1 = "cat1";
+    private final String spriteName2 = "cat2";
 
-	public PointToBrickTest() {
-		super(MainMenuActivity.class);
-	}
+    public PointToBrickTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		createProject();
-		UiTestUtils.prepareStageForTest();
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo, 2);
-		lookFile = UiTestUtils.setUpLookFile(solo, getActivity());
-	}
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        createProject();
+        UiTestUtils.prepareStageForTest();
+        UiTestUtils.getIntoScriptActivityFromMainMenu(solo, 2);
+        lookFile = UiTestUtils.setUpLookFile(solo, getActivity());
+    }
 
-	@Override
-	public void tearDown() throws Exception {
-		if (lookFile != null) {
-			lookFile.delete();
-		}
-		super.tearDown();
-	}
+    @Override
+    public void tearDown() throws Exception {
+        if (lookFile != null) {
+            lookFile.delete();
+        }
+        super.tearDown();
+    }
 
-	public void testPointToBrickTest() throws InterruptedException {
-		solo.sleep(500);
-		ListView dragDropListView = UiTestUtils.getScriptListView(solo);
-		BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
+    public void testPointToBrickTest() throws InterruptedException {
+        solo.sleep(500);
+        ListView dragDropListView = UiTestUtils.getScriptListView(solo);
+        BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
 
-		int childrenCount = adapter.getChildCountFromLastGroup();
+        int childrenCount = adapter.getChildCountFromLastGroup();
 
-		assertEquals("Incorrect number of bricks.", 3, dragDropListView.getChildCount());
-		assertEquals("Incorrect number of bricks.", 2, childrenCount);
+        assertEquals("Incorrect number of bricks.", 3, dragDropListView.getChildCount());
+        assertEquals("Incorrect number of bricks.", 2, childrenCount);
 
-		ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
-		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
+        ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
+        assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
 
-		int oldSpriteListSize = project.getDefaultScene().getSpriteList().size();
-		String spinnerNewText = solo.getString(R.string.new_broadcast_message);
+        int oldSpriteListSize = project.getDefaultScene().getSpriteList().size();
+        String spinnerNewText = solo.getString(R.string.new_broadcast_message);
 
-		assertNotNull("TextView does not exist", solo.getText(solo.getString(R.string.brick_point_to)));
+        assertNotNull("TextView does not exist", solo.getText(solo.getString(R.string.brick_point_to)));
 
-		solo.clickOnView(solo.getCurrentActivity().findViewById(R.id.brick_point_to_spinner));
-		solo.waitForText(spinnerNewText);
-		solo.clickInList(0);
-		assertTrue("First step of dialog not shown",
-				solo.waitForFragmentByTag(NewSpriteDialog.DIALOG_FRAGMENT_TAG, 5000));
-		solo.goBack();
+        solo.clickOnView(solo.getCurrentActivity().findViewById(R.id.brick_point_to_spinner));
+        solo.waitForText(spinnerNewText);
+        solo.clickInList(0);
+        assertTrue("First step of dialog not shown",
+                solo.waitForFragmentByTag(NewSpriteDialog.DIALOG_FRAGMENT_TAG, 5000));
+        solo.goBack();
 
-		String newSpriteName1 = "cat3";
-		createNewObjectWithinBrick(newSpriteName1, R.string.no);
-		assertEquals("In wrong sprite", spriteName1, ProjectManager.getInstance().getCurrentSprite().getName());
+        String newSpriteName1 = "cat3";
+        createNewObjectWithinBrick(newSpriteName1, R.string.no);
+        assertEquals("In wrong sprite", spriteName1, ProjectManager.getInstance().getCurrentSprite().getName());
 
-		assertEquals("Wrong number of sprites", oldSpriteListSize + 1, project.getDefaultScene().getSpriteList().size());
-		assertEquals("Wrong selection", newSpriteName1, ((Spinner) solo.getView(R.id.brick_point_to_spinner))
-				.getSelectedItem().toString());
+        assertEquals("Wrong number of sprites", oldSpriteListSize + 1, project.getDefaultScene().getSpriteList().size());
+        assertEquals("Wrong selection", newSpriteName1, ((Spinner) solo.getView(R.id.brick_point_to_spinner))
+                .getSelectedItem().toString());
 
-		solo.clickOnView(solo.getCurrentActivity().findViewById(R.id.brick_point_to_spinner));
-		solo.waitForText(spinnerNewText);
-		solo.clickInList(0);
-		solo.goBack();
-		assertEquals("Wrong selection", newSpriteName1, ((Spinner) solo.getView(R.id.brick_point_to_spinner))
-				.getSelectedItem().toString());
+        solo.clickOnView(solo.getCurrentActivity().findViewById(R.id.brick_point_to_spinner));
+        solo.waitForText(spinnerNewText);
+        solo.clickInList(0);
+        solo.goBack();
+        assertEquals("Wrong selection", newSpriteName1, ((Spinner) solo.getView(R.id.brick_point_to_spinner))
+                .getSelectedItem().toString());
 
-		String newSpriteName2 = "cat4";
-		createNewObjectWithinBrick(newSpriteName2, R.string.yes);
-		assertEquals("In wrong sprite", newSpriteName2, ProjectManager.getInstance().getCurrentSprite().getName());
+        String newSpriteName2 = "cat4";
+        createNewObjectWithinBrick(newSpriteName2, R.string.yes);
+        assertEquals("In wrong sprite", newSpriteName2, ProjectManager.getInstance().getCurrentSprite().getName());
 
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_add);
-		solo.clickOnText(solo.getString(R.string.category_motion));
-		solo.searchText(solo.getString(R.string.category_motion));
-		ListView fragmentListView = solo.getCurrentViews(ListView.class).get(
-				solo.getCurrentViews(ListView.class).size() - 1);
-		solo.scrollDownList(fragmentListView);
-		assertTrue("Wrong selection in prototype spinner", solo.isSpinnerTextSelected(spriteName2));
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_add);
+        solo.clickOnText(solo.getString(R.string.category_motion));
+        solo.searchText(solo.getString(R.string.category_motion));
+        ListView fragmentListView = solo.getCurrentViews(ListView.class).get(
+                solo.getCurrentViews(ListView.class).size() - 1);
+        solo.scrollDownList(fragmentListView);
+        assertTrue("Wrong selection in prototype spinner", solo.isSpinnerTextSelected(spriteName2));
 
-		UiTestUtils.goToHomeActivity(getActivity());
-		solo.clickOnText(solo.getString(R.string.main_menu_continue));
+        UiTestUtils.goToHomeActivity(getActivity());
+        solo.clickOnText(solo.getString(R.string.main_menu_continue));
 
-		solo.clickLongOnText(spriteName1);
-		solo.waitForText(solo.getString(R.string.delete));
-		solo.clickOnText(solo.getString(R.string.delete));
+        solo.clickLongOnText(spriteName1);
+        solo.waitForText(solo.getString(R.string.delete));
+        solo.clickOnText(solo.getString(R.string.delete));
 
-		assertTrue("Confirmation-dialog not shown",
-				solo.waitForText(solo.getString(R.string.dialog_confirm_delete_object_message), 0, 2000));
-		solo.clickOnText(solo.getString(R.string.yes));
+        assertTrue("Confirmation-dialog not shown",
+                solo.waitForText(solo.getString(R.string.dialog_confirm_delete_object_message), 0, 2000));
+        solo.clickOnText(solo.getString(R.string.yes));
 
-		solo.clickLongOnText(newSpriteName1);
-		solo.waitForText(solo.getString(R.string.delete));
-		solo.clickOnText(solo.getString(R.string.delete));
-		solo.clickOnButton(solo.getString(R.string.yes));
+        solo.clickLongOnText(newSpriteName1);
+        solo.waitForText(solo.getString(R.string.delete));
+        solo.clickOnText(solo.getString(R.string.delete));
+        solo.clickOnButton(solo.getString(R.string.yes));
 
-		solo.clickLongOnText(newSpriteName2);
-		solo.waitForText(solo.getString(R.string.delete));
-		solo.clickOnText(solo.getString(R.string.delete));
-		solo.clickOnButton(solo.getString(R.string.yes));
+        solo.clickLongOnText(newSpriteName2);
+        solo.waitForText(solo.getString(R.string.delete));
+        solo.clickOnText(solo.getString(R.string.delete));
+        solo.clickOnButton(solo.getString(R.string.yes));
 
-		solo.clickOnText(spriteName2);
-		solo.sleep(200);
-		solo.clickOnText(solo.getString(R.string.scripts));
+        solo.clickOnText(spriteName2);
+        solo.sleep(200);
+        solo.clickOnText(solo.getString(R.string.scripts));
 
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_add);
-		solo.clickOnText(solo.getString(R.string.category_motion));
-		solo.searchText(solo.getString(R.string.category_motion));
-		fragmentListView = solo.getCurrentViews(ListView.class).get(solo.getCurrentViews(ListView.class).size() - 1);
-		solo.scrollDownList(fragmentListView);
-		assertTrue("Wrong selection in prototype spinner", solo.isSpinnerTextSelected(spinnerNewText));
-	}
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_add);
+        solo.clickOnText(solo.getString(R.string.category_motion));
+        solo.searchText(solo.getString(R.string.category_motion));
+        fragmentListView = solo.getCurrentViews(ListView.class).get(solo.getCurrentViews(ListView.class).size() - 1);
+        solo.scrollDownList(fragmentListView);
+        assertTrue("Wrong selection in prototype spinner", solo.isSpinnerTextSelected(spinnerNewText));
+    }
 
-	private void createProject() {
-		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+    private void createProject() {
+        project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
 
-		Sprite sprite2 = new SingleSprite(spriteName2);
-		Script startScript2 = new StartScript();
-		PlaceAtBrick placeAt2 = new PlaceAtBrick(-400, -300);
-		startScript2.addBrick(placeAt2);
-		sprite2.addScript(startScript2);
-		project.getDefaultScene().addSprite(sprite2);
+        Sprite sprite2 = new SingleSprite(spriteName2);
+        Script startScript2 = new StartScript();
+        PlaceAtBrick placeAt2 = new PlaceAtBrick(-400, -300);
+        startScript2.addBrick(placeAt2);
+        sprite2.addScript(startScript2);
+        project.getDefaultScene().addSprite(sprite2);
 
-		Sprite sprite1 = new SingleSprite(spriteName1);
-		Script startScript1 = new StartScript();
-		PlaceAtBrick placeAt1 = new PlaceAtBrick(300, 400);
-		startScript1.addBrick(placeAt1);
-		pointToBrick = new PointToBrick(sprite2);
-		startScript1.addBrick(pointToBrick);
-		sprite1.addScript(startScript1);
-		project.getDefaultScene().addSprite(sprite1);
+        Sprite sprite1 = new SingleSprite(spriteName1);
+        Script startScript1 = new StartScript();
+        PlaceAtBrick placeAt1 = new PlaceAtBrick(300, 400);
+        startScript1.addBrick(placeAt1);
+        pointToBrick = new PointToBrick(sprite2);
+        startScript1.addBrick(pointToBrick);
+        sprite1.addScript(startScript1);
+        project.getDefaultScene().addSprite(sprite1);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite1);
-		ProjectManager.getInstance().setCurrentScript(startScript1);
-		StorageHandler.getInstance().saveProject(project);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite1);
+        ProjectManager.getInstance().setCurrentScript(startScript1);
+        StorageHandler.getInstance().saveProject(project);
+    }
 
-	private void createNewObjectWithinBrick(String objectName, int stringToClickOnAtTheEnd) {
-		SpinnerAdapterWrapper spinner = (SpinnerAdapterWrapper) Reflection.getPrivateField(pointToBrick,
-				"spinnerAdapterWrapper");
+    private void createNewObjectWithinBrick(String objectName, int stringToClickOnAtTheEnd) {
+        SpinnerAdapterWrapper spinner = (SpinnerAdapterWrapper) Reflection.getPrivateField(pointToBrick,
+                "spinnerAdapterWrapper");
 
-		UiTestUtils.showAndFilloutNewSpriteDialogWithoutClickingOk(solo, objectName, Uri.fromFile(lookFile),
-				ActionAfterFinished.ACTION_UPDATE_SPINNER, spinner);
-		solo.clickOnButton(solo.getString(R.string.ok));
+        UiTestUtils.showAndFilloutNewSpriteDialogWithoutClickingOk(solo, objectName, Uri.fromFile(lookFile),
+                ActionAfterFinished.ACTION_UPDATE_SPINNER, spinner);
+        solo.clickOnButton(solo.getString(R.string.ok));
 
-		UiTestUtils.hidePocketPaintDialog(solo);
-		assertTrue("Dialog not shown",
-				solo.waitForText(solo.getString(R.string.dialog_new_object_switch_message), 0, 10000));
-		solo.clickOnButton(solo.getString(stringToClickOnAtTheEnd));
-		UiTestUtils.hidePocketPaintDialog(solo);
-	}
+        UiTestUtils.hidePocketPaintDialog(solo);
+        assertTrue("Dialog not shown",
+                solo.waitForText(solo.getString(R.string.dialog_new_object_switch_message), 0, 10000));
+        solo.clickOnButton(solo.getString(stringToClickOnAtTheEnd));
+        UiTestUtils.hidePocketPaintDialog(solo);
+    }
 }

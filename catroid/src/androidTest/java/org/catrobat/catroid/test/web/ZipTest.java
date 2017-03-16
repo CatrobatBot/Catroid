@@ -33,52 +33,52 @@ import java.io.IOException;
 
 public class ZipTest extends AndroidTestCase {
 
-	public ZipTest() {
-		super();
-	}
+    public ZipTest() {
+        super();
+    }
 
-	public void testZipUnzip() throws IOException {
+    public void testZipUnzip() throws IOException {
 
-		String pathToTest = Constants.TMP_PATH + "/test1/";
+        String pathToTest = Constants.TMP_PATH + "/test1/";
 
-		File testfile = new File(pathToTest + "test2/testfile.txt");
-		testfile.getParentFile().mkdirs();
-		testfile.createNewFile();
+        File testfile = new File(pathToTest + "test2/testfile.txt");
+        testfile.getParentFile().mkdirs();
+        testfile.createNewFile();
 
-		String[] paths = { pathToTest };
+        String[] paths = {pathToTest};
 
-		String zipFileName = Constants.TMP_PATH + "/testzip" + Constants.CATROBAT_EXTENSION;
-		File zipFile = new File(zipFileName);
-		if (zipFile.exists()) {
-			zipFile.delete();
-		}
+        String zipFileName = Constants.TMP_PATH + "/testzip" + Constants.CATROBAT_EXTENSION;
+        File zipFile = new File(zipFileName);
+        if (zipFile.exists()) {
+            zipFile.delete();
+        }
 
-		zipFile.getParentFile().mkdirs();
-		zipFile.createNewFile();
+        zipFile.getParentFile().mkdirs();
+        zipFile.createNewFile();
 
-		if (!UtilZip.writeToZipFile(paths, zipFileName)) {
-			zipFile.delete();
-			assertFalse("zip failed", true);
-			return;
-		}
-		testfile.delete();
-		testfile.getParentFile().delete();
+        if (!UtilZip.writeToZipFile(paths, zipFileName)) {
+            zipFile.delete();
+            assertFalse("zip failed", true);
+            return;
+        }
+        testfile.delete();
+        testfile.getParentFile().delete();
 
-		if (!UtilZip.unZipFile(zipFileName, Constants.TMP_PATH + "/")) {
-			zipFile.delete();
-			assertFalse("unzip failed", true);
-			return;
-		}
+        if (!UtilZip.unZipFile(zipFileName, Constants.TMP_PATH + "/")) {
+            zipFile.delete();
+            assertFalse("unzip failed", true);
+            return;
+        }
 
-		File checkfile = new File(pathToTest + "/test2/testfile.txt");
+        File checkfile = new File(pathToTest + "/test2/testfile.txt");
 
-		assertTrue("File was not recreated from zip.", checkfile.exists());
+        assertTrue("File was not recreated from zip.", checkfile.exists());
 
-		zipFile.delete();
+        zipFile.delete();
 
-		File tempDirectory = new File(Constants.TMP_PATH);
-		if (tempDirectory.exists()) {
-			UtilFile.deleteDirectory(tempDirectory);
-		}
-	}
+        File tempDirectory = new File(Constants.TMP_PATH);
+        if (tempDirectory.exists()) {
+            UtilFile.deleteDirectory(tempDirectory);
+        }
+    }
 }

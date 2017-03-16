@@ -34,149 +34,149 @@ import org.catrobat.catroid.pocketmusic.note.Track;
 
 public class TrackTest extends AndroidTestCase {
 
-	public void testGetInstrument() {
-		Track track = TrackTestDataFactory.createTrack();
+    public void testGetInstrument() {
+        Track track = TrackTestDataFactory.createTrack();
 
-		assertEquals("Failed to create Track", MusicalInstrument.ACOUSTIC_GRAND_PIANO, track.getInstrument());
-	}
+        assertEquals("Failed to create Track", MusicalInstrument.ACOUSTIC_GRAND_PIANO, track.getInstrument());
+    }
 
-	public void testAddNoteEvent1() {
-		Track track = TrackTestDataFactory.createTrack();
-		track.addNoteEvent(0, NoteEventTestDataFactory.createNoteEvent());
+    public void testAddNoteEvent1() {
+        Track track = TrackTestDataFactory.createTrack();
+        track.addNoteEvent(0, NoteEventTestDataFactory.createNoteEvent());
 
-		assertEquals("Failed to add note Event", 1, track.size());
-	}
+        assertEquals("Failed to add note Event", 1, track.size());
+    }
 
-	public void testAddNoteEvent2() {
-		Track track = TrackTestDataFactory.createTrack();
-		track.addNoteEvent(0, NoteEventTestDataFactory.createNoteEvent());
-		track.addNoteEvent(0, NoteEventTestDataFactory.createNoteEvent());
+    public void testAddNoteEvent2() {
+        Track track = TrackTestDataFactory.createTrack();
+        track.addNoteEvent(0, NoteEventTestDataFactory.createNoteEvent());
+        track.addNoteEvent(0, NoteEventTestDataFactory.createNoteEvent());
 
-		assertEquals("Failed to add note Event", 1, track.size());
-	}
+        assertEquals("Failed to add note Event", 1, track.size());
+    }
 
-	public void testGetNoteEventsForTick() {
-		Track track = TrackTestDataFactory.createTrack();
-		long tick = 0;
-		NoteEvent noteEvent = NoteEventTestDataFactory.createNoteEvent();
-		track.addNoteEvent(tick, noteEvent);
+    public void testGetNoteEventsForTick() {
+        Track track = TrackTestDataFactory.createTrack();
+        long tick = 0;
+        NoteEvent noteEvent = NoteEventTestDataFactory.createNoteEvent();
+        track.addNoteEvent(tick, noteEvent);
 
-		assertEquals("Failed to get Note event for Tick", noteEvent, track.getNoteEventsForTick(tick).get(0));
-	}
+        assertEquals("Failed to get Note event for Tick", noteEvent, track.getNoteEventsForTick(tick).get(0));
+    }
 
-	public void testEquals1() {
-		long tick = 0;
-		Track track1 = TrackTestDataFactory.createTrack();
-		track1.addNoteEvent(tick, NoteEventTestDataFactory.createNoteEvent());
-		Track track2 = TrackTestDataFactory.createTrack();
-		track2.addNoteEvent(tick, NoteEventTestDataFactory.createNoteEvent());
+    public void testEquals1() {
+        long tick = 0;
+        Track track1 = TrackTestDataFactory.createTrack();
+        track1.addNoteEvent(tick, NoteEventTestDataFactory.createNoteEvent());
+        Track track2 = TrackTestDataFactory.createTrack();
+        track2.addNoteEvent(tick, NoteEventTestDataFactory.createNoteEvent());
 
-		assertTrue("Equal comparison failed", track1.equals(track2));
-	}
+        assertTrue("Equal comparison failed", track1.equals(track2));
+    }
 
-	public void testEquals2() {
-		long tick = 0;
-		Track track1 = TrackTestDataFactory.createTrack();
-		track1.addNoteEvent(tick, NoteEventTestDataFactory.createNoteEvent(NoteName.C1));
-		Track track2 = TrackTestDataFactory.createTrack();
-		track2.addNoteEvent(tick, NoteEventTestDataFactory.createNoteEvent(NoteName.C2));
+    public void testEquals2() {
+        long tick = 0;
+        Track track1 = TrackTestDataFactory.createTrack();
+        track1.addNoteEvent(tick, NoteEventTestDataFactory.createNoteEvent(NoteName.C1));
+        Track track2 = TrackTestDataFactory.createTrack();
+        track2.addNoteEvent(tick, NoteEventTestDataFactory.createNoteEvent(NoteName.C2));
 
-		assertFalse("Equal comparison failed", track1.equals(track2));
-	}
+        assertFalse("Equal comparison failed", track1.equals(track2));
+    }
 
-	public void testEquals3() {
-		Track track1 = TrackTestDataFactory.createTrack();
-		track1.addNoteEvent(0, NoteEventTestDataFactory.createNoteEvent());
-		Track track2 = TrackTestDataFactory.createTrack();
+    public void testEquals3() {
+        Track track1 = TrackTestDataFactory.createTrack();
+        track1.addNoteEvent(0, NoteEventTestDataFactory.createNoteEvent());
+        Track track2 = TrackTestDataFactory.createTrack();
 
-		assertFalse("Equal comparison failed", track1.equals(track2));
-	}
+        assertFalse("Equal comparison failed", track1.equals(track2));
+    }
 
-	public void testEquals4() {
-		Track track1 = TrackTestDataFactory.createTrack(MusicalInstrument.ACCORDION);
-		Track track2 = TrackTestDataFactory.createTrack(MusicalInstrument.ALTO_SAX);
+    public void testEquals4() {
+        Track track1 = TrackTestDataFactory.createTrack(MusicalInstrument.ACCORDION);
+        Track track2 = TrackTestDataFactory.createTrack(MusicalInstrument.ALTO_SAX);
 
-		assertFalse("Equal comparison failed", track1.equals(track2));
-	}
+        assertFalse("Equal comparison failed", track1.equals(track2));
+    }
 
-	public void testEquals5() {
-		Track track1 = TrackTestDataFactory.createTrack(MusicalKey.BASS);
-		Track track2 = TrackTestDataFactory.createTrack(MusicalKey.VIOLIN);
+    public void testEquals5() {
+        Track track1 = TrackTestDataFactory.createTrack(MusicalKey.BASS);
+        Track track2 = TrackTestDataFactory.createTrack(MusicalKey.VIOLIN);
 
-		assertFalse("Equal comparison failed", track1.equals(track2));
-	}
+        assertFalse("Equal comparison failed", track1.equals(track2));
+    }
 
-	public void testEquals6() {
-		Track track = TrackTestDataFactory.createTrack();
+    public void testEquals6() {
+        Track track = TrackTestDataFactory.createTrack();
 
-		assertFalse("Equal comparison failed", track.equals(null));
-	}
+        assertFalse("Equal comparison failed", track.equals(null));
+    }
 
-	public void testEquals7() {
-		Track track = TrackTestDataFactory.createTrack();
+    public void testEquals7() {
+        Track track = TrackTestDataFactory.createTrack();
 
-		assertFalse("Equal comparison failed", track.equals(""));
-	}
+        assertFalse("Equal comparison failed", track.equals(""));
+    }
 
-	public void testToString() {
-		Track track = TrackTestDataFactory.createTrack();
-		String expectedString = "[Track] instrument=" + MusicalInstrument.ACOUSTIC_GRAND_PIANO
-				+ " key=" + track.getKey()
-				+ " size=" + track.size();
+    public void testToString() {
+        Track track = TrackTestDataFactory.createTrack();
+        String expectedString = "[Track] instrument=" + MusicalInstrument.ACOUSTIC_GRAND_PIANO
+                + " key=" + track.getKey()
+                + " size=" + track.size();
 
-		assertEquals("Failed to create String from track", expectedString, track.toString());
-	}
+        assertEquals("Failed to create String from track", expectedString, track.toString());
+    }
 
-	public void testSetTickBasedOnTrack1() {
-		Track track = TrackTestDataFactory.createTrack();
+    public void testSetTickBasedOnTrack1() {
+        Track track = TrackTestDataFactory.createTrack();
 
-		assertEquals("Failed to set Tick based on Track", 0, track.getLastTick());
-	}
+        assertEquals("Failed to set Tick based on Track", 0, track.getLastTick());
+    }
 
-	public void testSetTickBasedOnTrack2() {
-		Track track = TrackTestDataFactory.createTrack();
-		long tick = 0;
+    public void testSetTickBasedOnTrack2() {
+        Track track = TrackTestDataFactory.createTrack();
+        long tick = 0;
 
-		track.addNoteEvent(tick, NoteEventTestDataFactory.createNoteEvent(true));
-		tick += NoteLength.QUARTER.toTicks(Project.DEFAULT_BEATS_PER_MINUTE);
-		track.addNoteEvent(tick, NoteEventTestDataFactory.createNoteEvent(false));
+        track.addNoteEvent(tick, NoteEventTestDataFactory.createNoteEvent(true));
+        tick += NoteLength.QUARTER.toTicks(Project.DEFAULT_BEATS_PER_MINUTE);
+        track.addNoteEvent(tick, NoteEventTestDataFactory.createNoteEvent(false));
 
-		assertEquals("Failed to set Tick based on Track", tick, track.getLastTick());
-	}
+        assertEquals("Failed to set Tick based on Track", tick, track.getLastTick());
+    }
 
-	public void testCopyTrack() {
-		Track track = TrackTestDataFactory.createSimpleTrack();
-		Track copyTrack = new Track(track);
+    public void testCopyTrack() {
+        Track track = TrackTestDataFactory.createSimpleTrack();
+        Track copyTrack = new Track(track);
 
-		assertTrue("Failed to create copy from Track", track != copyTrack);
-		assertTrue("Copied Track not equal to original Track", track.equals(copyTrack));
-	}
+        assertTrue("Failed to create copy from Track", track != copyTrack);
+        assertTrue("Copied Track not equal to original Track", track.equals(copyTrack));
+    }
 
-	public void testEmpty1() {
-		Track track = TrackTestDataFactory.createTrack();
+    public void testEmpty1() {
+        Track track = TrackTestDataFactory.createTrack();
 
-		assertTrue("Track not empty", track.empty());
-	}
+        assertTrue("Track not empty", track.empty());
+    }
 
-	public void testEmpty2() {
-		Track track = TrackTestDataFactory.createTrack();
-		long tick = 0;
+    public void testEmpty2() {
+        Track track = TrackTestDataFactory.createTrack();
+        long tick = 0;
 
-		track.addNoteEvent(tick, NoteEventTestDataFactory.createNoteEvent());
+        track.addNoteEvent(tick, NoteEventTestDataFactory.createNoteEvent());
 
-		assertFalse("Track not empty", track.empty());
-	}
+        assertFalse("Track not empty", track.empty());
+    }
 
-	public void testGetTotalTimeInMilliseconds() {
-		Track track = TrackTestDataFactory.createTrack();
-		NoteLength noteLength = NoteLength.QUARTER;
-		long expecteTotalTime = noteLength.toMilliseconds(Project.DEFAULT_BEATS_PER_MINUTE);
-		long tick = 0;
+    public void testGetTotalTimeInMilliseconds() {
+        Track track = TrackTestDataFactory.createTrack();
+        NoteLength noteLength = NoteLength.QUARTER;
+        long expecteTotalTime = noteLength.toMilliseconds(Project.DEFAULT_BEATS_PER_MINUTE);
+        long tick = 0;
 
-		track.addNoteEvent(tick, NoteEventTestDataFactory.createNoteEvent(true));
-		tick += noteLength.toTicks(Project.DEFAULT_BEATS_PER_MINUTE);
-		track.addNoteEvent(tick, NoteEventTestDataFactory.createNoteEvent(false));
+        track.addNoteEvent(tick, NoteEventTestDataFactory.createNoteEvent(true));
+        tick += noteLength.toTicks(Project.DEFAULT_BEATS_PER_MINUTE);
+        track.addNoteEvent(tick, NoteEventTestDataFactory.createNoteEvent(false));
 
-		assertEquals("Failed to get total time in Milliseconds", expecteTotalTime, track.getTotalTimeInMilliseconds());
-	}
+        assertEquals("Failed to get total time in Milliseconds", expecteTotalTime, track.getTotalTimeInMilliseconds());
+    }
 }

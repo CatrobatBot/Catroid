@@ -39,74 +39,74 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class RaspiIfLogicBeginBrick extends IfLogicBeginBrick {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public RaspiIfLogicBeginBrick() {
-		super();
-	}
+    public RaspiIfLogicBeginBrick() {
+        super();
+    }
 
-	public RaspiIfLogicBeginBrick(int condition) {
-		super(condition);
-	}
+    public RaspiIfLogicBeginBrick(int condition) {
+        super(condition);
+    }
 
-	public RaspiIfLogicBeginBrick(Formula condition) {
-		super(condition);
-	}
+    public RaspiIfLogicBeginBrick(Formula condition) {
+        super(condition);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return SOCKET_RASPI;
-	}
+    @Override
+    public int getRequiredResources() {
+        return SOCKET_RASPI;
+    }
 
-	@Override
-	public Brick clone() {
-		return new RaspiIfLogicBeginBrick(getFormulaWithBrickField(BrickField.IF_CONDITION).clone());
-	}
+    @Override
+    public Brick clone() {
+        return new RaspiIfLogicBeginBrick(getFormulaWithBrickField(BrickField.IF_CONDITION).clone());
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		if (view == null) {
-			alphaValue = 255;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        if (view == null) {
+            alphaValue = 255;
+        }
 
-		view = View.inflate(context, R.layout.brick_raspi_if_begin_if, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_raspi_if_begin_if, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_raspi_if_begin_checkbox);
+        setCheckboxView(R.id.brick_raspi_if_begin_checkbox);
 
-		TextView ifBeginTextView = (TextView) view.findViewById(R.id.brick_raspi_if_begin_edit_text);
+        TextView ifBeginTextView = (TextView) view.findViewById(R.id.brick_raspi_if_begin_edit_text);
 
-		getFormulaWithBrickField(BrickField.IF_CONDITION).setTextFieldId(R.id.brick_raspi_if_begin_edit_text);
-		getFormulaWithBrickField(BrickField.IF_CONDITION).refreshTextField(view);
+        getFormulaWithBrickField(BrickField.IF_CONDITION).setTextFieldId(R.id.brick_raspi_if_begin_edit_text);
+        getFormulaWithBrickField(BrickField.IF_CONDITION).refreshTextField(view);
 
-		ifBeginTextView.setOnClickListener(this);
+        ifBeginTextView.setOnClickListener(this);
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		View prototypeView = View.inflate(context, R.layout.brick_raspi_if_begin_if, null);
-		TextView textIfBegin = (TextView) prototypeView.findViewById(R.id.brick_raspi_if_begin_edit_text);
-		textIfBegin.setText(String.valueOf(BrickValues.RASPI_DIGITAL_INITIAL_PIN_NUMBER));
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        View prototypeView = View.inflate(context, R.layout.brick_raspi_if_begin_if, null);
+        TextView textIfBegin = (TextView) prototypeView.findViewById(R.id.brick_raspi_if_begin_edit_text);
+        textIfBegin.setText(String.valueOf(BrickValues.RASPI_DIGITAL_INITIAL_PIN_NUMBER));
+        return prototypeView;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		SequenceAction ifAction = (SequenceAction) sprite.getActionFactory().createSequence();
-		SequenceAction elseAction = (SequenceAction) sprite.getActionFactory().createSequence();
-		Action action = sprite.getActionFactory().createRaspiIfLogicActionAction(sprite, getFormulaWithBrickField(BrickField.IF_CONDITION), ifAction,
-				elseAction);
-		sequence.addAction(action);
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        SequenceAction ifAction = (SequenceAction) sprite.getActionFactory().createSequence();
+        SequenceAction elseAction = (SequenceAction) sprite.getActionFactory().createSequence();
+        Action action = sprite.getActionFactory().createRaspiIfLogicActionAction(sprite, getFormulaWithBrickField(BrickField.IF_CONDITION), ifAction,
+                elseAction);
+        sequence.addAction(action);
 
-		LinkedList<SequenceAction> returnActionList = new LinkedList<SequenceAction>();
-		returnActionList.add(elseAction);
-		returnActionList.add(ifAction);
+        LinkedList<SequenceAction> returnActionList = new LinkedList<SequenceAction>();
+        returnActionList.add(elseAction);
+        returnActionList.add(ifAction);
 
-		return returnActionList;
-	}
+        return returnActionList;
+    }
 }

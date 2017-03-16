@@ -34,38 +34,38 @@ import org.catrobat.catroid.stage.StageActivity;
 
 public class ThinkSayBubbleAction extends TemporalAction {
 
-	private Sprite sprite;
-	private Formula text;
-	private int type;
+    private Sprite sprite;
+    private Formula text;
+    private int type;
 
-	@Override
-	protected void update(float delta) {
-		String textToDisplay;
-		try {
-			textToDisplay = text == null ? "" : text.interpretString(sprite);
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-			return;
-		}
-		ShowBubbleActor showBubbleActor = new ShowBubbleActor(textToDisplay, sprite, type);
+    @Override
+    protected void update(float delta) {
+        String textToDisplay;
+        try {
+            textToDisplay = text == null ? "" : text.interpretString(sprite);
+        } catch (InterpretationException interpretationException) {
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+            return;
+        }
+        ShowBubbleActor showBubbleActor = new ShowBubbleActor(textToDisplay, sprite, type);
 
-		if (StageActivity.stageListener.getBubbleActorForSprite(sprite) != null) {
-			StageActivity.stageListener.getStage().getActors().removeValue(StageActivity.stageListener.getBubbleActorForSprite(sprite), true);
-			StageActivity.stageListener.removeBubbleActorForSprite(sprite);
-		}
-		StageActivity.stageListener.addActor(showBubbleActor);
-		StageActivity.stageListener.putBubbleActor(sprite, showBubbleActor);
-	}
+        if (StageActivity.stageListener.getBubbleActorForSprite(sprite) != null) {
+            StageActivity.stageListener.getStage().getActors().removeValue(StageActivity.stageListener.getBubbleActorForSprite(sprite), true);
+            StageActivity.stageListener.removeBubbleActorForSprite(sprite);
+        }
+        StageActivity.stageListener.addActor(showBubbleActor);
+        StageActivity.stageListener.putBubbleActor(sprite, showBubbleActor);
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setText(Formula text) {
-		this.text = text;
-	}
+    public void setText(Formula text) {
+        this.text = text;
+    }
 
-	public void setType(int type) {
-		this.type = type;
-	}
+    public void setType(int type) {
+        this.type = type;
+    }
 }

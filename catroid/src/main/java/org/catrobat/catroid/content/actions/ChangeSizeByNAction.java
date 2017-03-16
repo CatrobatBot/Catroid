@@ -32,24 +32,24 @@ import org.catrobat.catroid.formulaeditor.InterpretationException;
 
 public class ChangeSizeByNAction extends TemporalAction {
 
-	private Sprite sprite;
-	private Formula size;
+    private Sprite sprite;
+    private Formula size;
 
-	@Override
-	protected void update(float percent) {
-		try {
-			Float newSize = size == null ? Float.valueOf(0f) : size.interpretFloat(sprite);
-			sprite.look.changeSizeInUserInterfaceDimensionUnit(newSize);
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}
-	}
+    @Override
+    protected void update(float percent) {
+        try {
+            Float newSize = size == null ? Float.valueOf(0f) : size.interpretFloat(sprite);
+            sprite.look.changeSizeInUserInterfaceDimensionUnit(newSize);
+        } catch (InterpretationException interpretationException) {
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+        }
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setSize(Formula size) {
-		this.size = size;
-	}
+    public void setSize(Formula size) {
+        this.size = size;
+    }
 }

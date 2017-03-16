@@ -43,79 +43,79 @@ import org.catrobat.catroid.uitest.util.BaseActivityInstrumentationTestCase;
 import org.catrobat.catroid.uitest.util.UiTestUtils;
 
 public class FaceDetectionStartStopTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
-	private static final int SCREEN_WIDTH = 480;
-	private static final int SCREEN_HEIGHT = 800;
-	private static final int SLEEP_TIME = 1200;
+    private static final int SCREEN_WIDTH = 480;
+    private static final int SCREEN_HEIGHT = 800;
+    private static final int SLEEP_TIME = 1200;
 
-	public FaceDetectionStartStopTest() {
-		super(MainMenuActivity.class);
-	}
+    public FaceDetectionStartStopTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		createProjectFaceDetection();
-		UiTestUtils.prepareStageForTest();
-		UiTestUtils.getIntoSpritesFromMainMenu(solo);
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(SLEEP_TIME);
-	}
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        createProjectFaceDetection();
+        UiTestUtils.prepareStageForTest();
+        UiTestUtils.getIntoSpritesFromMainMenu(solo);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(SLEEP_TIME);
+    }
 
-	public void testGoingBack() {
-		assertTrue("Face detection was not started", FaceDetectionHandler.isFaceDetectionRunning());
+    public void testGoingBack() {
+        assertTrue("Face detection was not started", FaceDetectionHandler.isFaceDetectionRunning());
 
-		solo.goBackToActivity(MainMenuActivity.class.getSimpleName());
-		solo.sleep(SLEEP_TIME);
-		assertFalse("Face detection should be stopped when leaving to main menu",
-				FaceDetectionHandler.isFaceDetectionRunning());
-		solo.sleep(SLEEP_TIME);
-	}
+        solo.goBackToActivity(MainMenuActivity.class.getSimpleName());
+        solo.sleep(SLEEP_TIME);
+        assertFalse("Face detection should be stopped when leaving to main menu",
+                FaceDetectionHandler.isFaceDetectionRunning());
+        solo.sleep(SLEEP_TIME);
+    }
 
-	public void testStageMenu() throws Exception {
-		assertTrue("Face detection was not started", FaceDetectionHandler.isFaceDetectionRunning());
+    public void testStageMenu() throws Exception {
+        assertTrue("Face detection was not started", FaceDetectionHandler.isFaceDetectionRunning());
 
-		solo.sleep(SLEEP_TIME);
-		solo.goBack();
-		solo.sleep(SLEEP_TIME);
-		assertFalse("Face detection should be paused in stage dialog", FaceDetectionHandler.isFaceDetectionRunning());
-		solo.clickOnButton(solo.getString(R.string.stage_dialog_resume));
-		solo.sleep(SLEEP_TIME);
-		assertTrue("Face detection was not resumed when leaving stage dialog",
-				FaceDetectionHandler.isFaceDetectionRunning());
-		solo.sleep(SLEEP_TIME);
-		solo.goBack();
-		solo.sleep(SLEEP_TIME);
-		assertFalse("Face detection should be paused in stage dialog", FaceDetectionHandler.isFaceDetectionRunning());
-		solo.clickOnButton(solo.getString(R.string.stage_dialog_restart));
-		solo.sleep(SLEEP_TIME);
-		assertTrue("Face detection was not started when restarting stage",
-				FaceDetectionHandler.isFaceDetectionRunning());
+        solo.sleep(SLEEP_TIME);
+        solo.goBack();
+        solo.sleep(SLEEP_TIME);
+        assertFalse("Face detection should be paused in stage dialog", FaceDetectionHandler.isFaceDetectionRunning());
+        solo.clickOnButton(solo.getString(R.string.stage_dialog_resume));
+        solo.sleep(SLEEP_TIME);
+        assertTrue("Face detection was not resumed when leaving stage dialog",
+                FaceDetectionHandler.isFaceDetectionRunning());
+        solo.sleep(SLEEP_TIME);
+        solo.goBack();
+        solo.sleep(SLEEP_TIME);
+        assertFalse("Face detection should be paused in stage dialog", FaceDetectionHandler.isFaceDetectionRunning());
+        solo.clickOnButton(solo.getString(R.string.stage_dialog_restart));
+        solo.sleep(SLEEP_TIME);
+        assertTrue("Face detection was not started when restarting stage",
+                FaceDetectionHandler.isFaceDetectionRunning());
 
-		solo.goBack();
-		solo.clickOnButton(solo.getString(R.string.stage_dialog_back));
-		solo.sleep(SLEEP_TIME);
-		assertFalse("Face detection is running when leaving stage", FaceDetectionHandler.isFaceDetectionRunning());
-		solo.sleep(SLEEP_TIME);
-	}
+        solo.goBack();
+        solo.clickOnButton(solo.getString(R.string.stage_dialog_back));
+        solo.sleep(SLEEP_TIME);
+        assertFalse("Face detection is running when leaving stage", FaceDetectionHandler.isFaceDetectionRunning());
+        solo.sleep(SLEEP_TIME);
+    }
 
-	private void createProjectFaceDetection() {
-		ScreenValues.SCREEN_HEIGHT = SCREEN_HEIGHT;
-		ScreenValues.SCREEN_WIDTH = SCREEN_WIDTH;
+    private void createProjectFaceDetection() {
+        ScreenValues.SCREEN_HEIGHT = SCREEN_HEIGHT;
+        ScreenValues.SCREEN_WIDTH = SCREEN_WIDTH;
 
-		Project projectFaceDetection = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite sprite = new SingleSprite("fdSprite");
-		StartScript startScript = new StartScript();
-		SetSizeToBrick setSizeToBrick = new SetSizeToBrick(new Formula(new FormulaElement(ElementType.SENSOR,
-				Sensors.FACE_SIZE.name(), null)));
-		startScript.addBrick(setSizeToBrick);
-		sprite.addScript(startScript);
-		projectFaceDetection.getDefaultScene().addSprite(sprite);
+        Project projectFaceDetection = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Sprite sprite = new SingleSprite("fdSprite");
+        StartScript startScript = new StartScript();
+        SetSizeToBrick setSizeToBrick = new SetSizeToBrick(new Formula(new FormulaElement(ElementType.SENSOR,
+                Sensors.FACE_SIZE.name(), null)));
+        startScript.addBrick(setSizeToBrick);
+        sprite.addScript(startScript);
+        projectFaceDetection.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setFileChecksumContainer(new FileChecksumContainer());
-		ProjectManager.getInstance().setProject(projectFaceDetection);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(startScript);
-		StorageHandler.getInstance().saveProject(projectFaceDetection);
-	}
+        ProjectManager.getInstance().setFileChecksumContainer(new FileChecksumContainer());
+        ProjectManager.getInstance().setProject(projectFaceDetection);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(startScript);
+        StorageHandler.getInstance().saveProject(projectFaceDetection);
+    }
 }

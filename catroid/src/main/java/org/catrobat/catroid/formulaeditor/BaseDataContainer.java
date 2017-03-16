@@ -33,14 +33,14 @@ import java.util.List;
 import java.util.Map;
 
 public class BaseDataContainer implements Serializable {
-	protected static final long serialVersionUID = 1L;
+    protected static final long serialVersionUID = 1L;
 
-	@XStreamAlias("objectVariableList")
-	public Map<Sprite, List<UserVariable>> spriteVariables;
+    @XStreamAlias("objectVariableList")
+    public Map<Sprite, List<UserVariable>> spriteVariables;
 
-	@XStreamAlias("userBrickVariableList")
-	Map<UserBrick, List<UserVariable>> userBrickVariables = new HashMap<>();
+    @XStreamAlias("userBrickVariableList")
+    Map<UserBrick, List<UserVariable>> userBrickVariables = new HashMap<>();
 
-	@XStreamAlias("objectListOfList")
-	public Map<Sprite, List<UserList>> spriteListOfLists;
+    @XStreamAlias("objectListOfList")
+    public Map<Sprite, List<UserList>> spriteListOfLists;
 }

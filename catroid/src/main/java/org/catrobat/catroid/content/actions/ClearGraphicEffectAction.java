@@ -28,16 +28,16 @@ import org.catrobat.catroid.content.Sprite;
 
 public class ClearGraphicEffectAction extends TemporalAction {
 
-	private Sprite sprite;
+    private Sprite sprite;
 
-	@Override
-	protected void update(float percent) {
-		sprite.look.setBrightnessInUserInterfaceDimensionUnit(100.0f);
-		sprite.look.setTransparencyInUserInterfaceDimensionUnit(0.0f);
-		sprite.look.setColorInUserInterfaceDimensionUnit(0.0f);
-	}
+    @Override
+    protected void update(float percent) {
+        sprite.look.setBrightnessInUserInterfaceDimensionUnit(100.0f);
+        sprite.look.setTransparencyInUserInterfaceDimensionUnit(0.0f);
+        sprite.look.setColorInUserInterfaceDimensionUnit(0.0f);
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 }

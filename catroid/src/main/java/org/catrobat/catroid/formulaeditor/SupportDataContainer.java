@@ -28,9 +28,9 @@ import java.util.List;
 
 public class SupportDataContainer extends BaseDataContainer {
 
-	@XStreamAlias("programVariableList")
-	public List<UserVariable> projectVariables;
+    @XStreamAlias("programVariableList")
+    public List<UserVariable> projectVariables;
 
-	@XStreamAlias("programListOfLists")
-	public List<UserList> projectLists;
+    @XStreamAlias("programListOfLists")
+    public List<UserList> projectLists;
 }

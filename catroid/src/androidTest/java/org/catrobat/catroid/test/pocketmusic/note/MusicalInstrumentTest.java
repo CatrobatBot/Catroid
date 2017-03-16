@@ -28,20 +28,20 @@ import org.catrobat.catroid.pocketmusic.note.MusicalInstrument;
 
 public class MusicalInstrumentTest extends AndroidTestCase {
 
-	public void testGetInstrumentFromProgram1() {
-		MusicalInstrument expectedInstrument = MusicalInstrument.GUNSHOT;
+    public void testGetInstrumentFromProgram1() {
+        MusicalInstrument expectedInstrument = MusicalInstrument.GUNSHOT;
 
-		assertGetInstrumentFromProgram(expectedInstrument.getProgram(), expectedInstrument);
-	}
+        assertGetInstrumentFromProgram(expectedInstrument.getProgram(), expectedInstrument);
+    }
 
-	public void testGetInstrumentFromProgram2() {
-		int invalidProgram = 128;
+    public void testGetInstrumentFromProgram2() {
+        int invalidProgram = 128;
 
-		assertGetInstrumentFromProgram(invalidProgram, MusicalInstrument.ACOUSTIC_GRAND_PIANO);
-	}
+        assertGetInstrumentFromProgram(invalidProgram, MusicalInstrument.ACOUSTIC_GRAND_PIANO);
+    }
 
-	private void assertGetInstrumentFromProgram(int program, MusicalInstrument expectedInstrument) {
-		MusicalInstrument actualInstrument = MusicalInstrument.getInstrumentFromProgram(program);
-		assertEquals("Failed to get instrument from Program", expectedInstrument, actualInstrument);
-	}
+    private void assertGetInstrumentFromProgram(int program, MusicalInstrument expectedInstrument) {
+        MusicalInstrument actualInstrument = MusicalInstrument.getInstrumentFromProgram(program);
+        assertEquals("Failed to get instrument from Program", expectedInstrument, actualInstrument);
+    }
 }

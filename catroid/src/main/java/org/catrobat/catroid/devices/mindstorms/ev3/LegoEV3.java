@@ -30,28 +30,36 @@ import org.catrobat.catroid.formulaeditor.Sensors;
 
 public interface LegoEV3 extends Mindstorms, BluetoothDevice {
 
-	boolean isAlive();
+    boolean isAlive();
 
-	void playTone(int frequency, int duration, int volumeInPercent);
+    void playTone(int frequency, int duration, int volumeInPercent);
 
-	EV3Motor getMotorA();
-	EV3Motor getMotorB();
-	EV3Motor getMotorC();
-	EV3Motor getMotorD();
+    EV3Motor getMotorA();
 
-	void stopAllMovements();
+    EV3Motor getMotorB();
 
-	void moveMotorStepsSpeed(byte outputField, int chainLayer, int speed, int step1Tacho, int step2Tacho,
-			int step3Tacho, boolean brake);
-	void moveMotorSpeed(byte outputField, int chainLayer, int speed);
-	void stopMotor(byte outputField, int chainLayer, boolean brake);
+    EV3Motor getMotorC();
 
-	void setLed(int ledStatus);
+    EV3Motor getMotorD();
 
-	int getSensorValue(Sensors sensor);
+    void stopAllMovements();
 
-	MindstormsSensor getSensor1();
-	MindstormsSensor getSensor2();
-	MindstormsSensor getSensor3();
-	MindstormsSensor getSensor4();
+    void moveMotorStepsSpeed(byte outputField, int chainLayer, int speed, int step1Tacho, int step2Tacho,
+                             int step3Tacho, boolean brake);
+
+    void moveMotorSpeed(byte outputField, int chainLayer, int speed);
+
+    void stopMotor(byte outputField, int chainLayer, boolean brake);
+
+    void setLed(int ledStatus);
+
+    int getSensorValue(Sensors sensor);
+
+    MindstormsSensor getSensor1();
+
+    MindstormsSensor getSensor2();
+
+    MindstormsSensor getSensor3();
+
+    MindstormsSensor getSensor4();
 }

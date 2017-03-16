@@ -32,89 +32,89 @@ import java.util.HashMap;
 import java.util.List;
 
 public final class TouchUtil {
-	private static HashMap<Integer, Integer> currentlyTouchingPointersToTouchIndex = new HashMap<>();
-	private static ArrayList<PointF> touches = new ArrayList<>();
-	private static ArrayList<Boolean> isTouching = new ArrayList<>();
+    private static HashMap<Integer, Integer> currentlyTouchingPointersToTouchIndex = new HashMap<>();
+    private static ArrayList<PointF> touches = new ArrayList<>();
+    private static ArrayList<Boolean> isTouching = new ArrayList<>();
 
-	private TouchUtil() {
-		// static class, nothing to do
-	}
+    private TouchUtil() {
+        // static class, nothing to do
+    }
 
-	public static void reset() {
-		currentlyTouchingPointersToTouchIndex.clear();
-		touches.clear();
-		isTouching.clear();
-	}
+    public static void reset() {
+        currentlyTouchingPointersToTouchIndex.clear();
+        touches.clear();
+        isTouching.clear();
+    }
 
-	public static void updatePosition(float x, float y, int pointer) {
-		int index = currentlyTouchingPointersToTouchIndex.get(pointer);
-		touches.set(index, new PointF(x, y));
-	}
+    public static void updatePosition(float x, float y, int pointer) {
+        int index = currentlyTouchingPointersToTouchIndex.get(pointer);
+        touches.set(index, new PointF(x, y));
+    }
 
-	public static void touchDown(float x, float y, int pointer) {
-		if (currentlyTouchingPointersToTouchIndex.containsKey(pointer)) {
-			return;
-		}
-		currentlyTouchingPointersToTouchIndex.put(pointer, touches.size());
-		touches.add(new PointF(x, y));
-		isTouching.add(true);
-		fireTouchEvent();
-	}
+    public static void touchDown(float x, float y, int pointer) {
+        if (currentlyTouchingPointersToTouchIndex.containsKey(pointer)) {
+            return;
+        }
+        currentlyTouchingPointersToTouchIndex.put(pointer, touches.size());
+        touches.add(new PointF(x, y));
+        isTouching.add(true);
+        fireTouchEvent();
+    }
 
-	public static void touchUp(int pointer) {
-		if (!currentlyTouchingPointersToTouchIndex.containsKey(pointer)) {
-			return;
-		}
-		int index = currentlyTouchingPointersToTouchIndex.get(pointer);
-		isTouching.set(index, false);
-		currentlyTouchingPointersToTouchIndex.remove(pointer);
-	}
+    public static void touchUp(int pointer) {
+        if (!currentlyTouchingPointersToTouchIndex.containsKey(pointer)) {
+            return;
+        }
+        int index = currentlyTouchingPointersToTouchIndex.get(pointer);
+        isTouching.set(index, false);
+        currentlyTouchingPointersToTouchIndex.remove(pointer);
+    }
 
-	public static boolean isFingerTouching(int index) {
-		if (index < 1 || index > isTouching.size()) {
-			return false;
-		}
-		return isTouching.get(index - 1);
-	}
+    public static boolean isFingerTouching(int index) {
+        if (index < 1 || index > isTouching.size()) {
+            return false;
+        }
+        return isTouching.get(index - 1);
+    }
 
-	public static int getLastTouchIndex() {
-		return touches.size();
-	}
+    public static int getLastTouchIndex() {
+        return touches.size();
+    }
 
-	public static float getX(int index) {
-		if ((index < 1) || index > isTouching.size()) {
-			return 0.0f;
-		}
+    public static float getX(int index) {
+        if ((index < 1) || index > isTouching.size()) {
+            return 0.0f;
+        }
 
-		return touches.get(index - 1).x;
-	}
+        return touches.get(index - 1).x;
+    }
 
-	public static float getY(int index) {
-		if (index < 1 || index > isTouching.size()) {
-			return 0.0f;
-		}
+    public static float getY(int index) {
+        if (index < 1 || index > isTouching.size()) {
+            return 0.0f;
+        }
 
-		return touches.get(index - 1).y;
-	}
+        return touches.get(index - 1).y;
+    }
 
-	public static void setDummyTouchForTest(float x, float y) {
-		touches.add(new PointF(x, y));
-		isTouching.add(false);
-	}
+    public static void setDummyTouchForTest(float x, float y) {
+        touches.add(new PointF(x, y));
+        isTouching.add(false);
+    }
 
-	private static void fireTouchEvent() {
-		List<Sprite> spriteList = ProjectManager.getInstance().getCurrentProject().getSpriteListWithClones();
+    private static void fireTouchEvent() {
+        List<Sprite> spriteList = ProjectManager.getInstance().getCurrentProject().getSpriteListWithClones();
 
-		for (Sprite sprite : spriteList) {
-			sprite.createTouchDownAction();
-		}
-	}
+        for (Sprite sprite : spriteList) {
+            sprite.createTouchDownAction();
+        }
+    }
 
-	public static ArrayList<PointF> getCurrentTouchingPoints() {
-		ArrayList<PointF> points = new ArrayList<>();
-		for (int index : currentlyTouchingPointersToTouchIndex.values()) {
-			points.add(touches.get(index));
-		}
-		return points;
-	}
+    public static ArrayList<PointF> getCurrentTouchingPoints() {
+        ArrayList<PointF> points = new ArrayList<>();
+        for (int index : currentlyTouchingPointersToTouchIndex.values()) {
+            points.add(touches.get(index));
+        }
+        return points;
+    }
 }

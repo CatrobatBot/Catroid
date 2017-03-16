@@ -44,60 +44,60 @@ import java.io.File;
 
 public class SetLookActionTest extends InstrumentationTestCase {
 
-	private static final int IMAGE_FILE_ID = R.raw.icon;
-	private String projectName = "testProject";
-	private File testImage;
-	private Project project;
+    private static final int IMAGE_FILE_ID = R.raw.icon;
+    private String projectName = "testProject";
+    private File testImage;
+    private Project project;
 
-	@Override
-	protected void setUp() throws Exception {
+    @Override
+    protected void setUp() throws Exception {
 
-		File projectFile = new File(Constants.DEFAULT_ROOT + "/" + projectName);
+        File projectFile = new File(Constants.DEFAULT_ROOT + "/" + projectName);
 
-		if (projectFile.exists()) {
-			UtilFile.deleteDirectory(projectFile);
-		}
+        if (projectFile.exists()) {
+            UtilFile.deleteDirectory(projectFile);
+        }
 
-		project = new Project(getInstrumentation().getTargetContext(), projectName);
-		StorageHandler.getInstance().saveProject(project);
-		ProjectManager.getInstance().setProject(project);
+        project = new Project(getInstrumentation().getTargetContext(), projectName);
+        StorageHandler.getInstance().saveProject(project);
+        ProjectManager.getInstance().setProject(project);
 
-		testImage = TestUtils.saveFileToProject(this.projectName, project.getDefaultScene().getName(), "testImage.png", IMAGE_FILE_ID, getInstrumentation()
-				.getContext(), TestUtils.TYPE_IMAGE_FILE);
+        testImage = TestUtils.saveFileToProject(this.projectName, project.getDefaultScene().getName(), "testImage.png", IMAGE_FILE_ID, getInstrumentation()
+                .getContext(), TestUtils.TYPE_IMAGE_FILE);
 
-		BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-		bitmapOptions.inJustDecodeBounds = true;
-		BitmapFactory.decodeFile(this.testImage.getAbsolutePath(), bitmapOptions);
-	}
+        BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+        bitmapOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(this.testImage.getAbsolutePath(), bitmapOptions);
+    }
 
-	@Override
-	protected void tearDown() throws Exception {
-		File projectFile = new File(Constants.DEFAULT_ROOT + "/" + projectName);
+    @Override
+    protected void tearDown() throws Exception {
+        File projectFile = new File(Constants.DEFAULT_ROOT + "/" + projectName);
 
-		if (projectFile.exists()) {
-			UtilFile.deleteDirectory(projectFile);
-		}
-		if (testImage != null && testImage.exists()) {
-			testImage.delete();
-		}
-		super.tearDown();
-	}
+        if (projectFile.exists()) {
+            UtilFile.deleteDirectory(projectFile);
+        }
+        if (testImage != null && testImage.exists()) {
+            testImage.delete();
+        }
+        super.tearDown();
+    }
 
-	public void testSetLook() {
+    public void testSetLook() {
 
-		ScreenValues.SCREEN_HEIGHT = 200;
-		ScreenValues.SCREEN_WIDTH = 200;
+        ScreenValues.SCREEN_HEIGHT = 200;
+        ScreenValues.SCREEN_WIDTH = 200;
 
-		Sprite sprite = new SingleSprite("new sprite");
-		project.getDefaultScene().addSprite(sprite);
-		LookData lookData = new LookData();
-		lookData.setLookFilename(testImage.getName());
-		lookData.setLookName("testImage");
-		sprite.getLookDataList().add(lookData);
+        Sprite sprite = new SingleSprite("new sprite");
+        project.getDefaultScene().addSprite(sprite);
+        LookData lookData = new LookData();
+        lookData.setLookFilename(testImage.getName());
+        lookData.setLookName("testImage");
+        sprite.getLookDataList().add(lookData);
 
-		ActionFactory factory = sprite.getActionFactory();
-		Action action = factory.createSetLookAction(sprite, lookData);
-		action.act(1.0f);
-		assertEquals("Action didn't set the LookData", lookData, sprite.look.getLookData());
-	}
+        ActionFactory factory = sprite.getActionFactory();
+        Action action = factory.createSetLookAction(sprite, lookData);
+        action.act(1.0f);
+        assertEquals("Action didn't set the LookData", lookData, sprite.look.getLookData());
+    }
 }

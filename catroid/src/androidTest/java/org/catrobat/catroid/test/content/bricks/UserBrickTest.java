@@ -50,222 +50,222 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserBrickTest extends AndroidTestCase {
-	private static final String TAG = UserBrickTest.class.getSimpleName();
+    private static final String TAG = UserBrickTest.class.getSimpleName();
 
-	private Sprite sprite;
+    private Sprite sprite;
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		sprite = new SingleSprite("testSprite");
-		Project project = new Project(null, "testProject");
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        sprite = new SingleSprite("testSprite");
+        Project project = new Project(null, "testProject");
 
-		project.getDefaultScene().addSprite(sprite);
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-	}
+        project.getDefaultScene().addSprite(sprite);
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+    }
 
-	@Override
-	protected void tearDown() throws Exception {
-		ProjectManager.getInstance().setProject(null);
-		ProjectManager.getInstance().setCurrentSprite(null);
-		super.tearDown();
-	}
+    @Override
+    protected void tearDown() throws Exception {
+        ProjectManager.getInstance().setProject(null);
+        ProjectManager.getInstance().setCurrentSprite(null);
+        super.tearDown();
+    }
 
-	public void testSpriteHasOneUserBrickAfterAddingAUserBrick() {
-		UserBrick brick = new UserBrick(new UserScriptDefinitionBrick());
-		brick.getDefinitionBrick().addUIText("test0");
-		brick.getDefinitionBrick().addUILocalizedVariable("test1");
+    public void testSpriteHasOneUserBrickAfterAddingAUserBrick() {
+        UserBrick brick = new UserBrick(new UserScriptDefinitionBrick());
+        brick.getDefinitionBrick().addUIText("test0");
+        brick.getDefinitionBrick().addUILocalizedVariable("test1");
 
-		Script userScript = TestUtils.addUserBrickToSpriteAndGetUserScript(brick, sprite);
+        Script userScript = TestUtils.addUserBrickToSpriteAndGetUserScript(brick, sprite);
 
-		userScript.addBrick(new ChangeXByNBrick(1));
+        userScript.addBrick(new ChangeXByNBrick(1));
 
-		ArrayList<?> array = (ArrayList<?>) Reflection.getPrivateFieldOfBaseClass(sprite, "userBricks");
+        ArrayList<?> array = (ArrayList<?>) Reflection.getPrivateFieldOfBaseClass(sprite, "userBricks");
 
-		assertTrue("the sprite should have one user brick after we added a user brick to it, has " + array.size(),
-				array.size() == 1);
-	}
+        assertTrue("the sprite should have one user brick after we added a user brick to it, has " + array.size(),
+                array.size() == 1);
+    }
 
-	public void testSpriteMovedCorrectly() {
-		int moveValue = 0;
+    public void testSpriteMovedCorrectly() {
+        int moveValue = 0;
 
-		UserBrick brick = new UserBrick(new UserScriptDefinitionBrick());
-		brick.getDefinitionBrick().addUIText("test0");
-		brick.getDefinitionBrick().addUILocalizedVariable("test1");
-		brick.updateUserBrickParametersAndVariables();
+        UserBrick brick = new UserBrick(new UserScriptDefinitionBrick());
+        brick.getDefinitionBrick().addUIText("test0");
+        brick.getDefinitionBrick().addUILocalizedVariable("test1");
+        brick.updateUserBrickParametersAndVariables();
 
-		Script userScript = TestUtils.addUserBrickToSpriteAndGetUserScript(brick, sprite);
+        Script userScript = TestUtils.addUserBrickToSpriteAndGetUserScript(brick, sprite);
 
-		userScript.addBrick(new ChangeXByNBrick(moveValue));
+        userScript.addBrick(new ChangeXByNBrick(moveValue));
 
-		SequenceAction sequence = new SequenceAction();
-		brick.addActionToSequence(sprite, sequence);
+        SequenceAction sequence = new SequenceAction();
+        brick.addActionToSequence(sprite, sequence);
 
-		float x = sprite.look.getXInUserInterfaceDimensionUnit();
-		float y = sprite.look.getYInUserInterfaceDimensionUnit();
+        float x = sprite.look.getXInUserInterfaceDimensionUnit();
+        float y = sprite.look.getYInUserInterfaceDimensionUnit();
 
-		assertEquals("Unexpected initial sprite x position: " + x, 0f, x);
-		assertEquals("Unexpected initial sprite y position: " + y, 0f, y);
+        assertEquals("Unexpected initial sprite x position: " + x, 0f, x);
+        assertEquals("Unexpected initial sprite y position: " + y, 0f, y);
 
-		sequence.act(1f);
+        sequence.act(1f);
 
-		assertEquals("Unexpected initial sprite x position: ", (float) moveValue,
-				sprite.look.getXInUserInterfaceDimensionUnit());
-		assertEquals("Unexpected initial sprite y position: ", 0f, sprite.look.getYInUserInterfaceDimensionUnit());
-	}
+        assertEquals("Unexpected initial sprite x position: ", (float) moveValue,
+                sprite.look.getXInUserInterfaceDimensionUnit());
+        assertEquals("Unexpected initial sprite y position: ", 0f, sprite.look.getYInUserInterfaceDimensionUnit());
+    }
 
-	public void testSpriteMovedCorrectlyWithNestedBricks() {
-		Integer moveValue = 0;
+    public void testSpriteMovedCorrectlyWithNestedBricks() {
+        Integer moveValue = 0;
 
-		UserBrick outerBrick = new UserBrick(new UserScriptDefinitionBrick());
-		outerBrick.getDefinitionBrick().addUIText("test2");
-		outerBrick.getDefinitionBrick().addUILocalizedVariable("outerBrickVariable");
-		outerBrick.updateUserBrickParametersAndVariables();
+        UserBrick outerBrick = new UserBrick(new UserScriptDefinitionBrick());
+        outerBrick.getDefinitionBrick().addUIText("test2");
+        outerBrick.getDefinitionBrick().addUILocalizedVariable("outerBrickVariable");
+        outerBrick.updateUserBrickParametersAndVariables();
 
-		UserBrick innerBrick = new UserBrick(new UserScriptDefinitionBrick());
-		innerBrick.getDefinitionBrick().addUIText("test0");
-		innerBrick.getDefinitionBrick().addUILocalizedVariable("innerBrickVariable");
+        UserBrick innerBrick = new UserBrick(new UserScriptDefinitionBrick());
+        innerBrick.getDefinitionBrick().addUIText("test0");
+        innerBrick.getDefinitionBrick().addUILocalizedVariable("innerBrickVariable");
 
-		Script innerScript = TestUtils.addUserBrickToSpriteAndGetUserScript(innerBrick, sprite);
+        Script innerScript = TestUtils.addUserBrickToSpriteAndGetUserScript(innerBrick, sprite);
 
-		Formula innerFormula = new Formula(new FormulaElement(ElementType.USER_VARIABLE, "innerBrickVariable", null));
+        Formula innerFormula = new Formula(new FormulaElement(ElementType.USER_VARIABLE, "innerBrickVariable", null));
 
-		innerScript.addBrick(new ChangeXByNBrick(innerFormula));
+        innerScript.addBrick(new ChangeXByNBrick(innerFormula));
 
-		innerBrick.updateUserBrickParametersAndVariables();
+        innerBrick.updateUserBrickParametersAndVariables();
 
-		Script outerScript = TestUtils.addUserBrickToSpriteAndGetUserScript(outerBrick, sprite);
-		UserBrick innerBrickCopyInOuterScript = innerBrick.copyBrickForSprite(sprite);
-		outerScript.addBrick(innerBrickCopyInOuterScript);
+        Script outerScript = TestUtils.addUserBrickToSpriteAndGetUserScript(outerBrick, sprite);
+        UserBrick innerBrickCopyInOuterScript = innerBrick.copyBrickForSprite(sprite);
+        outerScript.addBrick(innerBrickCopyInOuterScript);
 
-		List<Formula> formulaList = innerBrickCopyInOuterScript.getFormulas();
+        List<Formula> formulaList = innerBrickCopyInOuterScript.getFormulas();
 
-		assertEquals("formulaList.size() after innerBrick.updateUserBrickParameters()" + formulaList.size(), 1,
-				formulaList.size());
+        assertEquals("formulaList.size() after innerBrick.updateUserBrickParameters()" + formulaList.size(), 1,
+                formulaList.size());
 
-		for (Formula formula : formulaList) {
-			formula.setRoot(new FormulaElement(ElementType.USER_VARIABLE, "outerBrickVariable", null));
-		}
+        for (Formula formula : formulaList) {
+            formula.setRoot(new FormulaElement(ElementType.USER_VARIABLE, "outerBrickVariable", null));
+        }
 
-		StartScript startScript = new StartScript();
-		sprite.addScript(startScript);
-		UserBrick outerBrickCopy = outerBrick.copyBrickForSprite(sprite);
-		startScript.addBrick(outerBrickCopy);
+        StartScript startScript = new StartScript();
+        sprite.addScript(startScript);
+        UserBrick outerBrickCopy = outerBrick.copyBrickForSprite(sprite);
+        startScript.addBrick(outerBrickCopy);
 
-		formulaList = outerBrickCopy.getFormulas();
+        formulaList = outerBrickCopy.getFormulas();
 
-		assertEquals("formulaList.size() after outerBrick.updateUserBrickParameters()" + formulaList.size(), 1,
-				formulaList.size());
+        assertEquals("formulaList.size() after outerBrick.updateUserBrickParameters()" + formulaList.size(), 1,
+                formulaList.size());
 
-		for (Formula formula : formulaList) {
-			formula.setRoot(new FormulaElement(ElementType.NUMBER, moveValue.toString(), null));
+        for (Formula formula : formulaList) {
+            formula.setRoot(new FormulaElement(ElementType.NUMBER, moveValue.toString(), null));
 
-			try {
-				assertEquals("outerBrick.formula.interpretDouble: ", (float) moveValue, formula.interpretFloat(sprite));
-			} catch (InterpretationException e) {
-				Log.e(TAG, "Interpretation Error", e);
-			}
-		}
+            try {
+                assertEquals("outerBrick.formula.interpretDouble: ", (float) moveValue, formula.interpretFloat(sprite));
+            } catch (InterpretationException e) {
+                Log.e(TAG, "Interpretation Error", e);
+            }
+        }
 
-		runAndCheckSpritePosition(startScript, moveValue, 0);
-	}
+        runAndCheckSpritePosition(startScript, moveValue, 0);
+    }
 
-	public void testGetRequiredResources() {
+    public void testGetRequiredResources() {
 
-		UserBrick brick = new UserBrick(new UserScriptDefinitionBrick());
+        UserBrick brick = new UserBrick(new UserScriptDefinitionBrick());
 
-		assertEquals("brick.getRequiredResources(): ", UserBrick.NO_RESOURCES, brick.getRequiredResources());
+        assertEquals("brick.getRequiredResources(): ", UserBrick.NO_RESOURCES, brick.getRequiredResources());
 
-		Script userScript = TestUtils.addUserBrickToSpriteAndGetUserScript(brick, sprite);
+        Script userScript = TestUtils.addUserBrickToSpriteAndGetUserScript(brick, sprite);
 
-		LegoNxtMotorStopBrick legoBrick = new LegoNxtMotorStopBrick(Motor.MOTOR_A);
+        LegoNxtMotorStopBrick legoBrick = new LegoNxtMotorStopBrick(Motor.MOTOR_A);
 
-		userScript.addBrick(legoBrick);
+        userScript.addBrick(legoBrick);
 
-		assertNotSame("legoBrick.getRequiredResources(): ", UserBrick.NO_RESOURCES, legoBrick.getRequiredResources());
+        assertNotSame("legoBrick.getRequiredResources(): ", UserBrick.NO_RESOURCES, legoBrick.getRequiredResources());
 
-		assertEquals("brick.getRequiredResources(): ", legoBrick.getRequiredResources(), brick.getRequiredResources());
-	}
+        assertEquals("brick.getRequiredResources(): ", legoBrick.getRequiredResources(), brick.getRequiredResources());
+    }
 
-	public void testDeleteBrick() {
-		UserBrick outerBrick = new UserBrick(new UserScriptDefinitionBrick());
-		outerBrick.getDefinitionBrick().addUIText("test2");
-		outerBrick.getDefinitionBrick().addUILocalizedVariable("outerBrickVariable");
-		outerBrick.updateUserBrickParametersAndVariables();
+    public void testDeleteBrick() {
+        UserBrick outerBrick = new UserBrick(new UserScriptDefinitionBrick());
+        outerBrick.getDefinitionBrick().addUIText("test2");
+        outerBrick.getDefinitionBrick().addUILocalizedVariable("outerBrickVariable");
+        outerBrick.updateUserBrickParametersAndVariables();
 
-		UserBrick innerBrick = new UserBrick(new UserScriptDefinitionBrick());
-		innerBrick.getDefinitionBrick().addUIText("test0");
-		innerBrick.getDefinitionBrick().addUILocalizedVariable("innerBrickVariable");
+        UserBrick innerBrick = new UserBrick(new UserScriptDefinitionBrick());
+        innerBrick.getDefinitionBrick().addUIText("test0");
+        innerBrick.getDefinitionBrick().addUILocalizedVariable("innerBrickVariable");
 
-		Script innerScript = TestUtils.addUserBrickToSpriteAndGetUserScript(innerBrick, sprite);
+        Script innerScript = TestUtils.addUserBrickToSpriteAndGetUserScript(innerBrick, sprite);
 
-		Formula innerFormula = new Formula(new FormulaElement(ElementType.USER_VARIABLE, "innerBrickVariable", null));
-		innerScript.addBrick(new ChangeXByNBrick(innerFormula));
-		innerBrick.updateUserBrickParametersAndVariables();
+        Formula innerFormula = new Formula(new FormulaElement(ElementType.USER_VARIABLE, "innerBrickVariable", null));
+        innerScript.addBrick(new ChangeXByNBrick(innerFormula));
+        innerBrick.updateUserBrickParametersAndVariables();
 
-		Script outerScript = TestUtils.addUserBrickToSpriteAndGetUserScript(outerBrick, sprite);
-		Brick innerBrickCopyInOuterScript = innerBrick.copyBrickForSprite(sprite);
-		outerScript.addBrick(innerBrickCopyInOuterScript);
+        Script outerScript = TestUtils.addUserBrickToSpriteAndGetUserScript(outerBrick, sprite);
+        Brick innerBrickCopyInOuterScript = innerBrick.copyBrickForSprite(sprite);
+        outerScript.addBrick(innerBrickCopyInOuterScript);
 
-		StartScript startScript = new StartScript();
-		sprite.addScript(startScript);
-		Brick innerBrickCopy = innerBrick.copyBrickForSprite(sprite);
-		startScript.addBrick(innerBrickCopy);
-		Brick outerBrickCopy = outerBrick.copyBrickForSprite(sprite);
-		startScript.addBrick(outerBrickCopy);
+        StartScript startScript = new StartScript();
+        sprite.addScript(startScript);
+        Brick innerBrickCopy = innerBrick.copyBrickForSprite(sprite);
+        startScript.addBrick(innerBrickCopy);
+        Brick outerBrickCopy = outerBrick.copyBrickForSprite(sprite);
+        startScript.addBrick(outerBrickCopy);
 
-		assertEquals("Start script has wrong number of bricks before deleting.", 2, startScript.getBrickList().size());
-		assertEquals("Start script has wrong brick before deleting.", innerBrickCopy, startScript.getBrick(0));
+        assertEquals("Start script has wrong number of bricks before deleting.", 2, startScript.getBrickList().size());
+        assertEquals("Start script has wrong brick before deleting.", innerBrickCopy, startScript.getBrick(0));
 
-		assertEquals("outerScript has wrong number of bricks before deleting.", 1, outerScript.getBrickList().size());
-		assertEquals("outerScript has wrong brick before deleting.", innerBrickCopyInOuterScript,
-				outerScript.getBrick(0));
+        assertEquals("outerScript has wrong number of bricks before deleting.", 1, outerScript.getBrickList().size());
+        assertEquals("outerScript has wrong brick before deleting.", innerBrickCopyInOuterScript,
+                outerScript.getBrick(0));
 
-		sprite.removeUserBrick(innerBrick);
+        sprite.removeUserBrick(innerBrick);
 
-		assertEquals("Start script user brick was also deleted", 2, startScript.getBrickList().size());
-		assertEquals("Start script has wrong brick after deleting.", innerBrickCopy, startScript.getBrick(0));
-		assertEquals("Start script has wrong brick after deleting.", outerBrickCopy, startScript.getBrick(1));
+        assertEquals("Start script user brick was also deleted", 2, startScript.getBrickList().size());
+        assertEquals("Start script has wrong brick after deleting.", innerBrickCopy, startScript.getBrick(0));
+        assertEquals("Start script has wrong brick after deleting.", outerBrickCopy, startScript.getBrick(1));
 
-		assertEquals("outerScript has wrong number of bricks after deleting.", 1, outerScript.getBrickList().size());
-	}
+        assertEquals("outerScript has wrong number of bricks after deleting.", 1, outerScript.getBrickList().size());
+    }
 
-	public void testBrickCloneWithFormula() {
-		UserBrick brick = new UserBrick(new UserScriptDefinitionBrick());
-		brick.getDefinitionBrick().addUIText("test0");
-		brick.getDefinitionBrick().addUILocalizedVariable("test1");
+    public void testBrickCloneWithFormula() {
+        UserBrick brick = new UserBrick(new UserScriptDefinitionBrick());
+        brick.getDefinitionBrick().addUIText("test0");
+        brick.getDefinitionBrick().addUILocalizedVariable("test1");
 
-		UserBrick cloneBrick = brick.copyBrickForSprite(sprite);
-		UserScriptDefinitionBrick definition = (UserScriptDefinitionBrick) Reflection.getPrivateField(brick,
-				"definitionBrick");
-		UserScriptDefinitionBrick clonedDef = (UserScriptDefinitionBrick) Reflection.getPrivateField(cloneBrick,
-				"definitionBrick");
-		assertFalse("The cloned brick has the same UserScriptDefinitionBrick instance as the original brick",
-				definition == clonedDef);
+        UserBrick cloneBrick = brick.copyBrickForSprite(sprite);
+        UserScriptDefinitionBrick definition = (UserScriptDefinitionBrick) Reflection.getPrivateField(brick,
+                "definitionBrick");
+        UserScriptDefinitionBrick clonedDef = (UserScriptDefinitionBrick) Reflection.getPrivateField(cloneBrick,
+                "definitionBrick");
+        assertFalse("The cloned brick has the same UserScriptDefinitionBrick instance as the original brick",
+                definition == clonedDef);
 
-		ArrayList<?> componentArray = (ArrayList<?>) Reflection.getPrivateField(brick, "userBrickParameters");
-		ArrayList<?> clonedComponentArray = (ArrayList<?>) Reflection.getPrivateField(cloneBrick, "userBrickParameters");
-		assertTrue("The cloned brick has a different userBrickElements than the original brick",
-				componentArray != clonedComponentArray);
-	}
+        ArrayList<?> componentArray = (ArrayList<?>) Reflection.getPrivateField(brick, "userBrickParameters");
+        ArrayList<?> clonedComponentArray = (ArrayList<?>) Reflection.getPrivateField(cloneBrick, "userBrickParameters");
+        assertTrue("The cloned brick has a different userBrickElements than the original brick",
+                componentArray != clonedComponentArray);
+    }
 
-	private void runAndCheckSpritePosition(Script startScript, Integer expectedX, Integer expectedY) {
-		SequenceAction sequence = new SequenceAction();
-		startScript.run(sprite, sequence);
+    private void runAndCheckSpritePosition(Script startScript, Integer expectedX, Integer expectedY) {
+        SequenceAction sequence = new SequenceAction();
+        startScript.run(sprite, sequence);
 
-		float x = sprite.look.getXInUserInterfaceDimensionUnit();
-		float y = sprite.look.getYInUserInterfaceDimensionUnit();
+        float x = sprite.look.getXInUserInterfaceDimensionUnit();
+        float y = sprite.look.getYInUserInterfaceDimensionUnit();
 
-		assertEquals("Unexpected initial sprite x position: ", 0f, x);
-		assertEquals("Unexpected initial sprite y position: ", 0f, y);
+        assertEquals("Unexpected initial sprite x position: ", 0f, x);
+        assertEquals("Unexpected initial sprite y position: ", 0f, y);
 
-		sequence.act(1f);
+        sequence.act(1f);
 
-		x = sprite.look.getXInUserInterfaceDimensionUnit();
-		y = sprite.look.getYInUserInterfaceDimensionUnit();
+        x = sprite.look.getXInUserInterfaceDimensionUnit();
+        y = sprite.look.getYInUserInterfaceDimensionUnit();
 
-		assertEquals("Unexpected sprite x position: ", (float) expectedX, x);
-		assertEquals("Unexpected sprite y position: ", (float) expectedY, y);
-	}
+        assertEquals("Unexpected sprite x position: ", (float) expectedX, x);
+        assertEquals("Unexpected sprite y position: ", (float) expectedY, y);
+    }
 }

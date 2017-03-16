@@ -35,93 +35,93 @@ import java.util.TreeSet;
 
 public class LookBaseAdapter extends ArrayAdapter<LookData> implements ActionModeActivityAdapterInterface {
 
-	protected List<LookData> lookDataItems;
-	protected Context context;
+    protected List<LookData> lookDataItems;
+    protected Context context;
 
-	private OnLookEditListener onLookEditListener;
+    private OnLookEditListener onLookEditListener;
 
-	private int selectMode;
-	private boolean showDetails;
-	protected SortedSet<Integer> checkedLookPositions = new TreeSet<>();
-	public boolean backPackAdapter;
+    private int selectMode;
+    private boolean showDetails;
+    protected SortedSet<Integer> checkedLookPositions = new TreeSet<>();
+    public boolean backPackAdapter;
 
-	public LookBaseAdapter(final Context context, int currentPlayingposition, boolean backPackAdapter) {
-		super(context, currentPlayingposition);
-		this.backPackAdapter = backPackAdapter;
-	}
+    public LookBaseAdapter(final Context context, int currentPlayingposition, boolean backPackAdapter) {
+        super(context, currentPlayingposition);
+        this.backPackAdapter = backPackAdapter;
+    }
 
-	public LookBaseAdapter(final Context context, int resource, int textViewResourceId, List<LookData> items,
-			boolean showDetails, boolean backPackAdapter) {
-		super(context, resource, textViewResourceId, items);
-		this.context = context;
-		this.showDetails = showDetails;
-		this.lookDataItems = items;
-		this.selectMode = ListView.CHOICE_MODE_NONE;
-		this.backPackAdapter = backPackAdapter;
-	}
+    public LookBaseAdapter(final Context context, int resource, int textViewResourceId, List<LookData> items,
+                           boolean showDetails, boolean backPackAdapter) {
+        super(context, resource, textViewResourceId, items);
+        this.context = context;
+        this.showDetails = showDetails;
+        this.lookDataItems = items;
+        this.selectMode = ListView.CHOICE_MODE_NONE;
+        this.backPackAdapter = backPackAdapter;
+    }
 
-	public OnLookEditListener getOnLookEditListener() {
-		return onLookEditListener;
-	}
+    public OnLookEditListener getOnLookEditListener() {
+        return onLookEditListener;
+    }
 
-	public void setOnLookEditListener(OnLookEditListener listener) {
-		onLookEditListener = listener;
-	}
+    public void setOnLookEditListener(OnLookEditListener listener) {
+        onLookEditListener = listener;
+    }
 
-	@Override
-	public void setShowDetails(boolean showDetails) {
-		this.showDetails = showDetails;
-	}
+    @Override
+    public void setShowDetails(boolean showDetails) {
+        this.showDetails = showDetails;
+    }
 
-	@Override
-	public boolean getShowDetails() {
-		return showDetails;
-	}
+    @Override
+    public boolean getShowDetails() {
+        return showDetails;
+    }
 
-	@Override
-	public void setSelectMode(int mode) {
-		selectMode = mode;
-	}
+    @Override
+    public void setSelectMode(int mode) {
+        selectMode = mode;
+    }
 
-	@Override
-	public int getSelectMode() {
-		return selectMode;
-	}
+    @Override
+    public int getSelectMode() {
+        return selectMode;
+    }
 
-	@Override
-	public int getAmountOfCheckedItems() {
-		return checkedLookPositions.size();
-	}
+    @Override
+    public int getAmountOfCheckedItems() {
+        return checkedLookPositions.size();
+    }
 
-	@Override
-	public SortedSet<Integer> getCheckedItems() {
-		return checkedLookPositions;
-	}
+    @Override
+    public SortedSet<Integer> getCheckedItems() {
+        return checkedLookPositions;
+    }
 
-	public List<LookData> getLookDataItems() {
-		return lookDataItems;
-	}
+    public List<LookData> getLookDataItems() {
+        return lookDataItems;
+    }
 
-	public void addCheckedItem(int position) {
-		checkedLookPositions.add(position);
-	}
+    public void addCheckedItem(int position) {
+        checkedLookPositions.add(position);
+    }
 
-	public void addCheckedItemIfNotExists(int position) {
-		checkedLookPositions.add(position);
-		if (!checkedLookPositions.contains(position)) {
-			checkedLookPositions.add(position);
-		}
-	}
+    public void addCheckedItemIfNotExists(int position) {
+        checkedLookPositions.add(position);
+        if (!checkedLookPositions.contains(position)) {
+            checkedLookPositions.add(position);
+        }
+    }
 
-	@Override
-	public void clearCheckedItems() {
-		checkedLookPositions.clear();
-	}
+    @Override
+    public void clearCheckedItems() {
+        checkedLookPositions.clear();
+    }
 
-	public interface OnLookEditListener {
+    public interface OnLookEditListener {
 
-		void onLookEdit(View view);
+        void onLookEdit(View view);
 
-		void onLookChecked();
-	}
+        void onLookChecked();
+    }
 }

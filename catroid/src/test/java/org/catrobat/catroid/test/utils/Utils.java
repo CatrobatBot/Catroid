@@ -33,53 +33,53 @@ import java.util.List;
 @Ignore
 public final class Utils {
 
-	public static final String SRC = "src/main/java";
-	public static final String ANDROID_TEST = "src/androidTest";
-	public static final String ANDROID_TEST_SRC = ANDROID_TEST + "/java";
-	public static final String SRC_TEST = "src/test/java";
-	public static final String BLUETOOTH = "catroidBluetoothTestServer/src";
+    public static final String SRC = "src/main/java";
+    public static final String ANDROID_TEST = "src/androidTest";
+    public static final String ANDROID_TEST_SRC = ANDROID_TEST + "/java";
+    public static final String SRC_TEST = "src/test/java";
+    public static final String BLUETOOTH = "catroidBluetoothTestServer/src";
 
-	public static final String[] TEST_FILE_DIRECTORIES = {ANDROID_TEST_SRC, SRC_TEST};
-	public static final String[] TOAST_STACK_TRACE_TEST_DIRECTORIES = {SRC, SRC_TEST, BLUETOOTH};
-	public static final String[] VERSION_NAME_AND_CODE_TEST_DIRECTORIES = {ANDROID_TEST};
-	public static final String[] SLEEP_TEST_DIRECTORIES = { };
+    public static final String[] TEST_FILE_DIRECTORIES = {ANDROID_TEST_SRC, SRC_TEST};
+    public static final String[] TOAST_STACK_TRACE_TEST_DIRECTORIES = {SRC, SRC_TEST, BLUETOOTH};
+    public static final String[] VERSION_NAME_AND_CODE_TEST_DIRECTORIES = {ANDROID_TEST};
+    public static final String[] SLEEP_TEST_DIRECTORIES = {};
 
-	private Utils() {
-		throw new AssertionError();
-	}
+    private Utils() {
+        throw new AssertionError();
+    }
 
-	public static List<File> getFilesFromDirectoryByExtension(File directory, String extension) {
-		String[] extensions = { extension };
-		return getFilesFromDirectoryByExtension(directory, extensions);
-	}
+    public static List<File> getFilesFromDirectoryByExtension(File directory, String extension) {
+        String[] extensions = {extension};
+        return getFilesFromDirectoryByExtension(directory, extensions);
+    }
 
-	public static List<File> getFilesFromDirectoryByExtension(File directory, final String[] extensions) {
-		List<File> filesFound = new ArrayList<>();
-		File[] contents = directory.listFiles(new FileFilter() {
-			@Override
-			public boolean accept(File pathname) {
-				// ignore automatically created build.xml files
-				if (pathname.getName().equals("build.xml")) {
-					return false;
-				}
-				for (String extension : extensions) {
-					if (pathname.getName().endsWith(extension)) {
-						return true;
-					}
-				}
-				return (pathname.isDirectory() && !pathname.getName().equals("gen") && !pathname.getName().equals(
-						"build"));
-			}
-		});
+    public static List<File> getFilesFromDirectoryByExtension(File directory, final String[] extensions) {
+        List<File> filesFound = new ArrayList<>();
+        File[] contents = directory.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                // ignore automatically created build.xml files
+                if (pathname.getName().equals("build.xml")) {
+                    return false;
+                }
+                for (String extension : extensions) {
+                    if (pathname.getName().endsWith(extension)) {
+                        return true;
+                    }
+                }
+                return (pathname.isDirectory() && !pathname.getName().equals("gen") && !pathname.getName().equals(
+                        "build"));
+            }
+        });
 
-		for (File file : contents) {
-			if (file.isDirectory()) {
-				filesFound.addAll(getFilesFromDirectoryByExtension(file, extensions));
-			} else {
-				filesFound.add(file);
-			}
-		}
+        for (File file : contents) {
+            if (file.isDirectory()) {
+                filesFound.addAll(getFilesFromDirectoryByExtension(file, extensions));
+            } else {
+                filesFound.add(file);
+            }
+        }
 
-		return filesFound;
-	}
+        return filesFound;
+    }
 }

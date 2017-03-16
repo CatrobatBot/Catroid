@@ -25,14 +25,14 @@ package org.catrobat.catroid.content.bricks;
 
 public class SetBackgroundAndWaitBrick extends SetBackgroundBrick {
 
-	public SetBackgroundAndWaitBrick() {
-		wait = true;
-	}
+    public SetBackgroundAndWaitBrick() {
+        wait = true;
+    }
 
-	@Override
-	public Brick clone() {
-		SetBackgroundAndWaitBrick clonedBrick = new SetBackgroundAndWaitBrick();
-		clonedBrick.setLook(look);
-		return clonedBrick;
-	}
+    @Override
+    public Brick clone() {
+        SetBackgroundAndWaitBrick clonedBrick = new SetBackgroundAndWaitBrick();
+        clonedBrick.setLook(look);
+        return clonedBrick;
+    }
 }

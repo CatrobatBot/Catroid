@@ -42,159 +42,159 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class IfLogicBeginBrick extends FormulaBrick implements NestingBrick {
-	private static final long serialVersionUID = 1L;
-	private static final String TAG = IfLogicBeginBrick.class.getSimpleName();
-	protected transient IfLogicElseBrick ifElseBrick;
-	protected transient IfLogicEndBrick ifEndBrick;
-	protected transient IfLogicBeginBrick copy;
+    private static final long serialVersionUID = 1L;
+    private static final String TAG = IfLogicBeginBrick.class.getSimpleName();
+    protected transient IfLogicElseBrick ifElseBrick;
+    protected transient IfLogicEndBrick ifEndBrick;
+    protected transient IfLogicBeginBrick copy;
 
-	public IfLogicBeginBrick() {
-		addAllowedBrickField(BrickField.IF_CONDITION);
-	}
+    public IfLogicBeginBrick() {
+        addAllowedBrickField(BrickField.IF_CONDITION);
+    }
 
-	public IfLogicBeginBrick(int condition) {
-		initializeBrickFields(new Formula(condition));
-	}
+    public IfLogicBeginBrick(int condition) {
+        initializeBrickFields(new Formula(condition));
+    }
 
-	public IfLogicBeginBrick(Formula condition) {
-		initializeBrickFields(condition);
-	}
+    public IfLogicBeginBrick(Formula condition) {
+        initializeBrickFields(condition);
+    }
 
-	protected void initializeBrickFields(Formula ifCondition) {
-		addAllowedBrickField(BrickField.IF_CONDITION);
-		setFormulaWithBrickField(BrickField.IF_CONDITION, ifCondition);
-	}
+    protected void initializeBrickFields(Formula ifCondition) {
+        addAllowedBrickField(BrickField.IF_CONDITION);
+        setFormulaWithBrickField(BrickField.IF_CONDITION, ifCondition);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return getFormulaWithBrickField(BrickField.IF_CONDITION).getRequiredResources();
-	}
+    @Override
+    public int getRequiredResources() {
+        return getFormulaWithBrickField(BrickField.IF_CONDITION).getRequiredResources();
+    }
 
-	public IfLogicElseBrick getIfElseBrick() {
-		return ifElseBrick;
-	}
+    public IfLogicElseBrick getIfElseBrick() {
+        return ifElseBrick;
+    }
 
-	public IfLogicEndBrick getIfEndBrick() {
-		return ifEndBrick;
-	}
+    public IfLogicEndBrick getIfEndBrick() {
+        return ifEndBrick;
+    }
 
-	public IfLogicBeginBrick getCopy() {
-		return copy;
-	}
+    public IfLogicBeginBrick getCopy() {
+        return copy;
+    }
 
-	public void setIfElseBrick(IfLogicElseBrick elseBrick) {
-		this.ifElseBrick = elseBrick;
-	}
+    public void setIfElseBrick(IfLogicElseBrick elseBrick) {
+        this.ifElseBrick = elseBrick;
+    }
 
-	public void setIfEndBrick(IfLogicEndBrick ifEndBrick) {
-		this.ifEndBrick = ifEndBrick;
-	}
+    public void setIfEndBrick(IfLogicEndBrick ifEndBrick) {
+        this.ifEndBrick = ifEndBrick;
+    }
 
-	@Override
-	public Brick clone() {
-		return new IfLogicBeginBrick(getFormulaWithBrickField(BrickField.IF_CONDITION).clone());
-	}
+    @Override
+    public Brick clone() {
+        return new IfLogicBeginBrick(getFormulaWithBrickField(BrickField.IF_CONDITION).clone());
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		FormulaEditorFragment.showFragment(view, this, BrickField.IF_CONDITION);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        FormulaEditorFragment.showFragment(view, this, BrickField.IF_CONDITION);
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_if_begin_if, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_if_begin_if, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_if_begin_checkbox);
+        setCheckboxView(R.id.brick_if_begin_checkbox);
 
-		TextView ifBeginTextView = (TextView) view.findViewById(R.id.brick_if_begin_edit_text);
+        TextView ifBeginTextView = (TextView) view.findViewById(R.id.brick_if_begin_edit_text);
 
-		getFormulaWithBrickField(BrickField.IF_CONDITION).setTextFieldId(R.id.brick_if_begin_edit_text);
-		getFormulaWithBrickField(BrickField.IF_CONDITION).refreshTextField(view);
+        getFormulaWithBrickField(BrickField.IF_CONDITION).setTextFieldId(R.id.brick_if_begin_edit_text);
+        getFormulaWithBrickField(BrickField.IF_CONDITION).refreshTextField(view);
 
-		ifBeginTextView.setOnClickListener(this);
+        ifBeginTextView.setOnClickListener(this);
 
-		removePrototypeElseTextViews(view);
+        removePrototypeElseTextViews(view);
 
-		return view;
-	}
+        return view;
+    }
 
-	protected void removePrototypeElseTextViews(View view) {
-		TextView prototypeTextPunctuation = (TextView) view.findViewById(R.id.if_else_prototype_punctuation);
-		TextView prototypeTextElse = (TextView) view.findViewById(R.id.if_prototype_else);
-		TextView prototypeTextPunctuation2 = (TextView) view.findViewById(R.id.if_else_prototype_punctuation2);
-		prototypeTextPunctuation.setVisibility(View.GONE);
-		prototypeTextElse.setVisibility(View.GONE);
-		prototypeTextPunctuation2.setVisibility(View.GONE);
-	}
+    protected void removePrototypeElseTextViews(View view) {
+        TextView prototypeTextPunctuation = (TextView) view.findViewById(R.id.if_else_prototype_punctuation);
+        TextView prototypeTextElse = (TextView) view.findViewById(R.id.if_prototype_else);
+        TextView prototypeTextPunctuation2 = (TextView) view.findViewById(R.id.if_else_prototype_punctuation2);
+        prototypeTextPunctuation.setVisibility(View.GONE);
+        prototypeTextElse.setVisibility(View.GONE);
+        prototypeTextPunctuation2.setVisibility(View.GONE);
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		View prototypeView = View.inflate(context, R.layout.brick_if_begin_if, null);
-		TextView textIfBegin = (TextView) prototypeView.findViewById(R.id.brick_if_begin_edit_text);
-		textIfBegin.setText(String.valueOf(BrickValues.IF_CONDITION));
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        View prototypeView = View.inflate(context, R.layout.brick_if_begin_if, null);
+        TextView textIfBegin = (TextView) prototypeView.findViewById(R.id.brick_if_begin_edit_text);
+        textIfBegin.setText(String.valueOf(BrickValues.IF_CONDITION));
+        return prototypeView;
+    }
 
-	@Override
-	public boolean isInitialized() {
-		return ifElseBrick != null;
-	}
+    @Override
+    public boolean isInitialized() {
+        return ifElseBrick != null;
+    }
 
-	@Override
-	public void initialize() {
-		ifElseBrick = new IfLogicElseBrick(this);
-		ifEndBrick = new IfLogicEndBrick(ifElseBrick, this);
-		Log.w(TAG, "Creating if logic stuff");
-	}
+    @Override
+    public void initialize() {
+        ifElseBrick = new IfLogicElseBrick(this);
+        ifEndBrick = new IfLogicEndBrick(ifElseBrick, this);
+        Log.w(TAG, "Creating if logic stuff");
+    }
 
-	@Override
-	public List<NestingBrick> getAllNestingBrickParts(boolean sorted) {
-		//TODO: handle sorting
-		List<NestingBrick> nestingBrickList = new ArrayList<NestingBrick>();
-		if (sorted) {
-			nestingBrickList.add(this);
-			nestingBrickList.add(ifElseBrick);
-			nestingBrickList.add(ifEndBrick);
-		} else {
-			nestingBrickList.add(this);
-			nestingBrickList.add(ifEndBrick);
-		}
+    @Override
+    public List<NestingBrick> getAllNestingBrickParts(boolean sorted) {
+        //TODO: handle sorting
+        List<NestingBrick> nestingBrickList = new ArrayList<NestingBrick>();
+        if (sorted) {
+            nestingBrickList.add(this);
+            nestingBrickList.add(ifElseBrick);
+            nestingBrickList.add(ifEndBrick);
+        } else {
+            nestingBrickList.add(this);
+            nestingBrickList.add(ifEndBrick);
+        }
 
-		return nestingBrickList;
-	}
+        return nestingBrickList;
+    }
 
-	@Override
-	public boolean isDraggableOver(Brick brick) {
-		return brick != ifElseBrick;
-	}
+    @Override
+    public boolean isDraggableOver(Brick brick) {
+        return brick != ifElseBrick;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		SequenceAction ifAction = (SequenceAction) sprite.getActionFactory().createSequence();
-		SequenceAction elseAction = (SequenceAction) sprite.getActionFactory().createSequence();
-		Action action = sprite.getActionFactory().createIfLogicAction(sprite,
-				getFormulaWithBrickField(BrickField.IF_CONDITION), ifAction, elseAction);
-		sequence.addAction(action);
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        SequenceAction ifAction = (SequenceAction) sprite.getActionFactory().createSequence();
+        SequenceAction elseAction = (SequenceAction) sprite.getActionFactory().createSequence();
+        Action action = sprite.getActionFactory().createIfLogicAction(sprite,
+                getFormulaWithBrickField(BrickField.IF_CONDITION), ifAction, elseAction);
+        sequence.addAction(action);
 
-		LinkedList<SequenceAction> returnActionList = new LinkedList<>();
-		returnActionList.add(elseAction);
-		returnActionList.add(ifAction);
+        LinkedList<SequenceAction> returnActionList = new LinkedList<>();
+        returnActionList.add(elseAction);
+        returnActionList.add(ifAction);
 
-		return returnActionList;
-	}
+        return returnActionList;
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		//ifEndBrick and ifElseBrick will be set in the copyBrickForSprite method of IfLogicEndBrick
-		IfLogicBeginBrick copyBrick = (IfLogicBeginBrick) clone(); //Using the clone method because of its flexibility if new fields are added
-		copyBrick.ifElseBrick = null; //if the Formula gets a field sprite, a separate copy method will be needed
-		copyBrick.ifEndBrick = null;
-		this.copy = copyBrick;
-		return copyBrick;
-	}
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        //ifEndBrick and ifElseBrick will be set in the copyBrickForSprite method of IfLogicEndBrick
+        IfLogicBeginBrick copyBrick = (IfLogicBeginBrick) clone(); //Using the clone method because of its flexibility if new fields are added
+        copyBrick.ifElseBrick = null; //if the Formula gets a field sprite, a separate copy method will be needed
+        copyBrick.ifEndBrick = null;
+        this.copy = copyBrick;
+        return copyBrick;
+    }
 }

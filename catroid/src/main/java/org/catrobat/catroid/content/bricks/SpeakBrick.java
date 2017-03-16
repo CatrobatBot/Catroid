@@ -38,65 +38,65 @@ import java.util.List;
 
 public class SpeakBrick extends FormulaBrick {
 
-	private static final long serialVersionUID = 1L;
-	private transient View prototypeView;
+    private static final long serialVersionUID = 1L;
+    private transient View prototypeView;
 
-	public SpeakBrick() {
-		addAllowedBrickField(BrickField.SPEAK);
-	}
+    public SpeakBrick() {
+        addAllowedBrickField(BrickField.SPEAK);
+    }
 
-	public SpeakBrick(String speak) {
-		initializeBrickFields(new Formula(speak));
-	}
+    public SpeakBrick(String speak) {
+        initializeBrickFields(new Formula(speak));
+    }
 
-	public SpeakBrick(Formula speak) {
-		initializeBrickFields(speak);
-	}
+    public SpeakBrick(Formula speak) {
+        initializeBrickFields(speak);
+    }
 
-	private void initializeBrickFields(Formula speak) {
-		addAllowedBrickField(BrickField.SPEAK);
-		setFormulaWithBrickField(BrickField.SPEAK, speak);
-	}
+    private void initializeBrickFields(Formula speak) {
+        addAllowedBrickField(BrickField.SPEAK);
+        setFormulaWithBrickField(BrickField.SPEAK, speak);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return TEXT_TO_SPEECH;
-	}
+    @Override
+    public int getRequiredResources() {
+        return TEXT_TO_SPEECH;
+    }
 
-	@Override
-	public View getView(final Context context, int brickId, final BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		view = View.inflate(context, R.layout.brick_speak, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+    @Override
+    public View getView(final Context context, int brickId, final BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        view = View.inflate(context, R.layout.brick_speak, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_speak_checkbox);
-		TextView textField = (TextView) view.findViewById(R.id.brick_speak_edit_text);
-		getFormulaWithBrickField(BrickField.SPEAK).setTextFieldId(R.id.brick_speak_edit_text);
-		getFormulaWithBrickField(BrickField.SPEAK).refreshTextField(view);
+        setCheckboxView(R.id.brick_speak_checkbox);
+        TextView textField = (TextView) view.findViewById(R.id.brick_speak_edit_text);
+        getFormulaWithBrickField(BrickField.SPEAK).setTextFieldId(R.id.brick_speak_edit_text);
+        getFormulaWithBrickField(BrickField.SPEAK).refreshTextField(view);
 
-		textField.setOnClickListener(this);
-		return view;
-	}
+        textField.setOnClickListener(this);
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_speak, null);
-		TextView textSpeak = (TextView) prototypeView.findViewById(R.id.brick_speak_edit_text);
-		textSpeak.setText(context.getString(R.string.brick_speak_default_value));
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_speak, null);
+        TextView textSpeak = (TextView) prototypeView.findViewById(R.id.brick_speak_edit_text);
+        textSpeak.setText(context.getString(R.string.brick_speak_default_value));
+        return prototypeView;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createSpeakAction(sprite,
-				getFormulaWithBrickField(BrickField.SPEAK)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createSpeakAction(sprite,
+                getFormulaWithBrickField(BrickField.SPEAK)));
+        return null;
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		FormulaEditorFragment.showFragment(view, this, BrickField.SPEAK);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        FormulaEditorFragment.showFragment(view, this, BrickField.SPEAK);
+    }
 }

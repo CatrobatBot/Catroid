@@ -41,116 +41,116 @@ import java.util.concurrent.locks.Lock;
 
 public class MyProjectsActivity extends BaseActivity {
 
-	public static final String TAG = MyProjectsActivity.class.getSimpleName();
-	public static final String ACTION_PROJECT_LIST_INIT = "org.catrobat.catroid.PROJECT_LIST_INIT";
+    public static final String TAG = MyProjectsActivity.class.getSimpleName();
+    public static final String ACTION_PROJECT_LIST_INIT = "org.catrobat.catroid.PROJECT_LIST_INIT";
 
-	private Lock viewSwitchLock = new ViewSwitchLock();
-	private ProjectListFragment projectListFragment;
+    private Lock viewSwitchLock = new ViewSwitchLock();
+    private ProjectListFragment projectListFragment;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_my_projects);
-		setUpActionBar();
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_my_projects);
+        setUpActionBar();
 
-		BottomBar.hidePlayButton(this);
+        BottomBar.hidePlayButton(this);
 
-		loadFragment(ProjectListFragment.class, false);
-		projectListFragment = (ProjectListFragment) getFragmentManager().findFragmentById(R.id.fragment_container);
-		SnackbarUtil.showHintSnackbar(this, R.string.hint_merge);
-	}
+        loadFragment(ProjectListFragment.class, false);
+        projectListFragment = (ProjectListFragment) getFragmentManager().findFragmentById(R.id.fragment_container);
+        SnackbarUtil.showHintSnackbar(this, R.string.hint_merge);
+    }
 
-	public void loadFragment(Class<? extends Fragment> fragmentClass, boolean addCurrentFragmentToBackStack) {
-		loadFragment(fragmentClass, null, addCurrentFragmentToBackStack);
-	}
+    public void loadFragment(Class<? extends Fragment> fragmentClass, boolean addCurrentFragmentToBackStack) {
+        loadFragment(fragmentClass, null, addCurrentFragmentToBackStack);
+    }
 
-	public void loadFragment(Class<? extends Fragment> fragmentClass, Bundle bundle, boolean addCurrentFragmentToBackStack) {
-		FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+    public void loadFragment(Class<? extends Fragment> fragmentClass, Bundle bundle, boolean addCurrentFragmentToBackStack) {
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
-		try {
-			Fragment newFragment = fragmentClass.newInstance();
-			fragmentTransaction.replace(R.id.fragment_container, newFragment, fragmentClass.getSimpleName());
+        try {
+            Fragment newFragment = fragmentClass.newInstance();
+            fragmentTransaction.replace(R.id.fragment_container, newFragment, fragmentClass.getSimpleName());
 
-			if (addCurrentFragmentToBackStack) {
-				fragmentTransaction.addToBackStack(null);
-			}
+            if (addCurrentFragmentToBackStack) {
+                fragmentTransaction.addToBackStack(null);
+            }
 
-			if (bundle != null) {
-				newFragment.setArguments(bundle);
-			}
+            if (bundle != null) {
+                newFragment.setArguments(bundle);
+            }
 
-			fragmentTransaction.commit();
-			getFragmentManager().executePendingTransactions();
-		} catch (Exception e) {
-			Log.e(TAG, "Error while loading fragment" + e);
-		}
-	}
+            fragmentTransaction.commit();
+            getFragmentManager().executePendingTransactions();
+        } catch (Exception e) {
+            Log.e(TAG, "Error while loading fragment" + e);
+        }
+    }
 
-	@Override
-	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-		if (hasFocus) {
-			sendBroadcast(new Intent(ACTION_PROJECT_LIST_INIT));
-		}
-	}
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            sendBroadcast(new Intent(ACTION_PROJECT_LIST_INIT));
+        }
+    }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_myprojects, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_myprojects, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		handleShowDetails(projectListFragment.getShowDetails(), menu.findItem(R.id.show_details));
-		return super.onPrepareOptionsMenu(menu);
-	}
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        handleShowDetails(projectListFragment.getShowDetails(), menu.findItem(R.id.show_details));
+        return super.onPrepareOptionsMenu(menu);
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				onBackPressed();
-				return true;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
 
-			case R.id.copy:
-				projectListFragment.startCopyActionMode();
-				break;
+            case R.id.copy:
+                projectListFragment.startCopyActionMode();
+                break;
 
-			case R.id.delete:
-				projectListFragment.startDeleteActionMode();
-				break;
+            case R.id.delete:
+                projectListFragment.startDeleteActionMode();
+                break;
 
-			case R.id.rename:
-				projectListFragment.startRenameActionMode();
-				break;
+            case R.id.rename:
+                projectListFragment.startRenameActionMode();
+                break;
 
-			case R.id.show_details:
-				handleShowDetails(!projectListFragment.getShowDetails(), item);
-				break;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+            case R.id.show_details:
+                handleShowDetails(!projectListFragment.getShowDetails(), item);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-	private void setUpActionBar() {
-		final ActionBar actionBar = getActionBar();
-		actionBar.setTitle(R.string.my_projects_activity_title);
-		actionBar.setHomeButtonEnabled(true);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-	}
+    private void setUpActionBar() {
+        final ActionBar actionBar = getActionBar();
+        actionBar.setTitle(R.string.my_projects_activity_title);
+        actionBar.setHomeButtonEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 
-	public void handleAddButton(View view) {
-		if (!viewSwitchLock.tryLock()) {
-			return;
-		}
-		NewProjectDialog dialog = new NewProjectDialog();
-		dialog.setOpenedFromProjectList(true);
-		dialog.show(getFragmentManager(), NewProjectDialog.DIALOG_FRAGMENT_TAG);
-	}
+    public void handleAddButton(View view) {
+        if (!viewSwitchLock.tryLock()) {
+            return;
+        }
+        NewProjectDialog dialog = new NewProjectDialog();
+        dialog.setOpenedFromProjectList(true);
+        dialog.show(getFragmentManager(), NewProjectDialog.DIALOG_FRAGMENT_TAG);
+    }
 
-	private void handleShowDetails(boolean showDetails, MenuItem item) {
-		projectListFragment.setShowDetails(showDetails);
+    private void handleShowDetails(boolean showDetails, MenuItem item) {
+        projectListFragment.setShowDetails(showDetails);
 
-		item.setTitle(showDetails ? R.string.hide_details : R.string.show_details);
-	}
+        item.setTitle(showDetails ? R.string.hide_details : R.string.show_details);
+    }
 }

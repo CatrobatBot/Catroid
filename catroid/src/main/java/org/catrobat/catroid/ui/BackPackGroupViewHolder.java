@@ -29,11 +29,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class BackPackGroupViewHolder {
-	public ImageView backPackGroupImageView;
-	public CheckBox checkbox;
-	public TextView backPackGroupNameTextView;
-	public LinearLayout backPackGroupDetailsLinearLayout;
-	public TextView backPackGroupNumberOfBricksTextView;
-	public TextView backPackGroupNumberOfBricksValue;
-	public RelativeLayout backPackGroupElement;
+    public ImageView backPackGroupImageView;
+    public CheckBox checkbox;
+    public TextView backPackGroupNameTextView;
+    public LinearLayout backPackGroupDetailsLinearLayout;
+    public TextView backPackGroupNumberOfBricksTextView;
+    public TextView backPackGroupNumberOfBricksValue;
+    public RelativeLayout backPackGroupElement;
 }

@@ -44,90 +44,90 @@ import java.util.List;
 
 public class DefaultProjectHandlerTest extends AndroidTestCase {
 
-	private static final String TEST_PROJECT_NAME = "testStandardProject";
+    private static final String TEST_PROJECT_NAME = "testStandardProject";
 
-	public DefaultProjectHandlerTest() throws IOException {
-	}
+    public DefaultProjectHandlerTest() throws IOException {
+    }
 
-	@Override
-	public void tearDown() throws Exception {
-		TestUtils.clearProject(TEST_PROJECT_NAME);
-		super.tearDown();
-	}
+    @Override
+    public void tearDown() throws Exception {
+        TestUtils.clearProject(TEST_PROJECT_NAME);
+        super.tearDown();
+    }
 
-	@Override
-	public void setUp() {
-		TestUtils.clearProject(TEST_PROJECT_NAME);
-		DefaultProjectHandler.getInstance().setDefaultProjectCreator(DefaultProjectHandler
-				.ProjectCreatorType.PROJECT_CREATOR_DEFAULT);
-	}
+    @Override
+    public void setUp() {
+        TestUtils.clearProject(TEST_PROJECT_NAME);
+        DefaultProjectHandler.getInstance().setDefaultProjectCreator(DefaultProjectHandler
+                .ProjectCreatorType.PROJECT_CREATOR_DEFAULT);
+    }
 
-	public void testCreateScaledDefaultProject() throws IOException {
-		ProjectManager projectManager = ProjectManager.getInstance();
-		projectManager.setProject(DefaultProjectHandler.createAndSaveDefaultProject(TEST_PROJECT_NAME, getContext()));
+    public void testCreateScaledDefaultProject() throws IOException {
+        ProjectManager projectManager = ProjectManager.getInstance();
+        projectManager.setProject(DefaultProjectHandler.createAndSaveDefaultProject(TEST_PROJECT_NAME, getContext()));
 
-		Project currentProject = projectManager.getCurrentProject();
-		Scene currentScene = currentProject.getDefaultScene();
-		List<Sprite> spriteList = currentScene.getSpriteList();
+        Project currentProject = projectManager.getCurrentProject();
+        Scene currentScene = currentProject.getDefaultScene();
+        List<Sprite> spriteList = currentScene.getSpriteList();
 
-		assertEquals("Number of Sprites in defaultProject is incorrect.", 4, spriteList.size());
+        assertEquals("Number of Sprites in defaultProject is incorrect.", 4, spriteList.size());
 
-		assertEquals("Number of Scripts in cloudSprite1 is incorrect.", 1, spriteList.get(1).getNumberOfScripts());
-		assertEquals("Number of Scripts in cloudSprite2 is incorrect.", 1, spriteList.get(2).getNumberOfScripts());
-		assertEquals("Number of Scripts in birdSprite is incorrect.", 3, spriteList.get(3).getNumberOfScripts());
+        assertEquals("Number of Scripts in cloudSprite1 is incorrect.", 1, spriteList.get(1).getNumberOfScripts());
+        assertEquals("Number of Scripts in cloudSprite2 is incorrect.", 1, spriteList.get(2).getNumberOfScripts());
+        assertEquals("Number of Scripts in birdSprite is incorrect.", 3, spriteList.get(3).getNumberOfScripts());
 
-		assertEquals("Number of Looks in background is incorrect.", 1, spriteList.get(0).getLookDataList().size());
-		assertEquals("Number of Looks in cloudSprite1 is incorrect.", 1, spriteList.get(1).getLookDataList().size());
-		assertEquals("Number of Looks in cloudSprite2 is incorrect.", 1, spriteList.get(2).getLookDataList().size());
-		assertEquals("Number of Looks in birdSprite is incorrect.", 2, spriteList.get(3).getLookDataList().size());
-	}
+        assertEquals("Number of Looks in background is incorrect.", 1, spriteList.get(0).getLookDataList().size());
+        assertEquals("Number of Looks in cloudSprite1 is incorrect.", 1, spriteList.get(1).getLookDataList().size());
+        assertEquals("Number of Looks in cloudSprite2 is incorrect.", 1, spriteList.get(2).getLookDataList().size());
+        assertEquals("Number of Looks in birdSprite is incorrect.", 2, spriteList.get(3).getLookDataList().size());
+    }
 
-	public void testDefaultProjectScreenshot() throws IOException {
-		DefaultProjectHandler.createAndSaveDefaultProject(TEST_PROJECT_NAME, getContext());
-		String projectPath = Constants.DEFAULT_ROOT + "/" + TEST_PROJECT_NAME;
-		String scenePath = projectPath + "/" + ProjectManager.getInstance().getCurrentScene().getName();
+    public void testDefaultProjectScreenshot() throws IOException {
+        DefaultProjectHandler.createAndSaveDefaultProject(TEST_PROJECT_NAME, getContext());
+        String projectPath = Constants.DEFAULT_ROOT + "/" + TEST_PROJECT_NAME;
+        String scenePath = projectPath + "/" + ProjectManager.getInstance().getCurrentScene().getName();
 
-		File file = new File(scenePath + "/" + StageListener.SCREENSHOT_MANUAL_FILE_NAME);
-		assertFalse("Manual screenshot shouldn't exist in default project", file.exists());
+        File file = new File(scenePath + "/" + StageListener.SCREENSHOT_MANUAL_FILE_NAME);
+        assertFalse("Manual screenshot shouldn't exist in default project", file.exists());
 
-		file = new File(scenePath + "/" + StageListener.SCREENSHOT_AUTOMATIC_FILE_NAME);
-		assertTrue("Automatic screenshot should exist in default project", file.exists());
-	}
+        file = new File(scenePath + "/" + StageListener.SCREENSHOT_AUTOMATIC_FILE_NAME);
+        assertTrue("Automatic screenshot should exist in default project", file.exists());
+    }
 
-	public void testCreateAllDefaultProjects() throws IOException {
-		TestUtils.clearProject(getContext().getString(R.string.default_project_name));
-		TestUtils.clearProject(getContext().getString(R.string.default_drone_project_name));
-		TestUtils.clearProject(getContext().getString(R.string.default_project_name_physics));
+    public void testCreateAllDefaultProjects() throws IOException {
+        TestUtils.clearProject(getContext().getString(R.string.default_project_name));
+        TestUtils.clearProject(getContext().getString(R.string.default_drone_project_name));
+        TestUtils.clearProject(getContext().getString(R.string.default_project_name_physics));
 
-		Project defaultDefaultProject = DefaultProjectHandler.createAndSaveDefaultProject(getContext());
-		DefaultProjectHandler defaultProjectHandler = DefaultProjectHandler.getInstance();
-		assertEquals("default project name not as expected", getContext().getString(R.string.default_project_name),
-				defaultDefaultProject.getName());
-		assertTrue("default project does not exist.", StorageHandler.getInstance().projectExists(defaultDefaultProject
-				.getName()));
+        Project defaultDefaultProject = DefaultProjectHandler.createAndSaveDefaultProject(getContext());
+        DefaultProjectHandler defaultProjectHandler = DefaultProjectHandler.getInstance();
+        assertEquals("default project name not as expected", getContext().getString(R.string.default_project_name),
+                defaultDefaultProject.getName());
+        assertTrue("default project does not exist.", StorageHandler.getInstance().projectExists(defaultDefaultProject
+                .getName()));
 
-		defaultProjectHandler.setDefaultProjectCreator(DefaultProjectHandler.ProjectCreatorType
-				.PROJECT_CREATOR_DRONE);
-		if (BuildConfig.FEATURE_PARROT_AR_DRONE_ENABLED) {
-			Project droneDefaultProject = DefaultProjectHandler.createAndSaveDefaultProject(getContext());
-			assertEquals("default drone project name not as expected", getContext().getString(
-					R.string.default_drone_project_name), droneDefaultProject.getName());
-			assertTrue("default drone project does not exist.", StorageHandler.getInstance().projectExists(
-					droneDefaultProject.getName()));
-		} else {
-			assertTrue("standard default project creator must be initialized", Reflection.getPrivateField(
-					defaultProjectHandler, "DefaultProjectCreator") instanceof DefaultProjectCreator);
-		}
+        defaultProjectHandler.setDefaultProjectCreator(DefaultProjectHandler.ProjectCreatorType
+                .PROJECT_CREATOR_DRONE);
+        if (BuildConfig.FEATURE_PARROT_AR_DRONE_ENABLED) {
+            Project droneDefaultProject = DefaultProjectHandler.createAndSaveDefaultProject(getContext());
+            assertEquals("default drone project name not as expected", getContext().getString(
+                    R.string.default_drone_project_name), droneDefaultProject.getName());
+            assertTrue("default drone project does not exist.", StorageHandler.getInstance().projectExists(
+                    droneDefaultProject.getName()));
+        } else {
+            assertTrue("standard default project creator must be initialized", Reflection.getPrivateField(
+                    defaultProjectHandler, "DefaultProjectCreator") instanceof DefaultProjectCreator);
+        }
 
-		defaultProjectHandler.setDefaultProjectCreator(DefaultProjectHandler.ProjectCreatorType
-				.PROJECT_CREATOR_PHYSICS);
-		Project physicsDefaultProject = DefaultProjectHandler.createAndSaveDefaultProject(getContext());
-		assertEquals("default physics project name not as expected", getContext().getString(
-				R.string.default_project_name_physics), physicsDefaultProject.getName());
-		assertTrue("default physics project does not exist.", StorageHandler.getInstance().projectExists(
-				physicsDefaultProject.getName()));
+        defaultProjectHandler.setDefaultProjectCreator(DefaultProjectHandler.ProjectCreatorType
+                .PROJECT_CREATOR_PHYSICS);
+        Project physicsDefaultProject = DefaultProjectHandler.createAndSaveDefaultProject(getContext());
+        assertEquals("default physics project name not as expected", getContext().getString(
+                R.string.default_project_name_physics), physicsDefaultProject.getName());
+        assertTrue("default physics project does not exist.", StorageHandler.getInstance().projectExists(
+                physicsDefaultProject.getName()));
 
-		TestUtils.clearProject(getContext().getString(R.string.default_drone_project_name));
-		TestUtils.clearProject(getContext().getString(R.string.default_project_name_physics));
-	}
+        TestUtils.clearProject(getContext().getString(R.string.default_drone_project_name));
+        TestUtils.clearProject(getContext().getString(R.string.default_project_name_physics));
+    }
 }

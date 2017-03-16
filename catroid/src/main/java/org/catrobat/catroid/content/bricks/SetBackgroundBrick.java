@@ -33,26 +33,26 @@ import java.util.List;
 
 public class SetBackgroundBrick extends SetLookBrick {
 
-	public SetBackgroundBrick() {
-	}
+    public SetBackgroundBrick() {
+    }
 
-	@Override
-	protected Sprite getSprite() {
-		return ProjectManager.getInstance().getCurrentScene().getSpriteList().get(0);
-	}
+    @Override
+    protected Sprite getSprite() {
+        return ProjectManager.getInstance().getCurrentScene().getSpriteList().get(0);
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		Sprite backgroundSprite = ProjectManager.getInstance().getSceneToPlay().getSpriteList().get(0);
-		sequence.addAction(sprite.getActionFactory().createSetLookAction(backgroundSprite, look, wait));
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        Sprite backgroundSprite = ProjectManager.getInstance().getSceneToPlay().getSpriteList().get(0);
+        sequence.addAction(sprite.getActionFactory().createSetLookAction(backgroundSprite, look, wait));
 
-		return Collections.emptyList();
-	}
+        return Collections.emptyList();
+    }
 
-	@Override
-	public Brick clone() {
-		SetBackgroundBrick clonedBrick = new SetBackgroundBrick();
-		clonedBrick.setLook(look);
-		return clonedBrick;
-	}
+    @Override
+    public Brick clone() {
+        SetBackgroundBrick clonedBrick = new SetBackgroundBrick();
+        clonedBrick.setLook(look);
+        return clonedBrick;
+    }
 }

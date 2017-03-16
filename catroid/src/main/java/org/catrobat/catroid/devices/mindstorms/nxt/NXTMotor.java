@@ -30,135 +30,135 @@ import org.catrobat.catroid.devices.mindstorms.MindstormsMotor;
 
 public class NXTMotor implements MindstormsMotor {
 
-	private static final String TAG = NXTMotor.class.getSimpleName();
+    private static final String TAG = NXTMotor.class.getSimpleName();
 
-	private int port;
-	private MindstormsConnection connection;
+    private int port;
+    private MindstormsConnection connection;
 
-	public NXTMotor(int port, MindstormsConnection connection) {
-		this.port = port;
-		this.connection = connection;
-	}
+    public NXTMotor(int port, MindstormsConnection connection) {
+        this.port = port;
+        this.connection = connection;
+    }
 
-	@Override
-	public void stop() {
-		OutputState state = new OutputState();
-		state.setSpeed(0);
-		state.mode = MotorMode.BREAK | MotorMode.ON | MotorMode.REGULATED;
-		state.regulation = MotorRegulation.SPEED;
-		state.turnRatio = 100;
-		state.runState = MotorRunState.RUNNING;
-		state.tachoLimit = 0;
-		setOutputState(state, false);
-	}
+    @Override
+    public void stop() {
+        OutputState state = new OutputState();
+        state.setSpeed(0);
+        state.mode = MotorMode.BREAK | MotorMode.ON | MotorMode.REGULATED;
+        state.regulation = MotorRegulation.SPEED;
+        state.turnRatio = 100;
+        state.runState = MotorRunState.RUNNING;
+        state.tachoLimit = 0;
+        setOutputState(state, false);
+    }
 
-	private void setOutputState(OutputState state, boolean reply) {
-		try {
-			trySetOutputState(state, reply);
-		} catch (MindstormsException e) {
-			Log.e(TAG, e.getMessage());
-		}
-	}
+    private void setOutputState(OutputState state, boolean reply) {
+        try {
+            trySetOutputState(state, reply);
+        } catch (MindstormsException e) {
+            Log.e(TAG, e.getMessage());
+        }
+    }
 
-	private void trySetOutputState(OutputState state, boolean reply) {
-		Command command = new Command(CommandType.DIRECT_COMMAND, CommandByte.SET_OUTPUT_STATE, false);
-		command.append((byte) port);
-		command.append(state.getSpeed());
-		command.append(state.mode);
-		command.append(state.regulation.getByte());
-		command.append(state.turnRatio);
-		command.append(state.runState.getByte());
-		command.append(state.tachoLimit);
-		command.append((byte) 0x00);
+    private void trySetOutputState(OutputState state, boolean reply) {
+        Command command = new Command(CommandType.DIRECT_COMMAND, CommandByte.SET_OUTPUT_STATE, false);
+        command.append((byte) port);
+        command.append(state.getSpeed());
+        command.append(state.mode);
+        command.append(state.regulation.getByte());
+        command.append(state.turnRatio);
+        command.append(state.runState.getByte());
+        command.append(state.tachoLimit);
+        command.append((byte) 0x00);
 
-		if (reply) {
-			connection.sendAndReceive(command);
-		} else {
-			connection.send(command);
-		}
-	}
+        if (reply) {
+            connection.sendAndReceive(command);
+        } else {
+            connection.send(command);
+        }
+    }
 
-	@Override
-	public void move(int speed) {
-		move(speed, 0, false);
-	}
+    @Override
+    public void move(int speed) {
+        move(speed, 0, false);
+    }
 
-	@Override
-	public void move(int speed, int degrees) {
-		move(speed, degrees, false);
-	}
+    @Override
+    public void move(int speed, int degrees) {
+        move(speed, degrees, false);
+    }
 
-	@Override
-	public void move(int speed, int degrees, boolean reply) {
-		OutputState state = new OutputState();
-		state.setSpeed(speed);
-		state.mode = MotorMode.BREAK | MotorMode.ON | MotorMode.REGULATED;
-		state.regulation = MotorRegulation.SPEED;
-		state.turnRatio = 100;
-		state.runState = MotorRunState.RUNNING;
-		state.tachoLimit = degrees;
-		setOutputState(state, reply);
-	}
+    @Override
+    public void move(int speed, int degrees, boolean reply) {
+        OutputState state = new OutputState();
+        state.setSpeed(speed);
+        state.mode = MotorMode.BREAK | MotorMode.ON | MotorMode.REGULATED;
+        state.regulation = MotorRegulation.SPEED;
+        state.turnRatio = 100;
+        state.runState = MotorRunState.RUNNING;
+        state.tachoLimit = degrees;
+        setOutputState(state, reply);
+    }
 
-	private static class OutputState {
+    private static class OutputState {
 
-		private byte speed;
-		public byte mode;
-		public MotorRegulation regulation;
-		public byte turnRatio;
-		public MotorRunState runState;
-		public int tachoLimit; //Current limit on a movement in progress, if any
+        private byte speed;
+        public byte mode;
+        public MotorRegulation regulation;
+        public byte turnRatio;
+        public MotorRunState runState;
+        public int tachoLimit; //Current limit on a movement in progress, if any
 
-		public void setSpeed(int speed) {
-			if (speed > 100) {
-				this.speed = (byte) 100;
-			} else if (speed < -100) {
-				this.speed = (byte) -100;
-			} else if (turnRatio > 100) {
-				turnRatio = (byte) 100;
-			} else if (turnRatio < -100) {
-				this.turnRatio = (byte) 100;
-			} else {
-				this.speed = (byte) speed;
-			}
-		}
+        public void setSpeed(int speed) {
+            if (speed > 100) {
+                this.speed = (byte) 100;
+            } else if (speed < -100) {
+                this.speed = (byte) -100;
+            } else if (turnRatio > 100) {
+                turnRatio = (byte) 100;
+            } else if (turnRatio < -100) {
+                this.turnRatio = (byte) 100;
+            } else {
+                this.speed = (byte) speed;
+            }
+        }
 
-		public byte getSpeed() {
-			return this.speed;
-		}
-	}
+        public byte getSpeed() {
+            return this.speed;
+        }
+    }
 
-	public static class MotorMode {
-		public static final byte ON = 0x01;
-		public static final byte BREAK = 0x02;
-		public static final byte REGULATED = 0x04;
-	}
+    public static class MotorMode {
+        public static final byte ON = 0x01;
+        public static final byte BREAK = 0x02;
+        public static final byte REGULATED = 0x04;
+    }
 
-	public enum MotorRegulation {
-		IDLE(0x00), SPEED(0x01), SYNC(0x02);
+    public enum MotorRegulation {
+        IDLE(0x00), SPEED(0x01), SYNC(0x02);
 
-		private int motorRegulationValue;
+        private int motorRegulationValue;
 
-		private MotorRegulation(int motorRegulationValue) {
-			this.motorRegulationValue = motorRegulationValue;
-		}
+        private MotorRegulation(int motorRegulationValue) {
+            this.motorRegulationValue = motorRegulationValue;
+        }
 
-		public byte getByte() {
-			return (byte) motorRegulationValue;
-		}
-	}
+        public byte getByte() {
+            return (byte) motorRegulationValue;
+        }
+    }
 
-	public enum MotorRunState {
-		IDLE(0x00), RAMP_UP(0x10), RUNNING(0x20), RAMP_DOWN(0x40);
+    public enum MotorRunState {
+        IDLE(0x00), RAMP_UP(0x10), RUNNING(0x20), RAMP_DOWN(0x40);
 
-		private int motorRunStateValue;
+        private int motorRunStateValue;
 
-		private MotorRunState(int motorRunStateValue) {
-			this.motorRunStateValue = motorRunStateValue;
-		}
+        private MotorRunState(int motorRunStateValue) {
+            this.motorRunStateValue = motorRunStateValue;
+        }
 
-		public byte getByte() {
-			return (byte) motorRunStateValue;
-		}
-	}
+        public byte getByte() {
+            return (byte) motorRunStateValue;
+        }
+    }
 }

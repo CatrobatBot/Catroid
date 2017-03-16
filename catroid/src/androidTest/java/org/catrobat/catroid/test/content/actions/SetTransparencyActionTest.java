@@ -32,62 +32,62 @@ import org.catrobat.catroid.formulaeditor.Formula;
 
 public class SetTransparencyActionTest extends InstrumentationTestCase {
 
-	private static final float TRANSPARENCY = 91f;
-	private Formula effect = new Formula(TRANSPARENCY);
-	private static final String NOT_NUMERICAL_STRING = "NOT_NUMERICAL_STRING";
-	private Sprite sprite;
+    private static final float TRANSPARENCY = 91f;
+    private Formula effect = new Formula(TRANSPARENCY);
+    private static final String NOT_NUMERICAL_STRING = "NOT_NUMERICAL_STRING";
+    private Sprite sprite;
 
-	@Override
-	protected void setUp() throws Exception {
-		sprite = new SingleSprite("testSprite");
-		super.setUp();
-	}
+    @Override
+    protected void setUp() throws Exception {
+        sprite = new SingleSprite("testSprite");
+        super.setUp();
+    }
 
-	public void testTransparency() {
-		assertEquals("Unexpected initial sprite ghost effect value", 0f,
-				sprite.look.getTransparencyInUserInterfaceDimensionUnit());
+    public void testTransparency() {
+        assertEquals("Unexpected initial sprite ghost effect value", 0f,
+                sprite.look.getTransparencyInUserInterfaceDimensionUnit());
 
-		sprite.getActionFactory().createSetTransparencyAction(sprite, effect).act(1.0f);
-		assertEquals("Incorrect sprite scale value after SetTransparencyBrick executed",
-				TRANSPARENCY, sprite.look.getTransparencyInUserInterfaceDimensionUnit());
+        sprite.getActionFactory().createSetTransparencyAction(sprite, effect).act(1.0f);
+        assertEquals("Incorrect sprite scale value after SetTransparencyBrick executed",
+                TRANSPARENCY, sprite.look.getTransparencyInUserInterfaceDimensionUnit());
 
-		sprite.getActionFactory().createSetTransparencyAction(sprite, new Formula(-50.0)).act(1.0f);
-		assertEquals("Incorrect sprite scale value after SetTransparencyBrick executed", 0f,
-				sprite.look.getTransparencyInUserInterfaceDimensionUnit());
+        sprite.getActionFactory().createSetTransparencyAction(sprite, new Formula(-50.0)).act(1.0f);
+        assertEquals("Incorrect sprite scale value after SetTransparencyBrick executed", 0f,
+                sprite.look.getTransparencyInUserInterfaceDimensionUnit());
 
-		sprite.getActionFactory().createSetTransparencyAction(sprite, new Formula(150.0)).act(1.0f);
-		assertEquals("Incorrect sprite scale value after SetTransparencyBrick executed", 100f,
-				sprite.look.getTransparencyInUserInterfaceDimensionUnit());
-	}
+        sprite.getActionFactory().createSetTransparencyAction(sprite, new Formula(150.0)).act(1.0f);
+        assertEquals("Incorrect sprite scale value after SetTransparencyBrick executed", 100f,
+                sprite.look.getTransparencyInUserInterfaceDimensionUnit());
+    }
 
-	public void testNullSprite() {
-		Action action = sprite.getActionFactory().createSetTransparencyAction(null, effect);
-		try {
-			action.act(1.0f);
-			fail("Execution of SetTransparencyBrick with null Sprite did not cause a NullPointerException to be thrown");
-		} catch (NullPointerException expected) {
-		}
-	}
+    public void testNullSprite() {
+        Action action = sprite.getActionFactory().createSetTransparencyAction(null, effect);
+        try {
+            action.act(1.0f);
+            fail("Execution of SetTransparencyBrick with null Sprite did not cause a NullPointerException to be thrown");
+        } catch (NullPointerException expected) {
+        }
+    }
 
-	public void testBrickWithStringFormula() {
-		sprite.getActionFactory().createSetTransparencyAction(sprite, new Formula(String.valueOf(TRANSPARENCY))).act(1.0f);
-		assertEquals("Incorrect sprite scale value after SetTransparencyBrick executed", TRANSPARENCY,
-				sprite.look.getTransparencyInUserInterfaceDimensionUnit());
+    public void testBrickWithStringFormula() {
+        sprite.getActionFactory().createSetTransparencyAction(sprite, new Formula(String.valueOf(TRANSPARENCY))).act(1.0f);
+        assertEquals("Incorrect sprite scale value after SetTransparencyBrick executed", TRANSPARENCY,
+                sprite.look.getTransparencyInUserInterfaceDimensionUnit());
 
-		sprite.getActionFactory().createSetTransparencyAction(sprite, new Formula(NOT_NUMERICAL_STRING)).act(1.0f);
-		assertEquals("Incorrect sprite scale value after SetTransparencyBrick executed", TRANSPARENCY,
-				sprite.look.getTransparencyInUserInterfaceDimensionUnit());
-	}
+        sprite.getActionFactory().createSetTransparencyAction(sprite, new Formula(NOT_NUMERICAL_STRING)).act(1.0f);
+        assertEquals("Incorrect sprite scale value after SetTransparencyBrick executed", TRANSPARENCY,
+                sprite.look.getTransparencyInUserInterfaceDimensionUnit());
+    }
 
-	public void testNullFormula() {
-		sprite.getActionFactory().createSetTransparencyAction(sprite, null).act(1.0f);
-		assertEquals("Incorrect sprite size value after SetTransparencyBrick executed", 0f,
-				sprite.look.getTransparencyInUserInterfaceDimensionUnit());
-	}
+    public void testNullFormula() {
+        sprite.getActionFactory().createSetTransparencyAction(sprite, null).act(1.0f);
+        assertEquals("Incorrect sprite size value after SetTransparencyBrick executed", 0f,
+                sprite.look.getTransparencyInUserInterfaceDimensionUnit());
+    }
 
-	public void testNotANumberFormula() {
-		sprite.getActionFactory().createSetTransparencyAction(sprite, new Formula(Double.NaN)).act(1.0f);
-		assertEquals("Incorrect sprite size value after SetTransparencyBrick executed", 0f,
-				sprite.look.getTransparencyInUserInterfaceDimensionUnit());
-	}
+    public void testNotANumberFormula() {
+        sprite.getActionFactory().createSetTransparencyAction(sprite, new Formula(Double.NaN)).act(1.0f);
+        assertEquals("Incorrect sprite size value after SetTransparencyBrick executed", 0f,
+                sprite.look.getTransparencyInUserInterfaceDimensionUnit());
+    }
 }

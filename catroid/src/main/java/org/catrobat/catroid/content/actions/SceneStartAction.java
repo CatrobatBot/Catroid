@@ -28,22 +28,22 @@ import org.catrobat.catroid.stage.StageActivity;
 
 public class SceneStartAction extends TemporalAction {
 
-	private String sceneName;
+    private String sceneName;
 
-	@Override
-	protected void update(float percent) {
-		if (sceneName != null) {
-			StageActivity.stageListener.startScene(sceneName);
-		}
-	}
+    @Override
+    protected void update(float percent) {
+        if (sceneName != null) {
+            StageActivity.stageListener.startScene(sceneName);
+        }
+    }
 
-	@Override
-	public void reset() {
-		super.reset();
-		sceneName = null;
-	}
+    @Override
+    public void reset() {
+        super.reset();
+        sceneName = null;
+    }
 
-	public void setScene(String sceneName) {
-		this.sceneName = sceneName;
-	}
+    public void setScene(String sceneName) {
+        this.sceneName = sceneName;
+    }
 }

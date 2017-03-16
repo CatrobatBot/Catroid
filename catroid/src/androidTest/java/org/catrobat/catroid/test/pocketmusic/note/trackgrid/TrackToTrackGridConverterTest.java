@@ -34,43 +34,43 @@ import org.catrobat.catroid.test.pocketmusic.note.TrackTestDataFactory;
 
 public class TrackToTrackGridConverterTest extends AndroidTestCase {
 
-	public void testConvertSimpleTrack() {
-		Track track = TrackTestDataFactory.createSimpleTrack();
-		TrackGrid simpleTrackGrid = TrackGridTestDataFactory.createSimpleTrackGrid();
+    public void testConvertSimpleTrack() {
+        Track track = TrackTestDataFactory.createSimpleTrack();
+        TrackGrid simpleTrackGrid = TrackGridTestDataFactory.createSimpleTrackGrid();
 
-		TrackGrid convertedTrackGrid = TrackToTrackGridConverter.convertTrackToTrackGrid(track, Project.DEFAULT_BEAT, Project
-				.DEFAULT_BEATS_PER_MINUTE);
+        TrackGrid convertedTrackGrid = TrackToTrackGridConverter.convertTrackToTrackGrid(track, Project.DEFAULT_BEAT, Project
+                .DEFAULT_BEATS_PER_MINUTE);
 
-		assertTrue("Failed to convert simple Track.", convertedTrackGrid.equals(simpleTrackGrid));
-	}
+        assertTrue("Failed to convert simple Track.", convertedTrackGrid.equals(simpleTrackGrid));
+    }
 
-	public void testConvertTrackWithSeveralBreaks() {
-		Track track = TrackTestDataFactory.createTrackWithSeveralBreaks();
-		TrackGrid trackWithSeveralBreaks = TrackGridTestDataFactory.createTrackGridWithSeveralBreaks();
+    public void testConvertTrackWithSeveralBreaks() {
+        Track track = TrackTestDataFactory.createTrackWithSeveralBreaks();
+        TrackGrid trackWithSeveralBreaks = TrackGridTestDataFactory.createTrackGridWithSeveralBreaks();
 
-		TrackGrid convertedTrackGrid = TrackToTrackGridConverter.convertTrackToTrackGrid(track, MusicalBeat.BEAT_4_4,
-				Project.DEFAULT_BEATS_PER_MINUTE);
+        TrackGrid convertedTrackGrid = TrackToTrackGridConverter.convertTrackToTrackGrid(track, MusicalBeat.BEAT_4_4,
+                Project.DEFAULT_BEATS_PER_MINUTE);
 
-		assertTrue("Failed to convert Track with several breaks", convertedTrackGrid.equals(trackWithSeveralBreaks));
-	}
+        assertTrue("Failed to convert Track with several breaks", convertedTrackGrid.equals(trackWithSeveralBreaks));
+    }
 
-	public void testConvertSemiComplexTrack() {
-		Track track = TrackTestDataFactory.createSemiComplexTrack(MusicalInstrument.ACOUSTIC_GRAND_PIANO);
-		TrackGrid semiComplexTrack = TrackGridTestDataFactory.createSemiComplexTrackGrid();
+    public void testConvertSemiComplexTrack() {
+        Track track = TrackTestDataFactory.createSemiComplexTrack(MusicalInstrument.ACOUSTIC_GRAND_PIANO);
+        TrackGrid semiComplexTrack = TrackGridTestDataFactory.createSemiComplexTrackGrid();
 
-		TrackGrid convertedTrackGrid = TrackToTrackGridConverter.convertTrackToTrackGrid(track, MusicalBeat.BEAT_4_4,
-				Project.DEFAULT_BEATS_PER_MINUTE);
+        TrackGrid convertedTrackGrid = TrackToTrackGridConverter.convertTrackToTrackGrid(track, MusicalBeat.BEAT_4_4,
+                Project.DEFAULT_BEATS_PER_MINUTE);
 
-		assertTrue("Failed to convert a more complex Track", convertedTrackGrid.equals(semiComplexTrack));
-	}
+        assertTrue("Failed to convert a more complex Track", convertedTrackGrid.equals(semiComplexTrack));
+    }
 
-	public void testConvertEmptyTrack() {
-		Track emptyTrack = TrackTestDataFactory.createEmptyTrack(MusicalInstrument.ACOUSTIC_GRAND_PIANO);
-		TrackGrid emptyTrackGrid = TrackGridTestDataFactory.createEmptyTrackGrid();
+    public void testConvertEmptyTrack() {
+        Track emptyTrack = TrackTestDataFactory.createEmptyTrack(MusicalInstrument.ACOUSTIC_GRAND_PIANO);
+        TrackGrid emptyTrackGrid = TrackGridTestDataFactory.createEmptyTrackGrid();
 
-		TrackGrid convertedTrackGrid = TrackToTrackGridConverter.convertTrackToTrackGrid(emptyTrack, MusicalBeat.BEAT_4_4,
-				Project.DEFAULT_BEATS_PER_MINUTE);
+        TrackGrid convertedTrackGrid = TrackToTrackGridConverter.convertTrackToTrackGrid(emptyTrack, MusicalBeat.BEAT_4_4,
+                Project.DEFAULT_BEATS_PER_MINUTE);
 
-		assertTrue("Failed to convert empty Track", convertedTrackGrid.equals(emptyTrackGrid));
-	}
+        assertTrue("Failed to convert empty Track", convertedTrackGrid.equals(emptyTrackGrid));
+    }
 }

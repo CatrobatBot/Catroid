@@ -34,172 +34,172 @@ import java.util.TreeSet;
 
 public class Track implements Serializable {
 
-	private static final long serialVersionUID = 7483021689872527955L;
+    private static final long serialVersionUID = 7483021689872527955L;
 
-	private MusicalInstrument instrument;
-	private LongSparseArray<List<NoteEvent>> events;
-	private MusicalKey key;
-	private long lastTick;
+    private MusicalInstrument instrument;
+    private LongSparseArray<List<NoteEvent>> events;
+    private MusicalKey key;
+    private long lastTick;
 
-	public Track(MusicalKey key, MusicalInstrument instrument) {
-		this.events = new LongSparseArray<>();
-		this.instrument = instrument;
-		this.key = key;
-		this.lastTick = 0;
-	}
+    public Track(MusicalKey key, MusicalInstrument instrument) {
+        this.events = new LongSparseArray<>();
+        this.instrument = instrument;
+        this.key = key;
+        this.lastTick = 0;
+    }
 
-	public Track(Track track) {
-		this.events = new LongSparseArray<>();
-		this.instrument = track.getInstrument();
-		this.key = track.getKey();
-		this.lastTick = track.getLastTick();
+    public Track(Track track) {
+        this.events = new LongSparseArray<>();
+        this.instrument = track.getInstrument();
+        this.key = track.getKey();
+        this.lastTick = track.getLastTick();
 
-		for (long tick : track.getSortedTicks()) {
-			List<NoteEvent> noteEventList = new LinkedList<>();
-			this.events.put(tick, noteEventList);
+        for (long tick : track.getSortedTicks()) {
+            List<NoteEvent> noteEventList = new LinkedList<>();
+            this.events.put(tick, noteEventList);
 
-			for (NoteEvent noteEvent : track.getNoteEventsForTick(tick)) {
-				noteEventList.add(new NoteEvent(noteEvent));
-			}
-		}
-	}
+            for (NoteEvent noteEvent : track.getNoteEventsForTick(tick)) {
+                noteEventList.add(new NoteEvent(noteEvent));
+            }
+        }
+    }
 
-	public MusicalInstrument getInstrument() {
-		return instrument;
-	}
+    public MusicalInstrument getInstrument() {
+        return instrument;
+    }
 
-	public MusicalKey getKey() {
-		return key;
-	}
+    public MusicalKey getKey() {
+        return key;
+    }
 
-	public void addNoteEvent(long tick, NoteEvent noteEvent) {
-		List<NoteEvent> noteEventList;
+    public void addNoteEvent(long tick, NoteEvent noteEvent) {
+        List<NoteEvent> noteEventList;
 
-		if (events.get(tick) != null) {
-			noteEventList = events.get(tick);
-		} else {
-			noteEventList = new LinkedList<>();
-			events.put(tick, noteEventList);
-		}
+        if (events.get(tick) != null) {
+            noteEventList = events.get(tick);
+        } else {
+            noteEventList = new LinkedList<>();
+            events.put(tick, noteEventList);
+        }
 
-		if (!noteEvent.isNoteOn()) {
-			lastTick = tick;
-		}
+        if (!noteEvent.isNoteOn()) {
+            lastTick = tick;
+        }
 
-		if (!eventListAlreadyContainsNoteEventWithTick(tick, noteEvent)) {
-			noteEventList.add(noteEvent);
-		}
-	}
+        if (!eventListAlreadyContainsNoteEventWithTick(tick, noteEvent)) {
+            noteEventList.add(noteEvent);
+        }
+    }
 
-	private boolean eventListAlreadyContainsNoteEventWithTick(long tick, NoteEvent noteEvent) {
-		for (int i = 0; i < events.size(); i++) {
-			long key = events.keyAt(i);
-			if (key == tick && events.get(key).contains(noteEvent)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    private boolean eventListAlreadyContainsNoteEventWithTick(long tick, NoteEvent noteEvent) {
+        for (int i = 0; i < events.size(); i++) {
+            long key = events.keyAt(i);
+            if (key == tick && events.get(key).contains(noteEvent)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	public List<NoteEvent> getNoteEventsForTick(long tick) {
-		List<NoteEvent> noteEvents = events.get(tick);
+    public List<NoteEvent> getNoteEventsForTick(long tick) {
+        List<NoteEvent> noteEvents = events.get(tick);
 
-		Collections.sort(noteEvents, new Comparator<NoteEvent>() {
-			@Override
-			public int compare(NoteEvent noteEvent1, NoteEvent noteEvent2) {
-				if (noteEvent1.isNoteOn() == noteEvent2.isNoteOn()) {
-					return 0;
-				} else if (noteEvent1.isNoteOn()) {
-					return 1;
-				} else {
-					return -1;
-				}
-			}
-		});
+        Collections.sort(noteEvents, new Comparator<NoteEvent>() {
+            @Override
+            public int compare(NoteEvent noteEvent1, NoteEvent noteEvent2) {
+                if (noteEvent1.isNoteOn() == noteEvent2.isNoteOn()) {
+                    return 0;
+                } else if (noteEvent1.isNoteOn()) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            }
+        });
 
-		return noteEvents;
-	}
+        return noteEvents;
+    }
 
-	public Set<Long> getSortedTicks() {
-		Set<Long> treeSet = new TreeSet<>();
-		for (int i = 0; i < events.size(); i++) {
-			treeSet.add(events.keyAt(i));
-		}
-		return treeSet;
-	}
+    public Set<Long> getSortedTicks() {
+        Set<Long> treeSet = new TreeSet<>();
+        for (int i = 0; i < events.size(); i++) {
+            treeSet.add(events.keyAt(i));
+        }
+        return treeSet;
+    }
 
-	public int size() {
-		int size = 0;
+    public int size() {
+        int size = 0;
 
-		for (Long sortedTick : getSortedTicks()) {
-			size += events.get(sortedTick).size();
-		}
+        for (Long sortedTick : getSortedTicks()) {
+            size += events.get(sortedTick).size();
+        }
 
-		return size;
-	}
+        return size;
+    }
 
-	public long getLastTick() {
-		return lastTick;
-	}
+    public long getLastTick() {
+        return lastTick;
+    }
 
-	public long getTotalTimeInMilliseconds() {
-		return NoteLength.tickToMilliseconds(lastTick);
-	}
+    public long getTotalTimeInMilliseconds() {
+        return NoteLength.tickToMilliseconds(lastTick);
+    }
 
-	public boolean empty() {
-		return (0 == size());
-	}
+    public boolean empty() {
+        return (0 == size());
+    }
 
-	@Override
-	public int hashCode() {
-		int primeWithGoodCollisionPrevention = 31;
-		int hashCode = 18;
-		hashCode = primeWithGoodCollisionPrevention * hashCode + instrument.hashCode();
-		hashCode = primeWithGoodCollisionPrevention * hashCode + events.hashCode();
-		hashCode = primeWithGoodCollisionPrevention * hashCode + key.hashCode();
-		hashCode = primeWithGoodCollisionPrevention * hashCode + (int) lastTick;
-		return hashCode;
-	}
+    @Override
+    public int hashCode() {
+        int primeWithGoodCollisionPrevention = 31;
+        int hashCode = 18;
+        hashCode = primeWithGoodCollisionPrevention * hashCode + instrument.hashCode();
+        hashCode = primeWithGoodCollisionPrevention * hashCode + events.hashCode();
+        hashCode = primeWithGoodCollisionPrevention * hashCode + key.hashCode();
+        hashCode = primeWithGoodCollisionPrevention * hashCode + (int) lastTick;
+        return hashCode;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if ((obj == null) || !(obj instanceof Track)) {
-			return false;
-		}
+    @Override
+    public boolean equals(Object obj) {
+        if ((obj == null) || !(obj instanceof Track)) {
+            return false;
+        }
 
-		Track track = (Track) obj;
+        Track track = (Track) obj;
 
-		if (track.getInstrument() != getInstrument()) {
-			return false;
-		}
+        if (track.getInstrument() != getInstrument()) {
+            return false;
+        }
 
-		if (track.getKey() != getKey()) {
-			return false;
-		}
+        if (track.getKey() != getKey()) {
+            return false;
+        }
 
-		Set<Long> ownTrackTicks = getSortedTicks();
-		Set<Long> otherTrackTicks = track.getSortedTicks();
+        Set<Long> ownTrackTicks = getSortedTicks();
+        Set<Long> otherTrackTicks = track.getSortedTicks();
 
-		if (otherTrackTicks.equals(ownTrackTicks)) {
-			for (long tick : ownTrackTicks) {
-				List<NoteEvent> ownNoteEventList = getNoteEventsForTick(tick);
-				List<NoteEvent> otherNoteEventList = track.getNoteEventsForTick(tick);
+        if (otherTrackTicks.equals(ownTrackTicks)) {
+            for (long tick : ownTrackTicks) {
+                List<NoteEvent> ownNoteEventList = getNoteEventsForTick(tick);
+                List<NoteEvent> otherNoteEventList = track.getNoteEventsForTick(tick);
 
-				if (!ownNoteEventList.equals(otherNoteEventList)) {
-					return false;
-				}
-			}
-			return true;
-		}
-		return false;
-	}
+                if (!ownNoteEventList.equals(otherNoteEventList)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 
-	@Override
-	public String toString() {
-		return "[Track] instrument=" + instrument + " key=" + key + " size=" + size();
-	}
+    @Override
+    public String toString() {
+        return "[Track] instrument=" + instrument + " key=" + key + " size=" + size();
+    }
 
-	public boolean isEmpty() {
-		return size() == 0;
-	}
+    public boolean isEmpty() {
+        return size() == 0;
+    }
 }

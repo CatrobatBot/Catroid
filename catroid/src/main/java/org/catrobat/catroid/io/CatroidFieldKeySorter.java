@@ -39,101 +39,101 @@ import java.util.Set;
 import java.util.TreeMap;
 
 public class CatroidFieldKeySorter implements FieldKeySorter {
-	private static final String TAG = CatroidFieldKeySorter.class.getSimpleName();
+    private static final String TAG = CatroidFieldKeySorter.class.getSimpleName();
 
-	@Override
-	public Map sort(final Class type, final Map keyedByFieldKey) {
-		XStreamFieldKeyOrder fieldKeyOrderAnnotation = findAnnotationInClassHierarchy(type, XStreamFieldKeyOrder.class);
-		if (fieldKeyOrderAnnotation != null) {
-			List<String> fieldOrder = Arrays.asList(fieldKeyOrderAnnotation.value());
-			return sortByList(fieldOrder, keyedByFieldKey);
-		} else {
-			return sortAlphabeticallyByClassHierarchy(keyedByFieldKey);
-		}
-	}
+    @Override
+    public Map sort(final Class type, final Map keyedByFieldKey) {
+        XStreamFieldKeyOrder fieldKeyOrderAnnotation = findAnnotationInClassHierarchy(type, XStreamFieldKeyOrder.class);
+        if (fieldKeyOrderAnnotation != null) {
+            List<String> fieldOrder = Arrays.asList(fieldKeyOrderAnnotation.value());
+            return sortByList(fieldOrder, keyedByFieldKey);
+        } else {
+            return sortAlphabeticallyByClassHierarchy(keyedByFieldKey);
+        }
+    }
 
-	private <E extends Annotation> E findAnnotationInClassHierarchy(Class<?> clazz, Class<? extends E> annotation) {
-		Class<?> currentClass = clazz;
-		while (currentClass != Object.class) {
-			E currentClassAnnotation = currentClass.getAnnotation(annotation);
-			if (currentClassAnnotation != null) {
-				return currentClassAnnotation;
-			} else {
-				currentClass = currentClass.getSuperclass();
-			}
-		}
-		return null;
-	}
+    private <E extends Annotation> E findAnnotationInClassHierarchy(Class<?> clazz, Class<? extends E> annotation) {
+        Class<?> currentClass = clazz;
+        while (currentClass != Object.class) {
+            E currentClassAnnotation = currentClass.getAnnotation(annotation);
+            if (currentClassAnnotation != null) {
+                return currentClassAnnotation;
+            } else {
+                currentClass = currentClass.getSuperclass();
+            }
+        }
+        return null;
+    }
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private Map sortByList(final List<String> fieldOrder, final Map keyedByFieldKey) {
-		checkMissingSerializableField(fieldOrder, keyedByFieldKey.entrySet());
-		final Map map = new TreeMap(new Comparator() {
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private Map sortByList(final List<String> fieldOrder, final Map keyedByFieldKey) {
+        checkMissingSerializableField(fieldOrder, keyedByFieldKey.entrySet());
+        final Map map = new TreeMap(new Comparator() {
 
-			@Override
-			public int compare(final Object objectOne, final Object objectTwo) {
-				final FieldKey fieldKeyOne = (FieldKey) objectOne;
-				final FieldKey fieldKeyTwo = (FieldKey) objectTwo;
+            @Override
+            public int compare(final Object objectOne, final Object objectTwo) {
+                final FieldKey fieldKeyOne = (FieldKey) objectOne;
+                final FieldKey fieldKeyTwo = (FieldKey) objectTwo;
 
-				int fieldKeyOneIndex = fieldOrder.indexOf(getAliasOrFieldName(fieldKeyOne));
-				int fieldKeyTwoIndex = fieldOrder.indexOf(getAliasOrFieldName(fieldKeyTwo));
-				return fieldKeyOneIndex - fieldKeyTwoIndex;
-			}
-		});
-		map.putAll(keyedByFieldKey);
-		return map;
-	}
+                int fieldKeyOneIndex = fieldOrder.indexOf(getAliasOrFieldName(fieldKeyOne));
+                int fieldKeyTwoIndex = fieldOrder.indexOf(getAliasOrFieldName(fieldKeyTwo));
+                return fieldKeyOneIndex - fieldKeyTwoIndex;
+            }
+        });
+        map.putAll(keyedByFieldKey);
+        return map;
+    }
 
-	private void checkMissingSerializableField(List<String> fieldOrder, Set<Map.Entry<FieldKey, Field>> fields) {
-		for (Map.Entry<FieldKey, Field> fieldEntry : fields) {
-			final FieldKey fieldKey = fieldEntry.getKey();
-			final String fieldKeyName = getAliasOrFieldName(fieldKey);
-			if (!fieldOrder.contains(fieldKeyName) && isSerializable(fieldEntry.getValue())) {
-				throw new XStreamMissingSerializableFieldException("Missing field '" + fieldKeyName
-						+ "' in XStreamFieldKeyOrder annotation for class " + fieldKey.getDeclaringClass());
-			}
-		}
-	}
+    private void checkMissingSerializableField(List<String> fieldOrder, Set<Map.Entry<FieldKey, Field>> fields) {
+        for (Map.Entry<FieldKey, Field> fieldEntry : fields) {
+            final FieldKey fieldKey = fieldEntry.getKey();
+            final String fieldKeyName = getAliasOrFieldName(fieldKey);
+            if (!fieldOrder.contains(fieldKeyName) && isSerializable(fieldEntry.getValue())) {
+                throw new XStreamMissingSerializableFieldException("Missing field '" + fieldKeyName
+                        + "' in XStreamFieldKeyOrder annotation for class " + fieldKey.getDeclaringClass());
+            }
+        }
+    }
 
-	private boolean isSerializable(Field field) {
-		int modifiers = field.getModifiers();
-		return !Modifier.isStatic(modifiers) && !Modifier.isTransient(modifiers);
-	}
+    private boolean isSerializable(Field field) {
+        int modifiers = field.getModifiers();
+        return !Modifier.isStatic(modifiers) && !Modifier.isTransient(modifiers);
+    }
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private Map sortAlphabeticallyByClassHierarchy(final Map keyedByFieldKey) {
-		final Map map = new TreeMap(new Comparator() {
-			@Override
-			public int compare(final Object objectOne, final Object objectTwo) {
-				final FieldKey fieldKeyOne = (FieldKey) objectOne;
-				final FieldKey fieldKeyTwo = (FieldKey) objectTwo;
-				int fieldKeyComparator = fieldKeyOne.getDepth() - fieldKeyTwo.getDepth();
-				if (fieldKeyComparator == 0) {
-					String fieldNameOrAlias1 = getAliasOrFieldName(fieldKeyOne);
-					String fieldNameOrAlias2 = getAliasOrFieldName(fieldKeyTwo);
-					fieldKeyComparator = fieldNameOrAlias1.compareTo(fieldNameOrAlias2);
-				}
-				return fieldKeyComparator;
-			}
-		});
-		map.putAll(keyedByFieldKey);
-		return map;
-	}
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private Map sortAlphabeticallyByClassHierarchy(final Map keyedByFieldKey) {
+        final Map map = new TreeMap(new Comparator() {
+            @Override
+            public int compare(final Object objectOne, final Object objectTwo) {
+                final FieldKey fieldKeyOne = (FieldKey) objectOne;
+                final FieldKey fieldKeyTwo = (FieldKey) objectTwo;
+                int fieldKeyComparator = fieldKeyOne.getDepth() - fieldKeyTwo.getDepth();
+                if (fieldKeyComparator == 0) {
+                    String fieldNameOrAlias1 = getAliasOrFieldName(fieldKeyOne);
+                    String fieldNameOrAlias2 = getAliasOrFieldName(fieldKeyTwo);
+                    fieldKeyComparator = fieldNameOrAlias1.compareTo(fieldNameOrAlias2);
+                }
+                return fieldKeyComparator;
+            }
+        });
+        map.putAll(keyedByFieldKey);
+        return map;
+    }
 
-	public static String getAliasOrFieldName(FieldKey fieldKey) {
-		String fieldName = fieldKey.getFieldName();
-		try {
-			Field field = fieldKey.getDeclaringClass().getDeclaredField(fieldName);
+    public static String getAliasOrFieldName(FieldKey fieldKey) {
+        String fieldName = fieldKey.getFieldName();
+        try {
+            Field field = fieldKey.getDeclaringClass().getDeclaredField(fieldName);
 
-			XStreamAlias alias = field.getAnnotation(XStreamAlias.class);
-			if (alias != null) {
-				return alias.value();
-			} else {
-				return fieldName;
-			}
-		} catch (SecurityException | NoSuchFieldException exception) {
-			Log.e(TAG, Log.getStackTraceString(exception));
-		}
-		return fieldName;
-	}
+            XStreamAlias alias = field.getAnnotation(XStreamAlias.class);
+            if (alias != null) {
+                return alias.value();
+            } else {
+                return fieldName;
+            }
+        } catch (SecurityException | NoSuchFieldException exception) {
+            Log.e(TAG, Log.getStackTraceString(exception));
+        }
+        return fieldName;
+    }
 }

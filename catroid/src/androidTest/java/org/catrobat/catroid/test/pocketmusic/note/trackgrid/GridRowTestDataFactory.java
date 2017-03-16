@@ -33,40 +33,40 @@ import java.util.List;
 
 public final class GridRowTestDataFactory {
 
-	private GridRowTestDataFactory() {
-	}
+    private GridRowTestDataFactory() {
+    }
 
-	public static GridRow createGridRowWithOnePosition() {
-		SparseArray<List<GridRowPosition>> gridRowPositionSparseArray = new SparseArray<>();
+    public static GridRow createGridRowWithOnePosition() {
+        SparseArray<List<GridRowPosition>> gridRowPositionSparseArray = new SparseArray<>();
 
-		List<GridRowPosition> gridRowPositionList = new ArrayList<>();
-		gridRowPositionList.add(GridRowPositionTestDataFactory.createSimpleGridRowPosition());
-		gridRowPositionSparseArray.put(0, gridRowPositionList);
+        List<GridRowPosition> gridRowPositionList = new ArrayList<>();
+        gridRowPositionList.add(GridRowPositionTestDataFactory.createSimpleGridRowPosition());
+        gridRowPositionSparseArray.put(0, gridRowPositionList);
 
-		return new GridRow(NoteName.C4, gridRowPositionSparseArray);
-	}
+        return new GridRow(NoteName.C4, gridRowPositionSparseArray);
+    }
 
-	public static GridRow createGridRowWithDuplicatePositions() {
-		SparseArray<List<GridRowPosition>> gridRowPositionSparseArray = new SparseArray<>();
+    public static GridRow createGridRowWithDuplicatePositions() {
+        SparseArray<List<GridRowPosition>> gridRowPositionSparseArray = new SparseArray<>();
 
-		List<GridRowPosition> gridRowPositionList = new ArrayList<>();
+        List<GridRowPosition> gridRowPositionList = new ArrayList<>();
 
-		gridRowPositionList.add(GridRowPositionTestDataFactory.createSimpleGridRowPosition());
-		gridRowPositionList.add(GridRowPositionTestDataFactory.createSimpleGridRowPosition());
-		gridRowPositionSparseArray.put(0, gridRowPositionList);
+        gridRowPositionList.add(GridRowPositionTestDataFactory.createSimpleGridRowPosition());
+        gridRowPositionList.add(GridRowPositionTestDataFactory.createSimpleGridRowPosition());
+        gridRowPositionSparseArray.put(0, gridRowPositionList);
 
-		return new GridRow(NoteName.C4, gridRowPositionSparseArray);
-	}
+        return new GridRow(NoteName.C4, gridRowPositionSparseArray);
+    }
 
-	public static GridRow createGridRowWithDifferentPositions() {
-		SparseArray<List<GridRowPosition>> gridRowPositionSparseArray = new SparseArray<>();
+    public static GridRow createGridRowWithDifferentPositions() {
+        SparseArray<List<GridRowPosition>> gridRowPositionSparseArray = new SparseArray<>();
 
-		List<GridRowPosition> gridRowPositionList = new ArrayList<>();
+        List<GridRowPosition> gridRowPositionList = new ArrayList<>();
 
-		gridRowPositionList.add(GridRowPositionTestDataFactory.createSimpleGridRowPosition());
-		gridRowPositionList.add(GridRowPositionTestDataFactory.createGridRowPositionWithOffset());
-		gridRowPositionSparseArray.put(0, gridRowPositionList);
+        gridRowPositionList.add(GridRowPositionTestDataFactory.createSimpleGridRowPosition());
+        gridRowPositionList.add(GridRowPositionTestDataFactory.createGridRowPositionWithOffset());
+        gridRowPositionSparseArray.put(0, gridRowPositionList);
 
-		return new GridRow(NoteName.C4, gridRowPositionSparseArray);
-	}
+        return new GridRow(NoteName.C4, gridRowPositionSparseArray);
+    }
 }

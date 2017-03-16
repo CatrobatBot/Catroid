@@ -44,159 +44,159 @@ import java.util.List;
 
 public class BroadcastActionTest extends AndroidTestCase {
 
-	public void testBroadcast() {
-		Sprite sprite = new SingleSprite("testSprite");
-		Script script = new StartScript();
-		String message = "simpleTest";
-		BroadcastBrick broadcastBrick = new BroadcastBrick(message);
-		script.addBrick(broadcastBrick);
-		sprite.addScript(script);
+    public void testBroadcast() {
+        Sprite sprite = new SingleSprite("testSprite");
+        Script script = new StartScript();
+        String message = "simpleTest";
+        BroadcastBrick broadcastBrick = new BroadcastBrick(message);
+        script.addBrick(broadcastBrick);
+        sprite.addScript(script);
 
-		BroadcastScript broadcastScript = new BroadcastScript(message);
-		int testPosition = 100;
-		SetXBrick testBrick = new SetXBrick(testPosition);
-		broadcastScript.addBrick(testBrick);
-		sprite.addScript(broadcastScript);
+        BroadcastScript broadcastScript = new BroadcastScript(message);
+        int testPosition = 100;
+        SetXBrick testBrick = new SetXBrick(testPosition);
+        broadcastScript.addBrick(testBrick);
+        sprite.addScript(broadcastScript);
 
-		Project project = new Project(getContext(), UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Scene scene = project.getDefaultScene();
-		scene.addSprite(sprite);
-		ProjectManager.getInstance().setProject(project);
+        Project project = new Project(getContext(), UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Scene scene = project.getDefaultScene();
+        scene.addSprite(sprite);
+        ProjectManager.getInstance().setProject(project);
 
-		sprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
+        sprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
 
-		while (!allActionsOfAllSpritesAreFinished()) {
-			for (Sprite spriteOfList : ProjectManager.getInstance().getCurrentScene().getSpriteList()) {
-				spriteOfList.look.act(1.0f);
-			}
-		}
+        while (!allActionsOfAllSpritesAreFinished()) {
+            for (Sprite spriteOfList : ProjectManager.getInstance().getCurrentScene().getSpriteList()) {
+                spriteOfList.look.act(1.0f);
+            }
+        }
 
-		assertEquals("Simple broadcast failed", testPosition, (int) sprite.look.getXInUserInterfaceDimensionUnit());
-	}
+        assertEquals("Simple broadcast failed", testPosition, (int) sprite.look.getXInUserInterfaceDimensionUnit());
+    }
 
-	public void testBroadcastWait() {
-		Sprite sprite = new SingleSprite("spriteOne");
-		Script scriptWait = new StartScript();
-		String message = "waitTest";
-		BroadcastWaitBrick broadcastWaitBrick = new BroadcastWaitBrick(message);
-		int testPosition = 100;
-		SetXBrick setXBrick = new SetXBrick(testPosition);
-		scriptWait.addBrick(broadcastWaitBrick);
-		scriptWait.addBrick(setXBrick);
-		sprite.addScript(scriptWait);
+    public void testBroadcastWait() {
+        Sprite sprite = new SingleSprite("spriteOne");
+        Script scriptWait = new StartScript();
+        String message = "waitTest";
+        BroadcastWaitBrick broadcastWaitBrick = new BroadcastWaitBrick(message);
+        int testPosition = 100;
+        SetXBrick setXBrick = new SetXBrick(testPosition);
+        scriptWait.addBrick(broadcastWaitBrick);
+        scriptWait.addBrick(setXBrick);
+        sprite.addScript(scriptWait);
 
-		BroadcastScript broadcastScript = new BroadcastScript(message);
-		WaitBrick waitBrick = new WaitBrick(500);
-		int setTestPosition = 20;
-		SetXBrick setXBrick2 = new SetXBrick(setTestPosition);
-		broadcastScript.addBrick(waitBrick);
-		broadcastScript.addBrick(setXBrick2);
-		sprite.addScript(broadcastScript);
+        BroadcastScript broadcastScript = new BroadcastScript(message);
+        WaitBrick waitBrick = new WaitBrick(500);
+        int setTestPosition = 20;
+        SetXBrick setXBrick2 = new SetXBrick(setTestPosition);
+        broadcastScript.addBrick(waitBrick);
+        broadcastScript.addBrick(setXBrick2);
+        sprite.addScript(broadcastScript);
 
-		Project project = new Project(getContext(), UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Scene scene = project.getDefaultScene();
-		scene.addSprite(sprite);
-		ProjectManager.getInstance().setProject(project);
+        Project project = new Project(getContext(), UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Scene scene = project.getDefaultScene();
+        scene.addSprite(sprite);
+        ProjectManager.getInstance().setProject(project);
 
-		sprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
+        sprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
 
-		while (!allActionsOfAllSpritesAreFinished()) {
-			for (Sprite spriteOfList : ProjectManager.getInstance().getCurrentScene().getSpriteList()) {
-				spriteOfList.look.act(1.0f);
-			}
-		}
+        while (!allActionsOfAllSpritesAreFinished()) {
+            for (Sprite spriteOfList : ProjectManager.getInstance().getCurrentScene().getSpriteList()) {
+                spriteOfList.look.act(1.0f);
+            }
+        }
 
-		assertEquals("Broadcast and wait failed", testPosition, (int) sprite.look.getXInUserInterfaceDimensionUnit());
-	}
+        assertEquals("Broadcast and wait failed", testPosition, (int) sprite.look.getXInUserInterfaceDimensionUnit());
+    }
 
-	public void testWhenScriptRestartingItself() {
-		Sprite sprite = new SingleSprite("testSprite");
-		Script script = new StartScript();
+    public void testWhenScriptRestartingItself() {
+        Sprite sprite = new SingleSprite("testSprite");
+        Script script = new StartScript();
 
-		String message = "simpleTest";
-		BroadcastBrick broadcastBrick = new BroadcastBrick(message);
-		script.addBrick(broadcastBrick);
-		sprite.addScript(script);
+        String message = "simpleTest";
+        BroadcastBrick broadcastBrick = new BroadcastBrick(message);
+        script.addBrick(broadcastBrick);
+        sprite.addScript(script);
 
-		BroadcastScript broadcastScript = new BroadcastScript(message);
+        BroadcastScript broadcastScript = new BroadcastScript(message);
 
-		final int xMovement = 1;
-		ChangeXByNBrick changeXByNBrick = new ChangeXByNBrick(xMovement);
-		broadcastScript.addBrick(changeXByNBrick);
+        final int xMovement = 1;
+        ChangeXByNBrick changeXByNBrick = new ChangeXByNBrick(xMovement);
+        broadcastScript.addBrick(changeXByNBrick);
 
-		BroadcastBrick broadcastBrickLoop = new BroadcastBrick(message);
-		broadcastScript.addBrick(broadcastBrickLoop);
+        BroadcastBrick broadcastBrickLoop = new BroadcastBrick(message);
+        broadcastScript.addBrick(broadcastBrickLoop);
 
-		WaitBrick wb = new WaitBrick(5);
-		broadcastScript.addBrick(wb);
+        WaitBrick wb = new WaitBrick(5);
+        broadcastScript.addBrick(wb);
 
-		sprite.addScript(broadcastScript);
+        sprite.addScript(broadcastScript);
 
-		Project project = new Project(getContext(), UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		project.getDefaultScene().addSprite(sprite);
-		ProjectManager.getInstance().setProject(project);
+        Project project = new Project(getContext(), UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        project.getDefaultScene().addSprite(sprite);
+        ProjectManager.getInstance().setProject(project);
 
-		sprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
+        sprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
 
-		int loopCounter = 0;
-		while (!allActionsOfAllSpritesAreFinished() && loopCounter++ < 20) {
-			for (Sprite spriteOfList : ProjectManager.getInstance().getCurrentScene().getSpriteList()) {
-				spriteOfList.look.act(1.0f);
-			}
-		}
+        int loopCounter = 0;
+        while (!allActionsOfAllSpritesAreFinished() && loopCounter++ < 20) {
+            for (Sprite spriteOfList : ProjectManager.getInstance().getCurrentScene().getSpriteList()) {
+                spriteOfList.look.act(1.0f);
+            }
+        }
 
-		assertTrue("When script does not restart itself!",
-				(int) sprite.look.getXInUserInterfaceDimensionUnit() > xMovement);
-	}
+        assertTrue("When script does not restart itself!",
+                (int) sprite.look.getXInUserInterfaceDimensionUnit() > xMovement);
+    }
 
-	public void testRestartingOfWhenScriptWithBroadcastWaitBrick() {
-		String messageOne = "messageOne";
-		String messageTwo = "messageTwo";
-		final int xMovement = 1;
+    public void testRestartingOfWhenScriptWithBroadcastWaitBrick() {
+        String messageOne = "messageOne";
+        String messageTwo = "messageTwo";
+        final int xMovement = 1;
 
-		Sprite sprite = new SingleSprite("cat");
-		Script startScript = new StartScript();
-		BroadcastBrick startBroadcastBrick = new BroadcastBrick(messageOne);
-		startScript.addBrick(startBroadcastBrick);
-		sprite.addScript(startScript);
+        Sprite sprite = new SingleSprite("cat");
+        Script startScript = new StartScript();
+        BroadcastBrick startBroadcastBrick = new BroadcastBrick(messageOne);
+        startScript.addBrick(startBroadcastBrick);
+        sprite.addScript(startScript);
 
-		BroadcastScript broadcastScriptMessageOne = new BroadcastScript(messageOne);
-		ChangeXByNBrick changeXByNBrickOne = new ChangeXByNBrick(xMovement);
-		BroadcastWaitBrick broadcastWaitBrickOne = new BroadcastWaitBrick(messageTwo);
-		broadcastScriptMessageOne.addBrick(changeXByNBrickOne);
-		broadcastScriptMessageOne.addBrick(broadcastWaitBrickOne);
-		sprite.addScript(broadcastScriptMessageOne);
+        BroadcastScript broadcastScriptMessageOne = new BroadcastScript(messageOne);
+        ChangeXByNBrick changeXByNBrickOne = new ChangeXByNBrick(xMovement);
+        BroadcastWaitBrick broadcastWaitBrickOne = new BroadcastWaitBrick(messageTwo);
+        broadcastScriptMessageOne.addBrick(changeXByNBrickOne);
+        broadcastScriptMessageOne.addBrick(broadcastWaitBrickOne);
+        sprite.addScript(broadcastScriptMessageOne);
 
-		BroadcastScript broadcastScriptMessageTwo = new BroadcastScript(messageTwo);
-		ChangeXByNBrick changeXByNBrickTwo = new ChangeXByNBrick(xMovement);
-		BroadcastWaitBrick broadcastWaitBrickTwo = new BroadcastWaitBrick(messageOne);
-		broadcastScriptMessageTwo.addBrick(changeXByNBrickTwo);
-		broadcastScriptMessageTwo.addBrick(broadcastWaitBrickTwo);
-		sprite.addScript(broadcastScriptMessageTwo);
+        BroadcastScript broadcastScriptMessageTwo = new BroadcastScript(messageTwo);
+        ChangeXByNBrick changeXByNBrickTwo = new ChangeXByNBrick(xMovement);
+        BroadcastWaitBrick broadcastWaitBrickTwo = new BroadcastWaitBrick(messageOne);
+        broadcastScriptMessageTwo.addBrick(changeXByNBrickTwo);
+        broadcastScriptMessageTwo.addBrick(broadcastWaitBrickTwo);
+        sprite.addScript(broadcastScriptMessageTwo);
 
-		Project project = new Project(getContext(), UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		project.getDefaultScene().addSprite(sprite);
-		ProjectManager.getInstance().setProject(project);
+        Project project = new Project(getContext(), UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        project.getDefaultScene().addSprite(sprite);
+        ProjectManager.getInstance().setProject(project);
 
-		sprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
+        sprite.createStartScriptActionSequenceAndPutToMap(new HashMap<String, List<String>>());
 
-		int loopCounter = 0;
-		while (!allActionsOfAllSpritesAreFinished() && loopCounter++ < 20) {
-			for (Sprite spriteOfList : ProjectManager.getInstance().getCurrentScene().getSpriteList()) {
-				spriteOfList.look.act(1.0f);
-			}
-		}
+        int loopCounter = 0;
+        while (!allActionsOfAllSpritesAreFinished() && loopCounter++ < 20) {
+            for (Sprite spriteOfList : ProjectManager.getInstance().getCurrentScene().getSpriteList()) {
+                spriteOfList.look.act(1.0f);
+            }
+        }
 
-		assertTrue("When script does not restart itself when a BroadcastWait is sent! ",
-				(int) sprite.look.getXInUserInterfaceDimensionUnit() > 5 * xMovement);
-	}
+        assertTrue("When script does not restart itself when a BroadcastWait is sent! ",
+                (int) sprite.look.getXInUserInterfaceDimensionUnit() > 5 * xMovement);
+    }
 
-	public boolean allActionsOfAllSpritesAreFinished() {
-		for (Sprite spriteOfList : ProjectManager.getInstance().getCurrentScene().getSpriteList()) {
-			if (!spriteOfList.look.getAllActionsAreFinished()) {
-				return false;
-			}
-		}
-		return true;
-	}
+    public boolean allActionsOfAllSpritesAreFinished() {
+        for (Sprite spriteOfList : ProjectManager.getInstance().getCurrentScene().getSpriteList()) {
+            if (!spriteOfList.look.getAllActionsAreFinished()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

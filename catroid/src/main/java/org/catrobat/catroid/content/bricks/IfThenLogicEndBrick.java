@@ -38,95 +38,95 @@ import java.util.List;
 
 public class IfThenLogicEndBrick extends BrickBaseType implements NestingBrick, AllowedAfterDeadEndBrick {
 
-	private static final long serialVersionUID = 1L;
-	private static final String TAG = IfThenLogicEndBrick.class.getSimpleName();
+    private static final long serialVersionUID = 1L;
+    private static final String TAG = IfThenLogicEndBrick.class.getSimpleName();
 
-	private transient IfThenLogicBeginBrick ifBeginBrick;
+    private transient IfThenLogicBeginBrick ifBeginBrick;
 
-	public IfThenLogicEndBrick(IfThenLogicBeginBrick beginBrick) {
-		this.ifBeginBrick = beginBrick;
-		if (beginBrick != null) {
-			beginBrick.setIfThenEndBrick(this);
-		}
-	}
+    public IfThenLogicEndBrick(IfThenLogicBeginBrick beginBrick) {
+        this.ifBeginBrick = beginBrick;
+        if (beginBrick != null) {
+            beginBrick.setIfThenEndBrick(this);
+        }
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return NO_RESOURCES;
-	}
+    @Override
+    public int getRequiredResources() {
+        return NO_RESOURCES;
+    }
 
-	public void setIfThenBeginBrick(IfThenLogicBeginBrick ifBeginBrick) {
-		this.ifBeginBrick = ifBeginBrick;
-	}
+    public void setIfThenBeginBrick(IfThenLogicBeginBrick ifBeginBrick) {
+        this.ifBeginBrick = ifBeginBrick;
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		if (view == null) {
-			alphaValue = 255;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        if (view == null) {
+            alphaValue = 255;
+        }
 
-		view = View.inflate(context, R.layout.brick_if_end_if, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_if_end_if, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_if_end_if_checkbox);
-		return view;
-	}
+        setCheckboxView(R.id.brick_if_end_if_checkbox);
+        return view;
+    }
 
-	@Override
-	public Brick clone() {
-		return new IfThenLogicEndBrick(ifBeginBrick);
-	}
+    @Override
+    public Brick clone() {
+        return new IfThenLogicEndBrick(ifBeginBrick);
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		return View.inflate(context, R.layout.brick_if_end_if, null);
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        return View.inflate(context, R.layout.brick_if_end_if, null);
+    }
 
-	@Override
-	public boolean isDraggableOver(Brick brick) {
-		return brick != ifBeginBrick;
-	}
+    @Override
+    public boolean isDraggableOver(Brick brick) {
+        return brick != ifBeginBrick;
+    }
 
-	@Override
-	public boolean isInitialized() {
-		return ifBeginBrick != null;
-	}
+    @Override
+    public boolean isInitialized() {
+        return ifBeginBrick != null;
+    }
 
-	@Override
-	public void initialize() {
-		Log.w(TAG, "Cannot create the IfLogic Bricks from here!");
-	}
+    @Override
+    public void initialize() {
+        Log.w(TAG, "Cannot create the IfLogic Bricks from here!");
+    }
 
-	@Override
-	public List<NestingBrick> getAllNestingBrickParts(boolean sorted) {
-		List<NestingBrick> nestingBrickList = new ArrayList<>();
-		nestingBrickList.add(ifBeginBrick);
-		nestingBrickList.add(this);
-		return nestingBrickList;
-	}
+    @Override
+    public List<NestingBrick> getAllNestingBrickParts(boolean sorted) {
+        List<NestingBrick> nestingBrickList = new ArrayList<>();
+        nestingBrickList.add(ifBeginBrick);
+        nestingBrickList.add(this);
+        return nestingBrickList;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		LinkedList<SequenceAction> returnActionList = new LinkedList<>();
-		returnActionList.add(sequence);
-		return returnActionList;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        LinkedList<SequenceAction> returnActionList = new LinkedList<>();
+        returnActionList.add(sequence);
+        return returnActionList;
+    }
 
-	@Override
-	public Brick copyBrickForSprite(Sprite sprite) {
-		IfThenLogicEndBrick copyBrick = (IfThenLogicEndBrick) clone(); //Using the clone method because of its flexibility if new fields are added
-		if (ifBeginBrick != null) {
-			ifBeginBrick.setIfThenEndBrick(this);
-		}
+    @Override
+    public Brick copyBrickForSprite(Sprite sprite) {
+        IfThenLogicEndBrick copyBrick = (IfThenLogicEndBrick) clone(); //Using the clone method because of its flexibility if new fields are added
+        if (ifBeginBrick != null) {
+            ifBeginBrick.setIfThenEndBrick(this);
+        }
 
-		copyBrick.ifBeginBrick = null;
-		return copyBrick;
-	}
+        copyBrick.ifBeginBrick = null;
+        return copyBrick;
+    }
 
-	public IfThenLogicBeginBrick getIfBeginBrick() {
-		return ifBeginBrick;
-	}
+    public IfThenLogicBeginBrick getIfBeginBrick() {
+        return ifBeginBrick;
+    }
 }

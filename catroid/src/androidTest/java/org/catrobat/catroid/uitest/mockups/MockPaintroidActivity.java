@@ -30,46 +30,46 @@ import java.io.File;
 
 public class MockPaintroidActivity extends Activity {
 
-	private File imageFile;
-	private File secondImageFile;
-	private String pathToImage;
+    private File imageFile;
+    private File secondImageFile;
+    private String pathToImage;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		Bundle bundle = this.getIntent().getExtras();
-		if (bundle == null) {
-			return;
-		}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = this.getIntent().getExtras();
+        if (bundle == null) {
+            return;
+        }
 
-		if (bundle.containsKey("org.catrobat.extra.PAINTROID_PICTURE_PATH")) {
-			pathToImage = bundle.getString("org.catrobat.extra.PAINTROID_PICTURE_PATH");
-			imageFile = new File(pathToImage);
-		}
+        if (bundle.containsKey("org.catrobat.extra.PAINTROID_PICTURE_PATH")) {
+            pathToImage = bundle.getString("org.catrobat.extra.PAINTROID_PICTURE_PATH");
+            imageFile = new File(pathToImage);
+        }
 
-		if (bundle.containsKey("secondExtra")) {
-			String secondPath = bundle.getString("secondExtra");
-			secondImageFile = new File(secondPath);
-		}
+        if (bundle.containsKey("secondExtra")) {
+            String secondPath = bundle.getString("secondExtra");
+            secondImageFile = new File(secondPath);
+        }
 
-		if (bundle.containsKey("thirdExtra")) {
-			finish(); //no bundle returned
-		} else {
-			sendBundleBackToCatroidAndFinish();
-		}
-	}
+        if (bundle.containsKey("thirdExtra")) {
+            finish(); //no bundle returned
+        } else {
+            sendBundleBackToCatroidAndFinish();
+        }
+    }
 
-	public void sendBundleBackToCatroidAndFinish() {
-		Bundle bundle = new Bundle();
-		if (secondImageFile != null) {
-			bundle.putString("org.catrobat.extra.PAINTROID_PICTURE_PATH", secondImageFile.getAbsolutePath());
-		} else {
-			bundle.putString("org.catrobat.extra.PAINTROID_PICTURE_PATH", imageFile.getAbsolutePath());
-		}
+    public void sendBundleBackToCatroidAndFinish() {
+        Bundle bundle = new Bundle();
+        if (secondImageFile != null) {
+            bundle.putString("org.catrobat.extra.PAINTROID_PICTURE_PATH", secondImageFile.getAbsolutePath());
+        } else {
+            bundle.putString("org.catrobat.extra.PAINTROID_PICTURE_PATH", imageFile.getAbsolutePath());
+        }
 
-		Intent intent = new Intent();
-		intent.putExtras(bundle);
-		setResult(RESULT_OK, intent);
-		finish();
-	}
+        Intent intent = new Intent();
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
 }

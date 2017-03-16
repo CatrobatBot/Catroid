@@ -46,326 +46,326 @@ import name.antonsmirnov.firmata.serial.StreamingSerialAdapter;
 
 public class PhiroImpl implements Phiro {
 
-	private static final UUID PHIRO_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-	private static final String TAG = PhiroImpl.class.getSimpleName();
+    private static final UUID PHIRO_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    private static final String TAG = PhiroImpl.class.getSimpleName();
 
-	private static final int MIN_VALUE = 0;
-	private static final int MAX_VALUE = 255;
-	private static final int PIN_SPEAKER_OUT = 3;
+    private static final int MIN_VALUE = 0;
+    private static final int MAX_VALUE = 255;
+    private static final int PIN_SPEAKER_OUT = 3;
 
-	private static final int PIN_RGB_RED_RIGHT = 4;
-	private static final int PIN_RGB_GREEN_RIGHT = 5;
-	private static final int PIN_RGB_BLUE_RIGHT = 6;
+    private static final int PIN_RGB_RED_RIGHT = 4;
+    private static final int PIN_RGB_GREEN_RIGHT = 5;
+    private static final int PIN_RGB_BLUE_RIGHT = 6;
 
-	private static final int PIN_RGB_RED_LEFT = 7;
-	private static final int PIN_RGB_GREEN_LEFT = 8;
-	private static final int PIN_RGB_BLUE_LEFT = 9;
+    private static final int PIN_RGB_RED_LEFT = 7;
+    private static final int PIN_RGB_GREEN_LEFT = 8;
+    private static final int PIN_RGB_BLUE_LEFT = 9;
 
-	private static final int PIN_LEFT_MOTOR_SPEED = 10;
-	private static final int PIN_LEFT_MOTOR_FORWARD_BACKWARD = 11;
+    private static final int PIN_LEFT_MOTOR_SPEED = 10;
+    private static final int PIN_LEFT_MOTOR_FORWARD_BACKWARD = 11;
 
-	private static final int PIN_RIGHT_MOTOR_SPEED = 12;
-	private static final int PIN_RIGHT_MOTOR_FORWARD_BACKWARD = 2;
+    private static final int PIN_RIGHT_MOTOR_SPEED = 12;
+    private static final int PIN_RIGHT_MOTOR_FORWARD_BACKWARD = 2;
 
-	private static final int MIN_PWM_PIN = 2;
-	private static final int MAX_PWM_PIN = 13;
+    private static final int MIN_PWM_PIN = 2;
+    private static final int MAX_PWM_PIN = 13;
 
-	public static final int PIN_SENSOR_SIDE_RIGHT = 0;
-	public static final int PIN_SENSOR_FRONT_RIGHT = 1;
-	public static final int PIN_SENSOR_BOTTOM_RIGHT = 2;
-	public static final int PIN_SENSOR_BOTTOM_LEFT = 3;
-	public static final int PIN_SENSOR_FRONT_LEFT = 4;
-	public static final int PIN_SENSOR_SIDE_LEFT = 5;
+    public static final int PIN_SENSOR_SIDE_RIGHT = 0;
+    public static final int PIN_SENSOR_FRONT_RIGHT = 1;
+    public static final int PIN_SENSOR_BOTTOM_RIGHT = 2;
+    public static final int PIN_SENSOR_BOTTOM_LEFT = 3;
+    public static final int PIN_SENSOR_FRONT_LEFT = 4;
+    public static final int PIN_SENSOR_SIDE_LEFT = 5;
 
-	private static final int MIN_SENSOR_PIN = 0;
-	private static final int MAX_SENSOR_PIN = 5;
+    private static final int MIN_SENSOR_PIN = 0;
+    private static final int MAX_SENSOR_PIN = 5;
 
-	private BluetoothConnection btConnection;
-	private Firmata firmata;
-	private boolean isInitialized = false;
-	private boolean isReportingSensorData = false;
+    private BluetoothConnection btConnection;
+    private Firmata firmata;
+    private boolean isInitialized = false;
+    private boolean isReportingSensorData = false;
 
-	private PhiroListener phiroListener;
+    private PhiroListener phiroListener;
 
-	@Override
-	public synchronized void playTone(int selectedTone, int durationInSeconds) {
-		sendAnalogFirmataMessage(PIN_SPEAKER_OUT, selectedTone);
+    @Override
+    public synchronized void playTone(int selectedTone, int durationInSeconds) {
+        sendAnalogFirmataMessage(PIN_SPEAKER_OUT, selectedTone);
 
-		if (currentStopPlayToneTask != null) {
-			currentStopPlayToneTask.cancel();
-		}
-		currentStopPlayToneTask = new StopPlayToneTask();
-		timer.schedule(currentStopPlayToneTask, durationInSeconds * 1000);
-	}
+        if (currentStopPlayToneTask != null) {
+            currentStopPlayToneTask.cancel();
+        }
+        currentStopPlayToneTask = new StopPlayToneTask();
+        timer.schedule(currentStopPlayToneTask, durationInSeconds * 1000);
+    }
 
-	Timer timer = new Timer();
-	TimerTask currentStopPlayToneTask = null;
+    Timer timer = new Timer();
+    TimerTask currentStopPlayToneTask = null;
 
-	private class StopPlayToneTask extends TimerTask {
-		@Override
-		public void run() {
-			sendAnalogFirmataMessage(PIN_SPEAKER_OUT, MIN_VALUE);
-		}
-	}
+    private class StopPlayToneTask extends TimerTask {
+        @Override
+        public void run() {
+            sendAnalogFirmataMessage(PIN_SPEAKER_OUT, MIN_VALUE);
+        }
+    }
 
-	@Override
-	public void moveLeftMotorForward(int speedInPercent) {
-		sendAnalogFirmataMessage(PIN_LEFT_MOTOR_SPEED, percentToSpeed(speedInPercent));
-		sendAnalogFirmataMessage(PIN_LEFT_MOTOR_FORWARD_BACKWARD, MIN_VALUE);
-	}
+    @Override
+    public void moveLeftMotorForward(int speedInPercent) {
+        sendAnalogFirmataMessage(PIN_LEFT_MOTOR_SPEED, percentToSpeed(speedInPercent));
+        sendAnalogFirmataMessage(PIN_LEFT_MOTOR_FORWARD_BACKWARD, MIN_VALUE);
+    }
 
-	@Override
-	public void moveLeftMotorBackward(int speedInPercent) {
-		sendAnalogFirmataMessage(PIN_LEFT_MOTOR_SPEED, percentToSpeed(speedInPercent));
-		sendAnalogFirmataMessage(PIN_LEFT_MOTOR_FORWARD_BACKWARD, MAX_VALUE);
-	}
+    @Override
+    public void moveLeftMotorBackward(int speedInPercent) {
+        sendAnalogFirmataMessage(PIN_LEFT_MOTOR_SPEED, percentToSpeed(speedInPercent));
+        sendAnalogFirmataMessage(PIN_LEFT_MOTOR_FORWARD_BACKWARD, MAX_VALUE);
+    }
 
-	@Override
-	public void moveRightMotorForward(int speedInPercent) {
-		sendAnalogFirmataMessage(PIN_RIGHT_MOTOR_SPEED, percentToSpeed(speedInPercent));
-		sendAnalogFirmataMessage(PIN_RIGHT_MOTOR_FORWARD_BACKWARD, MAX_VALUE);
-		sendAnalogFirmataMessage(MAX_PWM_PIN, MAX_VALUE);
-	}
+    @Override
+    public void moveRightMotorForward(int speedInPercent) {
+        sendAnalogFirmataMessage(PIN_RIGHT_MOTOR_SPEED, percentToSpeed(speedInPercent));
+        sendAnalogFirmataMessage(PIN_RIGHT_MOTOR_FORWARD_BACKWARD, MAX_VALUE);
+        sendAnalogFirmataMessage(MAX_PWM_PIN, MAX_VALUE);
+    }
 
-	@Override
-	public void moveRightMotorBackward(int speedInPercent) {
-		sendAnalogFirmataMessage(PIN_RIGHT_MOTOR_SPEED, percentToSpeed(speedInPercent));
-		sendAnalogFirmataMessage(PIN_RIGHT_MOTOR_FORWARD_BACKWARD, MIN_VALUE);
-		sendAnalogFirmataMessage(MAX_PWM_PIN, MIN_VALUE);
-	}
+    @Override
+    public void moveRightMotorBackward(int speedInPercent) {
+        sendAnalogFirmataMessage(PIN_RIGHT_MOTOR_SPEED, percentToSpeed(speedInPercent));
+        sendAnalogFirmataMessage(PIN_RIGHT_MOTOR_FORWARD_BACKWARD, MIN_VALUE);
+        sendAnalogFirmataMessage(MAX_PWM_PIN, MIN_VALUE);
+    }
 
-	@Override
-	public void stopLeftMotor() {
-		moveLeftMotorForward(MIN_VALUE);
-	}
+    @Override
+    public void stopLeftMotor() {
+        moveLeftMotorForward(MIN_VALUE);
+    }
 
-	@Override
-	public void stopRightMotor() {
-		moveRightMotorForward(MIN_VALUE);
-	}
+    @Override
+    public void stopRightMotor() {
+        moveRightMotorForward(MIN_VALUE);
+    }
 
-	@Override
-	public void stopAllMovements() {
-		stopLeftMotor();
-		stopRightMotor();
-	}
+    @Override
+    public void stopAllMovements() {
+        stopLeftMotor();
+        stopRightMotor();
+    }
 
-	@Override
-	public void setLeftRGBLightColor(int red, int green, int blue) {
-		red = checkRBGValue(red);
-		green = checkRBGValue(green);
-		blue = checkRBGValue(blue);
+    @Override
+    public void setLeftRGBLightColor(int red, int green, int blue) {
+        red = checkRBGValue(red);
+        green = checkRBGValue(green);
+        blue = checkRBGValue(blue);
 
-		sendFirmataMessage(new AnalogMessage(PIN_RGB_RED_LEFT, red));
-		sendFirmataMessage(new AnalogMessage(PIN_RGB_GREEN_LEFT, green));
-		sendFirmataMessage(new AnalogMessage(PIN_RGB_BLUE_LEFT, blue));
-	}
+        sendFirmataMessage(new AnalogMessage(PIN_RGB_RED_LEFT, red));
+        sendFirmataMessage(new AnalogMessage(PIN_RGB_GREEN_LEFT, green));
+        sendFirmataMessage(new AnalogMessage(PIN_RGB_BLUE_LEFT, blue));
+    }
 
-	@Override
-	public void setRightRGBLightColor(int red, int green, int blue) {
-		red = checkRBGValue(red);
-		green = checkRBGValue(green);
-		blue = checkRBGValue(blue);
+    @Override
+    public void setRightRGBLightColor(int red, int green, int blue) {
+        red = checkRBGValue(red);
+        green = checkRBGValue(green);
+        blue = checkRBGValue(blue);
 
-		sendFirmataMessage(new AnalogMessage(PIN_RGB_RED_RIGHT, red));
-		sendFirmataMessage(new AnalogMessage(PIN_RGB_GREEN_RIGHT, green));
-		sendFirmataMessage(new AnalogMessage(PIN_RGB_BLUE_RIGHT, blue));
-	}
+        sendFirmataMessage(new AnalogMessage(PIN_RGB_RED_RIGHT, red));
+        sendFirmataMessage(new AnalogMessage(PIN_RGB_GREEN_RIGHT, green));
+        sendFirmataMessage(new AnalogMessage(PIN_RGB_BLUE_RIGHT, blue));
+    }
 
-	private int percentToSpeed(int percent) {
-		if (percent <= 0) {
-			return MIN_VALUE;
-		}
-		if (percent >= 100) {
-			return MAX_VALUE;
-		}
+    private int percentToSpeed(int percent) {
+        if (percent <= 0) {
+            return MIN_VALUE;
+        }
+        if (percent >= 100) {
+            return MAX_VALUE;
+        }
 
-		return (int) (percent * 2.55);
-	}
+        return (int) (percent * 2.55);
+    }
 
-	private int checkRBGValue(int rgbValue) {
-		if (rgbValue > MAX_VALUE) {
-			return MAX_VALUE;
-		}
+    private int checkRBGValue(int rgbValue) {
+        if (rgbValue > MAX_VALUE) {
+            return MAX_VALUE;
+        }
 
-		if (rgbValue < MIN_VALUE) {
-			return MIN_VALUE;
-		}
+        if (rgbValue < MIN_VALUE) {
+            return MIN_VALUE;
+        }
 
-		return rgbValue;
-	}
+        return rgbValue;
+    }
 
-	@Override
-	public String getName() {
-		return "Phiro";
-	}
+    @Override
+    public String getName() {
+        return "Phiro";
+    }
 
-	@Override
-	public Class<? extends BluetoothDevice> getDeviceType() {
-		return PHIRO;
-	}
+    @Override
+    public Class<? extends BluetoothDevice> getDeviceType() {
+        return PHIRO;
+    }
 
-	@Override
-	public void setConnection(BluetoothConnection connection) {
-		this.btConnection = connection;
-	}
+    @Override
+    public void setConnection(BluetoothConnection connection) {
+        this.btConnection = connection;
+    }
 
-	@Override
-	public void disconnect() {
+    @Override
+    public void disconnect() {
 
-		if (firmata == null) {
-			return;
-		}
+        if (firmata == null) {
+            return;
+        }
 
-		try {
-			resetPins();
-			this.reportSensorData(false);
-			firmata.clearListeners();
-			firmata.getSerial().stop();
-			isInitialized = false;
-			firmata = null;
-		} catch (SerialException e) {
-			Log.d(TAG, "Error stop phiro pro serial");
-		}
-	}
+        try {
+            resetPins();
+            this.reportSensorData(false);
+            firmata.clearListeners();
+            firmata.getSerial().stop();
+            isInitialized = false;
+            firmata = null;
+        } catch (SerialException e) {
+            Log.d(TAG, "Error stop phiro pro serial");
+        }
+    }
 
-	@Override
-	public boolean isAlive() {
-		if (firmata == null) {
-			return false;
-		}
+    @Override
+    public boolean isAlive() {
+        if (firmata == null) {
+            return false;
+        }
 
-		try {
-			firmata.send(new ReportFirmwareVersionMessage());
-			return true;
-		} catch (SerialException e) {
-			return false;
-		}
-	}
+        try {
+            firmata.send(new ReportFirmwareVersionMessage());
+            return true;
+        } catch (SerialException e) {
+            return false;
+        }
+    }
 
-	public void reportFirmwareVersion() {
-		if (firmata == null) {
-			return;
-		}
+    public void reportFirmwareVersion() {
+        if (firmata == null) {
+            return;
+        }
 
-		try {
-			firmata.send(new ReportFirmwareVersionMessage());
-		} catch (SerialException e) {
-			Log.d(TAG, "Firmata Serial error, cannot send message.");
-		}
-	}
+        try {
+            firmata.send(new ReportFirmwareVersionMessage());
+        } catch (SerialException e) {
+            Log.d(TAG, "Firmata Serial error, cannot send message.");
+        }
+    }
 
-	@Override
-	public int getSensorValue(Sensors sensor) {
-		switch (sensor) {
-			case PHIRO_BOTTOM_LEFT:
-				return phiroListener.getBottomLeftSensor();
-			case PHIRO_BOTTOM_RIGHT:
-				return phiroListener.getBottomRightSensor();
-			case PHIRO_FRONT_LEFT:
-				return phiroListener.getFrontLeftSensor();
-			case PHIRO_FRONT_RIGHT:
-				return phiroListener.getFrontRightSensor();
-			case PHIRO_SIDE_LEFT:
-				return phiroListener.getSideLeftSensor();
-			case PHIRO_SIDE_RIGHT:
-				return phiroListener.getSideRightSensor();
-		}
+    @Override
+    public int getSensorValue(Sensors sensor) {
+        switch (sensor) {
+            case PHIRO_BOTTOM_LEFT:
+                return phiroListener.getBottomLeftSensor();
+            case PHIRO_BOTTOM_RIGHT:
+                return phiroListener.getBottomRightSensor();
+            case PHIRO_FRONT_LEFT:
+                return phiroListener.getFrontLeftSensor();
+            case PHIRO_FRONT_RIGHT:
+                return phiroListener.getFrontRightSensor();
+            case PHIRO_SIDE_LEFT:
+                return phiroListener.getSideLeftSensor();
+            case PHIRO_SIDE_RIGHT:
+                return phiroListener.getSideRightSensor();
+        }
 
-		return 0;
-	}
+        return 0;
+    }
 
-	@Override
-	public UUID getBluetoothDeviceUUID() {
-		return PHIRO_UUID;
-	}
+    @Override
+    public UUID getBluetoothDeviceUUID() {
+        return PHIRO_UUID;
+    }
 
-	@Override
-	public void initialise() {
-		if (isInitialized) {
-			return;
-		}
+    @Override
+    public void initialise() {
+        if (isInitialized) {
+            return;
+        }
 
-		try {
-			tryInitialize();
-			isInitialized = true;
-		} catch (SerialException e) {
-			Log.d(TAG, "Error starting firmata serials");
-		} catch (IOException e) {
-			Log.d(TAG, "Error opening streams");
-		}
-	}
+        try {
+            tryInitialize();
+            isInitialized = true;
+        } catch (SerialException e) {
+            Log.d(TAG, "Error starting firmata serials");
+        } catch (IOException e) {
+            Log.d(TAG, "Error opening streams");
+        }
+    }
 
-	private void tryInitialize() throws IOException, SerialException {
-		ISerial serial = new StreamingSerialAdapter(btConnection.getInputStream(), btConnection.getOutputStream());
+    private void tryInitialize() throws IOException, SerialException {
+        ISerial serial = new StreamingSerialAdapter(btConnection.getInputStream(), btConnection.getOutputStream());
 
-		firmata = new Firmata(serial);
+        firmata = new Firmata(serial);
 
-		phiroListener = new PhiroListener();
-		firmata.addListener(phiroListener);
+        phiroListener = new PhiroListener();
+        firmata.addListener(phiroListener);
 
-		firmata.getSerial().start();
+        firmata.getSerial().start();
 
-		for (int pin = MIN_PWM_PIN; pin <= MAX_PWM_PIN; ++pin) {
-			sendFirmataMessage(new SetPinModeMessage(pin, SetPinModeMessage.PIN_MODE.PWM.getMode()));
-		}
+        for (int pin = MIN_PWM_PIN; pin <= MAX_PWM_PIN; ++pin) {
+            sendFirmataMessage(new SetPinModeMessage(pin, SetPinModeMessage.PIN_MODE.PWM.getMode()));
+        }
 
-		reportSensorData(true);
-	}
+        reportSensorData(true);
+    }
 
-	private void reportSensorData(boolean report) {
-		if (isReportingSensorData == report) {
-			return;
-		}
+    private void reportSensorData(boolean report) {
+        if (isReportingSensorData == report) {
+            return;
+        }
 
-		isReportingSensorData = report;
+        isReportingSensorData = report;
 
-		for (int pin = MIN_SENSOR_PIN; pin <= MAX_SENSOR_PIN; ++pin) {
-			// sendFirmataMessage(new SetPinModeMessage(? maybe 54 ?, SetPinModeMessage.PIN_MODE.ANALOG.getMode())); // --> not needed
-			sendFirmataMessage(new ReportAnalogPinMessage(pin, report));
-		}
-	}
+        for (int pin = MIN_SENSOR_PIN; pin <= MAX_SENSOR_PIN; ++pin) {
+            // sendFirmataMessage(new SetPinModeMessage(? maybe 54 ?, SetPinModeMessage.PIN_MODE.ANALOG.getMode())); // --> not needed
+            sendFirmataMessage(new ReportAnalogPinMessage(pin, report));
+        }
+    }
 
-	private void resetPins() {
-		stopAllMovements();
-		setLeftRGBLightColor(0, 0, 0);
-		setRightRGBLightColor(0, 0, 0);
-		playTone(0, 0);
-	}
+    private void resetPins() {
+        stopAllMovements();
+        setLeftRGBLightColor(0, 0, 0);
+        setRightRGBLightColor(0, 0, 0);
+        playTone(0, 0);
+    }
 
-	@Override
-	public void start() {
-		if (!isInitialized) {
-			initialise();
-		}
+    @Override
+    public void start() {
+        if (!isInitialized) {
+            initialise();
+        }
 
-		reportSensorData(true);
-	}
+        reportSensorData(true);
+    }
 
-	@Override
-	public void pause() {
-		stopAllMovements();
-		reportSensorData(false);
-	}
+    @Override
+    public void pause() {
+        stopAllMovements();
+        reportSensorData(false);
+    }
 
-	@Override
-	public void destroy() {
-		resetPins();
-	}
+    @Override
+    public void destroy() {
+        resetPins();
+    }
 
-	private void sendAnalogFirmataMessage(int pin, int value) {
-		sendFirmataMessage(new AnalogMessage(pin, value));
-	}
+    private void sendAnalogFirmataMessage(int pin, int value) {
+        sendFirmataMessage(new AnalogMessage(pin, value));
+    }
 
-	private void sendFirmataMessage(Message message) {
-		if (firmata == null) {
-			return;
-		}
+    private void sendFirmataMessage(Message message) {
+        if (firmata == null) {
+            return;
+        }
 
-		try {
-			firmata.send(message);
-		} catch (SerialException e) {
-			Log.d(TAG, "Firmata Serial error, cannot send message.");
-		}
-	}
+        try {
+            firmata.send(message);
+        } catch (SerialException e) {
+            Log.d(TAG, "Firmata Serial error, cannot send message.");
+        }
+    }
 }

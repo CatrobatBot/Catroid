@@ -24,13 +24,13 @@ package org.catrobat.catroid.exceptions;
 
 public class CompatibilityProjectException extends ProjectException {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public CompatibilityProjectException() {
-		super();
-	}
+    public CompatibilityProjectException() {
+        super();
+    }
 
-	public CompatibilityProjectException(String message) {
-		super(message);
-	}
+    public CompatibilityProjectException(String message) {
+        super(message);
+    }
 }

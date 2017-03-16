@@ -38,71 +38,71 @@ import org.catrobat.catroid.camera.JpgPreviewCallback;
 
 public class SlowFaceDetector extends org.catrobat.catroid.facedetection.FaceDetector implements JpgPreviewCallback {
 
-	private static final int NUMBER_OF_FACES = 1;
+    private static final int NUMBER_OF_FACES = 1;
 
-	@Override
-	public boolean startFaceDetection() {
-		CameraManager.getInstance().addOnJpgPreviewFrameCallback(this);
-		return CameraManager.getInstance().startCamera();
-	}
+    @Override
+    public boolean startFaceDetection() {
+        CameraManager.getInstance().addOnJpgPreviewFrameCallback(this);
+        return CameraManager.getInstance().startCamera();
+    }
 
-	@Override
-	public void stopFaceDetection() {
-		CameraManager.getInstance().removeOnJpgPreviewFrameCallback(this);
-		CameraManager.getInstance().releaseCamera();
-	}
+    @Override
+    public void stopFaceDetection() {
+        CameraManager.getInstance().removeOnJpgPreviewFrameCallback(this);
+        CameraManager.getInstance().releaseCamera();
+    }
 
-	@Override
-	public void onFrame(byte[] data) {
-		Bitmap preview = BitmapFactory.decodeByteArray(data, 0, data.length);
-		detectFaces(preview);
-		preview.recycle();
-	}
+    @Override
+    public void onFrame(byte[] data) {
+        Bitmap preview = BitmapFactory.decodeByteArray(data, 0, data.length);
+        detectFaces(preview);
+        preview.recycle();
+    }
 
-	private void detectFaces(Bitmap bitmap) {
-		if (bitmap == null) {
-			return;
-		}
-		int height = bitmap.getWidth();
-		int width = bitmap.getHeight();
+    private void detectFaces(Bitmap bitmap) {
+        if (bitmap == null) {
+            return;
+        }
+        int height = bitmap.getWidth();
+        int width = bitmap.getHeight();
 
-		Matrix rotateAndInvertX = new Matrix();
-		int rotationAngle = 0;
-		boolean invertX = CameraManager.getInstance().isCurrentCameraFacingBack();
-		rotateAndInvertX.postRotate(rotationAngle);
-		rotateAndInvertX.postScale(invertX ? -1 : 1, 1);
-		Bitmap portraitBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),
-				rotateAndInvertX, true);
-		Bitmap rgb565Bitmap = Bitmap.createBitmap(width, height, Config.RGB_565);
-		Paint paint = new Paint();
-		paint.setDither(true);
+        Matrix rotateAndInvertX = new Matrix();
+        int rotationAngle = 0;
+        boolean invertX = CameraManager.getInstance().isCurrentCameraFacingBack();
+        rotateAndInvertX.postRotate(rotationAngle);
+        rotateAndInvertX.postScale(invertX ? -1 : 1, 1);
+        Bitmap portraitBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),
+                rotateAndInvertX, true);
+        Bitmap rgb565Bitmap = Bitmap.createBitmap(width, height, Config.RGB_565);
+        Paint paint = new Paint();
+        paint.setDither(true);
 
-		Canvas canvas = new Canvas();
-		canvas.setBitmap(rgb565Bitmap);
-		canvas.drawBitmap(portraitBitmap, 0, 0, paint);
+        Canvas canvas = new Canvas();
+        canvas.setBitmap(rgb565Bitmap);
+        canvas.drawBitmap(portraitBitmap, 0, 0, paint);
 
-		FaceDetector detector = new FaceDetector(width, height, NUMBER_OF_FACES);
-		Face[] faces = new Face[NUMBER_OF_FACES];
-		int numberOfFaces = detector.findFaces(rgb565Bitmap, faces);
+        FaceDetector detector = new FaceDetector(width, height, NUMBER_OF_FACES);
+        Face[] faces = new Face[NUMBER_OF_FACES];
+        int numberOfFaces = detector.findFaces(rgb565Bitmap, faces);
 
-		boolean detected = numberOfFaces > 0;
-		onFaceDetected(detected);
-		if (detected) {
-			PointF centerPoint = new PointF();
-			faces[0].getMidPoint(centerPoint);
-			float eyeDistance = faces[0].eyesDistance();
-			onFaceFound(centerPoint, eyeDistance, width, height);
-		}
-	}
+        boolean detected = numberOfFaces > 0;
+        onFaceDetected(detected);
+        if (detected) {
+            PointF centerPoint = new PointF();
+            faces[0].getMidPoint(centerPoint);
+            float eyeDistance = faces[0].eyesDistance();
+            onFaceFound(centerPoint, eyeDistance, width, height);
+        }
+    }
 
-	private void onFaceFound(PointF centerPoint, float eyeDistance, int detectionWidth, int detectionHeight) {
-		Point intPoint = new Point((int) centerPoint.x, (int) centerPoint.y);
-		Point relationSize = getRelationForFacePosition();
-		Point relativePoint = new Point((intPoint.x - detectionWidth / 2) * relationSize.x / detectionWidth,
-				(intPoint.y - detectionHeight / 2) * relationSize.y / detectionHeight);
-		int estimatedFaceWidth = (int) (eyeDistance * 2);
-		int relativeFaceSize = 200 * estimatedFaceWidth / detectionWidth;
-		relativeFaceSize = relativeFaceSize > 100 ? 100 : relativeFaceSize;
-		onFaceDetected(relativePoint, relativeFaceSize);
-	}
+    private void onFaceFound(PointF centerPoint, float eyeDistance, int detectionWidth, int detectionHeight) {
+        Point intPoint = new Point((int) centerPoint.x, (int) centerPoint.y);
+        Point relationSize = getRelationForFacePosition();
+        Point relativePoint = new Point((intPoint.x - detectionWidth / 2) * relationSize.x / detectionWidth,
+                (intPoint.y - detectionHeight / 2) * relationSize.y / detectionHeight);
+        int estimatedFaceWidth = (int) (eyeDistance * 2);
+        int relativeFaceSize = 200 * estimatedFaceWidth / detectionWidth;
+        relativeFaceSize = relativeFaceSize > 100 ? 100 : relativeFaceSize;
+        onFaceDetected(relativePoint, relativeFaceSize);
+    }
 }

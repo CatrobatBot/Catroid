@@ -49,119 +49,119 @@ import java.util.List;
 
 public class UserBricksExecutionTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
-	private static final String TAG = UserBricksExecutionTest.class.getSimpleName();
+    private static final String TAG = UserBricksExecutionTest.class.getSimpleName();
 
-	private Project project;
-	private Sprite sprite;
-	int xChangeValue = 5;
-	int yChangeValue = 10;
+    private Project project;
+    private Sprite sprite;
+    int xChangeValue = 5;
+    int yChangeValue = 10;
 
-	public UserBricksExecutionTest() {
-		super(MainMenuActivity.class);
-	}
+    public UserBricksExecutionTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		sprite = new SingleSprite("testSprite");
-		project = new Project(null, "testProject");
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        sprite = new SingleSprite("testSprite");
+        project = new Project(null, "testProject");
 
-		project.getDefaultScene().addSprite(new SingleSprite("background"));
-		project.getDefaultScene().addSprite(sprite);
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
+        project.getDefaultScene().addSprite(new SingleSprite("background"));
+        project.getDefaultScene().addSprite(sprite);
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
 
-		createProject();
-		UiTestUtils.prepareStageForTest();
-	}
+        createProject();
+        UiTestUtils.prepareStageForTest();
+    }
 
-	public void testUserBrickParallelExecutionInStage() {
-		checkSpritePosition(0, 0);
-		playProject();
-		checkSpritePosition(xChangeValue * 3, yChangeValue * 3);
-	}
+    public void testUserBrickParallelExecutionInStage() {
+        checkSpritePosition(0, 0);
+        playProject();
+        checkSpritePosition(xChangeValue * 3, yChangeValue * 3);
+    }
 
-	private void checkSpritePosition(Integer expectedX, Integer expectedY) {
-		float x = sprite.look.getXInUserInterfaceDimensionUnit();
-		float y = sprite.look.getYInUserInterfaceDimensionUnit();
+    private void checkSpritePosition(Integer expectedX, Integer expectedY) {
+        float x = sprite.look.getXInUserInterfaceDimensionUnit();
+        float y = sprite.look.getYInUserInterfaceDimensionUnit();
 
-		assertEquals("Unexpected sprite x position: ", (float) expectedX, x);
-		assertEquals("Unexpected sprite y position: ", (float) expectedY, y);
-	}
+        assertEquals("Unexpected sprite x position: ", (float) expectedX, x);
+        assertEquals("Unexpected sprite y position: ", (float) expectedY, y);
+    }
 
-	private void createProject() {
-		String variableOneName = "variable1";
-		String variableTwoName = "variable2";
+    private void createProject() {
+        String variableOneName = "variable1";
+        String variableTwoName = "variable2";
 
-		UserScriptDefinitionBrick definitionBrick = new UserScriptDefinitionBrick();
-		definitionBrick.addUIText("test");
-		definitionBrick.addUILocalizedVariable(variableOneName);
-		definitionBrick.addUILocalizedVariable(variableTwoName);
-		Formula variableOneFormula = new Formula(new FormulaElement(FormulaElement.ElementType.USER_VARIABLE, variableOneName, null));
-		Formula variableTwoFormula = new Formula(new FormulaElement(FormulaElement.ElementType.USER_VARIABLE, variableTwoName, null));
-		ChangeXByNBrick xBrick = new ChangeXByNBrick(variableOneFormula);
-		ChangeYByNBrick yBrick = new ChangeYByNBrick(variableTwoFormula);
-		definitionBrick.getUserScript().addBrick(xBrick);
-		definitionBrick.getUserScript().addBrick(yBrick);
+        UserScriptDefinitionBrick definitionBrick = new UserScriptDefinitionBrick();
+        definitionBrick.addUIText("test");
+        definitionBrick.addUILocalizedVariable(variableOneName);
+        definitionBrick.addUILocalizedVariable(variableTwoName);
+        Formula variableOneFormula = new Formula(new FormulaElement(FormulaElement.ElementType.USER_VARIABLE, variableOneName, null));
+        Formula variableTwoFormula = new Formula(new FormulaElement(FormulaElement.ElementType.USER_VARIABLE, variableTwoName, null));
+        ChangeXByNBrick xBrick = new ChangeXByNBrick(variableOneFormula);
+        ChangeYByNBrick yBrick = new ChangeYByNBrick(variableTwoFormula);
+        definitionBrick.getUserScript().addBrick(xBrick);
+        definitionBrick.getUserScript().addBrick(yBrick);
 
-		UserBrick firstUserBrickFirstScript = new UserBrick(definitionBrick);
-		UserBrick secondUserBrickFirstScript = new UserBrick(definitionBrick);
-		firstUserBrickFirstScript.updateUserBrickParametersAndVariables();
-		secondUserBrickFirstScript.updateUserBrickParametersAndVariables();
+        UserBrick firstUserBrickFirstScript = new UserBrick(definitionBrick);
+        UserBrick secondUserBrickFirstScript = new UserBrick(definitionBrick);
+        firstUserBrickFirstScript.updateUserBrickParametersAndVariables();
+        secondUserBrickFirstScript.updateUserBrickParametersAndVariables();
 
-		UserBrick firstUserBrickSecondScript = new UserBrick(definitionBrick);
-		firstUserBrickSecondScript.updateUserBrickParametersAndVariables();
+        UserBrick firstUserBrickSecondScript = new UserBrick(definitionBrick);
+        firstUserBrickSecondScript.updateUserBrickParametersAndVariables();
 
-		StartScript firstStartScript = new StartScript();
-		firstStartScript.addBrick(firstUserBrickFirstScript);
-		firstStartScript.addBrick(secondUserBrickFirstScript);
-		sprite.addScript(firstStartScript);
+        StartScript firstStartScript = new StartScript();
+        firstStartScript.addBrick(firstUserBrickFirstScript);
+        firstStartScript.addBrick(secondUserBrickFirstScript);
+        sprite.addScript(firstStartScript);
 
-		StartScript secondStartScript = new StartScript();
-		secondStartScript.addBrick(firstUserBrickSecondScript);
-		sprite.addScript(secondStartScript);
+        StartScript secondStartScript = new StartScript();
+        secondStartScript.addBrick(firstUserBrickSecondScript);
+        sprite.addScript(secondStartScript);
 
-		setValueFormula(firstUserBrickFirstScript, xChangeValue, yChangeValue);
-		setValueFormula(secondUserBrickFirstScript, xChangeValue, yChangeValue);
-		setValueFormula(firstUserBrickSecondScript, xChangeValue, yChangeValue);
+        setValueFormula(firstUserBrickFirstScript, xChangeValue, yChangeValue);
+        setValueFormula(secondUserBrickFirstScript, xChangeValue, yChangeValue);
+        setValueFormula(firstUserBrickSecondScript, xChangeValue, yChangeValue);
 
-		setVariableFormula(xBrick, variableOneName);
-		setVariableFormula(yBrick, variableTwoName);
-	}
+        setVariableFormula(xBrick, variableOneName);
+        setVariableFormula(yBrick, variableTwoName);
+    }
 
-	private void setValueFormula(UserBrick userBrick, Integer xValue, Integer yValue) {
-		List<Formula> formulaList = userBrick.getFormulas();
+    private void setValueFormula(UserBrick userBrick, Integer xValue, Integer yValue) {
+        List<Formula> formulaList = userBrick.getFormulas();
 
-		Formula xFormula = formulaList.get(0);
-		xFormula.setRoot(new FormulaElement(FormulaElement.ElementType.NUMBER, xValue.toString(), null));
-		Formula yFormula = formulaList.get(1);
-		yFormula.setRoot(new FormulaElement(FormulaElement.ElementType.NUMBER, yValue.toString(), null));
+        Formula xFormula = formulaList.get(0);
+        xFormula.setRoot(new FormulaElement(FormulaElement.ElementType.NUMBER, xValue.toString(), null));
+        Formula yFormula = formulaList.get(1);
+        yFormula.setRoot(new FormulaElement(FormulaElement.ElementType.NUMBER, yValue.toString(), null));
 
-		try {
-			assertEquals("userBrick.formula.interpretDouble: ", (float) xValue, xFormula.interpretFloat(sprite));
-			assertEquals("userBrick.formula.interpretDouble: ", (float) yValue, yFormula.interpretFloat(sprite));
-		} catch (InterpretationException e) {
-			Log.e(TAG, "Interpretation Error", e);
-		}
-	}
+        try {
+            assertEquals("userBrick.formula.interpretDouble: ", (float) xValue, xFormula.interpretFloat(sprite));
+            assertEquals("userBrick.formula.interpretDouble: ", (float) yValue, yFormula.interpretFloat(sprite));
+        } catch (InterpretationException e) {
+            Log.e(TAG, "Interpretation Error", e);
+        }
+    }
 
-	private void setVariableFormula(FormulaBrick formulaBrick, String variableName) {
-		List<Formula> formulaList = formulaBrick.getFormulas();
+    private void setVariableFormula(FormulaBrick formulaBrick, String variableName) {
+        List<Formula> formulaList = formulaBrick.getFormulas();
 
-		for (Formula formula : formulaList) {
-			formula.setRoot(new FormulaElement(FormulaElement.ElementType.USER_VARIABLE, variableName, null));
-		}
-	}
+        for (Formula formula : formulaList) {
+            formula.setRoot(new FormulaElement(FormulaElement.ElementType.USER_VARIABLE, variableName, null));
+        }
+    }
 
-	private void playProject() {
-		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
-		String continueString = solo.getString(R.string.main_menu_continue);
-		solo.waitForText(continueString);
-		solo.clickOnButton(continueString);
-		solo.waitForActivity(ProjectActivity.class.getSimpleName());
-		solo.waitForView(ListView.class);
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(2000);
-	}
+    private void playProject() {
+        solo.waitForActivity(MainMenuActivity.class.getSimpleName());
+        String continueString = solo.getString(R.string.main_menu_continue);
+        solo.waitForText(continueString);
+        solo.clickOnButton(continueString);
+        solo.waitForActivity(ProjectActivity.class.getSimpleName());
+        solo.waitForView(ListView.class);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(2000);
+    }
 }

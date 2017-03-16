@@ -33,38 +33,38 @@ import org.catrobat.catroid.formulaeditor.InterpretationException;
 
 public class SetPenColorAction extends TemporalAction {
 
-	private Sprite sprite;
-	private Formula red;
-	private Formula green;
-	private Formula blue;
+    private Sprite sprite;
+    private Formula red;
+    private Formula green;
+    private Formula blue;
 
-	@Override
-	protected void update(float delta) {
-		try {
-			int newRed = red == null ? 0 : red.interpretInteger(sprite);
-			int newGreen = green == null ? 0 : green.interpretInteger(sprite);
-			int newBlue = blue == null ? 0 : blue.interpretInteger(sprite);
-			Color color = new Color();
-			Color.argb8888ToColor(color, android.graphics.Color.argb(0xFF, newRed, newGreen, newBlue));
-			sprite.penConfiguration.penColor = color;
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}
-	}
+    @Override
+    protected void update(float delta) {
+        try {
+            int newRed = red == null ? 0 : red.interpretInteger(sprite);
+            int newGreen = green == null ? 0 : green.interpretInteger(sprite);
+            int newBlue = blue == null ? 0 : blue.interpretInteger(sprite);
+            Color color = new Color();
+            Color.argb8888ToColor(color, android.graphics.Color.argb(0xFF, newRed, newGreen, newBlue));
+            sprite.penConfiguration.penColor = color;
+        } catch (InterpretationException interpretationException) {
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+        }
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setRed(Formula red) {
-		this.red = red;
-	}
+    public void setRed(Formula red) {
+        this.red = red;
+    }
 
-	public void setGreen(Formula green) {
-		this.green = green;
-	}
+    public void setGreen(Formula green) {
+        this.green = green;
+    }
 
-	public void setBlue(Formula blue) {
-		this.blue = blue;
-	}
+    public void setBlue(Formula blue) {
+        this.blue = blue;
+    }
 }

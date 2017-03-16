@@ -24,11 +24,11 @@ package org.catrobat.catroid.bluetoothtestserver;
 
 public class Client {
 
-	public Client(String name, String uuid) {
-		this.name = name;
-		this.uuid = uuid;
-	}
+    public Client(String name, String uuid) {
+        this.name = name;
+        this.uuid = uuid;
+    }
 
-	public String name;
-	public String uuid;
+    public String name;
+    public String uuid;
 }

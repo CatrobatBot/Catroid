@@ -25,119 +25,119 @@ package org.catrobat.catroid.pocketmusic.note;
 import android.util.SparseArray;
 
 public enum NoteLength {
-	WHOLE_DOT(4f + 2f), WHOLE(4f), HALF_DOT(2f + 1f), HALF(2f), QUARTER_DOT(1f + 1 / 2f),
-	QUARTER(1f), EIGHT_DOT(1 / 2f + 1 / 4f), EIGHT(1 / 2f), SIXTEENTH(1 / 4f);
+    WHOLE_DOT(4f + 2f), WHOLE(4f), HALF_DOT(2f + 1f), HALF(2f), QUARTER_DOT(1f + 1 / 2f),
+    QUARTER(1f), EIGHT_DOT(1 / 2f + 1 / 4f), EIGHT(1 / 2f), SIXTEENTH(1 / 4f);
 
-	private static final NoteLength[] SORTED_NOTE_LENGTHS = new NoteLength[] { SIXTEENTH, EIGHT, EIGHT_DOT, QUARTER, QUARTER_DOT, HALF, HALF_DOT, WHOLE, WHOLE_DOT };
-	private static final long DEFAULT_TICK_DURATION_MODIFIER = 8;
-	private static final NoteLength SMALLEST_NOTE_LENGTH = SIXTEENTH;
+    private static final NoteLength[] SORTED_NOTE_LENGTHS = new NoteLength[]{SIXTEENTH, EIGHT, EIGHT_DOT, QUARTER, QUARTER_DOT, HALF, HALF_DOT, WHOLE, WHOLE_DOT};
+    private static final long DEFAULT_TICK_DURATION_MODIFIER = 8;
+    private static final NoteLength SMALLEST_NOTE_LENGTH = SIXTEENTH;
 
-	private static final int MINUTE_IN_SECONDS = 60;
-	private static final int SECOND_IN_MILLISECONDS = 1000;
+    private static final int MINUTE_IN_SECONDS = 60;
+    private static final int SECOND_IN_MILLISECONDS = 1000;
 
-	private float length;
-	private static SparseArray<long[]> millisecondsCalculationMap = new SparseArray<>();
+    private float length;
+    private static SparseArray<long[]> millisecondsCalculationMap = new SparseArray<>();
 
-	NoteLength(float length) {
-		this.length = length;
-	}
+    NoteLength(float length) {
+        this.length = length;
+    }
 
-	public static NoteLength getNoteLengthFromTickDuration(long duration, int beatsPerMinute) {
-		NoteLength noteLength = SMALLEST_NOTE_LENGTH;
-		NoteLength[] allNoteLengths = NoteLength.values();
+    public static NoteLength getNoteLengthFromTickDuration(long duration, int beatsPerMinute) {
+        NoteLength noteLength = SMALLEST_NOTE_LENGTH;
+        NoteLength[] allNoteLengths = NoteLength.values();
 
-		for (int i = (allNoteLengths.length - 1); i >= 0; i--) {
-			long difference = duration - allNoteLengths[i].toTicks(beatsPerMinute);
+        for (int i = (allNoteLengths.length - 1); i >= 0; i--) {
+            long difference = duration - allNoteLengths[i].toTicks(beatsPerMinute);
 
-			if (difference < 0) {
-				break;
-			}
+            if (difference < 0) {
+                break;
+            }
 
-			noteLength = allNoteLengths[i];
-		}
+            noteLength = allNoteLengths[i];
+        }
 
-		return noteLength;
-	}
+        return noteLength;
+    }
 
-	public static NoteLength getNoteLengthFromMilliseconds(long millis, int beatsPerMinute) {
-		long[] calculatedMilliseconds = getMilliseconds(beatsPerMinute);
-		long bottomLimit = calculatedMilliseconds[0];
-		int bottomIndex = 0;
-		long topLimit = calculatedMilliseconds[calculatedMilliseconds.length - 1];
-		int topIndex = 0;
+    public static NoteLength getNoteLengthFromMilliseconds(long millis, int beatsPerMinute) {
+        long[] calculatedMilliseconds = getMilliseconds(beatsPerMinute);
+        long bottomLimit = calculatedMilliseconds[0];
+        int bottomIndex = 0;
+        long topLimit = calculatedMilliseconds[calculatedMilliseconds.length - 1];
+        int topIndex = 0;
 
-		for (int i = 0; i < calculatedMilliseconds.length; i++) {
-			long calculatedMillis = calculatedMilliseconds[i];
-			if (millis > calculatedMillis) {
-				bottomLimit = calculatedMillis;
-				bottomIndex = i;
-			} else {
-				topLimit = calculatedMillis;
-				topIndex = i;
-				break;
-			}
-		}
+        for (int i = 0; i < calculatedMilliseconds.length; i++) {
+            long calculatedMillis = calculatedMilliseconds[i];
+            if (millis > calculatedMillis) {
+                bottomLimit = calculatedMillis;
+                bottomIndex = i;
+            } else {
+                topLimit = calculatedMillis;
+                topIndex = i;
+                break;
+            }
+        }
 
-		long distanceBottom = Math.abs(bottomLimit - millis);
-		long distanceTop = Math.abs(topLimit - millis);
+        long distanceBottom = Math.abs(bottomLimit - millis);
+        long distanceTop = Math.abs(topLimit - millis);
 
-		if (distanceBottom > distanceTop) {
-			return SORTED_NOTE_LENGTHS[topIndex];
-		} else {
-			return SORTED_NOTE_LENGTHS[bottomIndex];
-		}
-	}
+        if (distanceBottom > distanceTop) {
+            return SORTED_NOTE_LENGTHS[topIndex];
+        } else {
+            return SORTED_NOTE_LENGTHS[bottomIndex];
+        }
+    }
 
-	public long toTicks(int beatsPerMinute) {
-		return Math.round(beatsPerMinute * DEFAULT_TICK_DURATION_MODIFIER * length);
-	}
+    public long toTicks(int beatsPerMinute) {
+        return Math.round(beatsPerMinute * DEFAULT_TICK_DURATION_MODIFIER * length);
+    }
 
-	public long toMilliseconds(int beatsPerMinute) {
-		return Math.round(beatsPerMinute * length * SECOND_IN_MILLISECONDS / MINUTE_IN_SECONDS);
-	}
+    public long toMilliseconds(int beatsPerMinute) {
+        return Math.round(beatsPerMinute * length * SECOND_IN_MILLISECONDS / MINUTE_IN_SECONDS);
+    }
 
-	public static long tickToMilliseconds(long tick) {
-		return tick * SECOND_IN_MILLISECONDS / MINUTE_IN_SECONDS / DEFAULT_TICK_DURATION_MODIFIER;
-	}
+    public static long tickToMilliseconds(long tick) {
+        return tick * SECOND_IN_MILLISECONDS / MINUTE_IN_SECONDS / DEFAULT_TICK_DURATION_MODIFIER;
+    }
 
-	public boolean hasStem() {
-		return !((this == WHOLE) || (this == WHOLE_DOT));
-	}
+    public boolean hasStem() {
+        return !((this == WHOLE) || (this == WHOLE_DOT));
+    }
 
-	public NoteFlag getFlag() {
-		if (this == SIXTEENTH) {
-			return NoteFlag.DOUBLE_FLAG;
-		} else if ((this == EIGHT) || (this == EIGHT_DOT)) {
-			return NoteFlag.SINGLE_FLAG;
-		} else {
-			return NoteFlag.NO_FLAG;
-		}
-	}
+    public NoteFlag getFlag() {
+        if (this == SIXTEENTH) {
+            return NoteFlag.DOUBLE_FLAG;
+        } else if ((this == EIGHT) || (this == EIGHT_DOT)) {
+            return NoteFlag.SINGLE_FLAG;
+        } else {
+            return NoteFlag.NO_FLAG;
+        }
+    }
 
-	public boolean hasDot() {
-		return (WHOLE_DOT == this) || (HALF_DOT == this) || (QUARTER_DOT == this) || (EIGHT_DOT == this);
-	}
+    public boolean hasDot() {
+        return (WHOLE_DOT == this) || (HALF_DOT == this) || (QUARTER_DOT == this) || (EIGHT_DOT == this);
+    }
 
-	public boolean isHalfOrHigher() {
-		return (WHOLE_DOT == this) || (WHOLE == this) || (HALF_DOT == this) || (HALF == this);
-	}
+    public boolean isHalfOrHigher() {
+        return (WHOLE_DOT == this) || (WHOLE == this) || (HALF_DOT == this) || (HALF == this);
+    }
 
-	private static long[] getMilliseconds(int beatsPerMinute) {
-		if (null == millisecondsCalculationMap.get(beatsPerMinute)) {
-			millisecondsCalculationMap.put(beatsPerMinute, calculateMilliseconds(beatsPerMinute));
-		}
+    private static long[] getMilliseconds(int beatsPerMinute) {
+        if (null == millisecondsCalculationMap.get(beatsPerMinute)) {
+            millisecondsCalculationMap.put(beatsPerMinute, calculateMilliseconds(beatsPerMinute));
+        }
 
-		return millisecondsCalculationMap.get(beatsPerMinute);
-	}
+        return millisecondsCalculationMap.get(beatsPerMinute);
+    }
 
-	private static long[] calculateMilliseconds(int beatsPerMinute) {
-		long[] milliseconds = new long[SORTED_NOTE_LENGTHS.length];
+    private static long[] calculateMilliseconds(int beatsPerMinute) {
+        long[] milliseconds = new long[SORTED_NOTE_LENGTHS.length];
 
-		for (int i = 0; i < milliseconds.length; i++) {
-			NoteLength noteLength = SORTED_NOTE_LENGTHS[i];
-			milliseconds[i] = noteLength.toMilliseconds(beatsPerMinute);
-		}
+        for (int i = 0; i < milliseconds.length; i++) {
+            NoteLength noteLength = SORTED_NOTE_LENGTHS[i];
+            milliseconds[i] = noteLength.toMilliseconds(beatsPerMinute);
+        }
 
-		return milliseconds;
-	}
+        return milliseconds;
+    }
 }

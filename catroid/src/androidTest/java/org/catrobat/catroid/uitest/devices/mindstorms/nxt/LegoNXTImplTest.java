@@ -57,211 +57,211 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class LegoNXTImplTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
-	private static final int IMAGE_FILE_ID = org.catrobat.catroid.test.R.raw.icon;
-	private static final int MOTOR_ACTION = 0;
-	private static final int MOTOR_STOP = 1;
-	private static final int MOTOR_TURN = 2;
-	private static final int PLAY_TONE = 3;
+    private static final int IMAGE_FILE_ID = org.catrobat.catroid.test.R.raw.icon;
+    private static final int MOTOR_ACTION = 0;
+    private static final int MOTOR_STOP = 1;
+    private static final int MOTOR_TURN = 2;
+    private static final int PLAY_TONE = 3;
 
-	private static final String LOCAL_BLUETOOTH_TEST_DUMMY_DEVICE_NAME = "dummy_device";
+    private static final String LOCAL_BLUETOOTH_TEST_DUMMY_DEVICE_NAME = "dummy_device";
 
-	private final String projectName = UiTestUtils.PROJECTNAME1;
-	private final String spriteName = "testSprite";
+    private final String projectName = UiTestUtils.PROJECTNAME1;
+    private final String spriteName = "testSprite";
 
-	public LegoNXTImplTest() {
-		super(MainMenuActivity.class);
-	}
+    public LegoNXTImplTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		UiTestUtils.prepareStageForTest();
-		disableSensors();
-		SettingsActivity.disableLegoNXTMindstormsSensorInfoDialog(
-				this.getInstrumentation().getTargetContext().getApplicationContext());
-	}
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        UiTestUtils.prepareStageForTest();
+        disableSensors();
+        SettingsActivity.disableLegoNXTMindstormsSensorInfoDialog(
+                this.getInstrumentation().getTargetContext().getApplicationContext());
+    }
 
-	private void disableSensors() {
-		SettingsActivity.setLegoMindstormsNXTSensorMapping(this.getInstrumentation().getTargetContext(),
-				new NXTSensor.Sensor[] { NXTSensor.Sensor.NO_SENSOR, NXTSensor.Sensor.NO_SENSOR, NXTSensor.Sensor.NO_SENSOR, NXTSensor.Sensor.NO_SENSOR });
-	}
+    private void disableSensors() {
+        SettingsActivity.setLegoMindstormsNXTSensorMapping(this.getInstrumentation().getTargetContext(),
+                new NXTSensor.Sensor[]{NXTSensor.Sensor.NO_SENSOR, NXTSensor.Sensor.NO_SENSOR, NXTSensor.Sensor.NO_SENSOR, NXTSensor.Sensor.NO_SENSOR});
+    }
 
-	@Device
-	public void testNXTFunctionality() {
-		ArrayList<int[]> commands = createTestproject(projectName);
+    @Device
+    public void testNXTFunctionality() {
+        ArrayList<int[]> commands = createTestproject(projectName);
 
-		BluetoothTestUtils.enableBluetooth();
+        BluetoothTestUtils.enableBluetooth();
 
-		ConnectionDataLogger logger = ConnectionDataLogger.createLocalConnectionLogger();
+        ConnectionDataLogger logger = ConnectionDataLogger.createLocalConnectionLogger();
 
-		solo.clickOnText(solo.getString(R.string.main_menu_programs));
+        solo.clickOnText(solo.getString(R.string.main_menu_programs));
 
-		solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
-		solo.clickOnText(projectName);
+        solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
+        solo.clickOnText(projectName);
 
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.sleep(1000);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.sleep(1000);
 
-		solo.assertCurrentActivity("Not in BTConnectDeviceActivity", ConnectBluetoothDeviceActivity.class);
+        solo.assertCurrentActivity("Not in BTConnectDeviceActivity", ConnectBluetoothDeviceActivity.class);
 
-		// use this only, if ConnectionDataLogger is in local mode (localProxy)
-		BluetoothTestUtils.addPairedDevice(LOCAL_BLUETOOTH_TEST_DUMMY_DEVICE_NAME,
-				(ConnectBluetoothDeviceActivity) solo.getCurrentActivity(), getInstrumentation());
+        // use this only, if ConnectionDataLogger is in local mode (localProxy)
+        BluetoothTestUtils.addPairedDevice(LOCAL_BLUETOOTH_TEST_DUMMY_DEVICE_NAME,
+                (ConnectBluetoothDeviceActivity) solo.getCurrentActivity(), getInstrumentation());
 
-		int pairedDevicesIndex = 0;
+        int pairedDevicesIndex = 0;
 
-		for (int listViewIdx = 0; listViewIdx < solo.getCurrentViews(ListView.class).size(); listViewIdx++) {
-			if (solo.getCurrentViews(ListView.class).get(listViewIdx).getId() == R.id.paired_devices) {
-				pairedDevicesIndex = listViewIdx;
-			}
-		}
-		ListView deviceList = solo.getCurrentViews(ListView.class).get(pairedDevicesIndex);
+        for (int listViewIdx = 0; listViewIdx < solo.getCurrentViews(ListView.class).size(); listViewIdx++) {
+            if (solo.getCurrentViews(ListView.class).get(listViewIdx).getId() == R.id.paired_devices) {
+                pairedDevicesIndex = listViewIdx;
+            }
+        }
+        ListView deviceList = solo.getCurrentViews(ListView.class).get(pairedDevicesIndex);
 
-		String connectedDeviceName = null;
-		for (int i = 0; i < deviceList.getCount(); i++) {
-			String deviceName = (String) deviceList.getItemAtPosition(i);
+        String connectedDeviceName = null;
+        for (int i = 0; i < deviceList.getCount(); i++) {
+            String deviceName = (String) deviceList.getItemAtPosition(i);
 
-			if (deviceName.startsWith(LOCAL_BLUETOOTH_TEST_DUMMY_DEVICE_NAME)) {
-				connectedDeviceName = deviceName;
-				break;
-			}
-		}
+            if (deviceName.startsWith(LOCAL_BLUETOOTH_TEST_DUMMY_DEVICE_NAME)) {
+                connectedDeviceName = deviceName;
+                break;
+            }
+        }
 
-		solo.clickOnText(connectedDeviceName);
-		solo.sleep(2000);
-		solo.assertCurrentActivity("Not in stage - connection to bluetooth-device failed", StageActivity.class);
+        solo.clickOnText(connectedDeviceName);
+        solo.sleep(2000);
+        solo.assertCurrentActivity("Not in stage - connection to bluetooth-device failed", StageActivity.class);
 
-		solo.sleep(2000);
-		solo.clickOnScreen(ScreenValues.SCREEN_WIDTH / 2, ScreenValues.SCREEN_HEIGHT / 2);
+        solo.sleep(2000);
+        solo.clickOnScreen(ScreenValues.SCREEN_WIDTH / 2, ScreenValues.SCREEN_HEIGHT / 2);
 
-		ArrayList<byte[]> executedCommands = logger.getSentMessages(2, commands.size());
-		assertEquals("Commands seem to have not been executed! Connected to correct device??", commands.size(),
-				executedCommands.size());
+        ArrayList<byte[]> executedCommands = logger.getSentMessages(2, commands.size());
+        assertEquals("Commands seem to have not been executed! Connected to correct device??", commands.size(),
+                executedCommands.size());
 
-		solo.goBack();
-		solo.goBack();
+        solo.goBack();
+        solo.goBack();
 
-		int i = 0;
-		for (int[] item : commands) {
-			switch (item[0]) {
-				case MOTOR_ACTION:
-					assertEquals("Wrong motor was used!", item[1], executedCommands.get(i)[2]);
-					assertEquals("Wrong speed was used!", item[2], executedCommands.get(i)[3]);
-					break;
-				case MOTOR_STOP:
-					assertEquals("Wrong motor was used!", item[1], executedCommands.get(i)[2]);
-					assertEquals("Motor didn't actually stop!", 0, executedCommands.get(i)[3]);
-					break;
-				case MOTOR_TURN:
-					assertEquals("Wrong motor was used!", item[1], executedCommands.get(i)[2]);
-					int turnValue = (0x000000FF & executedCommands.get(i)[8]); //unsigned types would be too smart for java, sorry no chance mate!
-					turnValue += ((0x000000FF & executedCommands.get(i)[9]) << 8);
-					turnValue += ((0x000000FF & executedCommands.get(i)[10]) << 16);
-					turnValue += ((0x000000FF & executedCommands.get(i)[11]) << 24);
+        int i = 0;
+        for (int[] item : commands) {
+            switch (item[0]) {
+                case MOTOR_ACTION:
+                    assertEquals("Wrong motor was used!", item[1], executedCommands.get(i)[2]);
+                    assertEquals("Wrong speed was used!", item[2], executedCommands.get(i)[3]);
+                    break;
+                case MOTOR_STOP:
+                    assertEquals("Wrong motor was used!", item[1], executedCommands.get(i)[2]);
+                    assertEquals("Motor didn't actually stop!", 0, executedCommands.get(i)[3]);
+                    break;
+                case MOTOR_TURN:
+                    assertEquals("Wrong motor was used!", item[1], executedCommands.get(i)[2]);
+                    int turnValue = (0x000000FF & executedCommands.get(i)[8]); //unsigned types would be too smart for java, sorry no chance mate!
+                    turnValue += ((0x000000FF & executedCommands.get(i)[9]) << 8);
+                    turnValue += ((0x000000FF & executedCommands.get(i)[10]) << 16);
+                    turnValue += ((0x000000FF & executedCommands.get(i)[11]) << 24);
 
-					int turnSpeed = 30; //fixed value in Brick, however LegoBot needs negative speed instead of negative angles
-					if (item[2] < 0) {
-						item[2] += -2 * item[2];
-						turnSpeed -= 2 * turnSpeed;
-					}
+                    int turnSpeed = 30; //fixed value in Brick, however LegoBot needs negative speed instead of negative angles
+                    if (item[2] < 0) {
+                        item[2] += -2 * item[2];
+                        turnSpeed -= 2 * turnSpeed;
+                    }
 
-					assertEquals("Motor turned wrong angle", item[2], turnValue);
-					assertEquals("Motor didn't turn with fixed value 30!", turnSpeed, executedCommands.get(i)[3]);
-					break;
-				case PLAY_TONE:
-					int frequency = (0x000000FF & executedCommands.get(i)[2]);
-					frequency += ((0x000000FF & executedCommands.get(i)[3]) << 8);
-					assertEquals("wrong frequency used", item[1], frequency);
+                    assertEquals("Motor turned wrong angle", item[2], turnValue);
+                    assertEquals("Motor didn't turn with fixed value 30!", turnSpeed, executedCommands.get(i)[3]);
+                    break;
+                case PLAY_TONE:
+                    int frequency = (0x000000FF & executedCommands.get(i)[2]);
+                    frequency += ((0x000000FF & executedCommands.get(i)[3]) << 8);
+                    assertEquals("wrong frequency used", item[1], frequency);
 
-					int duration = (0x000000FF & executedCommands.get(i)[4]);
-					duration += ((0x000000FF & executedCommands.get(i)[5]) << 8);
-					assertEquals("wrong duration used", item[2], duration);
-			}
-			i++;
-		}
+                    int duration = (0x000000FF & executedCommands.get(i)[4]);
+                    duration += ((0x000000FF & executedCommands.get(i)[5]) << 8);
+                    assertEquals("wrong duration used", item[2], duration);
+            }
+            i++;
+        }
 
-		logger.disconnectAndDestroy();
-	}
+        logger.disconnectAndDestroy();
+    }
 
-	@Device
-	public void testNXTConnectionDialogGoBack() {
-		createTestproject(projectName);
+    @Device
+    public void testNXTConnectionDialogGoBack() {
+        createTestproject(projectName);
 
-		BluetoothTestUtils.enableBluetooth();
+        BluetoothTestUtils.enableBluetooth();
 
-		solo.clickOnText(solo.getString(R.string.main_menu_programs));
+        solo.clickOnText(solo.getString(R.string.main_menu_programs));
 
-		solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
-		solo.clickOnText(projectName);
+        solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
+        solo.clickOnText(projectName);
 
-		solo.waitForActivity(ProjectActivity.class.getSimpleName());
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.sleep(1000);
-		solo.assertCurrentActivity("Devicelist not shown!", ConnectBluetoothDeviceActivity.class);
-		solo.goBack();
-		solo.sleep(1000);
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.sleep(1000);
-		solo.assertCurrentActivity("Devicelist not shown!", ConnectBluetoothDeviceActivity.class);
-	}
+        solo.waitForActivity(ProjectActivity.class.getSimpleName());
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.sleep(1000);
+        solo.assertCurrentActivity("Devicelist not shown!", ConnectBluetoothDeviceActivity.class);
+        solo.goBack();
+        solo.sleep(1000);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.sleep(1000);
+        solo.assertCurrentActivity("Devicelist not shown!", ConnectBluetoothDeviceActivity.class);
+    }
 
-	private ArrayList<int[]> createTestproject(String projectName) {
-		ArrayList<int[]> commands = new ArrayList<int[]>();
+    private ArrayList<int[]> createTestproject(String projectName) {
+        ArrayList<int[]> commands = new ArrayList<int[]>();
 
-		Sprite firstSprite = new SingleSprite(spriteName);
-		Script startScript = new StartScript();
-		Script whenScript = new WhenScript();
-		SetLookBrick setLookBrick = new SetLookBrick();
+        Sprite firstSprite = new SingleSprite(spriteName);
+        Script startScript = new StartScript();
+        Script whenScript = new WhenScript();
+        SetLookBrick setLookBrick = new SetLookBrick();
 
-		LegoNxtMotorMoveBrick legoMotorActionBrick = new LegoNxtMotorMoveBrick(
-				LegoNxtMotorMoveBrick.Motor.MOTOR_B_C, 100);
-		commands.add(new int[] { MOTOR_ACTION, 1, 100 });
-		commands.add(new int[] { MOTOR_ACTION, 2, 100 });
-		WaitBrick firstWaitBrick = new WaitBrick(500);
+        LegoNxtMotorMoveBrick legoMotorActionBrick = new LegoNxtMotorMoveBrick(
+                LegoNxtMotorMoveBrick.Motor.MOTOR_B_C, 100);
+        commands.add(new int[]{MOTOR_ACTION, 1, 100});
+        commands.add(new int[]{MOTOR_ACTION, 2, 100});
+        WaitBrick firstWaitBrick = new WaitBrick(500);
 
-		LegoNxtMotorStopBrick legoMotorStopBrick = new LegoNxtMotorStopBrick(
-				LegoNxtMotorStopBrick.Motor.MOTOR_B_C);
-		commands.add(new int[] { MOTOR_STOP, 1 });
-		commands.add(new int[] { MOTOR_STOP, 2 });
-		WaitBrick secondWaitBrick = new WaitBrick(500);
+        LegoNxtMotorStopBrick legoMotorStopBrick = new LegoNxtMotorStopBrick(
+                LegoNxtMotorStopBrick.Motor.MOTOR_B_C);
+        commands.add(new int[]{MOTOR_STOP, 1});
+        commands.add(new int[]{MOTOR_STOP, 2});
+        WaitBrick secondWaitBrick = new WaitBrick(500);
 
-		LegoNxtMotorTurnAngleBrick legoMotorTurnAngleBrick = new LegoNxtMotorTurnAngleBrick(
-				LegoNxtMotorTurnAngleBrick.Motor.MOTOR_C, 515);
-		commands.add(new int[] { MOTOR_TURN, 2, 515 });
+        LegoNxtMotorTurnAngleBrick legoMotorTurnAngleBrick = new LegoNxtMotorTurnAngleBrick(
+                LegoNxtMotorTurnAngleBrick.Motor.MOTOR_C, 515);
+        commands.add(new int[]{MOTOR_TURN, 2, 515});
 
-		WaitBrick thirdWaitBrick = new WaitBrick(500);
-		LegoNxtPlayToneBrick legoPlayToneBrick = new LegoNxtPlayToneBrick(50, 1.5f);
-		//Tone does not return a command
-		commands.add(new int[] { PLAY_TONE, 5000, 1500 });
+        WaitBrick thirdWaitBrick = new WaitBrick(500);
+        LegoNxtPlayToneBrick legoPlayToneBrick = new LegoNxtPlayToneBrick(50, 1.5f);
+        //Tone does not return a command
+        commands.add(new int[]{PLAY_TONE, 5000, 1500});
 
-		whenScript.addBrick(legoMotorActionBrick);
-		whenScript.addBrick(firstWaitBrick);
-		whenScript.addBrick(legoMotorStopBrick);
-		whenScript.addBrick(secondWaitBrick);
-		whenScript.addBrick(legoMotorTurnAngleBrick);
-		whenScript.addBrick(thirdWaitBrick);
-		whenScript.addBrick(legoPlayToneBrick);
+        whenScript.addBrick(legoMotorActionBrick);
+        whenScript.addBrick(firstWaitBrick);
+        whenScript.addBrick(legoMotorStopBrick);
+        whenScript.addBrick(secondWaitBrick);
+        whenScript.addBrick(legoMotorTurnAngleBrick);
+        whenScript.addBrick(thirdWaitBrick);
+        whenScript.addBrick(legoPlayToneBrick);
 
-		startScript.addBrick(setLookBrick);
-		firstSprite.addScript(startScript);
-		firstSprite.addScript(whenScript);
+        startScript.addBrick(setLookBrick);
+        firstSprite.addScript(startScript);
+        firstSprite.addScript(whenScript);
 
-		ArrayList<Sprite> spriteList = new ArrayList<>();
-		spriteList.add(firstSprite);
-		Project project = UiTestUtils.createProject(projectName, spriteList, getActivity());
+        ArrayList<Sprite> spriteList = new ArrayList<>();
+        spriteList.add(firstSprite);
+        Project project = UiTestUtils.createProject(projectName, spriteList, getActivity());
 
-		String imageName = "image";
-		File image = UiTestUtils.saveFileToProject(projectName, project.getDefaultScene().getName(), imageName, IMAGE_FILE_ID, getInstrumentation()
-				.getContext(), UiTestUtils.FileTypes.IMAGE);
+        String imageName = "image";
+        File image = UiTestUtils.saveFileToProject(projectName, project.getDefaultScene().getName(), imageName, IMAGE_FILE_ID, getInstrumentation()
+                .getContext(), UiTestUtils.FileTypes.IMAGE);
 
-		LookData lookData = new LookData();
-		lookData.setLookFilename(image.getName());
-		lookData.setLookName(imageName);
-		setLookBrick.setLook(lookData);
-		firstSprite.getLookDataList().add(lookData);
+        LookData lookData = new LookData();
+        lookData.setLookFilename(image.getName());
+        lookData.setLookName(imageName);
+        setLookBrick.setLook(lookData);
+        firstSprite.getLookDataList().add(lookData);
 
-		StorageHandler.getInstance().saveProject(project);
+        StorageHandler.getInstance().saveProject(project);
 
-		return commands;
-	}
+        return commands;
+    }
 }

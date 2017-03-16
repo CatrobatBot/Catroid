@@ -26,84 +26,84 @@ import java.util.Stack;
 
 public class FormulaEditorHistory {
 
-	private static final int MAXIMUM_HISTORY_LENGTH = 32;
-	private Stack<InternFormulaState> undoStack = null;
-	private Stack<InternFormulaState> redoStack = null;
-	private InternFormulaState current = null;
-	private boolean hasUnsavedChanges = false;
+    private static final int MAXIMUM_HISTORY_LENGTH = 32;
+    private Stack<InternFormulaState> undoStack = null;
+    private Stack<InternFormulaState> redoStack = null;
+    private InternFormulaState current = null;
+    private boolean hasUnsavedChanges = false;
 
-	public FormulaEditorHistory(InternFormulaState internFormulaState) {
-		current = internFormulaState;
-		undoStack = new Stack<InternFormulaState>();
-		redoStack = new Stack<InternFormulaState>();
-	}
+    public FormulaEditorHistory(InternFormulaState internFormulaState) {
+        current = internFormulaState;
+        undoStack = new Stack<InternFormulaState>();
+        redoStack = new Stack<InternFormulaState>();
+    }
 
-	public void push(InternFormulaState internFormulaState) {
+    public void push(InternFormulaState internFormulaState) {
 
-		if (current != null && current.equals(internFormulaState)) {
-			return;
-		}
-		if (current != null) {
-			undoStack.push(current);
-		}
-		current = internFormulaState;
-		redoStack.clear();
-		hasUnsavedChanges = true;
-		if (undoStack.size() > MAXIMUM_HISTORY_LENGTH) {
-			undoStack.removeElementAt(0);
-		}
-	}
+        if (current != null && current.equals(internFormulaState)) {
+            return;
+        }
+        if (current != null) {
+            undoStack.push(current);
+        }
+        current = internFormulaState;
+        redoStack.clear();
+        hasUnsavedChanges = true;
+        if (undoStack.size() > MAXIMUM_HISTORY_LENGTH) {
+            undoStack.removeElementAt(0);
+        }
+    }
 
-	public InternFormulaState backward() {
-		redoStack.push(current);
-		hasUnsavedChanges = true;
-		if (!undoStack.empty()) {
-			current = undoStack.pop();
-		}
-		return current;
-	}
+    public InternFormulaState backward() {
+        redoStack.push(current);
+        hasUnsavedChanges = true;
+        if (!undoStack.empty()) {
+            current = undoStack.pop();
+        }
+        return current;
+    }
 
-	public InternFormulaState forward() {
-		undoStack.push(current);
-		hasUnsavedChanges = true;
-		if (!redoStack.empty()) {
-			current = redoStack.pop();
-		}
-		return current;
-	}
+    public InternFormulaState forward() {
+        undoStack.push(current);
+        hasUnsavedChanges = true;
+        if (!redoStack.empty()) {
+            current = redoStack.pop();
+        }
+        return current;
+    }
 
-	public void updateCurrentSelection(InternFormulaTokenSelection internFormulaTokenSelection) {
-		current.setSelection(internFormulaTokenSelection);
-	}
+    public void updateCurrentSelection(InternFormulaTokenSelection internFormulaTokenSelection) {
+        current.setSelection(internFormulaTokenSelection);
+    }
 
-	public void init(InternFormulaState internFormulaState) {
-		current = internFormulaState;
-	}
+    public void init(InternFormulaState internFormulaState) {
+        current = internFormulaState;
+    }
 
-	public void clear() {
-		undoStack.clear();
-		redoStack.clear();
-		current = null;
-		hasUnsavedChanges = false;
-	}
+    public void clear() {
+        undoStack.clear();
+        redoStack.clear();
+        current = null;
+        hasUnsavedChanges = false;
+    }
 
-	public void updateCurrentCursor(int cursorPosition) {
-		current.setExternCursorPosition(cursorPosition);
-	}
+    public void updateCurrentCursor(int cursorPosition) {
+        current.setExternCursorPosition(cursorPosition);
+    }
 
-	public boolean undoIsPossible() {
-		return !undoStack.empty();
-	}
+    public boolean undoIsPossible() {
+        return !undoStack.empty();
+    }
 
-	public boolean redoIsPossible() {
-		return !redoStack.empty();
-	}
+    public boolean redoIsPossible() {
+        return !redoStack.empty();
+    }
 
-	public boolean hasUnsavedChanges() {
-		return hasUnsavedChanges;
-	}
+    public boolean hasUnsavedChanges() {
+        return hasUnsavedChanges;
+    }
 
-	public void changesSaved() {
-		hasUnsavedChanges = false;
-	}
+    public void changesSaved() {
+        hasUnsavedChanges = false;
+    }
 }

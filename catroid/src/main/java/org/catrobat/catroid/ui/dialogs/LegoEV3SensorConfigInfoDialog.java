@@ -38,44 +38,44 @@ import org.catrobat.catroid.ui.SettingsActivity;
 
 public class LegoEV3SensorConfigInfoDialog extends DialogFragment {
 
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_lego_ev3_sensor_config_info";
+    public static final String DIALOG_FRAGMENT_TAG = "dialog_lego_ev3_sensor_config_info";
 
-	private CheckBox disableShowInfoDialog;
+    private CheckBox disableShowInfoDialog;
 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-		View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_lego_ev3_sensor_config_info, null);
+        View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_lego_ev3_sensor_config_info, null);
 
-		disableShowInfoDialog = (CheckBox) dialogView.findViewById(R.id
-				.lego_ev3_sensor_config_info_disable_show_dialog);
+        disableShowInfoDialog = (CheckBox) dialogView.findViewById(R.id
+                .lego_ev3_sensor_config_info_disable_show_dialog);
 
-		EV3Sensor.Sensor[] sensorMapping = SettingsActivity.getLegoMindstormsEV3SensorMapping(this.getActivity());
-		String[] sensorMappingStrings = getResources().getStringArray(R.array.ev3_sensor_chooser);
+        EV3Sensor.Sensor[] sensorMapping = SettingsActivity.getLegoMindstormsEV3SensorMapping(this.getActivity());
+        String[] sensorMappingStrings = getResources().getStringArray(R.array.ev3_sensor_chooser);
 
-		TextView mapping1 = (TextView) dialogView.findViewById(R.id.lego_ev3_sensor_config_info_port_1_mapping);
-		TextView mapping2 = (TextView) dialogView.findViewById(R.id.lego_ev3_sensor_config_info_port_2_mapping);
-		TextView mapping3 = (TextView) dialogView.findViewById(R.id.lego_ev3_sensor_config_info_port_3_mapping);
-		TextView mapping4 = (TextView) dialogView.findViewById(R.id.lego_ev3_sensor_config_info_port_4_mapping);
+        TextView mapping1 = (TextView) dialogView.findViewById(R.id.lego_ev3_sensor_config_info_port_1_mapping);
+        TextView mapping2 = (TextView) dialogView.findViewById(R.id.lego_ev3_sensor_config_info_port_2_mapping);
+        TextView mapping3 = (TextView) dialogView.findViewById(R.id.lego_ev3_sensor_config_info_port_3_mapping);
+        TextView mapping4 = (TextView) dialogView.findViewById(R.id.lego_ev3_sensor_config_info_port_4_mapping);
 
-		mapping1.setText(sensorMappingStrings[sensorMapping[0].ordinal()]);
-		mapping2.setText(sensorMappingStrings[sensorMapping[1].ordinal()]);
-		mapping3.setText(sensorMappingStrings[sensorMapping[2].ordinal()]);
-		mapping4.setText(sensorMappingStrings[sensorMapping[3].ordinal()]);
+        mapping1.setText(sensorMappingStrings[sensorMapping[0].ordinal()]);
+        mapping2.setText(sensorMappingStrings[sensorMapping[1].ordinal()]);
+        mapping3.setText(sensorMappingStrings[sensorMapping[2].ordinal()]);
+        mapping4.setText(sensorMappingStrings[sensorMapping[3].ordinal()]);
 
-		Dialog dialog = new AlertDialog.Builder(getActivity())
-				.setView(dialogView)
-				.setTitle(R.string.lego_ev3_sensor_config_info_title)
-				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						if (disableShowInfoDialog.isChecked()) {
-							SettingsActivity.disableLegoEV3MindstormsSensorInfoDialog(LegoEV3SensorConfigInfoDialog.this.getActivity());
-						}
-					}
-				}).create();
+        Dialog dialog = new AlertDialog.Builder(getActivity())
+                .setView(dialogView)
+                .setTitle(R.string.lego_ev3_sensor_config_info_title)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (disableShowInfoDialog.isChecked()) {
+                            SettingsActivity.disableLegoEV3MindstormsSensorInfoDialog(LegoEV3SensorConfigInfoDialog.this.getActivity());
+                        }
+                    }
+                }).create();
 
-		dialog.setCanceledOnTouchOutside(true);
+        dialog.setCanceledOnTouchOutside(true);
 
-		return dialog;
-	}
+        return dialog;
+    }
 }

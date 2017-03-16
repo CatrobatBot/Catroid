@@ -24,17 +24,17 @@ package org.catrobat.catroid.ui.dialogs;
 
 public class BrickTextDialog extends TextDialog {
 
-	public BrickTextDialog(int title, int inputLabel, String previousText) {
-		super(title, inputLabel, previousText, false);
-	}
+    public BrickTextDialog(int title, int inputLabel, String previousText) {
+        super(title, inputLabel, previousText, false);
+    }
 
-	@Override
-	protected boolean handlePositiveButtonClick() {
-		return false;
-	}
+    @Override
+    protected boolean handlePositiveButtonClick() {
+        return false;
+    }
 
-	@Override
-	protected void handleNegativeButtonClick() {
-		dismiss();
-	}
+    @Override
+    protected void handleNegativeButtonClick() {
+        dismiss();
+    }
 }

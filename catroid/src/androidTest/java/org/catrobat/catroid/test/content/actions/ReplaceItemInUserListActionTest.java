@@ -37,74 +37,74 @@ import java.util.List;
 
 public class ReplaceItemInUserListActionTest extends AndroidTestCase {
 
-	private static final String TEST_USERLIST_NAME = "testUserList";
-	private static final double DOUBLE_VALUE_ITEM_TO_REPLACE_WITH = 4.0;
-	private static final List<Object> INITIALIZED_LIST_VALUES = new ArrayList<Object>();
+    private static final String TEST_USERLIST_NAME = "testUserList";
+    private static final double DOUBLE_VALUE_ITEM_TO_REPLACE_WITH = 4.0;
+    private static final List<Object> INITIALIZED_LIST_VALUES = new ArrayList<Object>();
 
-	private Sprite testSprite;
-	private Project project;
-	private UserList userList;
+    private Sprite testSprite;
+    private Project project;
+    private UserList userList;
 
-	private ActionFactory actionFactory;
+    private ActionFactory actionFactory;
 
-	@Override
-	protected void setUp() throws Exception {
-		actionFactory = new ActionFactory();
-		testSprite = new SingleSprite("testSprite");
-		project = new Project(null, "testProject");
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().getCurrentScene().getDataContainer().addProjectUserList(TEST_USERLIST_NAME);
-		userList = ProjectManager.getInstance().getCurrentScene().getDataContainer()
-				.getUserList(TEST_USERLIST_NAME, null);
-		userList.setList(INITIALIZED_LIST_VALUES);
-		INITIALIZED_LIST_VALUES.clear();
-		INITIALIZED_LIST_VALUES.add(1.0);
-		INITIALIZED_LIST_VALUES.add(2.0);
-		INITIALIZED_LIST_VALUES.add(3.0);
-		super.setUp();
-	}
+    @Override
+    protected void setUp() throws Exception {
+        actionFactory = new ActionFactory();
+        testSprite = new SingleSprite("testSprite");
+        project = new Project(null, "testProject");
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().getCurrentScene().getDataContainer().addProjectUserList(TEST_USERLIST_NAME);
+        userList = ProjectManager.getInstance().getCurrentScene().getDataContainer()
+                .getUserList(TEST_USERLIST_NAME, null);
+        userList.setList(INITIALIZED_LIST_VALUES);
+        INITIALIZED_LIST_VALUES.clear();
+        INITIALIZED_LIST_VALUES.add(1.0);
+        INITIALIZED_LIST_VALUES.add(2.0);
+        INITIALIZED_LIST_VALUES.add(3.0);
+        super.setUp();
+    }
 
-	public void testReplaceNumericalValueInUserList() {
-		actionFactory.createReplaceItemInUserListAction(testSprite, new Formula(1), new Formula(DOUBLE_VALUE_ITEM_TO_REPLACE_WITH), userList).act(1f);
-		Object firstItemOfUserList = userList.getList().get(0);
+    public void testReplaceNumericalValueInUserList() {
+        actionFactory.createReplaceItemInUserListAction(testSprite, new Formula(1), new Formula(DOUBLE_VALUE_ITEM_TO_REPLACE_WITH), userList).act(1f);
+        Object firstItemOfUserList = userList.getList().get(0);
 
-		assertEquals("UserList size changed!", 3, userList.getList().size());
-		assertEquals("UserList not changed!", String.valueOf(DOUBLE_VALUE_ITEM_TO_REPLACE_WITH), firstItemOfUserList);
-	}
+        assertEquals("UserList size changed!", 3, userList.getList().size());
+        assertEquals("UserList not changed!", String.valueOf(DOUBLE_VALUE_ITEM_TO_REPLACE_WITH), firstItemOfUserList);
+    }
 
-	public void testReplaceNumericalValueInUserListAtLastPosition() {
-		actionFactory.createReplaceItemInUserListAction(testSprite, new Formula(3), new Formula(DOUBLE_VALUE_ITEM_TO_REPLACE_WITH), userList).act(1f);
-		Object lastItemOfUserList = userList.getList().get(userList.getList().size() - 1);
+    public void testReplaceNumericalValueInUserListAtLastPosition() {
+        actionFactory.createReplaceItemInUserListAction(testSprite, new Formula(3), new Formula(DOUBLE_VALUE_ITEM_TO_REPLACE_WITH), userList).act(1f);
+        Object lastItemOfUserList = userList.getList().get(userList.getList().size() - 1);
 
-		assertEquals("UserList size changed!", 3, userList.getList().size());
-		assertEquals("UserList not changed!", String.valueOf(DOUBLE_VALUE_ITEM_TO_REPLACE_WITH), lastItemOfUserList);
-	}
+        assertEquals("UserList size changed!", 3, userList.getList().size());
+        assertEquals("UserList not changed!", String.valueOf(DOUBLE_VALUE_ITEM_TO_REPLACE_WITH), lastItemOfUserList);
+    }
 
-	public void testReplaceNumericalValueInUserListOutOfUserListBounds() {
-		actionFactory.createReplaceItemInUserListAction(testSprite, new Formula(4), new Formula(DOUBLE_VALUE_ITEM_TO_REPLACE_WITH), userList).act(1f);
+    public void testReplaceNumericalValueInUserListOutOfUserListBounds() {
+        actionFactory.createReplaceItemInUserListAction(testSprite, new Formula(4), new Formula(DOUBLE_VALUE_ITEM_TO_REPLACE_WITH), userList).act(1f);
 
-		assertEquals("UserList size changed!", 3, userList.getList().size());
-		assertEquals("UserList changed!", 1d, userList.getList().get(0));
-		assertEquals("UserList changed!", 2d, userList.getList().get(1));
-		assertEquals("UserList changed!", 3d, userList.getList().get(2));
-	}
+        assertEquals("UserList size changed!", 3, userList.getList().size());
+        assertEquals("UserList changed!", 1d, userList.getList().get(0));
+        assertEquals("UserList changed!", 2d, userList.getList().get(1));
+        assertEquals("UserList changed!", 3d, userList.getList().get(2));
+    }
 
-	public void testReplaceItemWithInvalidUserList() {
-		actionFactory.createReplaceItemInUserListAction(testSprite, new Formula(1), new Formula(DOUBLE_VALUE_ITEM_TO_REPLACE_WITH), null).act(1f);
-		assertEquals("UserList changed, but should not!", 3, userList.getList().size());
-	}
+    public void testReplaceItemWithInvalidUserList() {
+        actionFactory.createReplaceItemInUserListAction(testSprite, new Formula(1), new Formula(DOUBLE_VALUE_ITEM_TO_REPLACE_WITH), null).act(1f);
+        assertEquals("UserList changed, but should not!", 3, userList.getList().size());
+    }
 
-	public void testReplaceNullFormula() {
-		actionFactory.createReplaceItemInUserListAction(testSprite, new Formula(1), null, userList).act(1f);
-		Object firstItemOfUserList = userList.getList().get(0);
+    public void testReplaceNullFormula() {
+        actionFactory.createReplaceItemInUserListAction(testSprite, new Formula(1), null, userList).act(1f);
+        Object firstItemOfUserList = userList.getList().get(0);
 
-		assertEquals("UserList size changed!", 3, userList.getList().size());
-		assertEquals("UserList not changed!", 0d, firstItemOfUserList);
-	}
+        assertEquals("UserList size changed!", 3, userList.getList().size());
+        assertEquals("UserList not changed!", 0d, firstItemOfUserList);
+    }
 
-	public void testNotANumberFormula() {
-		actionFactory.createReplaceItemInUserListAction(testSprite, new Formula(1), new Formula(Double.NaN), userList).act(1f);
-		Object firstItemOfUserList = userList.getList().get(0);
-		assertEquals("UserList not changed!", String.valueOf(Double.NaN), firstItemOfUserList);
-	}
+    public void testNotANumberFormula() {
+        actionFactory.createReplaceItemInUserListAction(testSprite, new Formula(1), new Formula(Double.NaN), userList).act(1f);
+        Object firstItemOfUserList = userList.getList().get(0);
+        assertEquals("UserList not changed!", String.valueOf(Double.NaN), firstItemOfUserList);
+    }
 }

@@ -36,55 +36,55 @@ import java.util.Map;
 
 public class HideTextAction extends TemporalAction {
 
-	private UserVariable variableToHide;
+    private UserVariable variableToHide;
 
-	private Sprite sprite;
-	private UserBrick userBrick;
+    private Sprite sprite;
+    private UserBrick userBrick;
 
-	@Override
-	protected void begin() {
-		DataContainer dataContainer = ProjectManager.getInstance().getSceneToPlay().getDataContainer();
+    @Override
+    protected void begin() {
+        DataContainer dataContainer = ProjectManager.getInstance().getSceneToPlay().getDataContainer();
 
-		List<UserVariable> variableList = dataContainer.getProjectVariables();
-		Map<Sprite, List<UserVariable>> spriteVariableMap = dataContainer.getSpriteVariableMap();
+        List<UserVariable> variableList = dataContainer.getProjectVariables();
+        Map<Sprite, List<UserVariable>> spriteVariableMap = dataContainer.getSpriteVariableMap();
 
-		setVariablesVisible(variableList);
+        setVariablesVisible(variableList);
 
-		if (sprite != null) {
-			List<UserVariable> spriteVariableList = spriteVariableMap.get(sprite);
-			setVariablesVisible(spriteVariableList);
-		}
-		if (userBrick != null) {
-			List<UserVariable> userBrickVariableList = dataContainer.getOrCreateVariableListForUserBrick(userBrick);
-			setVariablesVisible(userBrickVariableList);
-		}
-	}
+        if (sprite != null) {
+            List<UserVariable> spriteVariableList = spriteVariableMap.get(sprite);
+            setVariablesVisible(spriteVariableList);
+        }
+        if (userBrick != null) {
+            List<UserVariable> userBrickVariableList = dataContainer.getOrCreateVariableListForUserBrick(userBrick);
+            setVariablesVisible(userBrickVariableList);
+        }
+    }
 
-	private void setVariablesVisible(List<UserVariable> variableList) {
-		if (variableList == null) {
-			return;
-		}
-		for (UserVariable userVariable : variableList) {
-			if (userVariable.getName().equals(variableToHide.getName())) {
-				userVariable.setVisible(false);
-				break;
-			}
-		}
-	}
+    private void setVariablesVisible(List<UserVariable> variableList) {
+        if (variableList == null) {
+            return;
+        }
+        for (UserVariable userVariable : variableList) {
+            if (userVariable.getName().equals(variableToHide.getName())) {
+                userVariable.setVisible(false);
+                break;
+            }
+        }
+    }
 
-	@Override
-	protected void update(float percent) {
-	}
+    @Override
+    protected void update(float percent) {
+    }
 
-	public void setVariableToHide(UserVariable userVariable) {
-		this.variableToHide = userVariable;
-	}
+    public void setVariableToHide(UserVariable userVariable) {
+        this.variableToHide = userVariable;
+    }
 
-	public void setUserBrick(UserBrick userBrick) {
-		this.userBrick = userBrick;
-	}
+    public void setUserBrick(UserBrick userBrick) {
+        this.userBrick = userBrick;
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 }

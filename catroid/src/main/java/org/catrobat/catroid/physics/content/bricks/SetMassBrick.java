@@ -40,73 +40,73 @@ import org.catrobat.catroid.ui.fragment.FormulaEditorFragment;
 import java.util.List;
 
 public class SetMassBrick extends FormulaBrick {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private transient View prototypeView;
+    private transient View prototypeView;
 
-	public SetMassBrick() {
-		addAllowedBrickField(BrickField.PHYSICS_MASS);
-	}
+    public SetMassBrick() {
+        addAllowedBrickField(BrickField.PHYSICS_MASS);
+    }
 
-	public SetMassBrick(float mass) {
-		initializeBrickFields(new Formula(mass));
-	}
+    public SetMassBrick(float mass) {
+        initializeBrickFields(new Formula(mass));
+    }
 
-	public SetMassBrick(Formula mass) {
-		initializeBrickFields(mass);
-	}
+    public SetMassBrick(Formula mass) {
+        initializeBrickFields(mass);
+    }
 
-	private void initializeBrickFields(Formula mass) {
-		addAllowedBrickField(BrickField.PHYSICS_MASS);
-		setFormulaWithBrickField(BrickField.PHYSICS_MASS, mass);
-	}
+    private void initializeBrickFields(Formula mass) {
+        addAllowedBrickField(BrickField.PHYSICS_MASS);
+        setFormulaWithBrickField(BrickField.PHYSICS_MASS, mass);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return PHYSICS;
-	}
+    @Override
+    public int getRequiredResources() {
+        return PHYSICS;
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_physics_set_mass, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_physics_set_mass, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_set_mass_checkbox);
+        setCheckboxView(R.id.brick_set_mass_checkbox);
 
-		TextView edit = (TextView) view.findViewById(R.id.brick_set_mass_edit_text);
+        TextView edit = (TextView) view.findViewById(R.id.brick_set_mass_edit_text);
 
-		getFormulaWithBrickField(BrickField.PHYSICS_MASS).setTextFieldId(R.id.brick_set_mass_edit_text);
-		getFormulaWithBrickField(BrickField.PHYSICS_MASS).refreshTextField(view);
+        getFormulaWithBrickField(BrickField.PHYSICS_MASS).setTextFieldId(R.id.brick_set_mass_edit_text);
+        getFormulaWithBrickField(BrickField.PHYSICS_MASS).refreshTextField(view);
 
-		edit.setOnClickListener(this);
+        edit.setOnClickListener(this);
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_physics_set_mass, null);
-		TextView textMass = (TextView) prototypeView.findViewById(R.id.brick_set_mass_edit_text);
-		textMass.setText(String.valueOf(BrickValues.PHYSIC_MASS));
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_physics_set_mass, null);
+        TextView textMass = (TextView) prototypeView.findViewById(R.id.brick_set_mass_edit_text);
+        textMass.setText(String.valueOf(BrickValues.PHYSIC_MASS));
+        return prototypeView;
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		if (checkbox.getVisibility() == View.VISIBLE) {
-			return;
-		}
-		FormulaEditorFragment.showFragment(view, this, BrickField.PHYSICS_MASS);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        if (checkbox.getVisibility() == View.VISIBLE) {
+            return;
+        }
+        FormulaEditorFragment.showFragment(view, this, BrickField.PHYSICS_MASS);
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createSetMassAction(sprite,
-				getFormulaWithBrickField(BrickField.PHYSICS_MASS)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createSetMassAction(sprite,
+                getFormulaWithBrickField(BrickField.PHYSICS_MASS)));
+        return null;
+    }
 }

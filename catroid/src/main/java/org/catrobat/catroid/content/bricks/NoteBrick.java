@@ -38,60 +38,60 @@ import org.catrobat.catroid.ui.fragment.FormulaEditorFragment;
 import java.util.List;
 
 public class NoteBrick extends FormulaBrick implements OnClickListener {
-	private static final long serialVersionUID = 1L;
-	private transient View prototypeView;
+    private static final long serialVersionUID = 1L;
+    private transient View prototypeView;
 
-	public NoteBrick() {
-		addAllowedBrickField(BrickField.NOTE);
-	}
+    public NoteBrick() {
+        addAllowedBrickField(BrickField.NOTE);
+    }
 
-	public NoteBrick(String note) {
-		initializeBrickFields(new Formula(note));
-	}
+    public NoteBrick(String note) {
+        initializeBrickFields(new Formula(note));
+    }
 
-	public NoteBrick(Formula note) {
-		initializeBrickFields(note);
-	}
+    public NoteBrick(Formula note) {
+        initializeBrickFields(note);
+    }
 
-	private void initializeBrickFields(Formula note) {
-		addAllowedBrickField(BrickField.NOTE);
-		setFormulaWithBrickField(BrickField.NOTE, note);
-	}
+    private void initializeBrickFields(Formula note) {
+        addAllowedBrickField(BrickField.NOTE);
+        setFormulaWithBrickField(BrickField.NOTE, note);
+    }
 
-	@Override
-	public View getView(final Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(final Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_note, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_note, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_note_checkbox);
-		TextView textField = (TextView) view.findViewById(R.id.brick_note_edit_text);
-		getFormulaWithBrickField(BrickField.NOTE).setTextFieldId(R.id.brick_note_edit_text);
-		getFormulaWithBrickField(BrickField.NOTE).refreshTextField(view);
+        setCheckboxView(R.id.brick_note_checkbox);
+        TextView textField = (TextView) view.findViewById(R.id.brick_note_edit_text);
+        getFormulaWithBrickField(BrickField.NOTE).setTextFieldId(R.id.brick_note_edit_text);
+        getFormulaWithBrickField(BrickField.NOTE).refreshTextField(view);
 
-		textField.setOnClickListener(this);
+        textField.setOnClickListener(this);
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_note, null);
-		TextView textSpeak = (TextView) prototypeView.findViewById(R.id.brick_note_edit_text);
-		textSpeak.setText(context.getString(R.string.brick_note_default_value));
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_note, null);
+        TextView textSpeak = (TextView) prototypeView.findViewById(R.id.brick_note_edit_text);
+        textSpeak.setText(context.getString(R.string.brick_note_default_value));
+        return prototypeView;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        return null;
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		FormulaEditorFragment.showFragment(view, this, BrickField.NOTE);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        FormulaEditorFragment.showFragment(view, this, BrickField.NOTE);
+    }
 }

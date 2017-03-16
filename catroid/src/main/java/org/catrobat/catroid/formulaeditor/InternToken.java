@@ -28,123 +28,123 @@ import java.util.List;
 
 public class InternToken {
 
-	private String tokenStringValue = "";
-	private InternTokenType internTokenType;
+    private String tokenStringValue = "";
+    private InternTokenType internTokenType;
 
-	public InternToken(InternTokenType internTokenType) {
-		this.internTokenType = internTokenType;
-	}
+    public InternToken(InternTokenType internTokenType) {
+        this.internTokenType = internTokenType;
+    }
 
-	public InternToken(InternTokenType internTokenType, String tokenStringValue) {
-		this.tokenStringValue = tokenStringValue;
-		this.internTokenType = internTokenType;
-	}
+    public InternToken(InternTokenType internTokenType, String tokenStringValue) {
+        this.tokenStringValue = tokenStringValue;
+        this.internTokenType = internTokenType;
+    }
 
-	public void setTokenStringValue(String tokenString) {
-		this.tokenStringValue = tokenString;
-	}
+    public void setTokenStringValue(String tokenString) {
+        this.tokenStringValue = tokenString;
+    }
 
-	public String getTokenStringValue() {
-		return this.tokenStringValue;
-	}
+    public String getTokenStringValue() {
+        return this.tokenStringValue;
+    }
 
-	public void updateVariableReferences(String oldName, String newName) {
-		if (internTokenType == InternTokenType.USER_VARIABLE && tokenStringValue.equals(oldName)) {
-			tokenStringValue = newName;
-		}
-	}
+    public void updateVariableReferences(String oldName, String newName) {
+        if (internTokenType == InternTokenType.USER_VARIABLE && tokenStringValue.equals(oldName)) {
+            tokenStringValue = newName;
+        }
+    }
 
-	public void getVariableAndListNames(List<String> variables, List<String> lists) {
-		if (internTokenType == InternTokenType.USER_VARIABLE && !variables.contains(tokenStringValue)) {
-			variables.add(tokenStringValue);
-		}
-		if (internTokenType == InternTokenType.USER_LIST && !lists.contains(tokenStringValue)) {
-			lists.add(tokenStringValue);
-		}
-	}
+    public void getVariableAndListNames(List<String> variables, List<String> lists) {
+        if (internTokenType == InternTokenType.USER_VARIABLE && !variables.contains(tokenStringValue)) {
+            variables.add(tokenStringValue);
+        }
+        if (internTokenType == InternTokenType.USER_LIST && !lists.contains(tokenStringValue)) {
+            lists.add(tokenStringValue);
+        }
+    }
 
-	public void updateCollisionFormula(String oldName, String newName) {
-		if (internTokenType == InternTokenType.COLLISION_FORMULA && tokenStringValue.equals(oldName)) {
-			tokenStringValue = newName;
-		}
-	}
+    public void updateCollisionFormula(String oldName, String newName) {
+        if (internTokenType == InternTokenType.COLLISION_FORMULA && tokenStringValue.equals(oldName)) {
+            tokenStringValue = newName;
+        }
+    }
 
-	public void updateCollisionFormulaToVersion(float catroidLanguageVersion) {
-		if (catroidLanguageVersion == 0.993f && internTokenType == InternTokenType.COLLISION_FORMULA) {
-			String secondSpriteName = CollisionDetection.getSecondSpriteNameFromCollisionFormulaString(tokenStringValue);
-			if (secondSpriteName != null) {
-				tokenStringValue = secondSpriteName;
-			}
-		}
-	}
+    public void updateCollisionFormulaToVersion(float catroidLanguageVersion) {
+        if (catroidLanguageVersion == 0.993f && internTokenType == InternTokenType.COLLISION_FORMULA) {
+            String secondSpriteName = CollisionDetection.getSecondSpriteNameFromCollisionFormulaString(tokenStringValue);
+            if (secondSpriteName != null) {
+                tokenStringValue = secondSpriteName;
+            }
+        }
+    }
 
-	public boolean isNumber() {
-		return internTokenType == InternTokenType.NUMBER;
-	}
+    public boolean isNumber() {
+        return internTokenType == InternTokenType.NUMBER;
+    }
 
-	public boolean isOperator() {
-		return internTokenType == InternTokenType.OPERATOR && Operators.isOperator(tokenStringValue);
-	}
+    public boolean isOperator() {
+        return internTokenType == InternTokenType.OPERATOR && Operators.isOperator(tokenStringValue);
+    }
 
-	public boolean isBracketClose() {
-		return internTokenType == InternTokenType.BRACKET_CLOSE;
-	}
+    public boolean isBracketClose() {
+        return internTokenType == InternTokenType.BRACKET_CLOSE;
+    }
 
-	public boolean isFunctionParameterBracketOpen() {
-		return internTokenType == InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN;
-	}
+    public boolean isFunctionParameterBracketOpen() {
+        return internTokenType == InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN;
+    }
 
-	public boolean isFunctionParameterBracketClose() {
-		return internTokenType == InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE;
-	}
+    public boolean isFunctionParameterBracketClose() {
+        return internTokenType == InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE;
+    }
 
-	public boolean isFunctionParameterDelimiter() {
-		return internTokenType == InternTokenType.FUNCTION_PARAMETER_DELIMITER;
-	}
+    public boolean isFunctionParameterDelimiter() {
+        return internTokenType == InternTokenType.FUNCTION_PARAMETER_DELIMITER;
+    }
 
-	public boolean isFunctionName() {
-		return internTokenType == InternTokenType.FUNCTION_NAME;
-	}
+    public boolean isFunctionName() {
+        return internTokenType == InternTokenType.FUNCTION_NAME;
+    }
 
-	public boolean isSensor() {
-		return internTokenType == InternTokenType.SENSOR;
-	}
+    public boolean isSensor() {
+        return internTokenType == InternTokenType.SENSOR;
+    }
 
-	public boolean isEndOfFileToken() {
-		return internTokenType == InternTokenType.PARSER_END_OF_FILE;
-	}
+    public boolean isEndOfFileToken() {
+        return internTokenType == InternTokenType.PARSER_END_OF_FILE;
+    }
 
-	public boolean isUserVariable() {
-		return internTokenType == InternTokenType.USER_VARIABLE;
-	}
+    public boolean isUserVariable() {
+        return internTokenType == InternTokenType.USER_VARIABLE;
+    }
 
-	public boolean isUserVariable(String name) {
-		return internTokenType == InternTokenType.USER_VARIABLE && tokenStringValue.equals(name);
-	}
+    public boolean isUserVariable(String name) {
+        return internTokenType == InternTokenType.USER_VARIABLE && tokenStringValue.equals(name);
+    }
 
-	public boolean isUserList() {
-		return internTokenType == InternTokenType.USER_LIST;
-	}
+    public boolean isUserList() {
+        return internTokenType == InternTokenType.USER_LIST;
+    }
 
-	public boolean isString() {
-		return internTokenType == InternTokenType.STRING;
-	}
+    public boolean isString() {
+        return internTokenType == InternTokenType.STRING;
+    }
 
-	public void appendToTokenStringValue(String stringToAppend) {
-		this.tokenStringValue += stringToAppend;
-	}
+    public void appendToTokenStringValue(String stringToAppend) {
+        this.tokenStringValue += stringToAppend;
+    }
 
-	public void appendToTokenStringValue(List<InternToken> internTokensToAppend) {
-		for (InternToken internToken : internTokensToAppend) {
-			this.tokenStringValue += internToken.tokenStringValue;
-		}
-	}
+    public void appendToTokenStringValue(List<InternToken> internTokensToAppend) {
+        for (InternToken internToken : internTokensToAppend) {
+            this.tokenStringValue += internToken.tokenStringValue;
+        }
+    }
 
-	public InternTokenType getInternTokenType() {
-		return this.internTokenType;
-	}
+    public InternTokenType getInternTokenType() {
+        return this.internTokenType;
+    }
 
-	public InternToken deepCopy() {
-		return new InternToken(internTokenType, tokenStringValue);
-	}
+    public InternToken deepCopy() {
+        return new InternToken(internTokenType, tokenStringValue);
+    }
 }

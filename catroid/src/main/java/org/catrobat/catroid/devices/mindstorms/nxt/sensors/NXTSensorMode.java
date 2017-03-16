@@ -23,15 +23,15 @@
 package org.catrobat.catroid.devices.mindstorms.nxt.sensors;
 
 public enum NXTSensorMode {
-	RAW(0x00), BOOL(0x20), Percent(0x80);
+    RAW(0x00), BOOL(0x20), Percent(0x80);
 
-	private int sensorModeValue;
+    private int sensorModeValue;
 
-	private NXTSensorMode(int sensorModeValue) {
-		this.sensorModeValue = sensorModeValue;
-	}
+    private NXTSensorMode(int sensorModeValue) {
+        this.sensorModeValue = sensorModeValue;
+    }
 
-	public byte getByte() {
-		return (byte) sensorModeValue;
-	}
+    public byte getByte() {
+        return (byte) sensorModeValue;
+    }
 }

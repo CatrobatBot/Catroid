@@ -37,107 +37,107 @@ import java.util.HashMap;
 import java.util.List;
 
 public class LookAdapter extends LookBaseAdapter implements ActionModeActivityAdapterInterface,
-		LookController.OnBackpackLookCompleteListener {
+        LookController.OnBackpackLookCompleteListener {
 
-	private static final int INVALID_ID = -1;
+    private static final int INVALID_ID = -1;
 
-	private LookFragment lookFragment;
+    private LookFragment lookFragment;
 
-	private HashMap<LookData, Integer> idMap = new HashMap<>();
+    private HashMap<LookData, Integer> idMap = new HashMap<>();
 
-	public LookAdapter(final Context context, int resource, int textViewResourceId, List<LookData> items,
-			boolean showDetails) {
-		super(context, resource, textViewResourceId, items, showDetails, false);
-		for (int i = 0; i < items.size(); ++i) {
-			idMap.put(items.get(i), i);
-		}
-	}
+    public LookAdapter(final Context context, int resource, int textViewResourceId, List<LookData> items,
+                       boolean showDetails) {
+        super(context, resource, textViewResourceId, items, showDetails, false);
+        for (int i = 0; i < items.size(); ++i) {
+            idMap.put(items.get(i), i);
+        }
+    }
 
-	@Override
-	public long getItemId(int position) {
-		if (position < 0 || position >= idMap.size()) {
-			return INVALID_ID;
-		}
+    @Override
+    public long getItemId(int position) {
+        if (position < 0 || position >= idMap.size()) {
+            return INVALID_ID;
+        }
 
-		LookData item = getItem(position);
-		if (!idMap.containsKey(item)) {
-			idMap.clear();
-			for (int i = 0; i < getCount(); i++) {
-				idMap.put(getItem(i), i);
-			}
-		}
+        LookData item = getItem(position);
+        if (!idMap.containsKey(item)) {
+            idMap.clear();
+            for (int i = 0; i < getCount(); i++) {
+                idMap.put(getItem(i), i);
+            }
+        }
 
-		return idMap.get(item);
-	}
+        return idMap.get(item);
+    }
 
-	@Override
-	public void notifyDataSetChanged() {
-		super.notifyDataSetChanged();
-		if (getCount() != idMap.size()) {
-			idMap.clear();
-			for (int i = 0; i < getCount(); i++) {
-				idMap.put(getItem(i), i);
-			}
-		}
-	}
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        if (getCount() != idMap.size()) {
+            idMap.clear();
+            for (int i = 0; i < getCount(); i++) {
+                idMap.put(getItem(i), i);
+            }
+        }
+    }
 
-	public void hardSetIdMapForTesting() {
-		if (getCount() != idMap.size()) {
-			idMap.clear();
-			for (int i = 0; i < getCount(); i++) {
-				idMap.put(getItem(i), i);
-			}
-		}
-	}
+    public void hardSetIdMapForTesting() {
+        if (getCount() != idMap.size()) {
+            idMap.clear();
+            for (int i = 0; i < getCount(); i++) {
+                idMap.put(getItem(i), i);
+            }
+        }
+    }
 
-	@Override
-	public boolean hasStableIds() {
-		return true;
-	}
+    @Override
+    public boolean hasStableIds() {
+        return true;
+    }
 
-	@Override
-	public View getView(final int position, View convertView, ViewGroup parent) {
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
-		if (lookFragment == null) {
-			return convertView;
-		}
-		return lookFragment.getView(position, convertView);
-	}
+        if (lookFragment == null) {
+            return convertView;
+        }
+        return lookFragment.getView(position, convertView);
+    }
 
-	public void onDestroyActionModeBackPack() {
-		List<LookData> lookDataListToBackpack = new ArrayList<>();
-		for (Integer position : checkedLookPositions) {
-			lookDataListToBackpack.add(lookDataItems.get(position));
-		}
+    public void onDestroyActionModeBackPack() {
+        List<LookData> lookDataListToBackpack = new ArrayList<>();
+        for (Integer position : checkedLookPositions) {
+            lookDataListToBackpack.add(lookDataItems.get(position));
+        }
 
-		boolean looksAlreadyInBackpack = LookController.getInstance().checkLookReplaceInBackpack(lookDataListToBackpack);
+        boolean looksAlreadyInBackpack = LookController.getInstance().checkLookReplaceInBackpack(lookDataListToBackpack);
 
-		if (!lookDataListToBackpack.isEmpty()) {
-			if (!looksAlreadyInBackpack) {
-				for (LookData lookDataToBackpack : lookDataListToBackpack) {
-					LookController.getInstance().backPackVisibleLook(lookDataToBackpack);
-					onBackpackLookComplete(true);
-				}
-			} else {
-				LookController.getInstance().setOnBackpackLookCompleteListener(this);
-				LookController.getInstance().showBackPackReplaceDialog(lookDataListToBackpack, lookFragment.getActivity());
-			}
-		} else {
-			lookFragment.clearCheckedLooksAndEnableButtons();
-		}
-	}
+        if (!lookDataListToBackpack.isEmpty()) {
+            if (!looksAlreadyInBackpack) {
+                for (LookData lookDataToBackpack : lookDataListToBackpack) {
+                    LookController.getInstance().backPackVisibleLook(lookDataToBackpack);
+                    onBackpackLookComplete(true);
+                }
+            } else {
+                LookController.getInstance().setOnBackpackLookCompleteListener(this);
+                LookController.getInstance().showBackPackReplaceDialog(lookDataListToBackpack, lookFragment.getActivity());
+            }
+        } else {
+            lookFragment.clearCheckedLooksAndEnableButtons();
+        }
+    }
 
-	public void setLookFragment(LookFragment lookFragment) {
-		this.lookFragment = lookFragment;
-	}
+    public void setLookFragment(LookFragment lookFragment) {
+        this.lookFragment = lookFragment;
+    }
 
-	@Override
-	public void onBackpackLookComplete(boolean startBackpackActivity) {
-		if (!checkedLookPositions.isEmpty() && startBackpackActivity) {
-			Intent intent = new Intent(lookFragment.getActivity(), BackPackActivity.class);
-			intent.putExtra(BackPackActivity.EXTRA_FRAGMENT_POSITION, BackPackActivity.FRAGMENT_BACKPACK_LOOKS);
-			lookFragment.getActivity().startActivity(intent);
-		}
-		lookFragment.clearCheckedLooksAndEnableButtons();
-	}
+    @Override
+    public void onBackpackLookComplete(boolean startBackpackActivity) {
+        if (!checkedLookPositions.isEmpty() && startBackpackActivity) {
+            Intent intent = new Intent(lookFragment.getActivity(), BackPackActivity.class);
+            intent.putExtra(BackPackActivity.EXTRA_FRAGMENT_POSITION, BackPackActivity.FRAGMENT_BACKPACK_LOOKS);
+            lookFragment.getActivity().startActivity(intent);
+        }
+        lookFragment.clearCheckedLooksAndEnableButtons();
+    }
 }

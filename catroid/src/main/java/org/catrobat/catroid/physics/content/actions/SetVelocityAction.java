@@ -33,40 +33,40 @@ import org.catrobat.catroid.physics.PhysicsObject;
 
 public class SetVelocityAction extends TemporalAction {
 
-	private Sprite sprite;
-	private PhysicsObject physicsObject;
-	private Formula velocityX;
-	private Formula velocityY;
+    private Sprite sprite;
+    private PhysicsObject physicsObject;
+    private Formula velocityX;
+    private Formula velocityY;
 
-	@Override
-	protected void update(float percent) {
-		Float newVelocityX;
-		try {
-			newVelocityX = velocityX == null ? Float.valueOf(0f) : velocityX.interpretFloat(sprite);
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-			return;
-		}
-		Float newVelocityY;
-		try {
-			newVelocityY = velocityY == null ? Float.valueOf(0f) : velocityY.interpretFloat(sprite);
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-			return;
-		}
-		physicsObject.setVelocity(newVelocityX, newVelocityY);
-	}
+    @Override
+    protected void update(float percent) {
+        Float newVelocityX;
+        try {
+            newVelocityX = velocityX == null ? Float.valueOf(0f) : velocityX.interpretFloat(sprite);
+        } catch (InterpretationException interpretationException) {
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+            return;
+        }
+        Float newVelocityY;
+        try {
+            newVelocityY = velocityY == null ? Float.valueOf(0f) : velocityY.interpretFloat(sprite);
+        } catch (InterpretationException interpretationException) {
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+            return;
+        }
+        physicsObject.setVelocity(newVelocityX, newVelocityY);
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setPhysicsObject(PhysicsObject physicsObject) {
-		this.physicsObject = physicsObject;
-	}
+    public void setPhysicsObject(PhysicsObject physicsObject) {
+        this.physicsObject = physicsObject;
+    }
 
-	public void setVelocity(Formula velocityX, Formula velocityY) {
-		this.velocityX = velocityX;
-		this.velocityY = velocityY;
-	}
+    public void setVelocity(Formula velocityX, Formula velocityY) {
+        this.velocityX = velocityX;
+        this.velocityY = velocityY;
+    }
 }

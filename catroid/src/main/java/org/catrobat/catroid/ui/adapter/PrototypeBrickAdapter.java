@@ -35,38 +35,38 @@ import java.util.List;
 
 public class PrototypeBrickAdapter extends BrickBaseAdapter {
 
-	public PrototypeBrickAdapter(Context context, ScriptFragment scriptFragment, AddBrickFragment addBrickFragment, List<Brick> brickList) {
-		this.context = context;
-		this.scriptFragment = scriptFragment;
-		this.addBrickFragment = addBrickFragment;
-		this.brickList = brickList;
-	}
+    public PrototypeBrickAdapter(Context context, ScriptFragment scriptFragment, AddBrickFragment addBrickFragment, List<Brick> brickList) {
+        this.context = context;
+        this.scriptFragment = scriptFragment;
+        this.addBrickFragment = addBrickFragment;
+        this.brickList = brickList;
+    }
 
-	@Override
-	public int getCount() {
-		return brickList.size();
-	}
+    @Override
+    public int getCount() {
+        return brickList.size();
+    }
 
-	@Override
-	public Brick getItem(int position) {
-		return brickList.get(position);
-	}
+    @Override
+    public Brick getItem(int position) {
+        return brickList.get(position);
+    }
 
-	@Override
-	public long getItemId(int position) {
-		return position;
-	}
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
-	@Override
-	public int getItemViewType(int position) {
-		return position;
-	}
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		Brick brick = brickList.get(position);
-		View view = brick.getPrototypeView(context);
-		BrickViewProvider.setSpinnerClickability(view, false);
-		return view;
-	}
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        Brick brick = brickList.get(position);
+        View view = brick.getPrototypeView(context);
+        BrickViewProvider.setSpinnerClickability(view, false);
+        return view;
+    }
 }

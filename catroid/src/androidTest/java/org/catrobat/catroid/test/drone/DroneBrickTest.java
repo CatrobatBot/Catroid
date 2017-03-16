@@ -31,16 +31,16 @@ import org.catrobat.catroid.drone.DroneBrickFactory.DroneBricks;
 
 public class DroneBrickTest extends InstrumentationTestCase {
 
-	private static final String TAG = DroneBrickTest.class.getSimpleName();
-	private static final int DRONE_RESOURCE = 0x20;
+    private static final String TAG = DroneBrickTest.class.getSimpleName();
+    private static final int DRONE_RESOURCE = 0x20;
 
-	public void testAllBrickResources() {
-		for (DroneBricks brick : DroneBrickFactory.DroneBricks.values()) {
-			BrickBaseType brickFromFactory = DroneBrickFactory.getInstanceOfDroneBrick(brick, 0, 0);
-			String brickName = brickFromFactory.getClass().getSimpleName();
-			Log.d(TAG, "brickName: " + brickName);
-			assertEquals("Resource is wrong for brick: " + brickName, DRONE_RESOURCE,
-					brickFromFactory.getRequiredResources());
-		}
-	}
+    public void testAllBrickResources() {
+        for (DroneBricks brick : DroneBrickFactory.DroneBricks.values()) {
+            BrickBaseType brickFromFactory = DroneBrickFactory.getInstanceOfDroneBrick(brick, 0, 0);
+            String brickName = brickFromFactory.getClass().getSimpleName();
+            Log.d(TAG, "brickName: " + brickName);
+            assertEquals("Resource is wrong for brick: " + brickName, DRONE_RESOURCE,
+                    brickFromFactory.getRequiredResources());
+        }
+    }
 }

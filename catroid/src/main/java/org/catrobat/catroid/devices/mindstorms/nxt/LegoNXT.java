@@ -29,21 +29,27 @@ import org.catrobat.catroid.formulaeditor.Sensors;
 
 public interface LegoNXT extends Mindstorms, BluetoothDevice {
 
-	void playTone(int frequency, int duration);
+    void playTone(int frequency, int duration);
 
-	NXTMotor getMotorA();
-	NXTMotor getMotorB();
-	NXTMotor getMotorC();
+    NXTMotor getMotorA();
 
-	void stopAllMovements();
+    NXTMotor getMotorB();
 
-	int getSensorValue(Sensors sensor);
+    NXTMotor getMotorC();
 
-	int getKeepAliveTime();
-	int getBatteryLevel();
+    void stopAllMovements();
 
-	MindstormsSensor getSensor1();
-	MindstormsSensor getSensor2();
-	MindstormsSensor getSensor3();
-	MindstormsSensor getSensor4();
+    int getSensorValue(Sensors sensor);
+
+    int getKeepAliveTime();
+
+    int getBatteryLevel();
+
+    MindstormsSensor getSensor1();
+
+    MindstormsSensor getSensor2();
+
+    MindstormsSensor getSensor3();
+
+    MindstormsSensor getSensor4();
 }

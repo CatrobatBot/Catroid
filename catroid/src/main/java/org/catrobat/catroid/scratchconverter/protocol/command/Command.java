@@ -31,64 +31,64 @@ import java.util.Map;
 
 public abstract class Command {
 
-	public enum Type {
-		AUTHENTICATE(0),
-		RETRIEVE_INFO(1),
-		SCHEDULE_JOB(2),
-		CANCEL_DOWNLOAD(3);
+    public enum Type {
+        AUTHENTICATE(0),
+        RETRIEVE_INFO(1),
+        SCHEDULE_JOB(2),
+        CANCEL_DOWNLOAD(3);
 
-		private final int typeID;
+        private final int typeID;
 
-		Type(final int typeID) {
-			this.typeID = typeID;
-		}
+        Type(final int typeID) {
+            this.typeID = typeID;
+        }
 
-		public int getTypeID() {
-			return typeID;
-		}
-	}
+        public int getTypeID() {
+            return typeID;
+        }
+    }
 
-	public enum ArgumentType {
-		CLIENT_ID("clientID"),
-		JOB_ID("jobID"),
-		FORCE("force"),
-		VERBOSE("verbose");
-		private final String rawValue;
+    public enum ArgumentType {
+        CLIENT_ID("clientID"),
+        JOB_ID("jobID"),
+        FORCE("force"),
+        VERBOSE("verbose");
+        private final String rawValue;
 
-		ArgumentType(final String rawValue) {
-			this.rawValue = rawValue;
-		}
+        ArgumentType(final String rawValue) {
+            this.rawValue = rawValue;
+        }
 
-		@Override
-		public String toString() {
-			return rawValue;
-		}
-	}
+        @Override
+        public String toString() {
+            return rawValue;
+        }
+    }
 
-	private final Type type;
-	private final Map<ArgumentType, Object> arguments;
+    private final Type type;
+    private final Map<ArgumentType, Object> arguments;
 
-	public Command(Type type) {
-		this.type = type;
-		this.arguments = new EnumMap<>(ArgumentType.class);
-	}
+    public Command(Type type) {
+        this.type = type;
+        this.arguments = new EnumMap<>(ArgumentType.class);
+    }
 
-	public void addArgument(ArgumentType type, Object value) {
-		arguments.put(type, value);
-	}
+    public void addArgument(ArgumentType type, Object value) {
+        arguments.put(type, value);
+    }
 
-	public JSONObject toJson() {
-		final Map<String, Object> args = new HashMap<>();
-		for (Map.Entry<ArgumentType, Object> entry : arguments.entrySet()) {
-			args.put(entry.getKey().toString(), entry.getValue());
-		}
-		final Map<String, Object> payloadMap = new HashMap<>();
-		payloadMap.put("cmd", type.getTypeID());
-		payloadMap.put("args", args);
-		return new JSONObject(payloadMap);
-	}
+    public JSONObject toJson() {
+        final Map<String, Object> args = new HashMap<>();
+        for (Map.Entry<ArgumentType, Object> entry : arguments.entrySet()) {
+            args.put(entry.getKey().toString(), entry.getValue());
+        }
+        final Map<String, Object> payloadMap = new HashMap<>();
+        payloadMap.put("cmd", type.getTypeID());
+        payloadMap.put("args", args);
+        return new JSONObject(payloadMap);
+    }
 
-	public Type getType() {
-		return type;
-	}
+    public Type getType() {
+        return type;
+    }
 }

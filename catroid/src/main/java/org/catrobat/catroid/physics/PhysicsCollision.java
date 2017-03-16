@@ -35,95 +35,95 @@ import java.util.Map;
 
 public class PhysicsCollision implements ContactListener {
 
-	public static final String COLLISION_MESSAGE_ESCAPE_CHAR = "\t";
-	public static final String COLLISION_MESSAGE_CONNECTOR = "<" + COLLISION_MESSAGE_ESCAPE_CHAR
-			+ "-" + COLLISION_MESSAGE_ESCAPE_CHAR + ">";
-	public static final String COLLISION_WITH_ANYTHING_IDENTIFIER = COLLISION_MESSAGE_ESCAPE_CHAR
-			+ "ANYTHING" + COLLISION_MESSAGE_ESCAPE_CHAR;
+    public static final String COLLISION_MESSAGE_ESCAPE_CHAR = "\t";
+    public static final String COLLISION_MESSAGE_CONNECTOR = "<" + COLLISION_MESSAGE_ESCAPE_CHAR
+            + "-" + COLLISION_MESSAGE_ESCAPE_CHAR + ">";
+    public static final String COLLISION_WITH_ANYTHING_IDENTIFIER = COLLISION_MESSAGE_ESCAPE_CHAR
+            + "ANYTHING" + COLLISION_MESSAGE_ESCAPE_CHAR;
 
-	private PhysicsWorld physicsWorld;
+    private PhysicsWorld physicsWorld;
 
-	public PhysicsCollision(PhysicsWorld physicsWorld) {
-		this.physicsWorld = physicsWorld;
-	}
+    public PhysicsCollision(PhysicsWorld physicsWorld) {
+        this.physicsWorld = physicsWorld;
+    }
 
-	private Map<String, PhysicsCollisionBroadcast> physicsCollisionBroadcasts = new HashMap<>();
+    private Map<String, PhysicsCollisionBroadcast> physicsCollisionBroadcasts = new HashMap<>();
 
-	public static String generateBroadcastMessage(String collisionObjectOneIdentifier, String
-			collisionObjectTwoIdentifier) {
-		return collisionObjectOneIdentifier + COLLISION_MESSAGE_CONNECTOR + collisionObjectTwoIdentifier;
-	}
+    public static String generateBroadcastMessage(String collisionObjectOneIdentifier, String
+            collisionObjectTwoIdentifier) {
+        return collisionObjectOneIdentifier + COLLISION_MESSAGE_CONNECTOR + collisionObjectTwoIdentifier;
+    }
 
-	public static boolean isCollisionBroadcastMessage(String message) {
-		if (message == null) {
-			return false;
-		}
-		return message.contains(PhysicsCollision.COLLISION_MESSAGE_CONNECTOR);
-	}
+    public static boolean isCollisionBroadcastMessage(String message) {
+        if (message == null) {
+            return false;
+        }
+        return message.contains(PhysicsCollision.COLLISION_MESSAGE_CONNECTOR);
+    }
 
-	private static String generateKey(Sprite sprite1, Sprite sprite2) {
-		return sprite1.getName() + COLLISION_MESSAGE_CONNECTOR + sprite2.getName();
-	}
+    private static String generateKey(Sprite sprite1, Sprite sprite2) {
+        return sprite1.getName() + COLLISION_MESSAGE_CONNECTOR + sprite2.getName();
+    }
 
-	private void registerContact(Sprite sprite1, Sprite sprite2) {
-		String key1 = generateKey(sprite1, sprite2);
-		String key2 = generateKey(sprite2, sprite1);
-		if (!physicsCollisionBroadcasts.containsKey(key1)) {
-			PhysicsCollisionBroadcast physicsCollisionBroadcast = new PhysicsCollisionBroadcast(sprite1.getName(), sprite2.getName());
-			physicsCollisionBroadcasts.put(key1, physicsCollisionBroadcast);
-			physicsCollisionBroadcasts.put(key2, physicsCollisionBroadcast);
-		}
-		physicsCollisionBroadcasts.get(key1).increaseContactCounter();
-	}
+    private void registerContact(Sprite sprite1, Sprite sprite2) {
+        String key1 = generateKey(sprite1, sprite2);
+        String key2 = generateKey(sprite2, sprite1);
+        if (!physicsCollisionBroadcasts.containsKey(key1)) {
+            PhysicsCollisionBroadcast physicsCollisionBroadcast = new PhysicsCollisionBroadcast(sprite1.getName(), sprite2.getName());
+            physicsCollisionBroadcasts.put(key1, physicsCollisionBroadcast);
+            physicsCollisionBroadcasts.put(key2, physicsCollisionBroadcast);
+        }
+        physicsCollisionBroadcasts.get(key1).increaseContactCounter();
+    }
 
-	private void unregisterContact(Sprite sprite1, Sprite sprite2) {
-		String key1 = generateKey(sprite1, sprite2);
-		String key2 = generateKey(sprite2, sprite1);
-		if (physicsCollisionBroadcasts.containsKey(key1)) {
-			PhysicsCollisionBroadcast physicsCollisionBroadcast = physicsCollisionBroadcasts.get(key1);
-			physicsCollisionBroadcast.decreaseContactCounter();
+    private void unregisterContact(Sprite sprite1, Sprite sprite2) {
+        String key1 = generateKey(sprite1, sprite2);
+        String key2 = generateKey(sprite2, sprite1);
+        if (physicsCollisionBroadcasts.containsKey(key1)) {
+            PhysicsCollisionBroadcast physicsCollisionBroadcast = physicsCollisionBroadcasts.get(key1);
+            physicsCollisionBroadcast.decreaseContactCounter();
 
-			if (physicsCollisionBroadcast.getContactCounter() == 0) {
-				physicsCollisionBroadcast.sendBroadcast();
-				physicsCollisionBroadcasts.remove(key1);
-				physicsCollisionBroadcasts.remove(key2);
-			}
-		}
-	}
+            if (physicsCollisionBroadcast.getContactCounter() == 0) {
+                physicsCollisionBroadcast.sendBroadcast();
+                physicsCollisionBroadcasts.remove(key1);
+                physicsCollisionBroadcasts.remove(key2);
+            }
+        }
+    }
 
-	@Override
-	public void beginContact(Contact contact) {
-		Body a = contact.getFixtureA().getBody();
-		Body b = contact.getFixtureB().getBody();
+    @Override
+    public void beginContact(Contact contact) {
+        Body a = contact.getFixtureA().getBody();
+        Body b = contact.getFixtureB().getBody();
 
-		if (a.getUserData() instanceof Sprite && b.getUserData() instanceof PhysicsBoundaryBox.BoundaryBoxIdentifier) {
-			physicsWorld.bouncedOnEdge((Sprite) a.getUserData(), (PhysicsBoundaryBox.BoundaryBoxIdentifier) b.getUserData());
-		} else if (a.getUserData() instanceof PhysicsBoundaryBox.BoundaryBoxIdentifier && (b.getUserData() instanceof Sprite)) {
-			physicsWorld.bouncedOnEdge((Sprite) b.getUserData(), (PhysicsBoundaryBox.BoundaryBoxIdentifier) a.getUserData());
-		} else if (a.getUserData() instanceof Sprite && b.getUserData() instanceof Sprite) {
-			Sprite sprite1 = (Sprite) a.getUserData();
-			Sprite sprite2 = (Sprite) b.getUserData();
-			registerContact(sprite1, sprite2);
-		}
-	}
+        if (a.getUserData() instanceof Sprite && b.getUserData() instanceof PhysicsBoundaryBox.BoundaryBoxIdentifier) {
+            physicsWorld.bouncedOnEdge((Sprite) a.getUserData(), (PhysicsBoundaryBox.BoundaryBoxIdentifier) b.getUserData());
+        } else if (a.getUserData() instanceof PhysicsBoundaryBox.BoundaryBoxIdentifier && (b.getUserData() instanceof Sprite)) {
+            physicsWorld.bouncedOnEdge((Sprite) b.getUserData(), (PhysicsBoundaryBox.BoundaryBoxIdentifier) a.getUserData());
+        } else if (a.getUserData() instanceof Sprite && b.getUserData() instanceof Sprite) {
+            Sprite sprite1 = (Sprite) a.getUserData();
+            Sprite sprite2 = (Sprite) b.getUserData();
+            registerContact(sprite1, sprite2);
+        }
+    }
 
-	@Override
-	public void endContact(Contact contact) {
-		Body a = contact.getFixtureA().getBody();
-		Body b = contact.getFixtureB().getBody();
+    @Override
+    public void endContact(Contact contact) {
+        Body a = contact.getFixtureA().getBody();
+        Body b = contact.getFixtureB().getBody();
 
-		if (a.getUserData() instanceof Sprite && b.getUserData() instanceof Sprite) {
-			Sprite sprite1 = (Sprite) a.getUserData();
-			Sprite sprite2 = (Sprite) b.getUserData();
-			unregisterContact(sprite1, sprite2);
-		}
-	}
+        if (a.getUserData() instanceof Sprite && b.getUserData() instanceof Sprite) {
+            Sprite sprite1 = (Sprite) a.getUserData();
+            Sprite sprite2 = (Sprite) b.getUserData();
+            unregisterContact(sprite1, sprite2);
+        }
+    }
 
-	@Override
-	public void preSolve(Contact contact, Manifold oldManifold) {
-	}
+    @Override
+    public void preSolve(Contact contact, Manifold oldManifold) {
+    }
 
-	@Override
-	public void postSolve(Contact contact, ContactImpulse impulse) {
-	}
+    @Override
+    public void postSolve(Contact contact, ContactImpulse impulse) {
+    }
 }

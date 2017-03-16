@@ -39,98 +39,98 @@ import java.util.List;
 
 public class RaspiSendDigitalValueBrick extends FormulaBrick {
 
-	private static final long serialVersionUID = 1L;
-	private transient View prototypeView;
+    private static final long serialVersionUID = 1L;
+    private transient View prototypeView;
 
-	public RaspiSendDigitalValueBrick() {
-		addAllowedBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER);
-		addAllowedBrickField(BrickField.RASPI_DIGITAL_PIN_VALUE);
-	}
+    public RaspiSendDigitalValueBrick() {
+        addAllowedBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER);
+        addAllowedBrickField(BrickField.RASPI_DIGITAL_PIN_VALUE);
+    }
 
-	public RaspiSendDigitalValueBrick(int pinNumber, int pinValue) {
-		initializeBrickFields(new Formula(pinNumber), new Formula(pinValue));
-	}
+    public RaspiSendDigitalValueBrick(int pinNumber, int pinValue) {
+        initializeBrickFields(new Formula(pinNumber), new Formula(pinValue));
+    }
 
-	public RaspiSendDigitalValueBrick(Formula pinNumber, Formula pinValue) {
-		initializeBrickFields(pinNumber, pinValue);
-	}
+    public RaspiSendDigitalValueBrick(Formula pinNumber, Formula pinValue) {
+        initializeBrickFields(pinNumber, pinValue);
+    }
 
-	public RaspiSendDigitalValueBrick(int pinNumber, String pinValue) {
-		initializeBrickFields(new Formula(pinNumber), new Formula(pinValue));
-	}
+    public RaspiSendDigitalValueBrick(int pinNumber, String pinValue) {
+        initializeBrickFields(new Formula(pinNumber), new Formula(pinValue));
+    }
 
-	private void initializeBrickFields(Formula pinNumber, Formula pinValue) {
-		addAllowedBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER);
-		addAllowedBrickField(BrickField.RASPI_DIGITAL_PIN_VALUE);
-		setFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER, pinNumber);
-		setFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_VALUE, pinValue);
-	}
+    private void initializeBrickFields(Formula pinNumber, Formula pinValue) {
+        addAllowedBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER);
+        addAllowedBrickField(BrickField.RASPI_DIGITAL_PIN_VALUE);
+        setFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER, pinNumber);
+        setFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_VALUE, pinValue);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return SOCKET_RASPI
-				| getFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER).getRequiredResources()
-				| getFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_VALUE).getRequiredResources();
-	}
+    @Override
+    public int getRequiredResources() {
+        return SOCKET_RASPI
+                | getFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER).getRequiredResources()
+                | getFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_VALUE).getRequiredResources();
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		prototypeView = View.inflate(context, R.layout.brick_raspi_send_digital, null);
+    @Override
+    public View getPrototypeView(Context context) {
+        prototypeView = View.inflate(context, R.layout.brick_raspi_send_digital, null);
 
-		TextView textSetPinNumber = (TextView) prototypeView.findViewById(R.id.brick_raspi_set_digital_pin_edit_text);
-		textSetPinNumber.setText(String.valueOf(BrickValues.RASPI_DIGITAL_INITIAL_PIN_NUMBER));
-		TextView textSetPinValue = (TextView) prototypeView.findViewById(R.id.brick_raspi_set_digital_value_edit_text);
-		textSetPinValue.setText(String.valueOf(BrickValues.RASPI_DIGITAL_INITIAL_PIN_VALUE));
+        TextView textSetPinNumber = (TextView) prototypeView.findViewById(R.id.brick_raspi_set_digital_pin_edit_text);
+        textSetPinNumber.setText(String.valueOf(BrickValues.RASPI_DIGITAL_INITIAL_PIN_NUMBER));
+        TextView textSetPinValue = (TextView) prototypeView.findViewById(R.id.brick_raspi_set_digital_value_edit_text);
+        textSetPinValue.setText(String.valueOf(BrickValues.RASPI_DIGITAL_INITIAL_PIN_VALUE));
 
-		return prototypeView;
-	}
+        return prototypeView;
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-		if (view == null) {
-			alphaValue = 255;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
+        if (view == null) {
+            alphaValue = 255;
+        }
 
-		view = View.inflate(context, R.layout.brick_raspi_send_digital, null);
-		view = BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_raspi_send_digital, null);
+        view = BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_raspi_send_digital_checkbox);
-		TextView editPinNumber = (TextView) view.findViewById(R.id.brick_raspi_set_digital_pin_edit_text);
-		getFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER).setTextFieldId(R.id.brick_raspi_set_digital_pin_edit_text);
-		getFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER).refreshTextField(view);
+        setCheckboxView(R.id.brick_raspi_send_digital_checkbox);
+        TextView editPinNumber = (TextView) view.findViewById(R.id.brick_raspi_set_digital_pin_edit_text);
+        getFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER).setTextFieldId(R.id.brick_raspi_set_digital_pin_edit_text);
+        getFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER).refreshTextField(view);
 
-		editPinNumber.setOnClickListener(this);
+        editPinNumber.setOnClickListener(this);
 
-		TextView editPinValue = (TextView) view.findViewById(R.id.brick_raspi_set_digital_value_edit_text);
-		getFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_VALUE).setTextFieldId(R.id.brick_raspi_set_digital_value_edit_text);
-		getFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_VALUE).refreshTextField(view);
+        TextView editPinValue = (TextView) view.findViewById(R.id.brick_raspi_set_digital_value_edit_text);
+        getFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_VALUE).setTextFieldId(R.id.brick_raspi_set_digital_value_edit_text);
+        getFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_VALUE).refreshTextField(view);
 
-		editPinValue.setOnClickListener(this);
+        editPinValue.setOnClickListener(this);
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createSendDigitalRaspiValueAction(sprite,
-				getFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER),
-				getFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_VALUE)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createSendDigitalRaspiValueAction(sprite,
+                getFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_NUMBER),
+                getFormulaWithBrickField(BrickField.RASPI_DIGITAL_PIN_VALUE)));
+        return null;
+    }
 
-	public void showFormulaEditorToEditFormula(View view) {
-		switch (view.getId()) {
-			case R.id.brick_raspi_set_digital_value_edit_text:
-				FormulaEditorFragment.showFragment(view, this, BrickField.RASPI_DIGITAL_PIN_VALUE);
-				break;
+    public void showFormulaEditorToEditFormula(View view) {
+        switch (view.getId()) {
+            case R.id.brick_raspi_set_digital_value_edit_text:
+                FormulaEditorFragment.showFragment(view, this, BrickField.RASPI_DIGITAL_PIN_VALUE);
+                break;
 
-			case R.id.brick_raspi_set_digital_pin_edit_text:
-			default:
-				FormulaEditorFragment.showFragment(view, this, BrickField.RASPI_DIGITAL_PIN_NUMBER);
-				break;
-		}
-	}
+            case R.id.brick_raspi_set_digital_pin_edit_text:
+            default:
+                FormulaEditorFragment.showFragment(view, this, BrickField.RASPI_DIGITAL_PIN_NUMBER);
+                break;
+        }
+    }
 }

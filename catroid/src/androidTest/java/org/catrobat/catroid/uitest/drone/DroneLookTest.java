@@ -33,42 +33,42 @@ import org.catrobat.catroid.uitest.util.UiTestUtils;
 
 public class DroneLookTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
-	public DroneLookTest() {
-		super(MainMenuActivity.class);
-	}
+    public DroneLookTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	protected void setUp() throws Exception {
-		TestUtils.deleteTestProjects();
-		DroneTestUtils.createDefaultDroneProject();
-		SettingsActivity.enableARDroneBricks(getActivity(), true);
-		super.setUp();
-	}
+    @Override
+    protected void setUp() throws Exception {
+        TestUtils.deleteTestProjects();
+        DroneTestUtils.createDefaultDroneProject();
+        SettingsActivity.enableARDroneBricks(getActivity(), true);
+        super.setUp();
+    }
 
-	@Override
-	protected void tearDown() throws Exception {
-		SettingsActivity.enableARDroneBricks(getActivity(), false);
-		TestUtils.deleteTestProjects();
-		solo.finishOpenedActivities();
-		super.tearDown();
-	}
+    @Override
+    protected void tearDown() throws Exception {
+        SettingsActivity.enableARDroneBricks(getActivity(), false);
+        TestUtils.deleteTestProjects();
+        solo.finishOpenedActivities();
+        super.tearDown();
+    }
 
-	public void testAddLook() {
-		TestUtils.loadExistingOrCreateDefaultDroneProject(getActivity());
+    public void testAddLook() {
+        TestUtils.loadExistingOrCreateDefaultDroneProject(getActivity());
 
-		solo.waitForActivity(ProgramMenuActivity.class);
-		solo.clickOnText(solo.getString(R.string.programs));
-		solo.waitForText(solo.getString(R.string.default_project_name));
-		solo.clickOnText(solo.getString(R.string.default_project_name));
+        solo.waitForActivity(ProgramMenuActivity.class);
+        solo.clickOnText(solo.getString(R.string.programs));
+        solo.waitForText(solo.getString(R.string.default_project_name));
+        solo.clickOnText(solo.getString(R.string.default_project_name));
 
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_add);
-		boolean value = solo.waitForText(solo.getString(R.string.add_look_drone_video));
-		assertTrue(solo.getString(R.string.add_look_drone_video) + " not found!", value);
-		solo.clickOnText(solo.getString(R.string.add_look_drone_video));
-		solo.enterText(0, "Test 12345");
-		solo.clickOnText(solo.getString(R.string.ok));
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_add);
+        boolean value = solo.waitForText(solo.getString(R.string.add_look_drone_video));
+        assertTrue(solo.getString(R.string.add_look_drone_video) + " not found!", value);
+        solo.clickOnText(solo.getString(R.string.add_look_drone_video));
+        solo.enterText(0, "Test 12345");
+        solo.clickOnText(solo.getString(R.string.ok));
 
-		solo.goBack();
-		solo.goBack();
-	}
+        solo.goBack();
+        solo.goBack();
+    }
 }

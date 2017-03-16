@@ -39,151 +39,151 @@ import org.catrobat.catroid.uitest.util.BaseActivityInstrumentationTestCase;
 import org.catrobat.catroid.uitest.util.UiTestUtils;
 
 public class SceneStartBrickTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
-	private String sceneName;
-	private String sceneName2 = "testScene2";
+    private String sceneName;
+    private String sceneName2 = "testScene2";
 
-	public SceneStartBrickTest() {
-		super(MainMenuActivity.class);
-	}
+    public SceneStartBrickTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
 
-		createProject();
+        createProject();
 
-		UiTestUtils.prepareStageForTest();
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo, sceneName);
-	}
+        UiTestUtils.prepareStageForTest();
+        UiTestUtils.getIntoScriptActivityFromMainMenu(solo, sceneName);
+    }
 
-	public void testDismissNewSceneDialog() {
-		solo.clickOnText(sceneName2);
-		solo.clickOnText(solo.getString(R.string.new_broadcast_message));
-		solo.waitForDialogToOpen();
-		solo.goBack();
-		solo.waitForDialogToClose();
+    public void testDismissNewSceneDialog() {
+        solo.clickOnText(sceneName2);
+        solo.clickOnText(solo.getString(R.string.new_broadcast_message));
+        solo.waitForDialogToOpen();
+        solo.goBack();
+        solo.waitForDialogToClose();
 
-		assertEquals("Not in ScriptActivity", "ui.ScriptActivity", solo.getCurrentActivity().getLocalClassName());
-		assertTrue("Spinner not updated", solo.waitForText(sceneName2));
-	}
+        assertEquals("Not in ScriptActivity", "ui.ScriptActivity", solo.getCurrentActivity().getLocalClassName());
+        assertTrue("Spinner not updated", solo.waitForText(sceneName2));
+    }
 
-	public void testSelectSceneAndPlay() {
-		assertTrue(sceneName2 + " is not selected in Spinner", solo.isSpinnerTextSelected(sceneName2));
+    public void testSelectSceneAndPlay() {
+        assertTrue(sceneName2 + " is not selected in Spinner", solo.isSpinnerTextSelected(sceneName2));
 
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
 
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(2000);
-		Scene scene = ProjectManager.getInstance().getSceneToPlay();
-		assertEquals("scene not set", scene.getName(), sceneName2);
-		solo.goBack();
-		solo.goBack();
-		solo.waitForActivity(ScriptActivity.class.getSimpleName());
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(2000);
+        Scene scene = ProjectManager.getInstance().getSceneToPlay();
+        assertEquals("scene not set", scene.getName(), sceneName2);
+        solo.goBack();
+        solo.goBack();
+        solo.waitForActivity(ScriptActivity.class.getSimpleName());
 
-		solo.clickOnText(sceneName2);
-		solo.clickOnText(sceneName, 2);
-		assertTrue(sceneName + " is not selected in Spinner", solo.searchText(sceneName, 2));
+        solo.clickOnText(sceneName2);
+        solo.clickOnText(sceneName, 2);
+        assertTrue(sceneName + " is not selected in Spinner", solo.searchText(sceneName, 2));
 
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
 
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(2000);
-		scene = ProjectManager.getInstance().getSceneToPlay();
-		assertEquals("scene not set", sceneName, scene.getName());
-	}
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(2000);
+        scene = ProjectManager.getInstance().getSceneToPlay();
+        assertEquals("scene not set", sceneName, scene.getName());
+    }
 
-	public void testSpinnerUpdatesDelete() {
-		solo.clickOnText(sceneName2);
+    public void testSpinnerUpdatesDelete() {
+        solo.clickOnText(sceneName2);
 
-		assertTrue(sceneName + " is not in Spinner", solo.searchText(sceneName, 2));
-		assertTrue(sceneName2 + " is not in Spinner", solo.searchText(sceneName2));
+        assertTrue(sceneName + " is not in Spinner", solo.searchText(sceneName, 2));
+        assertTrue(sceneName2 + " is not in Spinner", solo.searchText(sceneName2));
 
-		solo.goBack();
-		solo.goBack();
-		solo.goBack();
-		solo.goBack();
+        solo.goBack();
+        solo.goBack();
+        solo.goBack();
+        solo.goBack();
 
-		clickOnContextMenuItem(sceneName2, solo.getString(R.string.delete));
-		solo.clickOnButton(solo.getString(R.string.yes));
+        clickOnContextMenuItem(sceneName2, solo.getString(R.string.delete));
+        solo.clickOnButton(solo.getString(R.string.yes));
 
-		solo.goBack();
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
+        solo.goBack();
+        UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
 
-		solo.clickOnText(sceneName, 1);
+        solo.clickOnText(sceneName, 1);
 
-		assertFalse(sceneName2 + " is still in Spinner", solo.searchText(sceneName2));
-		assertTrue(sceneName + " is not in Spinner", solo.searchText(sceneName, 2));
-	}
+        assertFalse(sceneName2 + " is still in Spinner", solo.searchText(sceneName2));
+        assertTrue(sceneName + " is not in Spinner", solo.searchText(sceneName, 2));
+    }
 
-	public void testSpinnerUpdatesRename() {
-		String newName = "nameRenamed";
+    public void testSpinnerUpdatesRename() {
+        String newName = "nameRenamed";
 
-		solo.clickOnText(sceneName2);
+        solo.clickOnText(sceneName2);
 
-		assertTrue(sceneName + " is not in Spinner", solo.searchText(sceneName, 2));
-		assertTrue(sceneName2 + " is not in Spinner", solo.searchText(sceneName2));
+        assertTrue(sceneName + " is not in Spinner", solo.searchText(sceneName, 2));
+        assertTrue(sceneName2 + " is not in Spinner", solo.searchText(sceneName2));
 
-		solo.goBack();
-		solo.goBack();
-		solo.goBack();
-		solo.goBack();
+        solo.goBack();
+        solo.goBack();
+        solo.goBack();
+        solo.goBack();
 
-		clickOnContextMenuItem(sceneName2, solo.getString(R.string.rename));
+        clickOnContextMenuItem(sceneName2, solo.getString(R.string.rename));
 
-		solo.clearEditText(0);
-		solo.enterText(0, newName);
-		solo.clickOnButton(solo.getString(R.string.ok));
+        solo.clearEditText(0);
+        solo.enterText(0, newName);
+        solo.clickOnButton(solo.getString(R.string.ok));
 
-		solo.goBack();
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo, sceneName);
+        solo.goBack();
+        UiTestUtils.getIntoScriptActivityFromMainMenu(solo, sceneName);
 
-		solo.clickOnText(newName);
+        solo.clickOnText(newName);
 
-		assertTrue(newName + " is not in Spinner", solo.searchText(newName));
-		assertTrue(sceneName + " is not in Spinner", solo.searchText(sceneName, 2));
-	}
+        assertTrue(newName + " is not in Spinner", solo.searchText(newName));
+        assertTrue(sceneName + " is not in Spinner", solo.searchText(sceneName, 2));
+    }
 
-	public void testAddNewScene() {
-		String newName = "newScene";
-		String newText = solo.getString(R.string.new_broadcast_message);
+    public void testAddNewScene() {
+        String newName = "newScene";
+        String newText = solo.getString(R.string.new_broadcast_message);
 
-		solo.clickOnText(sceneName2);
-		solo.clickOnText(newText);
+        solo.clickOnText(sceneName2);
+        solo.clickOnText(newText);
 
-		solo.waitForFragmentByTag(NewSceneDialog.TAG);
-		solo.enterText(0, newName);
+        solo.waitForFragmentByTag(NewSceneDialog.TAG);
+        solo.enterText(0, newName);
 
-		solo.clickOnText(solo.getString(R.string.ok));
-		solo.waitForActivity(ScriptActivity.class.getSimpleName());
-		solo.goBack();
+        solo.clickOnText(solo.getString(R.string.ok));
+        solo.waitForActivity(ScriptActivity.class.getSimpleName());
+        solo.goBack();
 
-		assertTrue("No new scene", solo.searchText(newName));
-	}
+        assertTrue("No new scene", solo.searchText(newName));
+    }
 
-	private void createProject() {
-		ProjectManager projectManager = ProjectManager.getInstance();
-		Project project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Scene scene = new Scene(null, sceneName2, project);
-		project.addScene(scene);
-		Sprite firstSprite = new SingleSprite("cat");
-		Script testScript = new StartScript();
+    private void createProject() {
+        ProjectManager projectManager = ProjectManager.getInstance();
+        Project project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Scene scene = new Scene(null, sceneName2, project);
+        project.addScene(scene);
+        Sprite firstSprite = new SingleSprite("cat");
+        Script testScript = new StartScript();
 
-		SceneStartBrick sceneStartBrick = new SceneStartBrick(sceneName2);
-		testScript.addBrick(sceneStartBrick);
+        SceneStartBrick sceneStartBrick = new SceneStartBrick(sceneName2);
+        testScript.addBrick(sceneStartBrick);
 
-		firstSprite.addScript(testScript);
-		project.getDefaultScene().addSprite(firstSprite);
+        firstSprite.addScript(testScript);
+        project.getDefaultScene().addSprite(firstSprite);
 
-		projectManager.setProject(project);
-		projectManager.setCurrentScene(project.getDefaultScene());
-		projectManager.setCurrentSprite(firstSprite);
-		projectManager.setCurrentScript(testScript);
-		sceneName = project.getDefaultScene().getName();
-	}
+        projectManager.setProject(project);
+        projectManager.setCurrentScene(project.getDefaultScene());
+        projectManager.setCurrentSprite(firstSprite);
+        projectManager.setCurrentScript(testScript);
+        sceneName = project.getDefaultScene().getName();
+    }
 
-	private void clickOnContextMenuItem(String sceneName, String menuItemName) {
-		solo.clickLongOnText(sceneName);
-		solo.waitForText(menuItemName);
-		solo.clickOnText(menuItemName);
-	}
+    private void clickOnContextMenuItem(String sceneName, String menuItemName) {
+        solo.clickLongOnText(sceneName);
+        solo.waitForText(menuItemName);
+        solo.clickOnText(menuItemName);
+    }
 }

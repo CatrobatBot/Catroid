@@ -34,100 +34,100 @@ import org.catrobat.catroid.content.Sprite;
 
 public class PointToActionTest extends AndroidTestCase {
 
-	private static final float DELTA = 1e-7f;
+    private static final float DELTA = 1e-7f;
 
-	private Sprite sprite;
-	private Sprite pointedSprite;
+    private Sprite sprite;
+    private Sprite pointedSprite;
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		createProject();
-	}
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        createProject();
+    }
 
-	public void testPointTo() {
-		Action pointToAction = createPointToAction(sprite, pointedSprite);
+    public void testPointTo() {
+        Action pointToAction = createPointToAction(sprite, pointedSprite);
 
-		pointedSprite.look.setPosition(200f, 0f);
-		pointToAction.act(1.0f);
-		assertEquals("Wrong direction", 90f, sprite.look.getDirectionInUserInterfaceDimensionUnit(), DELTA);
+        pointedSprite.look.setPosition(200f, 0f);
+        pointToAction.act(1.0f);
+        assertEquals("Wrong direction", 90f, sprite.look.getDirectionInUserInterfaceDimensionUnit(), DELTA);
 
-		pointedSprite.look.setPosition(200f, 200f);
-		pointToAction.restart();
-		pointToAction.act(1.0f);
-		assertEquals("Wrong direction", 45f, sprite.look.getDirectionInUserInterfaceDimensionUnit(), DELTA);
+        pointedSprite.look.setPosition(200f, 200f);
+        pointToAction.restart();
+        pointToAction.act(1.0f);
+        assertEquals("Wrong direction", 45f, sprite.look.getDirectionInUserInterfaceDimensionUnit(), DELTA);
 
-		pointedSprite.look.setPosition(0f, 200f);
-		pointToAction.restart();
-		pointToAction.act(1.0f);
-		assertEquals("Wrong direction", 0f, sprite.look.getDirectionInUserInterfaceDimensionUnit(), DELTA);
+        pointedSprite.look.setPosition(0f, 200f);
+        pointToAction.restart();
+        pointToAction.act(1.0f);
+        assertEquals("Wrong direction", 0f, sprite.look.getDirectionInUserInterfaceDimensionUnit(), DELTA);
 
-		pointedSprite.look.setPosition(-200f, 200f);
-		pointToAction.restart();
-		pointToAction.act(1.0f);
-		assertEquals("Wrong direction", -45f, sprite.look.getDirectionInUserInterfaceDimensionUnit(), DELTA);
+        pointedSprite.look.setPosition(-200f, 200f);
+        pointToAction.restart();
+        pointToAction.act(1.0f);
+        assertEquals("Wrong direction", -45f, sprite.look.getDirectionInUserInterfaceDimensionUnit(), DELTA);
 
-		pointedSprite.look.setPosition(-200f, 0f);
-		pointToAction.restart();
-		pointToAction.act(1.0f);
-		assertEquals("Wrong direction", -90f, sprite.look.getDirectionInUserInterfaceDimensionUnit(), DELTA);
+        pointedSprite.look.setPosition(-200f, 0f);
+        pointToAction.restart();
+        pointToAction.act(1.0f);
+        assertEquals("Wrong direction", -90f, sprite.look.getDirectionInUserInterfaceDimensionUnit(), DELTA);
 
-		pointedSprite.look.setPosition(-200f, -200f);
-		pointToAction.restart();
-		pointToAction.act(1.0f);
-		assertEquals("Wrong direction", -135f, sprite.look.getDirectionInUserInterfaceDimensionUnit(), DELTA);
+        pointedSprite.look.setPosition(-200f, -200f);
+        pointToAction.restart();
+        pointToAction.act(1.0f);
+        assertEquals("Wrong direction", -135f, sprite.look.getDirectionInUserInterfaceDimensionUnit(), DELTA);
 
-		pointedSprite.look.setPosition(0f, -200f);
-		pointToAction.restart();
-		pointToAction.act(1.0f);
-		assertEquals("Wrong direction", 180f, sprite.look.getDirectionInUserInterfaceDimensionUnit(), DELTA);
+        pointedSprite.look.setPosition(0f, -200f);
+        pointToAction.restart();
+        pointToAction.act(1.0f);
+        assertEquals("Wrong direction", 180f, sprite.look.getDirectionInUserInterfaceDimensionUnit(), DELTA);
 
-		pointedSprite.look.setPosition(200f, -200f);
-		pointToAction.restart();
-		pointToAction.act(1.0f);
-		assertEquals("Wrong direction", 135f, sprite.look.getDirectionInUserInterfaceDimensionUnit(), DELTA);
-	}
+        pointedSprite.look.setPosition(200f, -200f);
+        pointToAction.restart();
+        pointToAction.act(1.0f);
+        assertEquals("Wrong direction", 135f, sprite.look.getDirectionInUserInterfaceDimensionUnit(), DELTA);
+    }
 
-	public void testPointToBothSpritesOnSamePosition() {
-		pointedSprite.look.setPositionInUserInterfaceDimensionUnit(0, 0);
-		sprite.look.setPositionInUserInterfaceDimensionUnit(0, 0);
-		sprite.look.setDirectionInUserInterfaceDimensionUnit(45);
+    public void testPointToBothSpritesOnSamePosition() {
+        pointedSprite.look.setPositionInUserInterfaceDimensionUnit(0, 0);
+        sprite.look.setPositionInUserInterfaceDimensionUnit(0, 0);
+        sprite.look.setDirectionInUserInterfaceDimensionUnit(45);
 
-		createPointToAction(sprite, pointedSprite).act(1.0f);
+        createPointToAction(sprite, pointedSprite).act(1.0f);
 
-		assertEquals("Wrong direction", 90f, sprite.look.getDirectionInUserInterfaceDimensionUnit(), DELTA);
-	}
+        assertEquals("Wrong direction", 90f, sprite.look.getDirectionInUserInterfaceDimensionUnit(), DELTA);
+    }
 
-	public void testPointedSpriteNull() {
-		sprite.look.setDirectionInUserInterfaceDimensionUnit(33);
-		final float previousDirection = sprite.look.getDirectionInUserInterfaceDimensionUnit();
+    public void testPointedSpriteNull() {
+        sprite.look.setDirectionInUserInterfaceDimensionUnit(33);
+        final float previousDirection = sprite.look.getDirectionInUserInterfaceDimensionUnit();
 
-		createPointToAction(sprite, null).act(1.0f);
+        createPointToAction(sprite, null).act(1.0f);
 
-		assertEquals("Wrong direction", previousDirection, sprite.look.getDirectionInUserInterfaceDimensionUnit(), DELTA);
-	}
+        assertEquals("Wrong direction", previousDirection, sprite.look.getDirectionInUserInterfaceDimensionUnit(), DELTA);
+    }
 
-	public void testSpriteNotInScene() {
-		sprite.look.setDirectionInUserInterfaceDimensionUnit(33);
-		final float previousDirection = sprite.look.getDirectionInUserInterfaceDimensionUnit();
+    public void testSpriteNotInScene() {
+        sprite.look.setDirectionInUserInterfaceDimensionUnit(33);
+        final float previousDirection = sprite.look.getDirectionInUserInterfaceDimensionUnit();
 
-		createPointToAction(sprite, new Sprite("Sprite not in Scene")).act(1.0f);
+        createPointToAction(sprite, new Sprite("Sprite not in Scene")).act(1.0f);
 
-		assertEquals("Wrong direction", previousDirection, sprite.look.getDirectionInUserInterfaceDimensionUnit(), DELTA);
-	}
+        assertEquals("Wrong direction", previousDirection, sprite.look.getDirectionInUserInterfaceDimensionUnit(), DELTA);
+    }
 
-	private Action createPointToAction(Sprite sprite, Sprite pointedSprite) {
-		return sprite.getActionFactory().createPointToAction(sprite, pointedSprite);
-	}
+    private Action createPointToAction(Sprite sprite, Sprite pointedSprite) {
+        return sprite.getActionFactory().createPointToAction(sprite, pointedSprite);
+    }
 
-	private void createProject() {
-		sprite = new SingleSprite("sprite");
-		pointedSprite = new SingleSprite("pointedSprite");
-		Project project = new Project();
-		Scene scene = new Scene();
-		project.addScene(scene);
-		project.getDefaultScene().addSprite(sprite);
-		project.getDefaultScene().addSprite(pointedSprite);
-		ProjectManager.getInstance().setProject(project);
-	}
+    private void createProject() {
+        sprite = new SingleSprite("sprite");
+        pointedSprite = new SingleSprite("pointedSprite");
+        Project project = new Project();
+        Scene scene = new Scene();
+        project.addScene(scene);
+        project.getDefaultScene().addSprite(sprite);
+        project.getDefaultScene().addSprite(pointedSprite);
+        ProjectManager.getInstance().setProject(project);
+    }
 }

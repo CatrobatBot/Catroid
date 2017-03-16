@@ -29,48 +29,48 @@ import org.catrobat.catroid.content.Sprite;
 
 public class PointToAction extends TemporalAction {
 
-	private Sprite sprite;
-	private Sprite pointedSprite;
+    private Sprite sprite;
+    private Sprite pointedSprite;
 
-	@Override
-	protected void update(float percent) {
-		if (pointedSprite == null
-				|| !ProjectManager.getInstance().getSceneToPlay().getSpriteList().contains(pointedSprite)) {
-			return;
-		}
+    @Override
+    protected void update(float percent) {
+        if (pointedSprite == null
+                || !ProjectManager.getInstance().getSceneToPlay().getSpriteList().contains(pointedSprite)) {
+            return;
+        }
 
-		float spriteXPosition = sprite.look.getXInUserInterfaceDimensionUnit();
-		float spriteYPosition = sprite.look.getYInUserInterfaceDimensionUnit();
-		float pointedSpriteXPosition = pointedSprite.look.getXInUserInterfaceDimensionUnit();
-		float pointedSpriteYPosition = pointedSprite.look.getYInUserInterfaceDimensionUnit();
+        float spriteXPosition = sprite.look.getXInUserInterfaceDimensionUnit();
+        float spriteYPosition = sprite.look.getYInUserInterfaceDimensionUnit();
+        float pointedSpriteXPosition = pointedSprite.look.getXInUserInterfaceDimensionUnit();
+        float pointedSpriteYPosition = pointedSprite.look.getYInUserInterfaceDimensionUnit();
 
-		double rotationDegrees;
-		if (spriteXPosition == pointedSpriteXPosition && spriteYPosition == pointedSpriteYPosition) {
-			rotationDegrees = 90;
-		} else if (spriteXPosition == pointedSpriteXPosition) {
-			if (spriteYPosition < pointedSpriteYPosition) {
-				rotationDegrees = 0;
-			} else {
-				rotationDegrees = 180;
-			}
-		} else if (spriteYPosition == pointedSpriteYPosition) {
-			if (spriteXPosition < pointedSpriteXPosition) {
-				rotationDegrees = 90;
-			} else {
-				rotationDegrees = -90;
-			}
-		} else {
-			rotationDegrees = 90f - Math.toDegrees(Math.atan2(pointedSpriteYPosition - spriteYPosition,
-					pointedSpriteXPosition - spriteXPosition));
-		}
-		sprite.look.setDirectionInUserInterfaceDimensionUnit((float) rotationDegrees);
-	}
+        double rotationDegrees;
+        if (spriteXPosition == pointedSpriteXPosition && spriteYPosition == pointedSpriteYPosition) {
+            rotationDegrees = 90;
+        } else if (spriteXPosition == pointedSpriteXPosition) {
+            if (spriteYPosition < pointedSpriteYPosition) {
+                rotationDegrees = 0;
+            } else {
+                rotationDegrees = 180;
+            }
+        } else if (spriteYPosition == pointedSpriteYPosition) {
+            if (spriteXPosition < pointedSpriteXPosition) {
+                rotationDegrees = 90;
+            } else {
+                rotationDegrees = -90;
+            }
+        } else {
+            rotationDegrees = 90f - Math.toDegrees(Math.atan2(pointedSpriteYPosition - spriteYPosition,
+                    pointedSpriteXPosition - spriteXPosition));
+        }
+        sprite.look.setDirectionInUserInterfaceDimensionUnit((float) rotationDegrees);
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setPointedSprite(Sprite pointedSprite) {
-		this.pointedSprite = pointedSprite;
-	}
+    public void setPointedSprite(Sprite pointedSprite) {
+        this.pointedSprite = pointedSprite;
+    }
 }

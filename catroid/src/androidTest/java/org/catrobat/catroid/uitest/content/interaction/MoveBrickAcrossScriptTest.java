@@ -45,78 +45,78 @@ import org.catrobat.catroid.uitest.util.UiTestUtils;
 import java.util.ArrayList;
 
 public class MoveBrickAcrossScriptTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
-	private ArrayList<Brick> brickListToCheck;
-	private ArrayList<Brick> secondBrickListForMoving;
-	private Sprite firstSprite;
+    private ArrayList<Brick> brickListToCheck;
+    private ArrayList<Brick> secondBrickListForMoving;
+    private Sprite firstSprite;
 
-	public MoveBrickAcrossScriptTest() {
-		super(MainMenuActivity.class);
-	}
+    public MoveBrickAcrossScriptTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		createProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
-	}
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        createProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        UiTestUtils.getIntoScriptActivityFromMainMenu(solo);
+    }
 
-	public void testMoveBrickAcrossScript() {
-		ScriptActivity activity = (ScriptActivity) solo.getCurrentActivity();
-		ScriptFragment fragment = (ScriptFragment) activity.getFragment(ScriptActivity.FRAGMENT_SCRIPTS);
-		BrickAdapter adapter = fragment.getAdapter();
+    public void testMoveBrickAcrossScript() {
+        ScriptActivity activity = (ScriptActivity) solo.getCurrentActivity();
+        ScriptFragment fragment = (ScriptFragment) activity.getFragment(ScriptActivity.FRAGMENT_SCRIPTS);
+        BrickAdapter adapter = fragment.getAdapter();
 
-		ArrayList<Integer> yPositionList = UiTestUtils.getListItemYPositions(solo, 0);
-		assertTrue("Test project brick list smaller than expected", yPositionList.size() >= 4);
+        ArrayList<Integer> yPositionList = UiTestUtils.getListItemYPositions(solo, 0);
+        assertTrue("Test project brick list smaller than expected", yPositionList.size() >= 4);
 
-		int numberOfBricks = ProjectManager.getInstance().getCurrentScript().getBrickList().size();
-		UiTestUtils.longClickAndDrag(solo, 10, yPositionList.get(2), 10, yPositionList.get(5), 10);
-		assertTrue("Number of Bricks inside Script hasn't changed", (numberOfBricks - 1) == ProjectManager
-				.getInstance().getCurrentScript().getBrickList().size());
-		assertEquals("Incorrect Brick after dragging over Script", (Brick) adapter.getItem(4) instanceof WaitBrick,
-				true);
-	}
+        int numberOfBricks = ProjectManager.getInstance().getCurrentScript().getBrickList().size();
+        UiTestUtils.longClickAndDrag(solo, 10, yPositionList.get(2), 10, yPositionList.get(5), 10);
+        assertTrue("Number of Bricks inside Script hasn't changed", (numberOfBricks - 1) == ProjectManager
+                .getInstance().getCurrentScript().getBrickList().size());
+        assertEquals("Incorrect Brick after dragging over Script", (Brick) adapter.getItem(4) instanceof WaitBrick,
+                true);
+    }
 
-	private void createProject(String projectName) {
-		double size = 0.8;
+    private void createProject(String projectName) {
+        double size = 0.8;
 
-		Project project = new Project(null, projectName);
-		firstSprite = new SingleSprite("cat");
+        Project project = new Project(null, projectName);
+        firstSprite = new SingleSprite("cat");
 
-		Script startScript1 = new StartScript();
-		Script whenScript1 = new WhenScript();
-		Script whenScript2 = new WhenScript();
+        Script startScript1 = new StartScript();
+        Script whenScript1 = new WhenScript();
+        Script whenScript2 = new WhenScript();
 
-		brickListToCheck = new ArrayList<Brick>();
-		brickListToCheck.add(new SetSizeToBrick(size));
-		brickListToCheck.add(new WaitBrick(100));
+        brickListToCheck = new ArrayList<Brick>();
+        brickListToCheck.add(new SetSizeToBrick(size));
+        brickListToCheck.add(new WaitBrick(100));
 
-		secondBrickListForMoving = new ArrayList<Brick>();
-		secondBrickListForMoving.add(new ShowBrick());
-		secondBrickListForMoving.add(new WaitBrick(200));
-		secondBrickListForMoving.add(new SetBrightnessBrick(2.0));
-		secondBrickListForMoving.add(new SetXBrick(100));
-		secondBrickListForMoving.add(new SetSizeToBrick(size));
+        secondBrickListForMoving = new ArrayList<Brick>();
+        secondBrickListForMoving.add(new ShowBrick());
+        secondBrickListForMoving.add(new WaitBrick(200));
+        secondBrickListForMoving.add(new SetBrightnessBrick(2.0));
+        secondBrickListForMoving.add(new SetXBrick(100));
+        secondBrickListForMoving.add(new SetSizeToBrick(size));
 
-		// adding Bricks: ----------------
-		for (Brick brick : brickListToCheck) {
-			startScript1.addBrick(brick);
-		}
+        // adding Bricks: ----------------
+        for (Brick brick : brickListToCheck) {
+            startScript1.addBrick(brick);
+        }
 
-		for (Brick brick : secondBrickListForMoving) {
-			whenScript1.addBrick(brick);
-		}
+        for (Brick brick : secondBrickListForMoving) {
+            whenScript1.addBrick(brick);
+        }
 
-		whenScript2.addBrick(new WaitBrick(300));
-		whenScript2.addBrick(new ShowBrick());
-		// -------------------------------
+        whenScript2.addBrick(new WaitBrick(300));
+        whenScript2.addBrick(new ShowBrick());
+        // -------------------------------
 
-		firstSprite.addScript(startScript1);
-		firstSprite.addScript(whenScript1);
-		firstSprite.addScript(whenScript2);
+        firstSprite.addScript(startScript1);
+        firstSprite.addScript(whenScript1);
+        firstSprite.addScript(whenScript2);
 
-		project.getDefaultScene().addSprite(firstSprite);
+        project.getDefaultScene().addSprite(firstSprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(firstSprite);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(firstSprite);
+    }
 }

@@ -44,66 +44,66 @@ import org.catrobat.catroid.uitest.util.UiTestUtils;
 import java.util.ArrayList;
 
 public class ChangeSizeByNBrickTest extends BaseActivityInstrumentationTestCase<ScriptActivity> {
-	private static final double SIZE_TO_CHANGE = 25;
+    private static final double SIZE_TO_CHANGE = 25;
 
-	private Project project;
-	private ChangeSizeByNBrick changeSizeByNBrick;
+    private Project project;
+    private ChangeSizeByNBrick changeSizeByNBrick;
 
-	public ChangeSizeByNBrickTest() {
-		super(ScriptActivity.class);
-	}
+    public ChangeSizeByNBrickTest() {
+        super(ScriptActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		// normally super.setUp should be called first
-		// but kept the test failing due to view is null
-		// when starting in ScriptActivity
-		createProject();
-		super.setUp();
-	}
+    @Override
+    public void setUp() throws Exception {
+        // normally super.setUp should be called first
+        // but kept the test failing due to view is null
+        // when starting in ScriptActivity
+        createProject();
+        super.setUp();
+    }
 
-	public void testChangeSizeByNBrick() {
-		ListView dragDropListView = UiTestUtils.getScriptListView(solo);
-		BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
+    public void testChangeSizeByNBrick() {
+        ListView dragDropListView = UiTestUtils.getScriptListView(solo);
+        BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
 
-		int childrenCount = adapter.getChildCountFromLastGroup();
-		int groupCount = adapter.getScriptCount();
-		assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
-		assertEquals("Incorrect number of bricks.", 1, childrenCount);
+        int childrenCount = adapter.getChildCountFromLastGroup();
+        int groupCount = adapter.getScriptCount();
+        assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
+        assertEquals("Incorrect number of bricks.", 1, childrenCount);
 
-		ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
-		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
+        ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
+        assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
-		assertNotNull("TextView does not exist", solo.getText(solo.getString(R.string.brick_change_size_by)));
+        assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
+        assertNotNull("TextView does not exist", solo.getText(solo.getString(R.string.brick_change_size_by)));
 
-		UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_change_size_by_edit_text, SIZE_TO_CHANGE);
+        UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_change_size_by_edit_text, SIZE_TO_CHANGE);
 
-		Formula currentSize = changeSizeByNBrick.getFormulaWithBrickField(Brick.BrickField.SIZE_CHANGE);
+        Formula currentSize = changeSizeByNBrick.getFormulaWithBrickField(Brick.BrickField.SIZE_CHANGE);
 
-		try {
-			assertEquals("Wrong text in field", SIZE_TO_CHANGE, currentSize.interpretDouble(null));
-		} catch (InterpretationException interpretationException) {
-			fail("Wrong text in field");
-		}
+        try {
+            assertEquals("Wrong text in field", SIZE_TO_CHANGE, currentSize.interpretDouble(null));
+        } catch (InterpretationException interpretationException) {
+            fail("Wrong text in field");
+        }
 
-		TextView textView = ((TextView) solo.getView(R.id.brick_change_size_by_edit_text));
-		assertEquals("Text not updated", SIZE_TO_CHANGE,
-				Double.parseDouble(textView.getText().toString().replace(',', '.')));
-	}
+        TextView textView = ((TextView) solo.getView(R.id.brick_change_size_by_edit_text));
+        assertEquals("Text not updated", SIZE_TO_CHANGE,
+                Double.parseDouble(textView.getText().toString().replace(',', '.')));
+    }
 
-	private void createProject() {
-		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite sprite = new SingleSprite("cat");
-		Script script = new StartScript();
-		changeSizeByNBrick = new ChangeSizeByNBrick(20);
-		script.addBrick(changeSizeByNBrick);
+    private void createProject() {
+        project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Sprite sprite = new SingleSprite("cat");
+        Script script = new StartScript();
+        changeSizeByNBrick = new ChangeSizeByNBrick(20);
+        script.addBrick(changeSizeByNBrick);
 
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 }

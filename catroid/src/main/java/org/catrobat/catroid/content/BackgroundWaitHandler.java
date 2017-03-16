@@ -34,84 +34,84 @@ import java.util.List;
 
 public final class BackgroundWaitHandler {
 
-	private static HashMap<LookData, Integer> numberOfRunningScriptsOfLookData = new HashMap<>();
-	private static HashMap<Sprite, HashMap<LookData, ParallelAction>> actionsOfLookDataPerSprite = new HashMap<>();
-	private static HashMap<LookData, ArrayList<SetLookAction>> observingActions = new HashMap<>();
+    private static HashMap<LookData, Integer> numberOfRunningScriptsOfLookData = new HashMap<>();
+    private static HashMap<Sprite, HashMap<LookData, ParallelAction>> actionsOfLookDataPerSprite = new HashMap<>();
+    private static HashMap<LookData, ArrayList<SetLookAction>> observingActions = new HashMap<>();
 
-	private BackgroundWaitHandler() {
-		throw new AssertionError();
-	}
+    private BackgroundWaitHandler() {
+        throw new AssertionError();
+    }
 
-	public static void reset() {
-		numberOfRunningScriptsOfLookData.clear();
-		actionsOfLookDataPerSprite.clear();
-		observingActions.clear();
-	}
+    public static void reset() {
+        numberOfRunningScriptsOfLookData.clear();
+        actionsOfLookDataPerSprite.clear();
+        observingActions.clear();
+    }
 
-	public static synchronized void decrementRunningScripts(LookData lookData) {
-		Integer counter = numberOfRunningScriptsOfLookData.get(lookData);
-		if (counter != null) {
-			numberOfRunningScriptsOfLookData.put(lookData, --counter);
-			if (counter == 0) {
-				notifyObservingActions(lookData);
-			}
-		}
-	}
+    public static synchronized void decrementRunningScripts(LookData lookData) {
+        Integer counter = numberOfRunningScriptsOfLookData.get(lookData);
+        if (counter != null) {
+            numberOfRunningScriptsOfLookData.put(lookData, --counter);
+            if (counter == 0) {
+                notifyObservingActions(lookData);
+            }
+        }
+    }
 
-	public static void addObserver(LookData lookData, SetLookAction action) {
-		ArrayList<SetLookAction> actions = observingActions.get(lookData);
-		if (actions == null) {
-			actions = new ArrayList<>();
-			observingActions.put(lookData, actions);
-		}
-		actions.add(action);
-	}
+    public static void addObserver(LookData lookData, SetLookAction action) {
+        ArrayList<SetLookAction> actions = observingActions.get(lookData);
+        if (actions == null) {
+            actions = new ArrayList<>();
+            observingActions.put(lookData, actions);
+        }
+        actions.add(action);
+    }
 
-	public static void notifyObservingActions(LookData lookData) {
-		ArrayList<SetLookAction> actions = observingActions.get(lookData);
-		if (actions == null) {
-			return;
-		}
+    public static void notifyObservingActions(LookData lookData) {
+        ArrayList<SetLookAction> actions = observingActions.get(lookData);
+        if (actions == null) {
+            return;
+        }
 
-		for (SetLookAction action : actions) {
-			action.notifyScriptsCompleted();
-		}
-		actions.clear();
-	}
+        for (SetLookAction action : actions) {
+            action.notifyScriptsCompleted();
+        }
+        actions.clear();
+    }
 
-	private static void resetNumberOfReceivers(LookData lookData) {
-		List<Sprite> spriteList = ProjectManager.getInstance().getCurrentProject().getSpriteListWithClones();
+    private static void resetNumberOfReceivers(LookData lookData) {
+        List<Sprite> spriteList = ProjectManager.getInstance().getCurrentProject().getSpriteListWithClones();
 
-		Integer scriptsToRun = 0;
-		for (Sprite sprite : spriteList) {
-			scriptsToRun += sprite.getNumberOfWhenBackgroundChangesScripts(lookData);
-		}
-		numberOfRunningScriptsOfLookData.put(lookData, scriptsToRun);
-		if (scriptsToRun == 0) {
-			notifyObservingActions(lookData);
-		}
-	}
+        Integer scriptsToRun = 0;
+        for (Sprite sprite : spriteList) {
+            scriptsToRun += sprite.getNumberOfWhenBackgroundChangesScripts(lookData);
+        }
+        numberOfRunningScriptsOfLookData.put(lookData, scriptsToRun);
+        if (scriptsToRun == 0) {
+            notifyObservingActions(lookData);
+        }
+    }
 
-	public static void fireBackgroundChangedEvent(LookData lookData) {
-		numberOfRunningScriptsOfLookData.put(lookData, 0);
-		resetNumberOfReceivers(lookData);
+    public static void fireBackgroundChangedEvent(LookData lookData) {
+        numberOfRunningScriptsOfLookData.put(lookData, 0);
+        resetNumberOfReceivers(lookData);
 
-		List<Sprite> spriteList = ProjectManager.getInstance().getCurrentProject().getSpriteListWithClones();
+        List<Sprite> spriteList = ProjectManager.getInstance().getCurrentProject().getSpriteListWithClones();
 
-		for (Sprite sprite : spriteList) {
-			HashMap<LookData, ParallelAction> mapOfSprite = actionsOfLookDataPerSprite.get(sprite);
-			if (mapOfSprite == null) {
-				mapOfSprite = new HashMap<>();
-				actionsOfLookDataPerSprite.put(sprite, mapOfSprite);
-			}
+        for (Sprite sprite : spriteList) {
+            HashMap<LookData, ParallelAction> mapOfSprite = actionsOfLookDataPerSprite.get(sprite);
+            if (mapOfSprite == null) {
+                mapOfSprite = new HashMap<>();
+                actionsOfLookDataPerSprite.put(sprite, mapOfSprite);
+            }
 
-			ParallelAction action = mapOfSprite.get(lookData);
-			if (action == null) {
-				action = sprite.createBackgroundChangedAction(lookData);
-				mapOfSprite.put(lookData, action);
-			} else {
-				Look.actionsToRestartAdd(action);
-			}
-		}
-	}
+            ParallelAction action = mapOfSprite.get(lookData);
+            if (action == null) {
+                action = sprite.createBackgroundChangedAction(lookData);
+                mapOfSprite.put(lookData, action);
+            } else {
+                Look.actionsToRestartAdd(action);
+            }
+        }
+    }
 }

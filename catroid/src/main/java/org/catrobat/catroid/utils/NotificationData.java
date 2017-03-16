@@ -28,80 +28,80 @@ import android.content.Context;
 
 public class NotificationData {
 
-	private Notification.Builder notificationBuilder;
-	private PendingIntent pendingIntent;
+    private Notification.Builder notificationBuilder;
+    private PendingIntent pendingIntent;
 
-	private int notificationIcon;
-	private String programName;
+    private int notificationIcon;
+    private String programName;
 
-	private String notificationTitlePrefixWorking;
-	private String notificationTitlePrefixDone;
+    private String notificationTitlePrefixWorking;
+    private String notificationTitlePrefixDone;
 
-	private String notificationTextWorking;
-	private String notificationTextDone;
+    private String notificationTextWorking;
+    private String notificationTextDone;
 
-	public NotificationData(Context context, PendingIntent pendingIntent, int notificationIcon, String programName,
-			int notificationTitlePrefixWorkingStringId, int notificationTitlePrefixDoneStringId,
-			int notificationTextWorkingStringId, int notificationTextDoneStringId) {
-		this.pendingIntent = pendingIntent;
+    public NotificationData(Context context, PendingIntent pendingIntent, int notificationIcon, String programName,
+                            int notificationTitlePrefixWorkingStringId, int notificationTitlePrefixDoneStringId,
+                            int notificationTextWorkingStringId, int notificationTextDoneStringId) {
+        this.pendingIntent = pendingIntent;
 
-		this.notificationIcon = notificationIcon;
-		this.programName = programName;
+        this.notificationIcon = notificationIcon;
+        this.programName = programName;
 
-		this.notificationTitlePrefixWorking = context.getString(notificationTitlePrefixWorkingStringId);
-		this.notificationTitlePrefixDone = context.getString(notificationTitlePrefixDoneStringId);
-		this.notificationTextWorking = context.getString(notificationTextWorkingStringId);
-		this.notificationTextDone = context.getString(notificationTextDoneStringId);
-	}
+        this.notificationTitlePrefixWorking = context.getString(notificationTitlePrefixWorkingStringId);
+        this.notificationTitlePrefixDone = context.getString(notificationTitlePrefixDoneStringId);
+        this.notificationTextWorking = context.getString(notificationTextWorkingStringId);
+        this.notificationTextDone = context.getString(notificationTextDoneStringId);
+    }
 
-	public PendingIntent getPendingIntent() {
-		return pendingIntent;
-	}
+    public PendingIntent getPendingIntent() {
+        return pendingIntent;
+    }
 
-	public NotificationData setPendingIntent(PendingIntent pendingIntent) {
-		this.pendingIntent = pendingIntent;
-		return this;
-	}
+    public NotificationData setPendingIntent(PendingIntent pendingIntent) {
+        this.pendingIntent = pendingIntent;
+        return this;
+    }
 
-	public int getNotificationIcon() {
-		return notificationIcon;
-	}
+    public int getNotificationIcon() {
+        return notificationIcon;
+    }
 
-	public String getProgramName() {
-		return programName;
-	}
+    public String getProgramName() {
+        return programName;
+    }
 
-	public NotificationData setProgramName(String programName) {
-		this.programName = programName;
-		return this;
-	}
+    public NotificationData setProgramName(String programName) {
+        this.programName = programName;
+        return this;
+    }
 
-	public String getNotificationTitleWorking() {
-		return notificationTitlePrefixWorking + programName;
-	}
+    public String getNotificationTitleWorking() {
+        return notificationTitlePrefixWorking + programName;
+    }
 
-	public String getNotificationTitleDone() {
-		return notificationTitlePrefixDone + programName;
-	}
+    public String getNotificationTitleDone() {
+        return notificationTitlePrefixDone + programName;
+    }
 
-	public String getNotificationTextWorking() {
-		return notificationTextWorking;
-	}
+    public String getNotificationTextWorking() {
+        return notificationTextWorking;
+    }
 
-	public String getNotificationTextDone() {
-		return notificationTextDone;
-	}
+    public String getNotificationTextDone() {
+        return notificationTextDone;
+    }
 
-	public void setNotificationTextDone(String newTextDone) {
-		this.notificationTextDone = newTextDone;
-	}
+    public void setNotificationTextDone(String newTextDone) {
+        this.notificationTextDone = newTextDone;
+    }
 
-	public Notification.Builder getNotificationBuilder() {
-		return notificationBuilder;
-	}
+    public Notification.Builder getNotificationBuilder() {
+        return notificationBuilder;
+    }
 
-	public NotificationData setNotificationBuilder(Notification.Builder notificationBuilder) {
-		this.notificationBuilder = notificationBuilder;
-		return this;
-	}
+    public NotificationData setNotificationBuilder(Notification.Builder notificationBuilder) {
+        this.notificationBuilder = notificationBuilder;
+        return this;
+    }
 }

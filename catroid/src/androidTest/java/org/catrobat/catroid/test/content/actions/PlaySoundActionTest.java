@@ -44,74 +44,74 @@ import java.io.IOException;
 import java.util.List;
 
 public class PlaySoundActionTest extends InstrumentationTestCase {
-	private final SoundManager soundManager = SoundManager.getInstance();
-	private final int soundFileId = R.raw.testsound;
-	private final String projectName = TestUtils.DEFAULT_TEST_PROJECT_NAME;
-	private File soundFile;
+    private final SoundManager soundManager = SoundManager.getInstance();
+    private final int soundFileId = R.raw.testsound;
+    private final String projectName = TestUtils.DEFAULT_TEST_PROJECT_NAME;
+    private File soundFile;
 
-	@Override
-	protected void setUp() throws Exception {
-		TestUtils.deleteTestProjects();
-		soundManager.clear();
-		this.createTestProject();
-	}
+    @Override
+    protected void setUp() throws Exception {
+        TestUtils.deleteTestProjects();
+        soundManager.clear();
+        this.createTestProject();
+    }
 
-	@Override
-	protected void tearDown() throws Exception {
-		TestUtils.deleteTestProjects();
-		soundManager.clear();
-		super.tearDown();
-	}
+    @Override
+    protected void tearDown() throws Exception {
+        TestUtils.deleteTestProjects();
+        soundManager.clear();
+        super.tearDown();
+    }
 
-	public void testPlaySound() throws InterruptedException {
-		Sprite testSprite = new SingleSprite("testSprite");
-		SoundInfo soundInfo = createSoundInfo(soundFile);
-		testSprite.getSoundList().add(soundInfo);
+    public void testPlaySound() throws InterruptedException {
+        Sprite testSprite = new SingleSprite("testSprite");
+        SoundInfo soundInfo = createSoundInfo(soundFile);
+        testSprite.getSoundList().add(soundInfo);
 
-		ActionFactory factory = testSprite.getActionFactory();
-		Action action = factory.createPlaySoundAction(testSprite, soundInfo);
-		action.act(1.0f);
+        ActionFactory factory = testSprite.getActionFactory();
+        Action action = factory.createPlaySoundAction(testSprite, soundInfo);
+        action.act(1.0f);
 
-		List<MediaPlayer> mediaPlayers = getMediaPlayers();
-		assertEquals("Wrong media player count", 1, mediaPlayers.size());
-		assertTrue("MediaPlayer is not playing", mediaPlayers.get(0).isPlaying());
-	}
+        List<MediaPlayer> mediaPlayers = getMediaPlayers();
+        assertEquals("Wrong media player count", 1, mediaPlayers.size());
+        assertTrue("MediaPlayer is not playing", mediaPlayers.get(0).isPlaying());
+    }
 
-	public void testPlaySimultaneousSounds() {
-		Sprite testSprite = new SingleSprite("testSprite");
-		SoundInfo soundInfo = createSoundInfo(soundFile);
-		testSprite.getSoundList().add(soundInfo);
+    public void testPlaySimultaneousSounds() {
+        Sprite testSprite = new SingleSprite("testSprite");
+        SoundInfo soundInfo = createSoundInfo(soundFile);
+        testSprite.getSoundList().add(soundInfo);
 
-		ActionFactory factory = testSprite.getActionFactory();
-		Action playSoundAction1 = factory.createPlaySoundAction(testSprite, soundInfo);
-		Action playSoundAction2 = factory.createPlaySoundAction(testSprite, soundInfo);
+        ActionFactory factory = testSprite.getActionFactory();
+        Action playSoundAction1 = factory.createPlaySoundAction(testSprite, soundInfo);
+        Action playSoundAction2 = factory.createPlaySoundAction(testSprite, soundInfo);
 
-		playSoundAction1.act(1.0f);
-		playSoundAction2.act(1.0f);
+        playSoundAction1.act(1.0f);
+        playSoundAction2.act(1.0f);
 
-		List<MediaPlayer> mediaPlayers = getMediaPlayers();
-		assertEquals("Wrong media player count", 2, mediaPlayers.size());
-		assertTrue("First MediaPlayer is not playing", mediaPlayers.get(0).isPlaying());
-		assertTrue("Second MediaPlayer is not playing", mediaPlayers.get(1).isPlaying());
-	}
+        List<MediaPlayer> mediaPlayers = getMediaPlayers();
+        assertEquals("Wrong media player count", 2, mediaPlayers.size());
+        assertTrue("First MediaPlayer is not playing", mediaPlayers.get(0).isPlaying());
+        assertTrue("Second MediaPlayer is not playing", mediaPlayers.get(1).isPlaying());
+    }
 
-	private void createTestProject() throws IOException {
-		Project project = new Project(getInstrumentation().getTargetContext(), projectName);
-		StorageHandler.getInstance().saveProject(project);
-		ProjectManager.getInstance().setProject(project);
+    private void createTestProject() throws IOException {
+        Project project = new Project(getInstrumentation().getTargetContext(), projectName);
+        StorageHandler.getInstance().saveProject(project);
+        ProjectManager.getInstance().setProject(project);
 
-		soundFile = TestUtils.saveFileToProject(projectName, project.getDefaultScene().getName(), "soundTest.mp3", soundFileId, getInstrumentation()
-				.getContext(), TestUtils.TYPE_SOUND_FILE);
-	}
+        soundFile = TestUtils.saveFileToProject(projectName, project.getDefaultScene().getName(), "soundTest.mp3", soundFileId, getInstrumentation()
+                .getContext(), TestUtils.TYPE_SOUND_FILE);
+    }
 
-	private SoundInfo createSoundInfo(File soundFile) {
-		SoundInfo soundInfo = new SoundInfo();
-		soundInfo.setSoundFileName(soundFile.getName());
-		return soundInfo;
-	}
+    private SoundInfo createSoundInfo(File soundFile) {
+        SoundInfo soundInfo = new SoundInfo();
+        soundInfo.setSoundFileName(soundFile.getName());
+        return soundInfo;
+    }
 
-	@SuppressWarnings("unchecked")
-	private List<MediaPlayer> getMediaPlayers() {
-		return (List<MediaPlayer>) Reflection.getPrivateField(soundManager, "mediaPlayers");
-	}
+    @SuppressWarnings("unchecked")
+    private List<MediaPlayer> getMediaPlayers() {
+        return (List<MediaPlayer>) Reflection.getPrivateField(soundManager, "mediaPlayers");
+    }
 }

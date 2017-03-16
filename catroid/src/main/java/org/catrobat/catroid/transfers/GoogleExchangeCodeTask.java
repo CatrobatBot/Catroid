@@ -36,101 +36,101 @@ import org.catrobat.catroid.web.WebconnectionException;
 
 public class GoogleExchangeCodeTask extends AsyncTask<Void, Void, Boolean> {
 
-	private static final String TAG = GoogleExchangeCodeTask.class.getSimpleName();
+    private static final String TAG = GoogleExchangeCodeTask.class.getSimpleName();
 
-	private Context context;
-	private ProgressDialog progressDialog;
-	private String code;
-	private String mail;
-	private String username;
-	private String id;
-	private String locale;
-	private final String idToken;
-	private String message;
-	private OnFacebookExchangeCodeCompleteListener onGoogleExchangeCodeCompleteListener;
-	private WebconnectionException exception;
-	private boolean tokenExchanged;
+    private Context context;
+    private ProgressDialog progressDialog;
+    private String code;
+    private String mail;
+    private String username;
+    private String id;
+    private String locale;
+    private final String idToken;
+    private String message;
+    private OnFacebookExchangeCodeCompleteListener onGoogleExchangeCodeCompleteListener;
+    private WebconnectionException exception;
+    private boolean tokenExchanged;
 
-	public GoogleExchangeCodeTask(Activity activity, String code, String mail, String username, String id, String
-			locale, String idToken) {
-		this.code = code;
-		this.context = activity;
-		this.mail = mail;
-		this.username = username;
-		this.id = id;
-		this.locale = locale;
-		this.idToken = idToken;
-	}
+    public GoogleExchangeCodeTask(Activity activity, String code, String mail, String username, String id, String
+            locale, String idToken) {
+        this.code = code;
+        this.context = activity;
+        this.mail = mail;
+        this.username = username;
+        this.id = id;
+        this.locale = locale;
+        this.idToken = idToken;
+    }
 
-	public void setOnGoogleExchangeCodeCompleteListener(OnFacebookExchangeCodeCompleteListener listener) {
-		onGoogleExchangeCodeCompleteListener = listener;
-	}
+    public void setOnGoogleExchangeCodeCompleteListener(OnFacebookExchangeCodeCompleteListener listener) {
+        onGoogleExchangeCodeCompleteListener = listener;
+    }
 
-	@Override
-	protected void onPreExecute() {
-		super.onPreExecute();
-		if (context == null) {
-			return;
-		}
-		String title = context.getString(R.string.please_wait);
-		String message = context.getString(R.string.loading_google_exchange_code);
-		progressDialog = ProgressDialog.show(context, title, message);
-	}
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        if (context == null) {
+            return;
+        }
+        String title = context.getString(R.string.please_wait);
+        String message = context.getString(R.string.loading_google_exchange_code);
+        progressDialog = ProgressDialog.show(context, title, message);
+    }
 
-	@Override
-	protected Boolean doInBackground(Void... arg0) {
-		try {
-			if (!Utils.isNetworkAvailable(context)) {
-				exception = new WebconnectionException(WebconnectionException.ERROR_NETWORK, "Network not available!");
-				return false;
-			}
+    @Override
+    protected Boolean doInBackground(Void... arg0) {
+        try {
+            if (!Utils.isNetworkAvailable(context)) {
+                exception = new WebconnectionException(WebconnectionException.ERROR_NETWORK, "Network not available!");
+                return false;
+            }
 
-			tokenExchanged = ServerCalls.getInstance().googleExchangeCode(code, id, username, mail, locale, idToken);
-			return true;
-		} catch (WebconnectionException webconnectionException) {
-			Log.e(TAG, Log.getStackTraceString(webconnectionException));
-			message = webconnectionException.getMessage();
-		}
-		return false;
-	}
+            tokenExchanged = ServerCalls.getInstance().googleExchangeCode(code, id, username, mail, locale, idToken);
+            return true;
+        } catch (WebconnectionException webconnectionException) {
+            Log.e(TAG, Log.getStackTraceString(webconnectionException));
+            message = webconnectionException.getMessage();
+        }
+        return false;
+    }
 
-	@Override
-	protected void onPostExecute(Boolean success) {
-		super.onPostExecute(success);
+    @Override
+    protected void onPostExecute(Boolean success) {
+        super.onPostExecute(success);
 
-		if (progressDialog != null && progressDialog.isShowing()) {
-			progressDialog.dismiss();
-		}
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
 
-		if (Utils.checkForNetworkError(exception)) {
-			showDialog(R.string.error_internet_connection);
-			return;
-		}
+        if (Utils.checkForNetworkError(exception)) {
+            showDialog(R.string.error_internet_connection);
+            return;
+        }
 
-		if ((!success && exception != null) || !tokenExchanged) {
-			showDialog(R.string.sign_in_error);
-			return;
-		}
+        if ((!success && exception != null) || !tokenExchanged) {
+            showDialog(R.string.sign_in_error);
+            return;
+        }
 
-		if (onGoogleExchangeCodeCompleteListener != null) {
-			onGoogleExchangeCodeCompleteListener.onGoogleExchangeCodeComplete();
-		}
-	}
+        if (onGoogleExchangeCodeCompleteListener != null) {
+            onGoogleExchangeCodeCompleteListener.onGoogleExchangeCodeComplete();
+        }
+    }
 
-	private void showDialog(int messageId) {
-		if (context == null) {
-			return;
-		}
-		if (message == null) {
-			new CustomAlertDialogBuilder(context).setTitle(R.string.register_error).setMessage(messageId)
-					.setPositiveButton(R.string.ok, null).show();
-		} else {
-			new CustomAlertDialogBuilder(context).setTitle(R.string.register_error).setMessage(message)
-					.setPositiveButton(R.string.ok, null).show();
-		}
-	}
+    private void showDialog(int messageId) {
+        if (context == null) {
+            return;
+        }
+        if (message == null) {
+            new CustomAlertDialogBuilder(context).setTitle(R.string.register_error).setMessage(messageId)
+                    .setPositiveButton(R.string.ok, null).show();
+        } else {
+            new CustomAlertDialogBuilder(context).setTitle(R.string.register_error).setMessage(message)
+                    .setPositiveButton(R.string.ok, null).show();
+        }
+    }
 
-	public interface OnFacebookExchangeCodeCompleteListener {
-		void onGoogleExchangeCodeComplete();
-	}
+    public interface OnFacebookExchangeCodeCompleteListener {
+        void onGoogleExchangeCodeComplete();
+    }
 }

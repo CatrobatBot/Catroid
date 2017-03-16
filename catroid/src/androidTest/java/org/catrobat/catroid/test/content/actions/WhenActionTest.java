@@ -32,21 +32,21 @@ import org.catrobat.catroid.content.bricks.PlaceAtBrick;
 
 public class WhenActionTest extends AndroidTestCase {
 
-	public void testWhenBrick() throws InterruptedException {
-		int testPosition = 100;
+    public void testWhenBrick() throws InterruptedException {
+        int testPosition = 100;
 
-		Sprite sprite = new SingleSprite("new SingleSprite");
-		WhenScript whenScript = new WhenScript();
-		whenScript.setAction(1);
-		Brick placeAtBrick = new PlaceAtBrick(testPosition, testPosition);
-		whenScript.addBrick(placeAtBrick);
-		sprite.addScript(whenScript);
-		sprite.createWhenScriptActionSequence(whenScript.getAction());
+        Sprite sprite = new SingleSprite("new SingleSprite");
+        WhenScript whenScript = new WhenScript();
+        whenScript.setAction(1);
+        Brick placeAtBrick = new PlaceAtBrick(testPosition, testPosition);
+        whenScript.addBrick(placeAtBrick);
+        sprite.addScript(whenScript);
+        sprite.createWhenScriptActionSequence(whenScript.getAction());
 
-		while (!sprite.look.getAllActionsAreFinished()) {
-			sprite.look.act(1.0f);
-		}
+        while (!sprite.look.getAllActionsAreFinished()) {
+            sprite.look.act(1.0f);
+        }
 
-		assertEquals("Simple broadcast failed", (float) testPosition, sprite.look.getX());
-	}
+        assertEquals("Simple broadcast failed", (float) testPosition, sprite.look.getX());
+    }
 }

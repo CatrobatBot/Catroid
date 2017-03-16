@@ -32,105 +32,105 @@ import java.util.concurrent.TimeUnit;
 
 public class AsyncRPiTaskRunner {
 
-	private static final String TAG = AsyncRPiTaskRunner.class.getSimpleName();
+    private static final String TAG = AsyncRPiTaskRunner.class.getSimpleName();
 
-	private static final int UNKNOWN_HOST = 1;
-	private static final int CONNECTION_ERROR = 2;
-	private static final int CONNECTION_TIMEOUT = 3;
-	private static final int CONNECTION_UNHANDLED_EXCEPTION = 4;
+    private static final int UNKNOWN_HOST = 1;
+    private static final int CONNECTION_ERROR = 2;
+    private static final int CONNECTION_TIMEOUT = 3;
+    private static final int CONNECTION_UNHANDLED_EXCEPTION = 4;
 
-	private String host;
-	private int port;
-	private boolean connected;
+    private String host;
+    private int port;
+    private boolean connected;
 
-	private RPiSocketConnection connection;
+    private RPiSocketConnection connection;
 
-	public AsyncRPiTaskRunner() {
-		connection = new RPiSocketConnection();
-	}
+    public AsyncRPiTaskRunner() {
+        connection = new RPiSocketConnection();
+    }
 
-	public Boolean connect(String host, int port) {
-		this.host = host;
-		this.port = port;
+    public Boolean connect(String host, int port) {
+        this.host = host;
+        this.port = port;
 
-		try {
-			new AsyncConnectTask().execute().get(2000, TimeUnit.MILLISECONDS);
-		} catch (Exception e) {
-			Log.e(TAG, "RPi connecting took too long" + e);
-			return false;
-		}
+        try {
+            new AsyncConnectTask().execute().get(2000, TimeUnit.MILLISECONDS);
+        } catch (Exception e) {
+            Log.e(TAG, "RPi connecting took too long" + e);
+            return false;
+        }
 
-		return connected;
-	}
+        return connected;
+    }
 
-	public RPiSocketConnection getConnection() {
-		return connection;
-	}
+    public RPiSocketConnection getConnection() {
+        return connection;
+    }
 
-	public void disconnect() {
-		if (connected) {
-			new AsyncDisconnectTask().execute();
-		}
-	}
+    public void disconnect() {
+        if (connected) {
+            new AsyncDisconnectTask().execute();
+        }
+    }
 
-	private class AsyncConnectTask extends AsyncTask<String, Void, Integer> {
-		protected Integer doInBackground(String... args) {
+    private class AsyncConnectTask extends AsyncTask<String, Void, Integer> {
+        protected Integer doInBackground(String... args) {
 
-			try {
-				connection.connect(host, port);
+            try {
+                connection.connect(host, port);
 
-				for (Integer pin : RaspberryPiService.getInstance().getPinInterrupts()) {
-					connection.activatePinInterrupt(pin);
-				}
-			} catch (UnknownHostException e) {
-				return UNKNOWN_HOST;
-			} catch (ConnectException e) {
-				return CONNECTION_ERROR;
-			} catch (SocketTimeoutException e) {
-				return CONNECTION_TIMEOUT;
-			} catch (Exception e) {
-				Log.e(TAG, "Exception during connect: " + e);
-				return CONNECTION_UNHANDLED_EXCEPTION;
-			}
-			return 0;
-		}
+                for (Integer pin : RaspberryPiService.getInstance().getPinInterrupts()) {
+                    connection.activatePinInterrupt(pin);
+                }
+            } catch (UnknownHostException e) {
+                return UNKNOWN_HOST;
+            } catch (ConnectException e) {
+                return CONNECTION_ERROR;
+            } catch (SocketTimeoutException e) {
+                return CONNECTION_TIMEOUT;
+            } catch (Exception e) {
+                Log.e(TAG, "Exception during connect: " + e);
+                return CONNECTION_UNHANDLED_EXCEPTION;
+            }
+            return 0;
+        }
 
-		protected void onPostExecute(Integer progress) {
-			switch (progress) {
-				case UNKNOWN_HOST:
-					Log.e(TAG, "RPi: Host not found!");
-					break;
-				case CONNECTION_ERROR:
-					Log.e(TAG, "RPi: Could not connect!");
-					break;
-				case CONNECTION_TIMEOUT:
-					Log.e(TAG, "RPi: Connection timeout!");
-					break;
-				case CONNECTION_UNHANDLED_EXCEPTION:
-					Log.e(TAG, "RPi: Connect unhandled error.");
-					break;
-				default:
-					connected = true;
-			}
-		}
-	}
+        protected void onPostExecute(Integer progress) {
+            switch (progress) {
+                case UNKNOWN_HOST:
+                    Log.e(TAG, "RPi: Host not found!");
+                    break;
+                case CONNECTION_ERROR:
+                    Log.e(TAG, "RPi: Could not connect!");
+                    break;
+                case CONNECTION_TIMEOUT:
+                    Log.e(TAG, "RPi: Connection timeout!");
+                    break;
+                case CONNECTION_UNHANDLED_EXCEPTION:
+                    Log.e(TAG, "RPi: Connect unhandled error.");
+                    break;
+                default:
+                    connected = true;
+            }
+        }
+    }
 
-	private class AsyncDisconnectTask extends AsyncTask<String, Void, Integer> {
-		protected Integer doInBackground(String... args) {
+    private class AsyncDisconnectTask extends AsyncTask<String, Void, Integer> {
+        protected Integer doInBackground(String... args) {
 
-			try {
-				connection.disconnect();
-			} catch (Exception e) {
-				Log.e(TAG, "Exception during disconnect " + e);
-				return 1;
-			}
-			return 0;
-		}
+            try {
+                connection.disconnect();
+            } catch (Exception e) {
+                Log.e(TAG, "Exception during disconnect " + e);
+                return 1;
+            }
+            return 0;
+        }
 
-		protected void onPostExecute(Integer error) {
-			if (error == 1) {
-				Log.e(TAG, "RPi: Some error during disconnect.");
-			}
-		}
-	}
+        protected void onPostExecute(Integer error) {
+            if (error == 1) {
+                Log.e(TAG, "RPi: Some error during disconnect.");
+            }
+        }
+    }
 }

@@ -28,14 +28,14 @@ import org.catrobat.catroid.content.Sprite;
 
 public class PenDownAction extends TemporalAction {
 
-	private Sprite sprite;
+    private Sprite sprite;
 
-	@Override
-	protected void update(float delta) {
-		this.sprite.penConfiguration.penDown = true;
-	}
+    @Override
+    protected void update(float delta) {
+        this.sprite.penConfiguration.penDown = true;
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 }

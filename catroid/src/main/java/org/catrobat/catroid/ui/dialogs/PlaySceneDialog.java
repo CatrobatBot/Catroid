@@ -44,85 +44,85 @@ import org.catrobat.catroid.ui.ScriptActivity;
 
 public class PlaySceneDialog extends DialogFragment {
 
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_play_scene";
+    public static final String DIALOG_FRAGMENT_TAG = "dialog_play_scene";
 
-	private static final String TAG = PlaySceneDialog.class.getSimpleName();
+    private static final String TAG = PlaySceneDialog.class.getSimpleName();
 
-	private RadioButton playFirstScene;
+    private RadioButton playFirstScene;
 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_play_scene, null);
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_play_scene, null);
 
-		Dialog playSceneDialog = new AlertDialog.Builder(getActivity()).setView(dialogView)
-				.setPositiveButton(R.string.play, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				}).create();
+        Dialog playSceneDialog = new AlertDialog.Builder(getActivity()).setView(dialogView)
+                .setPositiveButton(R.string.play, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).create();
 
-		playSceneDialog.setCanceledOnTouchOutside(true);
-		playSceneDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		playSceneDialog.setOnShowListener(new OnShowListener() {
-			@Override
-			public void onShow(DialogInterface dialog) {
-				if (getActivity() == null) {
-					Log.e(TAG, "onShow() Activity was null!");
-					return;
-				}
+        playSceneDialog.setCanceledOnTouchOutside(true);
+        playSceneDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        playSceneDialog.setOnShowListener(new OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                if (getActivity() == null) {
+                    Log.e(TAG, "onShow() Activity was null!");
+                    return;
+                }
 
-				Button positiveButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-				positiveButton.setEnabled(true);
-				positiveButton.setOnClickListener(new OnClickListener() {
+                Button positiveButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                positiveButton.setEnabled(true);
+                positiveButton.setOnClickListener(new OnClickListener() {
 
-					@Override
-					public void onClick(View view) {
-						handleOkButtonClick();
-					}
-				});
-			}
-		});
+                    @Override
+                    public void onClick(View view) {
+                        handleOkButtonClick();
+                    }
+                });
+            }
+        });
 
-		playFirstScene = (RadioButton) dialogView.findViewById(R.id.play_default_scene_radiobutton);
-		playFirstScene.setChecked(true);
+        playFirstScene = (RadioButton) dialogView.findViewById(R.id.play_default_scene_radiobutton);
+        playFirstScene.setChecked(true);
 
-		String firstSceneText = String.format(getString(R.string.play_scene_dialog_default), ProjectManager
-				.getInstance().getCurrentProject().getDefaultScene().getName());
-		String currentSceneText = String.format(getString(R.string.play_scene_dialog_current), ProjectManager
-				.getInstance().getCurrentScene().getName());
+        String firstSceneText = String.format(getString(R.string.play_scene_dialog_default), ProjectManager
+                .getInstance().getCurrentProject().getDefaultScene().getName());
+        String currentSceneText = String.format(getString(R.string.play_scene_dialog_current), ProjectManager
+                .getInstance().getCurrentScene().getName());
 
-		playFirstScene.setText(firstSceneText);
-		((RadioButton) dialogView.findViewById(R.id.play_current_scene_radiobutton)).setText(currentSceneText);
+        playFirstScene.setText(firstSceneText);
+        ((RadioButton) dialogView.findViewById(R.id.play_current_scene_radiobutton)).setText(currentSceneText);
 
-		return playSceneDialog;
-	}
+        return playSceneDialog;
+    }
 
-	protected void handleOkButtonClick() {
-		if (getActivity() == null) {
-			Log.e(TAG, "handleOkButtonClick() Activity was null!");
-			return;
-		}
-		if (playFirstScene.isChecked()) {
-			ProjectManager.getInstance().setSceneToPlay(ProjectManager.getInstance().getCurrentProject().getDefaultScene());
-		} else {
-			ProjectManager.getInstance().setSceneToPlay(ProjectManager.getInstance().getCurrentScene());
-		}
+    protected void handleOkButtonClick() {
+        if (getActivity() == null) {
+            Log.e(TAG, "handleOkButtonClick() Activity was null!");
+            return;
+        }
+        if (playFirstScene.isChecked()) {
+            ProjectManager.getInstance().setSceneToPlay(ProjectManager.getInstance().getCurrentProject().getDefaultScene());
+        } else {
+            ProjectManager.getInstance().setSceneToPlay(ProjectManager.getInstance().getCurrentScene());
+        }
 
-		ProjectManager.getInstance().setStartScene(ProjectManager.getInstance().getSceneToPlay());
+        ProjectManager.getInstance().setStartScene(ProjectManager.getInstance().getSceneToPlay());
 
-		if (getActivity() instanceof ProjectActivity) {
-			((ProjectActivity) getActivity()).startPreStageActivity();
-		}
-		if (getActivity() instanceof ScriptActivity) {
-			((ScriptActivity) getActivity()).startPreStageActivity();
-		}
-		if (getActivity() instanceof ProgramMenuActivity) {
-			((ProgramMenuActivity) getActivity()).startPreStageActivity();
-		}
-		dismiss();
-	}
+        if (getActivity() instanceof ProjectActivity) {
+            ((ProjectActivity) getActivity()).startPreStageActivity();
+        }
+        if (getActivity() instanceof ScriptActivity) {
+            ((ScriptActivity) getActivity()).startPreStageActivity();
+        }
+        if (getActivity() instanceof ProgramMenuActivity) {
+            ((ProgramMenuActivity) getActivity()).startPreStageActivity();
+        }
+        dismiss();
+    }
 }

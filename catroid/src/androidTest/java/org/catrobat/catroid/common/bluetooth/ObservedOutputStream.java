@@ -27,35 +27,35 @@ import java.io.OutputStream;
 
 class ObservedOutputStream extends OutputStream {
 
-	private final OutputStream outputStream;
-	private final BluetoothLogger logger;
+    private final OutputStream outputStream;
+    private final BluetoothLogger logger;
 
-	ObservedOutputStream(OutputStream outputStream, BluetoothLogger logger) {
-		this.outputStream = outputStream;
-		this.logger = logger;
-	}
+    ObservedOutputStream(OutputStream outputStream, BluetoothLogger logger) {
+        this.outputStream = outputStream;
+        this.logger = logger;
+    }
 
-	@Override
-	public void write(byte[] buffer) throws IOException {
-		outputStream.write(buffer);
-		logger.logSentData(buffer);
-	}
+    @Override
+    public void write(byte[] buffer) throws IOException {
+        outputStream.write(buffer);
+        logger.logSentData(buffer);
+    }
 
-	@Override
-	public void write(byte[] buffer, int offset, int count) throws IOException {
-		outputStream.write(buffer, offset, count);
-		logger.logSentData(BluetoothTestUtils.getSubArray(buffer, offset, count));
-	}
+    @Override
+    public void write(byte[] buffer, int offset, int count) throws IOException {
+        outputStream.write(buffer, offset, count);
+        logger.logSentData(BluetoothTestUtils.getSubArray(buffer, offset, count));
+    }
 
-	@Override
-	public void write(int i) throws IOException {
-		outputStream.write(i);
-		logger.logSentData(BluetoothTestUtils.intToByteArray(i));
-	}
+    @Override
+    public void write(int i) throws IOException {
+        outputStream.write(i);
+        logger.logSentData(BluetoothTestUtils.intToByteArray(i));
+    }
 
-	@Override
-	public void close() throws IOException {
-		super.close();
-		outputStream.close();
-	}
+    @Override
+    public void close() throws IOException {
+        super.close();
+        outputStream.close();
+    }
 }

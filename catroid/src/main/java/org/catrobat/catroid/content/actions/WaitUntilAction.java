@@ -32,48 +32,48 @@ import org.catrobat.catroid.formulaeditor.InterpretationException;
 
 public class WaitUntilAction extends Action {
 
-	private boolean completed = false;
-	private Formula condition;
-	private Sprite sprite;
-	private static final float LOOP_DELAY = 0.02f;
-	private float currentTime = 0f;
+    private boolean completed = false;
+    private Formula condition;
+    private Sprite sprite;
+    private static final float LOOP_DELAY = 0.02f;
+    private float currentTime = 0f;
 
-	public WaitUntilAction() {
-	}
+    public WaitUntilAction() {
+    }
 
-	public void setCondition(Formula condition) {
-		this.condition = condition;
-	}
+    public void setCondition(Formula condition) {
+        this.condition = condition;
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	@Override
-	public boolean act(float delta) {
-		if (completed) {
-			return true;
-		}
+    @Override
+    public boolean act(float delta) {
+        if (completed) {
+            return true;
+        }
 
-		currentTime += delta;
-		if (currentTime < LOOP_DELAY) {
-			return false;
-		} else {
-			currentTime = 0.0f;
-		}
+        currentTime += delta;
+        if (currentTime < LOOP_DELAY) {
+            return false;
+        } else {
+            currentTime = 0.0f;
+        }
 
-		try {
-			completed = condition.interpretBoolean(sprite);
-		} catch (InterpretationException e) {
-			completed = false;
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", e);
-		}
+        try {
+            completed = condition.interpretBoolean(sprite);
+        } catch (InterpretationException e) {
+            completed = false;
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", e);
+        }
 
-		return completed;
-	}
+        return completed;
+    }
 
-	@Override
-	public void restart() {
-		completed = false;
-	}
+    @Override
+    public void restart() {
+        completed = false;
+    }
 }

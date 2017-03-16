@@ -26,6 +26,7 @@ package org.catrobat.catroid.utils;
 import java.io.InputStream;
 
 public interface DiskCacheSnapshotInterface {
-	InputStream getInputStream(int index);
-	void close();
+    InputStream getInputStream(int index);
+
+    void close();
 }

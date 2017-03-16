@@ -31,20 +31,20 @@ import java.util.Locale;
 
 public class CapitalizedTextView extends TextView implements OnPreDrawListener {
 
-	public CapitalizedTextView(Context context) {
-		super(context);
-	}
+    public CapitalizedTextView(Context context) {
+        super(context);
+    }
 
-	public CapitalizedTextView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
+    public CapitalizedTextView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
 
-	public CapitalizedTextView(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-	}
+    public CapitalizedTextView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+    }
 
-	@Override
-	public void setText(CharSequence text, BufferType type) {
-		super.setText(text.toString().toUpperCase(Locale.getDefault()), type);
-	}
+    @Override
+    public void setText(CharSequence text, BufferType type) {
+        super.setText(text.toString().toUpperCase(Locale.getDefault()), type);
+    }
 }

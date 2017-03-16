@@ -43,82 +43,82 @@ import java.util.HashMap;
 @SuppressWarnings("deprecation")
 public class SpeakAction extends TemporalAction {
 
-	private Formula text;
-	private Object interpretedText;
-	private String hashText;
-	private Sprite sprite;
+    private Formula text;
+    private Object interpretedText;
+    private String hashText;
+    private Sprite sprite;
 
-	private File speechFile;
-	private OnUtteranceCompletedListener listener;
+    private File speechFile;
+    private OnUtteranceCompletedListener listener;
 
-	private boolean determineLength = false;
-	private float lengthOfText;
+    private boolean determineLength = false;
+    private float lengthOfText;
 
-	@Override
-	protected void begin() {
-		try {
-			interpretedText = text == null ? "" : text.interpretString(sprite);
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-			interpretedText = "";
-		}
+    @Override
+    protected void begin() {
+        try {
+            interpretedText = text == null ? "" : text.interpretString(sprite);
+        } catch (InterpretationException interpretationException) {
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+            interpretedText = "";
+        }
 
-		boolean isFirstLevelStringTree = false;
-		if (text != null && text.getRoot().getElementType() == FormulaElement.ElementType.STRING) {
-			isFirstLevelStringTree = true;
-		}
+        boolean isFirstLevelStringTree = false;
+        if (text != null && text.getRoot().getElementType() == FormulaElement.ElementType.STRING) {
+            isFirstLevelStringTree = true;
+        }
 
-		if (!isFirstLevelStringTree) {
-			try {
-				if (interpretedText instanceof String) {
-					Double doubleValue = Double.valueOf((String) interpretedText);
-					if (doubleValue.isNaN()) {
-						interpretedText = "";
-					}
-				}
-			} catch (NumberFormatException numberFormatException) {
-				Log.d(getClass().getSimpleName(), "Couldn't parse String", numberFormatException);
-			}
-		}
+        if (!isFirstLevelStringTree) {
+            try {
+                if (interpretedText instanceof String) {
+                    Double doubleValue = Double.valueOf((String) interpretedText);
+                    if (doubleValue.isNaN()) {
+                        interpretedText = "";
+                    }
+                }
+            } catch (NumberFormatException numberFormatException) {
+                Log.d(getClass().getSimpleName(), "Couldn't parse String", numberFormatException);
+            }
+        }
 
-		hashText = Utils.md5Checksum(String.valueOf(interpretedText));
-		String fileName = hashText;
-		File pathToSpeechFile = new File(Constants.TEXT_TO_SPEECH_TMP_PATH);
-		pathToSpeechFile.mkdirs();
-		speechFile = new File(pathToSpeechFile, fileName + Constants.SOUND_STANDARD_EXTENSION);
-		listener = new OnUtteranceCompletedListener() {
-			@Override
-			public void onUtteranceCompleted(String utteranceId) {
-				if (determineLength) {
-					lengthOfText = SoundManager.getInstance().getDurationOfSoundFile(speechFile.getAbsolutePath());
-				} else {
-					SoundManager.getInstance().playSoundFile(speechFile.getAbsolutePath());
-				}
-			}
-		};
-		super.begin();
-	}
+        hashText = Utils.md5Checksum(String.valueOf(interpretedText));
+        String fileName = hashText;
+        File pathToSpeechFile = new File(Constants.TEXT_TO_SPEECH_TMP_PATH);
+        pathToSpeechFile.mkdirs();
+        speechFile = new File(pathToSpeechFile, fileName + Constants.SOUND_STANDARD_EXTENSION);
+        listener = new OnUtteranceCompletedListener() {
+            @Override
+            public void onUtteranceCompleted(String utteranceId) {
+                if (determineLength) {
+                    lengthOfText = SoundManager.getInstance().getDurationOfSoundFile(speechFile.getAbsolutePath());
+                } else {
+                    SoundManager.getInstance().playSoundFile(speechFile.getAbsolutePath());
+                }
+            }
+        };
+        super.begin();
+    }
 
-	@Override
-	protected void update(float delta) {
-		HashMap<String, String> speakParameter = new HashMap<String, String>();
-		speakParameter.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, hashText);
-		PreStageActivity.textToSpeech(String.valueOf(interpretedText), speechFile, listener, speakParameter);
-	}
+    @Override
+    protected void update(float delta) {
+        HashMap<String, String> speakParameter = new HashMap<String, String>();
+        speakParameter.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, hashText);
+        PreStageActivity.textToSpeech(String.valueOf(interpretedText), speechFile, listener, speakParameter);
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setText(Formula text) {
-		this.text = text;
-	}
+    public void setText(Formula text) {
+        this.text = text;
+    }
 
-	public float getLengthOfText() {
-		return lengthOfText;
-	}
+    public float getLengthOfText() {
+        return lengthOfText;
+    }
 
-	public void setDetermineLength(boolean getDurationOfText) {
-		this.determineLength = getDurationOfText;
-	}
+    public void setDetermineLength(boolean getDurationOfText) {
+        this.determineLength = getDurationOfText;
+    }
 }

@@ -35,44 +35,44 @@ import org.catrobat.catroid.formulaeditor.FormulaElement;
 
 public class XStreamConcurrentFormulaHashMapConverter implements Converter {
 
-	private static final String FORMULA = "formula";
-	private static final String CATEGORY = "category";
+    private static final String FORMULA = "formula";
+    private static final String CATEGORY = "category";
 
-	@Override
-	public boolean canConvert(Class type) {
-		return type.equals(ConcurrentFormulaHashMap.class);
-	}
+    @Override
+    public boolean canConvert(Class type) {
+        return type.equals(ConcurrentFormulaHashMap.class);
+    }
 
-	@Override
-	public void marshal(Object object, HierarchicalStreamWriter hierarchicalStreamWriter,
-			MarshallingContext marshallingContext) {
-		ConcurrentFormulaHashMap concurrentFormulaHashMap = (ConcurrentFormulaHashMap) object;
-		for (Brick.BrickField brickField : concurrentFormulaHashMap.keySet()) {
-			hierarchicalStreamWriter.startNode(FORMULA);
-			hierarchicalStreamWriter.addAttribute(CATEGORY, brickField.toString());
-			marshallingContext.convertAnother(concurrentFormulaHashMap.get(brickField).getRoot());
-			hierarchicalStreamWriter.endNode();
-		}
-	}
+    @Override
+    public void marshal(Object object, HierarchicalStreamWriter hierarchicalStreamWriter,
+                        MarshallingContext marshallingContext) {
+        ConcurrentFormulaHashMap concurrentFormulaHashMap = (ConcurrentFormulaHashMap) object;
+        for (Brick.BrickField brickField : concurrentFormulaHashMap.keySet()) {
+            hierarchicalStreamWriter.startNode(FORMULA);
+            hierarchicalStreamWriter.addAttribute(CATEGORY, brickField.toString());
+            marshallingContext.convertAnother(concurrentFormulaHashMap.get(brickField).getRoot());
+            hierarchicalStreamWriter.endNode();
+        }
+    }
 
-	@Override
-	public Object unmarshal(HierarchicalStreamReader hierarchicalStreamReader, UnmarshallingContext unmarshallingContext) {
-		ConcurrentFormulaHashMap concurrentFormulaHashMap = new ConcurrentFormulaHashMap();
-		while (hierarchicalStreamReader.hasMoreChildren()) {
-			hierarchicalStreamReader.moveDown();
-			Brick.BrickField brickField = Brick.BrickField.valueOf(hierarchicalStreamReader.getAttribute(CATEGORY));
-			Formula formula;
-			if (FORMULA.equals(hierarchicalStreamReader.getNodeName())) {
-				FormulaElement rootFormula = (FormulaElement) unmarshallingContext.convertAnother(concurrentFormulaHashMap,
-						FormulaElement.class);
-				formula = new Formula(rootFormula);
-			} else {
-				formula = new Formula(0);
-			}
-			hierarchicalStreamReader.moveUp();
+    @Override
+    public Object unmarshal(HierarchicalStreamReader hierarchicalStreamReader, UnmarshallingContext unmarshallingContext) {
+        ConcurrentFormulaHashMap concurrentFormulaHashMap = new ConcurrentFormulaHashMap();
+        while (hierarchicalStreamReader.hasMoreChildren()) {
+            hierarchicalStreamReader.moveDown();
+            Brick.BrickField brickField = Brick.BrickField.valueOf(hierarchicalStreamReader.getAttribute(CATEGORY));
+            Formula formula;
+            if (FORMULA.equals(hierarchicalStreamReader.getNodeName())) {
+                FormulaElement rootFormula = (FormulaElement) unmarshallingContext.convertAnother(concurrentFormulaHashMap,
+                        FormulaElement.class);
+                formula = new Formula(rootFormula);
+            } else {
+                formula = new Formula(0);
+            }
+            hierarchicalStreamReader.moveUp();
 
-			concurrentFormulaHashMap.putIfAbsent(brickField, formula);
-		}
-		return concurrentFormulaHashMap;
-	}
+            concurrentFormulaHashMap.putIfAbsent(brickField, formula);
+        }
+        return concurrentFormulaHashMap;
+    }
 }

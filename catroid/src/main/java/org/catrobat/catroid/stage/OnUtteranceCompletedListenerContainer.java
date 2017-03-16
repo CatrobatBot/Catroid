@@ -33,33 +33,33 @@ import java.util.Map;
 
 @SuppressWarnings("deprecation")
 public class OnUtteranceCompletedListenerContainer implements OnUtteranceCompletedListener {
-	private final Map<String, List<OnUtteranceCompletedListener>> listeners = new HashMap<String, List<OnUtteranceCompletedListener>>();
+    private final Map<String, List<OnUtteranceCompletedListener>> listeners = new HashMap<String, List<OnUtteranceCompletedListener>>();
 
-	public synchronized boolean addOnUtteranceCompletedListener(File speechFile,
-			OnUtteranceCompletedListener onUtteranceCompletedListener, String utteranceId) {
-		List<OnUtteranceCompletedListener> utteranceIdListeners = listeners.get(utteranceId);
+    public synchronized boolean addOnUtteranceCompletedListener(File speechFile,
+                                                                OnUtteranceCompletedListener onUtteranceCompletedListener, String utteranceId) {
+        List<OnUtteranceCompletedListener> utteranceIdListeners = listeners.get(utteranceId);
 
-		if (utteranceIdListeners == null) {
-			if (speechFile.exists()) {
-				onUtteranceCompletedListener.onUtteranceCompleted(utteranceId);
-				return false;
-			} else {
-				utteranceIdListeners = new ArrayList<TextToSpeech.OnUtteranceCompletedListener>();
-				utteranceIdListeners.add(onUtteranceCompletedListener);
-				listeners.put(utteranceId, utteranceIdListeners);
-				return true;
-			}
-		} else {
-			utteranceIdListeners.add(onUtteranceCompletedListener);
-			return false;
-		}
-	}
+        if (utteranceIdListeners == null) {
+            if (speechFile.exists()) {
+                onUtteranceCompletedListener.onUtteranceCompleted(utteranceId);
+                return false;
+            } else {
+                utteranceIdListeners = new ArrayList<TextToSpeech.OnUtteranceCompletedListener>();
+                utteranceIdListeners.add(onUtteranceCompletedListener);
+                listeners.put(utteranceId, utteranceIdListeners);
+                return true;
+            }
+        } else {
+            utteranceIdListeners.add(onUtteranceCompletedListener);
+            return false;
+        }
+    }
 
-	@Override
-	public synchronized void onUtteranceCompleted(String utteranceId) {
-		for (OnUtteranceCompletedListener listener : listeners.get(utteranceId)) {
-			listener.onUtteranceCompleted(utteranceId);
-		}
-		listeners.put(utteranceId, null);
-	}
+    @Override
+    public synchronized void onUtteranceCompleted(String utteranceId) {
+        for (OnUtteranceCompletedListener listener : listeners.get(utteranceId)) {
+            listener.onUtteranceCompleted(utteranceId);
+        }
+        listeners.put(utteranceId, null);
+    }
 }

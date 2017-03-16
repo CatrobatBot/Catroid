@@ -37,73 +37,73 @@ import java.util.ArrayList;
 
 public class AskAction extends Action {
 
-	private Sprite sprite;
-	private Formula questionFormula;
-	private UserVariable answerVariable;
+    private Sprite sprite;
+    private Formula questionFormula;
+    private UserVariable answerVariable;
 
-	private boolean questionAsked = false;
-	private boolean answerReceived = false;
+    private boolean questionAsked = false;
+    private boolean answerReceived = false;
 
-	private void askQuestion() {
+    private void askQuestion() {
 
-		if (StageActivity.messageHandler == null) {
-			return;
-		}
-		String question = "";
-		try {
-			if (questionFormula != null) {
-				question = questionFormula.interpretString(sprite);
-			}
-		} catch (InterpretationException e) {
-			Log.e(getClass().getSimpleName(), "formula interpretation in ask brick failed");
-		}
+        if (StageActivity.messageHandler == null) {
+            return;
+        }
+        String question = "";
+        try {
+            if (questionFormula != null) {
+                question = questionFormula.interpretString(sprite);
+            }
+        } catch (InterpretationException e) {
+            Log.e(getClass().getSimpleName(), "formula interpretation in ask brick failed");
+        }
 
-		ArrayList<Object> params = new ArrayList<>();
-		params.add(this);
-		params.add(question);
-		Message message = StageActivity.messageHandler.obtainMessage(StageActivity.ASK_MESSAGE, params);
-		message.sendToTarget();
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(this);
+        params.add(question);
+        Message message = StageActivity.messageHandler.obtainMessage(StageActivity.ASK_MESSAGE, params);
+        message.sendToTarget();
 
-		questionAsked = true;
-	}
+        questionAsked = true;
+    }
 
-	public void setAnswerText(String answer) {
-		if (answerVariable == null) {
-			return;
-		}
-		answerVariable.setValue(answer);
+    public void setAnswerText(String answer) {
+        if (answerVariable == null) {
+            return;
+        }
+        answerVariable.setValue(answer);
 
-		answerReceived = true;
-	}
+        answerReceived = true;
+    }
 
-	public void setAnswerVariable(UserVariable answerVariable) {
-		if (answerVariable == null) {
-			return;
-		}
-		this.answerVariable = answerVariable;
-	}
+    public void setAnswerVariable(UserVariable answerVariable) {
+        if (answerVariable == null) {
+            return;
+        }
+        this.answerVariable = answerVariable;
+    }
 
-	public void setQuestionFormula(Formula questionFormula) {
-		this.questionFormula = questionFormula;
-	}
+    public void setQuestionFormula(Formula questionFormula) {
+        this.questionFormula = questionFormula;
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	@Override
-	public boolean act(float delta) {
-		if (!questionAsked) {
-			askQuestion();
-		}
+    @Override
+    public boolean act(float delta) {
+        if (!questionAsked) {
+            askQuestion();
+        }
 
-		return answerReceived;
-	}
+        return answerReceived;
+    }
 
-	@Override
-	public void restart() {
-		questionAsked = false;
-		answerReceived = false;
-		super.restart();
-	}
+    @Override
+    public void restart() {
+        questionAsked = false;
+        answerReceived = false;
+        super.restart();
+    }
 }

@@ -31,100 +31,100 @@ import java.util.Map;
 
 public class FileChecksumContainer implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	private static final String TAG = FileChecksumContainer.class.getSimpleName();
+    private static final long serialVersionUID = 1L;
+    private static final String TAG = FileChecksumContainer.class.getSimpleName();
 
-	private class FileInfo {
-		private int usageCounter;
-		private String path;
-	}
+    private class FileInfo {
+        private int usageCounter;
+        private String path;
+    }
 
-	private class BackPackFileInfo {
-		private String path;
-	}
+    private class BackPackFileInfo {
+        private String path;
+    }
 
-	private Map<String, FileInfo> checksumFileInfoMap = new HashMap<>();
-	private Map<String, BackPackFileInfo> backPackChecksumFileInfoMap = new HashMap<>();
+    private Map<String, FileInfo> checksumFileInfoMap = new HashMap<>();
+    private Map<String, BackPackFileInfo> backPackChecksumFileInfoMap = new HashMap<>();
 
-	public boolean addChecksum(String checksum, String path) {
-		if (checksumFileInfoMap.containsKey(checksum)) {
-			FileInfo fileInfo = checksumFileInfoMap.get(checksum);
-			++fileInfo.usageCounter;
-			return false;
-		} else {
-			FileInfo fileInfo = new FileInfo();
-			fileInfo.usageCounter = 1;
-			fileInfo.path = path;
-			checksumFileInfoMap.put(checksum, fileInfo);
-			return true;
-		}
-	}
+    public boolean addChecksum(String checksum, String path) {
+        if (checksumFileInfoMap.containsKey(checksum)) {
+            FileInfo fileInfo = checksumFileInfoMap.get(checksum);
+            ++fileInfo.usageCounter;
+            return false;
+        } else {
+            FileInfo fileInfo = new FileInfo();
+            fileInfo.usageCounter = 1;
+            fileInfo.path = path;
+            checksumFileInfoMap.put(checksum, fileInfo);
+            return true;
+        }
+    }
 
-	public boolean addChecksumBackPack(String checksum, String path) {
-		if (backPackChecksumFileInfoMap.containsKey(checksum)) {
-			return false;
-		} else {
-			BackPackFileInfo fileInfo = new BackPackFileInfo();
-			fileInfo.path = path;
-			backPackChecksumFileInfoMap.put(checksum, fileInfo);
-			return true;
-		}
-	}
+    public boolean addChecksumBackPack(String checksum, String path) {
+        if (backPackChecksumFileInfoMap.containsKey(checksum)) {
+            return false;
+        } else {
+            BackPackFileInfo fileInfo = new BackPackFileInfo();
+            fileInfo.path = path;
+            backPackChecksumFileInfoMap.put(checksum, fileInfo);
+            return true;
+        }
+    }
 
-	public boolean containsChecksum(String checksum) {
-		return checksumFileInfoMap.containsKey(checksum);
-	}
+    public boolean containsChecksum(String checksum) {
+        return checksumFileInfoMap.containsKey(checksum);
+    }
 
-	public boolean containsChecksumBackPack(String checksum) {
-		return backPackChecksumFileInfoMap.containsKey(checksum);
-	}
+    public boolean containsChecksumBackPack(String checksum) {
+        return backPackChecksumFileInfoMap.containsKey(checksum);
+    }
 
-	public String getPath(String checksum) {
-		return checksumFileInfoMap.get(checksum).path;
-	}
+    public String getPath(String checksum) {
+        return checksumFileInfoMap.get(checksum).path;
+    }
 
-	public int getUsage(String checksum) {
-		if (!checksumFileInfoMap.containsKey(checksum)) {
-			return 0;
-		} else {
-			return checksumFileInfoMap.get(checksum).usageCounter;
-		}
-	}
+    public int getUsage(String checksum) {
+        if (!checksumFileInfoMap.containsKey(checksum)) {
+            return 0;
+        } else {
+            return checksumFileInfoMap.get(checksum).usageCounter;
+        }
+    }
 
-	public void incrementUsage(String filepath) throws FileNotFoundException {
-		String checksum = null;
-		for (Map.Entry<String, FileInfo> entry : checksumFileInfoMap.entrySet()) {
-			if (entry.getValue().path.equalsIgnoreCase(filepath)) {
-				checksum = entry.getKey();
-				break;
-			}
-		}
-		if (checksum == null) {
-			Log.e(TAG, "incrementUsage: FileNotFound: " + filepath);
-			throw new FileNotFoundException();
-		}
-		FileInfo fileInfo = checksumFileInfoMap.get(checksum);
-		fileInfo.usageCounter++;
-	}
+    public void incrementUsage(String filepath) throws FileNotFoundException {
+        String checksum = null;
+        for (Map.Entry<String, FileInfo> entry : checksumFileInfoMap.entrySet()) {
+            if (entry.getValue().path.equalsIgnoreCase(filepath)) {
+                checksum = entry.getKey();
+                break;
+            }
+        }
+        if (checksum == null) {
+            Log.e(TAG, "incrementUsage: FileNotFound: " + filepath);
+            throw new FileNotFoundException();
+        }
+        FileInfo fileInfo = checksumFileInfoMap.get(checksum);
+        fileInfo.usageCounter++;
+    }
 
-	public boolean decrementUsage(String filepath) throws FileNotFoundException {
-		String checksum = null;
-		for (Map.Entry<String, FileInfo> entry : checksumFileInfoMap.entrySet()) {
+    public boolean decrementUsage(String filepath) throws FileNotFoundException {
+        String checksum = null;
+        for (Map.Entry<String, FileInfo> entry : checksumFileInfoMap.entrySet()) {
 
-			if (entry.getValue().path.equalsIgnoreCase(filepath)) {
-				checksum = entry.getKey();
-				break;
-			}
-		}
-		if (checksum == null) {
-			throw new FileNotFoundException();
-		}
-		FileInfo fileInfo = checksumFileInfoMap.get(checksum);
-		fileInfo.usageCounter--;
-		if (fileInfo.usageCounter < 1) {
-			checksumFileInfoMap.remove(checksum);
-			return true;
-		}
-		return false;
-	}
+            if (entry.getValue().path.equalsIgnoreCase(filepath)) {
+                checksum = entry.getKey();
+                break;
+            }
+        }
+        if (checksum == null) {
+            throw new FileNotFoundException();
+        }
+        FileInfo fileInfo = checksumFileInfoMap.get(checksum);
+        fileInfo.usageCounter--;
+        if (fileInfo.usageCounter < 1) {
+            checksumFileInfoMap.remove(checksum);
+            return true;
+        }
+        return false;
+    }
 }

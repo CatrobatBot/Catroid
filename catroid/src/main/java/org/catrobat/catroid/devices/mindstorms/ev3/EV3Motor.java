@@ -26,44 +26,44 @@ package org.catrobat.catroid.devices.mindstorms.ev3;
 import org.catrobat.catroid.devices.mindstorms.MindstormsMotor;
 
 public class EV3Motor implements MindstormsMotor {
-	private byte outputField;
+    private byte outputField;
 
-	public EV3Motor(int port) {
+    public EV3Motor(int port) {
 
-		switch (port) {
-			case 0:
-				this.outputField = EV3MotorOutputByteCode.MOTOR_A_OUT.getByte();
-				break;
-			case 1:
-				this.outputField = EV3MotorOutputByteCode.MOTOR_B_OUT.getByte();
-				break;
-			case 2:
-				this.outputField = EV3MotorOutputByteCode.MOTOR_C_OUT.getByte();
-				break;
-			case 3:
-				this.outputField = EV3MotorOutputByteCode.MOTOR_D_OUT.getByte();
-				break;
-		}
-	}
+        switch (port) {
+            case 0:
+                this.outputField = EV3MotorOutputByteCode.MOTOR_A_OUT.getByte();
+                break;
+            case 1:
+                this.outputField = EV3MotorOutputByteCode.MOTOR_B_OUT.getByte();
+                break;
+            case 2:
+                this.outputField = EV3MotorOutputByteCode.MOTOR_C_OUT.getByte();
+                break;
+            case 3:
+                this.outputField = EV3MotorOutputByteCode.MOTOR_D_OUT.getByte();
+                break;
+        }
+    }
 
-	@Override
-	public void stop() {
-	}
+    @Override
+    public void stop() {
+    }
 
-	@Override
-	public void move(int speed) {
-		move(speed, 0, false);
-	}
+    @Override
+    public void move(int speed) {
+        move(speed, 0, false);
+    }
 
-	@Override
-	public void move(int speed, int degrees) {
-	}
+    @Override
+    public void move(int speed, int degrees) {
+    }
 
-	@Override
-	public void move(int speed, int degrees, boolean reply) {
-	}
+    @Override
+    public void move(int speed, int degrees, boolean reply) {
+    }
 
-	public byte getOutputField() {
-		return outputField;
-	}
+    public byte getOutputField() {
+        return outputField;
+    }
 }

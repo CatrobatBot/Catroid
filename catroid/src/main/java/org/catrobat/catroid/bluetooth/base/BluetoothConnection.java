@@ -30,20 +30,20 @@ import java.io.OutputStream;
 
 public interface BluetoothConnection {
 
-	static enum State {
-		CONNECTED, NOT_CONNECTED, ERROR_BLUETOOTH_NOT_SUPPORTED, ERROR_BLUETOOTH_NOT_ON,
-		ERROR_ADAPTER, ERROR_DEVICE, ERROR_SOCKET, ERROR_STILL_BONDING, ERROR_NOT_BONDED, ERROR_CLOSING
-	}
+    static enum State {
+        CONNECTED, NOT_CONNECTED, ERROR_BLUETOOTH_NOT_SUPPORTED, ERROR_BLUETOOTH_NOT_ON,
+        ERROR_ADAPTER, ERROR_DEVICE, ERROR_SOCKET, ERROR_STILL_BONDING, ERROR_NOT_BONDED, ERROR_CLOSING
+    }
 
-	State connect();
+    State connect();
 
-	State connectSocket(BluetoothSocket socket);
+    State connectSocket(BluetoothSocket socket);
 
-	void disconnect();
+    void disconnect();
 
-	InputStream getInputStream() throws IOException;
+    InputStream getInputStream() throws IOException;
 
-	OutputStream getOutputStream() throws IOException;
+    OutputStream getOutputStream() throws IOException;
 
-	State getState();
+    State getState();
 }

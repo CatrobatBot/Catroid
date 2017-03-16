@@ -32,89 +32,89 @@ import org.catrobat.catroid.formulaeditor.InterpretationException;
 
 public class GlideToAction extends TemporalAction {
 
-	private float startX;
-	private float startY;
-	private float currentX;
-	private float currentY;
-	private Formula endX;
-	private Formula endY;
-	protected Sprite sprite;
-	private Formula duration;
-	private float endXValue;
-	private float endYValue;
+    private float startX;
+    private float startY;
+    private float currentX;
+    private float currentY;
+    private Formula endX;
+    private Formula endY;
+    protected Sprite sprite;
+    private Formula duration;
+    private float endXValue;
+    private float endYValue;
 
-	private boolean restart = false;
+    private boolean restart = false;
 
-	@Override
-	protected void begin() {
-		Float durationInterpretation;
-		Float endXInterpretation = 0f;
-		Float endYInterpretation = 0f;
+    @Override
+    protected void begin() {
+        Float durationInterpretation;
+        Float endXInterpretation = 0f;
+        Float endYInterpretation = 0f;
 
-		try {
-			durationInterpretation = duration == null ? Float.valueOf(0f) : duration.interpretFloat(sprite);
-		} catch (InterpretationException interpretationException) {
-			durationInterpretation = 0f;
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}
+        try {
+            durationInterpretation = duration == null ? Float.valueOf(0f) : duration.interpretFloat(sprite);
+        } catch (InterpretationException interpretationException) {
+            durationInterpretation = 0f;
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+        }
 
-		try {
-			endXInterpretation = endX == null ? Float.valueOf(0f) : endX.interpretFloat(sprite);
-		} catch (InterpretationException interpretationException) {
-			durationInterpretation = 0f;
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}
+        try {
+            endXInterpretation = endX == null ? Float.valueOf(0f) : endX.interpretFloat(sprite);
+        } catch (InterpretationException interpretationException) {
+            durationInterpretation = 0f;
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+        }
 
-		try {
-			endYInterpretation = endY == null ? Float.valueOf(0f) : endY.interpretFloat(sprite);
-		} catch (InterpretationException interpretationException) {
-			durationInterpretation = 0f;
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}
+        try {
+            endYInterpretation = endY == null ? Float.valueOf(0f) : endY.interpretFloat(sprite);
+        } catch (InterpretationException interpretationException) {
+            durationInterpretation = 0f;
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+        }
 
-		if (!restart) {
-			if (duration != null) {
-				super.setDuration(durationInterpretation);
-			}
-			endXValue = endXInterpretation;
-			endYValue = endYInterpretation;
-		}
-		restart = false;
+        if (!restart) {
+            if (duration != null) {
+                super.setDuration(durationInterpretation);
+            }
+            endXValue = endXInterpretation;
+            endYValue = endYInterpretation;
+        }
+        restart = false;
 
-		startX = sprite.look.getXInUserInterfaceDimensionUnit();
-		startY = sprite.look.getYInUserInterfaceDimensionUnit();
-		currentX = startX;
-		currentY = startY;
-		if (startX == endXInterpretation && startY == endYInterpretation) {
-			super.finish();
-		}
-	}
+        startX = sprite.look.getXInUserInterfaceDimensionUnit();
+        startY = sprite.look.getYInUserInterfaceDimensionUnit();
+        currentX = startX;
+        currentY = startY;
+        if (startX == endXInterpretation && startY == endYInterpretation) {
+            super.finish();
+        }
+    }
 
-	@Override
-	protected void update(float percent) {
-		float deltaX = sprite.look.getXInUserInterfaceDimensionUnit() - currentX;
-		float deltaY = sprite.look.getYInUserInterfaceDimensionUnit() - currentY;
-		if ((-0.1f > deltaX || deltaX > 0.1f) || (-0.1f > deltaY || deltaY > 0.1f)) {
-			restart = true;
-			setDuration(getDuration() - getTime());
-			restart();
-		} else {
-			currentX = startX + (endXValue - startX) * percent;
-			currentY = startY + (endYValue - startY) * percent;
-			sprite.look.setPositionInUserInterfaceDimensionUnit(currentX, currentY);
-		}
-	}
+    @Override
+    protected void update(float percent) {
+        float deltaX = sprite.look.getXInUserInterfaceDimensionUnit() - currentX;
+        float deltaY = sprite.look.getYInUserInterfaceDimensionUnit() - currentY;
+        if ((-0.1f > deltaX || deltaX > 0.1f) || (-0.1f > deltaY || deltaY > 0.1f)) {
+            restart = true;
+            setDuration(getDuration() - getTime());
+            restart();
+        } else {
+            currentX = startX + (endXValue - startX) * percent;
+            currentY = startY + (endYValue - startY) * percent;
+            sprite.look.setPositionInUserInterfaceDimensionUnit(currentX, currentY);
+        }
+    }
 
-	public void setDuration(Formula duration) {
-		this.duration = duration;
-	}
+    public void setDuration(Formula duration) {
+        this.duration = duration;
+    }
 
-	public void setPosition(Formula x, Formula y) {
-		endX = x;
-		endY = y;
-	}
+    public void setPosition(Formula x, Formula y) {
+        endX = x;
+        endY = y;
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 }

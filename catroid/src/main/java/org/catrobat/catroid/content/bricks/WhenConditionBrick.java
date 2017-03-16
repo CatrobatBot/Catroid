@@ -41,88 +41,88 @@ import java.util.List;
 
 public class WhenConditionBrick extends FormulaBrick implements ScriptBrick {
 
-	private WhenConditionScript script;
+    private WhenConditionScript script;
 
-	public WhenConditionBrick() {
-		init();
-	}
+    public WhenConditionBrick() {
+        init();
+    }
 
-	public WhenConditionBrick(Formula condition) {
-		init();
-		setFormulaWithBrickField(BrickField.IF_CONDITION, condition);
-	}
+    public WhenConditionBrick(Formula condition) {
+        init();
+        setFormulaWithBrickField(BrickField.IF_CONDITION, condition);
+    }
 
-	public WhenConditionBrick(WhenConditionScript script) {
-		this.script = script;
-		init();
-	}
+    public WhenConditionBrick(WhenConditionScript script) {
+        this.script = script;
+        init();
+    }
 
-	private void init() {
-		getScriptSafe();
-		formulaMap = this.script.getFormulaMap();
-		addAllowedBrickField(BrickField.IF_CONDITION);
-	}
+    private void init() {
+        getScriptSafe();
+        formulaMap = this.script.getFormulaMap();
+        addAllowedBrickField(BrickField.IF_CONDITION);
+    }
 
-	@Override
-	public int getRequiredResources() {
-		return getConditionFormula().getRequiredResources();
-	}
+    @Override
+    public int getRequiredResources() {
+        return getConditionFormula().getRequiredResources();
+    }
 
-	@Override
-	public void showFormulaEditorToEditFormula(View view) {
-		FormulaEditorFragment.showFragment(view, this, BrickField.IF_CONDITION);
-	}
+    @Override
+    public void showFormulaEditorToEditFormula(View view) {
+        FormulaEditorFragment.showFragment(view, this, BrickField.IF_CONDITION);
+    }
 
-	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
+    @Override
+    public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+        if (animationState) {
+            return view;
+        }
 
-		view = View.inflate(context, R.layout.brick_when_condition_true, null);
-		BrickViewProvider.setAlphaOnView(view, alphaValue);
+        view = View.inflate(context, R.layout.brick_when_condition_true, null);
+        BrickViewProvider.setAlphaOnView(view, alphaValue);
 
-		setCheckboxView(R.id.brick_when_condition_checkbox);
+        setCheckboxView(R.id.brick_when_condition_checkbox);
 
-		TextView conditionEditText = (TextView) view.findViewById(R.id.brick_when_condition_edit_text);
+        TextView conditionEditText = (TextView) view.findViewById(R.id.brick_when_condition_edit_text);
 
-		getFormulaWithBrickField(BrickField.IF_CONDITION).setTextFieldId(R.id.brick_when_condition_edit_text);
-		getFormulaWithBrickField(BrickField.IF_CONDITION).refreshTextField(view);
+        getFormulaWithBrickField(BrickField.IF_CONDITION).setTextFieldId(R.id.brick_when_condition_edit_text);
+        getFormulaWithBrickField(BrickField.IF_CONDITION).refreshTextField(view);
 
-		conditionEditText.setOnClickListener(this);
+        conditionEditText.setOnClickListener(this);
 
-		return view;
-	}
+        return view;
+    }
 
-	public Formula getConditionFormula() {
-		return getFormulaWithBrickField(BrickField.IF_CONDITION);
-	}
+    public Formula getConditionFormula() {
+        return getFormulaWithBrickField(BrickField.IF_CONDITION);
+    }
 
-	@Override
-	public View getPrototypeView(Context context) {
-		View prototypeView = View.inflate(context, R.layout.brick_when_condition_true, null);
-		TextView textView = (TextView) prototypeView.findViewById(R.id.brick_when_condition_edit_text);
-		textView.setText(String.valueOf(BrickValues.IF_CONDITION));
-		return prototypeView;
-	}
+    @Override
+    public View getPrototypeView(Context context) {
+        View prototypeView = View.inflate(context, R.layout.brick_when_condition_true, null);
+        TextView textView = (TextView) prototypeView.findViewById(R.id.brick_when_condition_edit_text);
+        textView.setText(String.valueOf(BrickValues.IF_CONDITION));
+        return prototypeView;
+    }
 
-	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createWaitUntilAction(sprite, getFormulaWithBrickField(BrickField.IF_CONDITION)));
-		return null;
-	}
+    @Override
+    public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+        sequence.addAction(sprite.getActionFactory().createWaitUntilAction(sprite, getFormulaWithBrickField(BrickField.IF_CONDITION)));
+        return null;
+    }
 
-	@Override
-	public Script getScriptSafe() {
-		if (script == null) {
-			script = new WhenConditionScript(this);
-			formulaMap = script.getFormulaMap();
-		}
-		return script;
-	}
+    @Override
+    public Script getScriptSafe() {
+        if (script == null) {
+            script = new WhenConditionScript(this);
+            formulaMap = script.getFormulaMap();
+        }
+        return script;
+    }
 
-	@Override
-	public Brick clone() {
-		return new WhenConditionBrick(getConditionFormula());
-	}
+    @Override
+    public Brick clone() {
+        return new WhenConditionBrick(getConditionFormula());
+    }
 }

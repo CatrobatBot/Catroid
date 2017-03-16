@@ -27,62 +27,62 @@ import org.catrobat.catroid.content.bricks.WhenBrick;
 
 public class WhenScript extends Script {
 
-	private static final long serialVersionUID = 1L;
-	private static final String LONGPRESSED = "Long Pressed";
-	private static final String TAPPED = "Tapped";
-	private static final String DOUBLETAPPED = "Double Tapped";
-	private static final String SWIPELEFT = "Swipe Left";
-	private static final String SWIPERIGHT = "Swipe Right";
-	private static final String SWIPEUP = "Swipe Up";
-	private static final String SWIPEDOWN = "Swipe Down";
-	private static final String[] ACTIONS = { TAPPED, DOUBLETAPPED, LONGPRESSED, SWIPEUP, SWIPEDOWN, SWIPELEFT,
-			SWIPERIGHT };
-	private String action;
-	private transient int position;
+    private static final long serialVersionUID = 1L;
+    private static final String LONGPRESSED = "Long Pressed";
+    private static final String TAPPED = "Tapped";
+    private static final String DOUBLETAPPED = "Double Tapped";
+    private static final String SWIPELEFT = "Swipe Left";
+    private static final String SWIPERIGHT = "Swipe Right";
+    private static final String SWIPEUP = "Swipe Up";
+    private static final String SWIPEDOWN = "Swipe Down";
+    private static final String[] ACTIONS = {TAPPED, DOUBLETAPPED, LONGPRESSED, SWIPEUP, SWIPEDOWN, SWIPELEFT,
+            SWIPERIGHT};
+    private String action;
+    private transient int position;
 
-	public WhenScript() {
-		super();
-		this.position = 0;
-		this.action = TAPPED;
-	}
+    public WhenScript() {
+        super();
+        this.position = 0;
+        this.action = TAPPED;
+    }
 
-	public WhenScript(WhenBrick brick) {
-		this.brick = brick;
-	}
+    public WhenScript(WhenBrick brick) {
+        this.brick = brick;
+    }
 
-	@Override
-	protected Object readResolve() {
-		super.readResolve();
-		return this;
-	}
+    @Override
+    protected Object readResolve() {
+        super.readResolve();
+        return this;
+    }
 
-	public void setAction(int position) {
-		this.position = position;
-		this.action = ACTIONS[position];
-	}
+    public void setAction(int position) {
+        this.position = position;
+        this.action = ACTIONS[position];
+    }
 
-	public String getAction() {
-		return action;
-	}
+    public String getAction() {
+        return action;
+    }
 
-	public int getPosition() {
-		return position;
-	}
+    public int getPosition() {
+        return position;
+    }
 
-	@Override
-	public ScriptBrick getScriptBrick() {
-		if (brick == null) {
-			brick = new WhenBrick(this);
-		}
+    @Override
+    public ScriptBrick getScriptBrick() {
+        if (brick == null) {
+            brick = new WhenBrick(this);
+        }
 
-		return brick;
-	}
+        return brick;
+    }
 
-	@Override
-	public Script copyScriptForSprite(Sprite copySprite) {
-		WhenScript cloneScript = new WhenScript();
-		doCopy(copySprite, cloneScript);
+    @Override
+    public Script copyScriptForSprite(Sprite copySprite) {
+        WhenScript cloneScript = new WhenScript();
+        doCopy(copySprite, cloneScript);
 
-		return cloneScript;
-	}
+        return cloneScript;
+    }
 }

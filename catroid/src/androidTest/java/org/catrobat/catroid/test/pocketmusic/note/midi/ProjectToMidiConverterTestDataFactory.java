@@ -30,11 +30,11 @@ import java.io.IOException;
 
 public final class ProjectToMidiConverterTestDataFactory {
 
-	private ProjectToMidiConverterTestDataFactory() {
-	}
+    private ProjectToMidiConverterTestDataFactory() {
+    }
 
-	public static void writeTestProject(Project project) throws IOException, MidiException {
-		final ProjectToMidiConverter converter = new ProjectToMidiConverter();
-		converter.writeProjectAsMidi(project);
-	}
+    public static void writeTestProject(Project project) throws IOException, MidiException {
+        final ProjectToMidiConverter converter = new ProjectToMidiConverter();
+        converter.writeProjectAsMidi(project);
+    }
 }

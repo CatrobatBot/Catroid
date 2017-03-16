@@ -43,86 +43,86 @@ import org.catrobat.catroid.uitest.util.UiTestUtils;
 import java.util.ArrayList;
 
 public class GoNStepsBackTest extends BaseActivityInstrumentationTestCase<ScriptActivity> {
-	private static final int STEPS_TO_GO_BACK = 17;
+    private static final int STEPS_TO_GO_BACK = 17;
 
-	private Project project;
-	private GoNStepsBackBrick goNStepsBackBrick;
+    private Project project;
+    private GoNStepsBackBrick goNStepsBackBrick;
 
-	public GoNStepsBackTest() {
-		super(ScriptActivity.class);
-	}
+    public GoNStepsBackTest() {
+        super(ScriptActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		// normally super.setUp should be called first
-		// but kept the test failing due to view is null
-		// when starting in ScriptActivity
-		createProject();
-		super.setUp();
-	}
+    @Override
+    public void setUp() throws Exception {
+        // normally super.setUp should be called first
+        // but kept the test failing due to view is null
+        // when starting in ScriptActivity
+        createProject();
+        super.setUp();
+    }
 
-	public void testGoNStepsBackBrick() {
-		solo.sleep(300);
-		ListView dragDropListView = UiTestUtils.getScriptListView(solo);
-		BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
+    public void testGoNStepsBackBrick() {
+        solo.sleep(300);
+        ListView dragDropListView = UiTestUtils.getScriptListView(solo);
+        BrickAdapter adapter = (BrickAdapter) dragDropListView.getAdapter();
 
-		int childrenCount = adapter.getChildCountFromLastGroup();
-		int groupCount = adapter.getScriptCount();
+        int childrenCount = adapter.getChildCountFromLastGroup();
+        int groupCount = adapter.getScriptCount();
 
-		assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
-		assertEquals("Incorrect number of bricks.", 1, childrenCount);
+        assertEquals("Incorrect number of bricks.", 2, dragDropListView.getChildCount());
+        assertEquals("Incorrect number of bricks.", 1, childrenCount);
 
-		ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
-		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
+        ArrayList<Brick> projectBrickList = project.getDefaultScene().getSpriteList().get(0).getScript(0).getBrickList();
+        assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
-		assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.brick_go_back)));
+        assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
+        assertNotNull("TextView does not exist.", solo.getText(solo.getString(R.string.brick_go_back)));
 
-		UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_go_back_edit_text, STEPS_TO_GO_BACK);
+        UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_go_back_edit_text, STEPS_TO_GO_BACK);
 
-		try {
-			assertEquals("Wrong text in field.", STEPS_TO_GO_BACK,
-					goNStepsBackBrick.getFormulaWithBrickField(Brick.BrickField.STEPS).interpretDouble(null).intValue());
-		} catch (InterpretationException interpretationException) {
-			fail("Wrong text in field.");
-		}
+        try {
+            assertEquals("Wrong text in field.", STEPS_TO_GO_BACK,
+                    goNStepsBackBrick.getFormulaWithBrickField(Brick.BrickField.STEPS).interpretDouble(null).intValue());
+        } catch (InterpretationException interpretationException) {
+            fail("Wrong text in field.");
+        }
 
-		assertEquals(
-				"Value in Brick is not updated.",
-				(double) STEPS_TO_GO_BACK,
-				Double.valueOf(((TextView) solo.getView(R.id.brick_go_back_edit_text)).getText().toString()
-						.replace(',', '.'))
-		);
+        assertEquals(
+                "Value in Brick is not updated.",
+                (double) STEPS_TO_GO_BACK,
+                Double.valueOf(((TextView) solo.getView(R.id.brick_go_back_edit_text)).getText().toString()
+                        .replace(',', '.'))
+        );
 
-		UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_go_back_edit_text, 1);
-		TextView secondsTextView = (TextView) solo.getView(R.id.brick_go_back_layers_text_view);
-		assertTrue(
-				"Specifier hasn't changed from plural to singular",
-				secondsTextView.getText().equals(
-						dragDropListView.getResources().getQuantityString(R.plurals.brick_go_back_layer_plural, 1))
-		);
+        UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_go_back_edit_text, 1);
+        TextView secondsTextView = (TextView) solo.getView(R.id.brick_go_back_layers_text_view);
+        assertTrue(
+                "Specifier hasn't changed from plural to singular",
+                secondsTextView.getText().equals(
+                        dragDropListView.getResources().getQuantityString(R.plurals.brick_go_back_layer_plural, 1))
+        );
 
-		UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_go_back_edit_text, 2);
-		secondsTextView = (TextView) solo.getView(R.id.brick_go_back_layers_text_view);
-		assertTrue(
-				"Specifier hasn't changed from singular to plural",
-				secondsTextView.getText().equals(
-						dragDropListView.getResources().getQuantityString(R.plurals.brick_go_back_layer_plural, 2))
-		);
-	}
+        UiTestUtils.insertValueViaFormulaEditor(solo, R.id.brick_go_back_edit_text, 2);
+        secondsTextView = (TextView) solo.getView(R.id.brick_go_back_layers_text_view);
+        assertTrue(
+                "Specifier hasn't changed from singular to plural",
+                secondsTextView.getText().equals(
+                        dragDropListView.getResources().getQuantityString(R.plurals.brick_go_back_layer_plural, 2))
+        );
+    }
 
-	private void createProject() {
-		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite sprite = new SingleSprite("cat");
-		Script script = new StartScript();
-		goNStepsBackBrick = new GoNStepsBackBrick(0);
-		script.addBrick(goNStepsBackBrick);
+    private void createProject() {
+        project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        Sprite sprite = new SingleSprite("cat");
+        Script script = new StartScript();
+        goNStepsBackBrick = new GoNStepsBackBrick(0);
+        script.addBrick(goNStepsBackBrick);
 
-		sprite.addScript(script);
-		project.getDefaultScene().addSprite(sprite);
+        sprite.addScript(script);
+        project.getDefaultScene().addSprite(sprite);
 
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+        ProjectManager.getInstance().setProject(project);
+        ProjectManager.getInstance().setCurrentSprite(sprite);
+        ProjectManager.getInstance().setCurrentScript(script);
+    }
 }

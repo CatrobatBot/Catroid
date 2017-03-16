@@ -37,42 +37,42 @@ import java.util.regex.Pattern;
 
 public class VersionNameAndCodeTest extends TestCase {
 
-	private static final String[] DIRECTORIES = Utils.VERSION_NAME_AND_CODE_TEST_DIRECTORIES;
-	private static final String VERSION_CODE_REGEX = ".*android:versionCode=\"(\\d+)\".*";
-	private static final String VERSION_NAME_REGEX = ".*android:versionName=\"(\\d+\\.\\d+\\.\\d+[a-z]*)\".*";
+    private static final String[] DIRECTORIES = Utils.VERSION_NAME_AND_CODE_TEST_DIRECTORIES;
+    private static final String VERSION_CODE_REGEX = ".*android:versionCode=\"(\\d+)\".*";
+    private static final String VERSION_NAME_REGEX = ".*android:versionName=\"(\\d+\\.\\d+\\.\\d+[a-z]*)\".*";
 
-	public void testVersionCodeAndNameAreTheSameAcrossProjects() throws IOException {
-		Pattern versionCodePattern = Pattern.compile(VERSION_CODE_REGEX);
-		Pattern versionNamePattern = Pattern.compile(VERSION_NAME_REGEX);
+    public void testVersionCodeAndNameAreTheSameAcrossProjects() throws IOException {
+        Pattern versionCodePattern = Pattern.compile(VERSION_CODE_REGEX);
+        Pattern versionNamePattern = Pattern.compile(VERSION_NAME_REGEX);
 
-		HashSet<String> testSet = new HashSet<String>();
-		HashMap<String, String> versionInfos = new HashMap<String, String>();
+        HashSet<String> testSet = new HashSet<String>();
+        HashMap<String, String> versionInfos = new HashMap<String, String>();
 
-		for (String directoryName : DIRECTORIES) {
-			File directory = new File(directoryName);
-			assertTrue("Couldn't find directory: " + directoryName, directory.exists() && directory.isDirectory());
-			assertTrue("Couldn't read directory: " + directoryName, directory.canRead());
+        for (String directoryName : DIRECTORIES) {
+            File directory = new File(directoryName);
+            assertTrue("Couldn't find directory: " + directoryName, directory.exists() && directory.isDirectory());
+            assertTrue("Couldn't read directory: " + directoryName, directory.canRead());
 
-			File androidManifest = new File(directoryName + "/AndroidManifest.xml");
-			BufferedReader reader = new BufferedReader(new FileReader(androidManifest));
-			String line;
+            File androidManifest = new File(directoryName + "/AndroidManifest.xml");
+            BufferedReader reader = new BufferedReader(new FileReader(androidManifest));
+            String line;
 
-			while ((line = reader.readLine()) != null) {
-				Matcher matcher = versionCodePattern.matcher(line);
-				if (matcher.find()) {
-					testSet.add(matcher.group(1));
-					versionInfos.put(directory.getName() + " versionCode", matcher.group(1));
-				}
-				matcher = versionNamePattern.matcher(line);
-				if (matcher.find()) {
-					testSet.add(matcher.group(1));
-					versionInfos.put(directory.getName() + " versionName", matcher.group(1));
-				}
-			}
-			reader.close();
-		}
+            while ((line = reader.readLine()) != null) {
+                Matcher matcher = versionCodePattern.matcher(line);
+                if (matcher.find()) {
+                    testSet.add(matcher.group(1));
+                    versionInfos.put(directory.getName() + " versionCode", matcher.group(1));
+                }
+                matcher = versionNamePattern.matcher(line);
+                if (matcher.find()) {
+                    testSet.add(matcher.group(1));
+                    versionInfos.put(directory.getName() + " versionName", matcher.group(1));
+                }
+            }
+            reader.close();
+        }
 
-		assertEquals("There was a versionName or versionCode mismatch in one of the AndroidManifest.xml files\n"
-				+ versionInfos, 2, testSet.size());
-	}
+        assertEquals("There was a versionName or versionCode mismatch in one of the AndroidManifest.xml files\n"
+                + versionInfos, 2, testSet.size());
+    }
 }

@@ -33,47 +33,47 @@ import org.catrobat.catroid.devices.mindstorms.ev3.LegoEV3;
 import org.catrobat.catroid.devices.mindstorms.ev3.LegoEV3Impl;
 
 public class LegoEV3ImplTestWithModel extends AndroidTestCase {
-	private static final String TAG = LegoEV3ImplTestWithModel.class.getSimpleName();
+    private static final String TAG = LegoEV3ImplTestWithModel.class.getSimpleName();
 
-	private LegoEV3 ev3;
-	private MindstormsEV3TestModel ev3TestModel;
-	ConnectionDataLogger logger;
+    private LegoEV3 ev3;
+    private MindstormsEV3TestModel ev3TestModel;
+    ConnectionDataLogger logger;
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
 
-		Context applicationContext = this.getContext().getApplicationContext();
+        Context applicationContext = this.getContext().getApplicationContext();
 
-		ev3TestModel = new MindstormsEV3TestModel();
+        ev3TestModel = new MindstormsEV3TestModel();
 
-		ev3 = new LegoEV3Impl(applicationContext);
-		logger = ConnectionDataLogger.createLocalConnectionLoggerWithDeviceModel(ev3TestModel);
-		ev3.setConnection(logger.getConnectionProxy());
-	}
+        ev3 = new LegoEV3Impl(applicationContext);
+        logger = ConnectionDataLogger.createLocalConnectionLoggerWithDeviceModel(ev3TestModel);
+        ev3.setConnection(logger.getConnectionProxy());
+    }
 
-	public void testKeepAlive() {
-		int expectedKeepAliveTime = 5; // defined in LegoEV3Impl
+    public void testKeepAlive() {
+        int expectedKeepAliveTime = 5; // defined in LegoEV3Impl
 
-		ev3.initialise();
-		ev3.isAlive();
+        ev3.initialise();
+        ev3.isAlive();
 
-		boolean timeOut = false;
-		int timer = 0;
+        boolean timeOut = false;
+        int timer = 0;
 
-		while (!ev3TestModel.isKeepAliveSet() && !timeOut) {
-			try {
-				Thread.sleep(50);
-				timer += 50;
-			} catch (InterruptedException e) {
-				Log.w(TAG, "Sleep was interrupted", e);
-			}
+        while (!ev3TestModel.isKeepAliveSet() && !timeOut) {
+            try {
+                Thread.sleep(50);
+                timer += 50;
+            } catch (InterruptedException e) {
+                Log.w(TAG, "Sleep was interrupted", e);
+            }
 
-			if (timer >= 10000) {
-				timeOut = true;
-			}
-		}
+            if (timer >= 10000) {
+                timeOut = true;
+            }
+        }
 
-		assertEquals("Expected keep alive time deosn't match", expectedKeepAliveTime, ev3TestModel.getKeepAliveTime());
-	}
+        assertEquals("Expected keep alive time deosn't match", expectedKeepAliveTime, ev3TestModel.getKeepAliveTime());
+    }
 }

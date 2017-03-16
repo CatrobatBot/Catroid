@@ -33,32 +33,32 @@ import org.catrobat.catroid.devices.arduino.phiro.Phiro;
 
 public class PhiroMotorStopAction extends TemporalAction {
 
-	private Motor motorEnum;
+    private Motor motorEnum;
 
-	private BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
+    private BluetoothDeviceService btService = ServiceProvider.getService(CatroidService.BLUETOOTH_DEVICE_SERVICE);
 
-	@Override
-	protected void update(float percent) {
+    @Override
+    protected void update(float percent) {
 
-		Phiro phiro = btService.getDevice(BluetoothDevice.PHIRO);
-		if (phiro == null) {
-			return;
-		}
+        Phiro phiro = btService.getDevice(BluetoothDevice.PHIRO);
+        if (phiro == null) {
+            return;
+        }
 
-		switch (motorEnum) {
-			case MOTOR_LEFT:
-				phiro.stopLeftMotor();
-				break;
-			case MOTOR_RIGHT:
-				phiro.stopRightMotor();
-				break;
-			case MOTOR_BOTH:
-				phiro.stopAllMovements();
-				break;
-		}
-	}
+        switch (motorEnum) {
+            case MOTOR_LEFT:
+                phiro.stopLeftMotor();
+                break;
+            case MOTOR_RIGHT:
+                phiro.stopRightMotor();
+                break;
+            case MOTOR_BOTH:
+                phiro.stopAllMovements();
+                break;
+        }
+    }
 
-	public void setMotorEnum(Motor motorEnum) {
-		this.motorEnum = motorEnum;
-	}
+    public void setMotorEnum(Motor motorEnum) {
+        this.motorEnum = motorEnum;
+    }
 }

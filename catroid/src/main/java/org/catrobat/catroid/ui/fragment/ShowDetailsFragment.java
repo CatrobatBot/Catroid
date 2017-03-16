@@ -49,106 +49,106 @@ import java.util.Date;
 
 public class ShowDetailsFragment extends Fragment implements SetDescriptionDialog.ChangeDescriptionInterface {
 
-	public static final String TAG = ShowDetailsFragment.class.getSimpleName();
-	public static final String SELECTED_PROJECT_KEY = "selectedProject";
+    public static final String TAG = ShowDetailsFragment.class.getSimpleName();
+    public static final String SELECTED_PROJECT_KEY = "selectedProject";
 
-	private ProjectData projectData;
-	private TextView description;
+    private ProjectData projectData;
+    private TextView description;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View showDetailsFragment = inflater.inflate(R.layout.fragment_project_show_details, container, false);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View showDetailsFragment = inflater.inflate(R.layout.fragment_project_show_details, container, false);
 
-		try {
-			projectData = (ProjectData) getArguments().getSerializable(SELECTED_PROJECT_KEY);
-			projectData.project = StorageHandler.getInstance().loadProject(projectData.projectName, getActivity());
+        try {
+            projectData = (ProjectData) getArguments().getSerializable(SELECTED_PROJECT_KEY);
+            projectData.project = StorageHandler.getInstance().loadProject(projectData.projectName, getActivity());
 
-			if (projectData.project == null) {
-				throw new Exception("Can't load Project!");
-			}
-		} catch (Exception e) {
-			getActivity().getFragmentManager().beginTransaction().remove(this).commit();
-			((MyProjectsActivity) getActivity()).loadFragment(ProjectListFragment.class, false);
-		}
+            if (projectData.project == null) {
+                throw new Exception("Can't load Project!");
+            }
+        } catch (Exception e) {
+            getActivity().getFragmentManager().beginTransaction().remove(this).commit();
+            ((MyProjectsActivity) getActivity()).loadFragment(ProjectListFragment.class, false);
+        }
 
-		String sceneName = StorageHandler.getInstance().getFirstSceneName(projectData.projectName);
-		ProjectAndSceneScreenshotLoader screenshotLoader = new ProjectAndSceneScreenshotLoader(getActivity());
-		XmlHeader header = projectData.project.getXmlHeader();
+        String sceneName = StorageHandler.getInstance().getFirstSceneName(projectData.projectName);
+        ProjectAndSceneScreenshotLoader screenshotLoader = new ProjectAndSceneScreenshotLoader(getActivity());
+        XmlHeader header = projectData.project.getXmlHeader();
 
-		ImageView projectImage = (ImageView) showDetailsFragment.findViewById(R.id.image);
-		TextView name = (TextView) showDetailsFragment.findViewById(R.id.name);
-		TextView author = (TextView) showDetailsFragment.findViewById(R.id.author_value);
-		TextView size = (TextView) showDetailsFragment.findViewById(R.id.size_value);
-		TextView lastAccess = (TextView) showDetailsFragment.findViewById(R.id.last_access_value);
-		TextView screenSize = (TextView) showDetailsFragment.findViewById(R.id.screen_size_value);
-		TextView mode = (TextView) showDetailsFragment.findViewById(R.id.mode_value);
-		TextView remixOf = (TextView) showDetailsFragment.findViewById(R.id.remix_of_value);
-		description = (TextView) showDetailsFragment.findViewById(R.id.description_value);
+        ImageView projectImage = (ImageView) showDetailsFragment.findViewById(R.id.image);
+        TextView name = (TextView) showDetailsFragment.findViewById(R.id.name);
+        TextView author = (TextView) showDetailsFragment.findViewById(R.id.author_value);
+        TextView size = (TextView) showDetailsFragment.findViewById(R.id.size_value);
+        TextView lastAccess = (TextView) showDetailsFragment.findViewById(R.id.last_access_value);
+        TextView screenSize = (TextView) showDetailsFragment.findViewById(R.id.screen_size_value);
+        TextView mode = (TextView) showDetailsFragment.findViewById(R.id.mode_value);
+        TextView remixOf = (TextView) showDetailsFragment.findViewById(R.id.remix_of_value);
+        description = (TextView) showDetailsFragment.findViewById(R.id.description_value);
 
-		int modeText = header.islandscapeMode() ? R.string.landscape : R.string.portrait;
-		String screen = header.getVirtualScreenWidth() + "x" + header.getVirtualScreenHeight();
+        int modeText = header.islandscapeMode() ? R.string.landscape : R.string.portrait;
+        String screen = header.getVirtualScreenWidth() + "x" + header.getVirtualScreenHeight();
 
-		screenshotLoader.loadAndShowScreenshot(projectData.projectName, sceneName, false, projectImage);
-		name.setText(projectData.projectName);
-		author.setText(getUserHandle());
-		size.setText(UtilFile.getSizeAsString(new File(Utils.buildProjectPath(projectData.projectName))));
-		lastAccess.setText(getLastAccess());
-		screenSize.setText(screen);
-		mode.setText(modeText);
-		remixOf.setText(getRemixOf());
-		description.setText(header.getDescription());
-		description.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				handleDescriptionPressed();
-			}
-		});
+        screenshotLoader.loadAndShowScreenshot(projectData.projectName, sceneName, false, projectImage);
+        name.setText(projectData.projectName);
+        author.setText(getUserHandle());
+        size.setText(UtilFile.getSizeAsString(new File(Utils.buildProjectPath(projectData.projectName))));
+        lastAccess.setText(getLastAccess());
+        screenSize.setText(screen);
+        mode.setText(modeText);
+        remixOf.setText(getRemixOf());
+        description.setText(header.getDescription());
+        description.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleDescriptionPressed();
+            }
+        });
 
-		BottomBar.hideBottomBar(getActivity());
-		return showDetailsFragment;
-	}
+        BottomBar.hideBottomBar(getActivity());
+        return showDetailsFragment;
+    }
 
-	private void handleDescriptionPressed() {
-		SetDescriptionDialog dialog = new SetDescriptionDialog(R.string.set_description, R.string.description,
-				projectData.project.getDescription(), this);
-		dialog.show(getFragmentManager(), SetDescriptionDialog.DIALOG_FRAGMENT_TAG);
-	}
+    private void handleDescriptionPressed() {
+        SetDescriptionDialog dialog = new SetDescriptionDialog(R.string.set_description, R.string.description,
+                projectData.project.getDescription(), this);
+        dialog.show(getFragmentManager(), SetDescriptionDialog.DIALOG_FRAGMENT_TAG);
+    }
 
-	private String getLastAccess() {
-		Date lastModified = new Date(projectData.lastUsed);
-		String lastAccess;
-		if (DateUtils.isToday(lastModified.getTime())) {
-			lastAccess = getString(R.string.details_date_today).concat(": ");
-			lastAccess = lastAccess.concat(DateFormat.getTimeFormat(getActivity()).format(lastModified));
-		} else {
-			lastAccess = DateFormat.getDateFormat(getActivity()).format(lastModified);
-		}
-		return lastAccess;
-	}
+    private String getLastAccess() {
+        Date lastModified = new Date(projectData.lastUsed);
+        String lastAccess;
+        if (DateUtils.isToday(lastModified.getTime())) {
+            lastAccess = getString(R.string.details_date_today).concat(": ");
+            lastAccess = lastAccess.concat(DateFormat.getTimeFormat(getActivity()).format(lastModified));
+        } else {
+            lastAccess = DateFormat.getDateFormat(getActivity()).format(lastModified);
+        }
+        return lastAccess;
+    }
 
-	private String getUserHandle() {
-		String userHandle = projectData.project.getXmlHeader().getUserHandle();
-		if (userHandle == null || userHandle.equals("")) {
-			return getString(R.string.unknown);
-		}
-		return userHandle;
-	}
+    private String getUserHandle() {
+        String userHandle = projectData.project.getXmlHeader().getUserHandle();
+        if (userHandle == null || userHandle.equals("")) {
+            return getString(R.string.unknown);
+        }
+        return userHandle;
+    }
 
-	private String getRemixOf() {
-		String remixOf = projectData.project.getXmlHeader().getRemixParentsUrlString();
-		if (remixOf == null || remixOf.equals("")) {
-			return getString(R.string.nxt_no_sensor);
-		}
-		return remixOf;
-	}
+    private String getRemixOf() {
+        String remixOf = projectData.project.getXmlHeader().getRemixParentsUrlString();
+        if (remixOf == null || remixOf.equals("")) {
+            return getString(R.string.nxt_no_sensor);
+        }
+        return remixOf;
+    }
 
-	@Override
-	public void setDescription(String description) {
-		projectData.project.setDescription(description);
-		if (StorageHandler.getInstance().saveProject(projectData.project)) {
-			this.description.setText(description);
-		} else {
-			ToastUtil.showError(getActivity(), R.string.error_set_description);
-		}
-	}
+    @Override
+    public void setDescription(String description) {
+        projectData.project.setDescription(description);
+        if (StorageHandler.getInstance().saveProject(projectData.project)) {
+            this.description.setText(description);
+        } else {
+            ToastUtil.showError(getActivity(), R.string.error_set_description);
+        }
+    }
 }

@@ -33,45 +33,45 @@ import java.util.ArrayList;
 
 public class DeleteItemOfUserListAction extends TemporalAction {
 
-	private Sprite sprite;
-	private Formula formulaIndexToDelete;
-	private UserList userList;
+    private Sprite sprite;
+    private Formula formulaIndexToDelete;
+    private UserList userList;
 
-	@Override
-	protected void update(float percent) {
-		if (userList == null) {
-			return;
-		}
-		if (userList.getList().size() == 0) {
-			return;
-		}
+    @Override
+    protected void update(float percent) {
+        if (userList == null) {
+            return;
+        }
+        if (userList.getList().size() == 0) {
+            return;
+        }
 
-		int indexToDelete;
+        int indexToDelete;
 
-		try {
-			indexToDelete = formulaIndexToDelete == null ? 1 : formulaIndexToDelete.interpretInteger(sprite);
-		} catch (InterpretationException interpretationException) {
-			indexToDelete = 1;
-		}
+        try {
+            indexToDelete = formulaIndexToDelete == null ? 1 : formulaIndexToDelete.interpretInteger(sprite);
+        } catch (InterpretationException interpretationException) {
+            indexToDelete = 1;
+        }
 
-		indexToDelete--;
+        indexToDelete--;
 
-		if (indexToDelete >= userList.getList().size() || indexToDelete < 0) {
-			return;
-		}
+        if (indexToDelete >= userList.getList().size() || indexToDelete < 0) {
+            return;
+        }
 
-		((ArrayList<Object>) userList.getList()).remove(indexToDelete);
-	}
+        ((ArrayList<Object>) userList.getList()).remove(indexToDelete);
+    }
 
-	public void setUserList(UserList userVariable) {
-		this.userList = userVariable;
-	}
+    public void setUserList(UserList userVariable) {
+        this.userList = userVariable;
+    }
 
-	public void setFormulaIndexToDelete(Formula formulaIndexToDelete) {
-		this.formulaIndexToDelete = formulaIndexToDelete;
-	}
+    public void setFormulaIndexToDelete(Formula formulaIndexToDelete) {
+        this.formulaIndexToDelete = formulaIndexToDelete;
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 }

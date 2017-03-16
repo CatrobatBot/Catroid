@@ -56,281 +56,281 @@ import java.util.List;
 
 public class NewDataDialog extends DialogFragment {
 
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_new_data_catroid";
-	Spinner spinnerToUpdate;
-	DialogType dialogType = DialogType.SHOW_LIST_CHECKBOX;
-	private int spinnerPositionIfCancel;
+    public static final String DIALOG_FRAGMENT_TAG = "dialog_new_data_catroid";
+    Spinner spinnerToUpdate;
+    DialogType dialogType = DialogType.SHOW_LIST_CHECKBOX;
+    private int spinnerPositionIfCancel;
 
-	public static enum DialogType {
-		SHOW_LIST_CHECKBOX, USER_LIST, USER_VARIABLE
-	}
+    public static enum DialogType {
+        SHOW_LIST_CHECKBOX, USER_LIST, USER_VARIABLE
+    }
 
-	public NewDataDialog(DialogType dialogType) {
-		super();
-		this.dialogType = dialogType;
-	}
+    public NewDataDialog(DialogType dialogType) {
+        super();
+        this.dialogType = dialogType;
+    }
 
-	public NewDataDialog(Spinner spinnerToUpdate, DialogType dialogType) {
-		super();
-		this.spinnerToUpdate = spinnerToUpdate;
-		this.dialogType = dialogType;
-	}
+    public NewDataDialog(Spinner spinnerToUpdate, DialogType dialogType) {
+        super();
+        this.spinnerToUpdate = spinnerToUpdate;
+        this.dialogType = dialogType;
+    }
 
-	public interface NewUserListDialogListener {
-		void onFinishNewUserListDialog(Spinner spinnerToUpdate, UserList newUserList);
-	}
+    public interface NewUserListDialogListener {
+        void onFinishNewUserListDialog(Spinner spinnerToUpdate, UserList newUserList);
+    }
 
-	private List<NewUserListDialogListener> newUserListDialogListenerList = new ArrayList<NewDataDialog.NewUserListDialogListener>();
+    private List<NewUserListDialogListener> newUserListDialogListenerList = new ArrayList<NewDataDialog.NewUserListDialogListener>();
 
-	public interface NewVariableDialogListener {
-		void onFinishNewVariableDialog(Spinner spinnerToUpdate, UserVariable newUserVariable);
-	}
+    public interface NewVariableDialogListener {
+        void onFinishNewVariableDialog(Spinner spinnerToUpdate, UserVariable newUserVariable);
+    }
 
-	private List<NewVariableDialogListener> newVariableDialogListenerList = new ArrayList<NewVariableDialogListener>();
+    private List<NewVariableDialogListener> newVariableDialogListenerList = new ArrayList<NewVariableDialogListener>();
 
-	@Override
-	public void onCancel(DialogInterface dialog) {
-		super.onCancel(dialog);
-		userListDialogListenerListFinishNewUserListDialog(null);
-		if (spinnerToUpdate != null) {
-			spinnerToUpdate.setSelection(spinnerPositionIfCancel);
-		}
-	}
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
+        userListDialogListenerListFinishNewUserListDialog(null);
+        if (spinnerToUpdate != null) {
+            spinnerToUpdate.setSelection(spinnerPositionIfCancel);
+        }
+    }
 
-	@Override
-	public Dialog onCreateDialog(Bundle bundle) {
-		final View dialogView = LayoutInflater.from(getActivity()).inflate(
-				R.layout.dialog_formula_editor_data_name, null);
+    @Override
+    public Dialog onCreateDialog(Bundle bundle) {
+        final View dialogView = LayoutInflater.from(getActivity()).inflate(
+                R.layout.dialog_formula_editor_data_name, null);
 
-		final Dialog dialogNewData = new AlertDialog.Builder(getActivity()).setView(dialogView)
-				.setTitle(R.string.formula_editor_data_dialog_title)
-				.setNegativeButton(R.string.cancel, new OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.cancel();
-					}
-				}).setPositiveButton(R.string.ok, new OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						handleOkButton(dialogView);
-					}
-				}).create();
+        final Dialog dialogNewData = new AlertDialog.Builder(getActivity()).setView(dialogView)
+                .setTitle(R.string.formula_editor_data_dialog_title)
+                .setNegativeButton(R.string.cancel, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                }).setPositiveButton(R.string.ok, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        handleOkButton(dialogView);
+                    }
+                }).create();
 
-		dialogNewData.setCanceledOnTouchOutside(true);
-		dialogNewData.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        dialogNewData.setCanceledOnTouchOutside(true);
+        dialogNewData.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-		dialogNewData.setOnShowListener(new OnShowListener() {
-			@Override
-			public void onShow(DialogInterface dialog) {
-				handleOnShow(dialogNewData);
-			}
-		});
+        dialogNewData.setOnShowListener(new OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                handleOnShow(dialogNewData);
+            }
+        });
 
-		return dialogNewData;
-	}
+        return dialogNewData;
+    }
 
-	public void addUserListDialogListener(NewUserListDialogListener newUserListDialogListener) {
-		newUserListDialogListenerList.add(newUserListDialogListener);
-	}
+    public void addUserListDialogListener(NewUserListDialogListener newUserListDialogListener) {
+        newUserListDialogListenerList.add(newUserListDialogListener);
+    }
 
-	private void userListDialogListenerListFinishNewUserListDialog(UserList newUserList) {
-		for (NewUserListDialogListener newUserListDialogListener : newUserListDialogListenerList) {
-			newUserListDialogListener.onFinishNewUserListDialog(spinnerToUpdate, newUserList);
-		}
-	}
+    private void userListDialogListenerListFinishNewUserListDialog(UserList newUserList) {
+        for (NewUserListDialogListener newUserListDialogListener : newUserListDialogListenerList) {
+            newUserListDialogListener.onFinishNewUserListDialog(spinnerToUpdate, newUserList);
+        }
+    }
 
-	public void addVariableDialogListener(NewVariableDialogListener newVariableDialogListener) {
-		newVariableDialogListenerList.add(newVariableDialogListener);
-	}
+    public void addVariableDialogListener(NewVariableDialogListener newVariableDialogListener) {
+        newVariableDialogListenerList.add(newVariableDialogListener);
+    }
 
-	private void variableDialogListenerListFinishNewVariableDialog(UserVariable newUserVariable) {
-		for (NewVariableDialogListener newVariableDialogListener : newVariableDialogListenerList) {
-			newVariableDialogListener.onFinishNewVariableDialog(spinnerToUpdate, newUserVariable);
-		}
-	}
+    private void variableDialogListenerListFinishNewVariableDialog(UserVariable newUserVariable) {
+        for (NewVariableDialogListener newVariableDialogListener : newVariableDialogListenerList) {
+            newVariableDialogListener.onFinishNewVariableDialog(spinnerToUpdate, newUserVariable);
+        }
+    }
 
-	private void handleOkButton(View dialogView) {
-		EditText nameEditText = (EditText) dialogView
-				.findViewById(R.id.dialog_formula_editor_data_name_edit_text);
-		RadioButton local = (RadioButton) dialogView
-				.findViewById(R.id.dialog_formula_editor_data_name_local_variable_radio_button);
-		RadioButton global = (RadioButton) dialogView
-				.findViewById(R.id.dialog_formula_editor_data_name_global_variable_radio_button);
-		CheckBox isListCheckbox = (CheckBox) dialogView.findViewById(R.id.dialog_formula_editor_data_is_list_checkbox);
+    private void handleOkButton(View dialogView) {
+        EditText nameEditText = (EditText) dialogView
+                .findViewById(R.id.dialog_formula_editor_data_name_edit_text);
+        RadioButton local = (RadioButton) dialogView
+                .findViewById(R.id.dialog_formula_editor_data_name_local_variable_radio_button);
+        RadioButton global = (RadioButton) dialogView
+                .findViewById(R.id.dialog_formula_editor_data_name_global_variable_radio_button);
+        CheckBox isListCheckbox = (CheckBox) dialogView.findViewById(R.id.dialog_formula_editor_data_is_list_checkbox);
 
-		String name = nameEditText.getText().toString();
-		switch (dialogType) {
-			case SHOW_LIST_CHECKBOX:
+        String name = nameEditText.getText().toString();
+        switch (dialogType) {
+            case SHOW_LIST_CHECKBOX:
 
-				if (isListCheckbox.isChecked()) {
-					addUserList(name, local, global);
-				} else {
-					addUserVariable(name, local, global);
-				}
-				break;
-			case USER_LIST:
-				addUserList(name, local, global);
-				break;
-			case USER_VARIABLE:
-				addUserVariable(name, local, global);
-				break;
-		}
-	}
+                if (isListCheckbox.isChecked()) {
+                    addUserList(name, local, global);
+                } else {
+                    addUserVariable(name, local, global);
+                }
+                break;
+            case USER_LIST:
+                addUserList(name, local, global);
+                break;
+            case USER_VARIABLE:
+                addUserVariable(name, local, global);
+                break;
+        }
+    }
 
-	private void addUserList(String name, RadioButton local, RadioButton global) {
-		UserList newUserList = null;
-		if (global.isChecked()) {
-			if (!isListNameValid(name)) {
-				ToastUtil.showError(getActivity(), R.string.formula_editor_existing_data_item);
-			} else {
-				newUserList = ProjectManager.getInstance().getCurrentScene().getDataContainer()
-						.addProjectUserList(name);
-			}
-		} else if (local.isChecked()) {
-			newUserList = ProjectManager.getInstance().getCurrentScene().getDataContainer().addSpriteUserList(name);
-		}
-		userListDialogListenerListFinishNewUserListDialog(newUserList);
-	}
+    private void addUserList(String name, RadioButton local, RadioButton global) {
+        UserList newUserList = null;
+        if (global.isChecked()) {
+            if (!isListNameValid(name)) {
+                ToastUtil.showError(getActivity(), R.string.formula_editor_existing_data_item);
+            } else {
+                newUserList = ProjectManager.getInstance().getCurrentScene().getDataContainer()
+                        .addProjectUserList(name);
+            }
+        } else if (local.isChecked()) {
+            newUserList = ProjectManager.getInstance().getCurrentScene().getDataContainer().addSpriteUserList(name);
+        }
+        userListDialogListenerListFinishNewUserListDialog(newUserList);
+    }
 
-	private void addUserVariable(String name, RadioButton local, RadioButton global) {
-		UserVariable newUserVariable = null;
-		if (global.isChecked()) {
-			if (!isVariableNameValid(name)) {
-				ToastUtil.showError(getActivity(), R.string.formula_editor_existing_variable);
-			} else {
-				newUserVariable = ProjectManager.getInstance().getCurrentScene().getDataContainer()
-						.addProjectUserVariable(name);
-			}
-		} else if (local.isChecked()) {
-			newUserVariable = ProjectManager.getInstance().getCurrentScene().getDataContainer().addSpriteUserVariable(name);
-		}
-		variableDialogListenerListFinishNewVariableDialog(newUserVariable);
-	}
+    private void addUserVariable(String name, RadioButton local, RadioButton global) {
+        UserVariable newUserVariable = null;
+        if (global.isChecked()) {
+            if (!isVariableNameValid(name)) {
+                ToastUtil.showError(getActivity(), R.string.formula_editor_existing_variable);
+            } else {
+                newUserVariable = ProjectManager.getInstance().getCurrentScene().getDataContainer()
+                        .addProjectUserVariable(name);
+            }
+        } else if (local.isChecked()) {
+            newUserVariable = ProjectManager.getInstance().getCurrentScene().getDataContainer().addSpriteUserVariable(name);
+        }
+        variableDialogListenerListFinishNewVariableDialog(newUserVariable);
+    }
 
-	private void handleOnShow(final Dialog dialogNewUserList) {
-		final Button positiveButton = ((AlertDialog) dialogNewUserList).getButton(AlertDialog.BUTTON_POSITIVE);
-		positiveButton.setEnabled(false);
+    private void handleOnShow(final Dialog dialogNewUserList) {
+        final Button positiveButton = ((AlertDialog) dialogNewUserList).getButton(AlertDialog.BUTTON_POSITIVE);
+        positiveButton.setEnabled(false);
 
-		final CheckBox isListCheckbox = (CheckBox) dialogNewUserList.findViewById(R.id.dialog_formula_editor_data_is_list_checkbox);
+        final CheckBox isListCheckbox = (CheckBox) dialogNewUserList.findViewById(R.id.dialog_formula_editor_data_is_list_checkbox);
 
-		switch (dialogType) {
-			case SHOW_LIST_CHECKBOX:
-				isListCheckbox.setVisibility(View.VISIBLE);
-				break;
-			case USER_VARIABLE:
-				isListCheckbox.setVisibility(View.GONE);
-				dialogNewUserList.setTitle(R.string.formula_editor_variable_dialog_title);
-				break;
-			case USER_LIST:
-				isListCheckbox.setVisibility(View.GONE);
-				dialogNewUserList.setTitle(R.string.formula_editor_list_dialog_title);
-				break;
-		}
+        switch (dialogType) {
+            case SHOW_LIST_CHECKBOX:
+                isListCheckbox.setVisibility(View.VISIBLE);
+                break;
+            case USER_VARIABLE:
+                isListCheckbox.setVisibility(View.GONE);
+                dialogNewUserList.setTitle(R.string.formula_editor_variable_dialog_title);
+                break;
+            case USER_LIST:
+                isListCheckbox.setVisibility(View.GONE);
+                dialogNewUserList.setTitle(R.string.formula_editor_list_dialog_title);
+                break;
+        }
 
-		final EditText dialogEditText = (EditText) dialogNewUserList
-				.findViewById(R.id.dialog_formula_editor_data_name_edit_text);
+        final EditText dialogEditText = (EditText) dialogNewUserList
+                .findViewById(R.id.dialog_formula_editor_data_name_edit_text);
 
-		InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(
-				Context.INPUT_METHOD_SERVICE);
-		inputMethodManager.showSoftInput(dialogEditText, InputMethodManager.SHOW_IMPLICIT);
+        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInput(dialogEditText, InputMethodManager.SHOW_IMPLICIT);
 
-		dialogEditText.addTextChangedListener(new TextWatcher() {
+        dialogEditText.addTextChangedListener(new TextWatcher() {
 
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-			}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			}
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
-			@Override
-			public void afterTextChanged(Editable editable) {
-				String name = editable.toString();
-				checkName(name, positiveButton, isListCheckbox);
-			}
-		});
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String name = editable.toString();
+                checkName(name, positiveButton, isListCheckbox);
+            }
+        });
 
-		isListCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-				checkName(dialogEditText.getText().toString(), positiveButton, isListCheckbox);
-			}
-		});
-	}
+        isListCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                checkName(dialogEditText.getText().toString(), positiveButton, isListCheckbox);
+            }
+        });
+    }
 
-	private void checkName(String name, Button positiveButton, CheckBox isListCheckbox) {
-		switch (dialogType) {
-			case SHOW_LIST_CHECKBOX:
+    private void checkName(String name, Button positiveButton, CheckBox isListCheckbox) {
+        switch (dialogType) {
+            case SHOW_LIST_CHECKBOX:
 
-				if (isListCheckbox.isChecked()) {
-					if (isListNameValid(name)) {
-						positiveButton.setEnabled(true);
-					} else {
-						ToastUtil.showError(getActivity(), R.string.formula_editor_existing_data_item);
-						positiveButton.setEnabled(false);
-					}
-				} else {
-					if (isVariableNameValid(name)) {
-						positiveButton.setEnabled(true);
-					} else {
-						ToastUtil.showError(getActivity(), R.string.formula_editor_existing_variable);
-						positiveButton.setEnabled(false);
-					}
-				}
-				break;
-			case USER_LIST:
-				if (isListNameValid(name)) {
-					positiveButton.setEnabled(true);
-				} else {
-					ToastUtil.showError(getActivity(), R.string.formula_editor_existing_data_item);
-					positiveButton.setEnabled(false);
-				}
-				break;
-			case USER_VARIABLE:
-				if (isVariableNameValid(name)) {
-					positiveButton.setEnabled(true);
-				} else {
-					ToastUtil.showError(getActivity(), R.string.formula_editor_existing_variable);
-					positiveButton.setEnabled(false);
-				}
-				break;
-		}
+                if (isListCheckbox.isChecked()) {
+                    if (isListNameValid(name)) {
+                        positiveButton.setEnabled(true);
+                    } else {
+                        ToastUtil.showError(getActivity(), R.string.formula_editor_existing_data_item);
+                        positiveButton.setEnabled(false);
+                    }
+                } else {
+                    if (isVariableNameValid(name)) {
+                        positiveButton.setEnabled(true);
+                    } else {
+                        ToastUtil.showError(getActivity(), R.string.formula_editor_existing_variable);
+                        positiveButton.setEnabled(false);
+                    }
+                }
+                break;
+            case USER_LIST:
+                if (isListNameValid(name)) {
+                    positiveButton.setEnabled(true);
+                } else {
+                    ToastUtil.showError(getActivity(), R.string.formula_editor_existing_data_item);
+                    positiveButton.setEnabled(false);
+                }
+                break;
+            case USER_VARIABLE:
+                if (isVariableNameValid(name)) {
+                    positiveButton.setEnabled(true);
+                } else {
+                    ToastUtil.showError(getActivity(), R.string.formula_editor_existing_variable);
+                    positiveButton.setEnabled(false);
+                }
+                break;
+        }
 
-		if (name.length() == 0) {
-			positiveButton.setEnabled(false);
-		}
-	}
+        if (name.length() == 0) {
+            positiveButton.setEnabled(false);
+        }
+    }
 
-	private boolean isListNameValid(String name) {
-		DataContainer currentData = ProjectManager.getInstance().getCurrentScene().getDataContainer();
-		RadioButton global = (RadioButton) getDialog()
-				.findViewById(R.id.dialog_formula_editor_data_name_global_variable_radio_button);
+    private boolean isListNameValid(String name) {
+        DataContainer currentData = ProjectManager.getInstance().getCurrentScene().getDataContainer();
+        RadioButton global = (RadioButton) getDialog()
+                .findViewById(R.id.dialog_formula_editor_data_name_global_variable_radio_button);
 
-		if (global.isChecked()) {
-			List<Sprite> sprites = ProjectManager.getInstance().getCurrentScene().getSpriteList();
-			return !currentData.existListInAnySprite(name, sprites) && !currentData.existProjectListWithName(name);
-		} else {
-			Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
-			return !currentData.existProjectListWithName(name) && !currentData.existSpriteListByName(name, currentSprite);
-		}
-	}
+        if (global.isChecked()) {
+            List<Sprite> sprites = ProjectManager.getInstance().getCurrentScene().getSpriteList();
+            return !currentData.existListInAnySprite(name, sprites) && !currentData.existProjectListWithName(name);
+        } else {
+            Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
+            return !currentData.existProjectListWithName(name) && !currentData.existSpriteListByName(name, currentSprite);
+        }
+    }
 
-	private boolean isVariableNameValid(String name) {
-		DataContainer currentData = ProjectManager.getInstance().getCurrentScene().getDataContainer();
-		RadioButton global = (RadioButton) getDialog()
-				.findViewById(R.id.dialog_formula_editor_data_name_global_variable_radio_button);
+    private boolean isVariableNameValid(String name) {
+        DataContainer currentData = ProjectManager.getInstance().getCurrentScene().getDataContainer();
+        RadioButton global = (RadioButton) getDialog()
+                .findViewById(R.id.dialog_formula_editor_data_name_global_variable_radio_button);
 
-		if (global.isChecked()) {
-			List<Sprite> sprites = ProjectManager.getInstance().getCurrentScene().getSpriteList();
-			return !currentData.existVariableInAnySprite(name, sprites) && !currentData.existProjectVariableWithName(name);
-		} else {
-			Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
-			return !currentData.existProjectVariableWithName(name) && !currentData.existSpriteVariableByName(name, currentSprite);
-		}
-	}
+        if (global.isChecked()) {
+            List<Sprite> sprites = ProjectManager.getInstance().getCurrentScene().getSpriteList();
+            return !currentData.existVariableInAnySprite(name, sprites) && !currentData.existProjectVariableWithName(name);
+        } else {
+            Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
+            return !currentData.existProjectVariableWithName(name) && !currentData.existSpriteVariableByName(name, currentSprite);
+        }
+    }
 
-	public void setUserVariableIfCancel(int spinnerPositionIfCancel) {
-		this.spinnerPositionIfCancel = spinnerPositionIfCancel;
-	}
+    public void setUserVariableIfCancel(int spinnerPositionIfCancel) {
+        this.spinnerPositionIfCancel = spinnerPositionIfCancel;
+    }
 }

@@ -45,94 +45,94 @@ import org.catrobat.catroid.uitest.util.BaseActivityInstrumentationTestCase;
 import org.catrobat.catroid.uitest.util.UiTestUtils;
 
 public class FaceDetectionResourcesTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
-	private static final int SCREEN_WIDTH = 480;
-	private static final int SCREEN_HEIGHT = 800;
-	private static final int SLEEP_TIME = 300;
+    private static final int SCREEN_WIDTH = 480;
+    private static final int SCREEN_HEIGHT = 800;
+    private static final int SLEEP_TIME = 300;
 
-	private Project project;
-	Sprite sprite;
+    private Project project;
+    Sprite sprite;
 
-	public FaceDetectionResourcesTest() {
-		super(MainMenuActivity.class);
-	}
+    public FaceDetectionResourcesTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-	public void testResourceNeeded() throws Exception {
-		createProject(true);
-		UiTestUtils.prepareStageForTest();
-		UiTestUtils.getIntoSpritesFromMainMenu(solo);
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(SLEEP_TIME);
-		assertTrue("Face detection was not started although it is needed as a resource",
-				FaceDetectionHandler.isFaceDetectionRunning());
-		solo.goBackToActivity(MainMenuActivity.class.getSimpleName());
-		solo.sleep(SLEEP_TIME);
-		assertFalse("Face detection was not stopped", FaceDetectionHandler.isFaceDetectionRunning());
-		solo.goBackToActivity(MainMenuActivity.class.getSimpleName());
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-	}
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    public void testResourceNeeded() throws Exception {
+        createProject(true);
+        UiTestUtils.prepareStageForTest();
+        UiTestUtils.getIntoSpritesFromMainMenu(solo);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(SLEEP_TIME);
+        assertTrue("Face detection was not started although it is needed as a resource",
+                FaceDetectionHandler.isFaceDetectionRunning());
+        solo.goBackToActivity(MainMenuActivity.class.getSimpleName());
+        solo.sleep(SLEEP_TIME);
+        assertFalse("Face detection was not stopped", FaceDetectionHandler.isFaceDetectionRunning());
+        solo.goBackToActivity(MainMenuActivity.class.getSimpleName());
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+    }
 
-	public void testResourceNotNeeded() throws Exception {
-		createProject(false);
-		UiTestUtils.prepareStageForTest();
-		UiTestUtils.getIntoSpritesFromMainMenu(solo);
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(SLEEP_TIME);
-		assertFalse("Face detection was started although it is not needed as a resource",
-				FaceDetectionHandler.isFaceDetectionRunning());
-		solo.goBackToActivity(MainMenuActivity.class.getSimpleName());
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-	}
+    public void testResourceNotNeeded() throws Exception {
+        createProject(false);
+        UiTestUtils.prepareStageForTest();
+        UiTestUtils.getIntoSpritesFromMainMenu(solo);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(SLEEP_TIME);
+        assertFalse("Face detection was started although it is not needed as a resource",
+                FaceDetectionHandler.isFaceDetectionRunning());
+        solo.goBackToActivity(MainMenuActivity.class.getSimpleName());
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+    }
 
-	public void testResourceChanged() throws Exception {
-		createProject(true);
-		UiTestUtils.prepareStageForTest();
-		UiTestUtils.getIntoSpritesFromMainMenu(solo);
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(SLEEP_TIME * 5);
-		assertTrue("Face detection was not started although it is needed as a resource",
-				FaceDetectionHandler.isFaceDetectionRunning());
-		solo.goBackToActivity(MainMenuActivity.class.getSimpleName());
-		solo.sleep(SLEEP_TIME * 5);
-		assertFalse("Face detection was not stopped", FaceDetectionHandler.isFaceDetectionRunning());
-		createProject(false);
-		UiTestUtils.prepareStageForTest();
-		UiTestUtils.getIntoSpritesFromMainMenu(solo);
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(SLEEP_TIME * 5);
-		assertFalse("Face detection was resumed although it is not needed anymore"
-						+ " (if testResourceNotNeeded succeeds: FaceDetectionHandler.reset might be missing)",
-				FaceDetectionHandler.isFaceDetectionRunning());
-		solo.goBackToActivity(MainMenuActivity.class.getSimpleName());
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(SLEEP_TIME);
-	}
+    public void testResourceChanged() throws Exception {
+        createProject(true);
+        UiTestUtils.prepareStageForTest();
+        UiTestUtils.getIntoSpritesFromMainMenu(solo);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(SLEEP_TIME * 5);
+        assertTrue("Face detection was not started although it is needed as a resource",
+                FaceDetectionHandler.isFaceDetectionRunning());
+        solo.goBackToActivity(MainMenuActivity.class.getSimpleName());
+        solo.sleep(SLEEP_TIME * 5);
+        assertFalse("Face detection was not stopped", FaceDetectionHandler.isFaceDetectionRunning());
+        createProject(false);
+        UiTestUtils.prepareStageForTest();
+        UiTestUtils.getIntoSpritesFromMainMenu(solo);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(SLEEP_TIME * 5);
+        assertFalse("Face detection was resumed although it is not needed anymore"
+                        + " (if testResourceNotNeeded succeeds: FaceDetectionHandler.reset might be missing)",
+                FaceDetectionHandler.isFaceDetectionRunning());
+        solo.goBackToActivity(MainMenuActivity.class.getSimpleName());
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(SLEEP_TIME);
+    }
 
-	private void createProject(boolean faceDetection) {
-		ScreenValues.SCREEN_HEIGHT = SCREEN_HEIGHT;
-		ScreenValues.SCREEN_WIDTH = SCREEN_WIDTH;
+    private void createProject(boolean faceDetection) {
+        ScreenValues.SCREEN_HEIGHT = SCREEN_HEIGHT;
+        ScreenValues.SCREEN_WIDTH = SCREEN_WIDTH;
 
-		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+        project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
 
-		sprite = new SingleSprite("aSprite");
+        sprite = new SingleSprite("aSprite");
 
-		StartScript startScript = new StartScript();
-		FormulaElement faceDetectionFormulaElement = new FormulaElement(ElementType.SENSOR, Sensors.FACE_SIZE.name(),
-				null);
-		FormulaElement nonFaceDetectionFormulaElement = new FormulaElement(ElementType.NUMBER, "42", null);
-		MoveNStepsBrick moveBrick = new MoveNStepsBrick(new Formula(faceDetection ? faceDetectionFormulaElement
-				: nonFaceDetectionFormulaElement));
-		startScript.addBrick(moveBrick);
-		sprite.addScript(startScript);
+        StartScript startScript = new StartScript();
+        FormulaElement faceDetectionFormulaElement = new FormulaElement(ElementType.SENSOR, Sensors.FACE_SIZE.name(),
+                null);
+        FormulaElement nonFaceDetectionFormulaElement = new FormulaElement(ElementType.NUMBER, "42", null);
+        MoveNStepsBrick moveBrick = new MoveNStepsBrick(new Formula(faceDetection ? faceDetectionFormulaElement
+                : nonFaceDetectionFormulaElement));
+        startScript.addBrick(moveBrick);
+        sprite.addScript(startScript);
 
-		project.getDefaultScene().addSprite(sprite);
+        project.getDefaultScene().addSprite(sprite);
 
-		StorageHandler.getInstance().saveProject(project);
-		ProjectManager.getInstance().setProject(project);
-	}
+        StorageHandler.getInstance().saveProject(project);
+        ProjectManager.getInstance().setProject(project);
+    }
 }
 

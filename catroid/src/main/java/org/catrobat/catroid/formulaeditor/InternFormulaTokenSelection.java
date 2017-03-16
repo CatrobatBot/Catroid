@@ -26,60 +26,60 @@ import org.catrobat.catroid.formulaeditor.InternFormula.TokenSelectionType;
 
 public class InternFormulaTokenSelection {
 
-	private int internTokenSelectionStart;
-	private int internTokenSelectionEnd;
-	private TokenSelectionType tokenSelectionType;
+    private int internTokenSelectionStart;
+    private int internTokenSelectionEnd;
+    private TokenSelectionType tokenSelectionType;
 
-	public InternFormulaTokenSelection(TokenSelectionType tokenSelectionType, int internTokenSelectionStart,
-			int internTokenSelectionEnd) {
-		this.tokenSelectionType = tokenSelectionType;
-		this.internTokenSelectionStart = internTokenSelectionStart;
-		this.internTokenSelectionEnd = internTokenSelectionEnd;
-	}
+    public InternFormulaTokenSelection(TokenSelectionType tokenSelectionType, int internTokenSelectionStart,
+                                       int internTokenSelectionEnd) {
+        this.tokenSelectionType = tokenSelectionType;
+        this.internTokenSelectionStart = internTokenSelectionStart;
+        this.internTokenSelectionEnd = internTokenSelectionEnd;
+    }
 
-	public int getStartIndex() {
-		return internTokenSelectionStart;
-	}
+    public int getStartIndex() {
+        return internTokenSelectionStart;
+    }
 
-	public int getEndIndex() {
-		return internTokenSelectionEnd;
-	}
+    public int getEndIndex() {
+        return internTokenSelectionEnd;
+    }
 
-	public TokenSelectionType getTokenSelectionType() {
-		return tokenSelectionType;
-	}
+    public TokenSelectionType getTokenSelectionType() {
+        return tokenSelectionType;
+    }
 
-	@Override
-	public boolean equals(Object objectToCompare) {
+    @Override
+    public boolean equals(Object objectToCompare) {
 
-		if (objectToCompare instanceof InternFormulaTokenSelection) {
-			InternFormulaTokenSelection selectionToCompare = (InternFormulaTokenSelection) objectToCompare;
-			if (internTokenSelectionStart != selectionToCompare.internTokenSelectionStart
-					|| internTokenSelectionEnd != selectionToCompare.internTokenSelectionEnd
-					|| tokenSelectionType != selectionToCompare.tokenSelectionType) {
-				return false;
-			}
-			return true;
-		}
-		return super.equals(objectToCompare);
-	}
+        if (objectToCompare instanceof InternFormulaTokenSelection) {
+            InternFormulaTokenSelection selectionToCompare = (InternFormulaTokenSelection) objectToCompare;
+            if (internTokenSelectionStart != selectionToCompare.internTokenSelectionStart
+                    || internTokenSelectionEnd != selectionToCompare.internTokenSelectionEnd
+                    || tokenSelectionType != selectionToCompare.tokenSelectionType) {
+                return false;
+            }
+            return true;
+        }
+        return super.equals(objectToCompare);
+    }
 
-	@Override
-	public int hashCode() {
-		int result = 31;
-		int prime = 41;
+    @Override
+    public int hashCode() {
+        int result = 31;
+        int prime = 41;
 
-		result = prime * result + internTokenSelectionStart;
-		result = prime * result + internTokenSelectionEnd;
-		if (tokenSelectionType != null) {
-			result = prime * result + tokenSelectionType.hashCode();
-		}
+        result = prime * result + internTokenSelectionStart;
+        result = prime * result + internTokenSelectionEnd;
+        if (tokenSelectionType != null) {
+            result = prime * result + tokenSelectionType.hashCode();
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	public InternFormulaTokenSelection deepCopy() {
+    public InternFormulaTokenSelection deepCopy() {
 
-		return new InternFormulaTokenSelection(tokenSelectionType, internTokenSelectionStart, internTokenSelectionEnd);
-	}
+        return new InternFormulaTokenSelection(tokenSelectionType, internTokenSelectionStart, internTokenSelectionEnd);
+    }
 }

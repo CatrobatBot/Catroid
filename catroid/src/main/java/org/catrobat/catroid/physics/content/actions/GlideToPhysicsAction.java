@@ -27,21 +27,21 @@ import org.catrobat.catroid.physics.PhysicsLook;
 
 public class GlideToPhysicsAction extends GlideToAction {
 
-	private PhysicsLook physicsLook;
+    private PhysicsLook physicsLook;
 
-	@Override
-	protected void begin() {
-		physicsLook.startGlide();
-		super.begin();
-	}
+    @Override
+    protected void begin() {
+        physicsLook.startGlide();
+        super.begin();
+    }
 
-	@Override
-	protected void end() {
-		super.end();
-		physicsLook.stopGlide();
-	}
+    @Override
+    protected void end() {
+        super.end();
+        physicsLook.stopGlide();
+    }
 
-	public void setPhysicsLook(PhysicsLook physicsLook) {
-		this.physicsLook = physicsLook;
-	}
+    public void setPhysicsLook(PhysicsLook physicsLook) {
+        this.physicsLook = physicsLook;
+    }
 }

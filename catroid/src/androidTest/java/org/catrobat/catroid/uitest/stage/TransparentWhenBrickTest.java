@@ -46,156 +46,156 @@ import java.io.File;
 
 public class TransparentWhenBrickTest extends BaseActivityInstrumentationTestCase<MainMenuActivity> {
 
-	private final int screenWidth = 480;
-	private final int screenHeight = 800;
-	private final String catFilename = "catroid_sunglasses.png";
-	private final String fishFilename = "fish.jpg";
-	SetTransparencyBrick setTransparencyBrick;
-	private int catXPosition = 60;
-	private int catYPosition = 150;
-	private int fishXPosition = -60;
-	private int fishYPosition = -150;
-	private Sprite cat;
-	private Sprite fish;
+    private final int screenWidth = 480;
+    private final int screenHeight = 800;
+    private final String catFilename = "catroid_sunglasses.png";
+    private final String fishFilename = "fish.jpg";
+    SetTransparencyBrick setTransparencyBrick;
+    private int catXPosition = 60;
+    private int catYPosition = 150;
+    private int fishXPosition = -60;
+    private int fishYPosition = -150;
+    private Sprite cat;
+    private Sprite fish;
 
-	public TransparentWhenBrickTest() {
-		super(MainMenuActivity.class);
-	}
+    public TransparentWhenBrickTest() {
+        super(MainMenuActivity.class);
+    }
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		createProject();
-		UiTestUtils.prepareStageForTest();
-		UiTestUtils.getIntoSpritesFromMainMenu(solo);
-		UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
-	}
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        createProject();
+        UiTestUtils.prepareStageForTest();
+        UiTestUtils.getIntoSpritesFromMainMenu(solo);
+        UiTestUtils.clickOnBottomBar(solo, R.id.button_play);
+    }
 
-	public void testTapOnSideAreaOfForegroundSprite() {
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(2000);
-		assertTrue("Sprite cat is not at x=0 and y=0",
-				cat.look.getXInUserInterfaceDimensionUnit() == 0 && cat.look.getYInUserInterfaceDimensionUnit() == 0);
-		assertTrue("Sprite fish is not at x=0 and y=0",
-				fish.look.getXInUserInterfaceDimensionUnit() == 0 && fish.look.getYInUserInterfaceDimensionUnit() == 0);
-		assertTrue("Sprite fish is not the foreground sprite", fish.look.getZIndex() > cat.look.getZIndex());
-		UiTestUtils.clickOnStageCoordinates(solo, 22, 45, screenWidth, screenHeight);
-		solo.sleep(1000);
-		assertTrue("Sprite cat is at false position", cat.look.getXInUserInterfaceDimensionUnit() == catXPosition
-				&& cat.look.getYInUserInterfaceDimensionUnit() == catYPosition);
-		assertTrue("Sprite fish has moved",
-				fish.look.getXInUserInterfaceDimensionUnit() == 0 && fish.look.getYInUserInterfaceDimensionUnit() == 0);
-		UiTestUtils.clickOnStageCoordinates(solo, 0, 0, screenWidth, screenHeight);
-		solo.sleep(1000);
-		assertTrue("Sprite cat is at false position", cat.look.getXInUserInterfaceDimensionUnit() == catXPosition
-				&& cat.look.getYInUserInterfaceDimensionUnit() == catYPosition);
-		assertTrue(
-				"Sprite fish has moved",
-				fish.look.getXInUserInterfaceDimensionUnit() == fishXPosition
-						&& fish.look.getYInUserInterfaceDimensionUnit() == fishYPosition
-		);
-	}
+    public void testTapOnSideAreaOfForegroundSprite() {
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(2000);
+        assertTrue("Sprite cat is not at x=0 and y=0",
+                cat.look.getXInUserInterfaceDimensionUnit() == 0 && cat.look.getYInUserInterfaceDimensionUnit() == 0);
+        assertTrue("Sprite fish is not at x=0 and y=0",
+                fish.look.getXInUserInterfaceDimensionUnit() == 0 && fish.look.getYInUserInterfaceDimensionUnit() == 0);
+        assertTrue("Sprite fish is not the foreground sprite", fish.look.getZIndex() > cat.look.getZIndex());
+        UiTestUtils.clickOnStageCoordinates(solo, 22, 45, screenWidth, screenHeight);
+        solo.sleep(1000);
+        assertTrue("Sprite cat is at false position", cat.look.getXInUserInterfaceDimensionUnit() == catXPosition
+                && cat.look.getYInUserInterfaceDimensionUnit() == catYPosition);
+        assertTrue("Sprite fish has moved",
+                fish.look.getXInUserInterfaceDimensionUnit() == 0 && fish.look.getYInUserInterfaceDimensionUnit() == 0);
+        UiTestUtils.clickOnStageCoordinates(solo, 0, 0, screenWidth, screenHeight);
+        solo.sleep(1000);
+        assertTrue("Sprite cat is at false position", cat.look.getXInUserInterfaceDimensionUnit() == catXPosition
+                && cat.look.getYInUserInterfaceDimensionUnit() == catYPosition);
+        assertTrue(
+                "Sprite fish has moved",
+                fish.look.getXInUserInterfaceDimensionUnit() == fishXPosition
+                        && fish.look.getYInUserInterfaceDimensionUnit() == fishYPosition
+        );
+    }
 
-	public void testTapOnHalfTransparentAreaOfForegroundSprite() {
-		setTransparencyBrick.setFormulaWithBrickField(Brick.BrickField.TRANSPARENCY, new Formula(50.0));
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(2000);
-		assertTrue("Sprite cat is not at x=0 and y=0",
-				cat.look.getXInUserInterfaceDimensionUnit() == 0 && cat.look.getYInUserInterfaceDimensionUnit() == 0);
-		assertTrue("Sprite fish is not at x=0 and y=0",
-				fish.look.getXInUserInterfaceDimensionUnit() == 0 && fish.look.getYInUserInterfaceDimensionUnit() == 0);
-		assertTrue("Sprite fish is not the foreground sprite", fish.look.getZIndex() > cat.look.getZIndex());
-		UiTestUtils.clickOnStageCoordinates(solo, 22, 45, screenWidth, screenHeight);
-		solo.sleep(1000);
-		assertTrue("Sprite cat is at false position", cat.look.getXInUserInterfaceDimensionUnit() == catXPosition
-				&& cat.look.getYInUserInterfaceDimensionUnit() == catYPosition);
-		assertTrue("Sprite fish has moved",
-				fish.look.getXInUserInterfaceDimensionUnit() == 0 && fish.look.getYInUserInterfaceDimensionUnit() == 0);
-		UiTestUtils.clickOnStageCoordinates(solo, 0, 0, screenWidth, screenHeight);
-		solo.sleep(1000);
-		assertTrue("Sprite cat is at false position", cat.look.getXInUserInterfaceDimensionUnit() == catXPosition
-				&& cat.look.getYInUserInterfaceDimensionUnit() == catYPosition);
-		assertTrue(
-				"Sprite fish has moved",
-				fish.look.getXInUserInterfaceDimensionUnit() == fishXPosition
-						&& fish.look.getYInUserInterfaceDimensionUnit() == fishYPosition
-		);
-	}
+    public void testTapOnHalfTransparentAreaOfForegroundSprite() {
+        setTransparencyBrick.setFormulaWithBrickField(Brick.BrickField.TRANSPARENCY, new Formula(50.0));
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(2000);
+        assertTrue("Sprite cat is not at x=0 and y=0",
+                cat.look.getXInUserInterfaceDimensionUnit() == 0 && cat.look.getYInUserInterfaceDimensionUnit() == 0);
+        assertTrue("Sprite fish is not at x=0 and y=0",
+                fish.look.getXInUserInterfaceDimensionUnit() == 0 && fish.look.getYInUserInterfaceDimensionUnit() == 0);
+        assertTrue("Sprite fish is not the foreground sprite", fish.look.getZIndex() > cat.look.getZIndex());
+        UiTestUtils.clickOnStageCoordinates(solo, 22, 45, screenWidth, screenHeight);
+        solo.sleep(1000);
+        assertTrue("Sprite cat is at false position", cat.look.getXInUserInterfaceDimensionUnit() == catXPosition
+                && cat.look.getYInUserInterfaceDimensionUnit() == catYPosition);
+        assertTrue("Sprite fish has moved",
+                fish.look.getXInUserInterfaceDimensionUnit() == 0 && fish.look.getYInUserInterfaceDimensionUnit() == 0);
+        UiTestUtils.clickOnStageCoordinates(solo, 0, 0, screenWidth, screenHeight);
+        solo.sleep(1000);
+        assertTrue("Sprite cat is at false position", cat.look.getXInUserInterfaceDimensionUnit() == catXPosition
+                && cat.look.getYInUserInterfaceDimensionUnit() == catYPosition);
+        assertTrue(
+                "Sprite fish has moved",
+                fish.look.getXInUserInterfaceDimensionUnit() == fishXPosition
+                        && fish.look.getYInUserInterfaceDimensionUnit() == fishYPosition
+        );
+    }
 
-	public void testTapOnFullTransparentAreaOfForegroundSprite() {
-		setTransparencyBrick.setFormulaWithBrickField(Brick.BrickField.TRANSPARENCY, new Formula(100.0));
-		solo.waitForActivity(StageActivity.class.getSimpleName());
-		solo.sleep(2000);
-		assertTrue("Sprite cat is not at x=0 and y=0",
-				cat.look.getXInUserInterfaceDimensionUnit() == 0 && cat.look.getYInUserInterfaceDimensionUnit() == 0);
-		assertTrue("Sprite fish is not at x=0 and y=0",
-				fish.look.getXInUserInterfaceDimensionUnit() == 0 && fish.look.getYInUserInterfaceDimensionUnit() == 0);
-		assertTrue("Sprite fish is not the foreground sprite", fish.look.getZIndex() > cat.look.getZIndex());
-		UiTestUtils.clickOnStageCoordinates(solo, 0, 0, screenWidth, screenHeight);
-		solo.sleep(1000);
-		assertEquals("Sprite cat is at false position", catXPosition, (int) cat.look.getXInUserInterfaceDimensionUnit());
-		assertEquals("Sprite cat is at false position", catYPosition, (int) cat.look.getYInUserInterfaceDimensionUnit());
-		assertEquals("Sprite fish has moved", 0, (int) fish.look.getXInUserInterfaceDimensionUnit());
-		assertEquals("Sprite fish has moved", 0, (int) fish.look.getYInUserInterfaceDimensionUnit());
-	}
+    public void testTapOnFullTransparentAreaOfForegroundSprite() {
+        setTransparencyBrick.setFormulaWithBrickField(Brick.BrickField.TRANSPARENCY, new Formula(100.0));
+        solo.waitForActivity(StageActivity.class.getSimpleName());
+        solo.sleep(2000);
+        assertTrue("Sprite cat is not at x=0 and y=0",
+                cat.look.getXInUserInterfaceDimensionUnit() == 0 && cat.look.getYInUserInterfaceDimensionUnit() == 0);
+        assertTrue("Sprite fish is not at x=0 and y=0",
+                fish.look.getXInUserInterfaceDimensionUnit() == 0 && fish.look.getYInUserInterfaceDimensionUnit() == 0);
+        assertTrue("Sprite fish is not the foreground sprite", fish.look.getZIndex() > cat.look.getZIndex());
+        UiTestUtils.clickOnStageCoordinates(solo, 0, 0, screenWidth, screenHeight);
+        solo.sleep(1000);
+        assertEquals("Sprite cat is at false position", catXPosition, (int) cat.look.getXInUserInterfaceDimensionUnit());
+        assertEquals("Sprite cat is at false position", catYPosition, (int) cat.look.getYInUserInterfaceDimensionUnit());
+        assertEquals("Sprite fish has moved", 0, (int) fish.look.getXInUserInterfaceDimensionUnit());
+        assertEquals("Sprite fish has moved", 0, (int) fish.look.getYInUserInterfaceDimensionUnit());
+    }
 
-	private void createProject() {
-		ScreenValues.SCREEN_WIDTH = screenWidth;
-		ScreenValues.SCREEN_HEIGHT = screenHeight;
+    private void createProject() {
+        ScreenValues.SCREEN_WIDTH = screenWidth;
+        ScreenValues.SCREEN_HEIGHT = screenHeight;
 
-		Project project = new Project(null, UiTestUtils.PROJECTNAME1);
-		cat = new SingleSprite("cat");
-		StartScript startScriptCat = new StartScript();
-		SetLookBrick setLookCat = new SetLookBrick();
+        Project project = new Project(null, UiTestUtils.PROJECTNAME1);
+        cat = new SingleSprite("cat");
+        StartScript startScriptCat = new StartScript();
+        SetLookBrick setLookCat = new SetLookBrick();
 
-		LookData lookDataCat = new LookData();
-		lookDataCat.setLookName(catFilename);
+        LookData lookDataCat = new LookData();
+        lookDataCat.setLookName(catFilename);
 
-		cat.getLookDataList().add(lookDataCat);
-		setLookCat.setLook(lookDataCat);
-		startScriptCat.addBrick(setLookCat);
-		cat.addScript(startScriptCat);
+        cat.getLookDataList().add(lookDataCat);
+        setLookCat.setLook(lookDataCat);
+        startScriptCat.addBrick(setLookCat);
+        cat.addScript(startScriptCat);
 
-		WhenScript whenScriptCat = new WhenScript();
-		PlaceAtBrick placeAtCat = new PlaceAtBrick(catXPosition, catYPosition);
-		whenScriptCat.addBrick(placeAtCat);
-		cat.addScript(whenScriptCat);
+        WhenScript whenScriptCat = new WhenScript();
+        PlaceAtBrick placeAtCat = new PlaceAtBrick(catXPosition, catYPosition);
+        whenScriptCat.addBrick(placeAtCat);
+        cat.addScript(whenScriptCat);
 
-		project.getDefaultScene().addSprite(cat);
+        project.getDefaultScene().addSprite(cat);
 
-		fish = new SingleSprite("fish");
-		StartScript startScriptFish = new StartScript();
-		SetLookBrick setLookFish = new SetLookBrick();
-		setTransparencyBrick = new SetTransparencyBrick(0.0);
+        fish = new SingleSprite("fish");
+        StartScript startScriptFish = new StartScript();
+        SetLookBrick setLookFish = new SetLookBrick();
+        setTransparencyBrick = new SetTransparencyBrick(0.0);
 
-		LookData lookDataFish = new LookData();
-		lookDataFish.setLookName(fishFilename);
+        LookData lookDataFish = new LookData();
+        lookDataFish.setLookName(fishFilename);
 
-		fish.getLookDataList().add(lookDataFish);
-		setLookFish.setLook(lookDataFish);
-		startScriptFish.addBrick(setLookFish);
-		startScriptFish.addBrick(setTransparencyBrick);
-		fish.addScript(startScriptFish);
+        fish.getLookDataList().add(lookDataFish);
+        setLookFish.setLook(lookDataFish);
+        startScriptFish.addBrick(setLookFish);
+        startScriptFish.addBrick(setTransparencyBrick);
+        fish.addScript(startScriptFish);
 
-		WhenScript whenScriptFish = new WhenScript();
-		PlaceAtBrick placeAtFish = new PlaceAtBrick(fishXPosition, fishYPosition);
-		whenScriptFish.addBrick(placeAtFish);
-		fish.addScript(whenScriptFish);
+        WhenScript whenScriptFish = new WhenScript();
+        PlaceAtBrick placeAtFish = new PlaceAtBrick(fishXPosition, fishYPosition);
+        whenScriptFish.addBrick(placeAtFish);
+        fish.addScript(whenScriptFish);
 
-		project.getDefaultScene().addSprite(fish);
+        project.getDefaultScene().addSprite(fish);
 
-		StorageHandler.getInstance().saveProject(project);
+        StorageHandler.getInstance().saveProject(project);
 
-		File catImageFile = UiTestUtils.saveFileToProject(project.getName(), project.getDefaultScene().getName(), catFilename,
-				org.catrobat.catroid.test.R.drawable.catroid_sunglasses, getInstrumentation().getContext(),
-				UiTestUtils.FileTypes.IMAGE);
-		File fishImageFile = UiTestUtils.saveFileToProject(project.getName(), project.getDefaultScene().getName(), fishFilename,
-				org.catrobat.catroid.test.R.drawable.fish, getInstrumentation().getContext(),
-				UiTestUtils.FileTypes.IMAGE);
-		lookDataCat.setLookFilename(catImageFile.getName());
-		lookDataFish.setLookFilename(fishImageFile.getName());
+        File catImageFile = UiTestUtils.saveFileToProject(project.getName(), project.getDefaultScene().getName(), catFilename,
+                org.catrobat.catroid.test.R.drawable.catroid_sunglasses, getInstrumentation().getContext(),
+                UiTestUtils.FileTypes.IMAGE);
+        File fishImageFile = UiTestUtils.saveFileToProject(project.getName(), project.getDefaultScene().getName(), fishFilename,
+                org.catrobat.catroid.test.R.drawable.fish, getInstrumentation().getContext(),
+                UiTestUtils.FileTypes.IMAGE);
+        lookDataCat.setLookFilename(catImageFile.getName());
+        lookDataFish.setLookFilename(fishImageFile.getName());
 
-		ProjectManager.getInstance().setProject(project);
-		StorageHandler.getInstance().saveProject(project);
-	}
+        ProjectManager.getInstance().setProject(project);
+        StorageHandler.getInstance().saveProject(project);
+    }
 }

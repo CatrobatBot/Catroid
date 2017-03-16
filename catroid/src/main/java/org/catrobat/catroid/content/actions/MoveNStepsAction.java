@@ -32,26 +32,26 @@ import org.catrobat.catroid.formulaeditor.InterpretationException;
 
 public class MoveNStepsAction extends TemporalAction {
 
-	private Sprite sprite;
-	private Formula steps;
+    private Sprite sprite;
+    private Formula steps;
 
-	@Override
-	protected void update(float percent) {
-		try {
-			Double stepsValue = steps == null ? Double.valueOf(0d) : steps.interpretDouble(sprite);
-			double radians = Math.toRadians(sprite.look.getDirectionInUserInterfaceDimensionUnit());
-			sprite.look.changeXInUserInterfaceDimensionUnit((float) (stepsValue * Math.sin(radians)));
-			sprite.look.changeYInUserInterfaceDimensionUnit((float) (stepsValue * Math.cos(radians)));
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}
-	}
+    @Override
+    protected void update(float percent) {
+        try {
+            Double stepsValue = steps == null ? Double.valueOf(0d) : steps.interpretDouble(sprite);
+            double radians = Math.toRadians(sprite.look.getDirectionInUserInterfaceDimensionUnit());
+            sprite.look.changeXInUserInterfaceDimensionUnit((float) (stepsValue * Math.sin(radians)));
+            sprite.look.changeYInUserInterfaceDimensionUnit((float) (stepsValue * Math.cos(radians)));
+        } catch (InterpretationException interpretationException) {
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+        }
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public void setSteps(Formula steps) {
-		this.steps = steps;
-	}
+    public void setSteps(Formula steps) {
+        this.steps = steps;
+    }
 }

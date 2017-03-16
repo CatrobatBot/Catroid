@@ -39,48 +39,48 @@ import java.util.List;
 
 public class DeleteLookDialog extends DialogFragment {
 
-	private static final String BUNDLE_ARGUMENTS_SELECTED_POSITION = "selected_position";
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_delete_look";
+    private static final String BUNDLE_ARGUMENTS_SELECTED_POSITION = "selected_position";
+    public static final String DIALOG_FRAGMENT_TAG = "dialog_delete_look";
 
-	public static DeleteLookDialog newInstance(int selectedPosition) {
-		DeleteLookDialog dialog = new DeleteLookDialog();
+    public static DeleteLookDialog newInstance(int selectedPosition) {
+        DeleteLookDialog dialog = new DeleteLookDialog();
 
-		Bundle arguments = new Bundle();
-		arguments.putInt(BUNDLE_ARGUMENTS_SELECTED_POSITION, selectedPosition);
-		dialog.setArguments(arguments);
+        Bundle arguments = new Bundle();
+        arguments.putInt(BUNDLE_ARGUMENTS_SELECTED_POSITION, selectedPosition);
+        dialog.setArguments(arguments);
 
-		return dialog;
-	}
+        return dialog;
+    }
 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		final int selectedPosition = getArguments().getInt(BUNDLE_ARGUMENTS_SELECTED_POSITION);
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        final int selectedPosition = getArguments().getInt(BUNDLE_ARGUMENTS_SELECTED_POSITION);
 
-		Dialog dialog = new CustomAlertDialogBuilder(getActivity()).setTitle(R.string.delete_look_dialog)
-				.setMessage(R.string.dialog_confirm_delete_look_message)
-				.setNegativeButton(R.string.cancel, new OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dismiss();
-					}
-				}).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						handleDeleteLook(selectedPosition);
-					}
-				}).create();
+        Dialog dialog = new CustomAlertDialogBuilder(getActivity()).setTitle(R.string.delete_look_dialog)
+                .setMessage(R.string.dialog_confirm_delete_look_message)
+                .setNegativeButton(R.string.cancel, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dismiss();
+                    }
+                }).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        handleDeleteLook(selectedPosition);
+                    }
+                }).create();
 
-		dialog.setCanceledOnTouchOutside(true);
+        dialog.setCanceledOnTouchOutside(true);
 
-		return dialog;
-	}
+        return dialog;
+    }
 
-	private void handleDeleteLook(int position) {
-		List<LookData> lookDataList = ProjectManager.getInstance().getCurrentSprite().getLookDataList();
+    private void handleDeleteLook(int position) {
+        List<LookData> lookDataList = ProjectManager.getInstance().getCurrentSprite().getLookDataList();
 
-		StorageHandler.getInstance().deleteFile(lookDataList.get(position).getAbsolutePath(), false);
-		lookDataList.remove(position);
+        StorageHandler.getInstance().deleteFile(lookDataList.get(position).getAbsolutePath(), false);
+        lookDataList.remove(position);
 
-		getActivity().sendBroadcast(new Intent(ScriptActivity.ACTION_LOOK_DELETED));
-	}
+        getActivity().sendBroadcast(new Intent(ScriptActivity.ACTION_LOOK_DELETED));
+    }
 }

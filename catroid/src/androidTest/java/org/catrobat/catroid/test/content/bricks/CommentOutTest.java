@@ -33,42 +33,42 @@ import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.content.bricks.WaitBrick;
 
 public class CommentOutTest extends AndroidTestCase {
-	private Sprite sprite;
-	private StartScript script;
-	private SequenceAction sequence;
+    private Sprite sprite;
+    private StartScript script;
+    private SequenceAction sequence;
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		sprite = new Sprite("testSprite");
-		script = new StartScript();
-		sequence = ActionFactory.sequence();
-	}
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        sprite = new Sprite("testSprite");
+        script = new StartScript();
+        sequence = ActionFactory.sequence();
+    }
 
-	public void testCommentOutSimple() {
+    public void testCommentOutSimple() {
 
-		script.addBrick(new WaitBrick(1));
-		script.addBrick(new WaitBrick(1));
-		script.addBrick(new WaitBrick(1));
+        script.addBrick(new WaitBrick(1));
+        script.addBrick(new WaitBrick(1));
+        script.addBrick(new WaitBrick(1));
 
-		Brick disabledBrick = new WaitBrick(1);
-		disabledBrick.setCommentedOut(true);
-		script.addBrick(disabledBrick);
+        Brick disabledBrick = new WaitBrick(1);
+        disabledBrick.setCommentedOut(true);
+        script.addBrick(disabledBrick);
 
-		script.run(sprite, sequence);
+        script.run(sprite, sequence);
 
-		assertEquals("action of disabled brick should not be in sequence:", sequence.getActions().size, 3);
-	}
+        assertEquals("action of disabled brick should not be in sequence:", sequence.getActions().size, 3);
+    }
 
-	public void testCommentOutScript() {
-		script.addBrick(new WaitBrick(1));
-		script.addBrick(new WaitBrick(1));
+    public void testCommentOutScript() {
+        script.addBrick(new WaitBrick(1));
+        script.addBrick(new WaitBrick(1));
 
-		script.setCommentedOut(true);
+        script.setCommentedOut(true);
 
-		script.run(sprite, sequence);
+        script.run(sprite, sequence);
 
-		assertEquals("no action of a disabled script should be in the sequence:", sequence.getActions().size, 0);
-	}
+        assertEquals("no action of a disabled script should be in the sequence:", sequence.getActions().size, 0);
+    }
 }
 

@@ -35,41 +35,41 @@ import java.util.List;
 
 public class SpriteListAdapter extends CheckBoxListAdapter<Sprite> implements DragAndDropAdapterInterface {
 
-	public static final String TAG = SpriteListAdapter.class.getSimpleName();
+    public static final String TAG = SpriteListAdapter.class.getSimpleName();
 
-	public SpriteListAdapter(Context context, int resource, List<Sprite> listItems) {
-		super(context, resource, listItems);
-	}
+    public SpriteListAdapter(Context context, int resource, List<Sprite> listItems) {
+        super(context, resource, listItems);
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		View listItemView = super.getView(position, convertView, parent);
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View listItemView = super.getView(position, convertView, parent);
 
-		ListItemViewHolder listItemViewHolder = (ListItemViewHolder) listItemView.getTag();
-		Sprite sprite = getItem(position);
-		Bitmap lookData = null;
+        ListItemViewHolder listItemViewHolder = (ListItemViewHolder) listItemView.getTag();
+        Sprite sprite = getItem(position);
+        Bitmap lookData = null;
 
-		if (!sprite.getLookDataList().isEmpty()) {
-			lookData = sprite.getLookDataList().get(0).getThumbnailBitmap();
-		}
+        if (!sprite.getLookDataList().isEmpty()) {
+            lookData = sprite.getLookDataList().get(0).getThumbnailBitmap();
+        }
 
-		listItemViewHolder.name.setText(sprite.getName());
-		listItemViewHolder.image.setImageBitmap(lookData);
+        listItemViewHolder.name.setText(sprite.getName());
+        listItemViewHolder.image.setImageBitmap(lookData);
 
-		if (showDetails) {
-			listItemViewHolder.details.setVisibility(View.VISIBLE);
+        if (showDetails) {
+            listItemViewHolder.details.setVisibility(View.VISIBLE);
 
-			listItemViewHolder.leftBottomDetails.setText(getContext().getResources().getString(R.string.number_of_scripts)
-					.concat(" ").concat(Integer.toString(sprite.getNumberOfScripts())));
-			listItemViewHolder.rightBottomDetails.setText(getContext().getResources().getString(R.string.number_of_bricks)
-					.concat(" ").concat(Integer.toString(sprite.getNumberOfBricks())));
+            listItemViewHolder.leftBottomDetails.setText(getContext().getResources().getString(R.string.number_of_scripts)
+                    .concat(" ").concat(Integer.toString(sprite.getNumberOfScripts())));
+            listItemViewHolder.rightBottomDetails.setText(getContext().getResources().getString(R.string.number_of_bricks)
+                    .concat(" ").concat(Integer.toString(sprite.getNumberOfBricks())));
 
-			listItemViewHolder.leftTopDetails.setText(getContext().getResources().getString(R.string.number_of_looks)
-					.concat(" ").concat(Integer.toString(sprite.getLookDataList().size())));
-			listItemViewHolder.rightTopDetails.setText(getContext().getResources().getString(R.string.number_of_sounds)
-					.concat(" ").concat(Integer.toString(sprite.getSoundList().size())));
-		}
+            listItemViewHolder.leftTopDetails.setText(getContext().getResources().getString(R.string.number_of_looks)
+                    .concat(" ").concat(Integer.toString(sprite.getLookDataList().size())));
+            listItemViewHolder.rightTopDetails.setText(getContext().getResources().getString(R.string.number_of_sounds)
+                    .concat(" ").concat(Integer.toString(sprite.getSoundList().size())));
+        }
 
-		return listItemView;
-	}
+        return listItemView;
+    }
 }

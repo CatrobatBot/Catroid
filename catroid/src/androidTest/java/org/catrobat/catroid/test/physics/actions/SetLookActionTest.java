@@ -34,52 +34,52 @@ import java.io.File;
 
 public class SetLookActionTest extends PhysicsBaseTest {
 
-	private String multipleConvexPolygonsFileName;
-	private File multipleConvexPolygonsFile;
-	private static final int MULTIPLE_CONVEX_POLYGONS_RES_ID = org.catrobat.catroid.test.R.raw.multible_convex_polygons;
+    private String multipleConvexPolygonsFileName;
+    private File multipleConvexPolygonsFile;
+    private static final int MULTIPLE_CONVEX_POLYGONS_RES_ID = org.catrobat.catroid.test.R.raw.multible_convex_polygons;
 
-	private LookData lookData = null;
+    private LookData lookData = null;
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
 
-		multipleConvexPolygonsFileName = PhysicsTestUtils.getInternalImageFilenameFromFilename("multible_convex_polygons.png");
+        multipleConvexPolygonsFileName = PhysicsTestUtils.getInternalImageFilenameFromFilename("multible_convex_polygons.png");
 
-		multipleConvexPolygonsFile = TestUtils.saveFileToProject(TestUtils.DEFAULT_TEST_PROJECT_NAME, project.getDefaultScene().getName(),
-				multipleConvexPolygonsFileName, MULTIPLE_CONVEX_POLYGONS_RES_ID, getInstrumentation().getContext(),
-				TestUtils.TYPE_IMAGE_FILE);
+        multipleConvexPolygonsFile = TestUtils.saveFileToProject(TestUtils.DEFAULT_TEST_PROJECT_NAME, project.getDefaultScene().getName(),
+                multipleConvexPolygonsFileName, MULTIPLE_CONVEX_POLYGONS_RES_ID, getInstrumentation().getContext(),
+                TestUtils.TYPE_IMAGE_FILE);
 
-		lookData = PhysicsTestUtils.generateLookData(multipleConvexPolygonsFile);
+        lookData = PhysicsTestUtils.generateLookData(multipleConvexPolygonsFile);
 
-		assertTrue("getLookData is null", sprite.look.getLookData() != null);
-	}
+        assertTrue("getLookData is null", sprite.look.getLookData() != null);
+    }
 
-	@Override
-	protected void tearDown() throws Exception {
+    @Override
+    protected void tearDown() throws Exception {
 
-		multipleConvexPolygonsFileName = null;
-		multipleConvexPolygonsFile = null;
+        multipleConvexPolygonsFileName = null;
+        multipleConvexPolygonsFile = null;
 
-		TestUtils.deleteTestProjects();
-		super.tearDown();
-	}
+        TestUtils.deleteTestProjects();
+        super.tearDown();
+    }
 
-	public void testLookChanged() {
+    public void testLookChanged() {
 
-		LookData expectedLookData = lookData;
-		LookData previousLookData = sprite.look.getLookData();
+        LookData expectedLookData = lookData;
+        LookData previousLookData = sprite.look.getLookData();
 
-		changeLook();
+        changeLook();
 
-		assertTrue("Look has not changed", sprite.look.getLookData() != previousLookData);
-		assertEquals("Look is not correct", sprite.look.getLookData(), expectedLookData);
-	}
+        assertTrue("Look has not changed", sprite.look.getLookData() != previousLookData);
+        assertEquals("Look is not correct", sprite.look.getLookData(), expectedLookData);
+    }
 
-	private void changeLook() {
-		sprite.getLookDataList().add(lookData);
-		Action action = sprite.getActionFactory().createSetLookAction(sprite, lookData);
-		action.act(1.0f);
-		assertNotNull("Current Look is null", sprite.look);
-	}
+    private void changeLook() {
+        sprite.getLookDataList().add(lookData);
+        Action action = sprite.getActionFactory().createSetLookAction(sprite, lookData);
+        action.act(1.0f);
+        assertNotNull("Current Look is null", sprite.look);
+    }
 }

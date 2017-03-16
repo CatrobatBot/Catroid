@@ -24,11 +24,11 @@
 package org.catrobat.catroid.scratchconverter;
 
 public class ClientException extends Exception {
-	public ClientException(String detailMessage) {
-		super(detailMessage);
-	}
+    public ClientException(String detailMessage) {
+        super(detailMessage);
+    }
 
-	public ClientException(Throwable throwable) {
-		super(throwable);
-	}
+    public ClientException(Throwable throwable) {
+        super(throwable);
+    }
 }

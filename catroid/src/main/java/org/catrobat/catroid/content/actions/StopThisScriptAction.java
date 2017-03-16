@@ -27,8 +27,8 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 
 public class StopThisScriptAction extends Action {
 
-	@Override
-	public boolean act(float delta) {
-		return false;
-	}
+    @Override
+    public boolean act(float delta) {
+        return false;
+    }
 }

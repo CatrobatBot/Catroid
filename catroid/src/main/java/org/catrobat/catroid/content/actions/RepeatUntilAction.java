@@ -30,89 +30,89 @@ import org.catrobat.catroid.formulaeditor.InterpretationException;
 
 public class RepeatUntilAction extends com.badlogic.gdx.scenes.scene2d.actions.RepeatAction {
 
-	private int executedCount = 0;
-	private Sprite sprite;
-	private boolean isCurrentLoopInitialized = false;
-	private static final float LOOP_DELAY = 0.02f;
-	private float currentTime = 0f;
-	private Formula repeatCondition;
+    private int executedCount = 0;
+    private Sprite sprite;
+    private boolean isCurrentLoopInitialized = false;
+    private static final float LOOP_DELAY = 0.02f;
+    private float currentTime = 0f;
+    private Formula repeatCondition;
 
-	boolean isValidConditionFormula() {
-		try {
-			if (repeatCondition == null) {
-				return false;
-			}
+    boolean isValidConditionFormula() {
+        try {
+            if (repeatCondition == null) {
+                return false;
+            }
 
-			repeatCondition.interpretDouble(sprite);
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.",
-					interpretationException);
-			return false;
-		}
+            repeatCondition.interpretDouble(sprite);
+        } catch (InterpretationException interpretationException) {
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.",
+                    interpretationException);
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	boolean isConditionTrue() {
-		try {
-			return repeatCondition.interpretDouble(sprite).intValue() != 0;
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.",
-					interpretationException);
-			return true;
-		}
-	}
+    boolean isConditionTrue() {
+        try {
+            return repeatCondition.interpretDouble(sprite).intValue() != 0;
+        } catch (InterpretationException interpretationException) {
+            Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.",
+                    interpretationException);
+            return true;
+        }
+    }
 
-	@Override
-	public boolean delegate(float delta) {
+    @Override
+    public boolean delegate(float delta) {
 
-		if (!isValidConditionFormula()) {
-			return true;
-		}
+        if (!isValidConditionFormula()) {
+            return true;
+        }
 
-		if (!isCurrentLoopInitialized) {
-			if (isConditionTrue()) {
-				return true;
-			}
-			currentTime = 0f;
-			isCurrentLoopInitialized = true;
-		}
+        if (!isCurrentLoopInitialized) {
+            if (isConditionTrue()) {
+                return true;
+            }
+            currentTime = 0f;
+            isCurrentLoopInitialized = true;
+        }
 
-		currentTime += delta;
+        currentTime += delta;
 
-		if (action.act(delta) && currentTime >= LOOP_DELAY) {
+        if (action.act(delta) && currentTime >= LOOP_DELAY) {
 
-			executedCount++;
-			if (isConditionTrue()) {
-				return true;
-			}
+            executedCount++;
+            if (isConditionTrue()) {
+                return true;
+            }
 
-			isCurrentLoopInitialized = false;
+            isCurrentLoopInitialized = false;
 
-			if (action != null) {
-				action.restart();
-			}
-		}
+            if (action != null) {
+                action.restart();
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	public void restart() {
-		isCurrentLoopInitialized = false;
-		executedCount = 0;
-		super.restart();
-	}
+    @Override
+    public void restart() {
+        isCurrentLoopInitialized = false;
+        executedCount = 0;
+        super.restart();
+    }
 
-	public void setRepeatCondition(Formula repeatCondition) {
-		this.repeatCondition = repeatCondition;
-	}
+    public void setRepeatCondition(Formula repeatCondition) {
+        this.repeatCondition = repeatCondition;
+    }
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 
-	public int getExecutedCount() {
-		return executedCount;
-	}
+    public int getExecutedCount() {
+        return executedCount;
+    }
 }

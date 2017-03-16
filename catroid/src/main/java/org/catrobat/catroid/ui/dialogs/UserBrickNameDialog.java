@@ -48,108 +48,108 @@ import org.catrobat.catroid.utils.Utils;
 
 public class UserBrickNameDialog extends DialogFragment {
 
-	public static final String DIALOG_FRAGMENT_TAG = "dialog_userbrick_name";
+    public static final String DIALOG_FRAGMENT_TAG = "dialog_userbrick_name";
 
-	private static final String TAG = UserBrickNameDialog.class.getSimpleName();
+    private static final String TAG = UserBrickNameDialog.class.getSimpleName();
 
-	private EditText newUserBrickEditText;
-	private Dialog newUserBrickDialog;
-	private UserBrickNameDialogInterface userBrickNameDialogInterface;
+    private EditText newUserBrickEditText;
+    private Dialog newUserBrickDialog;
+    private UserBrickNameDialogInterface userBrickNameDialogInterface;
 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_userbrick_name, null);
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_userbrick_name, null);
 
-		newUserBrickEditText = (EditText) dialogView.findViewById(R.id.dialog_userbrick_name_edittext);
+        newUserBrickEditText = (EditText) dialogView.findViewById(R.id.dialog_userbrick_name_edittext);
 
-		Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
-		String text = getActivity().getString(R.string.new_user_brick) + " " + currentSprite.getNextNewUserBrickId();
-		newUserBrickEditText.setText(text);
+        Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
+        String text = getActivity().getString(R.string.new_user_brick) + " " + currentSprite.getNextNewUserBrickId();
+        newUserBrickEditText.setText(text);
 
-		newUserBrickDialog = new AlertDialog.Builder(getActivity()).setView(dialogView)
-				.setTitle(R.string.new_user_brick)
-				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				}).create();
+        newUserBrickDialog = new AlertDialog.Builder(getActivity()).setView(dialogView)
+                .setTitle(R.string.new_user_brick)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).create();
 
-		newUserBrickDialog.setCanceledOnTouchOutside(true);
-		newUserBrickDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		newUserBrickDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        newUserBrickDialog.setCanceledOnTouchOutside(true);
+        newUserBrickDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        newUserBrickDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-		newUserBrickDialog.setOnShowListener(new OnShowListener() {
-			@Override
-			public void onShow(DialogInterface dialog) {
-				if (getActivity() == null) {
-					Log.e(TAG, "onShow() Activity was null!");
-					return;
-				}
+        newUserBrickDialog.setOnShowListener(new OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                if (getActivity() == null) {
+                    Log.e(TAG, "onShow() Activity was null!");
+                    return;
+                }
 
-				InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
-						Context.INPUT_METHOD_SERVICE);
-				inputManager.showSoftInput(newUserBrickEditText, InputMethodManager.SHOW_IMPLICIT);
+                InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
+                        Context.INPUT_METHOD_SERVICE);
+                inputManager.showSoftInput(newUserBrickEditText, InputMethodManager.SHOW_IMPLICIT);
 
-				newUserBrickEditText.addTextChangedListener(new TextWatcher() {
+                newUserBrickEditText.addTextChangedListener(new TextWatcher() {
 
-					@Override
-					public void onTextChanged(CharSequence s, int start, int before, int count) {
-					}
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
 
-					@Override
-					public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-					}
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
 
-					@Override
-					public void afterTextChanged(Editable s) {
-						if (newUserBrickEditText.length() == 0) {
-							((AlertDialog) newUserBrickDialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
-						} else {
-							((AlertDialog) newUserBrickDialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(true);
-						}
-					}
-				});
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        if (newUserBrickEditText.length() == 0) {
+                            ((AlertDialog) newUserBrickDialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
+                        } else {
+                            ((AlertDialog) newUserBrickDialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(true);
+                        }
+                    }
+                });
 
-				Button positiveButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-				positiveButton.setOnClickListener(new OnClickListener() {
+                Button positiveButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                positiveButton.setOnClickListener(new OnClickListener() {
 
-					@Override
-					public void onClick(View view) {
-						handleOkButtonClick();
-					}
-				});
-			}
-		});
+                    @Override
+                    public void onClick(View view) {
+                        handleOkButtonClick();
+                    }
+                });
+            }
+        });
 
-		return newUserBrickDialog;
-	}
+        return newUserBrickDialog;
+    }
 
-	protected void handleOkButtonClick() {
-		String userBrickName = newUserBrickEditText.getText().toString().trim();
+    protected void handleOkButtonClick() {
+        String userBrickName = newUserBrickEditText.getText().toString().trim();
 
-		if (getActivity() == null) {
-			Log.e(TAG, "handleOkButtonClick() Activity was null!");
-			return;
-		}
+        if (getActivity() == null) {
+            Log.e(TAG, "handleOkButtonClick() Activity was null!");
+            return;
+        }
 
-		if (userBrickName.isEmpty()) {
-			Utils.showErrorDialog(getActivity(), R.string.no_name, R.string.error_no_userbrick_name_entered);
-			return;
-		}
+        if (userBrickName.isEmpty()) {
+            Utils.showErrorDialog(getActivity(), R.string.no_name, R.string.error_no_userbrick_name_entered);
+            return;
+        }
 
-		dismiss();
-		userBrickNameDialogInterface.onUserBrickNameEntered(userBrickName);
-	}
+        dismiss();
+        userBrickNameDialogInterface.onUserBrickNameEntered(userBrickName);
+    }
 
-	public void setUserBrickNameDialogInterface(UserBrickNameDialogInterface userBrickNameDialogInterface) {
-		this.userBrickNameDialogInterface = userBrickNameDialogInterface;
-	}
+    public void setUserBrickNameDialogInterface(UserBrickNameDialogInterface userBrickNameDialogInterface) {
+        this.userBrickNameDialogInterface = userBrickNameDialogInterface;
+    }
 
-	public interface UserBrickNameDialogInterface {
-		void onUserBrickNameEntered(String userBrickName);
-	}
+    public interface UserBrickNameDialogInterface {
+        void onUserBrickNameEntered(String userBrickName);
+    }
 }

@@ -43,86 +43,86 @@ import java.io.IOException;
 
 public class ProjectDownloadService extends IntentService {
 
-	public static final String TAG = ProjectDownloadService.class.getSimpleName();
+    public static final String TAG = ProjectDownloadService.class.getSimpleName();
 
-	public static final String RECEIVER_TAG = "receiver";
-	public static final String DOWNLOAD_NAME_TAG = "downloadName";
-	public static final String URL_TAG = "url";
-	public static final String ID_TAG = "notificationId";
-	public static final String RENAME_AFTER_DOWNLOAD = "renameAfterDownload";
+    public static final String RECEIVER_TAG = "receiver";
+    public static final String DOWNLOAD_NAME_TAG = "downloadName";
+    public static final String URL_TAG = "url";
+    public static final String ID_TAG = "notificationId";
+    public static final String RENAME_AFTER_DOWNLOAD = "renameAfterDownload";
 
-	private static final String DOWNLOAD_FILE_NAME = "down" + Constants.CATROBAT_EXTENSION;
+    private static final String DOWNLOAD_FILE_NAME = "down" + Constants.CATROBAT_EXTENSION;
 
-	public ResultReceiver receiver;
-	private Handler handler;
+    public ResultReceiver receiver;
+    private Handler handler;
 
-	public ProjectDownloadService() {
-		super(ProjectDownloadService.class.getSimpleName());
-	}
+    public ProjectDownloadService() {
+        super(ProjectDownloadService.class.getSimpleName());
+    }
 
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		handler = new Handler();
-	}
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        handler = new Handler();
+    }
 
-	@Override
-	protected void onHandleIntent(Intent intent) {
-		boolean result = false;
+    @Override
+    protected void onHandleIntent(Intent intent) {
+        boolean result = false;
 
-		String projectName = intent.getStringExtra(DOWNLOAD_NAME_TAG);
-		String zipFileString = Utils.buildPath(Constants.TMP_PATH, DOWNLOAD_FILE_NAME);
-		String url = intent.getStringExtra(URL_TAG);
-		Integer notificationId = intent.getIntExtra(ID_TAG, -1);
+        String projectName = intent.getStringExtra(DOWNLOAD_NAME_TAG);
+        String zipFileString = Utils.buildPath(Constants.TMP_PATH, DOWNLOAD_FILE_NAME);
+        String url = intent.getStringExtra(URL_TAG);
+        Integer notificationId = intent.getIntExtra(ID_TAG, -1);
 
-		receiver = intent.getParcelableExtra(RECEIVER_TAG);
-		try {
-			ServerCalls.getInstance().downloadProject(url, zipFileString, projectName, receiver, notificationId);
-			result = UtilZip.unZipFile(zipFileString, Utils.buildProjectPath(projectName));
+        receiver = intent.getParcelableExtra(RECEIVER_TAG);
+        try {
+            ServerCalls.getInstance().downloadProject(url, zipFileString, projectName, receiver, notificationId);
+            result = UtilZip.unZipFile(zipFileString, Utils.buildProjectPath(projectName));
 
-			boolean renameProject = intent.getBooleanExtra(RENAME_AFTER_DOWNLOAD, false);
-			if (renameProject) {
-				Project projectTBRenamed = StorageHandler.getInstance().loadProject(projectName, getBaseContext());
-				if (projectTBRenamed != null) {
-					projectTBRenamed.setName(projectName);
-					StorageHandler.getInstance().saveProject(projectTBRenamed);
-				}
-			}
-			StorageHandler.getInstance().updateCodefileOnDownload(projectName);
-			Log.v(TAG, "url: " + url + ", zip-file: " + zipFileString + ", notificationId: " + notificationId);
-		} catch (IOException ioException) {
-			Log.e(TAG, Log.getStackTraceString(ioException));
-		} catch (WebconnectionException webconnectionException) {
-			Log.e(TAG, Log.getStackTraceString(webconnectionException));
-		} finally {
-			DownloadUtil.getInstance().downloadFinished(projectName, url);
-		}
+            boolean renameProject = intent.getBooleanExtra(RENAME_AFTER_DOWNLOAD, false);
+            if (renameProject) {
+                Project projectTBRenamed = StorageHandler.getInstance().loadProject(projectName, getBaseContext());
+                if (projectTBRenamed != null) {
+                    projectTBRenamed.setName(projectName);
+                    StorageHandler.getInstance().saveProject(projectTBRenamed);
+                }
+            }
+            StorageHandler.getInstance().updateCodefileOnDownload(projectName);
+            Log.v(TAG, "url: " + url + ", zip-file: " + zipFileString + ", notificationId: " + notificationId);
+        } catch (IOException ioException) {
+            Log.e(TAG, Log.getStackTraceString(ioException));
+        } catch (WebconnectionException webconnectionException) {
+            Log.e(TAG, Log.getStackTraceString(webconnectionException));
+        } finally {
+            DownloadUtil.getInstance().downloadFinished(projectName, url);
+        }
 
-		if (!result) {
-			showToast(R.string.error_project_download, true);
-			return;
-		}
-		showToast(R.string.notification_download_finished, false);
-	}
+        if (!result) {
+            showToast(R.string.error_project_download, true);
+            return;
+        }
+        showToast(R.string.notification_download_finished, false);
+    }
 
-	private void showToast(final int messageId, boolean error) {
+    private void showToast(final int messageId, boolean error) {
 
-		if (error) {
-			handler.post(new Runnable() {
+        if (error) {
+            handler.post(new Runnable() {
 
-				@Override
-				public void run() {
-					ToastUtil.showError(getApplicationContext(), messageId);
-				}
-			});
-		} else {
-			handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    ToastUtil.showError(getApplicationContext(), messageId);
+                }
+            });
+        } else {
+            handler.post(new Runnable() {
 
-				@Override
-				public void run() {
-					ToastUtil.showSuccess(getApplicationContext(), messageId);
-				}
-			});
-		}
-	}
+                @Override
+                public void run() {
+                    ToastUtil.showSuccess(getApplicationContext(), messageId);
+                }
+            });
+        }
+    }
 }
