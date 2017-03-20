@@ -195,8 +195,8 @@ public final class UtilFile {
 	}
 
 	/**
-	 * returns a list of strings of all projectnames in the catroid folder
-	 */
+     * returns a list of strings of all projectnames in the catroid folder
+     */
 	public static List<String> getProjectNames(File directory) {
 		List<String> projectList = new ArrayList<String>();
 		File[] fileList = directory.listFiles();

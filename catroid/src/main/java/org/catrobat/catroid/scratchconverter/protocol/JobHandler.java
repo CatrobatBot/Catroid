@@ -50,7 +50,9 @@ public class JobHandler implements Client.DownloadCallback {
 	private final Job job;
 	private Client.ConvertCallback callback;
 
-	public JobHandler(@NonNull final Job job, @NonNull final Client.ConvertCallback callback) {
+	public JobHandler(@NonNull
+	final Job job, @NonNull
+	final Client.ConvertCallback callback) {
 		Preconditions.checkArgument(job != null);
 		this.job = job;
 		this.callback = callback;
@@ -156,7 +158,8 @@ public class JobHandler implements Client.DownloadCallback {
 		Log.w(TAG, "Unable to handle message of type in current state " + job.getState());
 	}
 
-	private void handleJobReadyMessage(@NonNull final JobReadyMessage jobReadyMessage) {
+	private void handleJobReadyMessage(@NonNull
+	final JobReadyMessage jobReadyMessage) {
 		Preconditions.checkArgument(getJob().getJobID() == jobReadyMessage.getJobID());
 		Preconditions.checkState(job.getState() == State.SCHEDULED);
 
@@ -164,7 +167,8 @@ public class JobHandler implements Client.DownloadCallback {
 		callback.onConversionReady(job);
 	}
 
-	private void handleJobAlreadyRunningMessage(@NonNull final JobAlreadyRunningMessage jobAlreadyRunningMessage) {
+	private void handleJobAlreadyRunningMessage(@NonNull
+	final JobAlreadyRunningMessage jobAlreadyRunningMessage) {
 		Preconditions.checkArgument(getJob().getJobID() == jobAlreadyRunningMessage.getJobID());
 		Preconditions.checkState(job.getState() == State.SCHEDULED);
 
@@ -175,7 +179,8 @@ public class JobHandler implements Client.DownloadCallback {
 		handleJobRunningMessage(new JobRunningMessage(jobID, jobTitle, jobImageURL));
 	}
 
-	private void handleJobRunningMessage(@NonNull final JobRunningMessage jobRunningMessage) {
+	private void handleJobRunningMessage(@NonNull
+	final JobRunningMessage jobRunningMessage) {
 		Preconditions.checkArgument(getJob().getJobID() == jobRunningMessage.getJobID());
 		Preconditions.checkState(job.getState() == State.READY);
 
@@ -189,7 +194,8 @@ public class JobHandler implements Client.DownloadCallback {
 		callback.onConversionStart(job);
 	}
 
-	private void handleJobProgressMessage(@NonNull final JobProgressMessage jobProgressMessage) {
+	private void handleJobProgressMessage(@NonNull
+	final JobProgressMessage jobProgressMessage) {
 		Preconditions.checkArgument(getJob().getJobID() == jobProgressMessage.getJobID());
 		Preconditions.checkState(job.getState() == State.RUNNING);
 
@@ -197,7 +203,8 @@ public class JobHandler implements Client.DownloadCallback {
 		callback.onJobProgress(job, jobProgressMessage.getProgress());
 	}
 
-	private void handleJobOutputMessage(@NonNull final JobOutputMessage jobOutputMessage) {
+	private void handleJobOutputMessage(@NonNull
+	final JobOutputMessage jobOutputMessage) {
 		Preconditions.checkArgument(getJob().getJobID() == jobOutputMessage.getJobID());
 		Preconditions.checkState(job.getState() == State.RUNNING);
 
@@ -208,7 +215,8 @@ public class JobHandler implements Client.DownloadCallback {
 		callback.onJobOutput(job, lines);
 	}
 
-	private void handleJobFinishedMessage(@NonNull final JobFinishedMessage jobFinishedMessage) {
+	private void handleJobFinishedMessage(@NonNull
+	final JobFinishedMessage jobFinishedMessage) {
 		Preconditions.checkArgument(getJob().getJobID() == jobFinishedMessage.getJobID());
 		Preconditions.checkState(job.getState() == State.SCHEDULED || job.getState() == State.RUNNING);
 
@@ -218,7 +226,8 @@ public class JobHandler implements Client.DownloadCallback {
 				jobFinishedMessage.getCachedDate());
 	}
 
-	private void handleJobFailedMessage(@NonNull final JobFailedMessage jobFailedMessage) {
+	private void handleJobFailedMessage(@NonNull
+	final JobFailedMessage jobFailedMessage) {
 		Preconditions.checkArgument(getJob().getJobID() == jobFailedMessage.getJobID());
 		Preconditions.checkState(job.getState() == State.SCHEDULED || job.getState() == State.RUNNING);
 

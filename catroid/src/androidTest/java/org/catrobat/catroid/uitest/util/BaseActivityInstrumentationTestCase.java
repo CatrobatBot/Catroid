@@ -63,12 +63,12 @@ public abstract class BaseActivityInstrumentationTestCase<T extends Activity> ex
 	}
 
 	/**
-	 * Methods like setActivityIntent(Intent) in child classes supposes that
-	 * setUp() of ActivityInstrumentationTestCase2 was called. But also it must be
-	 * called after getActivity() of ActivityInstrumentationTestCase2 otherwise
-	 * it has no effect. So a flag is needed to initialize solo later in child class
-	 * to use setActivityIntent.
-	 */
+     * Methods like setActivityIntent(Intent) in child classes supposes that
+     * setUp() of ActivityInstrumentationTestCase2 was called. But also it must be
+     * called after getActivity() of ActivityInstrumentationTestCase2 otherwise
+     * it has no effect. So a flag is needed to initialize solo later in child class
+     * to use setActivityIntent.
+     */
 	public BaseActivityInstrumentationTestCase(Class<T> clazz, boolean createSoloInSetUp) {
 		super(clazz);
 		this.clazz = clazz;

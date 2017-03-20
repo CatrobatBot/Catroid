@@ -415,7 +415,8 @@ public class ScratchProgramDetailsActivity extends BaseActivity implements
 	}
 
 	@Override
-	public void onJobOutput(final Job job, @NonNull final String[] lines) {
+	public void onJobOutput(final Job job, @NonNull
+	final String[] lines) {
 		// nothing to do
 	}
 

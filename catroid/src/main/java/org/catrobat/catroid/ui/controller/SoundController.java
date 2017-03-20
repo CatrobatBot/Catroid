@@ -95,15 +95,15 @@ public final class SoundController {
 	}
 
 	/**
-	 * Get a file path from a Uri. This will get the the path for Storage Access
-	 * Framework Documents, as well as the _data field for the MediaStore and
-	 * other file-based ContentProviders.
-	 * <p/>
-	 * <p/>
-	 * solution according to:
-	 * http://stackoverflow.com/questions/19834842/android-gallery-on-kitkat-returns-different-uri
-	 * -for-intent-action-get-content
-	 */
+     * Get a file path from a Uri. This will get the the path for Storage Access
+     * Framework Documents, as well as the _data field for the MediaStore and
+     * other file-based ContentProviders.
+     * <p/>
+     * <p/>
+     * solution according to:
+     * http://stackoverflow.com/questions/19834842/android-gallery-on-kitkat-returns-different-uri
+     * -for-intent-action-get-content
+     */
 	@TargetApi(19)
 	private static String getPathForVersionAboveEqualsVersion19(final Context context, final Uri uri) {
 

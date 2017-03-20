@@ -105,8 +105,8 @@ public final class PhysicsShapeBuilder {
 	}
 
 	/**
-	 * Saves computed shapes in different accuracies for one image. (All in baseline -> 100%)
-	 */
+     * Saves computed shapes in different accuracies for one image. (All in baseline -> 100%)
+     */
 	private class ImageShapes {
 
 		private static final int MAX_ORIGINAL_PIXMAP_SIZE = 512;

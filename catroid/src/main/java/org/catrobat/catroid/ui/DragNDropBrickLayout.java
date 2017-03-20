@@ -429,10 +429,10 @@ public class DragNDropBrickLayout extends BrickLayout {
 	}
 
 	/**
-	 * Finds the space closest to x,y where an element can be inserted
-	 *
-	 * @returns index of the element before the space or -1 for the beginning of the array
-	 */
+     * Finds the space closest to x,y where an element can be inserted
+     *
+     * @returns index of the element before the space or -1 for the beginning of the array
+     */
 	private int findClosestInsertableSpace(int x, int y) {
 		int previousElementIndex = -1;
 		int closestPreviousElementIndex = -1;

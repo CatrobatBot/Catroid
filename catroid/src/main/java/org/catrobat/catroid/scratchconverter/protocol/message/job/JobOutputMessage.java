@@ -31,7 +31,8 @@ public class JobOutputMessage extends JobMessage {
 
 	private final String[] lines;
 
-	public JobOutputMessage(final long jobID, @NonNull final String[] lines) {
+	public JobOutputMessage(final long jobID, @NonNull
+	final String[] lines) {
 		super(jobID);
 		this.lines = (lines != null) ? Arrays.copyOf(lines, lines.length) : new String[0];
 	}

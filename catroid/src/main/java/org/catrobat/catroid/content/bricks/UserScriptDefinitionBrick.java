@@ -396,8 +396,8 @@ public class UserScriptDefinitionBrick extends BrickBaseType implements ScriptBr
 	}
 
 	/**
-	 * Removes element at <b>from</b> and adds it after element at <b>to</b>
-	 */
+     * Removes element at <b>from</b> and adds it after element at <b>to</b>
+     */
 	public void reorderUIData(int from, int to) {
 
 		if (to == -1) {

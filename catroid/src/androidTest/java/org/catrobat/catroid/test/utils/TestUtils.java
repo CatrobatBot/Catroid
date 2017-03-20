@@ -96,17 +96,17 @@ public final class TestUtils {
 	}
 
 	/**
-	 * saves a file into the project folder
-	 * if project == null or "" file will be saved into Catroid folder
-	 *
-	 * @param project Folder where the file will be saved, this folder should exist
-	 * @param name    Name of the file
-	 * @param fileID  the id of the file --> needs the right context
-	 * @param context
-	 * @param type    type of the file: 0 = imagefile, 1 = soundfile
-	 * @return the file
-	 * @throws IOException
-	 */
+     * saves a file into the project folder
+     * if project == null or "" file will be saved into Catroid folder
+     *
+     * @param project Folder where the file will be saved, this folder should exist
+     * @param name    Name of the file
+     * @param fileID  the id of the file --> needs the right context
+     * @param context
+     * @param type    type of the file: 0 = imagefile, 1 = soundfile
+     * @return the file
+     * @throws IOException
+     */
 	public static File saveFileToProject(String project, String scene, String name, int fileID, Context context, int type)
 			throws IOException {
 

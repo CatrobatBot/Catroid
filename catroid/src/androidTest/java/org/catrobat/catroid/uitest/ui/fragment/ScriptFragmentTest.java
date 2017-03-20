@@ -364,8 +364,8 @@ public class ScriptFragmentTest extends BaseActivityInstrumentationTestCase<Main
 	}
 
 	/**
-	 * Tests issue#54. https://github.com/Catrobat/Catroid/issues/54
-	 */
+     * Tests issue#54. https://github.com/Catrobat/Catroid/issues/54
+     */
 
 	public void testOnlyAddControlBricks() {
 		UiTestUtils.createEmptyProject();

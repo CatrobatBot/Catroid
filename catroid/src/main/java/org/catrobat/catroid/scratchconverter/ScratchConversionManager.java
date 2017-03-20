@@ -407,7 +407,8 @@ public class ScratchConversionManager implements ConversionManager {
 	}
 
 	@Override
-	public void onConversionFailure(@Nullable final Job job, final ClientException ex) {
+	public void onConversionFailure(@Nullable
+	final Job job, final ClientException ex) {
 		Log.e(TAG, "Conversion failed: " + ex.getMessage());
 		currentActivity.runOnUiThread(new Runnable() {
 			@Override

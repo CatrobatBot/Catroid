@@ -43,11 +43,11 @@ public class PhysicsBoundaryBox {
 	}
 
 	/**
-	 * TODO[physics]: Create only one body with four shapes (sides). Refactor test after that.
-	 *
-	 * @param height
-	 * @param width
-	 */
+     * TODO[physics]: Create only one body with four shapes (sides). Refactor test after that.
+     *
+     * @param height
+     * @param width
+     */
 	public void create(int width, int height) {
 		float boxWidth = PhysicsWorldConverter.convertNormalToBox2dCoordinate(width);
 		float boxHeight = PhysicsWorldConverter.convertNormalToBox2dCoordinate(height);

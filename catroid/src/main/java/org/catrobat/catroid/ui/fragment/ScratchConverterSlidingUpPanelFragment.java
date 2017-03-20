@@ -400,7 +400,8 @@ public class ScratchConverterSlidingUpPanelFragment extends Fragment
 	}
 
 	@Override
-	public void onJobOutput(final Job job, @NonNull final String[] lines) {
+	public void onJobOutput(final Job job, @NonNull
+	final String[] lines) {
 		// reserved for later use (i.e. next ScratchConverter release)!
 	}
 
