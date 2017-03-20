@@ -293,7 +293,7 @@ public class DataContainer extends BaseDataContainer {
 
 	/**
 	 * This function deletes the user variable with userVariableName in the current context.
-	 *
+	 * <p>
 	 * The current context consists of all global variables, the sprite variables for the current sprite,
 	 * and the user brick variables for the current user brick.
 	 */
@@ -379,7 +379,7 @@ public class DataContainer extends BaseDataContainer {
 
 	/**
 	 * This function finds the user variable with userVariableName in the current context.
-	 *
+	 * <p>
 	 * The current context consists of all global variables, the sprite variables for the current sprite,
 	 * and the user brick variables for the current user brick.
 	 */
