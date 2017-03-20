@@ -394,7 +394,9 @@ public final class Utils {
 	/**
 	 * Constructs a path out of the pathElements.
 	 *
-	 * @param pathElements the strings to connect. They can have "/" in them which will be de-duped in the result, if necessary.
+	 * @param pathElements
+	 *         the strings to connect. They can have "/" in them which will be de-duped in the result, if necessary.
+	 *
 	 * @return the path that was constructed.
 	 */
 	public static String buildPath(String... pathElements) {

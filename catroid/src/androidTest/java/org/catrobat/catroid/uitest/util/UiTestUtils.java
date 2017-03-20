@@ -404,7 +404,8 @@ public final class UiTestUtils {
 	/**
 	 * Clicks on the EditText given by editTextId, inserts the integer value and closes the Dialog
 	 *
-	 * @param value The value you want to put into the EditText
+	 * @param value
+	 *         The value you want to put into the EditText
 	 */
 	public static void insertIntegerIntoEditText(Solo solo, int value) {
 		insertValue(solo, value + "");
@@ -413,7 +414,8 @@ public final class UiTestUtils {
 	/**
 	 * Clicks on the EditText given by editTextId, inserts the double value and closes the Dialog
 	 *
-	 * @param value The value you want to put into the EditText
+	 * @param value
+	 *         The value you want to put into the EditText
 	 */
 	public static void insertDoubleIntoEditText(Solo solo, double value) {
 		insertValue(solo, new BigDecimal(value).toPlainString());
@@ -1510,12 +1512,18 @@ public final class UiTestUtils {
 	 * saves a file into the project folder
 	 * if project == null or "" file will be saved into Catroid folder
 	 *
-	 * @param project Folder where the file will be saved, this folder should exist
-	 * @param name    Name of the file
-	 * @param fileID  the id of the file --> needs the right context
+	 * @param project
+	 *         Folder where the file will be saved, this folder should exist
+	 * @param name
+	 *         Name of the file
+	 * @param fileID
+	 *         the id of the file --> needs the right context
 	 * @param context
-	 * @param type    type of the file: 0 = imagefile, 1 = soundfile
+	 * @param type
+	 *         type of the file: 0 = imagefile, 1 = soundfile
+	 *
 	 * @return the file
+	 *
 	 * @throws IOException
 	 */
 	public static File saveFileToProject(String project, String sceneName, String name, int fileID, Context context, FileTypes type) {
@@ -1808,9 +1816,12 @@ public final class UiTestUtils {
 	 * (icon), or to click on an item in the overflow menu. So either pass a
 	 * String + ID --OR-- a String + 0.
 	 *
-	 * @param solo                 Use Robotium functionality
-	 * @param overflowMenuItemName Name of the overflow menu item
-	 * @param menuItemId           ID of an action item (icon)
+	 * @param solo
+	 *         Use Robotium functionality
+	 * @param overflowMenuItemName
+	 *         Name of the overflow menu item
+	 * @param menuItemId
+	 *         ID of an action item (icon)
 	 */
 	public static void openActionMode(Solo solo, String overflowMenuItemName, int menuItemId) {
 
