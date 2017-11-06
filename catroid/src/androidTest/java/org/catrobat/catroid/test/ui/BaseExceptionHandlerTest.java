@@ -34,8 +34,8 @@ import org.catrobat.catroid.ui.SettingsActivity;
 import org.catrobat.catroid.utils.CrashReporter;
 import org.junit.Before;
 
-import static org.catrobat.catroid.ui.BaseActivity.RECOVERED_FROM_CRASH;
-import static org.catrobat.catroid.utils.CrashReporter.EXCEPTION_FOR_REPORT;
+import static org.catrobat.catroid.utils.CrashRecovering.RECOVERED_FROM_CRASH;
+import static org.catrobat.catroid.utils.CrashRecovering.EXCEPTION_FOR_REPORT;
 
 public class BaseExceptionHandlerTest extends AndroidTestCase {
 
