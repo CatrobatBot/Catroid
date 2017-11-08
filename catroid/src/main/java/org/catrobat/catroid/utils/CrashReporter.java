@@ -31,7 +31,6 @@ import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
-import com.google.gson.Gson;
 
 import org.catrobat.catroid.BuildConfig;
 import org.catrobat.catroid.ui.SettingsActivity;
@@ -43,7 +42,6 @@ public final class CrashReporter {
 	private static final String TAG = CrashReporter.class.getSimpleName();
 
 	private static SharedPreferences preferences;
-	public static final String EXCEPTION_FOR_REPORT = "EXCEPTION_FOR_REPORT";
 	private static boolean isCrashReportEnabled = BuildConfig.CRASHLYTICS_CRASH_REPORT_ENABLED;
 
 	private CrashReporter() {
@@ -82,29 +80,5 @@ public final class CrashReporter {
 		}
 
 		return false;
-	}
-
-	public static void sendUnhandledCaughtException() {
-		String json = preferences.getString(EXCEPTION_FOR_REPORT, "");
-		if (isReportingEnabled() && !json.isEmpty()) {
-			Log.d(TAG, "AFTER_EXCEPTION : sendCaughtException()");
-			Gson gson = new Gson();
-			Throwable exception = gson.fromJson(json, Throwable.class);
-			logException(exception);
-			preferences.edit().remove(EXCEPTION_FOR_REPORT).commit();
-		}
-	}
-
-	public static void storeUnhandledException(Throwable exception) {
-		SharedPreferences.Editor prefsEditor = preferences.edit();
-		if (isReportingEnabled()) {
-			Gson gson = new Gson();
-			String check = preferences.getString(EXCEPTION_FOR_REPORT, "");
-			if (check.isEmpty()) {
-				String json = gson.toJson(exception);
-				prefsEditor.putString(EXCEPTION_FOR_REPORT, json);
-				prefsEditor.commit();
-			}
-		}
 	}
 }

@@ -30,6 +30,7 @@ import android.support.test.InstrumentationRegistry;
 import android.test.AndroidTestCase;
 
 import org.catrobat.catroid.ui.SettingsActivity;
+import org.catrobat.catroid.utils.CrashRecovering;
 import org.catrobat.catroid.utils.CrashReporter;
 
 public class CrashReporterTest extends AndroidTestCase {
@@ -75,60 +76,60 @@ public class CrashReporterTest extends AndroidTestCase {
 	}
 
 	public void testUnhandledExceptionStoredOnCrashReportEnabled() {
-		CrashReporter.storeUnhandledException(exception);
+		CrashRecovering.storeUnhandledException(context, exception);
 
-		assertFalse(sharedPreferences.getString(CrashReporter.EXCEPTION_FOR_REPORT, "").isEmpty());
+		assertFalse(sharedPreferences.getString(CrashRecovering.EXCEPTION_FOR_REPORT, "").isEmpty());
 	}
 
 	public void testUnhandledExceptionNotStoredOnCrashReportDisabled() {
 		CrashReporter.setIsCrashReportEnabled(false);
-		CrashReporter.storeUnhandledException(exception);
+		CrashRecovering.storeUnhandledException(context, exception);
 
-		assertTrue(sharedPreferences.getString(CrashReporter.EXCEPTION_FOR_REPORT, "").isEmpty());
+		assertTrue(sharedPreferences.getString(CrashRecovering.EXCEPTION_FOR_REPORT, "").isEmpty());
 	}
 
 	public void testUnhandledExceptionStoredOnNoPreviousExceptionStored() {
-		assertTrue(sharedPreferences.getString(CrashReporter.EXCEPTION_FOR_REPORT, "").isEmpty());
+		assertTrue(sharedPreferences.getString(CrashRecovering.EXCEPTION_FOR_REPORT, "").isEmpty());
 
-		CrashReporter.storeUnhandledException(exception);
+		CrashRecovering.storeUnhandledException(context, exception);
 
-		assertFalse(sharedPreferences.getString(CrashReporter.EXCEPTION_FOR_REPORT, "").isEmpty());
+		assertFalse(sharedPreferences.getString(CrashRecovering.EXCEPTION_FOR_REPORT, "").isEmpty());
 	}
 
 	public void testUnhandledExceptionNotStoredOnPreviousExceptionStored() {
-		assertTrue(sharedPreferences.getString(CrashReporter.EXCEPTION_FOR_REPORT, "").isEmpty());
+		assertTrue(sharedPreferences.getString(CrashRecovering.EXCEPTION_FOR_REPORT, "").isEmpty());
 
 		exception = new RuntimeException("Error 1");
-		CrashReporter.storeUnhandledException(exception);
-		assertFalse(sharedPreferences.getString(CrashReporter.EXCEPTION_FOR_REPORT, "").isEmpty());
+		CrashRecovering.storeUnhandledException(context, exception);
+		assertFalse(sharedPreferences.getString(CrashRecovering.EXCEPTION_FOR_REPORT, "").isEmpty());
 
-		String error1Data = sharedPreferences.getString(CrashReporter.EXCEPTION_FOR_REPORT, "");
+		String error1Data = sharedPreferences.getString(CrashRecovering.EXCEPTION_FOR_REPORT, "");
 
 		exception = new RuntimeException("Error 2");
-		CrashReporter.storeUnhandledException(exception);
-		assertFalse(sharedPreferences.getString(CrashReporter.EXCEPTION_FOR_REPORT, "").isEmpty());
+		CrashRecovering.storeUnhandledException(context, exception);
+		assertFalse(sharedPreferences.getString(CrashRecovering.EXCEPTION_FOR_REPORT, "").isEmpty());
 
-		assertTrue(sharedPreferences.getString(CrashReporter.EXCEPTION_FOR_REPORT, "").equals(error1Data));
+		assertTrue(sharedPreferences.getString(CrashRecovering.EXCEPTION_FOR_REPORT, "").equals(error1Data));
 	}
 
 	public void testSharedPreferencesClearedAfterLoggingException() {
-		CrashReporter.storeUnhandledException(exception);
+		CrashRecovering.storeUnhandledException(context, exception);
 
-		assertFalse(sharedPreferences.getString(CrashReporter.EXCEPTION_FOR_REPORT, "").isEmpty());
+		assertFalse(sharedPreferences.getString(CrashRecovering.EXCEPTION_FOR_REPORT, "").isEmpty());
 
-		CrashReporter.sendUnhandledCaughtException();
+		CrashRecovering.sendUnhandledCaughtException(context);
 
-		assertTrue(sharedPreferences.getString(CrashReporter.EXCEPTION_FOR_REPORT, "").isEmpty());
+		assertTrue(sharedPreferences.getString(CrashRecovering.EXCEPTION_FOR_REPORT, "").isEmpty());
 	}
 
 	public void testSharedPreferencesClearedOnLoggingFailed() {
-		CrashReporter.storeUnhandledException(exception);
+		CrashRecovering.storeUnhandledException(context, exception);
 
-		assertFalse(sharedPreferences.getString(CrashReporter.EXCEPTION_FOR_REPORT, "").isEmpty());
+		assertFalse(sharedPreferences.getString(CrashRecovering.EXCEPTION_FOR_REPORT, "").isEmpty());
 
-		CrashReporter.sendUnhandledCaughtException();
+		CrashRecovering.sendUnhandledCaughtException(context);
 
-		assertTrue(sharedPreferences.getString(CrashReporter.EXCEPTION_FOR_REPORT, "").isEmpty());
+		assertTrue(sharedPreferences.getString(CrashRecovering.EXCEPTION_FOR_REPORT, "").isEmpty());
 	}
 
 	public void testLogExceptionGenerateLogsOnReportsEnabled() {
