@@ -93,24 +93,24 @@ public class UpAndDownloadTest extends AndroidTestCase {
 		 * String projectFilename = Constants.PROJECTCODE_NAME;
 		 * new File(pathToDefaultProject + "/" + projectFilename).createNewFile();
 		 * String projectDescription = "this is just a testproject";
-		 * 
+		 *
 		 * ServerCalls.getInstance().setConnectionToUse(new MockConnection());
-		 * 
+		 *
 		 * assertTrue("The default Project does not exist.", new File(pathToDefaultProject).exists());
-		 * 
+		 *
 		 * new ProjectUploadService(null, testProjectName, projectDescription, pathToDefaultProject, "0").execute();
 		 * Thread.sleep(3000);
-		 * 
+		 *
 		 * assertTrue("Uploaded file does not exist", projectZipOnMockServer.exists());
-		 * 
+		 *
 		 * new ProjectDownloadService(null, "", testProjectName).execute();
 		 * Thread.sleep(3000);
-		 * 
+		 *
 		 * File downloadProjectRoot = new File(Constants.DEFAULT_ROOT + "/" + testProjectName);
 		 * assertTrue("Project does not exist after download", downloadProjectRoot.exists());
 		 * File testProjectFile = new File(Constants.DEFAULT_ROOT + "/" + testProjectName + "/" + projectFilename);
 		 * assertTrue("Project file does not exist after download", testProjectFile.exists());
-		 * 
+		 *
 		 * UtilFile.deleteDirectory(downloadProjectRoot);
 		 * UtilFile.deleteDirectory(new File(pathToDefaultProject));
 		 */
@@ -119,16 +119,16 @@ public class UpAndDownloadTest extends AndroidTestCase {
 	//not used yet
 	/*
 	 * private class MockConnection extends ConnectionWrapper {
-	 * 
+	 *
 	 * @Override
 	 * public String doFtpPostFileUpload(String urlstring, HashMap<String, String> postValues, String filetag,
 	 * String filePath, ResultReceiver receiver, String httpPostUrl, Integer notificationId)
 	 * throws IOException, WebconnectionException {
-	 * 
+	 *
 	 * new File(filePath).renameTo(projectZipOnMockServer);
 	 * return "";
 	 * }
-	 * 
+	 *
 	 * @Override
 	 * public void doHttpPostFileDownload(String urlstring, HashMap<String, String> postValues, String filePath,
 	 * ResultReceiver receiver, Integer notificationId, String projectName) throws IOException {
