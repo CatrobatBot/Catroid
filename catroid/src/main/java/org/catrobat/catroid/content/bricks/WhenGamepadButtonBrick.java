@@ -23,30 +23,43 @@
 package org.catrobat.catroid.content.bricks;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Spinner;
 
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+
 import org.catrobat.catroid.CatroidApplication;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.content.Script;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.WhenGamepadButtonScript;
-import org.catrobat.catroid.content.actions.ScriptSequenceAction;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class WhenGamepadButtonBrick extends BrickBaseType implements ScriptBrick {
-	private static final long serialVersionUID = 1L;
-	private WhenGamepadButtonScript whenGamepadButtonScript;
-	private List<String> actions = Arrays.asList(CatroidApplication.getAppContext().getResources().getStringArray(R.array.gamepad_buttons_array));
 
-	public WhenGamepadButtonBrick(@NonNull WhenGamepadButtonScript whenGamepadButtonScript) {
+	protected WhenGamepadButtonScript whenGamepadButtonScript;
+	protected transient boolean checked = false;
+	private static final long serialVersionUID = 1L;
+	private String[] actions;
+	private String action;
+	private int position;
+
+	public WhenGamepadButtonBrick(WhenGamepadButtonScript whenGamepadButtonScript) {
 		this.whenGamepadButtonScript = whenGamepadButtonScript;
+		actions = CatroidApplication.getAppContext().getResources().getStringArray(R.array.gamepad_buttons_array);
+		if (whenGamepadButtonScript != null) {
+			action = whenGamepadButtonScript.getAction();
+			for (int i = 0; i < actions.length; i++) {
+				if (actions[i].equals(action)) {
+					position = i;
+					break;
+				}
+			}
+		}
 	}
 
 	@Override
@@ -78,14 +91,21 @@ public class WhenGamepadButtonBrick extends BrickBaseType implements ScriptBrick
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				String actionChosen = actionSpinner.getSelectedItem().toString();
-				whenGamepadButtonScript.setAction(actionChosen);
+				action = actionChosen;
+				WhenGamepadButtonBrick.this.position = position;
+				if (whenGamepadButtonScript == null) {
+					whenGamepadButtonScript = new WhenGamepadButtonScript(actionChosen);
+				} else {
+					whenGamepadButtonScript.setAction(actionChosen);
+				}
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> parent) {
 			}
 		});
-		actionSpinner.setSelection(actions.indexOf(whenGamepadButtonScript.getAction()));
+
+		actionSpinner.setSelection(position);
 		return view;
 	}
 
@@ -96,17 +116,20 @@ public class WhenGamepadButtonBrick extends BrickBaseType implements ScriptBrick
 
 	@Override
 	public Brick clone() {
-		WhenGamepadButtonScript clonedScript = new WhenGamepadButtonScript(whenGamepadButtonScript.getAction());
-		return new WhenGamepadButtonBrick(clonedScript);
+		return new WhenGamepadButtonBrick(null);
 	}
 
 	@Override
 	public Script getScriptSafe() {
+		if (whenGamepadButtonScript == null) {
+			whenGamepadButtonScript = new WhenGamepadButtonScript();
+		}
+
 		return whenGamepadButtonScript;
 	}
 
 	@Override
-	public List<ScriptSequenceAction> addActionToSequence(Sprite sprite, ScriptSequenceAction sequence) {
+	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
 		return null;
 	}
 }

@@ -30,11 +30,12 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Spinner;
 
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.SoundInfo;
 import org.catrobat.catroid.content.Sprite;
-import org.catrobat.catroid.content.actions.ScriptSequenceAction;
 import org.catrobat.catroid.content.bricks.brickspinner.SpinnerAdapterWithNewOption;
 import org.catrobat.catroid.ui.recyclerview.dialog.NewSoundDialogFragment;
 import org.catrobat.catroid.ui.recyclerview.dialog.dialoginterface.NewItemInterface;
@@ -72,6 +73,23 @@ public class PlaySoundBrick extends BrickBaseType implements
 		return clone;
 	}
 
+	private SoundInfo getSoundByName(String name) {
+		for (SoundInfo sound : ProjectManager.getInstance().getCurrentSprite().getSoundList()) {
+			if (sound.getName().equals(name)) {
+				return sound;
+			}
+		}
+		return null;
+	}
+
+	private List<String> getSoundNames() {
+		List<String> soundNames = new ArrayList<>();
+		for (SoundInfo sound : ProjectManager.getInstance().getCurrentSprite().getSoundList()) {
+			soundNames.add(sound.getName());
+		}
+		return soundNames;
+	}
+
 	protected View prepareView(Context context) {
 		return View.inflate(context, R.layout.brick_play_sound, null);
 	}
@@ -105,23 +123,6 @@ public class PlaySoundBrick extends BrickBaseType implements
 		});
 		spinner.setSelection(spinnerAdapter.getPosition(sound != null ? sound.getName() : null));
 		return view;
-	}
-
-	private SoundInfo getSoundByName(String name) {
-		for (SoundInfo sound : ProjectManager.getInstance().getCurrentSprite().getSoundList()) {
-			if (sound.getName().equals(name)) {
-				return sound;
-			}
-		}
-		return null;
-	}
-
-	private List<String> getSoundNames() {
-		List<String> soundNames = new ArrayList<>();
-		for (SoundInfo sound : ProjectManager.getInstance().getCurrentSprite().getSoundList()) {
-			soundNames.add(sound.getName());
-		}
-		return soundNames;
 	}
 
 	@Override
@@ -159,7 +160,7 @@ public class PlaySoundBrick extends BrickBaseType implements
 	}
 
 	@Override
-	public List<ScriptSequenceAction> addActionToSequence(Sprite sprite, ScriptSequenceAction sequence) {
+	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
 		sequence.addAction(sprite.getActionFactory().createPlaySoundAction(sprite, sound));
 		return null;
 	}

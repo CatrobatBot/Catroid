@@ -29,17 +29,21 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Spinner;
 
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
+import org.catrobat.catroid.content.GroupSprite;
 import org.catrobat.catroid.content.Sprite;
-import org.catrobat.catroid.content.actions.ScriptSequenceAction;
 import org.catrobat.catroid.content.bricks.brickspinner.SpinnerAdapterWithNewOption;
 import org.catrobat.catroid.ui.recyclerview.dialog.NewSpriteDialogWrapper;
 import org.catrobat.catroid.ui.recyclerview.dialog.dialoginterface.NewItemInterface;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PointToBrick extends BrickBaseType implements
+		BrickWithSpriteReference,
 		SpinnerAdapterWithNewOption.OnNewOptionInDropDownClickListener,
 		NewItemInterface<Sprite> {
 
@@ -51,16 +55,55 @@ public class PointToBrick extends BrickBaseType implements
 	private transient Spinner spinner;
 	private transient SpinnerAdapterWithNewOption spinnerAdapter;
 
+	public PointToBrick(Sprite pointedSprite) {
+		this.pointedObject = pointedSprite;
+	}
+
 	public PointToBrick() {
 	}
 
-	public PointToBrick(Sprite pointedSprite) {
-		this.pointedObject = pointedSprite;
+	@Override
+	public Sprite getSprite() {
+		return pointedObject;
+	}
+
+	@Override
+	public void setSprite(Sprite sprite) {
+		this.pointedObject = sprite;
 	}
 
 	@Override
 	public Brick clone() {
 		return new PointToBrick(pointedObject);
+	}
+
+	private Sprite getSpriteByName(String name) {
+		for (Sprite sprite : ProjectManager.getInstance().getCurrentScene().getSpriteList()) {
+			if (sprite.getName().equals(name)) {
+				return sprite;
+			}
+		}
+		return null;
+	}
+
+	private List<String> getSpriteNames() {
+		List<String> spriteNames = new ArrayList<>();
+
+		for (Sprite sprite : ProjectManager.getInstance().getCurrentScene().getSpriteList()) {
+			if (sprite instanceof GroupSprite) {
+				continue;
+			}
+			if (sprite.equals(ProjectManager.getInstance().getCurrentSprite())) {
+				continue;
+			}
+
+			if (sprite.equals(ProjectManager.getInstance().getCurrentScene().getBackgroundSprite())) {
+				continue;
+			}
+			spriteNames.add(sprite.getName());
+		}
+
+		return spriteNames;
 	}
 
 	@Override
@@ -79,8 +122,7 @@ public class PointToBrick extends BrickBaseType implements
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				if (position != 0) {
-					String spriteName = spinnerAdapter.getItem(position);
-					pointedObject = ProjectManager.getInstance().getCurrentScene().getSprite(spriteName);
+					pointedObject = getSpriteByName(spinnerAdapter.getItem(position));
 				}
 			}
 
@@ -90,15 +132,6 @@ public class PointToBrick extends BrickBaseType implements
 		});
 		spinner.setSelection(spinnerAdapter.getPosition(pointedObject != null ? pointedObject.getName() : null));
 		return view;
-	}
-
-	private List<String> getSpriteNames() {
-		List<String> spriteNames = ProjectManager.getInstance().getCurrentScene().getSpriteNames();
-
-		spriteNames.remove(ProjectManager.getInstance().getCurrentSprite().getName());
-		spriteNames.remove(ProjectManager.getInstance().getCurrentScene().getBackgroundSprite().getName());
-
-		return spriteNames;
 	}
 
 	@Override
@@ -135,7 +168,7 @@ public class PointToBrick extends BrickBaseType implements
 	}
 
 	@Override
-	public List<ScriptSequenceAction> addActionToSequence(Sprite sprite, ScriptSequenceAction sequence) {
+	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
 		sequence.addAction(sprite.getActionFactory().createPointToAction(sprite, pointedObject));
 		return null;
 	}

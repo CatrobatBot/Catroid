@@ -62,8 +62,5 @@ Thumbs.db
 .gradle/
 build/
 
-# Cache for build scripts
-__pycache__
-
 #api-keys
 catroid/google-services.json

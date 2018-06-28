@@ -27,6 +27,7 @@ import android.content.Context;
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.content.Project;
+import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.bricks.UserBrick;
 import org.catrobat.catroid.formulaeditor.UserList;
@@ -69,6 +70,7 @@ public class DataContainer extends BaseDataContainer {
 		this.project = project;
 	}
 
+	//general methods
 	public DataAdapter createDataAdapter(Context context, Sprite sprite) {
 		List<UserVariable> userBrickVariables = new LinkedList<>();
 		List<UserVariable> spriteVariables = getOrCreateVariableListForSprite(sprite);
@@ -157,6 +159,7 @@ public class DataContainer extends BaseDataContainer {
 		}
 	}
 
+	//general UserVariable methods
 	public UserVariable getUserVariable(Sprite sprite, String userVariableName) {
 		return getUserVariable(sprite, userVariableName, getCurrentUserBrick());
 	}
@@ -192,6 +195,7 @@ public class DataContainer extends BaseDataContainer {
 		}
 	}
 
+	//general UserList methods
 	public UserList getUserList(Sprite currentSprite, String name) {
 		UserList userList = spriteListBehaviour.get(currentSprite, name);
 		if (userList == null) {
@@ -233,12 +237,17 @@ public class DataContainer extends BaseDataContainer {
 		}
 	}
 
+	//sprite UserVariable methods
 	public UserVariable addSpriteUserVariable(String userVariableName) {
 		return spriteVariableBehaviour.add(getCurrentSprite(), userVariableName);
 	}
 
 	public UserVariable addSpriteUserVariableToSprite(Sprite sprite, String userVariableName) {
 		return spriteVariableBehaviour.add(sprite, userVariableName);
+	}
+
+	public UserVariable addSpriteVariableIfDoesNotExist(Sprite sprite, String userVariableName) {
+		return spriteVariableBehaviour.addIfNotExists(sprite, userVariableName);
 	}
 
 	public List<UserVariable> getOrCreateVariableListForSprite(Sprite sprite) {
@@ -249,6 +258,10 @@ public class DataContainer extends BaseDataContainer {
 		return spriteVariableBehaviour.find(sprite, name);
 	}
 
+	public boolean spriteVariableExists(Sprite sprite, UserVariable userVariable) {
+		return spriteVariableBehaviour.exists(sprite, userVariable);
+	}
+
 	public boolean spriteVariableExistsByName(Sprite sprite, String variableName) {
 		return spriteVariableBehaviour.exists(sprite, variableName);
 	}
@@ -257,14 +270,23 @@ public class DataContainer extends BaseDataContainer {
 		return spriteVariableBehaviour.existsAny(sprites, variableName);
 	}
 
+	public void cloneSpriteVariablesForScene(Scene scene, DataContainer original) {
+		spriteVariables = spriteVariableBehaviour.cloneForScene(scene, original.getSpriteVariableMap());
+	}
+
 	public UserVariable renameSpriteUserVariable(String oldName, String newName) {
 		return spriteVariableBehaviour.rename(getCurrentSprite(), oldName, newName);
+	}
+
+	public void cleanVariableListForSprite(Sprite sprite) {
+		spriteVariableBehaviour.clean(sprite);
 	}
 
 	private void resetUserVariables(List<UserVariable> userVariableList) {
 		spriteVariableBehaviour.reset(userVariableList);
 	}
 
+	//UserList methods
 	public UserList addSpriteUserList(String userListName) {
 		return spriteListBehaviour.add(getCurrentSprite(), userListName);
 	}
@@ -297,16 +319,29 @@ public class DataContainer extends BaseDataContainer {
 		return spriteListBehaviour.existsAny(sprites, listName);
 	}
 
+	public void cloneSpriteListsForScene(Scene scene, DataContainer original) {
+		spriteListOfLists = spriteListBehaviour.cloneForScene(scene, original.getSpriteListMap());
+	}
+
 	public UserList renameSpriteUserList(String oldName, String newName) {
 		return spriteListBehaviour.rename(getCurrentSprite(), oldName, newName);
+	}
+
+	public void cleanUserListForSprite(Sprite sprite) {
+		spriteListBehaviour.clean(sprite);
 	}
 
 	private void resetUserLists(List<UserList> userList) {
 		spriteListBehaviour.reset(userList);
 	}
 
+	//methods for userbrick variables
 	public UserVariable addUserBrickVariableToUserBrick(UserBrick userBrick, String userVariableName, Object value) {
 		return userBrickVariableBehaviour.add(userBrick, userVariableName, value);
+	}
+
+	public UserVariable addUserBrickVariableToUserBrickIfNotExists(UserBrick userBrick, String userVariableName, Object userVariableValue) {
+		return userBrickVariableBehaviour.addIfNotExists(userBrick, userVariableName, userVariableValue);
 	}
 
 	public List<UserVariable> getOrCreateVariableListForUserBrick(UserBrick userBrick) {
@@ -326,6 +361,11 @@ public class DataContainer extends BaseDataContainer {
 		return userBrickVariableBehaviour.find(userBrick, name);
 	}
 
+	public void deleteUserVariableFromUserBrick(UserBrick userBrick, String userVariableName) {
+		userBrickVariableBehaviour.delete(userBrick, userVariableName);
+	}
+
+	//methods for project variables
 	public UserVariable addProjectUserVariable(String userVariableName) {
 		return projectVariableBehaviour.add(userVariableName);
 	}
@@ -346,6 +386,7 @@ public class DataContainer extends BaseDataContainer {
 		return projectVariableBehaviour.find(name);
 	}
 
+	//methods for project lists
 	public UserList addProjectUserList(String userListName) {
 		return projectListBehaviour.add(userListName);
 	}
@@ -366,6 +407,7 @@ public class DataContainer extends BaseDataContainer {
 		return projectListBehaviour.find(name);
 	}
 
+	//getters/setters
 	public void setProject(Project project) {
 		this.project = project;
 	}
@@ -398,6 +440,10 @@ public class DataContainer extends BaseDataContainer {
 			project = ProjectManager.getInstance().getCurrentProject();
 		}
 		return project.getProjectLists();
+	}
+
+	public List<UserList> getSpriteListOfLists(Sprite sprite) {
+		return spriteListOfLists.get(sprite);
 	}
 
 	public UserBrick getCurrentUserBrick() {

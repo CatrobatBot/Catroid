@@ -31,7 +31,6 @@ import org.catrobat.catroid.content.SingleSprite;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.StartScript;
 import org.catrobat.catroid.content.bricks.WaitUntilBrick;
-import org.catrobat.catroid.content.eventids.EventId;
 import org.catrobat.catroid.formulaeditor.Formula;
 import org.catrobat.catroid.formulaeditor.FormulaElement;
 import org.catrobat.catroid.formulaeditor.Operators;
@@ -62,7 +61,7 @@ public class WaitUntilActionTest extends AndroidTestCase {
 				new FormulaElement(FormulaElement.ElementType.NUMBER, "1", null), new FormulaElement(FormulaElement.ElementType.NUMBER, "2", null)));
 
 		runScript(validFormula);
-		assertTrue("Not all actions are finished", testSprite.look.haveAllThreadsFinished());
+		assertTrue("Not all actions are finished", testSprite.look.getAllActionsAreFinished());
 	}
 
 	public void testWaitUntilBrickFail() {
@@ -72,7 +71,7 @@ public class WaitUntilActionTest extends AndroidTestCase {
 				new FormulaElement(FormulaElement.ElementType.NUMBER, "2", null), new FormulaElement(FormulaElement.ElementType.NUMBER, "1", null)));
 
 		runScript(validFormula);
-		assertFalse("All actions are finished", testSprite.look.haveAllThreadsFinished());
+		assertFalse("All actions are finished", testSprite.look.getAllActionsAreFinished());
 	}
 
 	private void runScript(Formula validFormula) {
@@ -84,7 +83,7 @@ public class WaitUntilActionTest extends AndroidTestCase {
 		project.getDefaultScene().addSprite(testSprite);
 		ProjectManager.getInstance().setCurrentSprite(testSprite);
 		ProjectManager.getInstance().setCurrentScript(testScript);
-		testSprite.initializeEventThreads(EventId.START);
+		testSprite.createAndAddActions(Sprite.INCLUDE_START_ACTIONS);
 
 		testSprite.look.act(100f);
 	}

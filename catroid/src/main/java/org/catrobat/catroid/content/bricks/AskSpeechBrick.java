@@ -28,10 +28,12 @@ import android.widget.BaseAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
+import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.Sprite;
-import org.catrobat.catroid.content.actions.ScriptSequenceAction;
 import org.catrobat.catroid.formulaeditor.Formula;
 import org.catrobat.catroid.formulaeditor.InternToExternGenerator;
 import org.catrobat.catroid.formulaeditor.UserVariable;
@@ -70,7 +72,7 @@ public class AskSpeechBrick extends UserVariableBrick {
 	}
 
 	@Override
-	public List<ScriptSequenceAction> addActionToSequence(Sprite sprite, ScriptSequenceAction sequence) {
+	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
 		sequence.addAction(sprite.getActionFactory().createAskSpeechAction(sprite,
 				getFormulaWithBrickField(BrickField.ASK_SPEECH_QUESTION), userVariable));
 		return Collections.emptyList();
@@ -154,5 +156,10 @@ public class AskSpeechBrick extends UserVariableBrick {
 
 	public void showFormulaEditorToEditFormula(View view) {
 		FormulaEditorFragment.showFragment(view, this, BrickField.ASK_SPEECH_QUESTION);
+	}
+
+	@Override
+	public void updateReferenceAfterMerge(Scene into, Scene from) {
+		updateUserVariableReference(into, from);
 	}
 }

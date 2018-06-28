@@ -17,6 +17,7 @@ pipeline {
 		GRADLE_USER_HOME = "/.gradle/${env.EXECUTOR_NUMBER}"
 		// Otherwise user.home returns ? for java applications
 		JAVA_TOOL_OPTIONS = "-Duser.home=/tmp/"
+		ANDROID_EMULATOR_IMAGE = "system-images;android-24;default;x86_64"
 
 		// modulename
 		GRADLE_PROJECT_MODULE_NAME = "catroid"
@@ -36,8 +37,6 @@ pipeline {
 		ANDROID_HOME = "/usr/local/android-sdk"
 		ANDROID_SDK_LOCATION = "/usr/local/android-sdk"
 		ANDROID_NDK = ""
-
-		PYTHONUNBUFFERED = "true"
 	}
 
 	options {
@@ -50,14 +49,14 @@ pipeline {
 			steps {
 				// Install Android SDK
 				lock("update-android-sdk-on-${env.NODE_NAME}") {
-					sh "./buildScripts/build_step_install_android_sdk"
+					sh "jenkins_android_sdk_installer -g '${WORKSPACE}/${env.GRADLE_PROJECT_MODULE_NAME}/build.gradle' -s '${ANDROID_EMULATOR_IMAGE}'"
 				}
 			}
 		}
 
 		stage('Static Analysis') {
 			steps {
-				sh "./buildScripts/build_step_run_static_analysis"
+				sh "./gradlew pmd checkstyle lint"
 			}
 
 			post {
@@ -71,20 +70,28 @@ pipeline {
 
 		stage('Unit and Device tests') {
 			steps {
+				// create emulator
+				sh "jenkins_android_emulator_helper -C -P 'hw.camera:yes' -P 'hw.ramSize:800' -P 'hw.gpu.enabled:yes' -P 'hw.camera.front:emulated' -P 'hw.camera.back:emulated' -P 'hw.gps:yes' -i '${ANDROID_EMULATOR_IMAGE}' -s xhdpi"
+				// start emulator
+				sh "jenkins_android_emulator_helper -S -r 768x1280 -l en_US -c '-gpu swiftshader_indirect -no-boot-anim -noaudio'"
+				// wait for emulator startup
+				sh "jenkins_android_emulator_helper -W"
 				// Run Unit and device tests for package: org.catrobat.catroid.test
-				sh "./buildScripts/build_step_run_tests_on_emulator__test_pkg"
+				sh "jenkins_android_cmd_wrapper -I ./gradlew test connectedCatroidDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.package=org.catrobat.catroid.test"
 				// ensure that the following test run does not overwrite the results
 				sh "mv ${env.GRADLE_PROJECT_MODULE_NAME}/build/outputs/androidTest-results ${env.GRADLE_PROJECT_MODULE_NAME}/build/outputs/androidTest-results1"
 				// Run Unit and device tests for class: org.catrobat.catroid.uiespresso.testsuites.PullRequestTriggerSuite
-				sh "./buildScripts/build_step_run_tests_on_emulator__pr_test_suite"
+				sh "jenkins_android_cmd_wrapper -I ./gradlew test connectedCatroidDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=org.catrobat.catroid.uiespresso.testsuites.PullRequestTriggerSuite"
+				// stop emulator
+				sh "jenkins_android_emulator_helper -K"
 			}
 
 			post {
 				always {
 					junit '**/*TEST*.xml'
 
-					// stop/kill emulator
-					sh "./buildScripts/build_helper_stop_emulator"
+					// kill emulator
+					sh "jenkins_android_emulator_helper -K"
 				}
 			}
 		}
@@ -93,7 +100,7 @@ pipeline {
 			// It checks that the creation of standalone APKs (APK for a Pocketcode app) works, reducing the risk of breaking gradle changes.
 			// The resulting APK is not verified itself.
 			steps {
-				sh "./buildScripts/build_step_create_standalone_apk"
+				sh "./gradlew assembleStandaloneDebug -Pdownload='https://pocketcode.org/download/817.catrobat' -Papk_generator_enabled=true -Psuffix='generated821'"
 				archiveArtifacts "${env.APK_LOCATION_STANDALONE}"
 			}
 		}
@@ -102,7 +109,7 @@ pipeline {
 			// It checks that the job builds with the parameters to have unique APKs, reducing the risk of breaking gradle changes.
 			// The resulting APK is not verified on itself.
 			steps {
-				sh "./buildScripts/build_step_create_independent_apk"
+				sh "./gradlew assembleCatroidDebug -Pindependent='Code Nightly #${BUILD_NUMBER}'"
 				stash name: "apk-independent", includes: "${env.APK_LOCATION_DEBUG}"
 				archiveArtifacts "${env.APK_LOCATION_DEBUG}"
 			}
@@ -124,8 +131,6 @@ pipeline {
 
 	post {
 		always {
-			step([$class: 'LogParserPublisher', failBuildOnError: true, projectRulePath: 'buildScripts/log_parser_rules', unstableOnWarning: true, useProjectRule: true])
-
 			// Send notifications with standalone=false
 			script {
 				sendNotifications false

@@ -31,7 +31,6 @@ import org.catrobat.catroid.content.ActionFactory;
 import org.catrobat.catroid.content.CollisionScript;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.bricks.PlaceAtBrick;
-import org.catrobat.catroid.content.eventids.EventId;
 import org.catrobat.catroid.physics.PhysicsObject;
 import org.catrobat.catroid.physics.PhysicsWorld;
 import org.catrobat.catroid.physics.content.actions.IfOnEdgeBouncePhysicsAction;
@@ -180,7 +179,7 @@ public class IfOnEdgeBouncePhysicsActionTest extends PhysicsBaseTest {
 		spriteCollisionScript.addBrick(testBrick);
 		sprite.addScript(spriteCollisionScript);
 
-		sprite.initializeEventThreads(EventId.START);
+		sprite.createAndAddActions(Sprite.INCLUDE_START_ACTIONS);
 
 		PhysicsObject physicsObject = physicsWorld.getPhysicsObject(sprite);
 		physicsObject.setType(PhysicsObject.Type.DYNAMIC);
@@ -237,7 +236,7 @@ public class IfOnEdgeBouncePhysicsActionTest extends PhysicsBaseTest {
 
 	public boolean allActionsOfAllSpritesAreFinished() {
 		for (Sprite spriteOfList : project.getDefaultScene().getSpriteList()) {
-			if (!spriteOfList.look.haveAllThreadsFinished()) {
+			if (!spriteOfList.look.getAllActionsAreFinished()) {
 				return false;
 			}
 		}

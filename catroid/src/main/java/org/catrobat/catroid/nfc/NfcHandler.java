@@ -35,13 +35,12 @@ import android.util.Log;
 
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.common.BrickValues;
-import org.catrobat.catroid.content.EventWrapper;
-import org.catrobat.catroid.content.eventids.EventId;
-import org.catrobat.catroid.content.eventids.NfcEventId;
+import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.formulaeditor.InterpretationException;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.List;
 
 public final class NfcHandler {
 	private static final String TAG = NfcHandler.class.getSimpleName();
@@ -61,9 +60,11 @@ public final class NfcHandler {
 		setLastNfcTagId(uid);
 		setLastNfcTagMessage(getMessageFromIntent(intent));
 
-		EventId eventId = new NfcEventId(uid);
-		EventWrapper nfcEvent = new EventWrapper(eventId, EventWrapper.NO_WAIT);
-		ProjectManager.getInstance().getCurrentProject().fireToAllSprites(nfcEvent);
+		List<Sprite> spriteList = ProjectManager.getInstance().getCurrentProject().getSpriteListWithClones();
+
+		for (Sprite sprite : spriteList) {
+			sprite.createWhenNfcScriptAction(uid);
+		}
 	}
 
 	public static String getTagIdFromIntent(Intent intent) {

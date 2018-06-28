@@ -60,13 +60,12 @@ import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.common.ScreenModes;
 import org.catrobat.catroid.common.ScreenValues;
-import org.catrobat.catroid.content.EventWrapper;
 import org.catrobat.catroid.content.Look;
 import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.Scene;
+import org.catrobat.catroid.content.Script;
 import org.catrobat.catroid.content.Sprite;
-import org.catrobat.catroid.content.eventids.EventId;
-import org.catrobat.catroid.content.eventids.GamepadEventId;
+import org.catrobat.catroid.content.WhenGamepadButtonScript;
 import org.catrobat.catroid.facedetection.FaceDetectionHandler;
 import org.catrobat.catroid.formulaeditor.datacontainer.DataContainer;
 import org.catrobat.catroid.io.SoundManager;
@@ -96,6 +95,10 @@ public class StageListener implements ApplicationListener {
 	private static final float DELTA_ACTIONS_DIVIDER_MAXIMUM = 50f;
 	private static final int ACTIONS_COMPUTATION_TIME_MAXIMUM = 8;
 	private static final boolean DEBUG = false;
+
+	// needed for UiTests - is disabled to fix crashes with EMMA coverage
+	// CHECKSTYLE DISABLE StaticVariableNameCheck FOR 1 LINES
+	private static boolean DYNAMIC_SAMPLING_RATE_FOR_ACTIONS = true;
 
 	private float deltaActionTimeDivisor = 10f;
 	public static final String SCREENSHOT_AUTOMATIC_FILE_NAME = "automatic_screenshot"
@@ -175,9 +178,6 @@ public class StageListener implements ApplicationListener {
 
 	@Override
 	public void create() {
-		font = new BitmapFont();
-		font.setColor(1f, 0f, 0.05f, 1f);
-		font.getData().setScale(1.2f);
 		deltaActionTimeDivisor = 10f;
 
 		shapeRenderer = new ShapeRenderer();
@@ -191,6 +191,10 @@ public class StageListener implements ApplicationListener {
 
 		virtualWidthHalf = virtualWidth / 2;
 		virtualHeightHalf = virtualHeight / 2;
+
+		font = new BitmapFont();
+		font.setColor(1f, 0f, 0.05f, 1f);
+		font.getData().setScale(1.2f);
 
 		camera = new OrthographicCamera();
 		viewPort = new ExtendViewport(virtualWidth, virtualHeight, camera);
@@ -234,8 +238,8 @@ public class StageListener implements ApplicationListener {
 		axes = new Texture(Gdx.files.internal("stage/red_pixel.bmp"));
 		skipFirstFrameForAutomaticScreenshot = true;
 		if (checkIfAutomaticScreenshotShouldBeTaken) {
-			makeAutomaticScreenshot = project.manualScreenshotExists(SCREENSHOT_MANUAL_FILE_NAME)
-					|| scene.hasScreenshot();
+			makeAutomaticScreenshot = project.manualScreenshotExists(SCREENSHOT_MANUAL_FILE_NAME) || scene
+					.screenshotExists(SCREENSHOT_AUTOMATIC_FILE_NAME) || scene.screenshotExists(SCREENSHOT_MANUAL_FILE_NAME);
 		}
 		if (drawDebugCollisionPolygons) {
 			collisionPolygonDebugRenderer.setProjectionMatrix(camera.combined);
@@ -253,8 +257,7 @@ public class StageListener implements ApplicationListener {
 		if (!copy.getLookList().isEmpty()) {
 			copy.look.setLookData(copy.getLookList().get(0));
 		}
-		copy.initializeEventThreads(EventId.START_AS_CLONE);
-		copy.initConditionScriptTiggers();
+		copy.createAndAddActions(Sprite.INCLUDE_START_ACTIONS);
 	}
 
 	public boolean removeClonedSpriteFromStage(Sprite sprite) {
@@ -480,8 +483,7 @@ public class StageListener implements ApplicationListener {
 			int spriteSize = sprites.size();
 			for (int currentSprite = 0; currentSprite < spriteSize; currentSprite++) {
 				Sprite sprite = sprites.get(currentSprite);
-				sprite.initializeEventThreads(EventId.START);
-				sprite.initConditionScriptTiggers();
+				sprite.createAndAddActions(Sprite.INCLUDE_START_ACTIONS);
 				if (!sprite.getLookList().isEmpty()) {
 					sprite.look.setLookData(sprite.getLookList().get(0));
 				}
@@ -491,20 +493,34 @@ public class StageListener implements ApplicationListener {
 		if (!paused) {
 			float deltaTime = Gdx.graphics.getDeltaTime();
 
-			float optimizedDeltaTime = deltaTime / deltaActionTimeDivisor;
-			long timeBeforeActionsUpdate = SystemClock.uptimeMillis();
-			while (deltaTime > 0f) {
-				physicsWorld.step(optimizedDeltaTime);
-				stage.act(optimizedDeltaTime);
-				deltaTime -= optimizedDeltaTime;
-			}
-			long executionTimeOfActionsUpdate = SystemClock.uptimeMillis() - timeBeforeActionsUpdate;
-			if (executionTimeOfActionsUpdate <= ACTIONS_COMPUTATION_TIME_MAXIMUM) {
-				deltaActionTimeDivisor += 1f;
-				deltaActionTimeDivisor = Math.min(DELTA_ACTIONS_DIVIDER_MAXIMUM, deltaActionTimeDivisor);
+			/*
+			 * Necessary for UiTests, when EMMA - code coverage is enabled.
+			 *
+			 * Without setting DYNAMIC_SAMPLING_RATE_FOR_ACTIONS to false(via reflection), before
+			 * the UiTest enters the stage, random segmentation faults(triggered by EMMA) will occur.
+			 *
+			 * Can be removed, when EMMA is replaced by an other code coverage tool, or when a
+			 * future EMMA - update will fix the bugs.
+			 */
+			if (!DYNAMIC_SAMPLING_RATE_FOR_ACTIONS) {
+				physicsWorld.step(deltaTime);
+				stage.act(deltaTime);
 			} else {
-				deltaActionTimeDivisor -= 1f;
-				deltaActionTimeDivisor = Math.max(1f, deltaActionTimeDivisor);
+				float optimizedDeltaTime = deltaTime / deltaActionTimeDivisor;
+				long timeBeforeActionsUpdate = SystemClock.uptimeMillis();
+				while (deltaTime > 0f) {
+					physicsWorld.step(optimizedDeltaTime);
+					stage.act(optimizedDeltaTime);
+					deltaTime -= optimizedDeltaTime;
+				}
+				long executionTimeOfActionsUpdate = SystemClock.uptimeMillis() - timeBeforeActionsUpdate;
+				if (executionTimeOfActionsUpdate <= ACTIONS_COMPUTATION_TIME_MAXIMUM) {
+					deltaActionTimeDivisor += 1f;
+					deltaActionTimeDivisor = Math.min(DELTA_ACTIONS_DIVIDER_MAXIMUM, deltaActionTimeDivisor);
+				} else {
+					deltaActionTimeDivisor -= 1f;
+					deltaActionTimeDivisor = Math.max(1f, deltaActionTimeDivisor);
+				}
 			}
 		}
 
@@ -576,21 +592,45 @@ public class StageListener implements ApplicationListener {
 		batch.end();
 	}
 
+	private GlyphLayout getScaledFont() {
+
+		GlyphLayout layout = new GlyphLayout();
+		layout.setText(font, String.valueOf((int) virtualWidthHalf));
+
+		float landscapeHeight = (virtualHeight < virtualWidth) ? virtualHeight : virtualWidth;
+		float fontPercentage = layout.height / landscapeHeight;
+		float scaleFactor = 0.03f / fontPercentage;
+
+		layout.height = layout.height * scaleFactor;
+		layout.width = layout.width * scaleFactor;
+
+		font.getData().setScale(scaleFactor);
+
+		return layout;
+	}
+
 	private void drawAxes() {
+
+		GlyphLayout layout = getScaledFont();
+
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(axes, -virtualWidthHalf, -AXIS_WIDTH / 2, virtualWidth, AXIS_WIDTH);
 		batch.draw(axes, -AXIS_WIDTH / 2, -virtualHeightHalf, AXIS_WIDTH, virtualHeight);
 
-		GlyphLayout layout = new GlyphLayout();
-		layout.setText(font, String.valueOf((int) virtualHeightHalf));
-		font.draw(batch, "-" + (int) virtualWidthHalf, -virtualWidthHalf + 3, -layout.height / 2);
-		font.draw(batch, String.valueOf((int) virtualWidthHalf), virtualWidthHalf - layout.width, -layout.height / 2);
+		final float fontOffset = layout.height / 2;
 
-		font.draw(batch, "-" + (int) virtualHeightHalf, layout.height / 2, -virtualHeightHalf + layout.height + 3);
-		font.draw(batch, String.valueOf((int) virtualHeightHalf), layout.height / 2, virtualHeightHalf - 3);
-		font.draw(batch, "0", layout.height / 2, -layout.height / 2);
+		font.draw(batch, "-" + (int) virtualWidthHalf, -virtualWidthHalf + fontOffset, -fontOffset);
+		font.draw(batch, String.valueOf((int) virtualWidthHalf), virtualWidthHalf - layout.width,
+				-fontOffset);
+
+		font.draw(batch, "-" + (int) virtualHeightHalf, fontOffset, -virtualHeightHalf + layout.height + fontOffset);
+		font.draw(batch, String.valueOf((int) virtualHeightHalf), fontOffset, virtualHeightHalf - fontOffset);
+
+		font.draw(batch, "0", fontOffset, -fontOffset);
 		batch.end();
+
+		font.getData().setScale(1.2f);
 	}
 
 	public PenActor getPenActor() {
@@ -740,9 +780,22 @@ public class StageListener implements ApplicationListener {
 	}
 
 	public void gamepadPressed(String buttonType) {
-		EventId eventId = new GamepadEventId(buttonType);
-		EventWrapper gamepadEvent = new EventWrapper(eventId, EventWrapper.NO_WAIT);
-		project.fireToAllSprites(gamepadEvent);
+
+		for (Sprite sprite : sprites) {
+			if (hasSpriteGamepadScript(sprite)) {
+				sprite.createWhengamepadButtonScriptActionSequence(buttonType);
+			}
+		}
+	}
+
+	public static boolean hasSpriteGamepadScript(Sprite sprite) {
+
+		for (Script script : sprite.getScriptList()) {
+			if (script instanceof WhenGamepadButtonScript) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void addActor(Actor actor) {

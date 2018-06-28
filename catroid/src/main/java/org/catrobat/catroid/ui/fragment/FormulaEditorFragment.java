@@ -666,9 +666,9 @@ public class FormulaEditorFragment extends Fragment implements ViewTreeObserver.
 	 */
 	private void showToast(int resourceId, boolean error) {
 		if (error) {
-			ToastUtil.showError(getActivity(), resourceId);
+			ToastUtil.showError(getActivity().getApplicationContext(), resourceId);
 		} else {
-			ToastUtil.showSuccess(getActivity(), resourceId);
+			ToastUtil.showSuccess(getActivity().getApplicationContext(), resourceId);
 		}
 	}
 

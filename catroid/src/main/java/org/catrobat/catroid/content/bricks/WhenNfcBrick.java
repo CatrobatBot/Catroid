@@ -35,13 +35,14 @@ import android.widget.BaseAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.NfcTagData;
 import org.catrobat.catroid.content.Script;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.WhenNfcScript;
-import org.catrobat.catroid.content.actions.ScriptSequenceAction;
 
 import java.util.List;
 
@@ -58,6 +59,15 @@ public class WhenNfcBrick extends BrickBaseType implements ScriptBrick {
 		this.nfcTag = null;
 		this.whenNfcScript = new WhenNfcScript();
 		this.whenNfcScript.setMatchAll(true);
+	}
+
+	public WhenNfcBrick(String tagName, String tagUid) {
+		this.oldSelectedNfcTag = null;
+		this.nfcTag = new NfcTagData();
+		this.nfcTag.setNfcTagName(tagName);
+		this.nfcTag.setNfcTagUid(tagUid);
+		this.whenNfcScript = new WhenNfcScript(nfcTag);
+		this.whenNfcScript.setMatchAll(false);
 	}
 
 	public WhenNfcBrick(WhenNfcScript script) {
@@ -288,12 +298,20 @@ public class WhenNfcBrick extends BrickBaseType implements ScriptBrick {
 	}
 
 	@Override
-	public List<ScriptSequenceAction> addActionToSequence(Sprite sprite, ScriptSequenceAction sequence) {
+	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
 		return null;
 	}
 
 	public NfcTagData getNfcTag() {
 		return nfcTag;
+	}
+
+	public void setNfcTag(NfcTagData nfcTagData) {
+		this.nfcTag = nfcTagData;
+	}
+
+	public WhenNfcScript getWhenNfcScript() {
+		return whenNfcScript;
 	}
 
 	public void setWhenNfcScript(WhenNfcScript whenNfcScript) {

@@ -24,40 +24,32 @@
 package org.catrobat.catroid.content.actions;
 
 import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 
-import org.catrobat.catroid.content.Look;
-import org.catrobat.catroid.content.Script;
+public class StopOtherScriptsAction extends TemporalAction {
 
-import java.util.Iterator;
-
-public class StopOtherScriptsAction extends Action {
-
-	private Script currentScript;
+	private Action currentAction;
 
 	@Override
-	public boolean act(float delta) {
-		if (!(actor instanceof Look) || actor.getActions() == null) {
-			return true;
+	protected void update(float percent) {
+		if (this.actor == null || this.actor.getActions() == null) {
+			return;
 		}
-		Look look = (Look) actor;
-		look.stopThreads(getOtherThreads(look));
-		return true;
-	}
 
-	private Array<Action> getOtherThreads(Look look) {
-		Array<Action> otherThreads = new Array<>(look.getActions());
-		Iterator<Action> it = otherThreads.iterator();
-		while (it.hasNext()) {
-			Action action = it.next();
-			if (action instanceof ScriptSequenceAction && ((ScriptSequenceAction) action).getScript() == currentScript) {
-				it.remove();
+		boolean alreadyStopped = false;
+		String currentActionSignature = this.currentAction.toString();
+
+		for (Action action : this.actor.getActions()) {
+			if (!alreadyStopped && action.toString().contains(currentActionSignature)) {
+				alreadyStopped = true;
+				continue;
+			} else {
+				action.reset();
 			}
 		}
-		return otherThreads;
 	}
 
-	public void setCurrentScript(Script currentScript) {
-		this.currentScript = currentScript;
+	public void setCurrentAction(Action currentAction) {
+		this.currentAction = currentAction;
 	}
 }

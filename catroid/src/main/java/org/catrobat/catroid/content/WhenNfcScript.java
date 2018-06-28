@@ -26,8 +26,6 @@ import org.catrobat.catroid.common.NfcTagData;
 import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.content.bricks.ScriptBrick;
 import org.catrobat.catroid.content.bricks.WhenNfcBrick;
-import org.catrobat.catroid.content.eventids.EventId;
-import org.catrobat.catroid.content.eventids.NfcEventId;
 
 import java.util.ArrayList;
 
@@ -38,14 +36,15 @@ public class WhenNfcScript extends Script {
 	private NfcTagData nfcTag;
 	private boolean matchAll = true;
 
+	public WhenNfcScript() {
+		nfcTag = null;
+	}
+
 	@Override
 	public Script clone() throws CloneNotSupportedException {
 		WhenNfcScript clone = new WhenNfcScript(nfcTag);
 		clone.getBrickList().addAll(cloneBrickList());
 		return clone;
-	}
-
-	public WhenNfcScript() {
 	}
 
 	public WhenNfcScript(NfcTagData nfcTag) {
@@ -75,21 +74,15 @@ public class WhenNfcScript extends Script {
 		this.matchAll = matchAll;
 	}
 
+	public boolean isMatchAll() {
+		return matchAll;
+	}
+
 	public NfcTagData getNfcTag() {
 		return nfcTag;
 	}
 
 	public void setNfcTag(NfcTagData nfcTag) {
 		this.nfcTag = nfcTag;
-	}
-
-	@Override
-	public EventId createEventId(Sprite sprite) {
-		if (matchAll) {
-			return new NfcEventId(null);
-		} else if (nfcTag != null) {
-			return new NfcEventId(nfcTag.getNfcTagUid());
-		}
-		throw new RuntimeException("We want to identify a specific NfcTag, but null is given.");
 	}
 }

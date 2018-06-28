@@ -30,12 +30,13 @@ import org.catrobat.catroid.ui.SpriteActivity;
 import org.catrobat.catroid.uiespresso.content.brick.utils.BrickTestUtils;
 import org.catrobat.catroid.uiespresso.util.rules.BaseActivityInstrumentationRule;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static junit.framework.Assert.assertEquals;
+import java.util.Random;
+
+import static junit.framework.Assert.assertTrue;
 
 import static org.catrobat.catroid.uiespresso.content.brick.utils.BrickDataInteractionWrapper.onBrickAtPosition;
 
@@ -47,13 +48,6 @@ public class FlakyTestTest {
 			BaseActivityInstrumentationRule<>(SpriteActivity.class, SpriteActivity.EXTRA_FRAGMENT_POSITION,
 			SpriteActivity.FRAGMENT_SCRIPTS);
 
-	private static int flakyTestCounter;
-
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		flakyTestCounter = 0;
-	}
-
 	@Before
 	public void setUp() throws Exception {
 		BrickTestUtils.createProjectAndGetStartScript("flakyTestTest");
@@ -64,7 +58,9 @@ public class FlakyTestTest {
 	@Flaky(5)
 	public void flakyTestTest() {
 		onBrickAtPosition(0).checkShowsText(R.string.brick_when_started);
-		flakyTestCounter++;
-		assertEquals(5, flakyTestCounter);
+
+		Random randomGenerator = new Random();
+		int randomNumber = randomGenerator.nextInt(100);
+		assertTrue(randomNumber < 50);
 	}
 }

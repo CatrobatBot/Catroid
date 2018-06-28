@@ -27,9 +27,10 @@ import android.media.MediaMetadataRetriever;
 import android.view.View;
 import android.widget.TextView;
 
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.content.Sprite;
-import org.catrobat.catroid.content.actions.ScriptSequenceAction;
 import org.catrobat.catroid.formulaeditor.Formula;
 
 import java.util.List;
@@ -55,7 +56,7 @@ public class PlaySoundAndWaitBrick extends PlaySoundBrick {
 	}
 
 	@Override
-	public List<ScriptSequenceAction> addActionToSequence(Sprite sprite, ScriptSequenceAction sequence) {
+	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
 		sequence.addAction(sprite.getActionFactory().createPlaySoundAction(sprite, sound));
 
 		float duration = 0;
@@ -65,7 +66,7 @@ public class PlaySoundAndWaitBrick extends PlaySoundBrick {
 			metadataRetriever.setDataSource(sound.getFile().getAbsolutePath());
 
 			duration = Integer.parseInt(metadataRetriever
-					.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)) / 1000.0f;
+					.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)) / 1000;
 		}
 
 		sequence.addAction(sprite.getActionFactory().createWaitAction(sprite, new Formula(duration)));

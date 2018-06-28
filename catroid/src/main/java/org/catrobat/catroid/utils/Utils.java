@@ -22,8 +22,12 @@
  */
 package org.catrobat.catroid.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -31,6 +35,7 @@ import android.net.ConnectivityManager;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.badlogic.gdx.files.FileHandle;
@@ -82,14 +87,32 @@ public final class Utils {
 
 	public static final int TRANSLATION_PLURAL_OTHER_INTEGER = 767676;
 
+	// Suppress default constructor for noninstantiability
 	private Utils() {
 		throw new AssertionError();
 	}
 
-	public static boolean isExternalStorageAvailable() {
+	public static boolean externalStorageAvailable() {
 		String externalStorageState = Environment.getExternalStorageState();
 		return externalStorageState.equals(Environment.MEDIA_MOUNTED)
 				&& !externalStorageState.equals(Environment.MEDIA_MOUNTED_READ_ONLY);
+	}
+
+	public static boolean checkForExternalStorageAvailableAndDisplayErrorIfNot(final Context context) {
+		if (!externalStorageAvailable()) {
+			new AlertDialog.Builder(context)
+					.setTitle(R.string.error)
+					.setMessage(R.string.error_no_writiable_external_storage_available)
+					.setNeutralButton(R.string.close, new OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							((Activity) context).moveTaskToBack(true);
+						}
+					})
+					.show();
+			return false;
+		}
+		return true;
 	}
 
 	public static boolean isNetworkAvailable(Context context) {
@@ -367,6 +390,13 @@ public final class Utils {
 		return (int) (densityIndependentPixels * scale + 0.5f);
 	}
 
+	public static void saveToPreferences(Context context, String key, String message) {
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+		Editor edit = sharedPreferences.edit();
+		edit.putString(key, message);
+		edit.commit();
+	}
+
 	public static String getCurrentProjectName(Context context) {
 		if (ProjectManager.getInstance().getCurrentProject() == null) {
 
@@ -384,6 +414,10 @@ public final class Utils {
 		return ProjectManager.getInstance().getCurrentProject().getName();
 	}
 
+	public static String deleteSpecialCharactersInString(String stringToAdapt) {
+		return stringToAdapt.replaceAll("[\"*/:<>?\\\\|]", "");
+	}
+
 	public static Pixmap getPixmapFromFile(File imageFile) {
 		Pixmap pixmap;
 		try {
@@ -397,15 +431,18 @@ public final class Utils {
 		return pixmap;
 	}
 
+	public static String getUniqueProjectName() {
+		String projectName = "project_" + System.currentTimeMillis();
+		while (XstreamSerializer.getInstance().projectExists(projectName)) {
+			projectName = "project_" + System.currentTimeMillis();
+		}
+		return projectName;
+	}
+
 	public static boolean isDefaultProject(Project projectToCheck, Context context) {
 		try {
-			String uniqueProjectName = "project_" + System.currentTimeMillis();
-
-			while (XstreamSerializer.getInstance().projectExists(uniqueProjectName)) {
-				uniqueProjectName = "project_" + System.currentTimeMillis();
-			}
-
-			Project defaultProject = DefaultProjectHandler.createAndSaveDefaultProject(uniqueProjectName, context);
+			Project defaultProject = DefaultProjectHandler
+					.createAndSaveDefaultProject(getUniqueProjectName(), context);
 
 			String defaultProjectXml = XstreamSerializer.getInstance().getXmlAsStringFromProject(defaultProject);
 
@@ -466,37 +503,41 @@ public final class Utils {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 		if (sharedPreferences.getBoolean(Constants.RESTRICTED_USER, false)) {
 			logoutUser(context);
-			ToastUtil.showSuccess(context, R.string.logout_successful);
 		}
 	}
 
 	public static void logoutUser(Context context) {
+		logoutUser(context, true);
+	}
+
+	public static void logoutUser(Context context, boolean showToast) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 		String userName = sharedPreferences.getString(Constants.USERNAME, Constants.NO_USERNAME);
 		LogoutTask logoutTask = new LogoutTask(context, userName);
 		logoutTask.execute();
 
-		SharedPreferences.Editor sharedPreferenceEditor = sharedPreferences.edit();
+		sharedPreferences.edit().putString(Constants.TOKEN, Constants.NO_TOKEN).commit();
+		sharedPreferences.edit().putString(Constants.USERNAME, Constants.NO_USERNAME).commit();
 
-		sharedPreferenceEditor.putString(Constants.TOKEN, Constants.NO_TOKEN)
-				.putString(Constants.USERNAME, Constants.NO_USERNAME);
-
-		sharedPreferenceEditor.putBoolean(Constants.FACEBOOK_TOKEN_REFRESH_NEEDED, false)
-				.putString(Constants.FACEBOOK_EMAIL, Constants.NO_FACEBOOK_EMAIL)
-				.putString(Constants.FACEBOOK_USERNAME, Constants.NO_FACEBOOK_USERNAME)
-				.putString(Constants.FACEBOOK_ID, Constants.NO_FACEBOOK_ID)
-				.putString(Constants.FACEBOOK_LOCALE, Constants.NO_FACEBOOK_LOCALE);
+		sharedPreferences.edit().putBoolean(Constants.FACEBOOK_TOKEN_REFRESH_NEEDED, false).commit();
+		sharedPreferences.edit().putString(Constants.FACEBOOK_EMAIL, Constants.NO_FACEBOOK_EMAIL).commit();
+		sharedPreferences.edit().putString(Constants.FACEBOOK_USERNAME, Constants.NO_FACEBOOK_USERNAME).commit();
+		sharedPreferences.edit().putString(Constants.FACEBOOK_ID, Constants.NO_FACEBOOK_ID).commit();
+		sharedPreferences.edit().putString(Constants.FACEBOOK_LOCALE, Constants.NO_FACEBOOK_LOCALE).commit();
 		AccessToken.setCurrentAccessToken(null);
 
-		sharedPreferenceEditor.putString(Constants.GOOGLE_EXCHANGE_CODE, Constants.NO_GOOGLE_EXCHANGE_CODE)
-				.putString(Constants.GOOGLE_EMAIL, Constants.NO_GOOGLE_EMAIL)
-				.putString(Constants.GOOGLE_USERNAME, Constants.NO_GOOGLE_USERNAME)
-				.putString(Constants.GOOGLE_ID, Constants.NO_GOOGLE_ID)
-				.putString(Constants.GOOGLE_LOCALE, Constants.NO_GOOGLE_LOCALE)
-				.putString(Constants.GOOGLE_ID_TOKEN, Constants.NO_GOOGLE_ID_TOKEN);
+		sharedPreferences.edit().putString(Constants.GOOGLE_EXCHANGE_CODE, Constants.NO_GOOGLE_EXCHANGE_CODE).commit();
+		sharedPreferences.edit().putString(Constants.GOOGLE_EMAIL, Constants.NO_GOOGLE_EMAIL).commit();
+		sharedPreferences.edit().putString(Constants.GOOGLE_USERNAME, Constants.NO_GOOGLE_USERNAME).commit();
+		sharedPreferences.edit().putString(Constants.GOOGLE_ID, Constants.NO_GOOGLE_ID).commit();
+		sharedPreferences.edit().putString(Constants.GOOGLE_LOCALE, Constants.NO_GOOGLE_LOCALE).commit();
+		sharedPreferences.edit().putString(Constants.GOOGLE_ID_TOKEN, Constants.NO_GOOGLE_ID_TOKEN).commit();
 
-		sharedPreferenceEditor.commit();
 		WebViewActivity.clearCookies(context);
+
+		if (showToast) {
+			ToastUtil.showSuccess(context, R.string.logout_successful);
+		}
 	}
 
 	public static boolean isUserLoggedIn(Context context) {

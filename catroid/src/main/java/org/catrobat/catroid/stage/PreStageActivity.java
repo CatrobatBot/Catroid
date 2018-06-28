@@ -334,7 +334,7 @@ public class PreStageActivity extends BaseActivity implements GatherCollisionInf
 		if (RaspberryPiService.getInstance().connect(host, port)) {
 			resourceInitialized();
 		} else {
-			ToastUtil.showError(this, getString(R.string.error_connecting_to, host, port));
+			ToastUtil.showError(this, "Error: connecting to " + host + ":" + port + " failed");
 			resourceFailed();
 		}
 	}

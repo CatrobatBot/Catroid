@@ -54,8 +54,8 @@ import org.catrobat.catroid.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.catrobat.catroid.common.Constants.IMAGE_DIRECTORY_NAME;
 import static org.catrobat.catroid.common.Constants.POCKET_PAINT_PACKAGE_NAME;
@@ -143,7 +143,7 @@ public class NewLookDialogFragment extends DialogFragment implements View.OnClic
 	}
 
 	private String getMediaLibraryUrl() {
-		if (dstSprite.isBackgroundSprite()) {
+		if (ProjectManager.getInstance().getCurrentScene().getSpriteList().indexOf(dstSprite) == 0) {
 			if (ProjectManager.getInstance().isCurrentProjectLandscapeMode()) {
 				return Constants.LIBRARY_BACKGROUNDS_URL_LANDSCAPE;
 			} else {
@@ -214,22 +214,23 @@ public class NewLookDialogFragment extends DialogFragment implements View.OnClic
 		try {
 			File srcFile = new File(srcPath);
 			String name = StorageOperations.getSanitizedFileName(srcFile);
-
-			File file = StorageOperations.copyFileToDir(srcFile,
-					new File(dstScene.getDirectory(), IMAGE_DIRECTORY_NAME));
-
+			File file = StorageOperations.copyFileToDir(srcFile, getimageDir(dstScene));
 			newItemInterface.addItem(new LookData(uniqueNameProvider.getUniqueName(name, getScope(dstSprite)), file));
 		} catch (IOException e) {
 			Log.e(TAG, Log.getStackTraceString(e));
 		}
 	}
 
-	private List<String> getScope(Sprite sprite) {
-		List<String> scope = new ArrayList<>();
+	private Set<String> getScope(Sprite sprite) {
+		Set<String> scope = new HashSet<>();
 		for (LookData item : sprite.getLookList()) {
 			scope.add(item.getName());
 		}
 		return scope;
+	}
+
+	private File getimageDir(Scene scene) {
+		return new File(scene.getPath(), IMAGE_DIRECTORY_NAME);
 	}
 
 	private Uri getDefaultLookFromCameraUri(String defLookName) {

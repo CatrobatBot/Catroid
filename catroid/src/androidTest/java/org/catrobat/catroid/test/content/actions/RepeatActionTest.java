@@ -25,17 +25,16 @@ package org.catrobat.catroid.test.content.actions;
 import android.test.InstrumentationTestCase;
 
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
 import org.catrobat.catroid.content.Script;
 import org.catrobat.catroid.content.SingleSprite;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.StartScript;
-import org.catrobat.catroid.content.actions.EventThread;
 import org.catrobat.catroid.content.actions.RepeatAction;
 import org.catrobat.catroid.content.bricks.ChangeYByNBrick;
 import org.catrobat.catroid.content.bricks.LoopEndBrick;
 import org.catrobat.catroid.content.bricks.RepeatBrick;
-import org.catrobat.catroid.content.eventids.EventId;
 import org.catrobat.catroid.formulaeditor.Formula;
 import org.catrobat.catroid.formulaeditor.FormulaElement;
 import org.catrobat.catroid.formulaeditor.FormulaElement.ElementType;
@@ -71,7 +70,7 @@ public class RepeatActionTest extends InstrumentationTestCase {
 		testScript.addBrick(new ChangeYByNBrick(150));
 
 		testSprite.addScript(testScript);
-		testSprite.initializeEventThreads(EventId.START);
+		testSprite.createAndAddActions(Sprite.INCLUDE_START_ACTIONS);
 
 		// http://code.google.com/p/catroid/issues/detail?id=28
 		for (int index = 0; index < REPEAT_TIMES; index++) {
@@ -84,7 +83,7 @@ public class RepeatActionTest extends InstrumentationTestCase {
 				(int) testSprite.look.getYInUserInterfaceDimensionUnit());
 	}
 
-	public void testRepeatBrick() {
+	public void testRepeatBrick() throws InterruptedException {
 
 		RepeatBrick repeatBrick = new RepeatBrick(REPEAT_TIMES);
 		LoopEndBrick loopEndBrick = new LoopEndBrick(repeatBrick);
@@ -98,9 +97,9 @@ public class RepeatActionTest extends InstrumentationTestCase {
 		testScript.addBrick(loopEndBrick);
 
 		testSprite.addScript(testScript);
-		testSprite.initializeEventThreads(EventId.START);
+		testSprite.createAndAddActions(Sprite.INCLUDE_START_ACTIONS);
 
-		while (!testSprite.look.haveAllThreadsFinished()) {
+		while (!testSprite.look.getAllActionsAreFinished()) {
 			testSprite.look.act(1.0f);
 		}
 
@@ -125,9 +124,9 @@ public class RepeatActionTest extends InstrumentationTestCase {
 		testScript.addBrick(loopEndBrick);
 
 		testSprite.addScript(testScript);
-		testSprite.initializeEventThreads(EventId.START);
+		testSprite.createAndAddActions(Sprite.INCLUDE_START_ACTIONS);
 
-		while (!testSprite.look.haveAllThreadsFinished()) {
+		while (!testSprite.look.getAllActionsAreFinished()) {
 			testSprite.look.act(1.0f);
 		}
 
@@ -155,11 +154,11 @@ public class RepeatActionTest extends InstrumentationTestCase {
 		testScript.addBrick(loopEndBrick);
 
 		testSprite.addScript(testScript);
-		testSprite.initializeEventThreads(EventId.START);
+		testSprite.createAndAddActions(Sprite.INCLUDE_START_ACTIONS);
 
 		float timePerActCycle = 0.5f;
 
-		while (!testSprite.look.haveAllThreadsFinished()) {
+		while (!testSprite.look.getAllActionsAreFinished()) {
 			testSprite.look.act(timePerActCycle);
 		}
 
@@ -168,11 +167,11 @@ public class RepeatActionTest extends InstrumentationTestCase {
 				(int) testSprite.look.getYInUserInterfaceDimensionUnit());
 	}
 
-	public void testNegativeRepeats() {
+	public void testNegativeRepeats() throws InterruptedException {
 		Sprite testSprite = new SingleSprite("sprite");
 		RepeatBrick repeatBrick = new RepeatBrick(-1);
 
-		EventThread sequence = (EventThread) testSprite.getActionFactory().createEventThread(new StartScript());
+		SequenceAction sequence = (SequenceAction) testSprite.getActionFactory().createSequence();
 		repeatBrick.addActionToSequence(testSprite, sequence);
 
 		RepeatAction repeatAction = (RepeatAction) sequence.getActions().get(0);
@@ -185,7 +184,7 @@ public class RepeatActionTest extends InstrumentationTestCase {
 		assertEquals("Executed the wrong number of times!", 0, executedCount);
 	}
 
-	public void testZeroRepeats() {
+	public void testZeroRepeats() throws InterruptedException {
 		final float decoyDeltaY = -150f;
 		final float expectedDeltaY = 150f;
 
@@ -234,9 +233,9 @@ public class RepeatActionTest extends InstrumentationTestCase {
 		testScript.addBrick(new ChangeYByNBrick(delta));
 		testScript.addBrick(loopEndBrick);
 		testSprite.addScript(testScript);
-		testSprite.initializeEventThreads(EventId.START);
+		testSprite.createAndAddActions(Sprite.INCLUDE_START_ACTIONS);
 
-		while (!testSprite.look.haveAllThreadsFinished()) {
+		while (!testSprite.look.getAllActionsAreFinished()) {
 			testSprite.look.act(1.0f);
 		}
 		assertEquals("Executed the wrong number of times!", expected,

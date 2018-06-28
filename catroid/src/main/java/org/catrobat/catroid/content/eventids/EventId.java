@@ -29,15 +29,13 @@ import java.lang.annotation.RetentionPolicy;
 
 public class EventId {
 	@Retention(RetentionPolicy.SOURCE)
-	@IntDef({TAP, TAP_BACKGROUND, START, START_AS_CLONE, OTHER})
-	public @interface EventType {
+	@IntDef({TAP, TAP_BACKGROUND, OTHER})
+	@interface EventType {
 	}
 
 	public static final int OTHER = 0;
 	public static final int TAP = 1;
 	public static final int TAP_BACKGROUND = 2;
-	public static final int START = 3;
-	public static final int START_AS_CLONE = 4;
 
 	@EventType
 	private final int type;

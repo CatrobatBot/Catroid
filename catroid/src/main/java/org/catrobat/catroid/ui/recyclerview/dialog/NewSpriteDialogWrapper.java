@@ -40,6 +40,8 @@ import org.catrobat.catroid.ui.recyclerview.dialog.dialoginterface.NewItemInterf
 import org.catrobat.catroid.ui.recyclerview.util.UniqueNameProvider;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class NewSpriteDialogWrapper implements NewItemInterface<LookData> {
 
@@ -99,7 +101,7 @@ public class NewSpriteDialogWrapper implements NewItemInterface<LookData> {
 
 		@Override
 		public Dialog onCreateDialog(Bundle bundle) {
-			super.text = new UniqueNameProvider().getUniqueName(look.getName(), dstScene.getSpriteNames());
+			super.text = new UniqueNameProvider().getUniqueName(look.getName(), getScope(dstScene));
 			return super.onCreateDialog(bundle);
 		}
 
@@ -112,7 +114,7 @@ public class NewSpriteDialogWrapper implements NewItemInterface<LookData> {
 				return false;
 			}
 
-			if (dstScene.getSpriteNames().contains(name)) {
+			if (getScope(dstScene).contains(name)) {
 				inputLayout.setError(getString(R.string.name_already_exists));
 				return false;
 			} else {
@@ -135,6 +137,14 @@ public class NewSpriteDialogWrapper implements NewItemInterface<LookData> {
 			} catch (IOException e) {
 				Log.e(TAG, Log.getStackTraceString(e));
 			}
+		}
+
+		private Set<String> getScope(Scene scene) {
+			Set<String> scope = new HashSet<>();
+			for (Sprite item : scene.getSpriteList()) {
+				scope.add(item.getName());
+			}
+			return scope;
 		}
 	}
 }

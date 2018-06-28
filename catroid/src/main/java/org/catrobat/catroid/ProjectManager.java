@@ -24,7 +24,6 @@ package org.catrobat.catroid;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.catrobat.catroid.common.Constants;
@@ -61,8 +60,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
-import static org.catrobat.catroid.common.Constants.PREF_PROJECTNAME_KEY;
 
 public final class ProjectManager {
 
@@ -260,11 +257,7 @@ public final class ProjectManager {
 		}
 		currentSprite = null;
 		currentScript = null;
-
-		PreferenceManager.getDefaultSharedPreferences(context)
-				.edit()
-				.putString(PREF_PROJECTNAME_KEY, project.getName())
-				.commit();
+		Utils.saveToPreferences(context, Constants.PREF_PROJECTNAME_KEY, project.getName());
 	}
 
 	public void saveProject(Context context) {
@@ -475,7 +468,7 @@ public final class ProjectManager {
 		boolean projectCorrect = true;
 		if (inBackPack) {
 
-			List<Sprite> spritesToCheck = BackpackListManager.getInstance().getSprites();
+			List<Sprite> spritesToCheck = BackpackListManager.getInstance().getBackpackedSprites();
 
 			HashMap<String, List<Script>> backPackedScripts = BackpackListManager.getInstance().getBackpackedScripts();
 			for (String scriptGroup : backPackedScripts.keySet()) {

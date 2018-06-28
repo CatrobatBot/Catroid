@@ -164,8 +164,14 @@ public class UtilsTest extends AndroidTestCase {
 		assertEquals(PathBuilder.buildPath(first, second), result);
 	}
 
+	public void testDeleteSpecialCharactersFromString() {
+		String testString = "This:IsA-\" */ :<Very>?|Very\\\\Long_Test_String";
+		String newString = Utils.deleteSpecialCharactersInString(testString);
+		assertEquals("Strings are not equal!", "ThisIsA-  VeryVeryLong_Test_String", newString);
+	}
+
 	public void testBuildProjectPath() {
-		if (!Utils.isExternalStorageAvailable()) {
+		if (!Utils.externalStorageAvailable()) {
 			fail("No SD card present");
 		}
 		String projectName = "test?Projekt\"1";

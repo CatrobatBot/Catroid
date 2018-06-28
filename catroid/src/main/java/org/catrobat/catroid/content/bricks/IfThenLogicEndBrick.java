@@ -27,9 +27,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.BaseAdapter;
 
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.content.Sprite;
-import org.catrobat.catroid.content.actions.ScriptSequenceAction;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -105,8 +106,8 @@ public class IfThenLogicEndBrick extends BrickBaseType implements NestingBrick, 
 	}
 
 	@Override
-	public List<ScriptSequenceAction> addActionToSequence(Sprite sprite, ScriptSequenceAction sequence) {
-		LinkedList<ScriptSequenceAction> returnActionList = new LinkedList<>();
+	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+		LinkedList<SequenceAction> returnActionList = new LinkedList<>();
 		returnActionList.add(sequence);
 		return returnActionList;
 	}

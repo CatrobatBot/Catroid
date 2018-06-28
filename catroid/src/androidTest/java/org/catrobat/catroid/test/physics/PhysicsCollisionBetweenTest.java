@@ -32,7 +32,6 @@ import org.catrobat.catroid.content.CollisionScript;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.bricks.PlaceAtBrick;
 import org.catrobat.catroid.content.eventids.CollisionEventId;
-import org.catrobat.catroid.content.eventids.EventId;
 import org.catrobat.catroid.physics.PhysicsCollision;
 import org.catrobat.catroid.physics.PhysicsCollisionBroadcast;
 import org.catrobat.catroid.physics.PhysicsObject;
@@ -110,7 +109,7 @@ public class PhysicsCollisionBetweenTest extends PhysicsCollisionBaseTest {
 		secondSpriteCollisionScript.addBrick(testBrick);
 		sprite2.addScript(secondSpriteCollisionScript);
 
-		sprite2.initializeEventThreads(EventId.START);
+		sprite2.createAndAddActions(Sprite.INCLUDE_START_ACTIONS);
 
 		simulateFullCollision();
 
@@ -128,7 +127,7 @@ public class PhysicsCollisionBetweenTest extends PhysicsCollisionBaseTest {
 
 	public boolean allActionsOfAllSpritesAreFinished() {
 		for (Sprite spriteOfList : project.getDefaultScene().getSpriteList()) {
-			if (!spriteOfList.look.haveAllThreadsFinished()) {
+			if (!spriteOfList.look.getAllActionsAreFinished()) {
 				return false;
 			}
 		}

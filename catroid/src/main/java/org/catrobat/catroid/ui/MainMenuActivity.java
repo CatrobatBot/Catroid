@@ -62,6 +62,7 @@ import org.catrobat.catroid.ui.dialogs.TermsOfUseDialogFragment;
 import org.catrobat.catroid.ui.recyclerview.asynctask.ProjectLoaderTask;
 import org.catrobat.catroid.ui.recyclerview.dialog.AboutDialogFragment;
 import org.catrobat.catroid.ui.recyclerview.dialog.PrivacyPolicyDialogFragment;
+import org.catrobat.catroid.ui.recyclerview.dialog.login.SignInDialog;
 import org.catrobat.catroid.ui.recyclerview.fragment.MainMenuFragment;
 import org.catrobat.catroid.ui.settingsfragments.SettingsFragment;
 import org.catrobat.catroid.utils.PathBuilder;
@@ -75,18 +76,22 @@ import java.io.InputStream;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import static org.catrobat.catroid.common.Constants.PREF_PROJECTNAME_KEY;
-
-public class MainMenuActivity extends BaseCastActivity implements ProjectLoaderTask.ProjectLoaderListener {
+public class MainMenuActivity extends BaseCastActivity implements
+		ProjectLoaderTask.ProjectLoaderListener,
+		SignInDialog.SignInCompleteListener {
 
 	public static final String TAG = MainMenuActivity.class.getSimpleName();
 
 	public static final String AGREED_TO_PRIVACY_POLICY_SETTINGS_KEY = "AgreedToPrivacyPolicy";
+	public static final int REQUEST_CODE_GOOGLE_PLUS_SIGNIN = 100;
+
 	private static final int ACCESS_STORAGE = 0;
 
 	@Retention(RetentionPolicy.SOURCE)
 	@IntDef({PROGRESS_BAR, FRAGMENT, ERROR})
-	@interface Content {}
+	@interface Content {
+	}
+
 	protected static final int PROGRESS_BAR = 0;
 	protected static final int FRAGMENT = 1;
 	protected static final int ERROR = 2;
@@ -94,19 +99,16 @@ public class MainMenuActivity extends BaseCastActivity implements ProjectLoaderT
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		SettingsFragment.setToChosenLanguage(this);
 
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
 		ScreenValueHandler.updateScreenWidthAndHeight(this);
 
-		boolean hasUserAgreedToPrivacyPolicy = PreferenceManager.getDefaultSharedPreferences(this)
-				.getBoolean(AGREED_TO_PRIVACY_POLICY_SETTINGS_KEY, false);
-
-		if (hasUserAgreedToPrivacyPolicy) {
-			loadContent();
-		} else {
+		if (!PreferenceManager.getDefaultSharedPreferences(this)
+				.getBoolean(AGREED_TO_PRIVACY_POLICY_SETTINGS_KEY, false)) {
 			setContentView(R.layout.privacy_policy_view);
+		} else {
+			loadContent();
 		}
 	}
 
@@ -146,13 +148,15 @@ public class MainMenuActivity extends BaseCastActivity implements ProjectLoaderT
 		}
 
 		@PermissionChecker.PermissionResult
-		int permissionResult = ContextCompat
-				.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+		int permissionResult = ContextCompat.checkSelfPermission(this,
+				Manifest.permission.WRITE_EXTERNAL_STORAGE);
 		if (permissionResult == PackageManager.PERMISSION_GRANTED) {
 			onPermissionsGranted();
 		} else {
-			ActivityCompat.requestPermissions(this,
-					new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, ACCESS_STORAGE);
+			ActivityCompat.requestPermissions(
+					this,
+					new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE},
+					ACCESS_STORAGE);
 		}
 	}
 
@@ -224,13 +228,9 @@ public class MainMenuActivity extends BaseCastActivity implements ProjectLoaderT
 		super.onPause();
 
 		Project currentProject = ProjectManager.getInstance().getCurrentProject();
-
 		if (currentProject != null) {
 			ProjectManager.getInstance().saveProject(getApplicationContext());
-			PreferenceManager.getDefaultSharedPreferences(this)
-					.edit()
-					.putString(PREF_PROJECTNAME_KEY, currentProject.getName())
-					.commit();
+			Utils.saveToPreferences(this, Constants.PREF_PROJECTNAME_KEY, currentProject.getName());
 		}
 	}
 
@@ -264,16 +264,7 @@ public class MainMenuActivity extends BaseCastActivity implements ProjectLoaderT
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.menu_rate_app:
-				if (Utils.isNetworkAvailable(this)) {
-					try {
-						startActivity(new Intent(Intent.ACTION_VIEW,
-								Uri.parse("market://details?id=" + getPackageName())));
-					} catch (ActivityNotFoundException e) {
-						ToastUtil.showError(this, R.string.main_menu_play_store_not_installed);
-					}
-				} else {
-					ToastUtil.showError(this, R.string.error_internet_connection);
-				}
+				launchMarket();
 				break;
 			case R.id.menu_terms_of_use:
 				new TermsOfUseDialogFragment().show(getFragmentManager(), TermsOfUseDialogFragment.TAG);
@@ -295,16 +286,29 @@ public class MainMenuActivity extends BaseCastActivity implements ProjectLoaderT
 				startActivity(new Intent(this, SettingsActivity.class));
 				break;
 			case R.id.menu_login:
-				startActivity(new Intent(this, SignInActivity.class));
+				SignInDialog dialog = new SignInDialog();
+				dialog.setSignInCompleteListener(this);
+				dialog.show(getFragmentManager(), SignInDialog.TAG);
 				break;
 			case R.id.menu_logout:
 				Utils.logoutUser(this);
-				ToastUtil.showSuccess(this, R.string.logout_successful);
 				break;
 			default:
 				return super.onOptionsItemSelected(item);
 		}
 		return true;
+	}
+
+	private void launchMarket() {
+		if (Utils.isNetworkAvailable(this)) {
+			try {
+				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName())));
+			} catch (ActivityNotFoundException e) {
+				ToastUtil.showError(this, R.string.main_menu_play_store_not_installed);
+			}
+		} else {
+			ToastUtil.showError(this, R.string.error_internet_connection);
+		}
 	}
 
 	private void prepareStandaloneProject() {
@@ -323,6 +327,14 @@ public class MainMenuActivity extends BaseCastActivity implements ProjectLoaderT
 			startActivityForResult(
 					new Intent(this, PreStageActivity.class), PreStageActivity.REQUEST_RESOURCES_INIT);
 		}
+	}
+
+	@Override
+	public void onLoginSuccessful(Bundle bundle) {
+	}
+
+	@Override
+	public void onLoginCancel() {
 	}
 
 	@Override

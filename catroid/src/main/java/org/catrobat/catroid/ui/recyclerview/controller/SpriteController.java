@@ -35,6 +35,9 @@ import org.catrobat.catroid.ui.controller.BackpackListManager;
 import org.catrobat.catroid.ui.recyclerview.util.UniqueNameProvider;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class SpriteController {
 
@@ -46,7 +49,7 @@ public class SpriteController {
 	private SoundController soundController = new SoundController();
 
 	public Sprite copy(Sprite spriteToCopy, Scene srcScene, Scene dstScene) throws IOException {
-		String name = uniqueNameProvider.getUniqueName(spriteToCopy.getName(), dstScene.getSpriteNames());
+		String name = uniqueNameProvider.getUniqueName(spriteToCopy.getName(), getScope(dstScene.getSpriteList()));
 		Sprite sprite = new Sprite(name);
 
 		for (LookData look : spriteToCopy.getLookList()) {
@@ -91,8 +94,8 @@ public class SpriteController {
 	}
 
 	public Sprite pack(Sprite spriteToPack) throws IOException {
-		String name = uniqueNameProvider
-				.getUniqueName(spriteToPack.getName(), BackpackListManager.getInstance().getSpriteNames());
+		String name = uniqueNameProvider.getUniqueName(spriteToPack.getName(),
+				getScope(BackpackListManager.getInstance().getBackpackedSprites()));
 
 		Sprite sprite = new Sprite(name);
 
@@ -120,7 +123,7 @@ public class SpriteController {
 	}
 
 	public Sprite unpack(Sprite spriteToUnpack, Scene dstScene) throws IOException {
-		String name = uniqueNameProvider.getUniqueName(spriteToUnpack.getName(), dstScene.getSpriteNames());
+		String name = uniqueNameProvider.getUniqueName(spriteToUnpack.getName(), getScope(dstScene.getSpriteList()));
 		Sprite sprite = new Sprite(name);
 
 		for (LookData look : spriteToUnpack.getLookList()) {
@@ -144,5 +147,13 @@ public class SpriteController {
 		}
 
 		return sprite;
+	}
+
+	private Set<String> getScope(List<Sprite> items) {
+		Set<String> scope = new HashSet<>();
+		for (Sprite item : items) {
+			scope.add(item.getName());
+		}
+		return scope;
 	}
 }

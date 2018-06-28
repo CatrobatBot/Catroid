@@ -38,12 +38,11 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Array;
 
+import org.catrobat.catroid.common.ActionScheduler;
 import org.catrobat.catroid.common.DroneVideoLookData;
 import org.catrobat.catroid.common.LookData;
-import org.catrobat.catroid.common.ThreadScheduler;
-import org.catrobat.catroid.content.actions.EventThread;
+import org.catrobat.catroid.content.actions.EventSequenceAction;
 import org.catrobat.catroid.content.eventids.EventId;
 import org.catrobat.catroid.utils.TouchUtil;
 
@@ -67,11 +66,11 @@ public class Look extends Image {
 	private int rotationMode = ROTATION_STYLE_ALL_AROUND;
 	private float rotation = 90f;
 	private float realRotation = rotation;
-	private ThreadScheduler scheduler;
+	private ActionScheduler scheduler;
 
 	public Look(final Sprite sprite) {
 		this.sprite = sprite;
-		scheduler = new ThreadScheduler(this);
+		scheduler = new ActionScheduler(this);
 		setBounds(0f, 0f, 0f, 0f);
 		setOrigin(0f, 0f);
 		setScale(1f, 1f);
@@ -186,26 +185,17 @@ public class Look extends Image {
 	@Override
 	public void act(float delta) {
 		scheduler.tick(delta);
-		if (sprite != null) {
-			sprite.evaluateConditionScriptTriggers();
+	}
+
+	public void startAction(Action action) {
+		if (scheduler != null) {
+			scheduler.startAction(action);
 		}
 	}
 
-	public void startThread(EventThread threadToBeStarted) {
+	void stopActionWithScript(Script script) {
 		if (scheduler != null) {
-			scheduler.startThread(threadToBeStarted);
-		}
-	}
-
-	public void stopThreads(Array<Action> threads) {
-		if (scheduler != null) {
-			scheduler.stopThreads(threads);
-		}
-	}
-
-	public void stopThreadWithScript(Script script) {
-		if (scheduler != null) {
-			scheduler.stopThreadsWithScript(script);
+			scheduler.stopActionsWithScript(script);
 		}
 	}
 
@@ -258,8 +248,8 @@ public class Look extends Image {
 		imageChanged = true;
 	}
 
-	public boolean haveAllThreadsFinished() {
-		return scheduler.haveAllThreadsFinished();
+	public boolean getAllActionsAreFinished() {
+		return scheduler.getAllActionsFinished();
 	}
 
 	public String getImagePath() {
@@ -534,6 +524,10 @@ public class Look extends Image {
 		return breakDownCatroidAngle(catroidAngle);
 	}
 
+	public void createAndAddActionsWithoutStartActions() {
+		sprite.createAndAddActions(Sprite.EXCLUDE_START_ACTIONS);
+	}
+
 	private class BrightnessContrastHueShader extends ShaderProgram {
 
 		private static final String VERTEX_SHADER = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
@@ -637,8 +631,8 @@ public class Look extends Image {
 
 	void notifyAllWaiters() {
 		for (Action action : getActions()) {
-			if (action instanceof EventThread) {
-				((EventThread) action).notifyWaiter();
+			if (action instanceof EventSequenceAction) {
+				((EventSequenceAction) action).notifyWaiter();
 			}
 		}
 	}

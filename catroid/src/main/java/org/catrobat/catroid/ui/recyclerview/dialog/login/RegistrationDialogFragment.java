@@ -49,9 +49,9 @@ public class RegistrationDialogFragment extends DialogFragment implements OnRegi
 	private TextInputLayout passwordInputLayout;
 	private TextInputLayout confirmPasswordInputLayout;
 
-	private SignInCompleteListener signInCompleteListener;
+	private SignInDialog.SignInCompleteListener signInCompleteListener;
 
-	public void setSignInCompleteListener(SignInCompleteListener signInCompleteListener) {
+	public void setSignInCompleteListener(SignInDialog.SignInCompleteListener signInCompleteListener) {
 		this.signInCompleteListener = signInCompleteListener;
 	}
 

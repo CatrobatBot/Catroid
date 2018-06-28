@@ -48,9 +48,9 @@ public class LoginDialogFragment extends DialogFragment implements LoginTask.OnL
 	private TextInputLayout usernameInputLayout;
 	private TextInputLayout passwordInputLayout;
 
-	private SignInCompleteListener signInCompleteListener;
+	private SignInDialog.SignInCompleteListener signInCompleteListener;
 
-	public void setSignInCompleteListener(SignInCompleteListener signInCompleteListener) {
+	public void setSignInCompleteListener(SignInDialog.SignInCompleteListener signInCompleteListener) {
 		this.signInCompleteListener = signInCompleteListener;
 	}
 

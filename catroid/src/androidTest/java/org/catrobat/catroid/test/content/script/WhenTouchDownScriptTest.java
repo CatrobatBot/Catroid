@@ -34,7 +34,6 @@ import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.WhenTouchDownScript;
 import org.catrobat.catroid.content.bricks.ChangeXByNBrick;
 import org.catrobat.catroid.content.bricks.WaitBrick;
-import org.catrobat.catroid.content.eventids.EventId;
 import org.catrobat.catroid.utils.TouchUtil;
 import org.junit.Before;
 import org.junit.Test;
@@ -62,11 +61,11 @@ public class WhenTouchDownScriptTest {
 	public void basicTouchDownScriptTest() {
 		touchDownScript.addBrick(new ChangeXByNBrick(10));
 
-		sprite.initializeEventThreads(EventId.START);
+		sprite.createAndAddActions(Sprite.INCLUDE_START_ACTIONS);
 
 		TouchUtil.touchDown(0, 0, 1);
 
-		while (!sprite.look.haveAllThreadsFinished()) {
+		while (!sprite.look.getAllActionsAreFinished()) {
 			sprite.look.act(1.0f);
 		}
 
@@ -78,13 +77,13 @@ public class WhenTouchDownScriptTest {
 		touchDownScript.addBrick(new WaitBrick(50));
 		touchDownScript.addBrick(new ChangeXByNBrick(10));
 
-		sprite.initializeEventThreads(EventId.START);
+		sprite.createAndAddActions(Sprite.INCLUDE_START_ACTIONS);
 
 		TouchUtil.touchDown(0, 0, 1);
 		TouchUtil.touchUp(1);
 		TouchUtil.touchDown(10, 10, 1);
 
-		while (!sprite.look.haveAllThreadsFinished()) {
+		while (!sprite.look.getAllActionsAreFinished()) {
 			sprite.look.act(1.0f);
 		}
 

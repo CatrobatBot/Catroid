@@ -37,7 +37,6 @@ import org.catrobat.catroid.content.bricks.BroadcastWaitBrick;
 import org.catrobat.catroid.content.bricks.ChangeXByNBrick;
 import org.catrobat.catroid.content.bricks.SetXBrick;
 import org.catrobat.catroid.content.bricks.WaitBrick;
-import org.catrobat.catroid.content.eventids.EventId;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -79,7 +78,7 @@ public class EventActionTest {
 		startScript.addBrick(new BroadcastBrick(MESSAGE1));
 		broadcastScript1.addBrick(new SetXBrick(testPosition));
 
-		sprite.initializeEventThreads(EventId.START);
+		sprite.createAndAddActions(Sprite.INCLUDE_START_ACTIONS);
 
 		executeAllActions();
 
@@ -96,7 +95,7 @@ public class EventActionTest {
 		broadcastScript1.addBrick(new WaitBrick(500));
 		broadcastScript1.addBrick(new SetXBrick(setTestPosition));
 
-		sprite.initializeEventThreads(EventId.START);
+		sprite.createAndAddActions(Sprite.INCLUDE_START_ACTIONS);
 
 		executeAllActions();
 
@@ -112,7 +111,7 @@ public class EventActionTest {
 		broadcastScript1.addBrick(new BroadcastBrick(MESSAGE1));
 		broadcastScript1.addBrick(new WaitBrick(5));
 
-		sprite.initializeEventThreads(EventId.START);
+		sprite.createAndAddActions(Sprite.INCLUDE_START_ACTIONS);
 
 		executeAllActionsOrTimeoutAfter(20);
 
@@ -133,7 +132,7 @@ public class EventActionTest {
 		broadcastScript2.addBrick(new BroadcastWaitBrick(MESSAGE1));
 		sprite.addScript(broadcastScript2);
 
-		sprite.initializeEventThreads(EventId.START);
+		sprite.createAndAddActions(Sprite.INCLUDE_START_ACTIONS);
 
 		executeAllActionsOrTimeoutAfter(20);
 
@@ -155,7 +154,7 @@ public class EventActionTest {
 		startScript2.addBrick(new SetXBrick(xPosition));
 		sprite.addScript(startScript2);
 
-		sprite.initializeEventThreads(EventId.START);
+		sprite.createAndAddActions(Sprite.INCLUDE_START_ACTIONS);
 
 		executeAllActionsOrTimeoutAfter(20);
 
@@ -179,7 +178,7 @@ public class EventActionTest {
 
 	private boolean allActionsOfAllSpritesAreFinished() {
 		for (Sprite spriteOfList : ProjectManager.getInstance().getCurrentScene().getSpriteList()) {
-			if (!spriteOfList.look.haveAllThreadsFinished()) {
+			if (!spriteOfList.look.getAllActionsAreFinished()) {
 				return false;
 			}
 		}

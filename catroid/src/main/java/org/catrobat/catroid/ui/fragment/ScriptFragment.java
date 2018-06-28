@@ -78,7 +78,9 @@ public class ScriptFragment extends ListFragment implements OnCategorySelectedLi
 
 	@Retention(RetentionPolicy.SOURCE)
 	@IntDef({NONE, BACKPACK, COPY, DELETE, ENABLE_DISABLE})
-	@interface ActionModeType {}
+	@interface ActionModeType {
+	}
+
 	private static final int NONE = 0;
 	private static final int BACKPACK = 1;
 	private static final int COPY = 2;
@@ -223,8 +225,7 @@ public class ScriptFragment extends ListFragment implements OnCategorySelectedLi
 	public void onResume() {
 		super.onResume();
 
-		if (!Utils.isExternalStorageAvailable()) {
-			ToastUtil.showError(getActivity(), R.string.error_no_writiable_external_storage_available);
+		if (!Utils.checkForExternalStorageAvailableAndDisplayErrorIfNot(getActivity())) {
 			return;
 		}
 

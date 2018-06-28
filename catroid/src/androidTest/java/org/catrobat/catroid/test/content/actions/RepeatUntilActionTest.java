@@ -38,7 +38,6 @@ import org.catrobat.catroid.content.bricks.ChangeYByNBrick;
 import org.catrobat.catroid.content.bricks.LoopEndBrick;
 import org.catrobat.catroid.content.bricks.RepeatUntilBrick;
 import org.catrobat.catroid.content.bricks.SetVariableBrick;
-import org.catrobat.catroid.content.eventids.EventId;
 import org.catrobat.catroid.formulaeditor.Formula;
 import org.catrobat.catroid.formulaeditor.FormulaElement;
 import org.catrobat.catroid.formulaeditor.FormulaElement.ElementType;
@@ -111,9 +110,9 @@ public class RepeatUntilActionTest extends InstrumentationTestCase {
 		testScript.addBrick(loopEndBrick);
 
 		testSprite.addScript(testScript);
-		testSprite.initializeEventThreads(EventId.START);
+		testSprite.createAndAddActions(Sprite.INCLUDE_START_ACTIONS);
 
-		while (!testSprite.look.haveAllThreadsFinished()) {
+		while (!testSprite.look.getAllActionsAreFinished()) {
 			testSprite.look.act(1.0f);
 		}
 
@@ -160,9 +159,9 @@ public class RepeatUntilActionTest extends InstrumentationTestCase {
 		testScript.addBrick(new ChangeYByNBrick(delta));
 		testScript.addBrick(loopEndBrick);
 		testSprite.addScript(testScript);
-		testSprite.initializeEventThreads(EventId.START);
+		testSprite.createAndAddActions(Sprite.INCLUDE_START_ACTIONS);
 
-		while (!testSprite.look.haveAllThreadsFinished()) {
+		while (!testSprite.look.getAllActionsAreFinished()) {
 			testSprite.look.act(1.0f);
 		}
 		assertEquals("Executed the wrong number of times!", expected,
@@ -185,9 +184,9 @@ public class RepeatUntilActionTest extends InstrumentationTestCase {
 		testScript.addBrick(loopEndBrick);
 
 		testSprite.addScript(testScript);
-		testSprite.initializeEventThreads(EventId.START);
+		testSprite.createAndAddActions(Sprite.INCLUDE_START_ACTIONS);
 
-		while (!testSprite.look.haveAllThreadsFinished()) {
+		while (!testSprite.look.getAllActionsAreFinished()) {
 			testSprite.look.act(1.0f);
 		}
 

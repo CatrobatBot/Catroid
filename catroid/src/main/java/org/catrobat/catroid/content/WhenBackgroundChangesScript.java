@@ -32,7 +32,7 @@ import org.catrobat.catroid.content.eventids.SetBackgroundEventId;
 
 import java.util.ArrayList;
 
-public class WhenBackgroundChangesScript extends Script {
+public class WhenBackgroundChangesScript extends Script implements EventScript {
 
 	private static final long serialVersionUID = 1L;
 

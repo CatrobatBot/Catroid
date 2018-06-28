@@ -24,25 +24,25 @@ package org.catrobat.catroid.test.content.bricks;
 
 import android.test.AndroidTestCase;
 
-import org.catrobat.catroid.content.Script;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+
+import org.catrobat.catroid.content.ActionFactory;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.StartScript;
-import org.catrobat.catroid.content.actions.EventThread;
 import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.content.bricks.WaitBrick;
-import org.mockito.Mockito;
 
 public class CommentOutTest extends AndroidTestCase {
 	private Sprite sprite;
 	private StartScript script;
-	private EventThread sequence;
+	private SequenceAction sequence;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		sprite = new Sprite("testSprite");
 		script = new StartScript();
-		sequence = (EventThread) sprite.getActionFactory().createEventThread(Mockito.mock(Script.class));
+		sequence = ActionFactory.sequence();
 	}
 
 	public void testCommentOutSimple() {

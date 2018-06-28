@@ -24,9 +24,13 @@ package org.catrobat.catroid.content;
 
 import android.content.Context;
 import android.graphics.PointF;
+import android.support.annotation.IntDef;
 import android.util.Log;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
@@ -38,7 +42,7 @@ import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.common.NfcTagData;
 import org.catrobat.catroid.common.SoundInfo;
-import org.catrobat.catroid.content.actions.EventThread;
+import org.catrobat.catroid.content.actions.EventSequenceAction;
 import org.catrobat.catroid.content.bricks.ArduinoSendPWMValueBrick;
 import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.content.bricks.FormulaBrick;
@@ -50,6 +54,7 @@ import org.catrobat.catroid.content.bricks.UserVariableBrick;
 import org.catrobat.catroid.content.bricks.WhenConditionBrick;
 import org.catrobat.catroid.content.eventids.EventId;
 import org.catrobat.catroid.formulaeditor.Formula;
+import org.catrobat.catroid.formulaeditor.InterpretationException;
 import org.catrobat.catroid.formulaeditor.UserVariable;
 import org.catrobat.catroid.formulaeditor.datacontainer.DataContainer;
 import org.catrobat.catroid.io.XStreamFieldKeyOrder;
@@ -60,10 +65,10 @@ import org.catrobat.catroid.stage.StageActivity;
 import org.catrobat.catroid.ui.fragment.SpriteFactory;
 
 import java.io.Serializable;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 // Remove checkstyle disable when https://github.com/checkstyle/checkstyle/issues/1349 is fixed
 // CHECKSTYLE DISABLE IndentationCheck FOR 8 LINES
@@ -86,8 +91,7 @@ public class Sprite implements Serializable, Cloneable {
 	public transient PenConfiguration penConfiguration = new PenConfiguration();
 	private transient boolean convertToSingleSprite = false;
 	private transient boolean convertToGroupItemSprite = false;
-	private transient Multimap<EventId, EventThread> idToEventThreadMap = HashMultimap.create();
-	private transient Set<ConditionScriptTrigger> conditionScriptTriggers = new HashSet<>();
+	private transient Multimap<EventId, EventSequenceAction> idToEventSequenceMap = HashMultimap.create();
 
 	@XStreamAsAttribute
 	private String name;
@@ -96,10 +100,17 @@ public class Sprite implements Serializable, Cloneable {
 	private List<SoundInfo> soundList = new ArrayList<>();
 	private List<UserBrick> userBricks = new ArrayList<>();
 	private List<NfcTagData> nfcTagList = new ArrayList<>();
-
 	private transient ActionFactory actionFactory = new ActionFactory();
-
 	public transient boolean isClone = false;
+	private transient boolean isMobile = false;
+
+	@Retention(RetentionPolicy.SOURCE)
+	@IntDef({INCLUDE_START_ACTIONS, EXCLUDE_START_ACTIONS})
+	@interface CreateActionsMode {
+	}
+
+	public static final int INCLUDE_START_ACTIONS = 0;
+	public static final int EXCLUDE_START_ACTIONS = 1;
 
 	public Sprite(String name) {
 		this.name = name;
@@ -130,7 +141,7 @@ public class Sprite implements Serializable, Cloneable {
 		return scriptList;
 	}
 
-	public List<Brick> getAllBricks() {
+	public List<Brick> getListWithAllBricks() {
 		List<Brick> allBricks = new ArrayList<>();
 		for (Script script : scriptList) {
 			allBricks.add(script.getScriptBrick());
@@ -144,6 +155,23 @@ public class Sprite implements Serializable, Cloneable {
 			}
 		}
 		return allBricks;
+	}
+
+	public List<Brick> getAllBricks() {
+		List<Brick> result = new ArrayList<>();
+		for (Script script : scriptList) {
+			for (Brick brick : script.getBrickList()) {
+				result.add(brick);
+			}
+		}
+		for (UserBrick userBrick : userBricks) {
+			result.add(userBrick);
+			Script userScript = userBrick.getDefinitionBrick().getUserScript();
+			for (Brick brick : userScript.getBrickList()) {
+				result.add(brick);
+			}
+		}
+		return result;
 	}
 
 	public List<PlaySoundBrick> getPlaySoundBricks() {
@@ -170,8 +198,7 @@ public class Sprite implements Serializable, Cloneable {
 	}
 
 	public void invalidate() {
-		idToEventThreadMap = null;
-		conditionScriptTriggers = null;
+		idToEventSequenceMap = null;
 		penConfiguration = null;
 	}
 
@@ -212,36 +239,62 @@ public class Sprite implements Serializable, Cloneable {
 		return matchingUserBricks;
 	}
 
-	public void initConditionScriptTiggers() {
-		conditionScriptTriggers.clear();
+	public void createAndAddActions(@CreateActionsMode int includeStartActions) {
+		idToEventSequenceMap.clear();
 		for (Script script : scriptList) {
-			if (script instanceof WhenConditionScript) {
-				WhenConditionBrick conditionBrick = (WhenConditionBrick) script.getScriptBrick();
-				Formula condition = conditionBrick.getFormulaWithBrickField(Brick.BrickField.IF_CONDITION);
-				conditionScriptTriggers.add(new ConditionScriptTrigger(condition));
-			}
+			createAndAddAction(script, includeStartActions);
 		}
 	}
 
-	void evaluateConditionScriptTriggers() {
-		for (ConditionScriptTrigger conditionScriptTrigger : conditionScriptTriggers) {
-			conditionScriptTrigger.evaluateAndTriggerActions(this);
-		}
-	}
-
-	public void initializeEventThreads(@EventId.EventType int startType) {
-		idToEventThreadMap.clear();
-		for (Script script : scriptList) {
-			createThreadAndAddToEventMap(script);
-		}
-		look.fire(new EventWrapper(new EventId(startType), EventWrapper.NO_WAIT));
-	}
-
-	private void createThreadAndAddToEventMap(Script script) {
+	private void createAndAddAction(Script script, @CreateActionsMode int includeStartActions) {
 		if (script.isCommentedOut()) {
 			return;
+		} else if (!isClone && script instanceof StartScript
+				|| isClone && script instanceof WhenClonedScript) {
+			if (includeStartActions == INCLUDE_START_ACTIONS) {
+				createAndAddActionByScript(script);
+			}
+		} else if (script instanceof EventScript) {
+			createAndAddActionByEventScript(script);
+		} else if (script instanceof WhenConditionScript) {
+			createAndAddActionByWhenConditionScript((WhenConditionScript) script);
 		}
-		idToEventThreadMap.put(script.createEventId(this), createEventThread(script));
+	}
+
+	private void createAndAddActionByScript(Script script) {
+		Action sequenceAction = createActionSequence(script);
+		look.startAction(sequenceAction);
+	}
+
+	private SequenceAction createActionSequence(Script script) {
+		SequenceAction sequence = ActionFactory.sequence();
+		script.run(this, sequence);
+		return sequence;
+	}
+
+	private void createAndAddActionByEventScript(Script script) {
+		EventScript eventScript = (EventScript) script;
+		idToEventSequenceMap.put(eventScript.createEventId(this), createEventSequence(script));
+	}
+
+	private void createAndAddActionByWhenConditionScript(WhenConditionScript script) {
+		ActionFactory actionFactory = getActionFactory();
+		Formula condition = ((WhenConditionBrick) script.getScriptBrick()).getConditionFormula();
+		Formula negatedCondition = new Formula(condition.getRoot().clone()) {
+			@Override
+			public Boolean interpretBoolean(Sprite sprite) throws InterpretationException {
+				return !super.interpretBoolean(sprite);
+			}
+		};
+
+		Action waitAction = actionFactory.createWaitUntilAction(this, condition);
+		Action waitActionNegated = actionFactory.createWaitUntilAction(this, negatedCondition);
+
+		SequenceAction foreverSequence = ActionFactory.sequence(ActionFactory.sequence(waitAction,
+				createActionSequence(script)), waitActionNegated);
+
+		Action whenConditionBecomesTrueAction = actionFactory.createForeverAction(this, foreverSequence);
+		look.startAction(whenConditionBecomesTrueAction);
 	}
 
 	public ActionFactory getActionFactory() {
@@ -259,6 +312,7 @@ public class Sprite implements Serializable, Cloneable {
 		cloneSprite.setName(this.getName());
 		cloneSprite.convertToSingleSprite = false;
 		cloneSprite.convertToGroupItemSprite = false;
+		cloneSprite.isMobile = false;
 
 		ProjectManager projectManager = ProjectManager.getInstance();
 		Scene currentScene = ProjectManager.getInstance().getCurrentScene();
@@ -294,8 +348,7 @@ public class Sprite implements Serializable, Cloneable {
 
 		cloneSprite.soundList = this.soundList;
 		cloneSprite.nfcTagList = this.nfcTagList;
-		cloneSprite.idToEventThreadMap = HashMultimap.create();
-		cloneSprite.conditionScriptTriggers = new HashSet<>();
+		cloneSprite.idToEventSequenceMap = HashMultimap.create();
 
 		Sprite originalSprite = ProjectManager.getInstance().getCurrentSprite();
 		ProjectManager.getInstance().setCurrentSprite(cloneSprite);
@@ -425,10 +478,38 @@ public class Sprite implements Serializable, Cloneable {
 		cloneSprite.scriptList = cloneScriptList;
 	}
 
-	private EventThread createEventThread(Script script) {
-		EventThread sequence = (EventThread) actionFactory.createEventThread(script);
+	public void createWhengamepadButtonScriptActionSequence(String action) {
+		ParallelAction whenParallelAction = actionFactory.parallel();
+		for (Script script : scriptList) {
+			if (script instanceof WhenGamepadButtonScript && (((WhenGamepadButtonScript) script).getAction().equalsIgnoreCase(action))) {
+				SequenceAction sequence = createActionSequence(script);
+				whenParallelAction.addAction(sequence);
+			}
+		}
+		look.startAction(whenParallelAction);
+	}
+
+	private EventSequenceAction createEventSequence(Script script) {
+		EventSequenceAction sequence = (EventSequenceAction) ActionFactory.eventSequence(script);
 		script.run(this, sequence);
 		return sequence;
+	}
+
+	public void createWhenNfcScriptAction(String uid) {
+		ParallelAction whenParallelAction = ActionFactory.parallel();
+		for (Script s : scriptList) {
+			if (s instanceof WhenNfcScript) {
+				WhenNfcScript whenNfcScript = (WhenNfcScript) s;
+				if (whenNfcScript.isMatchAll()
+						|| whenNfcScript.getNfcTag().getNfcTagUid().equals(uid)) {
+					SequenceAction sequence = createActionSequence(s);
+					whenParallelAction.addAction(sequence);
+				}
+			}
+		}
+		//TODO: quick fix for faulty behaviour - nfc action triggers again after touchevents
+		//look.setWhenParallelAction(whenParallelAction);
+		look.startAction(whenParallelAction);
 	}
 
 	public String getName() {
@@ -524,7 +605,7 @@ public class Sprite implements Serializable, Cloneable {
 	}
 
 	public void updateUserVariableReferencesInUserVariableBricks(List<UserVariable> variables) {
-		for (Brick brick : getAllBricks()) {
+		for (Brick brick : getListWithAllBricks()) {
 			if (brick instanceof UserVariableBrick) {
 				UserVariableBrick userVariableBrick = (UserVariableBrick) brick;
 				for (UserVariable variable : variables) {
@@ -701,6 +782,14 @@ public class Sprite implements Serializable, Cloneable {
 		this.convertToGroupItemSprite = convertToGroupItemSprite;
 	}
 
+	public boolean isMobile() {
+		return isMobile;
+	}
+
+	public void setIsMobile(boolean isMobile) {
+		this.isMobile = isMobile;
+	}
+
 	public List<Brick> getBricksRequiringResource(int resource) {
 		List<Brick> resourceBrickList = new ArrayList<>();
 
@@ -718,7 +807,7 @@ public class Sprite implements Serializable, Cloneable {
 		return look.getZIndex() == Constants.Z_INDEX_BACKGROUND;
 	}
 
-	public Multimap<EventId, EventThread> getIdToEventThreadMap() {
-		return idToEventThreadMap;
+	public Multimap<EventId, EventSequenceAction> getIdToEventSequenceMap() {
+		return idToEventSequenceMap;
 	}
 }

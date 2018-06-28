@@ -72,7 +72,6 @@ public class PhysicsLookTest extends InstrumentationTestCase {
 	static {
 		GdxNativesLoader.load();
 	}
-
 	@Override
 	protected void setUp() throws Exception {
 		physicsWorld = new PhysicsWorld(1920, 1600);
@@ -305,10 +304,10 @@ public class PhysicsLookTest extends InstrumentationTestCase {
 						+ look.getLookData() + ".",
 				physicsLook.getLookData(), look.getLookData());
 
-		assertEquals("physicsLook haveAllThreadsFinished()"
-						+ physicsLook.haveAllThreadsFinished() + " differs from look value"
-						+ look.haveAllThreadsFinished() + ".",
-				physicsLook.haveAllThreadsFinished(), look.haveAllThreadsFinished());
+		assertEquals("physicsLook getAllActionsAreFinished()"
+						+ physicsLook.getAllActionsAreFinished() + " differs from look value"
+						+ look.getAllActionsAreFinished() + ".",
+				physicsLook.getAllActionsAreFinished(), look.getAllActionsAreFinished());
 
 		assertEquals("physicsLook getImagePath()"
 						+ physicsLook.getImagePath() + " differs from look value"

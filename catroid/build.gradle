@@ -54,7 +54,6 @@ apply plugin: 'pmd'
 apply from: 'gradle/code_quality_tasks.gradle'
 apply from: 'gradle/intellij_config_tasks.gradle'
 apply from: 'gradle/standalone_apk_tasks.gradle'
-apply from: 'gradle/android_tasks.gradle'
 
 check.dependsOn 'checkstyle'
 check.dependsOn 'pmd'
@@ -302,19 +301,11 @@ android {
                 'GradleCompatible', 'WifiManagerLeak', 'ApplySharedPref', 'DefaultLocale', 'ObsoleteSdkInt',
                 'StaticFieldLeak' , 'AppCompatResource'
 
-        abortOnError false
-
         textReport true
         xmlReport true
         htmlReport true
         xmlOutput file("build/reports/lint-report.xml")
         htmlOutput file("build/reports/lint-report.html")
-    }
-}
-
-project.gradle.taskGraph.whenReady {
-    connectedCatroidDebugAndroidTest {
-        ignoreFailures = true
     }
 }
 

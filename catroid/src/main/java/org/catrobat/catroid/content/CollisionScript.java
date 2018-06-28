@@ -28,7 +28,7 @@ import org.catrobat.catroid.content.eventids.CollisionEventId;
 import org.catrobat.catroid.content.eventids.EventId;
 import org.catrobat.catroid.physics.content.bricks.CollisionReceiverBrick;
 
-public class CollisionScript extends Script {
+public class CollisionScript extends Script implements EventScript {
 
 	private static final long serialVersionUID = 1L;
 	private String spriteToCollideWithName;
@@ -72,7 +72,7 @@ public class CollisionScript extends Script {
 		if (spriteToCollideWithName != null
 				&& (spriteToCollideWith == null || !spriteToCollideWithName.equals(spriteToCollideWith.getName()))) {
 			Scene currentScene = ProjectManager.getInstance().getCurrentScene();
-			spriteToCollideWith = currentScene.getSprite(spriteToCollideWithName);
+			spriteToCollideWith = currentScene.getSpriteBySpriteName(spriteToCollideWithName);
 		}
 	}
 

@@ -145,7 +145,7 @@ abstract class SpriteDataBehaviour<K, V> {
 			}
 
 			String keyName = getKeyName(entry.getKey());
-			Sprite clonedInstanceOnStage = scene.getSprite(keyName);
+			Sprite clonedInstanceOnStage = scene.getSpriteBySpriteName(keyName);
 			clonedMap.put(clonedInstanceOnStage, newList);
 		}
 

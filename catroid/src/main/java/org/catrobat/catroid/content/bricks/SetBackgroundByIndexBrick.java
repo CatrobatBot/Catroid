@@ -23,9 +23,10 @@
 
 package org.catrobat.catroid.content.bricks;
 
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.content.Sprite;
-import org.catrobat.catroid.content.actions.ScriptSequenceAction;
 
 import java.util.Collections;
 import java.util.List;
@@ -41,12 +42,12 @@ public class SetBackgroundByIndexBrick extends SetLookByIndexBrick {
 
 	@Override
 	protected Sprite getSprite() {
-		return ProjectManager.getInstance().getCurrentScene().getBackgroundSprite();
+		return ProjectManager.getInstance().getCurrentScene().getSpriteList().get(0);
 	}
 
 	@Override
-	public List<ScriptSequenceAction> addActionToSequence(Sprite sprite, ScriptSequenceAction sequence) {
-		Sprite backgroundSprite = ProjectManager.getInstance().getSceneToPlay().getBackgroundSprite();
+	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
+		Sprite backgroundSprite = ProjectManager.getInstance().getSceneToPlay().getSpriteList().get(0);
 		sequence.addAction(sprite.getActionFactory().createSetLookByIndexAction(backgroundSprite,
 				getFormulaWithBrickField(BrickField.LOOK_INDEX), wait));
 

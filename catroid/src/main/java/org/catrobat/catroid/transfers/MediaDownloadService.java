@@ -93,7 +93,7 @@ public class MediaDownloadService extends IntentService {
 
 				@Override
 				public void run() {
-					ToastUtil.showError(getBaseContext(), messageId);
+					ToastUtil.showError(getApplicationContext(), messageId);
 				}
 			});
 		} else {
@@ -101,7 +101,7 @@ public class MediaDownloadService extends IntentService {
 
 				@Override
 				public void run() {
-					ToastUtil.showSuccess(getBaseContext(), messageId);
+					ToastUtil.showSuccess(getApplicationContext(), messageId);
 				}
 			});
 		}

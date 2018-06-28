@@ -22,8 +22,6 @@
  */
 package org.catrobat.catroid.content.eventids;
 
-import com.google.common.base.Objects;
-
 public class RaspiEventId extends EventId {
 	private final String pin;
 	private final String eventValue;
@@ -38,15 +36,12 @@ public class RaspiEventId extends EventId {
 		if (this == o) {
 			return true;
 		}
-		if (!(o instanceof RaspiEventId)) {
+		if (o == null || getClass() != o.getClass()) {
 			return false;
 		}
-		if (!super.equals(o)) {
-			return false;
-		}
+
 		RaspiEventId that = (RaspiEventId) o;
-		return Objects.equal(pin, that.pin)
-				&& Objects.equal(eventValue, that.eventValue);
+		return pin.equals(that.pin) && eventValue.equals(that.eventValue);
 	}
 
 	@Override

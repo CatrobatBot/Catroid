@@ -24,7 +24,6 @@ package org.catrobat.catroid.content;
 
 import org.catrobat.catroid.content.bricks.ScriptBrick;
 import org.catrobat.catroid.content.bricks.WhenStartedBrick;
-import org.catrobat.catroid.content.eventids.EventId;
 
 public class StartScript extends Script {
 
@@ -63,10 +62,5 @@ public class StartScript extends Script {
 		Script clone = new StartScript(isUserScript);
 		clone.getBrickList().addAll(cloneBrickList());
 		return clone;
-	}
-
-	@Override
-	public EventId createEventId(Sprite sprite) {
-		return new EventId(EventId.START);
 	}
 }

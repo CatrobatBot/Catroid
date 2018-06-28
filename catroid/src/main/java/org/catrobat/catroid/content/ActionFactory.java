@@ -25,6 +25,7 @@ package org.catrobat.catroid.content;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.parrot.freeflight.drone.DroneProxy.ARDRONE_LED_ANIMATION;
 
 import org.catrobat.catroid.ProjectManager;
@@ -69,7 +70,7 @@ import org.catrobat.catroid.content.actions.DroneTurnLeftWithMagnetometerAction;
 import org.catrobat.catroid.content.actions.DroneTurnRightAction;
 import org.catrobat.catroid.content.actions.DroneTurnRightWithMagnetometerAction;
 import org.catrobat.catroid.content.actions.EventAction;
-import org.catrobat.catroid.content.actions.EventThread;
+import org.catrobat.catroid.content.actions.EventSequenceAction;
 import org.catrobat.catroid.content.actions.FlashAction;
 import org.catrobat.catroid.content.actions.GoNStepsBackAction;
 import org.catrobat.catroid.content.actions.GoToOtherSpritePositionAction;
@@ -121,7 +122,6 @@ import org.catrobat.catroid.content.actions.RepeatUntilAction;
 import org.catrobat.catroid.content.actions.ReplaceItemInUserListAction;
 import org.catrobat.catroid.content.actions.SceneStartAction;
 import org.catrobat.catroid.content.actions.SceneTransitionAction;
-import org.catrobat.catroid.content.actions.ScriptSequenceAction;
 import org.catrobat.catroid.content.actions.SetBrightnessAction;
 import org.catrobat.catroid.content.actions.SetColorAction;
 import org.catrobat.catroid.content.actions.SetLookAction;
@@ -172,12 +172,24 @@ import org.catrobat.catroid.content.bricks.PhiroRGBLightBrick;
 import org.catrobat.catroid.content.bricks.UserBrick;
 import org.catrobat.catroid.content.eventids.BroadcastEventId;
 import org.catrobat.catroid.content.eventids.EventId;
+import org.catrobat.catroid.content.eventids.RaspiEventId;
+import org.catrobat.catroid.content.eventids.SetBackgroundEventId;
 import org.catrobat.catroid.formulaeditor.Formula;
 import org.catrobat.catroid.formulaeditor.UserList;
 import org.catrobat.catroid.formulaeditor.UserVariable;
 import org.catrobat.catroid.physics.PhysicsObject;
 
 public class ActionFactory extends Actions {
+
+	public EventAction createSetLookEventAction(Sprite sprite, LookData lookData, @EventWrapper.WaitMode int waitMode) {
+		SetBackgroundEventId id = new SetBackgroundEventId(sprite, lookData);
+		return createEventAction(id, waitMode);
+	}
+
+	public EventAction createRaspiInterruptAction(String pin, String value) {
+		RaspiEventId id = new RaspiEventId(pin, value);
+		return createEventAction(id, EventWrapper.NO_WAIT);
+	}
 
 	public EventAction createBroadcastAction(String broadcastMessage, @EventWrapper.WaitMode int waitMode) {
 		BroadcastEventId id = new BroadcastEventId(broadcastMessage);
@@ -193,7 +205,7 @@ public class ActionFactory extends Actions {
 		return action;
 	}
 
-	public Action createNotifyEventWaiterAction(Sprite sprite, EventWrapper event) {
+	public static Action createNotifyEventWaiterAction(Sprite sprite, EventWrapper event) {
 		NotifyEventWaiterAction action = Actions.action(NotifyEventWaiterAction.class);
 		action.setEvent(event);
 		action.setSprite(sprite);
@@ -803,7 +815,7 @@ public class ActionFactory extends Actions {
 		return action;
 	}
 
-	public Action createForeverAction(Sprite sprite, ScriptSequenceAction foreverSequence) {
+	public Action createForeverAction(Sprite sprite, SequenceAction foreverSequence) {
 		RepeatAction action = Actions.action(RepeatAction.class);
 		action.setIsForeverRepeat(true);
 		action.setAction(foreverSequence);
@@ -818,12 +830,12 @@ public class ActionFactory extends Actions {
 		return action;
 	}
 
-	public static Action eventSequence(Script script) {
-		return new ScriptSequenceAction(script);
+	public Action createSequence() {
+		return Actions.sequence();
 	}
 
-	public static Action createEventThread(Script script) {
-		return new EventThread(script);
+	public static Action eventSequence(Script script) {
+		return new EventSequenceAction(script);
 	}
 
 	public Action createSetBounceFactorAction(Sprite sprite, Formula bounceFactor) {
@@ -1144,16 +1156,14 @@ public class ActionFactory extends Actions {
 		return action;
 	}
 
-	public Action createStopScriptAction(int spinnerSelection, Script currentScript) {
+	public Action createStopScriptAction(int spinnerSelection, Action currentAction) {
 		switch (spinnerSelection) {
 			case BrickValues.STOP_THIS_SCRIPT:
-				StopThisScriptAction stopThisScriptAction = Actions.action(StopThisScriptAction.class);
-				stopThisScriptAction.setCurrentScript(currentScript);
-				return stopThisScriptAction;
+				return Actions.action(StopThisScriptAction.class);
 			case BrickValues.STOP_OTHER_SCRIPTS:
-				StopOtherScriptsAction stopOtherScriptsAction = Actions.action(StopOtherScriptsAction.class);
-				stopOtherScriptsAction.setCurrentScript(currentScript);
-				return stopOtherScriptsAction;
+				StopOtherScriptsAction action = Actions.action(StopOtherScriptsAction.class);
+				action.setCurrentAction(currentAction);
+				return action;
 			default:
 				return Actions.action(StopAllScriptsAction.class);
 		}

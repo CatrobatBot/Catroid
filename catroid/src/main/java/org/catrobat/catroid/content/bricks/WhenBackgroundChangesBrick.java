@@ -30,13 +30,14 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Spinner;
 
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.content.Script;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.WhenBackgroundChangesScript;
-import org.catrobat.catroid.content.actions.ScriptSequenceAction;
 import org.catrobat.catroid.content.bricks.brickspinner.SpinnerAdapterWithNewOption;
 import org.catrobat.catroid.ui.recyclerview.dialog.NewLookDialogFragment;
 import org.catrobat.catroid.ui.recyclerview.dialog.dialoginterface.NewItemInterface;
@@ -57,11 +58,11 @@ public class WhenBackgroundChangesBrick extends BrickBaseType implements
 	private transient Spinner spinner;
 	private transient SpinnerAdapterWithNewOption spinnerAdapter;
 
-	public WhenBackgroundChangesBrick() {
-	}
-
 	public WhenBackgroundChangesBrick(WhenBackgroundChangesScript script) {
 		this.script = script;
+	}
+
+	public WhenBackgroundChangesBrick() {
 	}
 
 	public LookData getLook() {
@@ -91,6 +92,23 @@ public class WhenBackgroundChangesBrick extends BrickBaseType implements
 		return clone;
 	}
 
+	private LookData getLookByName(String name) {
+		for (LookData look : ProjectManager.getInstance().getCurrentScene().getSpriteList().get(0).getLookList()) {
+			if (look.getName().equals(name)) {
+				return look;
+			}
+		}
+		return null;
+	}
+
+	private List<String> getLookNames() {
+		List<String> lookNames = new ArrayList<>();
+		for (LookData look : ProjectManager.getInstance().getCurrentScene().getSpriteList().get(0).getLookList()) {
+			lookNames.add(look.getName());
+		}
+		return lookNames;
+	}
+
 	@Override
 	public View getView(final Context context, int brickId, BaseAdapter baseAdapter) {
 
@@ -117,23 +135,6 @@ public class WhenBackgroundChangesBrick extends BrickBaseType implements
 		});
 		spinner.setSelection(spinnerAdapter.getPosition(getLook() != null ? getLook().getName() : null));
 		return view;
-	}
-
-	private LookData getLookByName(String name) {
-		for (LookData look : ProjectManager.getInstance().getCurrentScene().getBackgroundSprite().getLookList()) {
-			if (look.getName().equals(name)) {
-				return look;
-			}
-		}
-		return null;
-	}
-
-	private List<String> getLookNames() {
-		List<String> lookNames = new ArrayList<>();
-		for (LookData look : ProjectManager.getInstance().getCurrentScene().getBackgroundSprite().getLookList()) {
-			lookNames.add(look.getName());
-		}
-		return lookNames;
 	}
 
 	@Override
@@ -173,7 +174,7 @@ public class WhenBackgroundChangesBrick extends BrickBaseType implements
 	}
 
 	@Override
-	public List<ScriptSequenceAction> addActionToSequence(Sprite sprite, ScriptSequenceAction sequence) {
+	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
 		sequence.addAction(sprite.getActionFactory().createSetLookAction(sprite, getLook()));
 		return null;
 	}

@@ -38,7 +38,6 @@ import org.catrobat.catroid.content.StartScript;
 import org.catrobat.catroid.content.WhenBackgroundChangesScript;
 import org.catrobat.catroid.content.bricks.SetBackgroundBrick;
 import org.catrobat.catroid.content.bricks.SetXBrick;
-import org.catrobat.catroid.content.eventids.EventId;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -101,9 +100,9 @@ public class WhenBackgroundChangesScriptTest {
 		setBackgroundBrick.setLook(bg2);
 		startScript.addBrick(setBackgroundBrick);
 		whenBgChangesScript.addBrick(new SetXBrick(position));
-		sprite.initializeEventThreads(EventId.START);
+		sprite.createAndAddActions(Sprite.INCLUDE_START_ACTIONS);
 
-		while (!sprite.look.haveAllThreadsFinished()) {
+		while (!sprite.look.getAllActionsAreFinished()) {
 			sprite.look.act(1.0f);
 		}
 
@@ -117,9 +116,9 @@ public class WhenBackgroundChangesScriptTest {
 		setBackgroundBrick.setLook(bg1);
 		startScript.addBrick(setBackgroundBrick);
 		whenBgChangesScript.addBrick(new SetXBrick(position));
-		sprite.initializeEventThreads(EventId.START);
+		sprite.createAndAddActions(Sprite.INCLUDE_START_ACTIONS);
 
-		while (!sprite.look.haveAllThreadsFinished()) {
+		while (!sprite.look.getAllActionsAreFinished()) {
 			sprite.look.act(1.0f);
 		}
 
@@ -137,9 +136,9 @@ public class WhenBackgroundChangesScriptTest {
 		startScript.addBrick(setBackgroundBrick1);
 		startScript.addBrick(setBackgroundBrick2);
 		whenBgChangesScript.addBrick(new SetXBrick(position));
-		sprite.initializeEventThreads(EventId.START);
+		sprite.createAndAddActions(Sprite.INCLUDE_START_ACTIONS);
 
-		while (!sprite.look.haveAllThreadsFinished()) {
+		while (!sprite.look.getAllActionsAreFinished()) {
 			sprite.look.act(1.0f);
 		}
 

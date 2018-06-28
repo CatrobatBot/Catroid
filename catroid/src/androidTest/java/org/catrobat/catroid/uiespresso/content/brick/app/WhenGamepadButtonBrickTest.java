@@ -28,7 +28,6 @@ import android.support.test.runner.AndroidJUnit4;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.content.WhenGamepadButtonScript;
 import org.catrobat.catroid.content.bricks.WhenGamepadButtonBrick;
-import org.catrobat.catroid.formulaeditor.Sensors;
 import org.catrobat.catroid.ui.SpriteActivity;
 import org.catrobat.catroid.uiespresso.annotations.Flaky;
 import org.catrobat.catroid.uiespresso.content.brick.utils.BrickTestUtils;
@@ -58,7 +57,7 @@ public class WhenGamepadButtonBrickTest {
 	public void setUp() throws Exception {
 		brickPosition = 1;
 		BrickTestUtils.createProjectAndGetStartScript("WhenGamepadButtonBrickTest")
-				.addBrick(new WhenGamepadButtonBrick(new WhenGamepadButtonScript(Sensors.GAMEPAD_A_PRESSED.name())));
+				.addBrick(new WhenGamepadButtonBrick(new WhenGamepadButtonScript()));
 		baseActivityTestRule.launchActivity();
 	}
 

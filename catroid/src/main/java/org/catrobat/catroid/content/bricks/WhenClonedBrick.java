@@ -26,11 +26,12 @@ import android.content.Context;
 import android.view.View;
 import android.widget.BaseAdapter;
 
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.content.Script;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.content.WhenClonedScript;
-import org.catrobat.catroid.content.actions.ScriptSequenceAction;
 
 import java.util.Collections;
 import java.util.List;
@@ -85,7 +86,7 @@ public class WhenClonedBrick extends BrickBaseType implements ScriptBrick {
 	}
 
 	@Override
-	public List<ScriptSequenceAction> addActionToSequence(Sprite sprite, ScriptSequenceAction sequence) {
+	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
 		return Collections.emptyList();
 	}
 }

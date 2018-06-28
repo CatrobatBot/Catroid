@@ -25,22 +25,10 @@ package org.catrobat.catroid.content.actions;
 
 import com.badlogic.gdx.scenes.scene2d.Action;
 
-import org.catrobat.catroid.content.Look;
-import org.catrobat.catroid.content.Script;
-
 public class StopThisScriptAction extends Action {
-
-	private Script currentScript;
-
-	public void setCurrentScript(Script currentScript) {
-		this.currentScript = currentScript;
-	}
 
 	@Override
 	public boolean act(float delta) {
-		if (actor instanceof Look) {
-			((Look) actor).stopThreadWithScript(currentScript);
-		}
-		return true;
+		return false;
 	}
 }

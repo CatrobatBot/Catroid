@@ -31,12 +31,13 @@ import android.widget.BaseAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.content.EventWrapper;
 import org.catrobat.catroid.content.Sprite;
-import org.catrobat.catroid.content.actions.ScriptSequenceAction;
 import org.catrobat.catroid.content.bricks.brickspinner.SpinnerAdapterWithNewOption;
 import org.catrobat.catroid.ui.recyclerview.dialog.NewLookDialogFragment;
 import org.catrobat.catroid.ui.recyclerview.dialog.dialoginterface.NewItemInterface;
@@ -74,10 +75,27 @@ public class SetLookBrick extends BrickBaseType implements
 		return clone;
 	}
 
+	private LookData getLookByName(String name) {
+		for (LookData look : getSprite().getLookList()) {
+			if (look.getName().equals(name)) {
+				return look;
+			}
+		}
+		return null;
+	}
+
+	private List<String> getLookNames() {
+		List<String> lookNames = new ArrayList<>();
+		for (LookData look : getSprite().getLookList()) {
+			lookNames.add(look.getName());
+		}
+		return lookNames;
+	}
+
 	protected View prepareView(Context context) {
 		View view = View.inflate(context, R.layout.brick_set_look, null);
 
-		if (getSprite().isBackgroundSprite()) {
+		if (getSprite().equals(ProjectManager.getInstance().getCurrentScene().getBackgroundSprite())) {
 			((TextView) view.findViewById(R.id.brick_set_look_text_view))
 					.setText(R.string.brick_set_background);
 		}
@@ -116,23 +134,6 @@ public class SetLookBrick extends BrickBaseType implements
 		return view;
 	}
 
-	private LookData getLookByName(String name) {
-		for (LookData look : getSprite().getLookList()) {
-			if (look.getName().equals(name)) {
-				return look;
-			}
-		}
-		return null;
-	}
-
-	private List<String> getLookNames() {
-		List<String> lookNames = new ArrayList<>();
-		for (LookData look : getSprite().getLookList()) {
-			lookNames.add(look.getName());
-		}
-		return lookNames;
-	}
-
 	@Override
 	public boolean onNewOptionInDropDownClicked(View v) {
 		spinnerSelectionBuffer = spinner.getSelectedItemPosition();
@@ -168,7 +169,7 @@ public class SetLookBrick extends BrickBaseType implements
 	}
 
 	@Override
-	public List<ScriptSequenceAction> addActionToSequence(Sprite sprite, ScriptSequenceAction sequence) {
+	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
 		sequence.addAction(sprite.getActionFactory().createSetLookAction(sprite, look, EventWrapper.NO_WAIT));
 		return null;
 	}

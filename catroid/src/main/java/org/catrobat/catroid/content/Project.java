@@ -53,8 +53,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static org.catrobat.catroid.common.Constants.Z_INDEX_BACKGROUND;
-
 @XStreamAlias("program")
 // Remove checkstyle disable when https://github.com/checkstyle/checkstyle/issues/1349 is fixed
 // CHECKSTYLE DISABLE IndentationCheck FOR 7 LINES
@@ -107,13 +105,7 @@ public class Project implements Serializable {
 			setChromecastFields();
 		}
 
-		Scene scene = new Scene(context.getString(R.string.default_scene_name, 1), this);
-		Sprite backgroundSprite = new Sprite(context.getString(R.string.background));
-		backgroundSprite.look.setZIndex(Z_INDEX_BACKGROUND);
-		scene.addSprite(backgroundSprite);
-
-		sceneList.add(scene);
-
+		sceneList.add(new Scene(context, context.getString(R.string.default_scene_name, 1), this));
 		xmlHeader.scenesEnabled = true;
 	}
 
@@ -136,9 +128,9 @@ public class Project implements Serializable {
 		removeInvalidVariablesAndLists(supportProject.dataContainer);
 		container.setSpriteVariablesForSupportContainer(supportProject.dataContainer);
 
-		Scene scene = new Scene(context.getString(R.string.default_scene_name, 1), this);
+		Scene scene = new Scene(context, context.getString(R.string.default_scene_name, 1), this);
 		scene.setDataContainer(container);
-		scene.getSpriteList().addAll(supportProject.spriteList);
+		scene.setSpriteList(supportProject.spriteList);
 		sceneList.add(scene);
 	}
 
@@ -236,7 +228,7 @@ public class Project implements Serializable {
 	public List<Sprite> getSpriteListWithClones() {
 		if (StageActivity.stageListener != null) {
 			return StageActivity.stageListener.getSpritesFromStage();
-		} else {
+		} else { // e.g. for ActionTests there is no Stage, only use sprites from Project
 			return getDefaultScene().getSpriteList();
 		}
 	}

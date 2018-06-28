@@ -33,21 +33,19 @@ import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.Scene;
-import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.ui.controller.BackpackListManager;
 import org.catrobat.catroid.ui.recyclerview.adapter.SceneAdapter;
 import org.catrobat.catroid.ui.recyclerview.backpack.BackpackActivity;
 import org.catrobat.catroid.ui.recyclerview.controller.SceneController;
 import org.catrobat.catroid.ui.recyclerview.dialog.NewSceneDialogFragment;
 import org.catrobat.catroid.ui.recyclerview.dialog.RenameDialogFragment;
+import org.catrobat.catroid.utils.SnackbarUtil;
 import org.catrobat.catroid.utils.ToastUtil;
 
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static org.catrobat.catroid.common.Constants.Z_INDEX_BACKGROUND;
 
 public class SceneListFragment extends RecyclerViewFragment<Scene> {
 
@@ -83,6 +81,7 @@ public class SceneListFragment extends RecyclerViewFragment<Scene> {
 
 	@Override
 	protected void initializeAdapter() {
+		SnackbarUtil.showHintSnackbar(getActivity(), R.string.hint_scenes);
 		sharedPreferenceDetailsKey = "showDetailsSceneList";
 		List<Scene> items = ProjectManager.getInstance().getCurrentProject().getSceneList();
 		adapter = new SceneAdapter(items);
@@ -91,8 +90,8 @@ public class SceneListFragment extends RecyclerViewFragment<Scene> {
 
 	@Override
 	public void handleAddButton() {
-		new NewSceneDialogFragment(this, ProjectManager.getInstance().getCurrentProject())
-				.show(getFragmentManager(), NewSceneDialogFragment.TAG);
+		NewSceneDialogFragment dialog = new NewSceneDialogFragment(this, ProjectManager.getInstance().getCurrentProject());
+		dialog.show(getFragmentManager(), NewSceneDialogFragment.TAG);
 	}
 
 	@Override
@@ -107,7 +106,7 @@ public class SceneListFragment extends RecyclerViewFragment<Scene> {
 
 		for (Scene item : selectedItems) {
 			try {
-				BackpackListManager.getInstance().getScenes().add(sceneController.pack(item));
+				BackpackListManager.getInstance().getBackpackedScenes().add(sceneController.pack(item));
 				BackpackListManager.getInstance().saveBackpack();
 				packedItemCnt++;
 			} catch (IOException e) {
@@ -127,7 +126,7 @@ public class SceneListFragment extends RecyclerViewFragment<Scene> {
 
 	@Override
 	protected boolean isBackpackEmpty() {
-		return BackpackListManager.getInstance().getScenes().isEmpty();
+		return BackpackListManager.getInstance().getBackpackedScenes().isEmpty();
 	}
 
 	@Override
@@ -185,7 +184,7 @@ public class SceneListFragment extends RecyclerViewFragment<Scene> {
 		finishActionMode();
 
 		if (adapter.getItems().isEmpty()) {
-			createEmptySceneWithDefaultName();
+			createDefaultScene();
 		}
 
 		if (ProjectManager.getInstance().getCurrentProject().getSceneList().size() < 2) {
@@ -193,17 +192,10 @@ public class SceneListFragment extends RecyclerViewFragment<Scene> {
 		}
 	}
 
-	private void createEmptySceneWithDefaultName() {
+	private void createDefaultScene() {
 		setShowProgressBar(true);
-
 		Project currentProject = ProjectManager.getInstance().getCurrentProject();
-		Scene scene = new Scene(getString(R.string.default_scene_name, 1), currentProject);
-
-		Sprite backgroundSprite = new Sprite(getString(R.string.background));
-		backgroundSprite.look.setZIndex(Z_INDEX_BACKGROUND);
-		scene.addSprite(backgroundSprite);
-
-		adapter.add(scene);
+		adapter.add(new Scene(getActivity(), getString(R.string.default_scene_name, 1), currentProject));
 		setShowProgressBar(false);
 	}
 
@@ -225,14 +217,7 @@ public class SceneListFragment extends RecyclerViewFragment<Scene> {
 
 	@Override
 	public void renameItem(String name) {
-		Scene item = adapter.getSelectedItems().get(0);
-		if (!item.getName().equals(name)) {
-			if (sceneController.rename(item, name)) {
-				ProjectManager.getInstance().saveProject(getActivity());
-			} else {
-				ToastUtil.showError(getActivity(), R.string.error_rename_scene);
-			}
-		}
+		adapter.getSelectedItems().get(0).rename(name, getActivity(), false);
 		finishActionMode();
 	}
 

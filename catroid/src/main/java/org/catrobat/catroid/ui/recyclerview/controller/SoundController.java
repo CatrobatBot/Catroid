@@ -23,6 +23,7 @@
 
 package org.catrobat.catroid.ui.recyclerview.controller;
 
+import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.common.SoundInfo;
 import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.Sprite;
@@ -32,11 +33,9 @@ import org.catrobat.catroid.ui.recyclerview.util.UniqueNameProvider;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-
-import static org.catrobat.catroid.common.Constants.BACKPACK_SOUND_DIRECTORY;
-import static org.catrobat.catroid.common.Constants.SOUND_DIRECTORY_NAME;
+import java.util.Set;
 
 public class SoundController {
 
@@ -70,7 +69,7 @@ public class SoundController {
 		String name = uniqueNameProvider.getUniqueName(soundToPack.getName(),
 				getScope(BackpackListManager.getInstance().getBackpackedSounds()));
 
-		File file = StorageOperations.copyFileToDir(soundToPack.getFile(), BACKPACK_SOUND_DIRECTORY);
+		File file = StorageOperations.copyFileToDir(soundToPack.getFile(), Constants.BACKPACK_SOUND_DIRECTORY);
 
 		return new SoundInfo(name, file);
 	}
@@ -82,7 +81,7 @@ public class SoundController {
 			}
 		}
 
-		File file = StorageOperations.copyFileToDir(soundToPack.getFile(), BACKPACK_SOUND_DIRECTORY);
+		File file = StorageOperations.copyFileToDir(soundToPack.getFile(), Constants.BACKPACK_SOUND_DIRECTORY);
 		SoundInfo sound = new SoundInfo(soundToPack.getName(), file);
 		dstSprite.getSoundList().add(sound);
 
@@ -107,8 +106,8 @@ public class SoundController {
 		return soundInfo;
 	}
 
-	private List<String> getScope(List<SoundInfo> items) {
-		List<String> scope = new ArrayList<>();
+	private Set<String> getScope(List<SoundInfo> items) {
+		Set<String> scope = new HashSet<>();
 		for (SoundInfo item : items) {
 			scope.add(item.getName());
 		}
@@ -116,6 +115,6 @@ public class SoundController {
 	}
 
 	private File getSoundDir(Scene scene) {
-		return new File(scene.getDirectory(), SOUND_DIRECTORY_NAME);
+		return new File(scene.getDirectory(), Constants.SOUND_DIRECTORY_NAME);
 	}
 }

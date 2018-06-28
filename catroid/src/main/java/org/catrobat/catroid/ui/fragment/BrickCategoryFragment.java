@@ -154,11 +154,6 @@ public class BrickCategoryFragment extends ListFragment {
 	private void setupBrickCategories() {
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		List<View> categories = new ArrayList<>();
-
-		if (SettingsFragment.isEmroiderySharedPreferenceEnabled(getActivity())) {
-			categories.add(inflater.inflate(R.layout.brick_category_embroidery, null));
-		}
-
 		categories.add(inflater.inflate(R.layout.brick_category_event, null));
 		categories.add(inflater.inflate(R.layout.brick_category_control, null));
 		categories.add(inflater.inflate(R.layout.brick_category_motion, null));
